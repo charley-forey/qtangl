@@ -136,6 +136,8 @@ export default function Home() {
               eyebrow={useCase.eyebrow}
               title={useCase.title}
               description={useCase.description}
+              imageSrc={useCase.image}
+              imageAlt={useCase.imageAlt}
             >
               <p>
                 <span className="font-semibold text-white">Problem:</span>{" "}

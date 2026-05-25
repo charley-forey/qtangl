@@ -36,6 +36,8 @@ export default function BlogPage() {
               title={post.title}
               description={post.excerpt}
               href={post.href}
+              imageSrc={post.coverImage}
+              imageAlt={post.coverAlt}
             >
               <p className="font-medium text-cyan-200">Read article →</p>
             </FeatureCard>

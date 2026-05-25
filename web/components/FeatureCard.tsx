@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { ReactNode } from "react";
 
@@ -6,6 +7,8 @@ type FeatureCardProps = {
   title: string;
   description: string;
   href?: string;
+  imageSrc?: string;
+  imageAlt?: string;
   children?: ReactNode;
 };
 
@@ -14,10 +17,23 @@ export default function FeatureCard({
   title,
   description,
   href,
+  imageSrc,
+  imageAlt,
   children,
 }: FeatureCardProps) {
   const content = (
     <article className="group h-full rounded-3xl border border-white/10 bg-white/[0.03] p-6 shadow-[0_0_0_1px_rgba(255,255,255,0.02)] transition-transform duration-200 hover:-translate-y-1 hover:border-cyan-400/30">
+      {imageSrc ? (
+        <div className="relative mb-5 aspect-[16/9] overflow-hidden rounded-2xl border border-white/10 bg-slate-950/60">
+          <Image
+            src={imageSrc}
+            alt={imageAlt ?? ""}
+            fill
+            sizes="(min-width: 1024px) 30vw, 100vw"
+            className="object-cover transition duration-300 group-hover:scale-[1.02]"
+          />
+        </div>
+      ) : null}
       {eyebrow ? (
         <p className="text-xs font-semibold uppercase tracking-[0.28em] text-cyan-300/80">
           {eyebrow}

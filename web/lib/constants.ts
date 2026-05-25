@@ -78,6 +78,8 @@ export const useCases = [
   {
     eyebrow: "Construction",
     title: "Construction scheduling optimization",
+    image: "/use-case-construction.png",
+    imageAlt: "Construction scheduling workflow diagram with site dependencies and gantt-style planning bars.",
     description:
       "Coordinate crews, equipment, and site dependencies without rebuilding the plan manually every time conditions change.",
     problem:
@@ -90,6 +92,8 @@ export const useCases = [
   {
     eyebrow: "Logistics",
     title: "Logistics routing optimization",
+    image: "/use-case-logistics.png",
+    imageAlt: "Routing optimization dashboard with connected stops, fleet paths, and dispatch planning modules.",
     description:
       "Balance delivery windows, fleet capacity, and route efficiency with a single routing workflow.",
     problem:
@@ -102,6 +106,8 @@ export const useCases = [
   {
     eyebrow: "Operations",
     title: "Workforce allocation optimization",
+    image: "/use-case-workforce.png",
+    imageAlt: "Workforce allocation dashboard showing staffing grids, assignments, and coverage planning.",
     description:
       "Match the right people and resources to the right jobs while respecting availability and skill constraints.",
     problem:
@@ -204,6 +210,9 @@ export const blogPosts = [
     slug: "quantum-optimization",
     href: "/blog/quantum-optimization",
     category: "Quantum optimization basics",
+    coverImage: "/blog-quantum-optimization.png",
+    coverAlt:
+      "Hybrid optimization illustration connecting planning inputs to solver infrastructure and ranked outputs.",
     title: "Why quantum optimization matters for operational planning",
     excerpt:
       "A plain-English introduction to QUBO, QAOA, and why hybrid workflows matter more than hype.",
@@ -214,6 +223,9 @@ export const blogPosts = [
     slug: "scheduling-use-cases",
     href: "/blog/scheduling-use-cases",
     category: "Scheduling use cases",
+    coverImage: "/blog-scheduling-use-cases.png",
+    coverAlt:
+      "Scheduling systems illustration with construction timelines, crew planning, and dependency graphs.",
     title: "Construction and workforce scheduling are still wide-open problems",
     excerpt:
       "Scheduling stays hard when teams, dependencies, and resource limits all collide at once.",
@@ -224,6 +236,9 @@ export const blogPosts = [
     slug: "routing-optimization",
     href: "/blog/routing-optimization",
     category: "Routing optimization",
+    coverImage: "/blog-routing-optimization.png",
+    coverAlt:
+      "Routing optimization dashboard with mapped stops, feasibility metrics, and route planning signals.",
     title: "Routing optimization breaks when real-world constraints are ignored",
     excerpt:
       "The best route on paper often fails in production once windows, capacity, and changeovers appear.",

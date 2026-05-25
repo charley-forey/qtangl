@@ -30,10 +30,10 @@ export const metadata: Metadata = {
     siteName: siteMetadata.name,
     images: [
       {
-        url: "/qtangl_banner.png",
-        width: 1024,
-        height: 472,
-        alt: "Qtangl banner",
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Qtangl social preview image",
       },
     ],
   },

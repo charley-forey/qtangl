@@ -1,9 +1,12 @@
+import Image from "next/image";
 import { ReactNode } from "react";
 
 type ArticleLayoutProps = {
   eyebrow: string;
   title: string;
   intro: string;
+  coverImage?: string;
+  coverAlt?: string;
   children: ReactNode;
 };
 
@@ -11,6 +14,8 @@ export default function ArticleLayout({
   eyebrow,
   title,
   intro,
+  coverImage,
+  coverAlt,
   children,
 }: ArticleLayoutProps) {
   return (
@@ -23,6 +28,17 @@ export default function ArticleLayout({
           {title}
         </h1>
         <p className="mt-6 text-lg leading-8 text-slate-300">{intro}</p>
+        {coverImage ? (
+          <div className="relative mt-10 aspect-[16/9] overflow-hidden rounded-3xl border border-white/10 bg-slate-900/70 shadow-[0_20px_80px_rgba(8,15,29,0.45)]">
+            <Image
+              src={coverImage}
+              alt={coverAlt ?? ""}
+              fill
+              sizes="(min-width: 1024px) 768px, 100vw"
+              className="object-cover"
+            />
+          </div>
+        ) : null}
         <article className="article-copy mt-12">
           {children}
         </article>

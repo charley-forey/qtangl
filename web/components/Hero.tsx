@@ -64,10 +64,10 @@ export default function Hero() {
         <div className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-slate-900/70 p-4 shadow-[0_20px_80px_rgba(8,15,29,0.45)]">
           <Image
             src="/qtangl_banner.png"
-            alt="Qtangl optimization concept diagram"
+            alt="Qtangl optimization workflow illustration"
             width={1024}
             height={472}
-            className="w-full rounded-[1.5rem] border border-white/10 bg-white object-cover"
+            className="w-full rounded-[1.5rem] border border-white/10 bg-slate-950/60 object-cover"
             priority
           />
         </div>

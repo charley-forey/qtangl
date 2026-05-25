@@ -6,6 +6,16 @@ export const metadata: Metadata = {
   title: "Routing Optimization",
   description:
     "A practical look at capacity, windows, and why the shortest route is rarely enough.",
+  openGraph: {
+    images: [
+      {
+        url: "/blog-routing-optimization.png",
+        width: 1200,
+        height: 630,
+        alt: "Routing optimization dashboard with mapped stops, feasibility metrics, and route planning signals.",
+      },
+    ],
+  },
 };
 
 export default function RoutingOptimizationPage() {
@@ -14,6 +24,8 @@ export default function RoutingOptimizationPage() {
       eyebrow="Routing optimization"
       title="Routing optimization breaks when real-world constraints are ignored"
       intro="The fastest route on paper often fails in production because delivery windows, capacity, service times, and changing conditions all shape what is actually feasible."
+      coverImage="/blog-routing-optimization.png"
+      coverAlt="Routing optimization dashboard with mapped stops, feasibility metrics, and route planning signals."
     >
       <section>
         <h2>The shortest path is rarely the best plan</h2>

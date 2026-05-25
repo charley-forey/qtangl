@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 
 import DocsShell from "@/components/DocsShell";
 
@@ -41,6 +42,15 @@ export default function ConceptsPage() {
             more than any single backend because it keeps the system practical for
             enterprise optimization use cases.
           </p>
+          <div className="relative mt-6 aspect-[16/9] overflow-hidden rounded-2xl border border-white/10 bg-slate-950/60">
+            <Image
+              src="/docs-hybrid-execution.png"
+              alt="Hybrid execution diagram showing classical preprocessing, quantum-assisted search, and classical post-processing."
+              fill
+              sizes="(min-width: 1024px) 768px, 100vw"
+              className="object-cover"
+            />
+          </div>
         </section>
       </div>
     </DocsShell>
