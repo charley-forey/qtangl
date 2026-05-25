@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 
-import FeatureCard from "@/components/FeatureCard";
-import Section from "@/components/Section";
+import FeatureCard from "@/components/marketing/FeatureCard";
+import Section from "@/components/layout/Section";
+import Eyebrow from "@/components/ui/Eyebrow";
 import { blogPosts } from "@/lib/constants";
 
 export const metadata: Metadata = {
@@ -14,13 +15,11 @@ export default function BlogPage() {
     <main className="flex-1">
       <Section className="pt-12 sm:pt-16">
         <div className="max-w-3xl">
-          <p className="text-xs font-semibold uppercase tracking-[0.28em] text-cyan-300/80">
-            Blog
-          </p>
+          <Eyebrow>Blog</Eyebrow>
           <h1 className="mt-4 text-4xl font-semibold tracking-tight text-white sm:text-5xl">
             Operational optimization, explained clearly.
           </h1>
-          <p className="mt-5 text-lg leading-8 text-slate-300">
+          <p className="mt-5 text-lg leading-8 text-[var(--color-gray-300)]">
             The Qtangl blog focuses on practical optimization problems, hybrid
             systems thinking, and the business cases behind better planning tools.
           </p>
@@ -36,10 +35,9 @@ export default function BlogPage() {
               title={post.title}
               description={post.excerpt}
               href={post.href}
-              imageSrc={post.coverImage}
-              imageAlt={post.coverAlt}
+              ctaLabel="Read article"
             >
-              <p className="font-medium text-cyan-200">Read article →</p>
+              <p className="font-medium text-white">{post.description}</p>
             </FeatureCard>
           ))}
         </div>

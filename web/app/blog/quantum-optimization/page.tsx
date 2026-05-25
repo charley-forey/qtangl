@@ -1,21 +1,11 @@
 import type { Metadata } from "next";
 
-import ArticleLayout from "@/components/ArticleLayout";
+import ArticleLayout from "@/components/docs/ArticleLayout";
 
 export const metadata: Metadata = {
   title: "Why Quantum Optimization Matters",
   description:
     "A plain-English introduction to QUBO, QAOA, and hybrid optimization workflows.",
-  openGraph: {
-    images: [
-      {
-        url: "/blog-quantum-optimization.png",
-        width: 1200,
-        height: 630,
-        alt: "Hybrid optimization illustration connecting planning inputs to solver infrastructure and ranked outputs.",
-      },
-    ],
-  },
 };
 
 export default function QuantumOptimizationPage() {
@@ -24,8 +14,6 @@ export default function QuantumOptimizationPage() {
       eyebrow="Quantum optimization basics"
       title="Why quantum optimization matters for operational planning"
       intro="Qtangl is not built around abstract quantum theory. It is built around the idea that real scheduling and routing problems stay hard when constraints stack on top of each other."
-      coverImage="/blog-quantum-optimization.png"
-      coverAlt="Hybrid optimization illustration connecting planning inputs to solver infrastructure and ranked outputs."
     >
       <section>
         <h2>Start with the actual business problem</h2>

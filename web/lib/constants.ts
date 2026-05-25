@@ -1,28 +1,4 @@
-export const siteMetadata = {
-  name: "Qtangl",
-  title: "Qtangl | Quantum Optimization API",
-  description:
-    "Optimize complex scheduling, routing, and allocation workflows with a hybrid classical and quantum API.",
-  url: "https://qtangl.com",
-  tagline: "Quantum Optimization API | Scheduling & Routing Solver | Qtangl",
-  oneLiner:
-    "Optimize complex scheduling and routing problems using hybrid classical + quantum computing.",
-  contactEmail: "founders@qtangl.com",
-} as const;
-
-export const hero = {
-  eyebrow: "Quantum optimization platform",
-  title: "Optimization infrastructure for real-world operations.",
-  description:
-    "Qtangl turns difficult scheduling, routing, and resource allocation problems into API-driven workflows that return clear, constraint-aware plans.",
-  primaryCta: { label: "Request Early Access", href: "#request-access" },
-  secondaryCta: { label: "View Docs", href: "/docs" },
-  valueProps: [
-    "Built for scheduling, routing, and allocation problems.",
-    "Designed for operations teams and developers, not research labs.",
-    "Hybrid workflows combine classical preprocessing with quantum-assisted search.",
-  ],
-} as const;
+export { footerBlurb, siteMetadata } from "@/lib/copy/product";
 
 export const problemPoints = [
   "Scheduling is still manual and fragmented across teams, tools, and spreadsheets.",
@@ -78,8 +54,6 @@ export const useCases = [
   {
     eyebrow: "Construction",
     title: "Construction scheduling optimization",
-    image: "/use-case-construction.png",
-    imageAlt: "Construction scheduling workflow diagram with site dependencies and gantt-style planning bars.",
     description:
       "Coordinate crews, equipment, and site dependencies without rebuilding the plan manually every time conditions change.",
     problem:
@@ -92,8 +66,6 @@ export const useCases = [
   {
     eyebrow: "Logistics",
     title: "Logistics routing optimization",
-    image: "/use-case-logistics.png",
-    imageAlt: "Routing optimization dashboard with connected stops, fleet paths, and dispatch planning modules.",
     description:
       "Balance delivery windows, fleet capacity, and route efficiency with a single routing workflow.",
     problem:
@@ -106,8 +78,6 @@ export const useCases = [
   {
     eyebrow: "Operations",
     title: "Workforce allocation optimization",
-    image: "/use-case-workforce.png",
-    imageAlt: "Workforce allocation dashboard showing staffing grids, assignments, and coverage planning.",
     description:
       "Match the right people and resources to the right jobs while respecting availability and skill constraints.",
     problem:
@@ -210,9 +180,6 @@ export const blogPosts = [
     slug: "quantum-optimization",
     href: "/blog/quantum-optimization",
     category: "Quantum optimization basics",
-    coverImage: "/blog-quantum-optimization.png",
-    coverAlt:
-      "Hybrid optimization illustration connecting planning inputs to solver infrastructure and ranked outputs.",
     title: "Why quantum optimization matters for operational planning",
     excerpt:
       "A plain-English introduction to QUBO, QAOA, and why hybrid workflows matter more than hype.",
@@ -223,9 +190,6 @@ export const blogPosts = [
     slug: "scheduling-use-cases",
     href: "/blog/scheduling-use-cases",
     category: "Scheduling use cases",
-    coverImage: "/blog-scheduling-use-cases.png",
-    coverAlt:
-      "Scheduling systems illustration with construction timelines, crew planning, and dependency graphs.",
     title: "Construction and workforce scheduling are still wide-open problems",
     excerpt:
       "Scheduling stays hard when teams, dependencies, and resource limits all collide at once.",
@@ -236,9 +200,6 @@ export const blogPosts = [
     slug: "routing-optimization",
     href: "/blog/routing-optimization",
     category: "Routing optimization",
-    coverImage: "/blog-routing-optimization.png",
-    coverAlt:
-      "Routing optimization dashboard with mapped stops, feasibility metrics, and route planning signals.",
     title: "Routing optimization breaks when real-world constraints are ignored",
     excerpt:
       "The best route on paper often fails in production once windows, capacity, and changeovers appear.",
@@ -246,6 +207,3 @@ export const blogPosts = [
       "Explore a practical framework for building route plans that teams can actually execute.",
   },
 ] as const;
-
-export const footerBlurb =
-  "Qtangl is a quantum optimization API for scheduling, routing, and allocation problems.";

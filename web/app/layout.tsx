@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
-import Footer from "@/components/Footer";
-import Navbar from "@/components/Navbar";
-import { siteMetadata } from "@/lib/constants";
+import Footer from "@/components/layout/Footer";
+import Navbar from "@/components/layout/Navbar";
+import { siteMetadata } from "@/lib/copy/product";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -30,7 +30,7 @@ export const metadata: Metadata = {
     siteName: siteMetadata.name,
     images: [
       {
-        url: "/og-image.png",
+        url: "/opengraph-image",
         width: 1200,
         height: 630,
         alt: "Qtangl social preview image",
@@ -38,9 +38,9 @@ export const metadata: Metadata = {
     ],
   },
   icons: {
-    icon: "/qtangl_logo.png",
-    shortcut: "/qtangl_logo.png",
-    apple: "/qtangl_logo.png",
+    icon: "/logo-mark.svg",
+    shortcut: "/logo-mark.svg",
+    apple: "/logo-mark.svg",
   },
 };
 
@@ -54,9 +54,8 @@ export default function RootLayout({
       lang="en"
       className={`${inter.variable} ${jetBrainsMono.variable} h-full scroll-smooth antialiased`}
     >
-      <body className="min-h-full bg-slate-950 text-slate-100">
-        <div className="relative flex min-h-screen flex-col overflow-x-hidden">
-          <div className="pointer-events-none absolute inset-x-0 top-0 h-[32rem] bg-[radial-gradient(circle_at_top,rgba(34,211,238,0.16),transparent_45%),radial-gradient(circle_at_top_right,rgba(124,58,237,0.16),transparent_28%)]" />
+      <body className="min-h-full bg-black text-white">
+        <div className="quantum-shell relative flex min-h-screen flex-col overflow-x-hidden">
           <Navbar />
           <div className="relative flex flex-1 flex-col">{children}</div>
           <Footer />

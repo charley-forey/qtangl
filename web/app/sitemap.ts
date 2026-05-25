@@ -1,10 +1,13 @@
 import type { MetadataRoute } from "next";
 
-import { siteMetadata } from "@/lib/constants";
+import { siteMetadata } from "@/lib/copy/product";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const routes = [
     "",
+    "/about",
+    "/technology",
+    "/access",
     "/docs",
     "/docs/quickstart",
     "/docs/concepts",

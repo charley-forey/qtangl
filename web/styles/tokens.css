@@ -1,0 +1,39 @@
+:root {
+  --color-void: #000000;
+  --color-signal: #ffffff;
+  --color-gray-950: #050505;
+  --color-gray-900: #0a0a0a;
+  --color-gray-850: #121212;
+  --color-gray-800: #181818;
+  --color-gray-700: #262626;
+  --color-gray-600: #525252;
+  --color-gray-500: #737373;
+  --color-gray-400: #a3a3a3;
+  --color-gray-300: #d4d4d4;
+  --color-gray-200: #e5e5e5;
+
+  --background: var(--color-void);
+  --foreground: var(--color-signal);
+  --muted: var(--color-gray-400);
+  --surface: rgba(255, 255, 255, 0.04);
+  --surface-strong: rgba(255, 255, 255, 0.08);
+  --border: rgba(255, 255, 255, 0.12);
+  --border-strong: rgba(255, 255, 255, 0.24);
+  --grid-line: rgba(255, 255, 255, 0.06);
+  --focus-ring: rgba(255, 255, 255, 0.72);
+
+  --radius-sm: 0.125rem;
+  --radius-md: 0.25rem;
+  --radius-lg: 0.5rem;
+  --radius-xl: 0.75rem;
+
+  --shadow-panel: 0 0 0 1px rgba(255, 255, 255, 0.04);
+  --shadow-elevated:
+    0 24px 80px rgba(0, 0, 0, 0.42),
+    0 0 0 1px rgba(255, 255, 255, 0.05);
+
+  --noise-image:
+    radial-gradient(circle at 12% 18%, rgba(255, 255, 255, 0.035), transparent 22%),
+    radial-gradient(circle at 78% 12%, rgba(255, 255, 255, 0.03), transparent 18%),
+    radial-gradient(circle at 60% 80%, rgba(255, 255, 255, 0.028), transparent 26%);
+}

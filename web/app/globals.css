@@ -1,18 +1,11 @@
 @import "tailwindcss";
-
-:root {
-  --background: #020617;
-  --foreground: #e2e8f0;
-  --muted: #94a3b8;
-  --surface: rgba(15, 23, 42, 0.74);
-  --surface-border: rgba(148, 163, 184, 0.16);
-  --accent: #67e8f9;
-  --accent-2: #8b5cf6;
-}
+@import "../styles/tokens.css";
+@import "../styles/utilities.css";
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
   --font-sans: var(--font-inter);
   --font-mono: var(--font-jetbrains-mono);
 }
@@ -22,9 +15,7 @@
 }
 
 html {
-  background:
-    radial-gradient(circle at top, rgba(34, 211, 238, 0.08), transparent 26%),
-    linear-gradient(180deg, #020617 0%, #020617 100%);
+  background: var(--background);
 }
 
 body {
@@ -33,6 +24,7 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-inter), Arial, Helvetica, sans-serif;
+  text-rendering: optimizeLegibility;
 }
 
 a {
@@ -41,26 +33,31 @@ a {
 }
 
 ::selection {
-  background: rgba(34, 211, 238, 0.28);
-  color: #f8fafc;
+  background: rgba(255, 255, 255, 0.22);
+  color: #000;
+}
+
+:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
 }
 
 .article-copy {
   display: grid;
-  gap: 1.5rem;
+  gap: 2rem;
 }
 
 .article-copy h2 {
   margin: 0;
   font-size: 1.75rem;
   line-height: 1.2;
-  color: #fff;
+  color: var(--foreground);
 }
 
 .article-copy p,
 .article-copy li {
   margin: 0;
-  color: #cbd5e1;
+  color: var(--color-gray-300);
   line-height: 1.9;
 }
 
@@ -73,18 +70,43 @@ a {
   font-family: var(--font-jetbrains-mono), monospace;
 }
 
-.grid-spotlight {
-  position: relative;
+.article-copy section {
+  display: grid;
+  gap: 0.9rem;
 }
 
-.grid-spotlight::before {
+.article-copy strong {
+  color: var(--foreground);
+}
+
+.quantum-shell {
+  position: relative;
+  isolation: isolate;
+}
+
+.quantum-shell::before {
   content: "";
   position: absolute;
   inset: 0;
-  background-image:
-    linear-gradient(rgba(148, 163, 184, 0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(148, 163, 184, 0.05) 1px, transparent 1px);
-  background-size: 48px 48px;
-  mask-image: radial-gradient(circle at center, black, transparent 85%);
+  z-index: -2;
+  background:
+    radial-gradient(circle at top, rgba(255, 255, 255, 0.06), transparent 28%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent 32%),
+    var(--background);
+}
+
+.quantum-shell::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--noise-image);
+  opacity: 0.7;
   pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
 }

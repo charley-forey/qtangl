@@ -1,0 +1,59 @@
+import { ReactNode } from "react";
+
+import ProbabilityGrid from "@/components/quantum/ProbabilityGrid";
+import Card from "@/components/ui/Card";
+import Eyebrow from "@/components/ui/Eyebrow";
+
+type ArticleLayoutProps = {
+  eyebrow: string;
+  title: string;
+  intro: string;
+  children: ReactNode;
+};
+
+export default function ArticleLayout({
+  eyebrow,
+  title,
+  intro,
+  children,
+}: ArticleLayoutProps) {
+  return (
+    <main className="flex-1">
+      <div className="mx-auto max-w-4xl px-6 py-16 sm:px-8 sm:py-24">
+        <Eyebrow>{eyebrow}</Eyebrow>
+        <h1 className="mt-4 text-4xl font-semibold tracking-tight text-white sm:text-5xl">
+          {title}
+        </h1>
+        <p className="mt-6 max-w-3xl text-lg leading-8 text-[var(--color-gray-300)]">
+          {intro}
+        </p>
+
+        <Card strong className="relative mt-10 overflow-hidden rounded-[1.75rem] p-0">
+          <ProbabilityGrid />
+          <div className="relative grid gap-6 px-8 py-10 sm:grid-cols-3">
+            <div>
+              <p className="text-label">Signal</p>
+              <p className="mt-3 text-sm leading-7 text-[var(--color-gray-300)]">
+                Constraint fields become computable when state, objective, and feasibility are modeled together.
+              </p>
+            </div>
+            <div>
+              <p className="text-label">Method</p>
+              <p className="mt-3 text-sm leading-7 text-[var(--color-gray-300)]">
+                Hybrid execution layers classical orchestration with quantum-assisted search where it improves ranking.
+              </p>
+            </div>
+            <div>
+              <p className="text-label">Outcome</p>
+              <p className="mt-3 text-sm leading-7 text-[var(--color-gray-300)]">
+                The interface returns interpretable plans rather than opaque solver output.
+              </p>
+            </div>
+          </div>
+        </Card>
+
+        <article className="article-copy mt-12">{children}</article>
+      </div>
+    </main>
+  );
+}
