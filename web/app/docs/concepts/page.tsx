@@ -45,7 +45,7 @@ export default function ConceptsPage() {
             more than any single backend because it keeps the system practical for
             enterprise optimization use cases.
           </p>
-          <div className="mt-6 grid gap-4 sm:grid-cols-3">
+          <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
             {[
               "Classical preprocessing",
               "Quantum-assisted search",

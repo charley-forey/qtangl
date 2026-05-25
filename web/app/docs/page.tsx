@@ -17,7 +17,7 @@ export default function DocsPage() {
       title="Documentation for the Qtangl optimization workflow"
       description="Start with the API model, understand the problem categories, and inspect the request and response surfaces that define the current interface."
     >
-      <div className="grid gap-6 md:grid-cols-3">
+      <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
         {docsCards.map((card) => (
           <FeatureCard
             key={card.href}

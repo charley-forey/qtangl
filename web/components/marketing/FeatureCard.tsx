@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { ReactNode } from "react";
 
@@ -11,6 +12,8 @@ type FeatureCardProps = {
   href?: string;
   children?: ReactNode;
   ctaLabel?: string;
+  imageSrc?: string;
+  imageAlt?: string;
 };
 
 export default function FeatureCard({
@@ -20,6 +23,8 @@ export default function FeatureCard({
   href,
   children,
   ctaLabel,
+  imageSrc,
+  imageAlt,
 }: FeatureCardProps) {
   const content = (
     <Card
@@ -30,6 +35,17 @@ export default function FeatureCard({
     >
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(255,255,255,0.08),transparent_40%)]" />
       <div className="relative">
+        {imageSrc ? (
+          <div className="relative mb-5 aspect-[4/3] overflow-hidden rounded-xl border border-[var(--border)] bg-black/50">
+            <Image
+              src={imageSrc}
+              alt={imageAlt ?? ""}
+              fill
+              sizes="(min-width: 1280px) 24vw, (min-width: 768px) 42vw, 100vw"
+              className="object-cover grayscale"
+            />
+          </div>
+        ) : null}
         {eyebrow ? <Eyebrow>{eyebrow}</Eyebrow> : null}
         <h3 className="mt-3 text-xl font-semibold tracking-tight text-white">
           {title}

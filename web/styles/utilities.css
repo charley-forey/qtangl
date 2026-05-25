@@ -24,6 +24,18 @@
   color: var(--color-gray-300);
 }
 
+.content-reading {
+  max-width: var(--container-reading);
+}
+
+.content-narrow {
+  max-width: var(--container-narrow);
+}
+
+.touch-target {
+  min-height: var(--touch-target);
+}
+
 .grid-frame {
   position: relative;
 }
@@ -50,4 +62,16 @@
     var(--border-strong) 78%,
     transparent 100%
   );
+}
+
+.mobile-scroll-nav {
+  display: flex;
+  gap: 0.75rem;
+  overflow-x: auto;
+  padding-bottom: 0.25rem;
+  scrollbar-width: none;
+}
+
+.mobile-scroll-nav::-webkit-scrollbar {
+  display: none;
 }

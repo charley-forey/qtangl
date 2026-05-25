@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 
 type EntanglementFieldProps = {
@@ -17,6 +18,19 @@ export default function EntanglementField({
   className = "",
 }: EntanglementFieldProps) {
   const reduceMotion = useReducedMotion();
+  const [isCompact, setIsCompact] = useState(false);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(max-width: 767px)");
+    const update = () => setIsCompact(mediaQuery.matches);
+
+    update();
+    mediaQuery.addEventListener("change", update);
+
+    return () => mediaQuery.removeEventListener("change", update);
+  }, []);
+
+  const shouldAnimate = !reduceMotion && !isCompact;
 
   return (
     <div
@@ -42,16 +56,16 @@ export default function EntanglementField({
           strokeLinecap="round"
           initial={false}
           animate={
-            reduceMotion
-              ? undefined
-              : {
+            shouldAnimate
+              ? {
                   d: [
                     "M96 240C176 144 248 116 320 240C392 364 464 336 544 240",
                     "M96 240C176 188 248 92 320 240C392 388 464 292 544 240",
                   ],
                 }
+              : undefined
           }
-          transition={lineTransition}
+          transition={{ ...lineTransition, duration: 14 }}
         />
         <motion.path
           d="M96 240C176 332 248 364 320 240C392 116 464 148 544 240"
@@ -61,16 +75,18 @@ export default function EntanglementField({
           strokeLinecap="round"
           initial={false}
           animate={
-            reduceMotion
-              ? undefined
-              : {
+            shouldAnimate
+              ? {
                   d: [
                     "M96 240C176 332 248 364 320 240C392 116 464 148 544 240",
                     "M96 240C176 288 248 388 320 240C392 92 464 188 544 240",
                   ],
                 }
+              : {
+                  opacity: isCompact ? 0.7 : 1,
+                }
           }
-          transition={{ ...lineTransition, duration: 12 }}
+          transition={{ ...lineTransition, duration: 18 }}
         />
 
         <circle cx="96" cy="240" r="14" fill="white" />
@@ -88,7 +104,7 @@ export default function EntanglementField({
         </g>
       </svg>
 
-      <div className="relative z-10 mt-6 flex items-center justify-between gap-4 text-xs uppercase tracking-[0.28em] text-[var(--color-gray-400)]">
+      <div className="relative z-10 mt-6 flex flex-col items-start gap-2 text-xs uppercase tracking-[0.28em] text-[var(--color-gray-400)] sm:flex-row sm:items-center sm:justify-between sm:gap-4">
         <span>Entangled state</span>
         <span>Constraint interference</span>
         <span>Ranked collapse</span>

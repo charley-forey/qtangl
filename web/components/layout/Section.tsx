@@ -16,9 +16,11 @@ export default function Section({
   return (
     <section
       id={id}
-      className={`px-6 py-24 sm:px-8 lg:px-12 lg:py-32 ${className}`.trim()}
+      className={`px-5 py-16 sm:px-6 sm:py-20 md:px-8 lg:px-10 lg:py-28 xl:px-12 xl:py-32 ${className}`.trim()}
     >
-      <div className={`mx-auto w-full max-w-7xl ${containerClassName}`.trim()}>
+      <div
+        className={`mx-auto w-full max-w-[var(--container-wide)] ${containerClassName}`.trim()}
+      >
         {children}
       </div>
     </section>

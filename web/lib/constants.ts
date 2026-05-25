@@ -54,6 +54,9 @@ export const useCases = [
   {
     eyebrow: "Construction",
     title: "Construction scheduling optimization",
+    image: "/qtangl-usecase-scheduling.png",
+    imageAlt:
+      "Black and white scheduling illustration showing crews, planning boards, and task sequencing.",
     description:
       "Coordinate crews, equipment, and site dependencies without rebuilding the plan manually every time conditions change.",
     problem:
@@ -66,6 +69,9 @@ export const useCases = [
   {
     eyebrow: "Logistics",
     title: "Logistics routing optimization",
+    image: "/qtangl-usecase-routing.png",
+    imageAlt:
+      "Black and white routing illustration showing dispatching, route maps, and network overlays.",
     description:
       "Balance delivery windows, fleet capacity, and route efficiency with a single routing workflow.",
     problem:
@@ -78,6 +84,9 @@ export const useCases = [
   {
     eyebrow: "Operations",
     title: "Workforce allocation optimization",
+    image: "/qtangl-usecase-allocation.png",
+    imageAlt:
+      "Black and white allocation illustration showing staffing grids and operational planning overlays.",
     description:
       "Match the right people and resources to the right jobs while respecting availability and skill constraints.",
     problem:
@@ -180,6 +189,9 @@ export const blogPosts = [
     slug: "quantum-optimization",
     href: "/blog/quantum-optimization",
     category: "Quantum optimization basics",
+    coverImage: "/qtangl-technology-solver-grid.png",
+    coverAlt:
+      "Black and white abstract technology illustration showing solver workflow panels and network geometry.",
     title: "Why quantum optimization matters for operational planning",
     excerpt:
       "A plain-English introduction to QUBO, QAOA, and why hybrid workflows matter more than hype.",
@@ -190,6 +202,9 @@ export const blogPosts = [
     slug: "scheduling-use-cases",
     href: "/blog/scheduling-use-cases",
     category: "Scheduling use cases",
+    coverImage: "/qtangl-usecase-scheduling.png",
+    coverAlt:
+      "Black and white scheduling illustration showing crews, planning boards, and task sequencing.",
     title: "Construction and workforce scheduling are still wide-open problems",
     excerpt:
       "Scheduling stays hard when teams, dependencies, and resource limits all collide at once.",
@@ -200,6 +215,9 @@ export const blogPosts = [
     slug: "routing-optimization",
     href: "/blog/routing-optimization",
     category: "Routing optimization",
+    coverImage: "/qtangl-usecase-routing.png",
+    coverAlt:
+      "Black and white routing illustration showing dispatching, route maps, and network overlays.",
     title: "Routing optimization breaks when real-world constraints are ignored",
     excerpt:
       "The best route on paper often fails in production once windows, capacity, and changeovers appear.",

@@ -9,9 +9,9 @@ import { homeHero } from "@/lib/copy/home";
 
 export default function Hero() {
   return (
-    <div className="grid items-center gap-10 lg:grid-cols-[1.02fr_0.98fr]">
+    <div className="grid items-center gap-8 xl:grid-cols-[1.02fr_0.98fr] xl:gap-10">
       <StateTransition>
-        <div className="relative overflow-hidden rounded-[2rem] border border-[var(--border)] px-6 py-8 sm:px-8 sm:py-10">
+        <div className="relative overflow-hidden rounded-[2rem] border border-[var(--border)] px-5 py-7 sm:px-7 sm:py-9 lg:px-8 lg:py-10">
           <GridBackground className="opacity-60" />
           <ProbabilityGrid className="opacity-70" />
           <div className="relative z-10">
@@ -26,14 +26,14 @@ export default function Hero() {
               {homeHero.description}
             </p>
 
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+            <div className="mt-8 flex flex-col gap-3 md:flex-row">
               <Button href={homeHero.primaryCta.href}>{homeHero.primaryCta.label}</Button>
               <Button href={homeHero.secondaryCta.href} variant="secondary">
                 {homeHero.secondaryCta.label}
               </Button>
             </div>
 
-            <div className="mt-10 grid gap-3 sm:grid-cols-3">
+            <div className="mt-10 grid gap-3 md:grid-cols-2 xl:grid-cols-3">
               {homeHero.valueProps.map((item, index) => (
                 <StateTransition key={item} delay={0.05 * index}>
                   <Card className="h-full rounded-2xl p-4">

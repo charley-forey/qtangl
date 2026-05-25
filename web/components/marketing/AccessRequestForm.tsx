@@ -44,24 +44,24 @@ export default function AccessRequestForm() {
   );
 
   return (
-    <Card strong className="rounded-[2rem] p-8 sm:p-10">
-      <div className="grid gap-8 lg:grid-cols-[0.8fr_1.2fr]">
+    <Card strong className="rounded-[2rem] p-6 sm:p-8 lg:p-10">
+      <div className="grid gap-8 xl:grid-cols-[0.8fr_1.2fr]">
         <div>
           <Eyebrow>Access interface</Eyebrow>
           <h2 className="mt-4 text-3xl font-semibold tracking-tight text-white">
             Request pilot access
           </h2>
           <p className="mt-4 text-base leading-8 text-[var(--color-gray-300)]">
-            Share the workflow you want to model. Qtangl prioritizes teams working on scheduling, routing, allocation, and adjacent optimization systems.
+            Share the workflow you want to improve. Qtangl prioritizes teams with clear scheduling, routing, allocation, and operational planning use cases.
           </p>
           <div className="mt-6 space-y-3 text-sm leading-7 text-[var(--color-gray-400)]">
-            <p>Preferred signals: operational scale, integration context, and constraint complexity.</p>
-            <p>Configured providers: Resend via API or Formspree via webhook endpoint.</p>
+            <p>Strong submissions explain the planning problem, the system context, and the operational constraints that matter most.</p>
+            <p>We currently prioritize design partners, API evaluation teams, and operations-heavy organizations preparing for a pilot.</p>
           </div>
         </div>
 
-        <form action={formAction} className="grid gap-4">
-          <div className="grid gap-4 sm:grid-cols-2">
+        <form action={formAction} className="grid gap-4 sm:gap-5">
+          <div className="grid gap-4 md:grid-cols-2">
             <Input
               label="Name"
               name="name"
@@ -77,7 +77,7 @@ export default function AccessRequestForm() {
             />
           </div>
 
-          <div className="grid gap-4 sm:grid-cols-2">
+          <div className="grid gap-4 md:grid-cols-2">
             <Input
               label="Company"
               name="company"
@@ -114,7 +114,7 @@ export default function AccessRequestForm() {
             />
           </label>
 
-          <div className="flex flex-col gap-4 pt-2 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex flex-col gap-4 pt-2 lg:flex-row lg:items-center lg:justify-between">
             <p
               className={`text-sm leading-7 ${
                 state.status === "error"
@@ -124,7 +124,7 @@ export default function AccessRequestForm() {
             >
               {state.message}
             </p>
-            <Button type="submit" disabled={pending}>
+            <Button type="submit" disabled={pending} className="w-full lg:w-auto">
               {pending ? "Submitting..." : "Request Access"}
             </Button>
           </div>

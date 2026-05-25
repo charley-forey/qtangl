@@ -4,6 +4,7 @@ import CodeBlock from "@/components/docs/CodeBlock";
 import CTA from "@/components/marketing/CTA";
 import FeatureCard from "@/components/marketing/FeatureCard";
 import Hero from "@/components/marketing/Hero";
+import ProductPreview from "@/components/marketing/ProductPreview";
 import StateTransition from "@/components/quantum/StateTransition";
 import Section from "@/components/layout/Section";
 import Card from "@/components/ui/Card";
@@ -35,7 +36,7 @@ export default function Home() {
       <Section>
         <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr]">
           <StateTransition>
-            <div>
+            <div className="content-reading">
               <Eyebrow>{homepageNarrative.problemEyebrow}</Eyebrow>
               <h2 className="mt-4 text-3xl font-semibold tracking-tight text-white sm:text-4xl">
                 {homepageNarrative.problemTitle}
@@ -51,7 +52,7 @@ export default function Home() {
             </div>
           </StateTransition>
 
-          <div className="grid gap-4 sm:grid-cols-2">
+          <div className="grid gap-4 md:grid-cols-2">
             {problemPoints.map((point, index) => (
               <StateTransition key={point} delay={0.05 * index}>
                 <Card className="h-full rounded-2xl p-5">
@@ -68,13 +69,13 @@ export default function Home() {
       <Section>
         <div className="grid gap-8 lg:grid-cols-[0.92fr_1.08fr]">
           <StateTransition>
-            <div>
-              <Eyebrow>System layer</Eyebrow>
+            <div className="content-reading">
+              <Eyebrow>What Qtangl does</Eyebrow>
               <h2 className="mt-4 text-3xl font-semibold tracking-tight text-white sm:text-4xl">
-                A quantum-native optimization interface for operational systems.
+                A quantum-native optimization platform for real operational decisions.
               </h2>
               <p className="mt-5 text-base leading-8 text-[var(--color-gray-300)]">
-                Qtangl holds onto the constraint field instead of flattening it into generic workflow software. Inputs stay structured. Trade-offs stay explicit. Outputs remain interpretable.
+                Qtangl keeps the planning problem intact instead of flattening it into generic workflow software. Teams submit structured constraints, evaluate feasible options, and receive ranked plans they can act on.
               </p>
             </div>
           </StateTransition>
@@ -91,7 +92,7 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="mt-10 grid gap-6 md:grid-cols-3">
+        <div className="mt-10 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
           {platformHighlights.map((item, index) => (
             <StateTransition key={item.title} delay={0.05 * index}>
               <FeatureCard title={item.title} description={item.description} />
@@ -100,10 +101,16 @@ export default function Home() {
         </div>
       </Section>
 
+      <Section className="pt-0">
+        <StateTransition>
+          <ProductPreview />
+        </StateTransition>
+      </Section>
+
       <Section>
         <div className="flex items-end justify-between gap-4">
           <StateTransition>
-            <div>
+            <div className="content-reading">
               <Eyebrow>{homepageNarrative.architectureEyebrow}</Eyebrow>
               <h2 className="mt-4 text-3xl font-semibold tracking-tight text-white sm:text-4xl">
                 {homepageNarrative.architectureTitle}
@@ -111,7 +118,7 @@ export default function Home() {
             </div>
           </StateTransition>
         </div>
-        <div className="mt-10 grid gap-6 md:grid-cols-3">
+        <div className="mt-10 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
           {workflowSteps.map((step, index) => (
             <StateTransition key={step.title} delay={0.05 * index}>
               <Card strong className="h-full rounded-2xl p-6">
@@ -129,7 +136,7 @@ export default function Home() {
       <Section>
         <div className="flex items-end justify-between gap-4">
           <StateTransition>
-            <div>
+            <div className="content-reading">
               <Eyebrow>{homepageNarrative.domainEyebrow}</Eyebrow>
               <h2 className="mt-4 text-3xl font-semibold tracking-tight text-white sm:text-4xl">
                 {homepageNarrative.domainTitle}
@@ -137,13 +144,15 @@ export default function Home() {
             </div>
           </StateTransition>
         </div>
-        <div className="mt-10 grid gap-6 lg:grid-cols-3">
+        <div className="mt-10 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
           {useCases.map((useCase, index) => (
             <StateTransition key={useCase.title} delay={0.05 * index}>
               <FeatureCard
                 eyebrow={useCase.eyebrow}
                 title={useCase.title}
                 description={useCase.description}
+                imageSrc={useCase.image}
+                imageAlt={useCase.imageAlt}
               >
                 <p>
                   <span className="font-semibold text-white">Problem:</span>{" "}
@@ -166,13 +175,13 @@ export default function Home() {
       <Section>
         <div className="grid gap-8 lg:grid-cols-[0.88fr_1.12fr]">
           <StateTransition>
-            <div>
+            <div className="content-reading">
               <Eyebrow>{homepageNarrative.interfaceEyebrow}</Eyebrow>
               <h2 className="mt-4 text-3xl font-semibold tracking-tight text-white sm:text-4xl">
                 {homepageNarrative.interfaceTitle}
               </h2>
               <p className="mt-5 text-base leading-8 text-[var(--color-gray-300)]">
-                Developers define the problem in JSON, Qtangl resolves the optimization workflow, and downstream systems receive a plan with traceable state, method, and cost metadata.
+                Developers define the problem in JSON, Qtangl runs the optimization workflow, and downstream systems receive a ranked plan with traceable method, cost, and feasibility metadata.
               </p>
             </div>
           </StateTransition>

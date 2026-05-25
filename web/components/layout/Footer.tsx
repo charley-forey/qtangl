@@ -62,7 +62,7 @@ export default function Footer() {
         </div>
       </div>
       <div className="border-t border-[var(--border)] px-6 py-4 text-center text-xs text-[var(--color-gray-500)] sm:px-8 lg:px-12">
-        © {new Date().getFullYear()} Qtangl. Quantum-native interface for constrained operations.
+        © {new Date().getFullYear()} Qtangl. All rights reserved.
       </div>
     </footer>
   );

@@ -27,7 +27,7 @@ export default function BlogPage() {
       </Section>
 
       <Section className="pt-0 pb-20 sm:pb-24">
-        <div className="grid gap-6 lg:grid-cols-3">
+        <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
           {blogPosts.map((post) => (
             <FeatureCard
               key={post.slug}
@@ -36,6 +36,8 @@ export default function BlogPage() {
               description={post.excerpt}
               href={post.href}
               ctaLabel="Read article"
+              imageSrc={post.coverImage}
+              imageAlt={post.coverAlt}
             >
               <p className="font-medium text-white">{post.description}</p>
             </FeatureCard>

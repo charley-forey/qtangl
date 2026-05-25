@@ -14,6 +14,8 @@ export default function QuantumOptimizationPage() {
       eyebrow="Quantum optimization basics"
       title="Why quantum optimization matters for operational planning"
       intro="Qtangl is not built around abstract quantum theory. It is built around the idea that real scheduling and routing problems stay hard when constraints stack on top of each other."
+      coverImage="/qtangl-technology-solver-grid.png"
+      coverAlt="Black and white abstract technology illustration showing solver workflow panels and network geometry."
     >
       <section>
         <h2>Start with the actual business problem</h2>

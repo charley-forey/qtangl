@@ -19,15 +19,15 @@ export default function StateTransition({
   return (
     <motion.div
       className={className}
-      initial={reduceMotion ? undefined : { opacity: 0, y: 8, filter: "blur(6px)" }}
+      initial={reduceMotion ? undefined : { opacity: 0, y: 10 }}
       whileInView={
         reduceMotion
           ? undefined
-          : { opacity: 1, y: 0, filter: "blur(0px)" }
+          : { opacity: 1, y: 0 }
       }
       viewport={{ once: true, amount: 0.2 }}
       transition={{
-        duration: reduceMotion ? 0 : 0.55,
+        duration: reduceMotion ? 0 : 0.45,
         delay,
         ease: [0.22, 1, 0.36, 1],
       }}

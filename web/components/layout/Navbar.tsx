@@ -34,11 +34,11 @@ export default function Navbar() {
 
   return (
     <>
-      <header className="sticky top-0 z-50 border-b border-[var(--border)] bg-black/80 backdrop-blur-xl">
+      <header className="sticky top-0 z-50 border-b border-[var(--border)] bg-black/80 backdrop-blur-md">
         <div
           className={[
-            "mx-auto flex w-full max-w-7xl items-center justify-between gap-4 px-6 sm:px-8 lg:px-12",
-            compressed ? "py-3" : "py-4",
+            "mx-auto flex w-full max-w-[var(--container-wide)] items-center justify-between gap-3 px-5 sm:px-6 md:px-8 lg:px-10 xl:px-12",
+            compressed ? "py-3" : "py-3.5 sm:py-4",
           ].join(" ")}
         >
           <Link href="/" className="flex items-center gap-3">
@@ -80,13 +80,13 @@ export default function Navbar() {
           <div className="flex items-center gap-3">
             <Link
               href="/access"
-              className="hidden rounded-full border border-[var(--border)] px-4 py-2 text-sm text-white transition hover:border-[var(--border-strong)] hover:bg-white/[0.04] md:inline-flex"
+              className="touch-target hidden items-center rounded-full border border-[var(--border)] px-4 py-2 text-sm text-white transition hover:border-[var(--border-strong)] hover:bg-white/[0.04] md:inline-flex"
             >
               Request Access
             </Link>
             <button
               type="button"
-              className="inline-flex rounded-full border border-[var(--border)] px-4 py-2 text-sm text-white transition hover:border-[var(--border-strong)] hover:bg-white/[0.04] md:hidden"
+              className="touch-target inline-flex items-center rounded-full border border-[var(--border)] px-4 py-2 text-sm text-white transition hover:border-[var(--border-strong)] hover:bg-white/[0.04] md:hidden"
               onClick={() => setOpen(true)}
             >
               Menu
@@ -103,7 +103,11 @@ export default function Navbar() {
                 key={item.href}
                 href={item.href}
                 onClick={() => setOpen(false)}
-                className="block rounded-xl border border-transparent px-3 py-3 text-base text-white transition hover:border-[var(--border)] hover:bg-white/[0.04]"
+                className={`touch-target block rounded-xl border px-3 py-3 text-base transition ${
+                  isActive(pathname, item.href)
+                    ? "border-[var(--border-strong)] bg-white/[0.06] text-white"
+                    : "border-transparent text-white hover:border-[var(--border)] hover:bg-white/[0.04]"
+                }`}
               >
                 {item.name}
               </Link>

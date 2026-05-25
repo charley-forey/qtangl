@@ -8,14 +8,14 @@ import { accessPanel } from "@/lib/copy/home";
 
 export const metadata: Metadata = {
   title: "Access",
-  description: "Request pilot access to the Qtangl optimization interface.",
+  description: "Request pilot access for scheduling, routing, and allocation workflows.",
 };
 
 export default function AccessPage() {
   return (
     <main className="flex-1">
       <Section className="pt-12 sm:pt-16">
-        <div className="max-w-4xl">
+        <div className="content-reading">
           <Eyebrow>{accessPanel.eyebrow}</Eyebrow>
           <h1 className="mt-4 text-4xl font-semibold tracking-tight text-white sm:text-5xl">
             {accessPanel.title}
@@ -27,20 +27,20 @@ export default function AccessPage() {
       </Section>
 
       <Section className="pt-0">
-        <div className="grid gap-6 lg:grid-cols-[0.78fr_1.22fr]">
+        <div className="grid gap-6 xl:grid-cols-[0.78fr_1.22fr]">
           <div className="space-y-6">
             <Card className="rounded-2xl">
               <Eyebrow>Who this is for</Eyebrow>
               <ul className="mt-4 space-y-3 text-sm leading-7 text-[var(--color-gray-300)]">
-                <li>Operations teams with scheduling or routing bottlenecks.</li>
-                <li>Platform teams building optimization into internal tooling.</li>
-                <li>Research-aligned partners evaluating hybrid execution workflows.</li>
+                <li>Operations teams dealing with scheduling, routing, or staffing bottlenecks.</li>
+                <li>Platform teams embedding optimization into internal or customer-facing tools.</li>
+                <li>Technical partners preparing for an API evaluation or pilot deployment.</li>
               </ul>
             </Card>
             <Card className="rounded-2xl">
               <Eyebrow>What to include</Eyebrow>
               <p className="mt-4 text-sm leading-7 text-[var(--color-gray-300)]">
-                Share the system you are modeling, the constraints that matter most, and whether the next step is a pilot, API evaluation, or research conversation.
+                Share the workflow you are improving, the constraints that matter most, and whether the next step is a pilot, API evaluation, or technical discovery conversation.
               </p>
             </Card>
           </div>

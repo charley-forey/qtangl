@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { ReactNode } from "react";
 
 import ProbabilityGrid from "@/components/quantum/ProbabilityGrid";
@@ -8,6 +9,8 @@ type ArticleLayoutProps = {
   eyebrow: string;
   title: string;
   intro: string;
+  coverImage?: string;
+  coverAlt?: string;
   children: ReactNode;
 };
 
@@ -15,6 +18,8 @@ export default function ArticleLayout({
   eyebrow,
   title,
   intro,
+  coverImage,
+  coverAlt,
   children,
 }: ArticleLayoutProps) {
   return (
@@ -27,6 +32,20 @@ export default function ArticleLayout({
         <p className="mt-6 max-w-3xl text-lg leading-8 text-[var(--color-gray-300)]">
           {intro}
         </p>
+
+        {coverImage ? (
+          <Card strong className="relative mt-10 overflow-hidden rounded-[1.5rem] p-0">
+            <div className="relative aspect-[16/9]">
+              <Image
+                src={coverImage}
+                alt={coverAlt ?? ""}
+                fill
+                sizes="(min-width: 1024px) 768px, 100vw"
+                className="object-cover grayscale"
+              />
+            </div>
+          </Card>
+        ) : null}
 
         <Card strong className="relative mt-10 overflow-hidden rounded-[1.75rem] p-0">
           <ProbabilityGrid />

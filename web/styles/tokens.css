@@ -22,6 +22,19 @@
   --grid-line: rgba(255, 255, 255, 0.06);
   --focus-ring: rgba(255, 255, 255, 0.72);
 
+  --container-wide: 78rem;
+  --container-reading: 46rem;
+  --container-narrow: 36rem;
+  --gutter-mobile: 1.25rem;
+  --gutter-tablet: 2rem;
+  --gutter-desktop: 3rem;
+  --section-space-mobile: 4rem;
+  --section-space-tablet: 5rem;
+  --section-space-desktop: 7rem;
+  --panel-gap-mobile: 1rem;
+  --panel-gap-desktop: 1.5rem;
+  --touch-target: 2.75rem;
+
   --radius-sm: 0.125rem;
   --radius-md: 0.25rem;
   --radius-lg: 0.5rem;

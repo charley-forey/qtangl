@@ -15,14 +15,14 @@ export default function Modal({ open, title, onClose, children }: ModalProps) {
   }
 
   return (
-    <div className="fixed inset-0 z-[60] flex items-start justify-end bg-black/75 p-4 backdrop-blur-sm md:hidden">
+    <div className="fixed inset-0 z-[60] flex items-start justify-stretch bg-black/80 p-3 backdrop-blur-[2px] md:hidden">
       <button
         type="button"
         aria-label="Close modal"
         className="absolute inset-0 cursor-default"
         onClick={onClose}
       />
-      <div className="surface-panel-strong relative z-10 w-full max-w-sm rounded-2xl p-5">
+      <div className="surface-panel-strong relative z-10 w-full rounded-[1.5rem] p-5 shadow-[0_18px_60px_rgba(0,0,0,0.45)]">
         <div className="flex items-center justify-between gap-4 border-b border-[var(--border)] pb-4">
           <div>
             <p className="text-label">Navigation</p>

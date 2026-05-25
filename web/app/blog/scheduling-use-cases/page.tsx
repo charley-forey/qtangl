@@ -14,6 +14,8 @@ export default function SchedulingUseCasesPage() {
       eyebrow="Scheduling use cases"
       title="Construction and workforce scheduling are still wide-open problems"
       intro="Scheduling stays difficult because the real world does not respect clean textbook assumptions. Dependencies, labor limits, inspections, and changing priorities all interact at once."
+      coverImage="/qtangl-usecase-scheduling.png"
+      coverAlt="Black and white scheduling illustration showing crews, planning boards, and task sequencing."
     >
       <section>
         <h2>Construction schedules are dependency graphs in disguise</h2>
