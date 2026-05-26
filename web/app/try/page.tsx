@@ -8,7 +8,7 @@ import Eyebrow from "@/components/ui/Eyebrow";
 export const metadata: Metadata = {
   title: "Try Qtangl",
   description:
-    "Explore how Qtangl turns scheduling, routing, and staffing inputs into visual plans and plain-English summaries.",
+    "See how Qtangl turns planning inputs into ranked plans, summaries, and metrics before you integrate.",
 };
 
 export default function TryPage() {

@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 
+import { homeHero } from "@/lib/copy/home";
+
 type EntanglementFieldProps = {
   className?: string;
 };
@@ -105,9 +107,9 @@ export default function EntanglementField({
       </svg>
 
       <div className="relative z-10 mt-6 flex flex-col items-start gap-2 text-xs uppercase tracking-[0.28em] text-[var(--color-gray-400)] sm:flex-row sm:items-center sm:justify-between sm:gap-4">
-        <span>Entangled state</span>
-        <span>Constraint interference</span>
-        <span>Ranked collapse</span>
+        {homeHero.visualLabels.map((label) => (
+          <span key={label}>{label}</span>
+        ))}
       </div>
     </div>
   );

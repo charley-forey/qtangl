@@ -9,6 +9,7 @@ import {
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
 import Eyebrow from "@/components/ui/Eyebrow";
+import { accessFormCopy } from "@/lib/copy/access";
 
 function Input({
   label,
@@ -47,54 +48,46 @@ export default function AccessRequestForm() {
     <Card strong className="rounded-[2rem] p-6 sm:p-8 lg:p-10">
       <div className="grid gap-8 xl:grid-cols-[0.8fr_1.2fr]">
         <div>
-          <Eyebrow>Access interface</Eyebrow>
+          <Eyebrow>{accessFormCopy.eyebrow}</Eyebrow>
           <h2 className="mt-4 text-3xl font-semibold tracking-tight text-white">
-            Request pilot access
+            {accessFormCopy.title}
           </h2>
           <p className="mt-4 text-base leading-8 text-[var(--color-gray-300)]">
-            Share the workflow you want to improve and the systems you already use.
-            Qtangl prioritizes teams with clear scheduling, routing, allocation, and
-            operational planning use cases.
+            {accessFormCopy.description}
           </p>
           <div className="mt-6 space-y-3 text-sm leading-7 text-[var(--color-gray-400)]">
-            <p>
-              Strong submissions explain the planning problem, the system context,
-              the operational constraints that matter most, and the current tooling
-              stack.
-            </p>
-            <p>
-              We currently prioritize design partners, API evaluation teams, and
-              operations-heavy organizations preparing for a pilot.
-            </p>
+            {accessFormCopy.helpfulNotes.map((note) => (
+              <p key={note}>{note}</p>
+            ))}
           </div>
         </div>
 
         <form action={formAction} className="grid gap-4 sm:gap-5">
           <div className="grid gap-4 md:grid-cols-2">
             <Input
-              label="Name"
+              label={accessFormCopy.fields.name.label}
               name="name"
-              placeholder="Ada Lovelace"
+              placeholder={accessFormCopy.fields.name.placeholder}
               required
             />
             <Input
-              label="Work email"
+              label={accessFormCopy.fields.email.label}
               name="email"
               type="email"
-              placeholder="ada@company.com"
+              placeholder={accessFormCopy.fields.email.placeholder}
               required
             />
           </div>
 
           <div className="grid gap-4 md:grid-cols-2">
             <Input
-              label="Company"
+              label={accessFormCopy.fields.company.label}
               name="company"
-              placeholder="Example Systems"
+              placeholder={accessFormCopy.fields.company.placeholder}
               required
             />
             <label className="grid gap-2 text-sm text-[var(--color-gray-300)]">
-              <span>Interest area</span>
+              <span>{accessFormCopy.fields.interest.label}</span>
               <select
                 name="interest"
                 required
@@ -102,32 +95,32 @@ export default function AccessRequestForm() {
                 defaultValue=""
               >
                 <option value="" disabled>
-                  Select
+                  {accessFormCopy.fields.interest.placeholder}
                 </option>
-                <option value="Scheduling optimization">Scheduling optimization</option>
-                <option value="Routing optimization">Routing optimization</option>
-                <option value="Resource allocation">Resource allocation</option>
-                <option value="Developer platform">Developer platform</option>
-                <option value="Research collaboration">Research collaboration</option>
+                {accessFormCopy.fields.interest.options.map((option) => (
+                  <option key={option} value={option}>
+                    {option}
+                  </option>
+                ))}
               </select>
             </label>
           </div>
 
           <label className="grid gap-2 text-sm text-[var(--color-gray-300)]">
-            <span>Current tools</span>
+            <span>{accessFormCopy.fields.currentTools.label}</span>
             <input
               name="currentTools"
-              placeholder="Procore, spreadsheets, Samsara, Smartsheet..."
+              placeholder={accessFormCopy.fields.currentTools.placeholder}
               className="h-12 rounded-xl border border-[var(--border)] bg-black px-4 text-sm text-white outline-none transition placeholder:text-[var(--color-gray-500)] focus:border-[var(--border-strong)]"
             />
           </label>
 
           <label className="grid gap-2 text-sm text-[var(--color-gray-300)]">
-            <span>System context</span>
+            <span>{accessFormCopy.fields.message.label}</span>
             <textarea
               name="message"
               rows={6}
-              placeholder="Describe the planning problem, system constraints, or API integration context."
+              placeholder={accessFormCopy.fields.message.placeholder}
               className="rounded-xl border border-[var(--border)] bg-black px-4 py-3 text-sm leading-7 text-white outline-none transition placeholder:text-[var(--color-gray-500)] focus:border-[var(--border-strong)]"
             />
           </label>
@@ -143,7 +136,7 @@ export default function AccessRequestForm() {
               {state.message}
             </p>
             <Button type="submit" disabled={pending} className="w-full lg:w-auto">
-              {pending ? "Submitting..." : "Request Access"}
+              {pending ? accessFormCopy.pendingLabel : accessFormCopy.submitLabel}
             </Button>
           </div>
         </form>

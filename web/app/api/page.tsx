@@ -12,7 +12,8 @@ import {
 
 export const metadata: Metadata = {
   title: "API Reference",
-  description: "Reference page for the Qtangl `/optimize` endpoint.",
+  description:
+    "See exactly what to send to `/optimize` and what comes back in the response.",
 };
 
 export default function ApiPage() {

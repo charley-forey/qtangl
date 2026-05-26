@@ -1,16 +1,4 @@
-export const nav = [
-  { name: "Home", href: "/" },
-  { name: "Try", href: "/try" },
-  { name: "Technology", href: "/technology" },
-  { name: "Docs", href: "/docs" },
-  { name: "Access", href: "/access" },
-] as const;
-
-export const footerNav = [
-  { name: "About", href: "/about" },
-  { name: "API", href: "/api" },
-  { name: "Blog", href: "/blog" },
-] as const;
+export { footerNav, nav } from "@/lib/copy/nav";
 
 export const docsNav = [
   { name: "Overview", href: "/docs" },

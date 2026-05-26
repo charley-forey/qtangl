@@ -11,7 +11,8 @@ import {
 
 export const metadata: Metadata = {
   title: "Quickstart",
-  description: "Submit a basic optimization request and understand the Qtangl response.",
+  description:
+    "Send your first planning job and understand the ranked plan Qtangl returns.",
 };
 
 export default function QuickstartPage() {

@@ -7,7 +7,7 @@ import { dataFormatGuides } from "@/lib/demo-data";
 export const metadata: Metadata = {
   title: "Data Formats",
   description:
-    "Field-level guidance for schedule, routing, and allocation inputs in the Qtangl pilot.",
+    "Prepare schedule, routing, and staffing data so your first Qtangl request is ready to run.",
 };
 
 export default function DataFormatsPage() {

@@ -1,7 +1,7 @@
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
 import Eyebrow from "@/components/ui/Eyebrow";
-import { accessPanel } from "@/lib/copy/home";
+import { accessCtas, accessPanel } from "@/lib/copy/access";
 
 export default function CTA() {
   return (
@@ -20,9 +20,9 @@ export default function CTA() {
           </p>
         </div>
         <div className="flex flex-col gap-3 sm:flex-row lg:flex-col">
-          <Button href="/access">Request Access</Button>
-          <Button href="/docs" variant="secondary">
-            Read Documentation
+          <Button href={accessCtas.primary.href}>{accessCtas.primary.label}</Button>
+          <Button href={accessCtas.secondary.href} variant="secondary">
+            {accessCtas.secondary.label}
           </Button>
         </div>
       </div>

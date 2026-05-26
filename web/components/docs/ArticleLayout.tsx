@@ -4,6 +4,7 @@ import { ReactNode } from "react";
 import ProbabilityGrid from "@/components/quantum/ProbabilityGrid";
 import Card from "@/components/ui/Card";
 import Eyebrow from "@/components/ui/Eyebrow";
+import { articleOutcomeStrip } from "@/lib/copy/articles";
 
 type ArticleLayoutProps = {
   eyebrow: string;
@@ -50,24 +51,14 @@ export default function ArticleLayout({
         <Card strong className="relative mt-10 overflow-hidden rounded-[1.75rem] p-0">
           <ProbabilityGrid />
           <div className="relative grid gap-6 px-8 py-10 sm:grid-cols-3">
-            <div>
-              <p className="text-label">Signal</p>
-              <p className="mt-3 text-sm leading-7 text-[var(--color-gray-300)]">
-                Constraint fields become computable when state, objective, and feasibility are modeled together.
-              </p>
-            </div>
-            <div>
-              <p className="text-label">Method</p>
-              <p className="mt-3 text-sm leading-7 text-[var(--color-gray-300)]">
-                Hybrid execution layers classical orchestration with quantum-assisted search where it improves ranking.
-              </p>
-            </div>
-            <div>
-              <p className="text-label">Outcome</p>
-              <p className="mt-3 text-sm leading-7 text-[var(--color-gray-300)]">
-                The interface returns interpretable plans rather than opaque solver output.
-              </p>
-            </div>
+            {articleOutcomeStrip.map((item) => (
+              <div key={item.label}>
+                <p className="text-label">{item.label}</p>
+                <p className="mt-3 text-sm leading-7 text-[var(--color-gray-300)]">
+                  {item.description}
+                </p>
+              </div>
+            ))}
           </div>
         </Card>
 

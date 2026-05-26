@@ -1,8 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 
+import { footerCopy, footerNav, nav } from "@/lib/copy/nav";
 import { footerBlurb, siteMetadata } from "@/lib/copy/product";
-import { footerNav, nav } from "@/lib/siteConfig";
 
 export default function Footer() {
   return (
@@ -30,7 +30,7 @@ export default function Footer() {
 
         <div className="grid gap-6 text-sm text-[var(--color-gray-300)] sm:grid-cols-2">
           <div className="space-y-3">
-            <p className="text-label">Primary</p>
+            <p className="text-label">{footerCopy.primaryHeading}</p>
             {nav.map((item) => (
               <Link
                 key={item.href}
@@ -42,7 +42,7 @@ export default function Footer() {
             ))}
           </div>
           <div className="space-y-3">
-            <p className="text-label">Signal</p>
+            <p className="text-label">{footerCopy.secondaryHeading}</p>
             {footerNav.map((item) => (
               <Link
                 key={item.href}
@@ -56,7 +56,7 @@ export default function Footer() {
               href={`mailto:${siteMetadata.contactEmail}`}
               className="block transition hover:text-white"
             >
-              Contact
+              {footerCopy.contactLabel}
             </a>
           </div>
         </div>

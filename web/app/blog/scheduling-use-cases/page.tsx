@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 
 import ArticleLayout from "@/components/docs/ArticleLayout";
+import { blogClosingCta } from "@/lib/copy/articles";
 
 export const metadata: Metadata = {
   title: "Scheduling Use Cases",
   description:
-    "Why construction and workforce scheduling remain hard and where API-driven optimization helps.",
+    "See how better scheduling workflows reduce manual replanning and improve staffing decisions.",
 };
 
 export default function SchedulingUseCasesPage() {
@@ -41,6 +43,14 @@ export default function SchedulingUseCasesPage() {
           Qtangl packages these planning decisions as an optimization workflow that
           existing systems can call. That turns scheduling from a manual exercise
           into a repeatable service that can be rerun as conditions change.
+        </p>
+      </section>
+
+      <section>
+        <h2>{blogClosingCta.title}</h2>
+        <p>
+          {blogClosingCta.description}{" "}
+          <Link href={blogClosingCta.href}>{blogClosingCta.label}</Link>.
         </p>
       </section>
     </ArticleLayout>

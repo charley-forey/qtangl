@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import Modal from "@/components/ui/Modal";
-import { footerNav, nav } from "@/lib/siteConfig";
+import { footerCopy, footerNav, nav, navbarCopy } from "@/lib/copy/nav";
 
 function isActive(pathname: string, href: string) {
   if (href === "/") {
@@ -52,7 +52,7 @@ export default function Navbar() {
             <div>
               <div className="text-label text-white">Qtangl</div>
               <div className="text-xs text-[var(--color-gray-400)]">
-                Planning API for operational teams
+                {navbarCopy.subtitle}
               </div>
             </div>
           </Link>
@@ -82,20 +82,20 @@ export default function Navbar() {
               href="/try"
               className="touch-target hidden items-center rounded-full border border-[var(--border)] px-4 py-2 text-sm text-white transition hover:border-[var(--border-strong)] hover:bg-white/[0.04] md:inline-flex"
             >
-              Try Demo
+              {navbarCopy.primaryCtaLabel}
             </Link>
             <button
               type="button"
               className="touch-target inline-flex items-center rounded-full border border-[var(--border)] px-4 py-2 text-sm text-white transition hover:border-[var(--border-strong)] hover:bg-white/[0.04] md:hidden"
               onClick={() => setOpen(true)}
             >
-              Menu
+              {navbarCopy.mobileMenuLabel}
             </button>
           </div>
         </div>
       </header>
 
-      <Modal open={open} onClose={() => setOpen(false)} title="Qtangl navigation">
+      <Modal open={open} onClose={() => setOpen(false)} title={navbarCopy.mobileTitle}>
         <div className="space-y-5">
           <div className="space-y-2">
             {nav.map((item) => (
@@ -115,6 +115,9 @@ export default function Navbar() {
           </div>
           <div className="hairline-divider" />
           <div className="space-y-2">
+            <p className="px-3 text-xs uppercase tracking-[0.22em] text-[var(--color-gray-500)]">
+              {footerCopy.secondaryHeading}
+            </p>
             {footerNav.map((item) => (
               <Link
                 key={item.href}

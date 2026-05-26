@@ -14,7 +14,8 @@ import { technologyPage } from "@/lib/copy/product";
 
 export const metadata: Metadata = {
   title: "Technology",
-  description: "How Qtangl models constraints, runs hybrid optimization, and returns ranked plans.",
+  description:
+    "See how Qtangl evaluates operational constraints and returns ranked plans teams can review and run.",
 };
 
 export default function TechnologyPage() {

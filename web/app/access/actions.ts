@@ -1,5 +1,7 @@
 "use server";
 
+import { accessFormMessages } from "@/lib/copy/access";
+
 export type AccessFormState = {
   status: "idle" | "success" | "error";
   message: string;
@@ -7,7 +9,7 @@ export type AccessFormState = {
 
 export const initialAccessFormState: AccessFormState = {
   status: "idle",
-  message: "Priority access is currently open for design partners and technical evaluation teams.",
+  message: accessFormMessages.initial,
 };
 
 export async function requestAccess(
@@ -24,7 +26,7 @@ export async function requestAccess(
   if (!name || !email || !company || !interest) {
     return {
       status: "error",
-      message: "Incomplete state. Add your name, work email, company, and interest area.",
+      message: accessFormMessages.missingFields,
     };
   }
 
@@ -32,7 +34,7 @@ export async function requestAccess(
   if (!isValidEmail) {
     return {
       status: "error",
-      message: "Invalid email state. Check the address and submit again.",
+      message: accessFormMessages.invalidEmail,
     };
   }
 
@@ -74,13 +76,13 @@ export async function requestAccess(
     if (!response.ok) {
       return {
         status: "error",
-        message: "Delivery failure. The request was valid, but email routing did not complete.",
+        message: accessFormMessages.deliveryFailed,
       };
     }
 
     return {
       status: "success",
-      message: "Signal received. Qtangl will reach out when the next pilot window opens.",
+      message: accessFormMessages.success,
     };
   }
 
@@ -98,13 +100,13 @@ export async function requestAccess(
     if (!response.ok) {
       return {
         status: "error",
-        message: "Delivery failure. The request reached the server action but not the form endpoint.",
+        message: accessFormMessages.deliveryFailed,
       };
     }
 
     return {
       status: "success",
-      message: "Signal received. Qtangl will reach out when the next pilot window opens.",
+      message: accessFormMessages.success,
     };
   }
 
@@ -112,7 +114,6 @@ export async function requestAccess(
 
   return {
     status: "success",
-    message:
-      "Signal received. Email delivery is not configured yet, but the server action path is active.",
+    message: accessFormMessages.capturedForReview,
   };
 }

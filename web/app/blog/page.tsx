@@ -7,7 +7,8 @@ import { blogPosts } from "@/lib/constants";
 
 export const metadata: Metadata = {
   title: "Blog",
-  description: "Qtangl thought leadership and use-case articles for optimization teams.",
+  description:
+    "Learn practical ways to improve scheduling, routing, and staffing decisions.",
 };
 
 export default function BlogPage() {

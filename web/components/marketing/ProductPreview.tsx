@@ -1,6 +1,7 @@
 import Card from "@/components/ui/Card";
 import Eyebrow from "@/components/ui/Eyebrow";
 import PlanVisualization from "@/components/visualization/PlanVisualization";
+import { homeProductPreview } from "@/lib/copy/home";
 import { tryScenarios } from "@/lib/demo-data";
 
 type ProductPreviewProps = {
@@ -10,9 +11,9 @@ type ProductPreviewProps = {
 };
 
 export default function ProductPreview({
-  eyebrow = "Product proof",
-  title = "A planning product people can understand before they ever read the API.",
-  description = "The interface below shows the kind of ranked output Qtangl is designed to return: a readable plan, a short explanation, and the metric that makes the value obvious.",
+  eyebrow = homeProductPreview.eyebrow,
+  title = homeProductPreview.title,
+  description = homeProductPreview.description,
 }: ProductPreviewProps) {
   const scheduleScenario = tryScenarios[0];
 
@@ -28,15 +29,9 @@ export default function ProductPreview({
             {description}
           </p>
           <div className="mt-6 space-y-3 text-sm leading-7 text-[var(--color-gray-300)]">
-            <p>
-              The right product surface starts with the business problem, not solver
-              jargon. That means a user should immediately see the plan, the blocked
-              window, and the measurable improvement.
-            </p>
-            <p>
-              The same visualization layer can render demo data today and live API
-              responses later without changing the mental model.
-            </p>
+            {homeProductPreview.details.map((detail) => (
+              <p key={detail}>{detail}</p>
+            ))}
           </div>
         </Card>
       </div>
