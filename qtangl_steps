@@ -1,0 +1,318 @@
+🧠 QTANGL CURSOR BUILD PLAN (FILE-BY-FILE)
+🏗️ PROJECT STRUCTURE
+qtangl/
+├── app/
+│   ├── page.tsx                      # Landing page
+│   ├── layout.tsx                    # Root layout
+│   ├── globals.css                   # Global styles
+│
+│   ├── docs/
+│   │   ├── page.tsx                  # Docs home
+│   │   ├── quickstart/page.tsx       # Quickstart guide
+│   │   ├── concepts/page.tsx         # Core concepts
+│   │   ├── api/page.tsx              # API overview
+│
+│   ├── api/
+│   │   ├── page.tsx                  # API reference landing
+│
+│   ├── blog/
+│   │   ├── page.tsx                  # Blog index
+│   │   ├── quantum-optimization/page.tsx
+│   │   ├── scheduling-use-cases/page.tsx
+│   │   ├── routing-optimization/page.tsx
+│
+├── components/
+│   ├── Hero.tsx
+│   ├── Navbar.tsx
+│   ├── Footer.tsx
+│   ├── Section.tsx
+│   ├── CTA.tsx
+│   ├── FeatureCard.tsx
+│   ├── CodeBlock.tsx
+│
+├── lib/
+│   ├── constants.ts                  # Copy, taglines, metadata
+│   ├── siteConfig.ts                 # Routes + nav structure
+│
+├── styles/
+│   ├── tailwind.css                  # Tailwind config styles
+│
+├── public/
+│   ├── logo.svg
+│   ├── og-image.png
+│
+├── package.json
+├── next.config.js
+├── tsconfig.json
+├── tailwind.config.js
+🏠 1. LANDING PAGE
+📄 app/page.tsx
+Purpose:
+
+Main conversion page (enterprise-grade landing)
+
+Must include:
+Hero section
+Problem
+Solution
+How it works
+Use cases
+CTA
+Imports:
+import Hero from "@/components/Hero";
+import FeatureCard from "@/components/FeatureCard";
+import CTA from "@/components/CTA";
+import Footer from "@/components/Footer";
+🧩 Sections to implement inside page.tsx
+HERO
+
+Use:
+
+<Hero />
+PROBLEM SECTION
+
+Inline section:
+
+“Work is fragmented across tools”
+“Scheduling + routing is manual and inefficient”
+SOLUTION SECTION
+Qtangl API for optimization
+Hybrid classical + quantum execution
+Scheduling + routing focus
+USE CASE CARDS
+
+Use FeatureCard.tsx
+
+Examples:
+
+Construction scheduling optimization
+Logistics routing optimization
+Workforce allocation optimization
+HOW IT WORKS
+
+3 steps:
+
+Input problem
+Optimization engine runs (QAOA concept)
+Returns solution
+CTA
+
+Use:
+
+<CTA />
+🧱 2. ROOT LAYOUT
+📄 app/layout.tsx
+Responsibilities:
+global layout
+navbar
+footer
+metadata
+
+Include:
+
+title: Qtangl
+description: Quantum Optimization API
+🎨 3. COMPONENTS
+📄 components/Hero.tsx
+Purpose:
+
+Main value proposition
+
+Must include:
+Company name: Qtangl
+
+Tagline:
+
+Quantum Optimization API | Scheduling & Routing Solver | Qtangl
+
+One-line explanation
+CTA buttons
+📄 components/Navbar.tsx
+
+Links:
+
+Home
+Docs
+API
+Blog
+📄 components/Footer.tsx
+
+Include:
+
+Qtangl copyright
+links
+simple enterprise footer style
+📄 components/FeatureCard.tsx
+
+Reusable card:
+
+Props:
+
+{
+  title: string,
+  description: string
+}
+
+Used for:
+
+use cases
+features
+📄 components/CTA.tsx
+
+Must include:
+
+email input field
+“Request Early Access” button
+minimal design
+
+No backend required.
+
+📄 components/Section.tsx
+
+Wrapper component for spacing + layout consistency.
+
+📄 components/CodeBlock.tsx
+
+Used in docs:
+
+JSON examples
+API responses
+📘 4. DOCS PAGES
+📄 app/docs/page.tsx
+Purpose:
+
+Docs homepage
+
+Include:
+
+What Qtangl is
+Links to:
+Quickstart
+Concepts
+API
+📄 app/docs/quickstart/page.tsx
+Include:
+Example request:
+{
+  "type": "schedule",
+  "tasks": [
+    {"id": "A", "duration": 3},
+    {"id": "B", "duration": 2}
+  ],
+  "constraints": ["A before B"]
+}
+Example response:
+{
+  "solution": [
+    {"task": "A", "start": "09:00"},
+    {"task": "B", "start": "12:00"}
+  ],
+  "method": "QAOA (IBM Quantum Simulator)"
+}
+📄 app/docs/concepts/page.tsx
+
+Explain:
+
+Optimization problems (scheduling, routing)
+QUBO (light explanation only)
+Hybrid execution (classical + quantum)
+📄 app/docs/api/page.tsx
+
+Explain:
+
+/optimize endpoint
+request/response format
+authentication (mock)
+🔌 5. API PAGE
+📄 app/api/page.tsx
+
+Show:
+
+Endpoint:
+POST /optimize
+Request schema:
+{
+  "type": "schedule | routing",
+  "data": {},
+  "constraints": []
+}
+Response:
+{
+  "status": "success",
+  "solution": {},
+  "method": "qaoa",
+  "backend": "ibm_simulator"
+}
+🧠 6. BLOG
+📄 app/blog/page.tsx
+
+List posts:
+
+Quantum Optimization Basics
+Scheduling Use Cases
+Routing Optimization
+📄 Blog posts:
+quantum-optimization/page.tsx
+what optimization means
+why quantum helps (conceptually)
+scheduling-use-cases/page.tsx
+construction scheduling
+workforce allocation
+routing-optimization/page.tsx
+logistics routing problems
+constraint optimization
+🧾 7. CONFIG FILES
+📄 lib/constants.ts
+
+Include:
+
+tagline
+hero text
+feature list
+use cases
+📄 lib/siteConfig.ts
+
+Define navigation:
+
+export const nav = [
+  { name: "Home", href: "/" },
+  { name: "Docs", href: "/docs" },
+  { name: "API", href: "/api" },
+  { name: "Blog", href: "/blog" }
+];
+🎨 DESIGN SYSTEM
+Styling rules:
+dark mode default
+subtle gradients
+minimal borders
+enterprise SaaS aesthetic
+no sci-fi visuals
+🚀 BUILD ORDER (IMPORTANT)
+
+Tell Cursor to build in this order:
+
+Phase 1
+layout.tsx
+landing page
+Hero / CTA / FeatureCard
+Phase 2
+docs structure
+quickstart page
+API page
+Phase 3
+blog pages
+Phase 4
+polish UI consistency
+navigation + SEO metadata
+🧭 SUCCESS CRITERIA
+
+The build is successful if:
+
+Landing page clearly explains Qtangl in <10 seconds
+Docs feel like a real developer platform
+API feels usable (even if mocked)
+Site looks like early-stage Vercel/Stripe-level startup
+Everything is deployable immediately
+🔥 FINAL INSTRUCTION TO CURSOR
+
+Build this as a real production-grade MVP for a quantum optimization API startup. Prioritize clarity, clean design, and credibility over complexity or features.
