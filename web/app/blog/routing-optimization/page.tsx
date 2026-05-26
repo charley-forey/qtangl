@@ -14,7 +14,7 @@ export default function RoutingOptimizationPage() {
       eyebrow="Routing optimization"
       title="Routing optimization breaks when real-world constraints are ignored"
       intro="The fastest route on paper often fails in production because delivery windows, capacity, service times, and changing conditions all shape what is actually feasible."
-      coverImage="/qtangl-usecase-routing.png"
+      coverImage="/qtangl-usecase-routing.svg"
       coverAlt="Black and white routing illustration showing dispatching, route maps, and network overlays."
     >
       <section>

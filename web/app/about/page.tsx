@@ -41,7 +41,7 @@ export default function AboutPage() {
             <div className="grid gap-4 lg:grid-cols-[1.05fr_0.95fr]">
               <div className="relative aspect-[4/3] overflow-hidden rounded-xl border border-[var(--border)] bg-black/55">
                 <Image
-                  src="/qtangl-hero-probability-field.png"
+                  src="/qtangl-hero-probability-field.svg"
                   alt="Black and white abstract technical artwork with entangled nodes, interference lines, and probability fields."
                   fill
                   sizes="(min-width: 1280px) 28vw, 100vw"

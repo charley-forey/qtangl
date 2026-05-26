@@ -72,10 +72,12 @@ export default function Home() {
             <div className="content-reading">
               <Eyebrow>What Qtangl does</Eyebrow>
               <h2 className="mt-4 text-3xl font-semibold tracking-tight text-white sm:text-4xl">
-                A quantum-native optimization platform for real operational decisions.
+                A planning API that turns constraints into ranked plans.
               </h2>
               <p className="mt-5 text-base leading-8 text-[var(--color-gray-300)]">
-                Qtangl keeps the planning problem intact instead of flattening it into generic workflow software. Teams submit structured constraints, evaluate feasible options, and receive ranked plans they can act on.
+                Qtangl keeps the planning problem intact instead of flattening it
+                into generic workflow software. Teams send the rules they already
+                track, evaluate feasible options, and receive a plan they can run.
               </p>
             </div>
           </StateTransition>
@@ -181,7 +183,9 @@ export default function Home() {
                 {homepageNarrative.interfaceTitle}
               </h2>
               <p className="mt-5 text-base leading-8 text-[var(--color-gray-300)]">
-                Developers define the problem in JSON, Qtangl runs the optimization workflow, and downstream systems receive a ranked plan with traceable method, cost, and feasibility metadata.
+                Start with the guided demo to see the workflow visually. When you are
+                ready to integrate, developers can send JSON and receive the same
+                ranked plan with summary, metrics, and solver details.
               </p>
             </div>
           </StateTransition>

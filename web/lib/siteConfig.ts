@@ -1,5 +1,6 @@
 export const nav = [
   { name: "Home", href: "/" },
+  { name: "Try", href: "/try" },
   { name: "Technology", href: "/technology" },
   { name: "Docs", href: "/docs" },
   { name: "Access", href: "/access" },
@@ -13,6 +14,7 @@ export const footerNav = [
 
 export const docsNav = [
   { name: "Overview", href: "/docs" },
+  { name: "Data formats", href: "/docs/data-formats" },
   { name: "Quickstart", href: "/docs/quickstart" },
   { name: "Concepts", href: "/docs/concepts" },
   { name: "API Guide", href: "/docs/api" },

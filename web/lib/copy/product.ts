@@ -1,13 +1,12 @@
 export const siteMetadata = {
   name: "Qtangl",
-  title: "Qtangl | Quantum-Native Optimization Platform",
+  title: "Qtangl | Planning API for Schedules, Routes, and Staffing",
   description:
-    "Qtangl helps teams solve scheduling, routing, and resource allocation problems through a hybrid optimization API.",
+    "Qtangl turns scheduling, routing, and staffing constraints into ranked plans teams can review and run.",
   url: "https://qtangl.com",
-  tagline:
-    "Scheduling, routing, and allocation optimization for operations teams.",
+  tagline: "Send your constraints. Get a plan your team can run.",
   oneLiner:
-    "Submit operational constraints. Get ranked schedules, routes, and allocation plans.",
+    "Turn operational constraints into ranked schedules, routes, and staffing plans.",
   contactEmail: "founders@qtangl.com",
 } as const;
 
@@ -15,7 +14,7 @@ export const aboutContent = {
   eyebrow: "About Qtangl",
   title: "Optimization infrastructure for operational systems.",
   intro:
-    "Qtangl builds software for teams that need better planning decisions under hard constraints. The product combines a precise interface, structured modeling, and hybrid optimization methods without forcing users to think in research terms.",
+    "Qtangl builds planning software for teams that lose time and money when schedules, routes, or staffing plans break under real-world constraints. The product keeps the interface readable, the outputs actionable, and the solver stack behind the scenes.",
   principles: [
     {
       title: "Clear inputs",
@@ -37,9 +36,9 @@ export const aboutContent = {
 
 export const technologyPage = {
   eyebrow: "Technology",
-  title: "Model planning constraints, run hybrid optimization, and return clear results.",
+  title: "Model real planning constraints, evaluate feasible options, and return a plan teams can run.",
   intro:
-    "Qtangl accepts structured scheduling, routing, and allocation problems, prepares the optimization model, evaluates feasible plans, and returns ranked results that teams can act on.",
+    "Qtangl accepts structured scheduling, routing, and allocation problems, prepares an optimization model, evaluates feasible plans, and returns ranked results with enough detail for engineering teams and enough clarity for operations teams.",
   sections: [
     {
       title: "Capture the real-world constraints",
@@ -61,4 +60,4 @@ export const technologyPage = {
 } as const;
 
 export const footerBlurb =
-  "Qtangl helps teams model scheduling, routing, and allocation problems as structured optimization workflows.";
+  "Qtangl helps teams turn scheduling, routing, and staffing constraints into plans they can review, compare, and run.";

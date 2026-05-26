@@ -11,3 +11,12 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 *.log
+
+# QOSF reference clones (manifest files are tracked)
+reference/*/
+!reference/manifest.json
+!reference/repos.txt
+
+# Python cache files
+**/__pycache__/
+*.pyc

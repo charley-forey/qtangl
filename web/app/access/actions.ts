@@ -18,6 +18,7 @@ export async function requestAccess(
   const email = String(formData.get("email") ?? "").trim();
   const company = String(formData.get("company") ?? "").trim();
   const interest = String(formData.get("interest") ?? "").trim();
+  const currentTools = String(formData.get("currentTools") ?? "").trim();
   const message = String(formData.get("message") ?? "").trim();
 
   if (!name || !email || !company || !interest) {
@@ -40,6 +41,7 @@ export async function requestAccess(
     email,
     company,
     interest,
+    currentTools,
     message,
     submittedAt: new Date().toISOString(),
   };
@@ -61,6 +63,7 @@ export async function requestAccess(
           `Email: ${email}`,
           `Company: ${company}`,
           `Interest: ${interest}`,
+          `Current tools: ${currentTools || "not provided"}`,
           "",
           message ? `Message:\n${message}` : "Message: none provided",
         ].join("\n"),

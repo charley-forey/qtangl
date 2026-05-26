@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://qtangl.com/contracts/optimize-response.schema.json",
+  "title": "Qtangl Optimize Response",
+  "type": "object",
+  "required": ["status", "summary", "solution", "metrics", "method", "details"],
+  "properties": {
+    "status": {
+      "type": "string",
+      "const": "success"
+    },
+    "summary": {
+      "type": "string"
+    },
+    "solution": {
+      "oneOf": [
+        {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "task": { "type": "string" },
+              "startDay": { "type": "integer" },
+              "endDay": { "type": "integer" },
+              "resource": { "type": ["string", "null"] }
+            },
+            "additionalProperties": true
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": true
+        }
+      ]
+    },
+    "metrics": {
+      "type": "object",
+      "required": ["constraintViolations", "savingsEstimate"],
+      "properties": {
+        "constraintViolations": { "type": "integer" },
+        "makespanDays": { "type": "integer" },
+        "totalCost": { "type": ["integer", "number"] },
+        "savingsEstimate": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "method": {
+      "type": "string",
+      "enum": ["classical", "hybrid"]
+    },
+    "details": {
+      "type": "object",
+      "required": ["solver", "backend"],
+      "properties": {
+        "solver": { "type": "string" },
+        "backend": { "type": "string" },
+        "diagnostics": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    },
+    "visualization": {
+      "type": ["object", "null"],
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": false
+}

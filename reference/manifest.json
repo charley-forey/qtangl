@@ -1,0 +1,792 @@
+{
+  "source_url": "https://www.qosf.org/project_list/",
+  "scraped_at": "2026-05-25T21:09:27.318224+00:00",
+  "repo_count": 157,
+  "repos": [
+    {
+      "owner": "0tt3r",
+      "name": "QuaC",
+      "url": "https://github.com/0tt3r/QuaC"
+    },
+    {
+      "owner": "adamisntdead",
+      "name": "QuSimPy",
+      "url": "https://github.com/adamisntdead/QuSimPy"
+    },
+    {
+      "owner": "aniabrown",
+      "name": "QuEST",
+      "url": "https://github.com/aniabrown/QuEST"
+    },
+    {
+      "owner": "ArlineQ",
+      "name": "arline_benchmarks",
+      "url": "https://github.com/ArlineQ/arline_benchmarks"
+    },
+    {
+      "owner": "ArlineQ",
+      "name": "arline_quantum",
+      "url": "https://github.com/ArlineQ/arline_quantum"
+    },
+    {
+      "owner": "artiste-qb-net",
+      "name": "quantum-fog",
+      "url": "https://github.com/artiste-qb-net/quantum-fog"
+    },
+    {
+      "owner": "artiste-qb-net",
+      "name": "Quantum_Edward",
+      "url": "https://github.com/artiste-qb-net/Quantum_Edward"
+    },
+    {
+      "owner": "artiste-qb-net",
+      "name": "qubiter",
+      "url": "https://github.com/artiste-qb-net/qubiter"
+    },
+    {
+      "owner": "aspuru-guzik-group",
+      "name": "tequila",
+      "url": "https://github.com/aspuru-guzik-group/tequila"
+    },
+    {
+      "owner": "avalon-lang",
+      "name": "avaloni",
+      "url": "https://github.com/avalon-lang/avaloni"
+    },
+    {
+      "owner": "aviggiano",
+      "name": "qcl",
+      "url": "https://github.com/aviggiano/qcl"
+    },
+    {
+      "owner": "aws",
+      "name": "amazon-braket-sdk-python",
+      "url": "https://github.com/aws/amazon-braket-sdk-python"
+    },
+    {
+      "owner": "BBN-Q",
+      "name": "Adapt",
+      "url": "https://github.com/BBN-Q/Adapt"
+    },
+    {
+      "owner": "BBN-Q",
+      "name": "Cliffords.jl",
+      "url": "https://github.com/BBN-Q/Cliffords.jl"
+    },
+    {
+      "owner": "BBN-Q",
+      "name": "pyqgl2",
+      "url": "https://github.com/BBN-Q/pyqgl2"
+    },
+    {
+      "owner": "BBN-Q",
+      "name": "PyQLab",
+      "url": "https://github.com/BBN-Q/PyQLab"
+    },
+    {
+      "owner": "BBN-Q",
+      "name": "PySimulator",
+      "url": "https://github.com/BBN-Q/PySimulator"
+    },
+    {
+      "owner": "BBN-Q",
+      "name": "QGL",
+      "url": "https://github.com/BBN-Q/QGL"
+    },
+    {
+      "owner": "BBN-Q",
+      "name": "QGL.jl",
+      "url": "https://github.com/BBN-Q/QGL.jl"
+    },
+    {
+      "owner": "BBN-Q",
+      "name": "Qlab",
+      "url": "https://github.com/BBN-Q/Qlab"
+    },
+    {
+      "owner": "BBN-Q",
+      "name": "Qlab.jl",
+      "url": "https://github.com/BBN-Q/Qlab.jl"
+    },
+    {
+      "owner": "BBN-Q",
+      "name": "QSimulator.jl",
+      "url": "https://github.com/BBN-Q/QSimulator.jl"
+    },
+    {
+      "owner": "BBN-Q",
+      "name": "QuantumInfo.jl",
+      "url": "https://github.com/BBN-Q/QuantumInfo.jl"
+    },
+    {
+      "owner": "BBN-Q",
+      "name": "QuantumTomography.jl",
+      "url": "https://github.com/BBN-Q/QuantumTomography.jl"
+    },
+    {
+      "owner": "BBN-Q",
+      "name": "Quince",
+      "url": "https://github.com/BBN-Q/Quince"
+    },
+    {
+      "owner": "BBN-Q",
+      "name": "RandomQuantum.jl",
+      "url": "https://github.com/BBN-Q/RandomQuantum.jl"
+    },
+    {
+      "owner": "cda-tum",
+      "name": "mqt-bench",
+      "url": "https://github.com/cda-tum/mqt-bench"
+    },
+    {
+      "owner": "cda-tum",
+      "name": "mqt-dasqa",
+      "url": "https://github.com/cda-tum/mqt-dasqa"
+    },
+    {
+      "owner": "cda-tum",
+      "name": "mqt-ddsim",
+      "url": "https://github.com/cda-tum/mqt-ddsim"
+    },
+    {
+      "owner": "cda-tum",
+      "name": "mqt-qmap",
+      "url": "https://github.com/cda-tum/mqt-qmap"
+    },
+    {
+      "owner": "cda-tum",
+      "name": "mqt-qudits",
+      "url": "https://github.com/cda-tum/mqt-qudits"
+    },
+    {
+      "owner": "corbett",
+      "name": "QuantumComputing",
+      "url": "https://github.com/corbett/QuantumComputing"
+    },
+    {
+      "owner": "CQCL",
+      "name": "tket",
+      "url": "https://github.com/CQCL/tket"
+    },
+    {
+      "owner": "dabacon",
+      "name": "qsel",
+      "url": "https://github.com/dabacon/qsel"
+    },
+    {
+      "owner": "decodoku",
+      "name": "A_Game_to_Benchmark_Quantum_Computers",
+      "url": "https://github.com/decodoku/A_Game_to_Benchmark_Quantum_Computers"
+    },
+    {
+      "owner": "decodoku",
+      "name": "Battleships_with_complementary_measurements",
+      "url": "https://github.com/decodoku/Battleships_with_complementary_measurements"
+    },
+    {
+      "owner": "desireevl",
+      "name": "quantum-catsweeper",
+      "url": "https://github.com/desireevl/quantum-catsweeper"
+    },
+    {
+      "owner": "dillanchang",
+      "name": "QOCS",
+      "url": "https://github.com/dillanchang/QOCS"
+    },
+    {
+      "owner": "dwavesystems",
+      "name": "chimera-embedding",
+      "url": "https://github.com/dwavesystems/chimera-embedding"
+    },
+    {
+      "owner": "dwavesystems",
+      "name": "dimod",
+      "url": "https://github.com/dwavesystems/dimod"
+    },
+    {
+      "owner": "dwavesystems",
+      "name": "dwave-cloud-client",
+      "url": "https://github.com/dwavesystems/dwave-cloud-client"
+    },
+    {
+      "owner": "dwavesystems",
+      "name": "dwave-neal",
+      "url": "https://github.com/dwavesystems/dwave-neal"
+    },
+    {
+      "owner": "dwavesystems",
+      "name": "dwave-ocean-sdk",
+      "url": "https://github.com/dwavesystems/dwave-ocean-sdk"
+    },
+    {
+      "owner": "dwavesystems",
+      "name": "dwave-system",
+      "url": "https://github.com/dwavesystems/dwave-system"
+    },
+    {
+      "owner": "dwavesystems",
+      "name": "dwave_embedding_utilities",
+      "url": "https://github.com/dwavesystems/dwave_embedding_utilities"
+    },
+    {
+      "owner": "dwavesystems",
+      "name": "dwave_micro_client_dimod",
+      "url": "https://github.com/dwavesystems/dwave_micro_client_dimod"
+    },
+    {
+      "owner": "dwavesystems",
+      "name": "dwave_networkx",
+      "url": "https://github.com/dwavesystems/dwave_networkx"
+    },
+    {
+      "owner": "dwavesystems",
+      "name": "dwave_sapi_dimod",
+      "url": "https://github.com/dwavesystems/dwave_sapi_dimod"
+    },
+    {
+      "owner": "dwavesystems",
+      "name": "dwavebinarycsp",
+      "url": "https://github.com/dwavesystems/dwavebinarycsp"
+    },
+    {
+      "owner": "dwavesystems",
+      "name": "minorminer",
+      "url": "https://github.com/dwavesystems/minorminer"
+    },
+    {
+      "owner": "dwavesystems",
+      "name": "penaltymodel",
+      "url": "https://github.com/dwavesystems/penaltymodel"
+    },
+    {
+      "owner": "dwavesystems",
+      "name": "qbsolv",
+      "url": "https://github.com/dwavesystems/qbsolv"
+    },
+    {
+      "owner": "eclipse-qrisp",
+      "name": "Qrisp",
+      "url": "https://github.com/eclipse-qrisp/Qrisp"
+    },
+    {
+      "owner": "Entanglion",
+      "name": "entanglion",
+      "url": "https://github.com/Entanglion/entanglion"
+    },
+    {
+      "owner": "entropicalabs",
+      "name": "openqaoa",
+      "url": "https://github.com/entropicalabs/openqaoa"
+    },
+    {
+      "owner": "epiqc",
+      "name": "ScaffCC",
+      "url": "https://github.com/epiqc/ScaffCC"
+    },
+    {
+      "owner": "gbanegas",
+      "name": "libQuantumJava",
+      "url": "https://github.com/gbanegas/libQuantumJava"
+    },
+    {
+      "owner": "goodchemistryco",
+      "name": "Tangelo",
+      "url": "https://github.com/goodchemistryco/Tangelo"
+    },
+    {
+      "owner": "grey-area",
+      "name": "qcircuits",
+      "url": "https://github.com/grey-area/qcircuits"
+    },
+    {
+      "owner": "haykkh",
+      "name": "qSim",
+      "url": "https://github.com/haykkh/qSim"
+    },
+    {
+      "owner": "iic-jku",
+      "name": "ddsim",
+      "url": "https://github.com/iic-jku/ddsim"
+    },
+    {
+      "owner": "indisoluble",
+      "name": "SwiftQuantumComputing",
+      "url": "https://github.com/indisoluble/SwiftQuantumComputing"
+    },
+    {
+      "owner": "intel",
+      "name": "intel-qs",
+      "url": "https://github.com/intel/intel-qs"
+    },
+    {
+      "owner": "jacobmarks",
+      "name": "QTop",
+      "url": "https://github.com/jacobmarks/QTop"
+    },
+    {
+      "owner": "JavaFXpert",
+      "name": "quantum-toy-piano",
+      "url": "https://github.com/JavaFXpert/quantum-toy-piano"
+    },
+    {
+      "owner": "JavaFXpert",
+      "name": "quantum-toy-piano-ibmq",
+      "url": "https://github.com/JavaFXpert/quantum-toy-piano-ibmq"
+    },
+    {
+      "owner": "JavaFXpert",
+      "name": "quil-syntax-highlighter",
+      "url": "https://github.com/JavaFXpert/quil-syntax-highlighter"
+    },
+    {
+      "owner": "jeffwass",
+      "name": "Squankum",
+      "url": "https://github.com/jeffwass/Squankum"
+    },
+    {
+      "owner": "jpaykin",
+      "name": "QWIRE",
+      "url": "https://github.com/jpaykin/QWIRE"
+    },
+    {
+      "owner": "jpzwolak",
+      "name": "QFlow-lite",
+      "url": "https://github.com/jpzwolak/QFlow-lite"
+    },
+    {
+      "owner": "jtiosue",
+      "name": "qubovert",
+      "url": "https://github.com/jtiosue/qubovert"
+    },
+    {
+      "owner": "kelzheng",
+      "name": "bloqit",
+      "url": "https://github.com/kelzheng/bloqit"
+    },
+    {
+      "owner": "ken-nakanishi",
+      "name": "qupy",
+      "url": "https://github.com/ken-nakanishi/qupy"
+    },
+    {
+      "owner": "lanl",
+      "name": "c2dwave",
+      "url": "https://github.com/lanl/c2dwave"
+    },
+    {
+      "owner": "lanl",
+      "name": "edif2qmasm",
+      "url": "https://github.com/lanl/edif2qmasm"
+    },
+    {
+      "owner": "lanl",
+      "name": "QA-Prolog",
+      "url": "https://github.com/lanl/QA-Prolog"
+    },
+    {
+      "owner": "lanl",
+      "name": "qmasm",
+      "url": "https://github.com/lanl/qmasm"
+    },
+    {
+      "owner": "m-labs",
+      "name": "artiq",
+      "url": "https://github.com/m-labs/artiq"
+    },
+    {
+      "owner": "mapmeld",
+      "name": "jsquil",
+      "url": "https://github.com/mapmeld/jsquil"
+    },
+    {
+      "owner": "Microsoft",
+      "name": "QuantumKatas",
+      "url": "https://github.com/Microsoft/QuantumKatas"
+    },
+    {
+      "owner": "mrdimosthenis",
+      "name": "QuantumPuzzleGenerator",
+      "url": "https://github.com/mrdimosthenis/QuantumPuzzleGenerator"
+    },
+    {
+      "owner": "MSRudolph",
+      "name": "PauliPropagation.jl",
+      "url": "https://github.com/MSRudolph/PauliPropagation.jl"
+    },
+    {
+      "owner": "mstechly",
+      "name": "quantum_tsp_tutorials",
+      "url": "https://github.com/mstechly/quantum_tsp_tutorials"
+    },
+    {
+      "owner": "mstechly",
+      "name": "vqf",
+      "url": "https://github.com/mstechly/vqf"
+    },
+    {
+      "owner": "nathanshammah",
+      "name": "piqs",
+      "url": "https://github.com/nathanshammah/piqs"
+    },
+    {
+      "owner": "NVIDIA",
+      "name": "cuda-quantum",
+      "url": "https://github.com/NVIDIA/cuda-quantum"
+    },
+    {
+      "owner": "open-quantum-safe",
+      "name": "liboqs",
+      "url": "https://github.com/open-quantum-safe/liboqs"
+    },
+    {
+      "owner": "open-quantum-safe",
+      "name": "openssh-portable",
+      "url": "https://github.com/open-quantum-safe/openssh-portable"
+    },
+    {
+      "owner": "open-quantum-safe",
+      "name": "openssl",
+      "url": "https://github.com/open-quantum-safe/openssl"
+    },
+    {
+      "owner": "ornl-qci",
+      "name": "tnqvm",
+      "url": "https://github.com/ornl-qci/tnqvm"
+    },
+    {
+      "owner": "ORNL-QCI",
+      "name": "xacc",
+      "url": "https://github.com/ORNL-QCI/xacc"
+    },
+    {
+      "owner": "ornl-qci",
+      "name": "xacc-vqe",
+      "url": "https://github.com/ornl-qci/xacc-vqe"
+    },
+    {
+      "owner": "pasqal-io",
+      "name": "qadence",
+      "url": "https://github.com/pasqal-io/qadence"
+    },
+    {
+      "owner": "PennyLaneAI",
+      "name": "catalyst",
+      "url": "https://github.com/PennyLaneAI/catalyst"
+    },
+    {
+      "owner": "perak",
+      "name": "quantum-circuit",
+      "url": "https://github.com/perak/quantum-circuit"
+    },
+    {
+      "owner": "PQClean",
+      "name": "PQClean",
+      "url": "https://github.com/PQClean/PQClean"
+    },
+    {
+      "owner": "ProjectQ-Framework",
+      "name": "FermiLib",
+      "url": "https://github.com/ProjectQ-Framework/FermiLib"
+    },
+    {
+      "owner": "ProjectQ-Framework",
+      "name": "ProjectQ",
+      "url": "https://github.com/ProjectQ-Framework/ProjectQ"
+    },
+    {
+      "owner": "Q-Compiler",
+      "name": "UniversalQCompiler",
+      "url": "https://github.com/Q-Compiler/UniversalQCompiler"
+    },
+    {
+      "owner": "qBraid",
+      "name": "qBraid",
+      "url": "https://github.com/qBraid/qBraid"
+    },
+    {
+      "owner": "QCGPU",
+      "name": "qcgpu-rust",
+      "url": "https://github.com/QCGPU/qcgpu-rust"
+    },
+    {
+      "owner": "QCHackers",
+      "name": "jquil",
+      "url": "https://github.com/QCHackers/jquil"
+    },
+    {
+      "owner": "QCT-IQC",
+      "name": "qacg",
+      "url": "https://github.com/QCT-IQC/qacg"
+    },
+    {
+      "owner": "QCT-IQC",
+      "name": "QCViewer",
+      "url": "https://github.com/QCT-IQC/QCViewer"
+    },
+    {
+      "owner": "QE-Lab",
+      "name": "OpenQL",
+      "url": "https://github.com/QE-Lab/OpenQL"
+    },
+    {
+      "owner": "QISKit",
+      "name": "openqasm",
+      "url": "https://github.com/QISKit/openqasm"
+    },
+    {
+      "owner": "QISKit",
+      "name": "qiskit",
+      "url": "https://github.com/QISKit/qiskit"
+    },
+    {
+      "owner": "Qiskit",
+      "name": "qiskit-aer",
+      "url": "https://github.com/Qiskit/qiskit-aer"
+    },
+    {
+      "owner": "Qiskit",
+      "name": "qiskit-finance",
+      "url": "https://github.com/Qiskit/qiskit-finance"
+    },
+    {
+      "owner": "Qiskit",
+      "name": "qiskit-js",
+      "url": "https://github.com/Qiskit/qiskit-js"
+    },
+    {
+      "owner": "Qiskit",
+      "name": "qiskit-machine-learning",
+      "url": "https://github.com/Qiskit/qiskit-machine-learning"
+    },
+    {
+      "owner": "Qiskit",
+      "name": "qiskit-nature",
+      "url": "https://github.com/Qiskit/qiskit-nature"
+    },
+    {
+      "owner": "Qiskit",
+      "name": "qiskit-optimization",
+      "url": "https://github.com/Qiskit/qiskit-optimization"
+    },
+    {
+      "owner": "Qiskit",
+      "name": "qiskit-terra",
+      "url": "https://github.com/Qiskit/qiskit-terra"
+    },
+    {
+      "owner": "QISKit",
+      "name": "qiskit-tutorial",
+      "url": "https://github.com/QISKit/qiskit-tutorial"
+    },
+    {
+      "owner": "qosf",
+      "name": "os_quantum_software",
+      "url": "https://github.com/qosf/os_quantum_software"
+    },
+    {
+      "owner": "qosf",
+      "name": "qosf.org",
+      "url": "https://github.com/qosf/qosf.org"
+    },
+    {
+      "owner": "Quandela",
+      "name": "Perceval",
+      "url": "https://github.com/Quandela/Perceval"
+    },
+    {
+      "owner": "Quantomatic",
+      "name": "pyzx",
+      "url": "https://github.com/Quantomatic/pyzx"
+    },
+    {
+      "owner": "Quantum-TII",
+      "name": "qibo",
+      "url": "https://github.com/Quantum-TII/qibo"
+    },
+    {
+      "owner": "QuantumBFS",
+      "name": "Yao.jl",
+      "url": "https://github.com/QuantumBFS/Yao.jl"
+    },
+    {
+      "owner": "quantumlib",
+      "name": "Cirq",
+      "url": "https://github.com/quantumlib/Cirq"
+    },
+    {
+      "owner": "quantumlib",
+      "name": "OpenFermion",
+      "url": "https://github.com/quantumlib/OpenFermion"
+    },
+    {
+      "owner": "quantumlib",
+      "name": "Qualtran",
+      "url": "https://github.com/quantumlib/Qualtran"
+    },
+    {
+      "owner": "quantumlib",
+      "name": "Stim",
+      "url": "https://github.com/quantumlib/Stim"
+    },
+    {
+      "owner": "QuantumUtils",
+      "name": "quantum-utils-mathematica",
+      "url": "https://github.com/QuantumUtils/quantum-utils-mathematica"
+    },
+    {
+      "owner": "qutech",
+      "name": "qupulse",
+      "url": "https://github.com/qutech/qupulse"
+    },
+    {
+      "owner": "rigetti",
+      "name": "quantumflow",
+      "url": "https://github.com/rigetti/quantumflow"
+    },
+    {
+      "owner": "rigetti",
+      "name": "quilc",
+      "url": "https://github.com/rigetti/quilc"
+    },
+    {
+      "owner": "rigetti",
+      "name": "qvm",
+      "url": "https://github.com/rigetti/qvm"
+    },
+    {
+      "owner": "rigetticomputing",
+      "name": "grove",
+      "url": "https://github.com/rigetticomputing/grove"
+    },
+    {
+      "owner": "rigetticomputing",
+      "name": "pyquil",
+      "url": "https://github.com/rigetticomputing/pyquil"
+    },
+    {
+      "owner": "rigetticomputing",
+      "name": "reference-qvm",
+      "url": "https://github.com/rigetticomputing/reference-qvm"
+    },
+    {
+      "owner": "rogercolbeck",
+      "name": "QI",
+      "url": "https://github.com/rogercolbeck/QI"
+    },
+    {
+      "owner": "RQC-QApp",
+      "name": "QuantumComputingBot",
+      "url": "https://github.com/RQC-QApp/QuantumComputingBot"
+    },
+    {
+      "owner": "sequencing-dev",
+      "name": "sequencing",
+      "url": "https://github.com/sequencing-dev/sequencing"
+    },
+    {
+      "owner": "softwareqinc",
+      "name": "qpp",
+      "url": "https://github.com/softwareqinc/qpp"
+    },
+    {
+      "owner": "softwareqinc",
+      "name": "staq",
+      "url": "https://github.com/softwareqinc/staq"
+    },
+    {
+      "owner": "stared",
+      "name": "quantum-game",
+      "url": "https://github.com/stared/quantum-game"
+    },
+    {
+      "owner": "StephanieWehner",
+      "name": "SimulaQron",
+      "url": "https://github.com/StephanieWehner/SimulaQron"
+    },
+    {
+      "owner": "Strilanc",
+      "name": "Quirk",
+      "url": "https://github.com/Strilanc/Quirk"
+    },
+    {
+      "owner": "subwayHareArmy",
+      "name": "SudoQ",
+      "url": "https://github.com/subwayHareArmy/SudoQ"
+    },
+    {
+      "owner": "TheoryInPractice",
+      "name": "aqc-virtual-embedding",
+      "url": "https://github.com/TheoryInPractice/aqc-virtual-embedding"
+    },
+    {
+      "owner": "thephoeron",
+      "name": "black-stone",
+      "url": "https://github.com/thephoeron/black-stone"
+    },
+    {
+      "owner": "thephoeron",
+      "name": "quipper-language",
+      "url": "https://github.com/thephoeron/quipper-language"
+    },
+    {
+      "owner": "theQRL",
+      "name": "QRL",
+      "url": "https://github.com/theQRL/QRL"
+    },
+    {
+      "owner": "tqsd",
+      "name": "QuNetSim",
+      "url": "https://github.com/tqsd/QuNetSim"
+    },
+    {
+      "owner": "unitaryfund",
+      "name": "mitiq",
+      "url": "https://github.com/unitaryfund/mitiq"
+    },
+    {
+      "owner": "vm6502q",
+      "name": "qrack",
+      "url": "https://github.com/vm6502q/qrack"
+    },
+    {
+      "owner": "vprusso",
+      "name": "toqito",
+      "url": "https://github.com/vprusso/toqito"
+    },
+    {
+      "owner": "weinbe58",
+      "name": "QuSpin",
+      "url": "https://github.com/weinbe58/QuSpin"
+    },
+    {
+      "owner": "wintershammer",
+      "name": "QImp",
+      "url": "https://github.com/wintershammer/QImp"
+    },
+    {
+      "owner": "XanaduAI",
+      "name": "blackbird",
+      "url": "https://github.com/XanaduAI/blackbird"
+    },
+    {
+      "owner": "XanaduAI",
+      "name": "pennylane",
+      "url": "https://github.com/XanaduAI/pennylane"
+    },
+    {
+      "owner": "xanaduai",
+      "name": "strawberryfields",
+      "url": "https://github.com/xanaduai/strawberryfields"
+    },
+    {
+      "owner": "xanaduAI",
+      "name": "thewalrus",
+      "url": "https://github.com/xanaduAI/thewalrus"
+    },
+    {
+      "owner": "ziofil",
+      "name": "QuantumGraphs",
+      "url": "https://github.com/ziofil/QuantumGraphs"
+    }
+  ]
+}

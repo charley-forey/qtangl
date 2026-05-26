@@ -14,8 +14,8 @@ export const metadata: Metadata = {
 export default function DocsPage() {
   return (
     <DocsShell
-      title="Documentation for the Qtangl optimization workflow"
-      description="Start with the API model, understand the problem categories, and inspect the request and response surfaces that define the current interface."
+      title="Documentation for the Qtangl planning API"
+      description="Start with the fields you need to send, review the summary and metrics Qtangl returns, and then wire the same workflow into your own system."
     >
       <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
         {docsCards.map((card) => (
@@ -32,10 +32,10 @@ export default function DocsPage() {
         <Card className="rounded-2xl">
           <h2 className="text-2xl font-semibold text-white">What Qtangl is</h2>
           <p className="mt-4 text-sm leading-8 text-[var(--color-gray-300)]">
-            Qtangl is an API-first optimization platform focused on scheduling,
-            routing, and resource allocation workflows for operations-heavy teams.
-            It is designed to translate business constraints into optimization jobs
-            rather than forcing teams to reason in academic quantum terms.
+            Qtangl is a planning API for scheduling, routing, and staffing
+            workflows. It turns the rules operations teams already track into a job
+            that returns a ranked plan, a short explanation, and decision-ready
+            metrics.
           </p>
         </Card>
 

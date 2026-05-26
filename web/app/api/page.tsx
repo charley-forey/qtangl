@@ -25,8 +25,8 @@ export default function ApiPage() {
             `POST /optimize`
           </h1>
           <p className="mt-5 text-lg leading-8 text-[var(--color-gray-300)]">
-            Submit a scheduling, routing, or allocation problem and receive a
-            structured optimization result.
+            Submit a schedule, route, or staffing problem and receive a readable
+            summary, metrics, and structured plan output.
           </p>
         </div>
       </Section>
@@ -43,9 +43,9 @@ export default function ApiPage() {
           <Card className="rounded-2xl">
             <h2 className="text-2xl font-semibold text-white">Execution flow</h2>
             <ol className="mt-4 space-y-3 text-sm leading-7 text-[var(--color-gray-300)]">
-              <li>1. Validate the problem type, payload shape, and constraints.</li>
-              <li>2. Convert the job into an optimization-ready representation.</li>
-              <li>3. Run the solver stack and return the best feasible result.</li>
+              <li>1. Validate the problem type, payload shape, and hard constraints.</li>
+              <li>2. Evaluate feasible plans with the available solver workflow.</li>
+              <li>3. Return the ranked result with a summary and metrics first.</li>
             </ol>
           </Card>
 

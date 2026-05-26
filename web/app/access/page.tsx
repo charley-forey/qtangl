@@ -40,7 +40,8 @@ export default function AccessPage() {
             <Card className="rounded-2xl">
               <Eyebrow>What to include</Eyebrow>
               <p className="mt-4 text-sm leading-7 text-[var(--color-gray-300)]">
-                Share the workflow you are improving, the constraints that matter most, and whether the next step is a pilot, API evaluation, or technical discovery conversation.
+                Share the workflow you are improving, the constraints that matter most,
+                and the tools your team already uses today.
               </p>
             </Card>
           </div>

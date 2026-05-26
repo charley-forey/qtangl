@@ -52,11 +52,20 @@ export default function AccessRequestForm() {
             Request pilot access
           </h2>
           <p className="mt-4 text-base leading-8 text-[var(--color-gray-300)]">
-            Share the workflow you want to improve. Qtangl prioritizes teams with clear scheduling, routing, allocation, and operational planning use cases.
+            Share the workflow you want to improve and the systems you already use.
+            Qtangl prioritizes teams with clear scheduling, routing, allocation, and
+            operational planning use cases.
           </p>
           <div className="mt-6 space-y-3 text-sm leading-7 text-[var(--color-gray-400)]">
-            <p>Strong submissions explain the planning problem, the system context, and the operational constraints that matter most.</p>
-            <p>We currently prioritize design partners, API evaluation teams, and operations-heavy organizations preparing for a pilot.</p>
+            <p>
+              Strong submissions explain the planning problem, the system context,
+              the operational constraints that matter most, and the current tooling
+              stack.
+            </p>
+            <p>
+              We currently prioritize design partners, API evaluation teams, and
+              operations-heavy organizations preparing for a pilot.
+            </p>
           </div>
         </div>
 
@@ -103,6 +112,15 @@ export default function AccessRequestForm() {
               </select>
             </label>
           </div>
+
+          <label className="grid gap-2 text-sm text-[var(--color-gray-300)]">
+            <span>Current tools</span>
+            <input
+              name="currentTools"
+              placeholder="Procore, spreadsheets, Samsara, Smartsheet..."
+              className="h-12 rounded-xl border border-[var(--border)] bg-black px-4 text-sm text-white outline-none transition placeholder:text-[var(--color-gray-500)] focus:border-[var(--border-strong)]"
+            />
+          </label>
 
           <label className="grid gap-2 text-sm text-[var(--color-gray-300)]">
             <span>System context</span>

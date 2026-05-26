@@ -8,27 +8,27 @@ export const problemPoints = [
 ] as const;
 
 export const solutionPoints = [
-  "Submit scheduling, routing, or allocation problems through a single API.",
-  "Qtangl converts operational constraints into optimization-ready models.",
-  "Hybrid execution combines classical orchestration with quantum-assisted search where it helps.",
-  "Teams receive optimized plans they can review, compare, and act on quickly.",
+  "Start with the fields your team already tracks: tasks, crews, windows, vehicles, shifts, and hard business rules.",
+  "Qtangl turns that context into one planning job instead of making teams coordinate spreadsheets and tribal knowledge.",
+  "The platform evaluates feasible options and returns the best plan with a plain-English summary of why it works.",
+  "Developers can integrate one API, while operations teams can review visuals and metrics before acting.",
 ] as const;
 
 export const workflowSteps = [
   {
-    title: "Define the problem",
+    title: "Describe the situation",
     description:
-      "Send jobs, locations, resources, and business constraints as structured JSON.",
+      "Send the tasks, crews, locations, windows, and business rules you already track.",
   },
   {
-    title: "Run hybrid optimization",
+    title: "Evaluate feasible plans",
     description:
-      "Qtangl prepares the model, runs the solver stack, and evaluates feasible plans.",
+      "Qtangl prepares the problem, checks the hard constraints, and ranks the best valid options.",
   },
   {
-    title: "Return an action-ready plan",
+    title: "Review and act",
     description:
-      "Receive ranked schedules, routes, or allocations with method and cost metadata.",
+      "Receive a ranked plan, a short summary, and the metrics your team already cares about.",
   },
 ] as const;
 
@@ -54,7 +54,7 @@ export const useCases = [
   {
     eyebrow: "Construction",
     title: "Construction scheduling optimization",
-    image: "/qtangl-usecase-scheduling.png",
+    image: "/qtangl-usecase-scheduling.svg",
     imageAlt:
       "Black and white scheduling illustration showing crews, planning boards, and task sequencing.",
     description:
@@ -69,7 +69,7 @@ export const useCases = [
   {
     eyebrow: "Logistics",
     title: "Logistics routing optimization",
-    image: "/qtangl-usecase-routing.png",
+    image: "/qtangl-usecase-routing.svg",
     imageAlt:
       "Black and white routing illustration showing dispatching, route maps, and network overlays.",
     description:
@@ -84,7 +84,7 @@ export const useCases = [
   {
     eyebrow: "Operations",
     title: "Workforce allocation optimization",
-    image: "/qtangl-usecase-allocation.png",
+    image: "/qtangl-usecase-allocation.svg",
     imageAlt:
       "Black and white allocation illustration showing staffing grids and operational planning overlays.",
     description:
@@ -114,18 +114,27 @@ export const apiPreviewRequest = {
 
 export const apiPreviewResponse = {
   status: "success",
+  summary:
+    "All 3 tasks fit without crew conflicts. Inspection stays after framing and the unavailable window for Crew B is respected.",
   solution: [
     { task: "foundation", start: "2026-05-27T07:00:00Z" },
     { task: "framing", start: "2026-05-30T07:00:00Z" },
     { task: "inspection", start: "2026-06-03T09:00:00Z" },
   ],
-  cost: 12,
-  method: "hybrid-qaoa",
-  backend: "ibm_quantum_simulator",
+  metrics: {
+    totalDurationDays: 8,
+    constraintViolations: 0,
+    savingsEstimate: "Approx. 6 idle crew hours avoided",
+  },
+  method: "hybrid",
+  details: {
+    solver: "classical",
+    backend: "simulator",
+  },
 };
 
 export const docsQuickstartRequest = {
-  type: "scheduling",
+  type: "schedule",
   tasks: [
     { id: "A", duration: 3 },
     { id: "B", duration: 2 },
@@ -134,12 +143,23 @@ export const docsQuickstartRequest = {
 };
 
 export const docsQuickstartResponse = {
+  status: "success",
+  summary:
+    "Task A finishes before Task B and the plan completes in 5 time units with no constraint violations.",
   solution: [
-    { task: "A", start: "09:00" },
-    { task: "B", start: "12:00" },
+    { task: "A", startDay: 1, endDay: 4 },
+    { task: "B", startDay: 4, endDay: 6 },
   ],
-  method: "hybrid-qaoa",
-  backend: "ibm_quantum_simulator",
+  metrics: {
+    totalDurationDays: 5,
+    constraintViolations: 0,
+    savingsEstimate: "Approx. 2 hours of manual replanning avoided",
+  },
+  method: "classical",
+  details: {
+    solver: "cp-sat",
+    backend: "local",
+  },
 };
 
 export const apiReferenceRequest = {
@@ -150,24 +170,38 @@ export const apiReferenceRequest = {
 
 export const apiReferenceResponse = {
   status: "success",
+  summary: "All tasks scheduled with no conflicts and one ranked plan returned.",
   solution: {},
-  cost: 12,
-  method: "qaoa",
-  backend: "ibm_qasm_simulator",
+  metrics: {
+    totalCost: 12,
+    constraintViolations: 0,
+    savingsEstimate: "Approx. 6 idle crew hours avoided",
+  },
+  method: "hybrid",
+  details: {
+    solver: "qaoa",
+    backend: "simulator",
+  },
 };
 
 export const apiErrors = [
-  "Invalid input",
-  "Unsupported problem type",
-  "Solver failure",
-  "Timeout",
+  "Your request is missing required tasks or resources.",
+  "This pilot currently supports schedule, routing, or allocation jobs only.",
+  "Qtangl could not produce a feasible plan with the supplied constraints.",
+  "The solver timed out before a valid result was available.",
 ] as const;
 
 export const docsCards = [
   {
+    title: "Data formats",
+    description:
+      "See the exact fields to send for schedules, routes, and staffing inputs before you touch the API.",
+    href: "/docs/data-formats",
+  },
+  {
     title: "Quickstart",
     description:
-      "Submit your first optimization request and understand the response shape in minutes.",
+      "Submit your first optimization request and understand the summary, metrics, and solution shape in minutes.",
     href: "/docs/quickstart",
   },
   {
@@ -179,7 +213,7 @@ export const docsCards = [
   {
     title: "API guide",
     description:
-      "Review authentication, rate limits, and the `/optimize` workflow for MVP integration.",
+      "Review authentication, rate limits, and the `/optimize` workflow for pilot integration.",
     href: "/docs/api",
   },
 ] as const;
@@ -189,7 +223,7 @@ export const blogPosts = [
     slug: "quantum-optimization",
     href: "/blog/quantum-optimization",
     category: "Quantum optimization basics",
-    coverImage: "/qtangl-technology-solver-grid.png",
+    coverImage: "/qtangl-technology-solver-grid.svg",
     coverAlt:
       "Black and white abstract technology illustration showing solver workflow panels and network geometry.",
     title: "Why quantum optimization matters for operational planning",
@@ -202,7 +236,7 @@ export const blogPosts = [
     slug: "scheduling-use-cases",
     href: "/blog/scheduling-use-cases",
     category: "Scheduling use cases",
-    coverImage: "/qtangl-usecase-scheduling.png",
+    coverImage: "/qtangl-usecase-scheduling.svg",
     coverAlt:
       "Black and white scheduling illustration showing crews, planning boards, and task sequencing.",
     title: "Construction and workforce scheduling are still wide-open problems",
@@ -215,7 +249,7 @@ export const blogPosts = [
     slug: "routing-optimization",
     href: "/blog/routing-optimization",
     category: "Routing optimization",
-    coverImage: "/qtangl-usecase-routing.png",
+    coverImage: "/qtangl-usecase-routing.svg",
     coverAlt:
       "Black and white routing illustration showing dispatching, route maps, and network overlays.",
     title: "Routing optimization breaks when real-world constraints are ignored",

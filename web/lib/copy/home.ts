@@ -1,18 +1,18 @@
 export const homeHero = {
-  eyebrow: "Quantum-native optimization platform",
-  title: "Optimization infrastructure for scheduling, routing, and allocation.",
+  eyebrow: "Planning API for schedules, routes, and staffing",
+  title: "Send your constraints. Get a plan your team can run.",
   bridge:
-    "Model complex operational constraints, run hybrid optimization, and return ranked plans through a single API.",
+    "Qtangl turns messy operational rules into ranked schedules, routes, and staffing plans without making teams rebuild everything by hand.",
   description:
-    "Qtangl helps operations teams and platform builders turn difficult planning problems into executable schedules, routes, and resource decisions.",
-  primaryCta: { label: "Request Access", href: "/access" },
-  secondaryCta: { label: "View Technology", href: "/technology" },
+    "Start with a guided demo or integrate through one API. Use the inputs you already track: tasks, crews, windows, vehicles, shifts, and hard business rules.",
+  primaryCta: { label: "Try the demo", href: "/try" },
+  secondaryCta: { label: "View docs", href: "/docs" },
   signal:
-    "Submit scheduling, routing, and allocation problems. Receive ranked plans with clear feasibility, method, and cost metadata.",
+    "Get a ranked plan, a plain-English summary, and metrics like delay risk, miles saved, or overtime avoided.",
   valueProps: [
-    "Built for operations teams dealing with hard constraints and shifting conditions.",
-    "Structured inputs, ranked outputs, and clean integration with existing systems.",
-    "A quantum-native brand with a product surface designed to stay practical and readable.",
+    "See a visual plan before you commit engineering time.",
+    "Map the fields you already track into one repeatable workflow.",
+    "Keep solver complexity under the hood and business value up front.",
   ],
 } as const;
 
@@ -22,18 +22,18 @@ export const homepageNarrative = {
   problemDescription:
     "Manual planning and generic workflow software struggle once constraints stack together. Qtangl is designed for teams that need better decisions when sequencing, availability, windows, and cost all matter at once.",
   architectureEyebrow: "How it works",
-  architectureTitle: "Define the problem. Evaluate feasible plans. Return the best next action.",
+  architectureTitle: "Describe the situation. Evaluate feasible plans. Return the best next action.",
   domainEyebrow: "Where it fits",
   domainTitle: "Used where timing, capacity, and sequencing directly affect business outcomes.",
   interfaceEyebrow: "API surface",
-  interfaceTitle: "Submit a problem. Get a ranked operational plan.",
+  interfaceTitle: "Try the workflow visually first. Integrate with the API when you're ready.",
 } as const;
 
 export const accessPanel = {
   eyebrow: "Access",
-  title: "Request access to the Qtangl pilot.",
+  title: "Tell us what planning problem you need to fix.",
   description:
-    "Tell us which scheduling, routing, or allocation workflow you need to improve. Qtangl is currently focused on early pilot teams with clear operational bottlenecks and integration needs.",
+    "Tell us which schedule, route, or staffing workflow is costing you time. Qtangl is currently focused on pilot teams with a clear planning bottleneck and a real integration path.",
   formHint:
     "Best fit for operations leaders, product teams, and technical partners preparing a pilot or API evaluation.",
 } as const;

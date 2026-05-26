@@ -52,7 +52,7 @@ export default function Navbar() {
             <div>
               <div className="text-label text-white">Qtangl</div>
               <div className="text-xs text-[var(--color-gray-400)]">
-                Quantum-native optimization interface
+                Planning API for operational teams
               </div>
             </div>
           </Link>
@@ -79,10 +79,10 @@ export default function Navbar() {
 
           <div className="flex items-center gap-3">
             <Link
-              href="/access"
+              href="/try"
               className="touch-target hidden items-center rounded-full border border-[var(--border)] px-4 py-2 text-sm text-white transition hover:border-[var(--border-strong)] hover:bg-white/[0.04] md:inline-flex"
             >
-              Request Access
+              Try Demo
             </Link>
             <button
               type="button"
@@ -95,7 +95,7 @@ export default function Navbar() {
         </div>
       </header>
 
-      <Modal open={open} onClose={() => setOpen(false)} title="Quantum navigation">
+      <Modal open={open} onClose={() => setOpen(false)} title="Qtangl navigation">
         <div className="space-y-5">
           <div className="space-y-2">
             {nav.map((item) => (
