@@ -1,16 +1,33 @@
 :root {
-  --color-void: #000000;
-  --color-signal: #ffffff;
-  --color-gray-950: #050505;
-  --color-gray-900: #0a0a0a;
-  --color-gray-850: #121212;
-  --color-gray-800: #181818;
-  --color-gray-700: #262626;
-  --color-gray-600: #525252;
-  --color-gray-500: #737373;
-  --color-gray-400: #a3a3a3;
-  --color-gray-300: #d4d4d4;
-  --color-gray-200: #e5e5e5;
+  --void: #000000;
+  --signal: #ffffff;
+  --gray-950: #050505;
+  --gray-900: #0a0a0a;
+  --gray-850: #121212;
+  --gray-800: #181818;
+  --gray-700: #262626;
+  --gray-600: #525252;
+  --gray-500: #737373;
+  --gray-400: #a3a3a3;
+  --gray-300: #d4d4d4;
+  --gray-200: #e5e5e5;
+  --success: #7ff0b2;
+  --error: #ff8d8d;
+
+  --color-void: var(--void);
+  --color-signal: var(--signal);
+  --color-gray-950: var(--gray-950);
+  --color-gray-900: var(--gray-900);
+  --color-gray-850: var(--gray-850);
+  --color-gray-800: var(--gray-800);
+  --color-gray-700: var(--gray-700);
+  --color-gray-600: var(--gray-600);
+  --color-gray-500: var(--gray-500);
+  --color-gray-400: var(--gray-400);
+  --color-gray-300: var(--gray-300);
+  --color-gray-200: var(--gray-200);
+  --color-success: var(--success);
+  --color-error: var(--error);
 
   --background: var(--color-void);
   --foreground: var(--color-signal);
@@ -21,6 +38,20 @@
   --border-strong: rgba(255, 255, 255, 0.24);
   --grid-line: rgba(255, 255, 255, 0.06);
   --focus-ring: rgba(255, 255, 255, 0.72);
+  --input-bg: rgba(255, 255, 255, 0.035);
+  --input-border: rgba(255, 255, 255, 0.16);
+  --input-focus: rgba(255, 255, 255, 0.82);
+
+  --text-display: clamp(2.75rem, 5.5vw, 4.75rem);
+  --text-h1: clamp(2.125rem, 4.2vw, 3.5rem);
+  --text-h2: clamp(1.625rem, 2.8vw, 2.25rem);
+  --text-body: 1rem;
+  --text-label: 0.7rem;
+  --leading-display: 0.95;
+  --leading-h1: 1.02;
+  --leading-h2: 1.12;
+  --leading-body: 1.75;
+  --leading-label: 1.4;
 
   --container-wide: 78rem;
   --container-reading: 46rem;
@@ -35,10 +66,10 @@
   --panel-gap-desktop: 1.5rem;
   --touch-target: 2.75rem;
 
-  --radius-sm: 0.125rem;
-  --radius-md: 0.25rem;
-  --radius-lg: 0.5rem;
-  --radius-xl: 0.75rem;
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.875rem;
+  --radius-xl: var(--radius-lg);
 
   --shadow-panel: 0 0 0 1px rgba(255, 255, 255, 0.04);
   --shadow-elevated:

@@ -7,7 +7,7 @@ import { footerNav, nav } from "@/lib/siteConfig";
 export default function Footer() {
   return (
     <footer className="border-t border-[var(--border)] bg-black">
-      <div className="mx-auto grid w-full max-w-7xl gap-10 px-6 py-12 sm:px-8 lg:grid-cols-[1.35fr_0.9fr] lg:px-12">
+      <div className="mx-auto grid w-full max-w-[var(--container-wide)] gap-10 px-[var(--gutter-mobile)] py-12 md:px-[var(--gutter-tablet)] lg:grid-cols-[1.35fr_0.9fr] lg:px-[var(--gutter-desktop)]">
         <div className="max-w-2xl">
           <div className="flex items-center gap-3">
             <Image
@@ -61,8 +61,10 @@ export default function Footer() {
           </div>
         </div>
       </div>
-      <div className="border-t border-[var(--border)] px-6 py-4 text-center text-xs text-[var(--color-gray-500)] sm:px-8 lg:px-12">
-        © {new Date().getFullYear()} Qtangl. All rights reserved.
+      <div className="border-t border-[var(--border)]">
+        <div className="mx-auto w-full max-w-[var(--container-wide)] px-[var(--gutter-mobile)] py-4 text-center text-xs text-[var(--color-gray-500)] md:px-[var(--gutter-tablet)] lg:px-[var(--gutter-desktop)]">
+          © {new Date().getFullYear()} Qtangl. All rights reserved.
+        </div>
       </div>
     </footer>
   );
