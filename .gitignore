@@ -17,6 +17,9 @@ reference/*/
 !reference/manifest.json
 !reference/repos.txt
 
+# Python virtualenv
+.venv/
+
 # Python cache files
 **/__pycache__/
 *.pyc
