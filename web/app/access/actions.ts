@@ -1,13 +1,25 @@
 "use server";
 
+export type AccessFieldName =
+  | "name"
+  | "email"
+  | "company"
+  | "interest"
+  | "currentTools"
+  | "message";
+
+export type AccessFieldErrors = Partial<Record<AccessFieldName, string>>;
+
 export type AccessFormState = {
   status: "idle" | "success" | "error";
   message: string;
+  fieldErrors: AccessFieldErrors;
 };
 
 export const initialAccessFormState: AccessFormState = {
   status: "idle",
   message: "Priority access is currently open for design partners and technical evaluation teams.",
+  fieldErrors: {},
 };
 
 export async function requestAccess(
@@ -20,11 +32,29 @@ export async function requestAccess(
   const interest = String(formData.get("interest") ?? "").trim();
   const currentTools = String(formData.get("currentTools") ?? "").trim();
   const message = String(formData.get("message") ?? "").trim();
+  const fieldErrors: AccessFieldErrors = {};
 
-  if (!name || !email || !company || !interest) {
+  if (!name) {
+    fieldErrors.name = "Enter your name.";
+  }
+
+  if (!email) {
+    fieldErrors.email = "Enter a work email.";
+  }
+
+  if (!company) {
+    fieldErrors.company = "Enter your company.";
+  }
+
+  if (!interest) {
+    fieldErrors.interest = "Select an interest area.";
+  }
+
+  if (Object.keys(fieldErrors).length > 0) {
     return {
       status: "error",
-      message: "Incomplete state. Add your name, work email, company, and interest area.",
+      message: "Review the highlighted fields and submit again.",
+      fieldErrors,
     };
   }
 
@@ -32,7 +62,10 @@ export async function requestAccess(
   if (!isValidEmail) {
     return {
       status: "error",
-      message: "Invalid email state. Check the address and submit again.",
+      message: "Check the work email field and submit again.",
+      fieldErrors: {
+        email: "Enter a valid work email.",
+      },
     };
   }
 
@@ -75,12 +108,14 @@ export async function requestAccess(
       return {
         status: "error",
         message: "Delivery failure. The request was valid, but email routing did not complete.",
+        fieldErrors: {},
       };
     }
 
     return {
       status: "success",
       message: "Signal received. Qtangl will reach out when the next pilot window opens.",
+      fieldErrors: {},
     };
   }
 
@@ -99,12 +134,14 @@ export async function requestAccess(
       return {
         status: "error",
         message: "Delivery failure. The request reached the server action but not the form endpoint.",
+        fieldErrors: {},
       };
     }
 
     return {
       status: "success",
       message: "Signal received. Qtangl will reach out when the next pilot window opens.",
+      fieldErrors: {},
     };
   }
 
@@ -114,5 +151,6 @@ export async function requestAccess(
     status: "success",
     message:
       "Signal received. Email delivery is not configured yet, but the server action path is active.",
+    fieldErrors: {},
   };
 }

@@ -48,46 +48,58 @@ export default function EntanglementField({
         role="img"
         aria-label="Abstract entanglement field"
       >
-        <motion.path
-          d="M96 240C176 144 248 116 320 240C392 364 464 336 544 240"
-          fill="none"
-          stroke="rgba(255,255,255,0.8)"
-          strokeWidth="1.25"
-          strokeLinecap="round"
-          initial={false}
-          animate={
-            shouldAnimate
-              ? {
-                  d: [
-                    "M96 240C176 144 248 116 320 240C392 364 464 336 544 240",
-                    "M96 240C176 188 248 92 320 240C392 388 464 292 544 240",
-                  ],
-                }
-              : undefined
-          }
-          transition={{ ...lineTransition, duration: 14 }}
-        />
-        <motion.path
-          d="M96 240C176 332 248 364 320 240C392 116 464 148 544 240"
-          fill="none"
-          stroke="rgba(255,255,255,0.45)"
-          strokeWidth="1"
-          strokeLinecap="round"
-          initial={false}
-          animate={
-            shouldAnimate
-              ? {
-                  d: [
-                    "M96 240C176 332 248 364 320 240C392 116 464 148 544 240",
-                    "M96 240C176 288 248 388 320 240C392 92 464 188 544 240",
-                  ],
-                }
-              : {
-                  opacity: isCompact ? 0.7 : 1,
-                }
-          }
-          transition={{ ...lineTransition, duration: 18 }}
-        />
+        {shouldAnimate ? (
+          <>
+            <motion.path
+              d="M96 240C176 144 248 116 320 240C392 364 464 336 544 240"
+              fill="none"
+              stroke="rgba(255,255,255,0.8)"
+              strokeWidth="1.25"
+              strokeLinecap="round"
+              initial={false}
+              animate={{
+                d: [
+                  "M96 240C176 144 248 116 320 240C392 364 464 336 544 240",
+                  "M96 240C176 188 248 92 320 240C392 388 464 292 544 240",
+                ],
+              }}
+              transition={{ ...lineTransition, duration: 14 }}
+            />
+            <motion.path
+              d="M96 240C176 332 248 364 320 240C392 116 464 148 544 240"
+              fill="none"
+              stroke="rgba(255,255,255,0.45)"
+              strokeWidth="1"
+              strokeLinecap="round"
+              initial={false}
+              animate={{
+                d: [
+                  "M96 240C176 332 248 364 320 240C392 116 464 148 544 240",
+                  "M96 240C176 288 248 388 320 240C392 92 464 188 544 240",
+                ],
+              }}
+              transition={{ ...lineTransition, duration: 18 }}
+            />
+          </>
+        ) : (
+          <>
+            <path
+              d="M96 240C176 144 248 116 320 240C392 364 464 336 544 240"
+              fill="none"
+              stroke="rgba(255,255,255,0.8)"
+              strokeWidth="1.25"
+              strokeLinecap="round"
+            />
+            <path
+              d="M96 240C176 332 248 364 320 240C392 116 464 148 544 240"
+              fill="none"
+              stroke="rgba(255,255,255,0.45)"
+              strokeWidth="1"
+              strokeLinecap="round"
+              opacity={isCompact ? 0.7 : 1}
+            />
+          </>
+        )}
 
         <circle cx="96" cy="240" r="14" fill="white" />
         <circle cx="544" cy="240" r="14" fill="white" />

@@ -16,18 +16,18 @@ export default function StateTransition({
 }: StateTransitionProps) {
   const reduceMotion = useReducedMotion();
 
+  if (reduceMotion) {
+    return <div className={className}>{children}</div>;
+  }
+
   return (
     <motion.div
       className={className}
-      initial={reduceMotion ? undefined : { opacity: 0, y: 10 }}
-      whileInView={
-        reduceMotion
-          ? undefined
-          : { opacity: 1, y: 0 }
-      }
+      initial={{ opacity: 0, y: 10 }}
+      whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.2 }}
       transition={{
-        duration: reduceMotion ? 0 : 0.45,
+        duration: 0.45,
         delay,
         ease: [0.22, 1, 0.36, 1],
       }}
