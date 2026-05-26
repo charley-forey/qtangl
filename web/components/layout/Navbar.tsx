@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import Modal from "@/components/ui/Modal";
-import { footerNav, nav } from "@/lib/siteConfig";
+import { footerNav, nav, navCta } from "@/lib/siteConfig";
 
 function isActive(pathname: string, href: string) {
   if (href === "/") {
@@ -79,10 +79,10 @@ export default function Navbar() {
 
           <div className="flex items-center gap-3">
             <Link
-              href="/try"
+              href={navCta.href}
               className="touch-target hidden items-center rounded-full border border-[var(--border)] px-4 py-2 text-sm text-white transition hover:border-[var(--border-strong)] hover:bg-white/[0.04] md:inline-flex"
             >
-              Try Demo
+              {navCta.name}
             </Link>
             <button
               type="button"
@@ -113,6 +113,14 @@ export default function Navbar() {
               </Link>
             ))}
           </div>
+          <div className="hairline-divider" />
+          <Link
+            href={navCta.href}
+            onClick={() => setOpen(false)}
+            className="touch-target inline-flex w-full items-center justify-center rounded-full border border-[var(--border)] px-4 py-3 text-sm text-white transition hover:border-[var(--border-strong)] hover:bg-white/[0.04]"
+          >
+            {navCta.name}
+          </Link>
           <div className="hairline-divider" />
           <div className="space-y-2">
             {footerNav.map((item) => (

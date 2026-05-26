@@ -5,10 +5,12 @@ import { siteMetadata } from "@/lib/copy/product";
 export default function sitemap(): MetadataRoute.Sitemap {
   const routes = [
     "",
+    "/try",
     "/about",
     "/technology",
     "/access",
     "/docs",
+    "/docs/data-formats",
     "/docs/quickstart",
     "/docs/concepts",
     "/docs/api",

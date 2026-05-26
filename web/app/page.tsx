@@ -5,6 +5,7 @@ import CTA from "@/components/marketing/CTA";
 import FeatureCard from "@/components/marketing/FeatureCard";
 import Hero from "@/components/marketing/Hero";
 import ProductPreview from "@/components/marketing/ProductPreview";
+import PageShell from "@/components/layout/PageShell";
 import StateTransition from "@/components/quantum/StateTransition";
 import Section from "@/components/layout/Section";
 import Card from "@/components/ui/Card";
@@ -28,7 +29,7 @@ export const metadata: Metadata = {
 
 export default function Home() {
   return (
-    <main className="flex-1">
+    <PageShell>
       <Section className="pt-12 sm:pt-16">
         <Hero />
       </Section>
@@ -200,9 +201,9 @@ export default function Home() {
         </div>
       </Section>
 
-      <Section className="pb-20 sm:pb-24">
+      <Section className="pb-0">
         <CTA />
       </Section>
-    </main>
+    </PageShell>
   );
 }
