@@ -1,12 +1,14 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 
 import ArticleLayout from "@/components/docs/ArticleLayout";
 import { MAIN_CONTENT_ID } from "@/components/layout/PageShell";
+import { blogClosingCta } from "@/lib/copy/articles";
 
 export const metadata: Metadata = {
   title: "Routing Optimization",
   description:
-    "A practical look at capacity, windows, and why the shortest route is rarely enough.",
+    "Learn how to build route plans teams can actually execute when windows and capacity matter.",
 };
 
 export default function RoutingOptimizationPage() {
@@ -43,6 +45,14 @@ export default function RoutingOptimizationPage() {
             The product story is straightforward: submit the route problem, evaluate
             feasible plans through the solver workflow, and return the best operational
             route package for the team to execute.
+          </p>
+        </section>
+
+        <section>
+          <h2>{blogClosingCta.title}</h2>
+          <p>
+            {blogClosingCta.description}{" "}
+            <Link href={blogClosingCta.href}>{blogClosingCta.label}</Link>.
           </p>
         </section>
       </ArticleLayout>

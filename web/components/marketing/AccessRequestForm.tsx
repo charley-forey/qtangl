@@ -7,6 +7,7 @@ import { requestAccess } from "@/app/access/actions";
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
 import Eyebrow from "@/components/ui/Eyebrow";
+import { accessFormCopy, accessFormMessages } from "@/lib/copy/access";
 
 const fieldBaseClassName =
   "h-12 rounded-xl border bg-black px-4 text-sm text-white outline-none transition placeholder:text-[var(--color-gray-500)]";
@@ -16,7 +17,7 @@ const textAreaBaseClassName =
 
 const initialAccessFormState: AccessFormState = {
   status: "idle",
-  message: "Priority access is currently open for design partners and technical evaluation teams.",
+  message: accessFormMessages.initial,
   fieldErrors: {},
 };
 
@@ -76,7 +77,7 @@ export default function AccessRequestForm() {
   const formState = state ?? initialAccessFormState;
   const fieldErrors = formState.fieldErrors || initialAccessFormState.fieldErrors;
   const statusIsError = formState.status === "error";
-  const statusMessage = pending ? "Submitting access request." : formState.message;
+  const statusMessage = pending ? accessFormCopy.pendingLabel : formState.message;
 
   useEffect(() => {
     if (formState.status !== "error") {
@@ -113,25 +114,17 @@ export default function AccessRequestForm() {
     <Card strong className="rounded-[2rem] p-6 sm:p-8 lg:p-10">
       <div className="grid gap-8 xl:grid-cols-[0.8fr_1.2fr]">
         <div>
-          <Eyebrow>Access interface</Eyebrow>
+          <Eyebrow>{accessFormCopy.eyebrow}</Eyebrow>
           <h2 className="mt-4 text-3xl font-semibold tracking-tight text-white">
-            Request pilot access
+            {accessFormCopy.title}
           </h2>
           <p className="mt-4 text-base leading-8 text-[var(--color-gray-300)]">
-            Share the workflow you want to improve and the systems you already use.
-            Qtangl prioritizes teams with clear scheduling, routing, allocation, and
-            operational planning use cases.
+            {accessFormCopy.description}
           </p>
           <div className="mt-6 space-y-3 text-sm leading-7 text-[var(--color-gray-400)]">
-            <p>
-              Strong submissions explain the planning problem, the system context,
-              the operational constraints that matter most, and the current tooling
-              stack.
-            </p>
-            <p>
-              We currently prioritize design partners, API evaluation teams, and
-              operations-heavy organizations preparing for a pilot.
-            </p>
+            {accessFormCopy.helpfulNotes.map((note) => (
+              <p key={note}>{note}</p>
+            ))}
           </div>
         </div>
 
@@ -144,7 +137,9 @@ export default function AccessRequestForm() {
         >
           <fieldset disabled={pending} className="grid gap-4 border-0 p-0 sm:gap-5">
             <div
-              className="text-sm leading-7 text-[var(--color-gray-400)]"
+              className={`text-sm leading-7 ${
+                statusIsError ? "text-[var(--color-gray-200)]" : "text-[var(--color-gray-400)]"
+              }`}
               aria-live={statusIsError ? "assertive" : "polite"}
               role={statusIsError ? "alert" : "status"}
             >
@@ -153,17 +148,17 @@ export default function AccessRequestForm() {
 
             <div className="grid gap-4 md:grid-cols-2">
               <Input
-                label="Name"
+                label={accessFormCopy.fields.name.label}
                 name="name"
-                placeholder="Ada Lovelace"
+                placeholder={accessFormCopy.fields.name.placeholder}
                 required
                 error={fieldErrors.name}
               />
               <Input
-                label="Work email"
+                label={accessFormCopy.fields.email.label}
                 name="email"
                 type="email"
-                placeholder="ada@company.com"
+                placeholder={accessFormCopy.fields.email.placeholder}
                 required
                 error={fieldErrors.email}
               />
@@ -171,14 +166,14 @@ export default function AccessRequestForm() {
 
             <div className="grid gap-4 md:grid-cols-2">
               <Input
-                label="Company"
+                label={accessFormCopy.fields.company.label}
                 name="company"
-                placeholder="Example Systems"
+                placeholder={accessFormCopy.fields.company.placeholder}
                 required
                 error={fieldErrors.company}
               />
               <div className="grid gap-2 text-sm text-[var(--color-gray-300)]">
-                <label htmlFor="access-interest">Interest area</label>
+                <label htmlFor="access-interest">{accessFormCopy.fields.interest.label}</label>
                 <select
                   id="access-interest"
                   name="interest"
@@ -192,13 +187,13 @@ export default function AccessRequestForm() {
                   defaultValue=""
                 >
                   <option value="" disabled>
-                    Select
+                    {accessFormCopy.fields.interest.placeholder}
                   </option>
-                  <option value="Scheduling optimization">Scheduling optimization</option>
-                  <option value="Routing optimization">Routing optimization</option>
-                  <option value="Resource allocation">Resource allocation</option>
-                  <option value="Developer platform">Developer platform</option>
-                  <option value="Research collaboration">Research collaboration</option>
+                  {accessFormCopy.fields.interest.options.map((option) => (
+                    <option key={option} value={option}>
+                      {option}
+                    </option>
+                  ))}
                 </select>
                 {fieldErrors.interest ? (
                   <p
@@ -212,11 +207,11 @@ export default function AccessRequestForm() {
             </div>
 
             <div className="grid gap-2 text-sm text-[var(--color-gray-300)]">
-              <label htmlFor="access-currentTools">Current tools</label>
+              <label htmlFor="access-currentTools">{accessFormCopy.fields.currentTools.label}</label>
               <input
                 id="access-currentTools"
                 name="currentTools"
-                placeholder="Procore, spreadsheets, Samsara, Smartsheet..."
+                placeholder={accessFormCopy.fields.currentTools.placeholder}
                 aria-invalid={fieldErrors.currentTools ? "true" : undefined}
                 aria-describedby={
                   fieldErrors.currentTools ? "access-currentTools-error" : undefined
@@ -237,12 +232,12 @@ export default function AccessRequestForm() {
             </div>
 
             <div className="grid gap-2 text-sm text-[var(--color-gray-300)]">
-              <label htmlFor="access-message">System context</label>
+              <label htmlFor="access-message">{accessFormCopy.fields.message.label}</label>
               <textarea
                 id="access-message"
                 name="message"
                 rows={6}
-                placeholder="Describe the planning problem, system constraints, or API integration context."
+                placeholder={accessFormCopy.fields.message.placeholder}
                 aria-invalid={fieldErrors.message ? "true" : undefined}
                 aria-describedby={fieldErrors.message ? "access-message-error" : undefined}
                 className={[
@@ -257,13 +252,9 @@ export default function AccessRequestForm() {
               ) : null}
             </div>
 
-            <div className="flex flex-col gap-4 pt-2 lg:flex-row lg:items-center lg:justify-between">
-              <p className="text-sm leading-7 text-[var(--color-gray-400)]">
-                Required fields are checked after submission so assistive technology can
-                report the exact issues.
-              </p>
+            <div className="flex flex-col gap-4 pt-2 lg:flex-row lg:items-center lg:justify-end">
               <Button type="submit" disabled={pending} className="w-full lg:w-auto">
-                {pending ? "Submitting..." : "Request Access"}
+                {pending ? accessFormCopy.pendingLabel : accessFormCopy.submitLabel}
               </Button>
             </div>
           </fieldset>

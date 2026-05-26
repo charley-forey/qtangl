@@ -6,11 +6,11 @@ import PageShell from "@/components/layout/PageShell";
 import Section from "@/components/layout/Section";
 import Card from "@/components/ui/Card";
 import Eyebrow from "@/components/ui/Eyebrow";
-import { accessPanel } from "@/lib/copy/home";
+import { accessPageCopy, accessPanel } from "@/lib/copy/access";
 
 export const metadata: Metadata = {
   title: "Access",
-  description: "Request pilot access for scheduling, routing, and allocation workflows.",
+  description: accessPageCopy.metadataDescription,
 };
 
 export default function AccessPage() {
@@ -23,20 +23,22 @@ export default function AccessPage() {
       />
       <Section className="pt-0 pb-0">
         <div className="grid gap-6 xl:grid-cols-[0.78fr_1.22fr]">
-          <Card className="rounded-2xl">
-            <Eyebrow>Who this is for</Eyebrow>
-            <ul className="mt-4 space-y-3 text-sm leading-7 text-[var(--color-gray-300)]">
-              <li>Operations teams dealing with scheduling, routing, or staffing bottlenecks.</li>
-              <li>Platform teams embedding optimization into internal or customer-facing tools.</li>
-              <li>Technical partners preparing for an API evaluation or pilot deployment.</li>
-            </ul>
-            <div className="hairline-divider mt-6" />
-            <Eyebrow className="mt-6">What to include</Eyebrow>
-            <p className="mt-4 text-sm leading-7 text-[var(--color-gray-300)]">
-              Share the workflow you are improving, the constraints that matter most,
-              and the tools your team already uses today.
-            </p>
-          </Card>
+          <div className="space-y-6">
+            <Card className="rounded-2xl">
+              <Eyebrow>{accessPageCopy.audienceEyebrow}</Eyebrow>
+              <ul className="mt-4 space-y-3 text-sm leading-7 text-[var(--color-gray-300)]">
+                {accessPageCopy.audienceItems.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+            </Card>
+            <Card className="rounded-2xl">
+              <Eyebrow>{accessPageCopy.includeEyebrow}</Eyebrow>
+              <p className="mt-4 text-sm leading-7 text-[var(--color-gray-300)]">
+                {accessPageCopy.includeDescription}
+              </p>
+            </Card>
+          </div>
           <AccessRequestForm />
         </div>
       </Section>

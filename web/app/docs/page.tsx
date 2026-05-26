@@ -9,7 +9,8 @@ import { siteMetadata } from "@/lib/copy/product";
 
 export const metadata: Metadata = {
   title: "Docs",
-  description: "Developer onboarding and conceptual guides for the Qtangl API.",
+  description:
+    "Learn how to send planning inputs and read ranked outputs from the Qtangl API.",
 };
 
 export default function DocsPage() {

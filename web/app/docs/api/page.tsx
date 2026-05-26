@@ -15,7 +15,8 @@ import {
 
 export const metadata: Metadata = {
   title: "API Guide",
-  description: "Authentication, rate limits, and the `/optimize` flow for Qtangl.",
+  description:
+    "Understand the `/optimize` flow so you can submit jobs and read results quickly.",
 };
 
 export default function DocsApiPage() {

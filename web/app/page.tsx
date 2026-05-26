@@ -10,7 +10,7 @@ import StateTransition from "@/components/quantum/StateTransition";
 import Section from "@/components/layout/Section";
 import Card from "@/components/ui/Card";
 import Eyebrow from "@/components/ui/Eyebrow";
-import { homeHero, homepageNarrative } from "@/lib/copy/home";
+import { homeProductPreview, homeSections, homeHero, homepageNarrative } from "@/lib/copy/home";
 import {
   apiPreviewRequest,
   apiPreviewResponse,
@@ -71,14 +71,12 @@ export default function Home() {
         <div className="grid gap-8 lg:grid-cols-[0.92fr_1.08fr]">
           <StateTransition>
             <div className="content-reading">
-              <Eyebrow>What Qtangl does</Eyebrow>
+              <Eyebrow>{homeSections.solution.eyebrow}</Eyebrow>
               <h2 className="mt-4 text-3xl font-semibold tracking-tight text-white sm:text-4xl">
-                A planning API that turns constraints into ranked plans.
+                {homeSections.solution.title}
               </h2>
               <p className="mt-5 text-base leading-8 text-[var(--color-gray-300)]">
-                Qtangl keeps the planning problem intact instead of flattening it
-                into generic workflow software. Teams send the rules they already
-                track, evaluate feasible options, and receive a plan they can run.
+                {homeSections.solution.description}
               </p>
             </div>
           </StateTransition>
@@ -106,7 +104,11 @@ export default function Home() {
 
       <Section className="pt-0">
         <StateTransition>
-          <ProductPreview />
+          <ProductPreview
+            eyebrow={homeProductPreview.eyebrow}
+            title={homeProductPreview.title}
+            description={homeProductPreview.description}
+          />
         </StateTransition>
       </Section>
 
@@ -184,9 +186,7 @@ export default function Home() {
                 {homepageNarrative.interfaceTitle}
               </h2>
               <p className="mt-5 text-base leading-8 text-[var(--color-gray-300)]">
-                Start with the guided demo to see the workflow visually. When you are
-                ready to integrate, developers can send JSON and receive the same
-                ranked plan with summary, metrics, and solver details.
+                {homepageNarrative.interfaceDescription}
               </p>
             </div>
           </StateTransition>

@@ -12,7 +12,8 @@ import { aboutContent, siteMetadata } from "@/lib/copy/product";
 
 export const metadata: Metadata = {
   title: "About",
-  description: "Mission, principles, and product direction behind Qtangl.",
+  description:
+    "Learn how Qtangl helps teams make better planning decisions under hard constraints.",
 };
 
 export default function AboutPage() {

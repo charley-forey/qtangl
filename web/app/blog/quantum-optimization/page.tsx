@@ -1,12 +1,14 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 
 import ArticleLayout from "@/components/docs/ArticleLayout";
 import { MAIN_CONTENT_ID } from "@/components/layout/PageShell";
+import { blogClosingCta } from "@/lib/copy/articles";
 
 export const metadata: Metadata = {
   title: "Why Quantum Optimization Matters",
   description:
-    "A plain-English introduction to QUBO, QAOA, and hybrid optimization workflows.",
+    "Learn where quantum-assisted search can help teams evaluate harder planning problems.",
 };
 
 export default function QuantumOptimizationPage() {
@@ -45,6 +47,14 @@ export default function QuantumOptimizationPage() {
             system itself. Classical preprocessing shapes the problem, quantum-assisted
             search explores candidates, and classical post-processing returns an
             operational result that teams can use.
+          </p>
+        </section>
+
+        <section>
+          <h2>{blogClosingCta.title}</h2>
+          <p>
+            {blogClosingCta.description}{" "}
+            <Link href={blogClosingCta.href}>{blogClosingCta.label}</Link>.
           </p>
         </section>
       </ArticleLayout>

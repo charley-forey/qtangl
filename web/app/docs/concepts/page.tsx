@@ -7,7 +7,8 @@ import Card from "@/components/ui/Card";
 
 export const metadata: Metadata = {
   title: "Concepts",
-  description: "Core Qtangl concepts for optimization problems and hybrid execution.",
+  description:
+    "Understand how Qtangl models constraints and where hybrid optimization fits in the workflow.",
 };
 
 export default function ConceptsPage() {

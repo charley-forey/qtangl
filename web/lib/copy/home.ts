@@ -14,6 +14,7 @@ export const homeHero = {
     "Map the fields you already track into one repeatable workflow.",
     "Keep solver complexity under the hood and business value up front.",
   ],
+  visualLabels: ["Input constraints", "Feasible plans", "Ranked output"],
 } as const;
 
 export const homepageNarrative = {
@@ -27,13 +28,26 @@ export const homepageNarrative = {
   domainTitle: "Used where timing, capacity, and sequencing directly affect business outcomes.",
   interfaceEyebrow: "API surface",
   interfaceTitle: "Try the workflow visually first. Integrate with the API when you're ready.",
+  interfaceDescription:
+    "Start with the guided demo to see the workflow visually. When you are ready to integrate, developers can send JSON and receive the same ranked plan with summary, metrics, and solver details.",
 } as const;
 
-export const accessPanel = {
-  eyebrow: "Access",
-  title: "Tell us what planning problem you need to fix.",
+export const homeSections = {
+  solution: {
+    eyebrow: "What Qtangl does",
+    title: "Turn operational constraints into ranked plans your team can run.",
+    description:
+      "Qtangl keeps the planning problem intact instead of flattening it into generic workflow software. Teams send the rules they already track, evaluate feasible options, and receive a plan they can run.",
+  },
+} as const;
+
+export const homeProductPreview = {
+  eyebrow: "Product proof",
+  title: "A planning product people can understand before they ever read the API.",
   description:
-    "Tell us which schedule, route, or staffing workflow is costing you time. Qtangl is currently focused on pilot teams with a clear planning bottleneck and a real integration path.",
-  formHint:
-    "Best fit for operations leaders, product teams, and technical partners preparing a pilot or API evaluation.",
+    "The interface below shows the kind of ranked output Qtangl is designed to return: a readable plan, a short explanation, and the metric that makes the value obvious.",
+  details: [
+    "The right product surface starts with the business problem, not solver jargon. That means a user should immediately see the plan, the blocked window, and the measurable improvement.",
+    "The same visualization layer can render demo data today and live API responses later without changing the mental model.",
+  ],
 } as const;

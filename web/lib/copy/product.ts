@@ -2,11 +2,11 @@ export const siteMetadata = {
   name: "Qtangl",
   title: "Qtangl | Planning API for Schedules, Routes, and Staffing",
   description:
-    "Qtangl turns scheduling, routing, and staffing constraints into ranked plans teams can review and run.",
+    "Get ranked schedules, routes, and staffing plans from the constraints your team already tracks.",
   url: "https://qtangl.com",
   tagline: "Send your constraints. Get a plan your team can run.",
   oneLiner:
-    "Turn operational constraints into ranked schedules, routes, and staffing plans.",
+    "Turn operational constraints into ranked plans your team can review and run.",
   contactEmail: "founders@qtangl.com",
 } as const;
 
