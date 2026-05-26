@@ -14,46 +14,54 @@ export default function StaffingGrid({ plan }: StaffingGridProps) {
       <h3 className="mt-2 text-xl font-semibold text-white">{plan.title}</h3>
 
       <div className="mt-6 overflow-x-auto">
-        <div
-          className="grid min-w-[32rem] gap-3"
-          style={{
-            gridTemplateColumns: `minmax(10rem, 1.2fr) repeat(${plan.shifts.length}, minmax(8rem, 1fr))`,
-          }}
-        >
-          <div className="px-4 py-3 text-xs uppercase tracking-[0.16em] text-[var(--color-gray-500)]">
-            Team member
-          </div>
-          {plan.shifts.map((shift) => (
-            <div
-              key={shift}
-              className="px-4 py-3 text-xs uppercase tracking-[0.16em] text-[var(--color-gray-500)]"
-            >
-              {shift}
-            </div>
-          ))}
+        <table className="min-w-[32rem] w-full border-separate border-spacing-3">
+          <caption className="sr-only">{plan.summary}</caption>
+          <thead>
+            <tr>
+              <th
+                scope="col"
+                className="px-4 py-3 text-left text-xs uppercase tracking-[0.16em] text-[var(--color-gray-500)]"
+              >
+                Team member
+              </th>
+              {plan.shifts.map((shift) => (
+                <th
+                  key={shift}
+                  scope="col"
+                  className="px-4 py-3 text-left text-xs uppercase tracking-[0.16em] text-[var(--color-gray-500)]"
+                >
+                  {shift}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {people.map((person) => (
+              <tr key={person}>
+                <th
+                  scope="row"
+                  className="rounded-2xl border border-[var(--border)] bg-black/35 px-4 py-4 text-left text-sm font-medium text-white"
+                >
+                  {person}
+                </th>
+                {plan.shifts.map((shift) => {
+                  const assignment = plan.assignments.find(
+                    (item) => item.person === person && item.shift === shift
+                  );
 
-          {people.map((person) => (
-            <div key={person} className="contents">
-              <div className="rounded-2xl border border-[var(--border)] bg-black/35 px-4 py-4 text-sm font-medium text-white">
-                {person}
-              </div>
-              {plan.shifts.map((shift) => {
-                const assignment = plan.assignments.find(
-                  (item) => item.person === person && item.shift === shift
-                );
-
-                return (
-                  <div
-                    key={`${person}-${shift}`}
-                    className="rounded-2xl border border-[var(--border)] bg-black/35 px-4 py-4 text-sm text-[var(--color-gray-300)]"
-                  >
-                    {assignment ? assignment.role : "—"}
-                  </div>
-                );
-              })}
-            </div>
-          ))}
-        </div>
+                  return (
+                    <td
+                      key={`${person}-${shift}`}
+                      className="rounded-2xl border border-[var(--border)] bg-black/35 px-4 py-4 text-sm text-[var(--color-gray-300)]"
+                    >
+                      {assignment ? assignment.role : "—"}
+                    </td>
+                  );
+                })}
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </Card>
   );

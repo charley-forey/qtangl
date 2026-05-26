@@ -1,20 +1,22 @@
 import Card from "@/components/ui/Card";
 import Eyebrow from "@/components/ui/Eyebrow";
 import PlanVisualization from "@/components/visualization/PlanVisualization";
-import { tryScenarios } from "@/lib/demo-data";
+import { TryScenario, tryScenarios } from "@/lib/demo-data";
 
 type ProductPreviewProps = {
   eyebrow?: string;
   title?: string;
   description?: string;
+  scenario?: TryScenario;
 };
 
 export default function ProductPreview({
   eyebrow = "Product proof",
   title = "A planning product people can understand before they ever read the API.",
   description = "The interface below shows the kind of ranked output Qtangl is designed to return: a readable plan, a short explanation, and the metric that makes the value obvious.",
+  scenario,
 }: ProductPreviewProps) {
-  const scheduleScenario = tryScenarios[0];
+  const activeScenario = scenario ?? tryScenarios[0];
 
   return (
     <div className="grid gap-6">
@@ -41,7 +43,7 @@ export default function ProductPreview({
         </Card>
       </div>
 
-      <PlanVisualization plan={scheduleScenario.plan} />
+      <PlanVisualization plan={activeScenario.plan} />
     </div>
   );
 }

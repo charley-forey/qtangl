@@ -1,21 +1,25 @@
-import { ReactNode } from "react";
+import { ComponentPropsWithoutRef, ElementType, ReactNode } from "react";
 
-type CardProps = {
-  as?: "article" | "div" | "section";
+type CardOwnProps<T extends ElementType> = {
+  as?: T;
   children: ReactNode;
   className?: string;
   interactive?: boolean;
   strong?: boolean;
 };
 
-export default function Card({
-  as = "div",
+type CardProps<T extends ElementType> = CardOwnProps<T> &
+  Omit<ComponentPropsWithoutRef<T>, keyof CardOwnProps<T>>;
+
+export default function Card<T extends ElementType = "div">({
+  as,
   children,
   className = "",
   interactive = false,
   strong = false,
-}: CardProps) {
-  const Component = as;
+  ...rest
+}: CardProps<T>) {
+  const Component = as ?? "div";
 
   return (
     <Component
@@ -29,6 +33,7 @@ export default function Card({
       ]
         .filter(Boolean)
         .join(" ")}
+      {...rest}
     >
       {children}
     </Component>
