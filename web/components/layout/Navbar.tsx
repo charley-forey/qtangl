@@ -70,6 +70,7 @@ export default function Navbar() {
                       ? "text-white"
                       : "text-[var(--color-gray-300)] transition hover:text-white"
                   }
+                  aria-current={active ? "page" : undefined}
                 >
                   {item.name}
                 </Link>
@@ -88,6 +89,8 @@ export default function Navbar() {
               type="button"
               className="touch-target inline-flex items-center rounded-full border border-[var(--border)] px-4 py-2 text-sm text-white transition hover:border-[var(--border-strong)] hover:bg-white/[0.04] md:hidden"
               onClick={() => setOpen(true)}
+              aria-controls="mobile-navigation"
+              aria-expanded={open}
             >
               Menu
             </button>
@@ -96,22 +99,27 @@ export default function Navbar() {
       </header>
 
       <Modal open={open} onClose={() => setOpen(false)} title="Qtangl navigation">
-        <div className="space-y-5">
+        <div id="mobile-navigation" className="space-y-5">
           <div className="space-y-2">
-            {nav.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                onClick={() => setOpen(false)}
-                className={`touch-target block rounded-xl border px-3 py-3 text-base transition ${
-                  isActive(pathname, item.href)
-                    ? "border-[var(--border-strong)] bg-white/[0.06] text-white"
-                    : "border-transparent text-white hover:border-[var(--border)] hover:bg-white/[0.04]"
-                }`}
-              >
-                {item.name}
-              </Link>
-            ))}
+            {nav.map((item) => {
+              const active = isActive(pathname, item.href);
+
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  onClick={() => setOpen(false)}
+                  className={`touch-target block rounded-xl border px-3 py-3 text-base transition ${
+                    active
+                      ? "border-[var(--border-strong)] bg-white/[0.06] text-white"
+                      : "border-transparent text-white hover:border-[var(--border)] hover:bg-white/[0.04]"
+                  }`}
+                  aria-current={active ? "page" : undefined}
+                >
+                  {item.name}
+                </Link>
+              );
+            })}
           </div>
           <div className="hairline-divider" />
           <div className="space-y-2">

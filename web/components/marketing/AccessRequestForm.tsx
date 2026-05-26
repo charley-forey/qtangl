@@ -142,7 +142,12 @@ export default function AccessRequestForm() {
             >
               {state.message}
             </p>
-            <Button type="submit" disabled={pending} className="w-full lg:w-auto">
+            <Button
+              type="submit"
+              disabled={pending}
+              aria-busy={pending}
+              className="w-full lg:w-auto"
+            >
               {pending ? "Submitting..." : "Request Access"}
             </Button>
           </div>

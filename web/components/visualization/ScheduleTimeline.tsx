@@ -1,5 +1,6 @@
 import Card from "@/components/ui/Card";
 import type { ScheduleVisualization } from "@/lib/demo-data";
+import { useId } from "react";
 
 type ScheduleTimelineProps = {
   plan: ScheduleVisualization;
@@ -7,16 +8,29 @@ type ScheduleTimelineProps = {
 
 export default function ScheduleTimeline({ plan }: ScheduleTimelineProps) {
   const horizon = Math.max(...plan.blocks.map((block) => block.start + block.duration), 1);
+  const summaryId = useId();
+  const titleId = useId();
 
   return (
-    <Card strong className="rounded-[1.5rem] p-5 sm:p-6">
+    <Card
+      as="section"
+      strong
+      className="rounded-[1.5rem] p-5 sm:p-6"
+      aria-labelledby={titleId}
+      aria-describedby={summaryId}
+    >
       <div className="flex items-center justify-between gap-3">
         <div>
           <p className="text-label">Visual plan</p>
-          <h3 className="mt-2 text-xl font-semibold text-white">{plan.title}</h3>
+          <h3 id={titleId} className="mt-2 text-xl font-semibold text-white">
+            {plan.title}
+          </h3>
         </div>
         <p className="text-sm text-[var(--color-gray-400)]">{plan.horizonLabel}</p>
       </div>
+      <p id={summaryId} className="sr-only">
+        {plan.summary}
+      </p>
 
       <div className="mt-6 space-y-4">
         <div

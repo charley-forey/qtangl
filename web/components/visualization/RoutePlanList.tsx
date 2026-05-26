@@ -11,9 +11,9 @@ export default function RoutePlanList({ plan }: RoutePlanListProps) {
       <p className="text-label">Visual plan</p>
       <h3 className="mt-2 text-xl font-semibold text-white">{plan.title}</h3>
 
-      <div className="mt-6 space-y-3">
+      <ol className="mt-6 space-y-3" aria-label={`${plan.title} stops`}>
         {plan.stops.map((stop) => (
-          <div
+          <li
             key={`${stop.vehicle}-${stop.order}-${stop.name}`}
             className="grid gap-3 rounded-2xl border border-[var(--border)] bg-black/40 px-4 py-4 md:grid-cols-[auto_1fr_auto]"
           >
@@ -32,9 +32,9 @@ export default function RoutePlanList({ plan }: RoutePlanListProps) {
               ) : null}
             </div>
             <p className="text-sm text-[var(--color-gray-300)]">{stop.vehicle}</p>
-          </div>
+          </li>
         ))}
-      </div>
+      </ol>
     </Card>
   );
 }
