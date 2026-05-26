@@ -13,6 +13,7 @@ from qiskit_optimization.utils import algorithm_globals
 
 
 def main() -> None:
+    # Research-only QAOA demo on a tiny graph.
     n = 4
     edges = [(0, 1, 1.0), (0, 2, 1.0), (0, 3, 1.0), (1, 2, 1.0), (2, 3, 1.0)]
 
@@ -30,9 +31,9 @@ def main() -> None:
 
     seed = 1234
     algorithm_globals.random_seed = seed
-    spsa = SPSA(maxiter=50)
-    simulator = AerSimulator()
-    sampler = SamplerV2(seed=seed, default_shots=2048)
+    spsa = SPSA(maxiter=20)
+    simulator = AerSimulator(method="matrix_product_state")
+    sampler = SamplerV2(seed=seed, default_shots=256)
     pass_manager = generate_preset_pass_manager(
         optimization_level=1, backend=simulator
     )

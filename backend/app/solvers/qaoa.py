@@ -1,28 +1,126 @@
 from __future__ import annotations
 
 import os
+from typing import Any
 
 from app.models.canonical import CanonicalProblem
 from app.models.results import SolverRunResult, TaskAssignment
-from app.qubo.scheduling import build_scheduling_quadratic_program
+from app.qubo.scheduling import (
+    SchedulingQuboDiagnostics,
+    build_scheduling_quadratic_program,
+    estimate_scheduling_qubo_size,
+)
 
 
-def solve_schedule_with_qaoa(problem: CanonicalProblem) -> SolverRunResult:
+def is_qaoa_enabled_for_runtime() -> bool:
+    raw_value = os.getenv("QTANGL_ENABLE_QAOA")
+    if raw_value is not None:
+        return raw_value.strip().lower() in {"1", "true", "yes", "on"}
+
+    # Production-safe default: disable on Railway unless explicitly re-enabled.
+    return not (
+        os.getenv("RAILWAY_ENVIRONMENT") or os.getenv("RAILWAY_PROJECT_ID")
+    )
+
+
+def assess_qaoa_candidate(
+    problem: CanonicalProblem,
+    *,
+    qubo_diagnostics: SchedulingQuboDiagnostics | None = None,
+    check_environment: bool = True,
+) -> dict[str, Any]:
+    diagnostics = qubo_diagnostics or estimate_scheduling_qubo_size(problem)
+    limits = {
+        "maxBinaryVariables": int(
+            os.getenv("QTANGL_QAOA_MAX_BINARY_VARIABLES", "12")
+        ),
+        "maxHorizon": int(os.getenv("QTANGL_QAOA_MAX_HORIZON", "6")),
+        "maxOverlapConstraints": int(
+            os.getenv("QTANGL_QAOA_MAX_OVERLAP_CONSTRAINTS", "24")
+        ),
+    }
+
+    assessment: dict[str, Any] = {
+        "enabled": is_qaoa_enabled_for_runtime(),
+        "quboDiagnostics": diagnostics.as_dict(),
+        "limits": limits,
+        "status": "eligible",
+        "reason": "QAOA candidate is within the configured research-size limits.",
+    }
+
+    if check_environment and not assessment["enabled"]:
+        assessment["status"] = "disabled"
+        assessment["reason"] = (
+            "QAOA disabled by environment. Railway production stays classical-first "
+            "unless QTANGL_ENABLE_QAOA is explicitly turned on."
+        )
+        return assessment
+
+    if diagnostics.binary_variable_count > limits["maxBinaryVariables"]:
+        assessment["status"] = "too_large"
+        assessment["reason"] = (
+            "QAOA skipped because the candidate exceeds the binary-variable limit "
+            "for safe simulator execution."
+        )
+        return assessment
+
+    if diagnostics.horizon > limits["maxHorizon"]:
+        assessment["status"] = "too_large"
+        assessment["reason"] = (
+            "QAOA skipped because the candidate horizon is too large for the "
+            "configured simulator budget."
+        )
+        return assessment
+
+    if diagnostics.overlap_constraint_count > limits["maxOverlapConstraints"]:
+        assessment["status"] = "too_large"
+        assessment["reason"] = (
+            "QAOA skipped because the resource-overlap search space is too large "
+            "for the configured simulator budget."
+        )
+        return assessment
+
+    return assessment
+
+
+def solve_schedule_with_qaoa(
+    problem: CanonicalProblem,
+    *,
+    qubo_diagnostics: SchedulingQuboDiagnostics | None = None,
+    candidate_assessment: dict[str, Any] | None = None,
+) -> SolverRunResult:
+    diagnostics = qubo_diagnostics or estimate_scheduling_qubo_size(problem)
+    assessment = candidate_assessment or assess_qaoa_candidate(
+        problem,
+        qubo_diagnostics=diagnostics,
+    )
+
+    if assessment["status"] != "eligible":
+        return SolverRunResult(
+            feasible=False,
+            method="hybrid",
+            solver="qaoa",
+            backend="simulator",
+            summary=assessment["reason"],
+            diagnostics={"qaoa": assessment},
+        )
+
     try:
+        from qiskit.transpiler.preset_passmanagers import generate_preset_pass_manager
         from qiskit_aer import AerSimulator
         from qiskit_aer.primitives import SamplerV2
         from qiskit_optimization.algorithms import MinimumEigenOptimizer
         from qiskit_optimization.minimum_eigensolvers import QAOA
         from qiskit_optimization.optimizers import SPSA
         from qiskit_optimization.utils import algorithm_globals
-    except ImportError as exc:
+    except Exception as exc:
         return SolverRunResult(
             feasible=False,
             method="hybrid",
             solver="qaoa",
             backend="simulator",
             summary="QAOA dependencies are not installed in this environment yet.",
-            diagnostics={"error": str(exc)},
+            diagnostics={"qaoa": assessment, "error": str(exc)},
         )
 
     try:
@@ -34,22 +132,31 @@ def solve_schedule_with_qaoa(problem: CanonicalProblem) -> SolverRunResult:
             solver="qaoa",
             backend="simulator",
             summary="Qtangl could not translate the schedule into a QUBO model.",
-            diagnostics={"error": str(exc)},
+            diagnostics={"qaoa": assessment, "error": str(exc)},
         )
 
     seed = int(os.getenv("QTANGL_QAOA_SEED", "1234"))
-    reps = int(os.getenv("QTANGL_QAOA_REPS", "2"))
-    maxiter = int(os.getenv("QTANGL_QAOA_MAXITER", "40"))
-    shots = int(os.getenv("QTANGL_QAOA_SHOTS", "2048"))
+    reps = int(os.getenv("QTANGL_QAOA_REPS", "1"))
+    maxiter = int(os.getenv("QTANGL_QAOA_MAXITER", "12"))
+    shots = int(os.getenv("QTANGL_QAOA_SHOTS", "256"))
+    simulator_method = os.getenv(
+        "QTANGL_QAOA_SIMULATOR_METHOD", "matrix_product_state"
+    )
 
     try:
         algorithm_globals.random_seed = seed
-        simulator = AerSimulator()
+        simulator = AerSimulator(method=simulator_method)
         sampler = SamplerV2(seed=seed, default_shots=shots)
+        pass_manager = generate_preset_pass_manager(
+            optimization_level=1,
+            backend=simulator,
+            seed_transpiler=seed,
+        )
         qaoa = QAOA(
             sampler=sampler,
             optimizer=SPSA(maxiter=maxiter),
             reps=reps,
+            pass_manager=pass_manager,
         )
         result = MinimumEigenOptimizer(qaoa).solve(quadratic_program)
         assignments = _decode_assignments(problem, quadratic_program, variable_map, result)
@@ -60,7 +167,18 @@ def solve_schedule_with_qaoa(problem: CanonicalProblem) -> SolverRunResult:
             solver="qaoa",
             backend="simulator",
             summary="The QAOA path did not return a usable result before the fallback window expired.",
-            diagnostics={"error": str(exc)},
+            diagnostics={
+                "qaoa": {
+                    **assessment,
+                    "status": "failed",
+                    "simulatorMethod": simulator_method,
+                    "seed": seed,
+                    "shots": shots,
+                    "reps": reps,
+                    "maxiter": maxiter,
+                },
+                "error": str(exc),
+            },
         )
 
     if not assignments:
@@ -70,6 +188,7 @@ def solve_schedule_with_qaoa(problem: CanonicalProblem) -> SolverRunResult:
             solver="qaoa",
             backend="simulator",
             summary="The QAOA path did not produce a complete feasible assignment.",
+            diagnostics={"qaoa": assessment},
         )
 
     makespan_value = max(assignment.end_day - 1 for assignment in assignments)
@@ -107,7 +226,18 @@ def solve_schedule_with_qaoa(problem: CanonicalProblem) -> SolverRunResult:
             ],
         },
         score=makespan_value,
-        diagnostics={"result_fval": getattr(result, "fval", None)},
+        diagnostics={
+            "qaoa": {
+                **assessment,
+                "status": "used",
+                "simulatorMethod": simulator_method,
+                "seed": seed,
+                "shots": shots,
+                "reps": reps,
+                "maxiter": maxiter,
+                "resultFval": getattr(result, "fval", None),
+            }
+        },
     )
 
 

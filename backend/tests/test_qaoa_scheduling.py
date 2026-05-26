@@ -1,7 +1,9 @@
 from __future__ import annotations
 
 import importlib.util
+import os
 import unittest
+from unittest.mock import patch
 
 from app.models.api import OptimizeRequest
 from app.parsers.scheduling import parse_schedule_request
@@ -19,19 +21,32 @@ class QaoaSchedulingSmokeTest(unittest.TestCase):
             tasks=[
                 {"id": "a", "duration": 1, "crew": "Crew A"},
                 {"id": "b", "duration": 1, "crew": "Crew B"},
-                {"id": "c", "duration": 1, "crew": "Crew A"},
             ],
             constraints=[
                 "a must happen before b",
-                "b must happen before c",
             ],
         )
 
         problem = parse_schedule_request(request)
-        result = solve_schedule_with_qaoa(problem)
+
+        with patch.dict(
+            os.environ,
+            {
+                "QTANGL_ENABLE_QAOA": "true",
+                "QTANGL_QAOA_MAX_BINARY_VARIABLES": "8",
+                "QTANGL_QAOA_MAX_HORIZON": "4",
+                "QTANGL_QAOA_MAX_OVERLAP_CONSTRAINTS": "8",
+                "QTANGL_QAOA_REPS": "1",
+                "QTANGL_QAOA_MAXITER": "4",
+                "QTANGL_QAOA_SHOTS": "64",
+            },
+        ):
+            result = solve_schedule_with_qaoa(problem)
 
         self.assertIsNotNone(result.summary)
-        self.assertIn(result.method, {"hybrid"})
+        self.assertEqual(result.method, "hybrid")
+        self.assertTrue(result.feasible)
+        self.assertEqual(result.diagnostics["qaoa"]["status"], "used")
 
 
 if __name__ == "__main__":

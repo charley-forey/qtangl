@@ -14,21 +14,18 @@ from app.solvers.qaoa import solve_schedule_with_qaoa
 
 
 def main() -> None:
+    # Research-only comparison: keep the candidate tiny so QAOA stays within
+    # the intentionally small simulator budget.
     request = OptimizeRequest(
         type="schedule",
         tasks=[
-            {"id": "foundation", "duration": 2, "crew": "Crew A"},
-            {"id": "framing", "duration": 2, "crew": "Crew B"},
+            {"id": "foundation", "duration": 1, "crew": "Crew A"},
             {"id": "inspection", "duration": 1, "crew": "Inspector"},
-            {"id": "handoff", "duration": 1, "crew": "Crew A"},
-            {"id": "closeout", "duration": 1, "crew": "Crew B"},
+            {"id": "handoff", "duration": 1, "crew": "Crew B"},
         ],
         constraints=[
-            "foundation must finish before framing",
-            "inspection must happen after framing",
-            "handoff must happen after inspection",
-            "closeout must happen after handoff",
-            "Crew B unavailable on day 2",
+            "foundation must happen before inspection",
+            "inspection must happen before handoff",
         ],
     )
     problem = parse_schedule_request(request)

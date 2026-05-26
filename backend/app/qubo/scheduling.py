@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from collections import defaultdict
+from dataclasses import asdict, dataclass
 
 from docplex.mp.model import Model
 from qiskit_optimization.translators import from_docplex_mp
@@ -8,18 +9,25 @@ from qiskit_optimization.translators import from_docplex_mp
 from app.models.canonical import CanonicalProblem
 
 
+@dataclass(slots=True)
+class SchedulingQuboDiagnostics:
+    task_count: int
+    horizon: int
+    precedence_count: int
+    binary_variable_count: int
+    overlap_constraint_count: int
+    max_allowed_starts_per_task: int
+    blocked_resource_days: int
+
+    def as_dict(self) -> dict[str, int]:
+        return asdict(self)
+
+
 def build_scheduling_quadratic_program(problem: CanonicalProblem) -> tuple[object, dict[str, tuple[str, int, int | None]]]:
     horizon = max(sum(task.duration for task in problem.tasks), 1)
     model = Model(name="qtangl_schedule")
 
-    blocked_days_by_resource: dict[str, set[int]] = defaultdict(set)
-    precedence_pairs: list[tuple[str, str]] = []
-
-    for constraint in problem.constraints:
-        if constraint.kind == "resource_unavailable" and constraint.subject and constraint.day:
-            blocked_days_by_resource[constraint.subject].add(max(constraint.day - 1, 0))
-        if constraint.kind == "precedence" and constraint.subject and constraint.target:
-            precedence_pairs.append((constraint.subject, constraint.target))
+    blocked_days_by_resource, precedence_pairs = _collect_schedule_structure(problem)
 
     start_vars: dict[tuple[str, int], object] = {}
     variable_map: dict[str, tuple[str, int, int | None]] = {}
@@ -94,9 +102,74 @@ def build_scheduling_quadratic_program(problem: CanonicalProblem) -> tuple[objec
     return from_docplex_mp(model), variable_map
 
 
+def estimate_scheduling_qubo_size(problem: CanonicalProblem) -> SchedulingQuboDiagnostics:
+    horizon = max(sum(task.duration for task in problem.tasks), 1)
+    blocked_days_by_resource, precedence_pairs = _collect_schedule_structure(problem)
+
+    binary_variable_count = 0
+    max_allowed_starts_per_task = 0
+    overlap_constraint_count = 0
+    tasks_by_resource: dict[str, list[tuple[str, int, list[int]]]] = defaultdict(list)
+
+    for task in problem.tasks:
+        allowed_starts = [
+            start
+            for start in range(horizon - task.duration + 1)
+            if not (
+                task.resource
+                and _overlaps_blocked_day(
+                    start,
+                    task.duration,
+                    blocked_days_by_resource[task.resource],
+                )
+            )
+        ]
+
+        binary_variable_count += len(allowed_starts)
+        max_allowed_starts_per_task = max(max_allowed_starts_per_task, len(allowed_starts))
+
+        if task.resource:
+            tasks_by_resource[task.resource].append((task.id, task.duration, allowed_starts))
+
+    for task_entries in tasks_by_resource.values():
+        for index, (_, duration_a, starts_a) in enumerate(task_entries):
+            for _, duration_b, starts_b in task_entries[index + 1 :]:
+                overlap_constraint_count += sum(
+                    1
+                    for start_a in starts_a
+                    for start_b in starts_b
+                    if start_a < start_b + duration_b and start_b < start_a + duration_a
+                )
+
+    return SchedulingQuboDiagnostics(
+        task_count=len(problem.tasks),
+        horizon=horizon,
+        precedence_count=len(precedence_pairs),
+        binary_variable_count=binary_variable_count,
+        overlap_constraint_count=overlap_constraint_count,
+        max_allowed_starts_per_task=max_allowed_starts_per_task,
+        blocked_resource_days=sum(len(days) for days in blocked_days_by_resource.values()),
+    )
+
+
 def _overlaps_blocked_day(start: int, duration: int, blocked_days: set[int]) -> bool:
     if not blocked_days:
         return False
 
     task_days = set(range(start, start + duration))
     return any(day in task_days for day in blocked_days)
+
+
+def _collect_schedule_structure(
+    problem: CanonicalProblem,
+) -> tuple[dict[str, set[int]], list[tuple[str, str]]]:
+    blocked_days_by_resource: dict[str, set[int]] = defaultdict(set)
+    precedence_pairs: list[tuple[str, str]] = []
+
+    for constraint in problem.constraints:
+        if constraint.kind == "resource_unavailable" and constraint.subject and constraint.day:
+            blocked_days_by_resource[constraint.subject].add(max(constraint.day - 1, 0))
+        if constraint.kind == "precedence" and constraint.subject and constraint.target:
+            precedence_pairs.append((constraint.subject, constraint.target))
+
+    return blocked_days_by_resource, precedence_pairs
