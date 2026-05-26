@@ -1,5 +1,7 @@
 import { ImageResponse } from "next/og";
 
+import { siteMetadata } from "@/lib/copy/product";
+
 export const size = {
   width: 1200,
   height: 630,
@@ -76,7 +78,7 @@ export default function OpenGraphImage() {
               Qtangl
             </div>
             <div style={{ fontSize: 54, lineHeight: 1.08, maxWidth: 760, fontWeight: 600 }}>
-              Quantum-native interface for constrained operations.
+              {siteMetadata.oneLiner}
             </div>
           </div>
         </div>

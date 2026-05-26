@@ -5,8 +5,8 @@ import { accessPanel } from "@/lib/copy/home";
 
 export default function CTA() {
   return (
-    <Card strong className="overflow-hidden rounded-[2rem] p-8 sm:p-10">
-      <div className="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end">
+    <Card strong className="overflow-hidden rounded-[2rem] p-6 sm:p-8 lg:p-10">
+      <div className="grid gap-6 lg:grid-cols-[1fr_auto] lg:items-end">
         <div className="max-w-2xl">
           <Eyebrow>{accessPanel.eyebrow}</Eyebrow>
           <h2 className="mt-4 text-3xl font-semibold tracking-tight text-white sm:text-4xl">

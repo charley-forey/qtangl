@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 
 import FeatureCard from "@/components/marketing/FeatureCard";
 import ProductPreview from "@/components/marketing/ProductPreview";
@@ -33,19 +34,26 @@ export default function TechnologyPage() {
       </Section>
 
       <Section className="pt-0">
-        <Card strong className="rounded-[2rem]">
-          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-[repeat(4,minmax(0,1fr))_auto] xl:items-center">
+        <Card strong className="overflow-hidden rounded-[2rem] p-4 sm:p-6 lg:p-8">
+          <div className="relative aspect-[16/10] overflow-hidden rounded-2xl border border-[var(--border)] bg-black/60">
+            <Image
+              src="/qtangl-technology-solver-grid.svg"
+              alt="Black and white solver workflow diagram showing structured inputs, solver orchestration, and ranked output panels."
+              fill
+              priority
+              sizes="(min-width: 1280px) 80vw, (min-width: 768px) 88vw, 100vw"
+              className="object-cover grayscale"
+            />
+          </div>
+          <div className="mt-6 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
             {technologyPage.diagramLabels.map((label) => (
               <div
                 key={label}
-                className="rounded-xl border border-[var(--border)] bg-black/55 px-4 py-5 text-center text-sm text-[var(--color-gray-200)]"
+                className="rounded-2xl border border-[var(--border)] bg-black/55 px-4 py-4 text-center text-sm text-[var(--color-gray-200)]"
               >
                 {label}
               </div>
             ))}
-            <div className="hidden text-center text-[var(--color-gray-500)] xl:block">
-              →
-            </div>
           </div>
         </Card>
       </Section>
@@ -53,7 +61,7 @@ export default function TechnologyPage() {
       <Section className="pt-0">
         <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
           {technologyPage.sections.map((section, index) => (
-            <Card key={section.title} strong={index === 1} className="rounded-2xl">
+            <Card key={section.title} strong={index === 1} className="rounded-[2rem] p-6 sm:p-7">
               <Eyebrow>0{index + 1}</Eyebrow>
               <h2 className="mt-4 text-2xl font-semibold text-white">{section.title}</h2>
               <p className="mt-4 text-sm leading-7 text-[var(--color-gray-300)]">
@@ -95,7 +103,7 @@ export default function TechnologyPage() {
           </div>
           <div className="space-y-4">
             {workflowSteps.map((step, index) => (
-              <Card key={step.title} className="rounded-2xl">
+              <Card key={step.title} className="rounded-[2rem] p-6 sm:p-7">
                 <div className="flex items-start gap-4">
                   <div className="text-label min-w-[2rem] text-white">0{index + 1}</div>
                   <div>
