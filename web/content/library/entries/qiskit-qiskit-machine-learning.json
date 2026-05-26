@@ -1,0 +1,52 @@
+{
+  "slug": "qiskit-qiskit-machine-learning",
+  "owner": "Qiskit",
+  "name": "qiskit-machine-learning",
+  "title": "qiskit-machine-learning",
+  "repoUrl": "https://github.com/Qiskit/qiskit-machine-learning",
+  "homepageUrl": null,
+  "category": {
+    "slug": "quantum-ml",
+    "title": "Quantum machine learning",
+    "description": "Libraries and experiments combining quantum circuit workflows with machine learning models or differentiable programming."
+  },
+  "topics": [
+    {
+      "slug": "quantum-software-map",
+      "title": "Quantum computing software in 2026: the open-source map"
+    }
+  ],
+  "primaryLanguage": "Python",
+  "license": "Apache-2.0",
+  "summary": "Qiskit Machine Learning introduces fundamental computational building blocks, such as Quantum Kernels and Quantum Neural Networks, used in various applications including classification and regression.",
+  "description": "Qiskit Machine Learning introduces fundamental computational building blocks, such as Quantum Kernels and Quantum Neural Networks, used in various applications including classification and regression.",
+  "whatItIs": [
+    "qiskit-machine-learning is an open-source project in the quantum machine learning category. It is maintained by Qiskit and primarily looks like a Python codebase. Qiskit Machine Learning introduces fundamental computational building blocks, such as Quantum Kernels and Quantum Neural Networks, used in various applications including classification and regression.",
+    "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches quantum machine learning workflows in practice. The repository README emphasizes: Qiskit Machine Learning introduces fundamental computational building blocks, such as Quantum Kernels and Quantum Neural Networks, used in various applications including classification and regression. This library is part of the Qiskit Community ecosystem, a collection of high-level libraries that are based on the Qiskit software development kit. As..."
+  ],
+  "whoItsFor": "Researchers and practitioners experimenting with quantum machine learning, variational models, and differentiable circuit stacks.",
+  "whatYouCanBuild": [
+    "Learn how the project connects model training ideas to quantum primitives.",
+    "Inspect the assumptions behind differentiable or ML-oriented workflows.",
+    "Compare how serious or experimental the ML story really is."
+  ],
+  "readmeExcerpt": "Qiskit Machine Learning introduces fundamental computational building blocks, such as Quantum Kernels and Quantum Neural Networks, used in various applications including classification and regression. This library is part of the Qiskit Community ecosystem, a collection of high-level libraries that are based on the Qiskit software development kit. As of version 0.7, Qiskit Machine Learning is co-maintained by IBM and the Hartree Centre, part of the UK Science and Technologies Facilities Council (STFC).",
+  "readmePath": "reference\\Qiskit__qiskit-machine-learning\\README.md",
+  "clonePath": "reference\\Qiskit__qiskit-machine-learning",
+  "stars": 0,
+  "lastPushedAt": null,
+  "githubTopics": [],
+  "featured": false,
+  "flagship": false,
+  "qtanglRelevant": false,
+  "archived": false,
+  "imagePath": null,
+  "relatedSlugs": [
+    "artiste-qb-net-quantum-edward",
+    "jpzwolak-qflow-lite",
+    "aws-amazon-braket-sdk-python",
+    "cqcl-tket",
+    "dwavesystems-dwave-ocean-sdk",
+    "entropicalabs-openqaoa"
+  ]
+}

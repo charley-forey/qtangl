@@ -1,0 +1,52 @@
+{
+  "slug": "bbn-q-quince",
+  "owner": "BBN-Q",
+  "name": "Quince",
+  "title": "Quince",
+  "repoUrl": "https://github.com/BBN-Q/Quince",
+  "homepageUrl": null,
+  "category": {
+    "slug": "visualization-tomography",
+    "title": "Visualization and tomography",
+    "description": "Tools for visualizing circuits, reasoning about states, and reconstructing quantum systems from measurements."
+  },
+  "topics": [
+    {
+      "slug": "quantum-software-map",
+      "title": "Quantum computing software in 2026: the open-source map"
+    }
+  ],
+  "primaryLanguage": "Python",
+  "license": "Apache-2.0",
+  "summary": "This project is intended as an alternative means of defining the topology of an experiment, and will augment certain functionality of PyQLab's ExpSettingsGUI.",
+  "description": "This project is intended as an alternative means of defining the topology of an experiment, and will augment certain functionality of PyQLab's ExpSettingsGUI. Currently envisioned use cases:",
+  "whatItIs": [
+    "Quince is an open-source project in the visualization and tomography category. It is maintained by BBN-Q and primarily looks like a Python codebase. This project is intended as an alternative means of defining the topology of an experiment, and will augment certain functionality of PyQLab's ExpSettingsGUI.",
+    "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches visualization and tomography workflows in practice. The repository README emphasizes: This project is intended as an alternative means of defining the topology of an experiment, and will augment certain functionality of PyQLab's ExpSettingsGUI. Currently envisioned use cases: Graphically construct measurement filter pipelines. Graphically establish logical qubits with physical measurement apparatus."
+  ],
+  "whoItsFor": "People who learn best by seeing state structure, measurement results, or circuit behavior laid out visually.",
+  "whatYouCanBuild": [
+    "Understand how the project helps inspect or reconstruct quantum systems.",
+    "Compare visual tooling against more code-heavy workflows.",
+    "Use the resource as a bridge between theory, experiments, and debugging."
+  ],
+  "readmeExcerpt": "This project is intended as an alternative means of defining the topology of an experiment, and will augment certain functionality of PyQLab's ExpSettingsGUI. Currently envisioned use cases: Graphically construct measurement filter pipelines. Graphically establish logical qubits with physical measurement apparatus.",
+  "readmePath": "reference\\BBN-Q__Quince\\README.md",
+  "clonePath": "reference\\BBN-Q__Quince",
+  "stars": 0,
+  "lastPushedAt": null,
+  "githubTopics": [],
+  "featured": false,
+  "flagship": false,
+  "qtanglRelevant": false,
+  "archived": false,
+  "imagePath": null,
+  "relatedSlugs": [
+    "artiste-qb-net-quantum-fog",
+    "bbn-q-quantuminfo-jl",
+    "bbn-q-quantumtomography-jl",
+    "qct-iqc-qcviewer",
+    "ziofil-quantumgraphs",
+    "aws-amazon-braket-sdk-python"
+  ]
+}

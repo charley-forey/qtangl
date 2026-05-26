@@ -1,0 +1,56 @@
+{
+  "slug": "projectq-framework-fermilib",
+  "owner": "ProjectQ-Framework",
+  "name": "FermiLib",
+  "title": "FermiLib",
+  "repoUrl": "https://github.com/ProjectQ-Framework/FermiLib",
+  "homepageUrl": null,
+  "category": {
+    "slug": "quantum-chemistry",
+    "title": "Quantum chemistry",
+    "description": "Libraries that connect quantum computing workflows to chemistry, electronic structure, and molecular modeling."
+  },
+  "topics": [
+    {
+      "slug": "quantum-chemistry-for-newcomers",
+      "title": "Quantum chemistry software for newcomers"
+    },
+    {
+      "slug": "quantum-software-map",
+      "title": "Quantum computing software in 2026: the open-source map"
+    }
+  ],
+  "primaryLanguage": "Python",
+  "license": "Apache-2.0",
+  "summary": "FermiLib - Open source software for analyzing quantum simulation algorithms ===========================================================================",
+  "description": "FermiLib - Open source software for analyzing quantum simulation algorithms ===========================================================================",
+  "whatItIs": [
+    "FermiLib is an open-source project in the quantum chemistry category. It is maintained by ProjectQ-Framework and primarily looks like a Python codebase. FermiLib - Open source software for analyzing quantum simulation algorithms ===========================================================================",
+    "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches quantum chemistry workflows in practice. The repository README emphasizes: FermiLib - Open source software for analyzing quantum simulation algorithms =========================================================================== FermiLib is an open source effort for compiling and analyzing quantum simulation algorithms."
+  ],
+  "whoItsFor": "Researchers, students, and developers exploring how quantum software is used for chemistry and electronic-structure problems.",
+  "whatYouCanBuild": [
+    "See how chemistry problems are mapped into quantum-friendly representations.",
+    "Understand the workflow around Hamiltonians, ansatze, and measurement loops.",
+    "Compare beginner-friendly entry points into chemistry-focused quantum tooling."
+  ],
+  "readmeExcerpt": "FermiLib - Open source software for analyzing quantum simulation algorithms =========================================================================== FermiLib is an open source effort for compiling and analyzing quantum simulation algorithms.",
+  "readmePath": "reference\\ProjectQ-Framework__FermiLib\\README.rst",
+  "clonePath": "reference\\ProjectQ-Framework__FermiLib",
+  "stars": 0,
+  "lastPushedAt": null,
+  "githubTopics": [],
+  "featured": false,
+  "flagship": false,
+  "qtanglRelevant": false,
+  "archived": false,
+  "imagePath": null,
+  "relatedSlugs": [
+    "quantumlib-openfermion",
+    "aspuru-guzik-group-tequila",
+    "cda-tum-mqt-dasqa",
+    "ornl-qci-xacc-vqe",
+    "pasqal-io-qadence",
+    "qiskit-qiskit-nature"
+  ]
+}

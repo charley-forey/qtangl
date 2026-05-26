@@ -1,0 +1,56 @@
+{
+  "slug": "dwavesystems-dwave-ocean-sdk",
+  "owner": "dwavesystems",
+  "name": "dwave-ocean-sdk",
+  "title": "dwave-ocean-sdk",
+  "repoUrl": "https://github.com/dwavesystems/dwave-ocean-sdk",
+  "homepageUrl": null,
+  "category": {
+    "slug": "annealing-ising",
+    "title": "Annealing and Ising",
+    "description": "D-Wave and Ising-model tools for quantum annealing, embeddings, and heuristic search workflows."
+  },
+  "topics": [
+    {
+      "slug": "quantum-optimization-compared",
+      "title": "Quantum optimization libraries compared: QAOA, QUBO, and annealing"
+    },
+    {
+      "slug": "quantum-software-map",
+      "title": "Quantum computing software in 2026: the open-source map"
+    }
+  ],
+  "primaryLanguage": "Python",
+  "license": "Apache-2.0",
+  "summary": "Ocean SDK <https://docs.dwavequantum.com/en/latest/ocean/>_ is D-Wave's <https://www.dwavequantum.com/>_ suite of tools for solving hard problems with quantum computers.",
+  "description": "Ocean SDK <https://docs.dwavequantum.com/en/latest/ocean/>_ is D-Wave's <https://www.dwavequantum.com/>_ suite of tools for solving hard problems with quantum computers.",
+  "whatItIs": [
+    "dwave-ocean-sdk is an open-source project in the annealing and ising category. It is maintained by dwavesystems and primarily looks like a Python codebase. Ocean SDK <https://docs.dwavequantum.com/en/latest/ocean/>_ is D-Wave's <https://www.dwavequantum.com/>_ suite of tools for solving hard problems with quantum computers.",
+    "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches annealing and ising workflows in practice. The repository README emphasizes: Ocean SDK <https://docs.dwavequantum.com/en/latest/ocean/>_ is D-Wave's <https://www.dwavequantum.com/>_ suite of tools for solving hard problems with quantum computers. For more information, see the Ocean documentation's installation <https://docs.dwavequantum.com/en/latest/ocean/install.html>_ page."
+  ],
+  "whoItsFor": "Developers interested in Ising-model formulations, annealing workflows, and D-Wave-style solver ecosystems.",
+  "whatYouCanBuild": [
+    "See how annealing-oriented projects model optimization problems.",
+    "Understand embeddings, samplers, and the surrounding tooling needed in practice.",
+    "Compare annealing workflows against gate-model and hybrid alternatives."
+  ],
+  "readmeExcerpt": "Ocean SDK <https://docs.dwavequantum.com/en/latest/ocean/>_ is D-Wave's <https://www.dwavequantum.com/>_ suite of tools for solving hard problems with quantum computers. For more information, see the Ocean documentation's installation <https://docs.dwavequantum.com/en/latest/ocean/install.html>_ page.",
+  "readmePath": "reference\\dwavesystems__dwave-ocean-sdk\\README.rst",
+  "clonePath": "reference\\dwavesystems__dwave-ocean-sdk",
+  "stars": 0,
+  "lastPushedAt": null,
+  "githubTopics": [],
+  "featured": true,
+  "flagship": true,
+  "qtanglRelevant": true,
+  "archived": false,
+  "imagePath": "/learn/flagship/dwavesystems-dwave-ocean-sdk.png",
+  "relatedSlugs": [
+    "dwavesystems-dimod",
+    "dwavesystems-qbsolv",
+    "dwavesystems-chimera-embedding",
+    "dwavesystems-dwave-cloud-client",
+    "dwavesystems-dwave-embedding-utilities",
+    "dwavesystems-dwave-micro-client-dimod"
+  ]
+}

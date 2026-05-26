@@ -1,0 +1,56 @@
+{
+  "slug": "decodoku-a-game-to-benchmark-quantum-computers",
+  "owner": "decodoku",
+  "name": "A_Game_to_Benchmark_Quantum_Computers",
+  "title": "A_Game_to_Benchmark_Quantum_Computers",
+  "repoUrl": "https://github.com/decodoku/A_Game_to_Benchmark_Quantum_Computers",
+  "homepageUrl": null,
+  "category": {
+    "slug": "games-learning",
+    "title": "Games and learning",
+    "description": "Interactive projects, puzzles, and educational resources for learning quantum computing concepts."
+  },
+  "topics": [
+    {
+      "slug": "quantum-software-map",
+      "title": "Quantum computing software in 2026: the open-source map"
+    },
+    {
+      "slug": "start-writing-quantum-code",
+      "title": "How to start writing quantum code: an honest path"
+    }
+  ],
+  "primaryLanguage": "Jupyter",
+  "license": "Apache-2.0",
+  "summary": "Quantum Awesomeness A Game to Benchmark Quantum Computers",
+  "description": "Quantum Awesomeness A Game to Benchmark Quantum Computers",
+  "whatItIs": [
+    "A_Game_to_Benchmark_Quantum_Computers is an open-source project in the games and learning category. It is maintained by decodoku and primarily looks like a Jupyter codebase. Quantum Awesomeness A Game to Benchmark Quantum Computers",
+    "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches games and learning workflows in practice. The repository README emphasizes: Quantum Awesomeness A Game to Benchmark Quantum Computers This game is designed to run on any and all prototype devices capable of universal quantum computation. The better the device, the better the game will run. This therefore allows a simple and accessible way to assess and compare these..."
+  ],
+  "whoItsFor": "Beginners, educators, and curious developers who want a more approachable path into quantum concepts.",
+  "whatYouCanBuild": [
+    "Get a gentler introduction before diving into full SDKs.",
+    "See how different projects teach circuits, superposition, and measurement.",
+    "Identify resources that work well for onboarding or self-study."
+  ],
+  "readmeExcerpt": "Quantum Awesomeness A Game to Benchmark Quantum Computers This game is designed to run on any and all prototype devices capable of universal quantum computation. The better the device, the better the game will run. This therefore allows a simple and accessible way to assess and compare these prototypes.",
+  "readmePath": "reference\\decodoku__A_Game_to_Benchmark_Quantum_Computers\\README.md",
+  "clonePath": "reference\\decodoku__A_Game_to_Benchmark_Quantum_Computers",
+  "stars": 0,
+  "lastPushedAt": null,
+  "githubTopics": [],
+  "featured": false,
+  "flagship": false,
+  "qtanglRelevant": false,
+  "archived": false,
+  "imagePath": null,
+  "relatedSlugs": [
+    "microsoft-quantumkatas",
+    "strilanc-quirk",
+    "stared-quantum-game",
+    "decodoku-battleships-with-complementary-measurements",
+    "desireevl-quantum-catsweeper",
+    "entanglion-entanglion"
+  ]
+}

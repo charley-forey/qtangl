@@ -1,0 +1,56 @@
+{
+  "slug": "cqcl-tket",
+  "owner": "CQCL",
+  "name": "tket",
+  "title": "tket",
+  "repoUrl": "https://github.com/CQCL/tket",
+  "homepageUrl": null,
+  "category": {
+    "slug": "compilers-languages",
+    "title": "Compilers and languages",
+    "description": "Compilers, intermediate representations, domain-specific languages, and transpilation tools for quantum programs."
+  },
+  "topics": [
+    {
+      "slug": "quantum-software-map",
+      "title": "Quantum computing software in 2026: the open-source map"
+    },
+    {
+      "slug": "start-writing-quantum-code",
+      "title": "How to start writing quantum code: an honest path"
+    }
+  ],
+  "primaryLanguage": "C++",
+  "license": "Apache-2.0",
+  "summary": "TKET (pronounced \"ticket\") is a high-performance quantum compiler that can optimise circuits for a wide range of quantum computing architectures.",
+  "description": "TKET (pronounced \"ticket\") is a high-performance quantum compiler that can optimise circuits for a wide range of quantum computing architectures.",
+  "whatItIs": [
+    "tket is an open-source project in the compilers and languages category. It is maintained by CQCL and primarily looks like a C++ codebase. TKET (pronounced \"ticket\") is a high-performance quantum compiler that can optimise circuits for a wide range of quantum computing architectures.",
+    "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches compilers and languages workflows in practice. The repository README emphasizes: TKET (pronounced \"ticket\") is a high-performance quantum compiler that can optimise circuits for a wide range of quantum computing architectures. This repository contains the full source code for TKET and its python bindings."
+  ],
+  "whoItsFor": "Developers who want to understand the representations and compilers that sit between high-level code and runnable circuits.",
+  "whatYouCanBuild": [
+    "Compare IRs, DSLs, transpilers, and compiler assumptions across ecosystems.",
+    "Understand how high-level code becomes something a backend can execute.",
+    "Spot tools that matter when interoperability and compilation quality are important."
+  ],
+  "readmeExcerpt": "TKET (pronounced \"ticket\") is a high-performance quantum compiler that can optimise circuits for a wide range of quantum computing architectures. This repository contains the full source code for TKET and its python bindings.",
+  "readmePath": "reference\\CQCL__tket\\README.md",
+  "clonePath": "reference\\CQCL__tket",
+  "stars": 0,
+  "lastPushedAt": null,
+  "githubTopics": [],
+  "featured": true,
+  "flagship": true,
+  "qtanglRelevant": true,
+  "archived": false,
+  "imagePath": "/learn/flagship/cqcl-tket.png",
+  "relatedSlugs": [
+    "nvidia-cuda-quantum",
+    "quantomatic-pyzx",
+    "avalon-lang-avaloni",
+    "aviggiano-qcl",
+    "dabacon-qsel",
+    "epiqc-scaffcc"
+  ]
+}

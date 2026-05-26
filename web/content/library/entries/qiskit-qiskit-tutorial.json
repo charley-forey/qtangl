@@ -1,0 +1,56 @@
+{
+  "slug": "qiskit-qiskit-tutorial",
+  "owner": "QISKit",
+  "name": "qiskit-tutorial",
+  "title": "qiskit-tutorial",
+  "repoUrl": "https://github.com/QISKit/qiskit-tutorial",
+  "homepageUrl": null,
+  "category": {
+    "slug": "simulators",
+    "title": "Simulators",
+    "description": "Projects focused on state-vector, stabilizer, tensor-network, or hardware-inspired quantum simulation."
+  },
+  "topics": [
+    {
+      "slug": "quantum-simulators-guide",
+      "title": "Open-source quantum simulators: what each one is good at"
+    },
+    {
+      "slug": "quantum-software-map",
+      "title": "Quantum computing software in 2026: the open-source map"
+    }
+  ],
+  "primaryLanguage": "Jupyter",
+  "license": "Apache-2.0",
+  "summary": "> :warning: **This repository is archived**: The content in this repository was moved to other locations.",
+  "description": "> :warning: **This repository is archived**: The content in this repository was moved to other locations. If you have issues or PR, please submit them to their new location.",
+  "whatItIs": [
+    "qiskit-tutorial is an open-source project in the simulators category. It is maintained by QISKit and primarily looks like a Jupyter codebase. > :warning: **This repository is archived**: The content in this repository was moved to other locations.",
+    "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches simulators workflows in practice. The repository README emphasizes: > :warning: **This repository is archived**: The content in this repository was moved to other locations. If you have issues or PR, please submit them to their new location. algorithms folder -> qiskit-algorithms (GitHub) circuits folder -> Qiskit (GitHub) circuits_advanced folder -> Qiskit (GitHub) opflow folder -> Qiskit..."
+  ],
+  "whoItsFor": "Developers and researchers who need to test ideas locally before running on hardware or who want to compare simulation strategies.",
+  "whatYouCanBuild": [
+    "Benchmark how different simulation methods trade accuracy for runtime.",
+    "Inspect circuit behavior, noise assumptions, or state evolution offline.",
+    "Choose the right simulator for a debugging, teaching, or research workflow."
+  ],
+  "readmeExcerpt": "> :warning: **This repository is archived**: The content in this repository was moved to other locations. If you have issues or PR, please submit them to their new location. algorithms folder -> qiskit-algorithms (GitHub) circuits folder -> Qiskit (GitHub) circuits_advanced folder -> Qiskit (GitHub) opflow folder -> Qiskit (GitHub) simulators folder -> qiskit-aer (GitHub) textbook folder -> removed in favor of https://www.qiskit.org/learn",
+  "readmePath": "reference\\QISKit__qiskit-tutorial\\README.md",
+  "clonePath": "reference\\QISKit__qiskit-tutorial",
+  "stars": 0,
+  "lastPushedAt": null,
+  "githubTopics": [],
+  "featured": false,
+  "flagship": false,
+  "qtanglRelevant": false,
+  "archived": false,
+  "imagePath": null,
+  "relatedSlugs": [
+    "0tt3r-quac",
+    "adamisntdead-qusimpy",
+    "aniabrown-quest",
+    "bbn-q-pysimulator",
+    "cda-tum-mqt-ddsim",
+    "dillanchang-qocs"
+  ]
+}

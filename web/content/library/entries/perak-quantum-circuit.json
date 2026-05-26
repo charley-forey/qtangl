@@ -1,0 +1,56 @@
+{
+  "slug": "perak-quantum-circuit",
+  "owner": "perak",
+  "name": "quantum-circuit",
+  "title": "quantum-circuit",
+  "repoUrl": "https://github.com/perak/quantum-circuit",
+  "homepageUrl": null,
+  "category": {
+    "slug": "compilers-languages",
+    "title": "Compilers and languages",
+    "description": "Compilers, intermediate representations, domain-specific languages, and transpilation tools for quantum programs."
+  },
+  "topics": [
+    {
+      "slug": "quantum-software-map",
+      "title": "Quantum computing software in 2026: the open-source map"
+    },
+    {
+      "slug": "start-writing-quantum-code",
+      "title": "How to start writing quantum code: an honest path"
+    }
+  ],
+  "primaryLanguage": "JavaScript",
+  "license": "MIT",
+  "summary": "quantum-circuit is open source quantum circuit simulator implemented in javascript.",
+  "description": "quantum-circuit is open source quantum circuit simulator implemented in javascript. Smoothly runs 20+ qubit simulations in browser or at server (node.js). You can use it in your javascript program to run quantum simulations.",
+  "whatItIs": [
+    "quantum-circuit is an open-source project in the compilers and languages category. It is maintained by perak and primarily looks like a JavaScript codebase. quantum-circuit is open source quantum circuit simulator implemented in javascript.",
+    "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches compilers and languages workflows in practice. The repository README emphasizes: quantum-circuit is open source quantum circuit simulator implemented in javascript. Smoothly runs 20+ qubit simulations in browser or at server (node.js). You can use it in your javascript program to run quantum simulations. Circuit can be imported from OpenQASM, Quil and IONQ. You can export circuits to OpenQASM..."
+  ],
+  "whoItsFor": "Developers who want to understand the representations and compilers that sit between high-level code and runnable circuits.",
+  "whatYouCanBuild": [
+    "Compare IRs, DSLs, transpilers, and compiler assumptions across ecosystems.",
+    "Understand how high-level code becomes something a backend can execute.",
+    "Spot tools that matter when interoperability and compilation quality are important."
+  ],
+  "readmeExcerpt": "quantum-circuit is open source quantum circuit simulator implemented in javascript. Smoothly runs 20+ qubit simulations in browser or at server (node.js). You can use it in your javascript program to run quantum simulations. Circuit can be imported from OpenQASM, Quil and IONQ. You can export circuits to OpenQASM, pyQuil, Quil, Qiskit, Cirq, TensorFlow Quantum, QSharp, and CudaQ, so it can be used for conversion between quantum programming languages. Circuit drawing can be exported to SVG vector image.",
+  "readmePath": "reference\\perak__quantum-circuit\\README.md",
+  "clonePath": "reference\\perak__quantum-circuit",
+  "stars": 0,
+  "lastPushedAt": null,
+  "githubTopics": [],
+  "featured": false,
+  "flagship": false,
+  "qtanglRelevant": false,
+  "archived": false,
+  "imagePath": null,
+  "relatedSlugs": [
+    "cqcl-tket",
+    "nvidia-cuda-quantum",
+    "quantomatic-pyzx",
+    "avalon-lang-avaloni",
+    "aviggiano-qcl",
+    "dabacon-qsel"
+  ]
+}

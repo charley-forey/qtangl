@@ -1,0 +1,52 @@
+{
+  "slug": "sequencing-dev-sequencing",
+  "owner": "sequencing-dev",
+  "name": "sequencing",
+  "title": "sequencing",
+  "repoUrl": "https://github.com/sequencing-dev/sequencing",
+  "homepageUrl": null,
+  "category": {
+    "slug": "pulse-control",
+    "title": "Pulse and control",
+    "description": "Tooling for low-level pulse scheduling, experiment orchestration, and laboratory control around quantum hardware."
+  },
+  "topics": [
+    {
+      "slug": "quantum-software-map",
+      "title": "Quantum computing software in 2026: the open-source map"
+    }
+  ],
+  "primaryLanguage": "Python",
+  "license": "BSD",
+  "summary": "`sequencing is a Python package for simulating realistic quantum control sequences using QuTiP.",
+  "description": "`sequencing is a Python package for simulating realistic quantum control sequences using QuTiP. Built for researchers and quantum engineers, sequencing` provides an intuitive framework for constructing models of quantum systems composed of many modes and generating complex time-dependent control Hamiltonians for master equation simulations.",
+  "whatItIs": [
+    "sequencing is an open-source project in the pulse and control category. It is maintained by sequencing-dev and primarily looks like a Python codebase. `sequencing is a Python package for simulating realistic quantum control sequences using QuTiP.",
+    "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches pulse and control workflows in practice. The repository README emphasizes: `sequencing is a Python package for simulating realistic quantum control sequences using QuTiP. Built for researchers and quantum engineers, sequencing` provides an intuitive framework for constructing models of quantum systems composed of many modes and generating complex time-dependent control Hamiltonians for master equation simulations. The documentation for sequencing..."
+  ],
+  "whoItsFor": "Hardware-adjacent developers and researchers working closer to experiments, pulse schedules, or lab orchestration.",
+  "whatYouCanBuild": [
+    "See how low-level control stacks differ from higher-level SDKs.",
+    "Understand where pulse sequencing and experiment orchestration fit in the stack.",
+    "Learn which projects matter when hardware control is part of the workflow."
+  ],
+  "readmeExcerpt": "`sequencing is a Python package for simulating realistic quantum control sequences using QuTiP. Built for researchers and quantum engineers, sequencing` provides an intuitive framework for constructing models of quantum systems composed of many modes and generating complex time-dependent control Hamiltonians for master equation simulations. The documentation for sequencing is available at: sequencing.readthedocs.io",
+  "readmePath": "reference\\sequencing-dev__sequencing\\README.md",
+  "clonePath": "reference\\sequencing-dev__sequencing",
+  "stars": 0,
+  "lastPushedAt": null,
+  "githubTopics": [],
+  "featured": false,
+  "flagship": false,
+  "qtanglRelevant": false,
+  "archived": false,
+  "imagePath": null,
+  "relatedSlugs": [
+    "m-labs-artiq",
+    "bbn-q-pyqgl2",
+    "bbn-q-pyqlab",
+    "bbn-q-qgl",
+    "bbn-q-qlab",
+    "bbn-q-qlab-jl"
+  ]
+}

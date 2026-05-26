@@ -1,0 +1,52 @@
+{
+  "slug": "bbn-q-qgl-jl",
+  "owner": "BBN-Q",
+  "name": "QGL.jl",
+  "title": "QGL.jl",
+  "repoUrl": "https://github.com/BBN-Q/QGL.jl",
+  "homepageUrl": null,
+  "category": {
+    "slug": "benchmarks-analysis",
+    "title": "Benchmarks and analysis",
+    "description": "Benchmark suites, performance studies, and analysis tooling for comparing quantum software and hardware workflows."
+  },
+  "topics": [
+    {
+      "slug": "quantum-software-map",
+      "title": "Quantum computing software in 2026: the open-source map"
+    }
+  ],
+  "primaryLanguage": "Julia",
+  "license": "Apache-2.0",
+  "summary": "The package is not yet registered with METADATA.jl and so must be cloned with",
+  "description": "The package is not yet registered with METADATA.jl and so must be cloned with",
+  "whatItIs": [
+    "QGL.jl is an open-source project in the benchmarks and analysis category. It is maintained by BBN-Q and primarily looks like a Julia codebase. The package is not yet registered with METADATA.jl and so must be cloned with",
+    "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches benchmarks and analysis workflows in practice. The repository README emphasizes: The package is not yet registered with METADATA.jl and so must be cloned with Preliminary benchmarks show speed-ups for Python QGL of ~25-30X."
+  ],
+  "whoItsFor": "Researchers and evaluators comparing toolchains, algorithms, hardware assumptions, or performance tradeoffs.",
+  "whatYouCanBuild": [
+    "Learn what this project measures and why it matters.",
+    "Compare benchmarking assumptions instead of taking headline claims at face value.",
+    "Use the resource to evaluate ecosystems more critically."
+  ],
+  "readmeExcerpt": "The package is not yet registered with METADATA.jl and so must be cloned with Preliminary benchmarks show speed-ups for Python QGL of ~25-30X.",
+  "readmePath": "reference\\BBN-Q__QGL.jl\\README.md",
+  "clonePath": "reference\\BBN-Q__QGL.jl",
+  "stars": 0,
+  "lastPushedAt": null,
+  "githubTopics": [],
+  "featured": false,
+  "flagship": false,
+  "qtanglRelevant": false,
+  "archived": false,
+  "imagePath": null,
+  "relatedSlugs": [
+    "bbn-q-qsimulator-jl",
+    "cda-tum-mqt-bench",
+    "quantumlib-qualtran",
+    "aws-amazon-braket-sdk-python",
+    "cqcl-tket",
+    "dwavesystems-dwave-ocean-sdk"
+  ]
+}

@@ -1,0 +1,56 @@
+{
+  "slug": "dwavesystems-chimera-embedding",
+  "owner": "dwavesystems",
+  "name": "chimera-embedding",
+  "title": "chimera-embedding",
+  "repoUrl": "https://github.com/dwavesystems/chimera-embedding",
+  "homepageUrl": null,
+  "category": {
+    "slug": "annealing-ising",
+    "title": "Annealing and Ising",
+    "description": "D-Wave and Ising-model tools for quantum annealing, embeddings, and heuristic search workflows."
+  },
+  "topics": [
+    {
+      "slug": "quantum-optimization-compared",
+      "title": "Quantum optimization libraries compared: QAOA, QUBO, and annealing"
+    },
+    {
+      "slug": "quantum-software-map",
+      "title": "Quantum computing software in 2026: the open-source map"
+    }
+  ],
+  "primaryLanguage": "Python",
+  "license": "Apache-2.0",
+  "summary": "This is a repository for algorithms to generate native-structured embeddings.",
+  "description": "This is a repository for algorithms to generate native-structured embeddings.",
+  "whatItIs": [
+    "chimera-embedding is an open-source project in the annealing and ising category. It is maintained by dwavesystems and primarily looks like a Python codebase. This is a repository for algorithms to generate native-structured embeddings.",
+    "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches annealing and ising workflows in practice. The repository README emphasizes: This is a repository for algorithms to generate native-structured embeddings. sphinx 1.4 or greater; required to build documentation nose; required to run unit tests dwave_sapi2 Python client; required to build documentation and run python examples matlab and dwave_sapi2 matlab client; required to run matlab examples c compiler and..."
+  ],
+  "whoItsFor": "Developers interested in Ising-model formulations, annealing workflows, and D-Wave-style solver ecosystems.",
+  "whatYouCanBuild": [
+    "See how annealing-oriented projects model optimization problems.",
+    "Understand embeddings, samplers, and the surrounding tooling needed in practice.",
+    "Compare annealing workflows against gate-model and hybrid alternatives."
+  ],
+  "readmeExcerpt": "This is a repository for algorithms to generate native-structured embeddings. sphinx 1.4 or greater; required to build documentation nose; required to run unit tests dwave_sapi2 Python client; required to build documentation and run python examples matlab and dwave_sapi2 matlab client; required to run matlab examples c compiler and dwave_sapi2 c client; required to run c examples",
+  "readmePath": "reference\\dwavesystems__chimera-embedding\\README",
+  "clonePath": "reference\\dwavesystems__chimera-embedding",
+  "stars": 0,
+  "lastPushedAt": null,
+  "githubTopics": [],
+  "featured": false,
+  "flagship": false,
+  "qtanglRelevant": false,
+  "archived": false,
+  "imagePath": null,
+  "relatedSlugs": [
+    "dwavesystems-dwave-ocean-sdk",
+    "dwavesystems-dimod",
+    "dwavesystems-qbsolv",
+    "dwavesystems-dwave-cloud-client",
+    "dwavesystems-dwave-embedding-utilities",
+    "dwavesystems-dwave-micro-client-dimod"
+  ]
+}

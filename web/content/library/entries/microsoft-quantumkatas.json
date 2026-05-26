@@ -1,0 +1,56 @@
+{
+  "slug": "microsoft-quantumkatas",
+  "owner": "Microsoft",
+  "name": "QuantumKatas",
+  "title": "QuantumKatas",
+  "repoUrl": "https://github.com/Microsoft/QuantumKatas",
+  "homepageUrl": null,
+  "category": {
+    "slug": "games-learning",
+    "title": "Games and learning",
+    "description": "Interactive projects, puzzles, and educational resources for learning quantum computing concepts."
+  },
+  "topics": [
+    {
+      "slug": "quantum-software-map",
+      "title": "Quantum computing software in 2026: the open-source map"
+    },
+    {
+      "slug": "start-writing-quantum-code",
+      "title": "How to start writing quantum code: an honest path"
+    }
+  ],
+  "primaryLanguage": "Jupyter",
+  "license": "MIT",
+  "summary": ">**We are modernizing the quantum katas experience.",
+  "description": ">**We are modernizing the quantum katas experience. Please visit https://quantum.microsoft.com/experience/quantum-katas to try the new online Azure Quantum katas experience, with integrated assistance from Copilot in Azure Quantum.**",
+  "whatItIs": [
+    "QuantumKatas is an open-source project in the games and learning category. It is maintained by Microsoft and primarily looks like a Jupyter codebase. >**We are modernizing the quantum katas experience.",
+    "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches games and learning workflows in practice. The repository README emphasizes: >**We are modernizing the quantum katas experience. Please visit https://quantum.microsoft.com/experience/quantum-katas to try the new online Azure Quantum katas experience, with integrated assistance from Copilot in Azure Quantum.** For the Modern QDK repository, please visit Microsoft/qsharp."
+  ],
+  "whoItsFor": "Beginners, educators, and curious developers who want a more approachable path into quantum concepts.",
+  "whatYouCanBuild": [
+    "Get a gentler introduction before diving into full SDKs.",
+    "See how different projects teach circuits, superposition, and measurement.",
+    "Identify resources that work well for onboarding or self-study."
+  ],
+  "readmeExcerpt": ">**We are modernizing the quantum katas experience. Please visit https://quantum.microsoft.com/experience/quantum-katas to try the new online Azure Quantum katas experience, with integrated assistance from Copilot in Azure Quantum.** For the Modern QDK repository, please visit Microsoft/qsharp.",
+  "readmePath": "reference\\Microsoft__QuantumKatas\\README.md",
+  "clonePath": "reference\\Microsoft__QuantumKatas",
+  "stars": 0,
+  "lastPushedAt": null,
+  "githubTopics": [],
+  "featured": true,
+  "flagship": true,
+  "qtanglRelevant": false,
+  "archived": false,
+  "imagePath": "/learn/flagship/microsoft-quantumkatas.png",
+  "relatedSlugs": [
+    "strilanc-quirk",
+    "stared-quantum-game",
+    "decodoku-a-game-to-benchmark-quantum-computers",
+    "decodoku-battleships-with-complementary-measurements",
+    "desireevl-quantum-catsweeper",
+    "entanglion-entanglion"
+  ]
+}

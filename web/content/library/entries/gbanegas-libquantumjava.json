@@ -1,0 +1,56 @@
+{
+  "slug": "gbanegas-libquantumjava",
+  "owner": "gbanegas",
+  "name": "libQuantumJava",
+  "title": "libQuantumJava",
+  "repoUrl": "https://github.com/gbanegas/libQuantumJava",
+  "homepageUrl": null,
+  "category": {
+    "slug": "general-purpose-sdks",
+    "title": "General-purpose SDKs",
+    "description": "Broad frameworks for building, simulating, and experimenting with quantum circuits across multiple domains."
+  },
+  "topics": [
+    {
+      "slug": "quantum-software-map",
+      "title": "Quantum computing software in 2026: the open-source map"
+    },
+    {
+      "slug": "start-writing-quantum-code",
+      "title": "How to start writing quantum code: an honest path"
+    }
+  ],
+  "primaryLanguage": "Java",
+  "license": "Apache-2.0",
+  "summary": "This is a crude translation from th C implementation of libquantum to a Java version.",
+  "description": "This is a crude translation from th C implementation of libquantum to a Java version.",
+  "whatItIs": [
+    "libQuantumJava is an open-source project in the general-purpose sdks category. It is maintained by gbanegas and primarily looks like a Java codebase. This is a crude translation from th C implementation of libquantum to a Java version.",
+    "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches general-purpose sdks workflows in practice. The repository README emphasizes: This is a crude translation from th C implementation of libquantum to a Java version. The main idea is to be able to work with CNOT / Toffoli and other gates that are not necessary to use superposition. LibQuantumJava supports up to 2048 qubits, the \"C implementation\" covers..."
+  ],
+  "whoItsFor": "Developers who want a broad entry point for building circuits, experimenting with algorithms, and integrating quantum workflows into larger applications.",
+  "whatYouCanBuild": [
+    "Prototype end-to-end circuit workflows without committing to a niche backend too early.",
+    "Learn how the project represents circuits, gates, jobs, and results.",
+    "Compare how a major ecosystem frames practical quantum development."
+  ],
+  "readmeExcerpt": "This is a crude translation from th C implementation of libquantum to a Java version. The main idea is to be able to work with CNOT / Toffoli and other gates that are not necessary to use superposition. LibQuantumJava supports up to 2048 qubits, the \"C implementation\" covers only 128 qubits.",
+  "readmePath": "reference\\gbanegas__libQuantumJava\\README.md",
+  "clonePath": "reference\\gbanegas__libQuantumJava",
+  "stars": 0,
+  "lastPushedAt": null,
+  "githubTopics": [],
+  "featured": false,
+  "flagship": false,
+  "qtanglRelevant": false,
+  "archived": false,
+  "imagePath": null,
+  "relatedSlugs": [
+    "qiskit-qiskit",
+    "quantumlib-cirq",
+    "xanaduai-pennylane",
+    "projectq-framework-projectq",
+    "quantumbfs-yao-jl",
+    "arlineq-arline-benchmarks"
+  ]
+}

@@ -1,0 +1,56 @@
+{
+  "slug": "quantumlib-openfermion",
+  "owner": "quantumlib",
+  "name": "OpenFermion",
+  "title": "OpenFermion",
+  "repoUrl": "https://github.com/quantumlib/OpenFermion",
+  "homepageUrl": null,
+  "category": {
+    "slug": "quantum-chemistry",
+    "title": "Quantum chemistry",
+    "description": "Libraries that connect quantum computing workflows to chemistry, electronic structure, and molecular modeling."
+  },
+  "topics": [
+    {
+      "slug": "quantum-chemistry-for-newcomers",
+      "title": "Quantum chemistry software for newcomers"
+    },
+    {
+      "slug": "quantum-software-map",
+      "title": "Quantum computing software in 2026: the open-source map"
+    }
+  ],
+  "primaryLanguage": "Python",
+  "license": "Apache-2.0",
+  "summary": "Features &ndash; Installation &ndash; Plugins &ndash; Documentation &ndash; Contributing &ndash; Citing &ndash; Authors &ndash; Contact",
+  "description": "Features &ndash; Installation &ndash; Plugins &ndash; Documentation &ndash; Contributing &ndash; Citing &ndash; Authors &ndash; Contact",
+  "whatItIs": [
+    "OpenFermion is an open-source project in the quantum chemistry category. It is maintained by quantumlib and primarily looks like a Python codebase. Features &ndash; Installation &ndash; Plugins &ndash; Documentation &ndash; Contributing &ndash; Citing &ndash; Authors &ndash; Contact",
+    "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches quantum chemistry workflows in practice. The repository README emphasizes: Features &ndash; Installation &ndash; Plugins &ndash; Documentation &ndash; Contributing &ndash; Citing &ndash; Authors &ndash; Contact OpenFermion is an open-source Python package for compiling and analyzing quantum algorithms to simulate fermionic systems, including quantum chemistry. Among other features, it includes data structures and tools for obtaining and manipulating representations..."
+  ],
+  "whoItsFor": "Researchers, students, and developers exploring how quantum software is used for chemistry and electronic-structure problems.",
+  "whatYouCanBuild": [
+    "See how chemistry problems are mapped into quantum-friendly representations.",
+    "Understand the workflow around Hamiltonians, ansatze, and measurement loops.",
+    "Compare beginner-friendly entry points into chemistry-focused quantum tooling."
+  ],
+  "readmeExcerpt": "Features &ndash; Installation &ndash; Plugins &ndash; Documentation &ndash; Contributing &ndash; Citing &ndash; Authors &ndash; Contact OpenFermion is an open-source Python package for compiling and analyzing quantum algorithms to simulate fermionic systems, including quantum chemistry. Among other features, it includes data structures and tools for obtaining and manipulating representations of fermionic and qubit Hamiltonians. More information can be found in the release paper.",
+  "readmePath": "reference\\quantumlib__OpenFermion\\README.md",
+  "clonePath": "reference\\quantumlib__OpenFermion",
+  "stars": 0,
+  "lastPushedAt": null,
+  "githubTopics": [],
+  "featured": true,
+  "flagship": true,
+  "qtanglRelevant": false,
+  "archived": false,
+  "imagePath": "/learn/flagship/quantumlib-openfermion.png",
+  "relatedSlugs": [
+    "aspuru-guzik-group-tequila",
+    "cda-tum-mqt-dasqa",
+    "ornl-qci-xacc-vqe",
+    "pasqal-io-qadence",
+    "projectq-framework-fermilib",
+    "qiskit-qiskit-nature"
+  ]
+}

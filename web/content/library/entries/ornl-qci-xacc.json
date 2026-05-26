@@ -1,0 +1,56 @@
+{
+  "slug": "ornl-qci-xacc",
+  "owner": "ORNL-QCI",
+  "name": "xacc",
+  "title": "xacc",
+  "repoUrl": "https://github.com/ORNL-QCI/xacc",
+  "homepageUrl": null,
+  "category": {
+    "slug": "cloud-interop",
+    "title": "Cloud and interoperability",
+    "description": "Projects that connect quantum workflows across providers, cloud runtimes, and software ecosystems."
+  },
+  "topics": [
+    {
+      "slug": "quantum-optimization-compared",
+      "title": "Quantum optimization libraries compared: QAOA, QUBO, and annealing"
+    },
+    {
+      "slug": "quantum-software-map",
+      "title": "Quantum computing software in 2026: the open-source map"
+    }
+  ],
+  "primaryLanguage": "C++",
+  "license": "Unknown",
+  "summary": "Language and Hardware Independent Quantum Programming Framework XACC is an extensible compilation framework for hybrid quantum-classical computing architectures.",
+  "description": "Language and Hardware Independent Quantum Programming Framework XACC is an extensible compilation framework for hybrid quantum-classical computing architectures. It provides extensible language frontend and hardware backend compilation components glued together via a novel quantum intermediate representation. XACC currently supports quantum-classical programming and enables the execution of quantum kernels on IBM, Rigetti, and D-Wave QPUs, as well as a number of...",
+  "whatItIs": [
+    "xacc is an open-source project in the cloud and interoperability category. It is maintained by ORNL-QCI and primarily looks like a C++ codebase. Language and Hardware Independent Quantum Programming Framework XACC is an extensible compilation framework for hybrid quantum-classical computing architectures.",
+    "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches cloud and interoperability workflows in practice. The repository README emphasizes: Language and Hardware Independent Quantum Programming Framework XACC is an extensible compilation framework for hybrid quantum-classical computing architectures. It provides extensible language frontend and hardware backend compilation components glued together via a novel quantum intermediate representation. XACC currently supports quantum-classical programming and enables the execution of quantum kernels..."
+  ],
+  "whoItsFor": "Teams that need to connect multiple providers, runtimes, or software ecosystems instead of staying in one stack.",
+  "whatYouCanBuild": [
+    "See how the project smooths over provider or runtime boundaries.",
+    "Understand tradeoffs between portability and provider-specific features.",
+    "Compare where interoperability helps versus where it adds abstraction."
+  ],
+  "readmeExcerpt": "Language and Hardware Independent Quantum Programming Framework XACC is an extensible compilation framework for hybrid quantum-classical computing architectures. It provides extensible language frontend and hardware backend compilation components glued together via a novel quantum intermediate representation. XACC currently supports quantum-classical programming and enables the execution of quantum kernels on IBM, Rigetti, and D-Wave QPUs, as well as a number of quantum computer simulators. Quick Start ----------- Click to open up a pre-configured Eclipse Theia IDE. You should immediately be able to run any of the C++ or Python examples from the included terminal: ```bash [example C++ executables are in build/quantum/examples/*] $ build/quantum/examples/qasm/deuteron_from_qasm",
+  "readmePath": "reference\\ORNL-QCI__xacc\\README.md",
+  "clonePath": "reference\\ORNL-QCI__xacc",
+  "stars": 0,
+  "lastPushedAt": null,
+  "githubTopics": [],
+  "featured": false,
+  "flagship": false,
+  "qtanglRelevant": false,
+  "archived": false,
+  "imagePath": null,
+  "relatedSlugs": [
+    "aws-amazon-braket-sdk-python",
+    "qbraid-qbraid",
+    "dwavesystems-dwave-ocean-sdk",
+    "entropicalabs-openqaoa",
+    "cda-tum-mqt-qmap",
+    "dwavesystems-dimod"
+  ]
+}

@@ -1,0 +1,56 @@
+{
+  "slug": "javafxpert-quil-syntax-highlighter",
+  "owner": "JavaFXpert",
+  "name": "quil-syntax-highlighter",
+  "title": "quil-syntax-highlighter",
+  "repoUrl": "https://github.com/JavaFXpert/quil-syntax-highlighter",
+  "homepageUrl": null,
+  "category": {
+    "slug": "compilers-languages",
+    "title": "Compilers and languages",
+    "description": "Compilers, intermediate representations, domain-specific languages, and transpilation tools for quantum programs."
+  },
+  "topics": [
+    {
+      "slug": "quantum-software-map",
+      "title": "Quantum computing software in 2026: the open-source map"
+    },
+    {
+      "slug": "start-writing-quantum-code",
+      "title": "How to start writing quantum code: an honest path"
+    }
+  ],
+  "primaryLanguage": "Mixed",
+  "license": "Unknown",
+  "summary": "quil-syntax-highlighter is an open-source quantum project.",
+  "description": "",
+  "whatItIs": [
+    "quil-syntax-highlighter is an open-source project in the compilers and languages category. It is maintained by JavaFXpert and primarily looks like a Mixed codebase. quil-syntax-highlighter is an open-source quantum project.",
+    "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches compilers and languages workflows in practice."
+  ],
+  "whoItsFor": "Developers who want to understand the representations and compilers that sit between high-level code and runnable circuits.",
+  "whatYouCanBuild": [
+    "Compare IRs, DSLs, transpilers, and compiler assumptions across ecosystems.",
+    "Understand how high-level code becomes something a backend can execute.",
+    "Spot tools that matter when interoperability and compilation quality are important."
+  ],
+  "readmeExcerpt": "",
+  "readmePath": null,
+  "clonePath": null,
+  "stars": 0,
+  "lastPushedAt": null,
+  "githubTopics": [],
+  "featured": false,
+  "flagship": false,
+  "qtanglRelevant": false,
+  "archived": false,
+  "imagePath": null,
+  "relatedSlugs": [
+    "cqcl-tket",
+    "nvidia-cuda-quantum",
+    "quantomatic-pyzx",
+    "avalon-lang-avaloni",
+    "aviggiano-qcl",
+    "dabacon-qsel"
+  ]
+}

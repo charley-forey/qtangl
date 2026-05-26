@@ -14,7 +14,7 @@ type PageHeroProps = {
   eyebrow: ReactNode;
   title: ReactNode;
   description: ReactNode;
-  actions?: PageHeroAction[];
+  actions?: readonly PageHeroAction[];
   contentClassName?: string;
 };
 

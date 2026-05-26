@@ -1,0 +1,56 @@
+{
+  "slug": "qe-lab-openql",
+  "owner": "QE-Lab",
+  "name": "OpenQL",
+  "title": "OpenQL",
+  "repoUrl": "https://github.com/QE-Lab/OpenQL",
+  "homepageUrl": null,
+  "category": {
+    "slug": "compilers-languages",
+    "title": "Compilers and languages",
+    "description": "Compilers, intermediate representations, domain-specific languages, and transpilation tools for quantum programs."
+  },
+  "topics": [
+    {
+      "slug": "quantum-software-map",
+      "title": "Quantum computing software in 2026: the open-source map"
+    },
+    {
+      "slug": "start-writing-quantum-code",
+      "title": "How to start writing quantum code: an honest path"
+    }
+  ],
+  "primaryLanguage": "C/C++",
+  "license": "Apache-2.0",
+  "summary": "OpenQL is a framework for high-level quantum programming in C++/Python.",
+  "description": "OpenQL is a framework for high-level quantum programming in C++/Python. The framework provides a compiler for compiling and optimizing quantum code. The compiler produces the intermediate quantum assembly language and the compiled micro-code for various target platforms. While the microcode is platform-specific, the quantum assembly code (in cQASM format) is hardware-agnostic and can be simulated on the QX simulator.",
+  "whatItIs": [
+    "OpenQL is an open-source project in the compilers and languages category. It is maintained by QE-Lab and primarily looks like a C/C++ codebase. OpenQL is a framework for high-level quantum programming in C++/Python.",
+    "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches compilers and languages workflows in practice. The repository README emphasizes: OpenQL is a framework for high-level quantum programming in C++/Python. The framework provides a compiler for compiling and optimizing quantum code. The compiler produces the intermediate quantum assembly language and the compiled micro-code for various target platforms. While the microcode is platform-specific, the quantum assembly code (in cQASM..."
+  ],
+  "whoItsFor": "Developers who want to understand the representations and compilers that sit between high-level code and runnable circuits.",
+  "whatYouCanBuild": [
+    "Compare IRs, DSLs, transpilers, and compiler assumptions across ecosystems.",
+    "Understand how high-level code becomes something a backend can execute.",
+    "Spot tools that matter when interoperability and compilation quality are important."
+  ],
+  "readmeExcerpt": "OpenQL is a framework for high-level quantum programming in C++/Python. The framework provides a compiler for compiling and optimizing quantum code. The compiler produces the intermediate quantum assembly language and the compiled micro-code for various target platforms. While the microcode is platform-specific, the quantum assembly code (in cQASM format) is hardware-agnostic and can be simulated on the QX simulator. OpenQL's source code is released under the Apache 2.0 license.",
+  "readmePath": "reference\\QE-Lab__OpenQL\\README.md",
+  "clonePath": "reference\\QE-Lab__OpenQL",
+  "stars": 0,
+  "lastPushedAt": null,
+  "githubTopics": [],
+  "featured": false,
+  "flagship": false,
+  "qtanglRelevant": false,
+  "archived": false,
+  "imagePath": null,
+  "relatedSlugs": [
+    "cqcl-tket",
+    "nvidia-cuda-quantum",
+    "quantomatic-pyzx",
+    "avalon-lang-avaloni",
+    "aviggiano-qcl",
+    "dabacon-qsel"
+  ]
+}

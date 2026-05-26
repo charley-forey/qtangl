@@ -1,0 +1,52 @@
+{
+  "slug": "artiste-qb-net-quantum-fog",
+  "owner": "artiste-qb-net",
+  "name": "quantum-fog",
+  "title": "quantum-fog",
+  "repoUrl": "https://github.com/artiste-qb-net/quantum-fog",
+  "homepageUrl": null,
+  "category": {
+    "slug": "visualization-tomography",
+    "title": "Visualization and tomography",
+    "description": "Tools for visualizing circuits, reasoning about states, and reconstructing quantum systems from measurements."
+  },
+  "topics": [
+    {
+      "slug": "quantum-software-map",
+      "title": "Quantum computing software in 2026: the open-source map"
+    }
+  ],
+  "primaryLanguage": "Python",
+  "license": "BSD",
+  "summary": "Quantum Fog at GitHub What is Quantum Fog?",
+  "description": "Quantum Fog at GitHub What is Quantum Fog?",
+  "whatItIs": [
+    "quantum-fog is an open-source project in the visualization and tomography category. It is maintained by artiste-qb-net and primarily looks like a Python codebase. Quantum Fog at GitHub What is Quantum Fog?",
+    "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches visualization and tomography workflows in practice. The repository README emphasizes: Quantum Fog at GitHub What is Quantum Fog? Quantum Fog (QFog) is an app for modelling physical situations that exhibit quantum mechanical behavior. It's a tool for investigating and discussing quantum measurement problems graphically, in terms of network diagrams called quantum Bayesian networks."
+  ],
+  "whoItsFor": "People who learn best by seeing state structure, measurement results, or circuit behavior laid out visually.",
+  "whatYouCanBuild": [
+    "Understand how the project helps inspect or reconstruct quantum systems.",
+    "Compare visual tooling against more code-heavy workflows.",
+    "Use the resource as a bridge between theory, experiments, and debugging."
+  ],
+  "readmeExcerpt": "Quantum Fog at GitHub What is Quantum Fog? Quantum Fog (QFog) is an app for modelling physical situations that exhibit quantum mechanical behavior. It's a tool for investigating and discussing quantum measurement problems graphically, in terms of network diagrams called quantum Bayesian networks.",
+  "readmePath": "reference\\artiste-qb-net__quantum-fog\\README.md",
+  "clonePath": "reference\\artiste-qb-net__quantum-fog",
+  "stars": 0,
+  "lastPushedAt": null,
+  "githubTopics": [],
+  "featured": false,
+  "flagship": false,
+  "qtanglRelevant": false,
+  "archived": false,
+  "imagePath": null,
+  "relatedSlugs": [
+    "bbn-q-quantuminfo-jl",
+    "bbn-q-quantumtomography-jl",
+    "bbn-q-quince",
+    "qct-iqc-qcviewer",
+    "ziofil-quantumgraphs",
+    "aws-amazon-braket-sdk-python"
+  ]
+}

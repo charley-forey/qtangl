@@ -1,0 +1,52 @@
+{
+  "slug": "cda-tum-mqt-bench",
+  "owner": "cda-tum",
+  "name": "mqt-bench",
+  "title": "mqt-bench",
+  "repoUrl": "https://github.com/cda-tum/mqt-bench",
+  "homepageUrl": null,
+  "category": {
+    "slug": "benchmarks-analysis",
+    "title": "Benchmarks and analysis",
+    "description": "Benchmark suites, performance studies, and analysis tooling for comparing quantum software and hardware workflows."
+  },
+  "topics": [
+    {
+      "slug": "quantum-software-map",
+      "title": "Quantum computing software in 2026: the open-source map"
+    }
+  ],
+  "primaryLanguage": "Python",
+  "license": "MIT",
+  "summary": "<p align=\"center\"> <a href=\"https://mqt.readthedocs.io\"> <picture> <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://raw.githubusercontent.com/munich-quantum-toolkit/.github/refs/heads/main/docs/_static/logo-mqt-dark.svg\" width=\"60%\"> <img src=\"https://raw.githubusercontent.com/munich-quantum-toolkit/.github/refs/heads/main/docs/_static/logo-mqt-light.svg\" width=\"60%\" alt=\"MQT Logo\"> </picture> </a> </p>",
+  "description": "<p align=\"center\"> <a href=\"https://mqt.readthedocs.io\"> <picture> <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://raw.githubusercontent.com/munich-quantum-toolkit/.github/refs/heads/main/docs/_static/logo-mqt-dark.svg\" width=\"60%\"> <img src=\"https://raw.githubusercontent.com/munich-quantum-toolkit/.github/refs/heads/main/docs/_static/logo-mqt-light.svg\" width=\"60%\" alt=\"MQT Logo\"> </picture> </a> </p>",
+  "whatItIs": [
+    "mqt-bench is an open-source project in the benchmarks and analysis category. It is maintained by cda-tum and primarily looks like a Python codebase. <p align=\"center\"> <a href=\"https://mqt.readthedocs.io\"> <picture> <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://raw.githubusercontent.com/munich-quantum-toolkit/.github/refs/heads/main/docs/_static/logo-mqt-dark.svg\" width=\"60%\"> <img src=\"https://raw.githubusercontent.com/munich-quantum-toolkit/.github/refs/heads/main/docs/_static/logo-mqt-light.svg\" width=\"60%\" alt=\"MQT Logo\"> </picture> </a> </p>",
+    "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches benchmarks and analysis workflows in practice. The repository README emphasizes: <p align=\"center\"> <a href=\"https://mqt.readthedocs.io\"> <picture> <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://raw.githubusercontent.com/munich-quantum-toolkit/.github/refs/heads/main/docs/_static/logo-mqt-dark.svg\" width=\"60%\"> <img src=\"https://raw.githubusercontent.com/munich-quantum-toolkit/.github/refs/heads/main/docs/_static/logo-mqt-light.svg\" width=\"60%\" alt=\"MQT Logo\"> </picture> </a> </p> MQT Bench - Benchmarking Software and Design Automation Tools for Quantum Computing"
+  ],
+  "whoItsFor": "Researchers and evaluators comparing toolchains, algorithms, hardware assumptions, or performance tradeoffs.",
+  "whatYouCanBuild": [
+    "Learn what this project measures and why it matters.",
+    "Compare benchmarking assumptions instead of taking headline claims at face value.",
+    "Use the resource to evaluate ecosystems more critically."
+  ],
+  "readmeExcerpt": "<p align=\"center\"> <a href=\"https://mqt.readthedocs.io\"> <picture> <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://raw.githubusercontent.com/munich-quantum-toolkit/.github/refs/heads/main/docs/_static/logo-mqt-dark.svg\" width=\"60%\"> <img src=\"https://raw.githubusercontent.com/munich-quantum-toolkit/.github/refs/heads/main/docs/_static/logo-mqt-light.svg\" width=\"60%\" alt=\"MQT Logo\"> </picture> </a> </p> MQT Bench - Benchmarking Software and Design Automation Tools for Quantum Computing",
+  "readmePath": "reference\\cda-tum__mqt-bench\\README.md",
+  "clonePath": "reference\\cda-tum__mqt-bench",
+  "stars": 0,
+  "lastPushedAt": null,
+  "githubTopics": [],
+  "featured": false,
+  "flagship": false,
+  "qtanglRelevant": false,
+  "archived": false,
+  "imagePath": null,
+  "relatedSlugs": [
+    "bbn-q-qgl-jl",
+    "bbn-q-qsimulator-jl",
+    "quantumlib-qualtran",
+    "aws-amazon-braket-sdk-python",
+    "cqcl-tket",
+    "dwavesystems-dwave-ocean-sdk"
+  ]
+}

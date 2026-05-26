@@ -1,0 +1,52 @@
+{
+  "slug": "ziofil-quantumgraphs",
+  "owner": "ziofil",
+  "name": "QuantumGraphs",
+  "title": "QuantumGraphs",
+  "repoUrl": "https://github.com/ziofil/QuantumGraphs",
+  "homepageUrl": null,
+  "category": {
+    "slug": "visualization-tomography",
+    "title": "Visualization and tomography",
+    "description": "Tools for visualizing circuits, reasoning about states, and reconstructing quantum systems from measurements."
+  },
+  "topics": [
+    {
+      "slug": "quantum-software-map",
+      "title": "Quantum computing software in 2026: the open-source map"
+    }
+  ],
+  "primaryLanguage": "Python",
+  "license": "LGPL",
+  "summary": "Introduction This package is for growing random graphs and trees by using continuous quantum walks:",
+  "description": "Introduction This package is for growing random graphs and trees by using continuous quantum walks:",
+  "whatItIs": [
+    "QuantumGraphs is an open-source project in the visualization and tomography category. It is maintained by ziofil and primarily looks like a Python codebase. Introduction This package is for growing random graphs and trees by using continuous quantum walks:",
+    "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches visualization and tomography workflows in practice. The repository README emphasizes: Introduction This package is for growing random graphs and trees by using continuous quantum walks: One or more quantum walkers evolve on a graph, and at random times their wave function collapses on its nodes. A new node is attached to all the nodes where a walker collapsed."
+  ],
+  "whoItsFor": "People who learn best by seeing state structure, measurement results, or circuit behavior laid out visually.",
+  "whatYouCanBuild": [
+    "Understand how the project helps inspect or reconstruct quantum systems.",
+    "Compare visual tooling against more code-heavy workflows.",
+    "Use the resource as a bridge between theory, experiments, and debugging."
+  ],
+  "readmeExcerpt": "Introduction This package is for growing random graphs and trees by using continuous quantum walks: One or more quantum walkers evolve on a graph, and at random times their wave function collapses on its nodes. A new node is attached to all the nodes where a walker collapsed.",
+  "readmePath": "reference\\ziofil__QuantumGraphs\\README.md",
+  "clonePath": "reference\\ziofil__QuantumGraphs",
+  "stars": 0,
+  "lastPushedAt": null,
+  "githubTopics": [],
+  "featured": false,
+  "flagship": false,
+  "qtanglRelevant": false,
+  "archived": false,
+  "imagePath": null,
+  "relatedSlugs": [
+    "artiste-qb-net-quantum-fog",
+    "bbn-q-quantuminfo-jl",
+    "bbn-q-quantumtomography-jl",
+    "bbn-q-quince",
+    "qct-iqc-qcviewer",
+    "aws-amazon-braket-sdk-python"
+  ]
+}

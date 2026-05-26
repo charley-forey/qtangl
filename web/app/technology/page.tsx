@@ -113,6 +113,18 @@ export default function TechnologyPage() {
               description={item.description}
             />
           ))}
+          <FeatureCard
+            eyebrow="Deeper context"
+            title="Compare the optimization tools behind the story"
+            description="The learn section maps the libraries, annealing stacks, QAOA projects, and modeling tools that make the optimization landscape easier to understand."
+            href="/learn/topics/quantum-optimization-compared"
+            ctaLabel="Read the comparison guide"
+          >
+            <p>
+              <span className="font-semibold text-white">Best next step:</span> see how
+              OpenQAOA, dimod, qbsolv, and Qiskit Optimization differ in practice.
+            </p>
+          </FeatureCard>
         </div>
       </Section>
 

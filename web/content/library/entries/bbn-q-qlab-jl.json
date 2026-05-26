@@ -1,0 +1,52 @@
+{
+  "slug": "bbn-q-qlab-jl",
+  "owner": "BBN-Q",
+  "name": "Qlab.jl",
+  "title": "Qlab.jl",
+  "repoUrl": "https://github.com/BBN-Q/Qlab.jl",
+  "homepageUrl": null,
+  "category": {
+    "slug": "pulse-control",
+    "title": "Pulse and control",
+    "description": "Tooling for low-level pulse scheduling, experiment orchestration, and laboratory control around quantum hardware."
+  },
+  "topics": [
+    {
+      "slug": "quantum-software-map",
+      "title": "Quantum computing software in 2026: the open-source map"
+    }
+  ],
+  "primaryLanguage": "Julia",
+  "license": "Apache-2.0",
+  "summary": "Data manipulation and analysis tools tailored for quantum computing experiments in conjunction with Auspex.",
+  "description": "Data manipulation and analysis tools tailored for quantum computing experiments in conjunction with Auspex. Currently working with Julia v1.0.",
+  "whatItIs": [
+    "Qlab.jl is an open-source project in the pulse and control category. It is maintained by BBN-Q and primarily looks like a Julia codebase. Data manipulation and analysis tools tailored for quantum computing experiments in conjunction with Auspex.",
+    "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches pulse and control workflows in practice. The repository README emphasizes: Data manipulation and analysis tools tailored for quantum computing experiments in conjunction with Auspex. Currently working with Julia v1.0. The code base also uses some system tools and python libraries for building libraries and plotting data with PyPlot.jl. You'll want to make sure your system has these."
+  ],
+  "whoItsFor": "Hardware-adjacent developers and researchers working closer to experiments, pulse schedules, or lab orchestration.",
+  "whatYouCanBuild": [
+    "See how low-level control stacks differ from higher-level SDKs.",
+    "Understand where pulse sequencing and experiment orchestration fit in the stack.",
+    "Learn which projects matter when hardware control is part of the workflow."
+  ],
+  "readmeExcerpt": "Data manipulation and analysis tools tailored for quantum computing experiments in conjunction with Auspex. Currently working with Julia v1.0. The code base also uses some system tools and python libraries for building libraries and plotting data with PyPlot.jl. You'll want to make sure your system has these.",
+  "readmePath": "reference\\BBN-Q__Qlab.jl\\README.md",
+  "clonePath": "reference\\BBN-Q__Qlab.jl",
+  "stars": 0,
+  "lastPushedAt": null,
+  "githubTopics": [],
+  "featured": false,
+  "flagship": false,
+  "qtanglRelevant": false,
+  "archived": false,
+  "imagePath": null,
+  "relatedSlugs": [
+    "m-labs-artiq",
+    "bbn-q-pyqgl2",
+    "bbn-q-pyqlab",
+    "bbn-q-qgl",
+    "bbn-q-qlab",
+    "indisoluble-swiftquantumcomputing"
+  ]
+}

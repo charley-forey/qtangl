@@ -1,0 +1,52 @@
+{
+  "slug": "artiste-qb-net-quantum-edward",
+  "owner": "artiste-qb-net",
+  "name": "Quantum_Edward",
+  "title": "Quantum_Edward",
+  "repoUrl": "https://github.com/artiste-qb-net/Quantum_Edward",
+  "homepageUrl": null,
+  "category": {
+    "slug": "quantum-ml",
+    "title": "Quantum machine learning",
+    "description": "Libraries and experiments combining quantum circuit workflows with machine learning models or differentiable programming."
+  },
+  "topics": [
+    {
+      "slug": "quantum-software-map",
+      "title": "Quantum computing software in 2026: the open-source map"
+    }
+  ],
+  "primaryLanguage": "Python",
+  "license": "MIT",
+  "summary": "You can install Quantum Edward from the Python package manager pip using: If you are useing JupyterNotebook, use: and restart the kernel.",
+  "description": "You can install Quantum Edward from the Python package manager pip using: If you are useing JupyterNotebook, use: and restart the kernel.",
+  "whatItIs": [
+    "Quantum_Edward is an open-source project in the quantum machine learning category. It is maintained by artiste-qb-net and primarily looks like a Python codebase. You can install Quantum Edward from the Python package manager pip using: If you are useing JupyterNotebook, use: and restart the kernel.",
+    "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches quantum machine learning workflows in practice. The repository README emphasizes: You can install Quantum Edward from the Python package manager pip using: If you are useing JupyterNotebook, use: and restart the kernel. Quantum Edward at this point is just a small library of Python tools for doing classical supervised learning on Quantum Neural Networks (QNNs)."
+  ],
+  "whoItsFor": "Researchers and practitioners experimenting with quantum machine learning, variational models, and differentiable circuit stacks.",
+  "whatYouCanBuild": [
+    "Learn how the project connects model training ideas to quantum primitives.",
+    "Inspect the assumptions behind differentiable or ML-oriented workflows.",
+    "Compare how serious or experimental the ML story really is."
+  ],
+  "readmeExcerpt": "You can install Quantum Edward from the Python package manager pip using: If you are useing JupyterNotebook, use: and restart the kernel. Quantum Edward at this point is just a small library of Python tools for doing classical supervised learning on Quantum Neural Networks (QNNs).",
+  "readmePath": "reference\\artiste-qb-net__Quantum_Edward\\README.md",
+  "clonePath": "reference\\artiste-qb-net__Quantum_Edward",
+  "stars": 0,
+  "lastPushedAt": null,
+  "githubTopics": [],
+  "featured": false,
+  "flagship": false,
+  "qtanglRelevant": false,
+  "archived": false,
+  "imagePath": null,
+  "relatedSlugs": [
+    "jpzwolak-qflow-lite",
+    "qiskit-qiskit-machine-learning",
+    "aws-amazon-braket-sdk-python",
+    "cqcl-tket",
+    "dwavesystems-dwave-ocean-sdk",
+    "entropicalabs-openqaoa"
+  ]
+}

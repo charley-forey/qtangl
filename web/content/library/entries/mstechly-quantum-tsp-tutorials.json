@@ -1,0 +1,56 @@
+{
+  "slug": "mstechly-quantum-tsp-tutorials",
+  "owner": "mstechly",
+  "name": "quantum_tsp_tutorials",
+  "title": "quantum_tsp_tutorials",
+  "repoUrl": "https://github.com/mstechly/quantum_tsp_tutorials",
+  "homepageUrl": null,
+  "category": {
+    "slug": "games-learning",
+    "title": "Games and learning",
+    "description": "Interactive projects, puzzles, and educational resources for learning quantum computing concepts."
+  },
+  "topics": [
+    {
+      "slug": "quantum-software-map",
+      "title": "Quantum computing software in 2026: the open-source map"
+    },
+    {
+      "slug": "start-writing-quantum-code",
+      "title": "How to start writing quantum code: an honest path"
+    }
+  ],
+  "primaryLanguage": "Python",
+  "license": "Apache-2.0",
+  "summary": "This repository contains code with tutorials on how to approach optimization problems using quantum computing.",
+  "description": "This repository contains code with tutorials on how to approach optimization problems using quantum computing. I used Travelling Salesman Problem for this tutorials, though the idea is, that after finishing it, you should be able to implement any similar optimization problem.",
+  "whatItIs": [
+    "quantum_tsp_tutorials is an open-source project in the games and learning category. It is maintained by mstechly and primarily looks like a Python codebase. This repository contains code with tutorials on how to approach optimization problems using quantum computing.",
+    "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches games and learning workflows in practice. The repository README emphasizes: This repository contains code with tutorials on how to approach optimization problems using quantum computing. I used Travelling Salesman Problem for this tutorials, though the idea is, that after finishing it, you should be able to implement any similar optimization problem. I have created this tutorial with specific..."
+  ],
+  "whoItsFor": "Beginners, educators, and curious developers who want a more approachable path into quantum concepts.",
+  "whatYouCanBuild": [
+    "Get a gentler introduction before diving into full SDKs.",
+    "See how different projects teach circuits, superposition, and measurement.",
+    "Identify resources that work well for onboarding or self-study."
+  ],
+  "readmeExcerpt": "This repository contains code with tutorials on how to approach optimization problems using quantum computing. I used Travelling Salesman Problem for this tutorials, though the idea is, that after finishing it, you should be able to implement any similar optimization problem. I have created this tutorial with specific audience in mind. It means people, who: are curious about quantum computing, don't have any background in quantum physics, have some programming experience, really want to learn this topic.",
+  "readmePath": "reference\\mstechly__quantum_tsp_tutorials\\README.md",
+  "clonePath": "reference\\mstechly__quantum_tsp_tutorials",
+  "stars": 0,
+  "lastPushedAt": null,
+  "githubTopics": [],
+  "featured": false,
+  "flagship": false,
+  "qtanglRelevant": false,
+  "archived": false,
+  "imagePath": null,
+  "relatedSlugs": [
+    "microsoft-quantumkatas",
+    "strilanc-quirk",
+    "stared-quantum-game",
+    "decodoku-a-game-to-benchmark-quantum-computers",
+    "decodoku-battleships-with-complementary-measurements",
+    "desireevl-quantum-catsweeper"
+  ]
+}

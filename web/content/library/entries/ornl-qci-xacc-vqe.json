@@ -1,0 +1,56 @@
+{
+  "slug": "ornl-qci-xacc-vqe",
+  "owner": "ornl-qci",
+  "name": "xacc-vqe",
+  "title": "xacc-vqe",
+  "repoUrl": "https://github.com/ornl-qci/xacc-vqe",
+  "homepageUrl": null,
+  "category": {
+    "slug": "quantum-chemistry",
+    "title": "Quantum chemistry",
+    "description": "Libraries that connect quantum computing workflows to chemistry, electronic structure, and molecular modeling."
+  },
+  "topics": [
+    {
+      "slug": "quantum-chemistry-for-newcomers",
+      "title": "Quantum chemistry software for newcomers"
+    },
+    {
+      "slug": "quantum-software-map",
+      "title": "Quantum computing software in 2026: the open-source map"
+    }
+  ],
+  "primaryLanguage": "C++",
+  "license": "BSD",
+  "summary": "XACC Plugins and Programs for the Variational Quantum Eigensolver",
+  "description": "XACC Plugins and Programs for the Variational Quantum Eigensolver",
+  "whatItIs": [
+    "xacc-vqe is an open-source project in the quantum chemistry category. It is maintained by ornl-qci and primarily looks like a C++ codebase. XACC Plugins and Programs for the Variational Quantum Eigensolver",
+    "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches quantum chemistry workflows in practice. The repository README emphasizes: XACC Plugins and Programs for the Variational Quantum Eigensolver Questions, bug reporting and issue tracking are provided by GitHub. Please report all bugs by creating a new issue with the bug tag. You can ask questions by creating a new issue with the question tag."
+  ],
+  "whoItsFor": "Researchers, students, and developers exploring how quantum software is used for chemistry and electronic-structure problems.",
+  "whatYouCanBuild": [
+    "See how chemistry problems are mapped into quantum-friendly representations.",
+    "Understand the workflow around Hamiltonians, ansatze, and measurement loops.",
+    "Compare beginner-friendly entry points into chemistry-focused quantum tooling."
+  ],
+  "readmeExcerpt": "XACC Plugins and Programs for the Variational Quantum Eigensolver Questions, bug reporting and issue tracking are provided by GitHub. Please report all bugs by creating a new issue with the bug tag. You can ask questions by creating a new issue with the question tag.",
+  "readmePath": "reference\\ornl-qci__xacc-vqe\\README.md",
+  "clonePath": "reference\\ornl-qci__xacc-vqe",
+  "stars": 0,
+  "lastPushedAt": null,
+  "githubTopics": [],
+  "featured": false,
+  "flagship": false,
+  "qtanglRelevant": false,
+  "archived": false,
+  "imagePath": null,
+  "relatedSlugs": [
+    "quantumlib-openfermion",
+    "aspuru-guzik-group-tequila",
+    "cda-tum-mqt-dasqa",
+    "pasqal-io-qadence",
+    "projectq-framework-fermilib",
+    "qiskit-qiskit-nature"
+  ]
+}

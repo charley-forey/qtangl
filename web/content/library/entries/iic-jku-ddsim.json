@@ -1,0 +1,56 @@
+{
+  "slug": "iic-jku-ddsim",
+  "owner": "iic-jku",
+  "name": "ddsim",
+  "title": "ddsim",
+  "repoUrl": "https://github.com/iic-jku/ddsim",
+  "homepageUrl": null,
+  "category": {
+    "slug": "simulators",
+    "title": "Simulators",
+    "description": "Projects focused on state-vector, stabilizer, tensor-network, or hardware-inspired quantum simulation."
+  },
+  "topics": [
+    {
+      "slug": "quantum-simulators-guide",
+      "title": "Open-source quantum simulators: what each one is good at"
+    },
+    {
+      "slug": "quantum-software-map",
+      "title": "Quantum computing software in 2026: the open-source map"
+    }
+  ],
+  "primaryLanguage": "Python",
+  "license": "MIT",
+  "summary": "<p align=\"center\"> <a href=\"https://mqt.readthedocs.io\"> <picture> <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://raw.githubusercontent.com/munich-quantum-toolkit/.github/refs/heads/main/docs/_static/mqt-banner-dark.svg\" width=\"90%\"> <img src=\"https://raw.githubusercontent.com/munich-quantum-toolkit/.github/refs/heads/main/docs/_static/mqt-banner-light.svg\" width=\"90%\" alt=\"MQT Banner\"> </picture> </a> </p>",
+  "description": "<p align=\"center\"> <a href=\"https://mqt.readthedocs.io\"> <picture> <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://raw.githubusercontent.com/munich-quantum-toolkit/.github/refs/heads/main/docs/_static/mqt-banner-dark.svg\" width=\"90%\"> <img src=\"https://raw.githubusercontent.com/munich-quantum-toolkit/.github/refs/heads/main/docs/_static/mqt-banner-light.svg\" width=\"90%\" alt=\"MQT Banner\"> </picture> </a> </p>",
+  "whatItIs": [
+    "ddsim is an open-source project in the simulators category. It is maintained by iic-jku and primarily looks like a Python codebase. <p align=\"center\"> <a href=\"https://mqt.readthedocs.io\"> <picture> <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://raw.githubusercontent.com/munich-quantum-toolkit/.github/refs/heads/main/docs/_static/mqt-banner-dark.svg\" width=\"90%\"> <img src=\"https://raw.githubusercontent.com/munich-quantum-toolkit/.github/refs/heads/main/docs/_static/mqt-banner-light.svg\" width=\"90%\" alt=\"MQT Banner\"> </picture> </a> </p>",
+    "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches simulators workflows in practice. The repository README emphasizes: <p align=\"center\"> <a href=\"https://mqt.readthedocs.io\"> <picture> <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://raw.githubusercontent.com/munich-quantum-toolkit/.github/refs/heads/main/docs/_static/mqt-banner-dark.svg\" width=\"90%\"> <img src=\"https://raw.githubusercontent.com/munich-quantum-toolkit/.github/refs/heads/main/docs/_static/mqt-banner-light.svg\" width=\"90%\" alt=\"MQT Banner\"> </picture> </a> </p> MQT DDSIM - A quantum circuit simulator based on decision diagrams written in C++"
+  ],
+  "whoItsFor": "Developers and researchers who need to test ideas locally before running on hardware or who want to compare simulation strategies.",
+  "whatYouCanBuild": [
+    "Benchmark how different simulation methods trade accuracy for runtime.",
+    "Inspect circuit behavior, noise assumptions, or state evolution offline.",
+    "Choose the right simulator for a debugging, teaching, or research workflow."
+  ],
+  "readmeExcerpt": "<p align=\"center\"> <a href=\"https://mqt.readthedocs.io\"> <picture> <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://raw.githubusercontent.com/munich-quantum-toolkit/.github/refs/heads/main/docs/_static/mqt-banner-dark.svg\" width=\"90%\"> <img src=\"https://raw.githubusercontent.com/munich-quantum-toolkit/.github/refs/heads/main/docs/_static/mqt-banner-light.svg\" width=\"90%\" alt=\"MQT Banner\"> </picture> </a> </p> MQT DDSIM - A quantum circuit simulator based on decision diagrams written in C++",
+  "readmePath": "reference\\iic-jku__ddsim\\README.md",
+  "clonePath": "reference\\iic-jku__ddsim",
+  "stars": 0,
+  "lastPushedAt": null,
+  "githubTopics": [],
+  "featured": false,
+  "flagship": false,
+  "qtanglRelevant": false,
+  "archived": false,
+  "imagePath": null,
+  "relatedSlugs": [
+    "0tt3r-quac",
+    "adamisntdead-qusimpy",
+    "aniabrown-quest",
+    "bbn-q-pysimulator",
+    "cda-tum-mqt-ddsim",
+    "dillanchang-qocs"
+  ]
+}

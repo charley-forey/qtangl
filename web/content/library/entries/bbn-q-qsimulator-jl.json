@@ -1,0 +1,52 @@
+{
+  "slug": "bbn-q-qsimulator-jl",
+  "owner": "BBN-Q",
+  "name": "QSimulator.jl",
+  "title": "QSimulator.jl",
+  "repoUrl": "https://github.com/BBN-Q/QSimulator.jl",
+  "homepageUrl": null,
+  "category": {
+    "slug": "benchmarks-analysis",
+    "title": "Benchmarks and analysis",
+    "description": "Benchmark suites, performance studies, and analysis tooling for comparing quantum software and hardware workflows."
+  },
+  "topics": [
+    {
+      "slug": "quantum-software-map",
+      "title": "Quantum computing software in 2026: the open-source map"
+    }
+  ],
+  "primaryLanguage": "Julia",
+  "license": "Apache-2.0",
+  "summary": "Package for simulating time dynamics of quantum systems with a focus on superconducting qubits.",
+  "description": "Package for simulating time dynamics of quantum systems with a focus on superconducting qubits.",
+  "whatItIs": [
+    "QSimulator.jl is an open-source project in the benchmarks and analysis category. It is maintained by BBN-Q and primarily looks like a Julia codebase. Package for simulating time dynamics of quantum systems with a focus on superconducting qubits.",
+    "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches benchmarks and analysis workflows in practice. The repository README emphasizes: Package for simulating time dynamics of quantum systems with a focus on superconducting qubits. We can track the code performance between commits by running the benchmarking suite in benchmark/benchmarks.jl using PkgBenchmark."
+  ],
+  "whoItsFor": "Researchers and evaluators comparing toolchains, algorithms, hardware assumptions, or performance tradeoffs.",
+  "whatYouCanBuild": [
+    "Learn what this project measures and why it matters.",
+    "Compare benchmarking assumptions instead of taking headline claims at face value.",
+    "Use the resource to evaluate ecosystems more critically."
+  ],
+  "readmeExcerpt": "Package for simulating time dynamics of quantum systems with a focus on superconducting qubits. We can track the code performance between commits by running the benchmarking suite in benchmark/benchmarks.jl using PkgBenchmark.",
+  "readmePath": "reference\\BBN-Q__QSimulator.jl\\README.md",
+  "clonePath": "reference\\BBN-Q__QSimulator.jl",
+  "stars": 0,
+  "lastPushedAt": null,
+  "githubTopics": [],
+  "featured": false,
+  "flagship": false,
+  "qtanglRelevant": false,
+  "archived": false,
+  "imagePath": null,
+  "relatedSlugs": [
+    "bbn-q-qgl-jl",
+    "cda-tum-mqt-bench",
+    "quantumlib-qualtran",
+    "aws-amazon-braket-sdk-python",
+    "cqcl-tket",
+    "dwavesystems-dwave-ocean-sdk"
+  ]
+}

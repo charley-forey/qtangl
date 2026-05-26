@@ -1,0 +1,52 @@
+{
+  "slug": "bbn-q-pyqlab",
+  "owner": "BBN-Q",
+  "name": "PyQLab",
+  "title": "PyQLab",
+  "repoUrl": "https://github.com/BBN-Q/PyQLab",
+  "homepageUrl": null,
+  "category": {
+    "slug": "pulse-control",
+    "title": "Pulse and control",
+    "description": "Tooling for low-level pulse scheduling, experiment orchestration, and laboratory control around quantum hardware."
+  },
+  "topics": [
+    {
+      "slug": "quantum-software-map",
+      "title": "Quantum computing software in 2026: the open-source map"
+    }
+  ],
+  "primaryLanguage": "Python",
+  "license": "Apache-2.0",
+  "summary": "This is a python package for managing instruments and control parameters for superconducting qubit systems.",
+  "description": "This is a python package for managing instruments and control parameters for superconducting qubit systems. It complements the Qlab repository by providing simple GUIs for creating the JSON settings structures used by Qlab.",
+  "whatItIs": [
+    "PyQLab is an open-source project in the pulse and control category. It is maintained by BBN-Q and primarily looks like a Python codebase. This is a python package for managing instruments and control parameters for superconducting qubit systems.",
+    "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches pulse and control workflows in practice. The repository README emphasizes: This is a python package for managing instruments and control parameters for superconducting qubit systems. It complements the Qlab repository by providing simple GUIs for creating the JSON settings structures used by Qlab. The most straightforward way to get up and running is to use the Anaconda Python..."
+  ],
+  "whoItsFor": "Hardware-adjacent developers and researchers working closer to experiments, pulse schedules, or lab orchestration.",
+  "whatYouCanBuild": [
+    "See how low-level control stacks differ from higher-level SDKs.",
+    "Understand where pulse sequencing and experiment orchestration fit in the stack.",
+    "Learn which projects matter when hardware control is part of the workflow."
+  ],
+  "readmeExcerpt": "This is a python package for managing instruments and control parameters for superconducting qubit systems. It complements the Qlab repository by providing simple GUIs for creating the JSON settings structures used by Qlab. The most straightforward way to get up and running is to use the Anaconda Python distribution. This includes nearly all the dependencies. The few remaining can be installed from the termminal or Anaconda Command Prompt on Windows. On Windows you may also need to ensure that either the already installed git is on the path or conda install git.",
+  "readmePath": "reference\\BBN-Q__PyQLab\\README.md",
+  "clonePath": "reference\\BBN-Q__PyQLab",
+  "stars": 0,
+  "lastPushedAt": null,
+  "githubTopics": [],
+  "featured": false,
+  "flagship": false,
+  "qtanglRelevant": false,
+  "archived": false,
+  "imagePath": null,
+  "relatedSlugs": [
+    "m-labs-artiq",
+    "bbn-q-pyqgl2",
+    "bbn-q-qgl",
+    "bbn-q-qlab",
+    "bbn-q-qlab-jl",
+    "indisoluble-swiftquantumcomputing"
+  ]
+}

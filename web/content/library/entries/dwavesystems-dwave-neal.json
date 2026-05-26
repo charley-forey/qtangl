@@ -1,0 +1,56 @@
+{
+  "slug": "dwavesystems-dwave-neal",
+  "owner": "dwavesystems",
+  "name": "dwave-neal",
+  "title": "dwave-neal",
+  "repoUrl": "https://github.com/dwavesystems/dwave-neal",
+  "homepageUrl": null,
+  "category": {
+    "slug": "annealing-ising",
+    "title": "Annealing and Ising",
+    "description": "D-Wave and Ising-model tools for quantum annealing, embeddings, and heuristic search workflows."
+  },
+  "topics": [
+    {
+      "slug": "quantum-optimization-compared",
+      "title": "Quantum optimization libraries compared: QAOA, QUBO, and annealing"
+    },
+    {
+      "slug": "quantum-software-map",
+      "title": "Quantum computing software in 2026: the open-source map"
+    }
+  ],
+  "primaryLanguage": "Python",
+  "license": "Apache-2.0",
+  "summary": "A simulated annealing sampler can be used for approximate Boltzmann sampling or heuristic optimization.",
+  "description": "A simulated annealing sampler can be used for approximate Boltzmann sampling or heuristic optimization. This implementation approaches the equilibrium distribution by performing updates at a sequence of increasing beta values, `beta_schedule`, terminating at the target beta. Each spin is updated once in a fixed order per point in the beta_schedule according to a Metropolis- Hastings update. When beta is large...",
+  "whatItIs": [
+    "dwave-neal is an open-source project in the annealing and ising category. It is maintained by dwavesystems and primarily looks like a Python codebase. A simulated annealing sampler can be used for approximate Boltzmann sampling or heuristic optimization.",
+    "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches annealing and ising workflows in practice. The repository README emphasizes: A simulated annealing sampler can be used for approximate Boltzmann sampling or heuristic optimization. This implementation approaches the equilibrium distribution by performing updates at a sequence of increasing beta values, `beta_schedule`, terminating at the target beta. Each spin is updated once in a fixed order per point in..."
+  ],
+  "whoItsFor": "Developers interested in Ising-model formulations, annealing workflows, and D-Wave-style solver ecosystems.",
+  "whatYouCanBuild": [
+    "See how annealing-oriented projects model optimization problems.",
+    "Understand embeddings, samplers, and the surrounding tooling needed in practice.",
+    "Compare annealing workflows against gate-model and hybrid alternatives."
+  ],
+  "readmeExcerpt": "A simulated annealing sampler can be used for approximate Boltzmann sampling or heuristic optimization. This implementation approaches the equilibrium distribution by performing updates at a sequence of increasing beta values, `beta_schedule`, terminating at the target beta. Each spin is updated once in a fixed order per point in the beta_schedule according to a Metropolis- Hastings update. When beta is large the target distribution concentrates, at equilibrium, over ground states of the model. Samples are guaranteed to match the equilibrium for long 'smooth' beta schedules. For more information, see Kirkpatrick, S.; Gelatt Jr, C. D.; Vecchi, M. P. (1983). \"Optimization by Simulated Annealing\". Science. 220 (4598): 671\u2013680",
+  "readmePath": "reference\\dwavesystems__dwave-neal\\README.rst",
+  "clonePath": "reference\\dwavesystems__dwave-neal",
+  "stars": 0,
+  "lastPushedAt": null,
+  "githubTopics": [],
+  "featured": false,
+  "flagship": false,
+  "qtanglRelevant": false,
+  "archived": false,
+  "imagePath": null,
+  "relatedSlugs": [
+    "dwavesystems-dwave-ocean-sdk",
+    "dwavesystems-dimod",
+    "dwavesystems-qbsolv",
+    "dwavesystems-chimera-embedding",
+    "dwavesystems-dwave-cloud-client",
+    "dwavesystems-dwave-embedding-utilities"
+  ]
+}

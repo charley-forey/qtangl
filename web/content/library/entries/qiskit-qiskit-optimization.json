@@ -1,0 +1,56 @@
+{
+  "slug": "qiskit-qiskit-optimization",
+  "owner": "Qiskit",
+  "name": "qiskit-optimization",
+  "title": "qiskit-optimization",
+  "repoUrl": "https://github.com/Qiskit/qiskit-optimization",
+  "homepageUrl": null,
+  "category": {
+    "slug": "optimization-qubo",
+    "title": "Optimization and QUBO",
+    "description": "Libraries for expressing and solving combinatorial optimization problems with QUBO, QAOA, or related formulations."
+  },
+  "topics": [
+    {
+      "slug": "quantum-optimization-compared",
+      "title": "Quantum optimization libraries compared: QAOA, QUBO, and annealing"
+    },
+    {
+      "slug": "quantum-software-map",
+      "title": "Quantum computing software in 2026: the open-source map"
+    }
+  ],
+  "primaryLanguage": "Python",
+  "license": "Apache-2.0",
+  "summary": "> [!WARNING] > **Qiskit Optimization is no longer officially supported by IBM**.",
+  "description": "> [!WARNING] > **Qiskit Optimization is no longer officially supported by IBM**. > While you may continue to use or extend it under the Apache 2.0 license, please note that it is provided as-is and without official support. For a fully supported solution and extended mapping features, migrate to the qiskit-addon-opt-mapper library.",
+  "whatItIs": [
+    "qiskit-optimization is an open-source project in the optimization and qubo category. It is maintained by Qiskit and primarily looks like a Python codebase. > [!WARNING] > **Qiskit Optimization is no longer officially supported by IBM**.",
+    "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches optimization and qubo workflows in practice. The repository README emphasizes: > [!WARNING] > **Qiskit Optimization is no longer officially supported by IBM**. > While you may continue to use or extend it under the Apache 2.0 license, please note that it is provided as-is and without official support. For a fully supported solution and extended mapping features, migrate..."
+  ],
+  "whoItsFor": "Teams exploring routing, scheduling, allocation, and other combinatorial problems that can be modeled as optimization workloads.",
+  "whatYouCanBuild": [
+    "Understand how this project models constrained optimization problems.",
+    "Compare QUBO, QAOA, and hybrid optimization workflows against classical baselines.",
+    "Identify pieces that could inform a practical planning stack like Qtangl."
+  ],
+  "readmeExcerpt": "> [!WARNING] > **Qiskit Optimization is no longer officially supported by IBM**. > While you may continue to use or extend it under the Apache 2.0 license, please note that it is provided as-is and without official support. For a fully supported solution and extended mapping features, migrate to the qiskit-addon-opt-mapper library. **Qiskit Optimization** is an open-source framework that covers the whole range from high-level modeling of optimization problems, with automatic conversion of problems to different required representations, to a suite of easy-to-use quantum optimization algorithms that are ready to run on classical simulators, as well as on real quantum devices via Qiskit.",
+  "readmePath": "reference\\Qiskit__qiskit-optimization\\README.md",
+  "clonePath": "reference\\Qiskit__qiskit-optimization",
+  "stars": 0,
+  "lastPushedAt": null,
+  "githubTopics": [],
+  "featured": false,
+  "flagship": true,
+  "qtanglRelevant": true,
+  "archived": false,
+  "imagePath": "/learn/flagship/qiskit-qiskit-optimization.png",
+  "relatedSlugs": [
+    "entropicalabs-openqaoa",
+    "cda-tum-mqt-qmap",
+    "jtiosue-qubovert",
+    "dwavesystems-dwave-sapi-dimod",
+    "dwavesystems-penaltymodel",
+    "goodchemistryco-tangelo"
+  ]
+}

@@ -1,0 +1,56 @@
+{
+  "slug": "aspuru-guzik-group-tequila",
+  "owner": "aspuru-guzik-group",
+  "name": "tequila",
+  "title": "tequila",
+  "repoUrl": "https://github.com/aspuru-guzik-group/tequila",
+  "homepageUrl": null,
+  "category": {
+    "slug": "quantum-chemistry",
+    "title": "Quantum chemistry",
+    "description": "Libraries that connect quantum computing workflows to chemistry, electronic structure, and molecular modeling."
+  },
+  "topics": [
+    {
+      "slug": "quantum-chemistry-for-newcomers",
+      "title": "Quantum chemistry software for newcomers"
+    },
+    {
+      "slug": "quantum-software-map",
+      "title": "Quantum computing software in 2026: the open-source map"
+    }
+  ],
+  "primaryLanguage": "Python",
+  "license": "MIT",
+  "summary": "Tequila is an abstraction framework for (variational) quantum algorithms.",
+  "description": "Tequila is an abstraction framework for (variational) quantum algorithms. It operates on abstract data structures allowing the formulation, combination, automatic differentiation and optimization of generalized objectives. Tequila can execute the underlying quantum expectation values on state of the art simulators as well as on real quantum devices.",
+  "whatItIs": [
+    "tequila is an open-source project in the quantum chemistry category. It is maintained by aspuru-guzik-group and primarily looks like a Python codebase. Tequila is an abstraction framework for (variational) quantum algorithms.",
+    "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches quantum chemistry workflows in practice. The repository README emphasizes: Tequila is an abstraction framework for (variational) quantum algorithms. It operates on abstract data structures allowing the formulation, combination, automatic differentiation and optimization of generalized objectives. Tequila can execute the underlying quantum expectation values on state of the art simulators as well as on real quantum devices. Get..."
+  ],
+  "whoItsFor": "Researchers, students, and developers exploring how quantum software is used for chemistry and electronic-structure problems.",
+  "whatYouCanBuild": [
+    "See how chemistry problems are mapped into quantum-friendly representations.",
+    "Understand the workflow around Hamiltonians, ansatze, and measurement loops.",
+    "Compare beginner-friendly entry points into chemistry-focused quantum tooling."
+  ],
+  "readmeExcerpt": "Tequila is an abstraction framework for (variational) quantum algorithms. It operates on abstract data structures allowing the formulation, combination, automatic differentiation and optimization of generalized objectives. Tequila can execute the underlying quantum expectation values on state of the art simulators as well as on real quantum devices. Get started with our collection of *Tutorials* *Documentation*",
+  "readmePath": "reference\\aspuru-guzik-group__tequila\\README.md",
+  "clonePath": "reference\\aspuru-guzik-group__tequila",
+  "stars": 0,
+  "lastPushedAt": null,
+  "githubTopics": [],
+  "featured": false,
+  "flagship": true,
+  "qtanglRelevant": false,
+  "archived": false,
+  "imagePath": "/learn/flagship/aspuru-guzik-group-tequila.png",
+  "relatedSlugs": [
+    "quantumlib-openfermion",
+    "cda-tum-mqt-dasqa",
+    "ornl-qci-xacc-vqe",
+    "pasqal-io-qadence",
+    "projectq-framework-fermilib",
+    "qiskit-qiskit-nature"
+  ]
+}

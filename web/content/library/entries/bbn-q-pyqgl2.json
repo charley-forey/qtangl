@@ -1,0 +1,52 @@
+{
+  "slug": "bbn-q-pyqgl2",
+  "owner": "BBN-Q",
+  "name": "pyqgl2",
+  "title": "pyqgl2",
+  "repoUrl": "https://github.com/BBN-Q/pyqgl2",
+  "homepageUrl": null,
+  "category": {
+    "slug": "pulse-control",
+    "title": "Pulse and control",
+    "description": "Tooling for low-level pulse scheduling, experiment orchestration, and laboratory control around quantum hardware."
+  },
+  "topics": [
+    {
+      "slug": "quantum-software-map",
+      "title": "Quantum computing software in 2026: the open-source map"
+    }
+  ],
+  "primaryLanguage": "Python",
+  "license": "Apache-2.0",
+  "summary": "This is the QGL2 language compiler.",
+  "description": "This is the QGL2 language compiler. QGL2 is a python-like language for programming quantum computers. It is a \"low-level language\" in the sense that programs directly specify gates at the physical layer, but with many of the niceties of a high-level programming language provided by the python host language.",
+  "whatItIs": [
+    "pyqgl2 is an open-source project in the pulse and control category. It is maintained by BBN-Q and primarily looks like a Python codebase. This is the QGL2 language compiler.",
+    "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches pulse and control workflows in practice. The repository README emphasizes: This is the QGL2 language compiler. QGL2 is a python-like language for programming quantum computers. It is a \"low-level language\" in the sense that programs directly specify gates at the physical layer, but with many of the niceties of a high-level programming language provided by the python host..."
+  ],
+  "whoItsFor": "Hardware-adjacent developers and researchers working closer to experiments, pulse schedules, or lab orchestration.",
+  "whatYouCanBuild": [
+    "See how low-level control stacks differ from higher-level SDKs.",
+    "Understand where pulse sequencing and experiment orchestration fit in the stack.",
+    "Learn which projects matter when hardware control is part of the workflow."
+  ],
+  "readmeExcerpt": "This is the QGL2 language compiler. QGL2 is a python-like language for programming quantum computers. It is a \"low-level language\" in the sense that programs directly specify gates at the physical layer, but with many of the niceties of a high-level programming language provided by the python host language. Documentation on the QGL2 compiler and language, including current known limitations, is in doc.",
+  "readmePath": "reference\\BBN-Q__pyqgl2\\README.md",
+  "clonePath": "reference\\BBN-Q__pyqgl2",
+  "stars": 0,
+  "lastPushedAt": null,
+  "githubTopics": [],
+  "featured": false,
+  "flagship": false,
+  "qtanglRelevant": false,
+  "archived": false,
+  "imagePath": null,
+  "relatedSlugs": [
+    "m-labs-artiq",
+    "bbn-q-pyqlab",
+    "bbn-q-qgl",
+    "bbn-q-qlab",
+    "bbn-q-qlab-jl",
+    "indisoluble-swiftquantumcomputing"
+  ]
+}

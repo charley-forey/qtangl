@@ -1,0 +1,56 @@
+{
+  "slug": "cda-tum-mqt-dasqa",
+  "owner": "cda-tum",
+  "name": "mqt-dasqa",
+  "title": "mqt-dasqa",
+  "repoUrl": "https://github.com/cda-tum/mqt-dasqa",
+  "homepageUrl": null,
+  "category": {
+    "slug": "quantum-chemistry",
+    "title": "Quantum chemistry",
+    "description": "Libraries that connect quantum computing workflows to chemistry, electronic structure, and molecular modeling."
+  },
+  "topics": [
+    {
+      "slug": "quantum-chemistry-for-newcomers",
+      "title": "Quantum chemistry software for newcomers"
+    },
+    {
+      "slug": "quantum-software-map",
+      "title": "Quantum computing software in 2026: the open-source map"
+    }
+  ],
+  "primaryLanguage": "Python",
+  "license": "MIT",
+  "summary": "<p align=\"center\"> <a href=\"https://mqt.readthedocs.io\"> <picture> <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://raw.githubusercontent.com/cda-tum/mqt/main/docs/_static/mqt_light.png\" width=\"60%\"> <img src=\"https://raw.githubusercontent.com/cda-tum/mqt/main/docs/_static/mqt_dark.png\" width=\"60%\" alt=\"MQT Logo\"> </picture> </a> </p>",
+  "description": "<p align=\"center\"> <a href=\"https://mqt.readthedocs.io\"> <picture> <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://raw.githubusercontent.com/cda-tum/mqt/main/docs/_static/mqt_light.png\" width=\"60%\"> <img src=\"https://raw.githubusercontent.com/cda-tum/mqt/main/docs/_static/mqt_dark.png\" width=\"60%\" alt=\"MQT Logo\"> </picture> </a> </p>",
+  "whatItIs": [
+    "mqt-dasqa is an open-source project in the quantum chemistry category. It is maintained by cda-tum and primarily looks like a Python codebase. <p align=\"center\"> <a href=\"https://mqt.readthedocs.io\"> <picture> <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://raw.githubusercontent.com/cda-tum/mqt/main/docs/_static/mqt_light.png\" width=\"60%\"> <img src=\"https://raw.githubusercontent.com/cda-tum/mqt/main/docs/_static/mqt_dark.png\" width=\"60%\" alt=\"MQT Logo\"> </picture> </a> </p>",
+    "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches quantum chemistry workflows in practice. The repository README emphasizes: <p align=\"center\"> <a href=\"https://mqt.readthedocs.io\"> <picture> <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://raw.githubusercontent.com/cda-tum/mqt/main/docs/_static/mqt_light.png\" width=\"60%\"> <img src=\"https://raw.githubusercontent.com/cda-tum/mqt/main/docs/_static/mqt_dark.png\" width=\"60%\" alt=\"MQT Logo\"> </picture> </a> </p> MQT DASQA - Designer for Alternative Superconducting Quantum Architectures"
+  ],
+  "whoItsFor": "Researchers, students, and developers exploring how quantum software is used for chemistry and electronic-structure problems.",
+  "whatYouCanBuild": [
+    "See how chemistry problems are mapped into quantum-friendly representations.",
+    "Understand the workflow around Hamiltonians, ansatze, and measurement loops.",
+    "Compare beginner-friendly entry points into chemistry-focused quantum tooling."
+  ],
+  "readmeExcerpt": "<p align=\"center\"> <a href=\"https://mqt.readthedocs.io\"> <picture> <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://raw.githubusercontent.com/cda-tum/mqt/main/docs/_static/mqt_light.png\" width=\"60%\"> <img src=\"https://raw.githubusercontent.com/cda-tum/mqt/main/docs/_static/mqt_dark.png\" width=\"60%\" alt=\"MQT Logo\"> </picture> </a> </p> MQT DASQA - Designer for Alternative Superconducting Quantum Architectures",
+  "readmePath": "reference\\cda-tum__mqt-dasqa\\README.md",
+  "clonePath": "reference\\cda-tum__mqt-dasqa",
+  "stars": 0,
+  "lastPushedAt": null,
+  "githubTopics": [],
+  "featured": false,
+  "flagship": false,
+  "qtanglRelevant": false,
+  "archived": false,
+  "imagePath": null,
+  "relatedSlugs": [
+    "quantumlib-openfermion",
+    "aspuru-guzik-group-tequila",
+    "ornl-qci-xacc-vqe",
+    "pasqal-io-qadence",
+    "projectq-framework-fermilib",
+    "qiskit-qiskit-nature"
+  ]
+}

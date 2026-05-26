@@ -1,0 +1,56 @@
+{
+  "slug": "rogercolbeck-qi",
+  "owner": "rogercolbeck",
+  "name": "QI",
+  "title": "QI",
+  "repoUrl": "https://github.com/rogercolbeck/QI",
+  "homepageUrl": null,
+  "category": {
+    "slug": "compilers-languages",
+    "title": "Compilers and languages",
+    "description": "Compilers, intermediate representations, domain-specific languages, and transpilation tools for quantum programs."
+  },
+  "topics": [
+    {
+      "slug": "quantum-software-map",
+      "title": "Quantum computing software in 2026: the open-source map"
+    },
+    {
+      "slug": "start-writing-quantum-code",
+      "title": "How to start writing quantum code: an honest path"
+    }
+  ],
+  "primaryLanguage": "Mixed",
+  "license": "Apache-2.0",
+  "summary": "This is a Mathematica package containing commands for implementing functionalities commonly needed in quantum information processing.",
+  "description": "This is a Mathematica package containing commands for implementing functionalities commonly needed in quantum information processing. These are useful for doing theoretical computations on quantum information protocols. For instance, one could easily use it to work through the teleportation protocol with a perfect Bell state, and then to see what happens to the fidelity of the output state when a...",
+  "whatItIs": [
+    "QI is an open-source project in the compilers and languages category. It is maintained by rogercolbeck and primarily looks like a Mixed codebase. This is a Mathematica package containing commands for implementing functionalities commonly needed in quantum information processing.",
+    "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches compilers and languages workflows in practice. The repository README emphasizes: This is a Mathematica package containing commands for implementing functionalities commonly needed in quantum information processing. These are useful for doing theoretical computations on quantum information protocols. For instance, one could easily use it to work through the teleportation protocol with a perfect Bell state, and then to..."
+  ],
+  "whoItsFor": "Developers who want to understand the representations and compilers that sit between high-level code and runnable circuits.",
+  "whatYouCanBuild": [
+    "Compare IRs, DSLs, transpilers, and compiler assumptions across ecosystems.",
+    "Understand how high-level code becomes something a backend can execute.",
+    "Spot tools that matter when interoperability and compilation quality are important."
+  ],
+  "readmeExcerpt": "This is a Mathematica package containing commands for implementing functionalities commonly needed in quantum information processing. These are useful for doing theoretical computations on quantum information protocols. For instance, one could easily use it to work through the teleportation protocol with a perfect Bell state, and then to see what happens to the fidelity of the output state when a noisy Bell state is shared instead. The ability to choose random states etc. can be useful for finding counterexamples to particular statements, or for gaining confidence in a statement prior to proving it. The package may form a useful starting point for constructing others, e.g., it has been used for...",
+  "readmePath": "reference\\rogercolbeck__QI\\README.md",
+  "clonePath": "reference\\rogercolbeck__QI",
+  "stars": 0,
+  "lastPushedAt": null,
+  "githubTopics": [],
+  "featured": false,
+  "flagship": false,
+  "qtanglRelevant": false,
+  "archived": false,
+  "imagePath": null,
+  "relatedSlugs": [
+    "cqcl-tket",
+    "nvidia-cuda-quantum",
+    "quantomatic-pyzx",
+    "avalon-lang-avaloni",
+    "aviggiano-qcl",
+    "dabacon-qsel"
+  ]
+}

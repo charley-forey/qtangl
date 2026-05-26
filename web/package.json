@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "generate:library": "python ../scripts/build_library_index.py",
+    "prebuild": "npm run generate:library",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",

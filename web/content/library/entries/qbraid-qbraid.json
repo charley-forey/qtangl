@@ -1,0 +1,56 @@
+{
+  "slug": "qbraid-qbraid",
+  "owner": "qBraid",
+  "name": "qBraid",
+  "title": "qBraid",
+  "repoUrl": "https://github.com/qBraid/qBraid",
+  "homepageUrl": null,
+  "category": {
+    "slug": "cloud-interop",
+    "title": "Cloud and interoperability",
+    "description": "Projects that connect quantum workflows across providers, cloud runtimes, and software ecosystems."
+  },
+  "topics": [
+    {
+      "slug": "quantum-optimization-compared",
+      "title": "Quantum optimization libraries compared: QAOA, QUBO, and annealing"
+    },
+    {
+      "slug": "quantum-software-map",
+      "title": "Quantum computing software in 2026: the open-source map"
+    }
+  ],
+  "primaryLanguage": "Python",
+  "license": "Apache-2.0",
+  "summary": "<p align=\"center\"> <a href=\"https://github.com/qBraid/qBraid/actions/workflows/main.yml\"> <img src=\"https://github.com/qBraid/qBraid/actions/workflows/main.yml/badge.svg?branch=main\" alt=\"CI\"/> </a> <a href=\"https://codecov.io/gh/qBraid/qBraid\"> <img src=\"https://codecov.io/gh/qBraid/qBraid/branch/main/graph/badge.svg?token=1UTM0XZB7A\" alt=\"codecov\"/> </a> <a href='https://sdk.qbraid.com/qBraid/'> <img src='https://img.shields.io/github/actions/workflow/status/qBraid/qBraid/gh-pages.yml?label=docs' alt='GitHub Pages'/> </a> <a href=\"https://pypi.org/project/qbraid/\"> <img src=\"https://img.shields.io/pypi/v/qbraid.svg?color=blue\" alt=\"PyPI version\"/> </a> <a href=\"https://pepy.tech/project/qbraid\"> <img src=\"https://static.pepy.tech/badge/qbraid\"...",
+  "description": "<p align=\"center\"> <a href=\"https://github.com/qBraid/qBraid/actions/workflows/main.yml\"> <img src=\"https://github.com/qBraid/qBraid/actions/workflows/main.yml/badge.svg?branch=main\" alt=\"CI\"/> </a> <a href=\"https://codecov.io/gh/qBraid/qBraid\"> <img src=\"https://codecov.io/gh/qBraid/qBraid/branch/main/graph/badge.svg?token=1UTM0XZB7A\" alt=\"codecov\"/> </a> <a href='https://sdk.qbraid.com/qBraid/'> <img src='https://img.shields.io/github/actions/workflow/status/qBraid/qBraid/gh-pages.yml?label=docs' alt='GitHub Pages'/> </a> <a href=\"https://pypi.org/project/qbraid/\"> <img src=\"https://img.shields.io/pypi/v/qbraid.svg?color=blue\" alt=\"PyPI version\"/> </a> <a href=\"https://pepy.tech/project/qbraid\"> <img src=\"https://static.pepy.tech/badge/qbraid\" alt=\"Downloads\"/> </a> <a href=\"http://www.apache.org/licenses/LICENSE-2.0\"> <img src=\"https://img.shields.io/github/license/qBraid/qbraid.svg\" alt=\"License\"/> </a> <a href=\"https://doi.org/10.5281/zenodo.12627596\"> <img src=\"https://zenodo.org/badge/DOI/10.5281/zenodo.12627596.svg\" alt=\"DOI\"> </a> </p>",
+  "whatItIs": [
+    "qBraid is an open-source project in the cloud and interoperability category. It is maintained by qBraid and primarily looks like a Python codebase. <p align=\"center\"> <a href=\"https://github.com/qBraid/qBraid/actions/workflows/main.yml\"> <img src=\"https://github.com/qBraid/qBraid/actions/workflows/main.yml/badge.svg?branch=main\" alt=\"CI\"/> </a> <a href=\"https://codecov.io/gh/qBraid/qBraid\"> <img src=\"https://codecov.io/gh/qBraid/qBraid/branch/main/graph/badge.svg?token=1UTM0XZB7A\" alt=\"codecov\"/> </a> <a href='https://sdk.qbraid.com/qBraid/'> <img src='https://img.shields.io/github/actions/workflow/status/qBraid/qBraid/gh-pages.yml?label=docs' alt='GitHub Pages'/> </a> <a href=\"https://pypi.org/project/qbraid/\"> <img src=\"https://img.shields.io/pypi/v/qbraid.svg?color=blue\" alt=\"PyPI version\"/> </a> <a href=\"https://pepy.tech/project/qbraid\"> <img src=\"https://static.pepy.tech/badge/qbraid\"...",
+    "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches cloud and interoperability workflows in practice. The repository README emphasizes: <p align=\"center\"> <a href=\"https://github.com/qBraid/qBraid/actions/workflows/main.yml\"> <img src=\"https://github.com/qBraid/qBraid/actions/workflows/main.yml/badge.svg?branch=main\" alt=\"CI\"/> </a> <a href=\"https://codecov.io/gh/qBraid/qBraid\"> <img src=\"https://codecov.io/gh/qBraid/qBraid/branch/main/graph/badge.svg?token=1UTM0XZB7A\" alt=\"codecov\"/> </a> <a href='https://sdk.qbraid.com/qBraid/'> <img src='https://img.shields.io/github/actions/workflow/status/qBraid/qBraid/gh-pages.yml?label=docs' alt='GitHub Pages'/> </a> <a href=\"https://pypi.org/project/qbraid/\"> <img src=\"https://img.shields.io/pypi/v/qbraid.svg?color=blue\" alt=\"PyPI version\"/> </a> <a href=\"https://pepy.tech/project/qbraid\"> <img src=\"https://static.pepy.tech/badge/qbraid\" alt=\"Downloads\"/> </a> <a href=\"http://www.apache.org/licenses/LICENSE-2.0\"> <img src=\"https://img.shields.io/github/license/qBraid/qbraid.svg\" alt=\"License\"/> </a> <a href=\"https://doi.org/10.5281/zenodo.12627596\"> <img src=\"https://zenodo.org/badge/DOI/10.5281/zenodo.12627596.svg\" alt=\"DOI\"> </a> </p> The..."
+  ],
+  "whoItsFor": "Teams that need to connect multiple providers, runtimes, or software ecosystems instead of staying in one stack.",
+  "whatYouCanBuild": [
+    "See how the project smooths over provider or runtime boundaries.",
+    "Understand tradeoffs between portability and provider-specific features.",
+    "Compare where interoperability helps versus where it adds abstraction."
+  ],
+  "readmeExcerpt": "<p align=\"center\"> <a href=\"https://github.com/qBraid/qBraid/actions/workflows/main.yml\"> <img src=\"https://github.com/qBraid/qBraid/actions/workflows/main.yml/badge.svg?branch=main\" alt=\"CI\"/> </a> <a href=\"https://codecov.io/gh/qBraid/qBraid\"> <img src=\"https://codecov.io/gh/qBraid/qBraid/branch/main/graph/badge.svg?token=1UTM0XZB7A\" alt=\"codecov\"/> </a> <a href='https://sdk.qbraid.com/qBraid/'> <img src='https://img.shields.io/github/actions/workflow/status/qBraid/qBraid/gh-pages.yml?label=docs' alt='GitHub Pages'/> </a> <a href=\"https://pypi.org/project/qbraid/\"> <img src=\"https://img.shields.io/pypi/v/qbraid.svg?color=blue\" alt=\"PyPI version\"/> </a> <a href=\"https://pepy.tech/project/qbraid\"> <img src=\"https://static.pepy.tech/badge/qbraid\" alt=\"Downloads\"/> </a> <a href=\"http://www.apache.org/licenses/LICENSE-2.0\"> <img src=\"https://img.shields.io/github/license/qBraid/qbraid.svg\" alt=\"License\"/> </a> <a href=\"https://doi.org/10.5281/zenodo.12627596\"> <img src=\"https://zenodo.org/badge/DOI/10.5281/zenodo.12627596.svg\" alt=\"DOI\"> </a> </p> The qBraid-SDK is a platform-agnostic quantum runtime framework designed for both quantum software and hardware providers.",
+  "readmePath": "reference\\qBraid__qBraid\\README.md",
+  "clonePath": "reference\\qBraid__qBraid",
+  "stars": 0,
+  "lastPushedAt": null,
+  "githubTopics": [],
+  "featured": false,
+  "flagship": false,
+  "qtanglRelevant": false,
+  "archived": false,
+  "imagePath": null,
+  "relatedSlugs": [
+    "aws-amazon-braket-sdk-python",
+    "ornl-qci-xacc",
+    "dwavesystems-dwave-ocean-sdk",
+    "entropicalabs-openqaoa",
+    "cda-tum-mqt-qmap",
+    "dwavesystems-dimod"
+  ]
+}

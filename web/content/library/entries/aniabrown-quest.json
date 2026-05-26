@@ -1,0 +1,56 @@
+{
+  "slug": "aniabrown-quest",
+  "owner": "aniabrown",
+  "name": "QuEST",
+  "title": "QuEST",
+  "repoUrl": "https://github.com/aniabrown/QuEST",
+  "homepageUrl": null,
+  "category": {
+    "slug": "simulators",
+    "title": "Simulators",
+    "description": "Projects focused on state-vector, stabilizer, tensor-network, or hardware-inspired quantum simulation."
+  },
+  "topics": [
+    {
+      "slug": "quantum-simulators-guide",
+      "title": "Open-source quantum simulators: what each one is good at"
+    },
+    {
+      "slug": "quantum-software-map",
+      "title": "Quantum computing software in 2026: the open-source map"
+    }
+  ],
+  "primaryLanguage": "C++",
+  "license": "Unknown",
+  "summary": "Because this file doubles as the doxygen mainpage, it must use absolute paths.",
+  "description": "Because this file doubles as the doxygen mainpage, it must use absolute paths.",
+  "whatItIs": [
+    "QuEST is an open-source project in the simulators category. It is maintained by aniabrown and primarily looks like a C++ codebase. Because this file doubles as the doxygen mainpage, it must use absolute paths.",
+    "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches simulators workflows in practice. The repository README emphasizes: Because this file doubles as the doxygen mainpage, it must use absolute paths. <a href=\"https://quest.qtechtheory.org\"> <img src=\"https://raw.githubusercontent.com/QuEST-Kit/QuEST/refs/heads/main/utils/docs/logos/banner.png\" alt=\"The QuEST logo\" width=400> </a> The repository also appears to be archival or no longer actively maintained, which matters when evaluating it for current production use."
+  ],
+  "whoItsFor": "Developers and researchers who need to test ideas locally before running on hardware or who want to compare simulation strategies.",
+  "whatYouCanBuild": [
+    "Benchmark how different simulation methods trade accuracy for runtime.",
+    "Inspect circuit behavior, noise assumptions, or state evolution offline.",
+    "Choose the right simulator for a debugging, teaching, or research workflow."
+  ],
+  "readmeExcerpt": "Because this file doubles as the doxygen mainpage, it must use absolute paths. <a href=\"https://quest.qtechtheory.org\"> <img src=\"https://raw.githubusercontent.com/QuEST-Kit/QuEST/refs/heads/main/utils/docs/logos/banner.png\" alt=\"The QuEST logo\" width=400> </a>",
+  "readmePath": "reference\\aniabrown__QuEST\\README.md",
+  "clonePath": "reference\\aniabrown__QuEST",
+  "stars": 0,
+  "lastPushedAt": null,
+  "githubTopics": [],
+  "featured": false,
+  "flagship": false,
+  "qtanglRelevant": false,
+  "archived": true,
+  "imagePath": null,
+  "relatedSlugs": [
+    "0tt3r-quac",
+    "adamisntdead-qusimpy",
+    "bbn-q-pysimulator",
+    "cda-tum-mqt-ddsim",
+    "dillanchang-qocs",
+    "iic-jku-ddsim"
+  ]
+}

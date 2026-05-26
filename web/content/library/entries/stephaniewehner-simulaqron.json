@@ -1,0 +1,52 @@
+{
+  "slug": "stephaniewehner-simulaqron",
+  "owner": "StephanieWehner",
+  "name": "SimulaQron",
+  "title": "SimulaQron",
+  "repoUrl": "https://github.com/StephanieWehner/SimulaQron",
+  "homepageUrl": null,
+  "category": {
+    "slug": "networking",
+    "title": "Networking",
+    "description": "Simulators and frameworks for quantum networking, distributed entanglement, and communication systems."
+  },
+  "topics": [
+    {
+      "slug": "quantum-software-map",
+      "title": "Quantum computing software in 2026: the open-source map"
+    }
+  ],
+  "primaryLanguage": "Python",
+  "license": "BSD",
+  "summary": "The purpose of this simulator of quantum network nodes is to allow you to develop new applications for a future quantum internet, while we do not yet have real quantum network nodes...",
+  "description": "The purpose of this simulator of quantum network nodes is to allow you to develop new applications for a future quantum internet, while we do not yet have real quantum network nodes available for testing.",
+  "whatItIs": [
+    "SimulaQron is an open-source project in the networking category. It is maintained by StephanieWehner and primarily looks like a Python codebase. The purpose of this simulator of quantum network nodes is to allow you to develop new applications for a future quantum internet, while we do not yet have real quantum network nodes...",
+    "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches networking workflows in practice. The repository README emphasizes: The purpose of this simulator of quantum network nodes is to allow you to develop new applications for a future quantum internet, while we do not yet have real quantum network nodes available for testing. Since version 4.0, SimulaQron is compatible with NetQASM. See its documentation for how..."
+  ],
+  "whoItsFor": "Researchers and students exploring distributed quantum systems, communication protocols, and quantum internet concepts.",
+  "whatYouCanBuild": [
+    "See how the project models nodes, links, and entanglement distribution.",
+    "Understand what a networking-oriented workflow looks like in software.",
+    "Compare education-focused versus research-focused networking tools."
+  ],
+  "readmeExcerpt": "The purpose of this simulator of quantum network nodes is to allow you to develop new applications for a future quantum internet, while we do not yet have real quantum network nodes available for testing. Since version 4.0, SimulaQron is compatible with NetQASM. See its documentation for how to use SimulaQron as a backend for running NetQASM applications.",
+  "readmePath": "reference\\StephanieWehner__SimulaQron\\README.md",
+  "clonePath": "reference\\StephanieWehner__SimulaQron",
+  "stars": 0,
+  "lastPushedAt": null,
+  "githubTopics": [],
+  "featured": false,
+  "flagship": false,
+  "qtanglRelevant": false,
+  "archived": false,
+  "imagePath": null,
+  "relatedSlugs": [
+    "tqsd-qunetsim",
+    "aws-amazon-braket-sdk-python",
+    "cqcl-tket",
+    "dwavesystems-dwave-ocean-sdk",
+    "entropicalabs-openqaoa",
+    "microsoft-quantumkatas"
+  ]
+}

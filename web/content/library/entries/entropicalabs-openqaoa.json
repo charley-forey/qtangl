@@ -1,0 +1,56 @@
+{
+  "slug": "entropicalabs-openqaoa",
+  "owner": "entropicalabs",
+  "name": "openqaoa",
+  "title": "openqaoa",
+  "repoUrl": "https://github.com/entropicalabs/openqaoa",
+  "homepageUrl": null,
+  "category": {
+    "slug": "optimization-qubo",
+    "title": "Optimization and QUBO",
+    "description": "Libraries for expressing and solving combinatorial optimization problems with QUBO, QAOA, or related formulations."
+  },
+  "topics": [
+    {
+      "slug": "quantum-optimization-compared",
+      "title": "Quantum optimization libraries compared: QAOA, QUBO, and annealing"
+    },
+    {
+      "slug": "quantum-software-map",
+      "title": "Quantum computing software in 2026: the open-source map"
+    }
+  ],
+  "primaryLanguage": "Python",
+  "license": "Custom / project-specific",
+  "summary": "<picture> <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://github.com/entropicalabs/openqaoa/blob/main/.github/images/openqaoa_logo_offW.png\" width=\"650\"> <img alt=\"OpenQAOA\" src=\"https://github.com/entropicalabs/openqaoa/blob/main/.github/images/openqaoa_logo.png\" width=\"650\"> </picture>",
+  "description": "<picture> <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://github.com/entropicalabs/openqaoa/blob/main/.github/images/openqaoa_logo_offW.png\" width=\"650\"> <img alt=\"OpenQAOA\" src=\"https://github.com/entropicalabs/openqaoa/blob/main/.github/images/openqaoa_logo.png\" width=\"650\"> </picture>",
+  "whatItIs": [
+    "openqaoa is an open-source project in the optimization and qubo category. It is maintained by entropicalabs and primarily looks like a Python codebase. <picture> <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://github.com/entropicalabs/openqaoa/blob/main/.github/images/openqaoa_logo_offW.png\" width=\"650\"> <img alt=\"OpenQAOA\" src=\"https://github.com/entropicalabs/openqaoa/blob/main/.github/images/openqaoa_logo.png\" width=\"650\"> </picture>",
+    "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches optimization and qubo workflows in practice. The repository README emphasizes: <picture> <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://github.com/entropicalabs/openqaoa/blob/main/.github/images/openqaoa_logo_offW.png\" width=\"650\"> <img alt=\"OpenQAOA\" src=\"https://github.com/entropicalabs/openqaoa/blob/main/.github/images/openqaoa_logo.png\" width=\"650\"> </picture> A multi-backend python library for quantum optimization using QAOA on Quantum computers and Quantum computer simulators. Check out the OpenQAOA website at https://openqaoa.entropicalabs.com/"
+  ],
+  "whoItsFor": "Teams exploring routing, scheduling, allocation, and other combinatorial problems that can be modeled as optimization workloads.",
+  "whatYouCanBuild": [
+    "Understand how this project models constrained optimization problems.",
+    "Compare QUBO, QAOA, and hybrid optimization workflows against classical baselines.",
+    "Identify pieces that could inform a practical planning stack like Qtangl."
+  ],
+  "readmeExcerpt": "<picture> <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://github.com/entropicalabs/openqaoa/blob/main/.github/images/openqaoa_logo_offW.png\" width=\"650\"> <img alt=\"OpenQAOA\" src=\"https://github.com/entropicalabs/openqaoa/blob/main/.github/images/openqaoa_logo.png\" width=\"650\"> </picture> A multi-backend python library for quantum optimization using QAOA on Quantum computers and Quantum computer simulators. Check out the OpenQAOA website at https://openqaoa.entropicalabs.com/",
+  "readmePath": "reference\\entropicalabs__openqaoa\\README.md",
+  "clonePath": "reference\\entropicalabs__openqaoa",
+  "stars": 0,
+  "lastPushedAt": null,
+  "githubTopics": [],
+  "featured": true,
+  "flagship": true,
+  "qtanglRelevant": true,
+  "archived": false,
+  "imagePath": "/learn/flagship/entropicalabs-openqaoa.png",
+  "relatedSlugs": [
+    "cda-tum-mqt-qmap",
+    "jtiosue-qubovert",
+    "qiskit-qiskit-optimization",
+    "dwavesystems-dwave-sapi-dimod",
+    "dwavesystems-penaltymodel",
+    "goodchemistryco-tangelo"
+  ]
+}

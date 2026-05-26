@@ -1,0 +1,56 @@
+{
+  "slug": "desireevl-quantum-catsweeper",
+  "owner": "desireevl",
+  "name": "quantum-catsweeper",
+  "title": "quantum-catsweeper",
+  "repoUrl": "https://github.com/desireevl/quantum-catsweeper",
+  "homepageUrl": null,
+  "category": {
+    "slug": "games-learning",
+    "title": "Games and learning",
+    "description": "Interactive projects, puzzles, and educational resources for learning quantum computing concepts."
+  },
+  "topics": [
+    {
+      "slug": "quantum-software-map",
+      "title": "Quantum computing software in 2026: the open-source map"
+    },
+    {
+      "slug": "start-writing-quantum-code",
+      "title": "How to start writing quantum code: an honest path"
+    }
+  ],
+  "primaryLanguage": "Python",
+  "license": "MIT",
+  "summary": "This is a super simple game loosely based on Minesweeper Flags and runs on the IBM Quantum computer or simulator.",
+  "description": "This is a super simple game loosely based on Minesweeper Flags and runs on the IBM Quantum computer or simulator.",
+  "whatItIs": [
+    "quantum-catsweeper is an open-source project in the games and learning category. It is maintained by desireevl and primarily looks like a Python codebase. This is a super simple game loosely based on Minesweeper Flags and runs on the IBM Quantum computer or simulator.",
+    "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches games and learning workflows in practice. The repository README emphasizes: This is a super simple game loosely based on Minesweeper Flags and runs on the IBM Quantum computer or simulator. Rules of the game: Don't explode the cat (bombs) The tile numbers indicate the number of times you need to click on the same colour to reveal the..."
+  ],
+  "whoItsFor": "Beginners, educators, and curious developers who want a more approachable path into quantum concepts.",
+  "whatYouCanBuild": [
+    "Get a gentler introduction before diving into full SDKs.",
+    "See how different projects teach circuits, superposition, and measurement.",
+    "Identify resources that work well for onboarding or self-study."
+  ],
+  "readmeExcerpt": "This is a super simple game loosely based on Minesweeper Flags and runs on the IBM Quantum computer or simulator. Rules of the game: Don't explode the cat (bombs) The tile numbers indicate the number of times you need to click on the same colour to reveal the whole group If a tile has an ! at the end that means quantum probability was not in your favour and that tile click does not count To win the game, find the golden kitty (who moves based on whether you reveal a ! or normal tile)",
+  "readmePath": "reference\\desireevl__quantum-catsweeper\\README.md",
+  "clonePath": "reference\\desireevl__quantum-catsweeper",
+  "stars": 0,
+  "lastPushedAt": null,
+  "githubTopics": [],
+  "featured": false,
+  "flagship": false,
+  "qtanglRelevant": false,
+  "archived": false,
+  "imagePath": null,
+  "relatedSlugs": [
+    "microsoft-quantumkatas",
+    "strilanc-quirk",
+    "stared-quantum-game",
+    "decodoku-a-game-to-benchmark-quantum-computers",
+    "decodoku-battleships-with-complementary-measurements",
+    "entanglion-entanglion"
+  ]
+}

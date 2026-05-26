@@ -1,0 +1,52 @@
+{
+  "slug": "bbn-q-qgl",
+  "owner": "BBN-Q",
+  "name": "QGL",
+  "title": "QGL",
+  "repoUrl": "https://github.com/BBN-Q/QGL",
+  "homepageUrl": null,
+  "category": {
+    "slug": "pulse-control",
+    "title": "Pulse and control",
+    "description": "Tooling for low-level pulse scheduling, experiment orchestration, and laboratory control around quantum hardware."
+  },
+  "topics": [
+    {
+      "slug": "quantum-software-map",
+      "title": "Quantum computing software in 2026: the open-source map"
+    }
+  ],
+  "primaryLanguage": "Python",
+  "license": "Apache-2.0",
+  "summary": "Quantum Gate Language (QGL) is a domain specific language embedded in python for specifying pulse sequences.",
+  "description": "Quantum Gate Language (QGL) is a domain specific language embedded in python for specifying pulse sequences.",
+  "whatItIs": [
+    "QGL is an open-source project in the pulse and control category. It is maintained by BBN-Q and primarily looks like a Python codebase. Quantum Gate Language (QGL) is a domain specific language embedded in python for specifying pulse sequences.",
+    "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches pulse and control workflows in practice. The repository README emphasizes: Quantum Gate Language (QGL) is a domain specific language embedded in python for specifying pulse sequences. Our \"getting started\" documentation is published online from the local file. This documentation includes dependency, installation and basic programming information. The documentation is organized into the following sections:"
+  ],
+  "whoItsFor": "Hardware-adjacent developers and researchers working closer to experiments, pulse schedules, or lab orchestration.",
+  "whatYouCanBuild": [
+    "See how low-level control stacks differ from higher-level SDKs.",
+    "Understand where pulse sequencing and experiment orchestration fit in the stack.",
+    "Learn which projects matter when hardware control is part of the workflow."
+  ],
+  "readmeExcerpt": "Quantum Gate Language (QGL) is a domain specific language embedded in python for specifying pulse sequences. Our \"getting started\" documentation is published online from the local file. This documentation includes dependency, installation and basic programming information. The documentation is organized into the following sections:",
+  "readmePath": "reference\\BBN-Q__QGL\\README.md",
+  "clonePath": "reference\\BBN-Q__QGL",
+  "stars": 0,
+  "lastPushedAt": null,
+  "githubTopics": [],
+  "featured": false,
+  "flagship": false,
+  "qtanglRelevant": false,
+  "archived": false,
+  "imagePath": null,
+  "relatedSlugs": [
+    "m-labs-artiq",
+    "bbn-q-pyqgl2",
+    "bbn-q-pyqlab",
+    "bbn-q-qlab",
+    "bbn-q-qlab-jl",
+    "indisoluble-swiftquantumcomputing"
+  ]
+}

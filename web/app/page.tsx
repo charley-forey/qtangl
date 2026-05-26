@@ -108,6 +108,20 @@ export default function Home() {
               />
             </StateTransition>
           ))}
+          <StateTransition delay={0.05 * platformHighlights.length}>
+            <FeatureCard
+              eyebrow="Ecosystem map"
+              title="Learn the landscape behind the product"
+              description="Explore the open-source quantum tools, frameworks, simulators, and optimization libraries that shape the broader ecosystem around Qtangl."
+              href="/learn"
+              ctaLabel="Open Learn"
+            >
+              <p>
+                <span className="font-semibold text-white">Start here:</span> category
+                guides, flagship tools, and optimization comparisons.
+              </p>
+            </FeatureCard>
+          </StateTransition>
         </div>
       </Section>
 

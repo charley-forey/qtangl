@@ -1,0 +1,52 @@
+{
+  "slug": "indisoluble-swiftquantumcomputing",
+  "owner": "indisoluble",
+  "name": "SwiftQuantumComputing",
+  "title": "SwiftQuantumComputing",
+  "repoUrl": "https://github.com/indisoluble/SwiftQuantumComputing",
+  "homepageUrl": null,
+  "category": {
+    "slug": "pulse-control",
+    "title": "Pulse and control",
+    "description": "Tooling for low-level pulse scheduling, experiment orchestration, and laboratory control around quantum hardware."
+  },
+  "topics": [
+    {
+      "slug": "quantum-software-map",
+      "title": "Quantum computing software in 2026: the open-source map"
+    }
+  ],
+  "primaryLanguage": "Swift",
+  "license": "Apache-2.0",
+  "summary": "Run this application to check the performance of this simulator in your computer.",
+  "description": "Run this application to check the performance of this simulator in your computer. Execute swift run sqc-measure-performance -h to see all available options.",
+  "whatItIs": [
+    "SwiftQuantumComputing is an open-source project in the pulse and control category. It is maintained by indisoluble and primarily looks like a Swift codebase. Run this application to check the performance of this simulator in your computer.",
+    "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches pulse and control workflows in practice. The repository README emphasizes: Run this application to check the performance of this simulator in your computer. Execute swift run sqc-measure-performance -h to see all available options. Use a genetic algorithm to automatically generate a quantum circuit - Check example in Genetic.playground. Two-level decomposition: Decompose any gate into an equivalent sequence of..."
+  ],
+  "whoItsFor": "Hardware-adjacent developers and researchers working closer to experiments, pulse schedules, or lab orchestration.",
+  "whatYouCanBuild": [
+    "See how low-level control stacks differ from higher-level SDKs.",
+    "Understand where pulse sequencing and experiment orchestration fit in the stack.",
+    "Learn which projects matter when hardware control is part of the workflow."
+  ],
+  "readmeExcerpt": "Run this application to check the performance of this simulator in your computer. Execute swift run sqc-measure-performance -h to see all available options. Use a genetic algorithm to automatically generate a quantum circuit - Check example in Genetic.playground. Two-level decomposition: Decompose any gate into an equivalent sequence of not gates and fully controlled phase shifts, z-rotations, y-rotations & not gates - Check example in TwoLevelDecomposition.playground.",
+  "readmePath": "reference\\indisoluble__SwiftQuantumComputing\\README.md",
+  "clonePath": "reference\\indisoluble__SwiftQuantumComputing",
+  "stars": 0,
+  "lastPushedAt": null,
+  "githubTopics": [],
+  "featured": false,
+  "flagship": false,
+  "qtanglRelevant": false,
+  "archived": false,
+  "imagePath": null,
+  "relatedSlugs": [
+    "m-labs-artiq",
+    "bbn-q-pyqgl2",
+    "bbn-q-pyqlab",
+    "bbn-q-qgl",
+    "bbn-q-qlab",
+    "bbn-q-qlab-jl"
+  ]
+}

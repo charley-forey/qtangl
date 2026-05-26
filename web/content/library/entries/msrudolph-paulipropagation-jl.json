@@ -1,0 +1,56 @@
+{
+  "slug": "msrudolph-paulipropagation-jl",
+  "owner": "MSRudolph",
+  "name": "PauliPropagation.jl",
+  "title": "PauliPropagation.jl",
+  "repoUrl": "https://github.com/MSRudolph/PauliPropagation.jl",
+  "homepageUrl": null,
+  "category": {
+    "slug": "error-correction-mitigation",
+    "title": "Error correction and mitigation",
+    "description": "Projects that help analyze, mitigate, or correct quantum errors and noisy computation."
+  },
+  "topics": [
+    {
+      "slug": "quantum-simulators-guide",
+      "title": "Open-source quantum simulators: what each one is good at"
+    },
+    {
+      "slug": "quantum-software-map",
+      "title": "Quantum computing software in 2026: the open-source map"
+    }
+  ],
+  "primaryLanguage": "Julia",
+  "license": "Apache-2.0",
+  "summary": "PauliPropagation.jl PauliPropagation.jl is a Julia package for simulating Pauli propagation in quantum circuits and systems.",
+  "description": "PauliPropagation.jl PauliPropagation.jl is a Julia package for simulating Pauli propagation in quantum circuits and systems. It focuses on simulating the evolution of observables expressed in the Pauli basis under the action of unitary gates and non-unitary channels in a quantum circuit.",
+  "whatItIs": [
+    "PauliPropagation.jl is an open-source project in the error correction and mitigation category. It is maintained by MSRudolph and primarily looks like a Julia codebase. PauliPropagation.jl PauliPropagation.jl is a Julia package for simulating Pauli propagation in quantum circuits and systems.",
+    "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches error correction and mitigation workflows in practice. The repository README emphasizes: PauliPropagation.jl PauliPropagation.jl is a Julia package for simulating Pauli propagation in quantum circuits and systems. It focuses on simulating the evolution of observables expressed in the Pauli basis under the action of unitary gates and non-unitary channels in a quantum circuit. Unlike traditional simulators which simulate a circuit..."
+  ],
+  "whoItsFor": "Researchers and advanced developers working on noise, reliability, and the realities of imperfect quantum hardware.",
+  "whatYouCanBuild": [
+    "Learn how this project frames error handling or mitigation.",
+    "Compare whether it targets analysis, simulation, or production-minded workflows.",
+    "Understand where noise-aware tooling fits in a modern stack."
+  ],
+  "readmeExcerpt": "PauliPropagation.jl PauliPropagation.jl is a Julia package for simulating Pauli propagation in quantum circuits and systems. It focuses on simulating the evolution of observables expressed in the Pauli basis under the action of unitary gates and non-unitary channels in a quantum circuit. Unlike traditional simulators which simulate a circuit $\\mathcal{E}$ evolving the state $\\rho$ in the Schr\u00f6dinger picture, Pauli propagation often adopts the Heisenberg picture, evolving an observable $O$ under $\\mathcal{E}^\\dagger$. This can be particularly efficient when the observables remain sparse or structured under evolution, and is useful for estimating expectation values such as $\\text{Tr}\\left[\\rho \\mathcal{E}^{\\dagger}(O)\\right]$, studying operator dynamics, and computing correlation functions.",
+  "readmePath": "reference\\MSRudolph__PauliPropagation.jl\\README.md",
+  "clonePath": "reference\\MSRudolph__PauliPropagation.jl",
+  "stars": 0,
+  "lastPushedAt": null,
+  "githubTopics": [],
+  "featured": false,
+  "flagship": false,
+  "qtanglRelevant": false,
+  "archived": false,
+  "imagePath": null,
+  "relatedSlugs": [
+    "quantumlib-stim",
+    "unitaryfund-mitiq",
+    "jacobmarks-qtop",
+    "0tt3r-quac",
+    "adamisntdead-qusimpy",
+    "aniabrown-quest"
+  ]
+}

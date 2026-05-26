@@ -1,0 +1,56 @@
+{
+  "slug": "lanl-qa-prolog",
+  "owner": "lanl",
+  "name": "QA-Prolog",
+  "title": "QA-Prolog",
+  "repoUrl": "https://github.com/lanl/QA-Prolog",
+  "homepageUrl": null,
+  "category": {
+    "slug": "annealing-ising",
+    "title": "Annealing and Ising",
+    "description": "D-Wave and Ising-model tools for quantum annealing, embeddings, and heuristic search workflows."
+  },
+  "topics": [
+    {
+      "slug": "quantum-optimization-compared",
+      "title": "Quantum optimization libraries compared: QAOA, QUBO, and annealing"
+    },
+    {
+      "slug": "quantum-software-map",
+      "title": "Quantum computing software in 2026: the open-source map"
+    }
+  ],
+  "primaryLanguage": "Go",
+  "license": "BSD",
+  "summary": "QA Prolog (\"Quantum Annealing Prolog\") compiles a subset of the Prolog programming language, enhanced with some native support for constraint-logic programming, into a 2-local Ising-model Hamiltonian function suitable for execution on a...",
+  "description": "QA Prolog (\"Quantum Annealing Prolog\") compiles a subset of the Prolog programming language, enhanced with some native support for constraint-logic programming, into a 2-local Ising-model Hamiltonian function suitable for execution on a D\u2011Wave quantum annealer. Technically, though, QA Prolog produces a *classical* Hamiltonian function so it can in principle target classical annealers as well.",
+  "whatItIs": [
+    "QA-Prolog is an open-source project in the annealing and ising category. It is maintained by lanl and primarily looks like a Go codebase. QA Prolog (\"Quantum Annealing Prolog\") compiles a subset of the Prolog programming language, enhanced with some native support for constraint-logic programming, into a 2-local Ising-model Hamiltonian function suitable for execution on a...",
+    "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches annealing and ising workflows in practice. The repository README emphasizes: QA Prolog (\"Quantum Annealing Prolog\") compiles a subset of the Prolog programming language, enhanced with some native support for constraint-logic programming, into a 2-local Ising-model Hamiltonian function suitable for execution on a D\u2011Wave quantum annealer. Technically, though, QA Prolog produces a *classical* Hamiltonian function so it can in..."
+  ],
+  "whoItsFor": "Developers interested in Ising-model formulations, annealing workflows, and D-Wave-style solver ecosystems.",
+  "whatYouCanBuild": [
+    "See how annealing-oriented projects model optimization problems.",
+    "Understand embeddings, samplers, and the surrounding tooling needed in practice.",
+    "Compare annealing workflows against gate-model and hybrid alternatives."
+  ],
+  "readmeExcerpt": "QA Prolog (\"Quantum Annealing Prolog\") compiles a subset of the Prolog programming language, enhanced with some native support for constraint-logic programming, into a 2-local Ising-model Hamiltonian function suitable for execution on a D\u2011Wave quantum annealer. Technically, though, QA Prolog produces a *classical* Hamiltonian function so it can in principle target classical annealers as well. QA Prolog is largely a proof of concept, but it does hold out the possibility\u2014not yet demonstrated\u2014of improving Prolog program execution time by replacing backtracking with fully parallel annealing into a solution state.",
+  "readmePath": "reference\\lanl__QA-Prolog\\README.md",
+  "clonePath": "reference\\lanl__QA-Prolog",
+  "stars": 0,
+  "lastPushedAt": null,
+  "githubTopics": [],
+  "featured": false,
+  "flagship": false,
+  "qtanglRelevant": false,
+  "archived": false,
+  "imagePath": null,
+  "relatedSlugs": [
+    "dwavesystems-dwave-ocean-sdk",
+    "dwavesystems-dimod",
+    "dwavesystems-qbsolv",
+    "dwavesystems-chimera-embedding",
+    "dwavesystems-dwave-cloud-client",
+    "dwavesystems-dwave-embedding-utilities"
+  ]
+}

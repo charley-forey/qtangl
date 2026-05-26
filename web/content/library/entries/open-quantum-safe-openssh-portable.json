@@ -1,0 +1,56 @@
+{
+  "slug": "open-quantum-safe-openssh-portable",
+  "owner": "open-quantum-safe",
+  "name": "openssh-portable",
+  "title": "openssh-portable",
+  "repoUrl": "https://github.com/open-quantum-safe/openssh-portable",
+  "homepageUrl": null,
+  "category": {
+    "slug": "post-quantum-crypto",
+    "title": "Post-quantum cryptography",
+    "description": "Libraries and standards implementations for quantum-safe cryptography and related security tooling."
+  },
+  "topics": [
+    {
+      "slug": "post-quantum-crypto-libraries",
+      "title": "Post-quantum cryptography libraries you can use today"
+    },
+    {
+      "slug": "quantum-software-map",
+      "title": "Quantum computing software in 2026: the open-source map"
+    }
+  ],
+  "primaryLanguage": "C",
+  "license": "Unknown",
+  "summary": "Please read https://www.openssh.com/report.html for bug reporting instructions and note that we do not use Github for bug reporting.",
+  "description": "Please read https://www.openssh.com/report.html for bug reporting instructions and note that we do not use Github for bug reporting.",
+  "whatItIs": [
+    "openssh-portable is an open-source project in the post-quantum cryptography category. It is maintained by open-quantum-safe and primarily looks like a C codebase. Please read https://www.openssh.com/report.html for bug reporting instructions and note that we do not use Github for bug reporting.",
+    "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches post-quantum cryptography workflows in practice. The repository README emphasizes: Please read https://www.openssh.com/report.html for bug reporting instructions and note that we do not use Github for bug reporting. This is the port of OpenBSD's excellent OpenSSH[0] to Linux and other Unices."
+  ],
+  "whoItsFor": "Security-minded developers and teams looking for practical quantum-safe cryptography resources they can evaluate today.",
+  "whatYouCanBuild": [
+    "Identify which libraries are reference implementations versus production integrations.",
+    "Understand how PQC work differs from quantum-computing SDK work.",
+    "Find the right starting point for learning or experimentation."
+  ],
+  "readmeExcerpt": "Please read https://www.openssh.com/report.html for bug reporting instructions and note that we do not use Github for bug reporting. This is the port of OpenBSD's excellent OpenSSH[0] to Linux and other Unices.",
+  "readmePath": "reference\\open-quantum-safe__openssh-portable\\README",
+  "clonePath": "reference\\open-quantum-safe__openssh-portable",
+  "stars": 0,
+  "lastPushedAt": null,
+  "githubTopics": [],
+  "featured": false,
+  "flagship": false,
+  "qtanglRelevant": false,
+  "archived": false,
+  "imagePath": null,
+  "relatedSlugs": [
+    "open-quantum-safe-liboqs",
+    "open-quantum-safe-openssl",
+    "pqclean-pqclean",
+    "theqrl-qrl",
+    "aws-amazon-braket-sdk-python",
+    "cqcl-tket"
+  ]
+}

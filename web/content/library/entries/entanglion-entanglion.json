@@ -1,0 +1,56 @@
+{
+  "slug": "entanglion-entanglion",
+  "owner": "Entanglion",
+  "name": "entanglion",
+  "title": "entanglion",
+  "repoUrl": "https://github.com/Entanglion/entanglion",
+  "homepageUrl": null,
+  "category": {
+    "slug": "games-learning",
+    "title": "Games and learning",
+    "description": "Interactive projects, puzzles, and educational resources for learning quantum computing concepts."
+  },
+  "topics": [
+    {
+      "slug": "quantum-software-map",
+      "title": "Quantum computing software in 2026: the open-source map"
+    },
+    {
+      "slug": "start-writing-quantum-code",
+      "title": "How to start writing quantum code: an honest path"
+    }
+  ],
+  "primaryLanguage": "Mixed",
+  "license": "Creative Commons",
+  "summary": "**2 PLAYERS AGES 14 & UP 45 MINUTES**",
+  "description": "**2 PLAYERS AGES 14 & UP 45 MINUTES**",
+  "whatItIs": [
+    "entanglion is an open-source project in the games and learning category. It is maintained by Entanglion and primarily looks like a Mixed codebase. **2 PLAYERS AGES 14 & UP 45 MINUTES**",
+    "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches games and learning workflows in practice. The repository README emphasizes: **2 PLAYERS AGES 14 & UP 45 MINUTES** Entanglion awaits your space navigation skills and strategic planning to explore a new galaxy and reconstruct an ancient quantum computer. Entanglion is a cooperative board game designed for two players. Learn about quantum computing as you work together with your..."
+  ],
+  "whoItsFor": "Beginners, educators, and curious developers who want a more approachable path into quantum concepts.",
+  "whatYouCanBuild": [
+    "Get a gentler introduction before diving into full SDKs.",
+    "See how different projects teach circuits, superposition, and measurement.",
+    "Identify resources that work well for onboarding or self-study."
+  ],
+  "readmeExcerpt": "**2 PLAYERS AGES 14 & UP 45 MINUTES** Entanglion awaits your space navigation skills and strategic planning to explore a new galaxy and reconstruct an ancient quantum computer. Entanglion is a cooperative board game designed for two players. Learn about quantum computing as you work together with your teammate to navigate the three galaxies of the quantum universe, avoid detection by the defense mechanisms left behind by the ancients, and rebuild the quantum computer.",
+  "readmePath": "reference\\Entanglion__entanglion\\README.md",
+  "clonePath": "reference\\Entanglion__entanglion",
+  "stars": 0,
+  "lastPushedAt": null,
+  "githubTopics": [],
+  "featured": false,
+  "flagship": false,
+  "qtanglRelevant": false,
+  "archived": false,
+  "imagePath": null,
+  "relatedSlugs": [
+    "microsoft-quantumkatas",
+    "strilanc-quirk",
+    "stared-quantum-game",
+    "decodoku-a-game-to-benchmark-quantum-computers",
+    "decodoku-battleships-with-complementary-measurements",
+    "desireevl-quantum-catsweeper"
+  ]
+}

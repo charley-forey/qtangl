@@ -1,0 +1,56 @@
+{
+  "slug": "rigetticomputing-grove",
+  "owner": "rigetticomputing",
+  "name": "grove",
+  "title": "grove",
+  "repoUrl": "https://github.com/rigetticomputing/grove",
+  "homepageUrl": null,
+  "category": {
+    "slug": "optimization-qubo",
+    "title": "Optimization and QUBO",
+    "description": "Libraries for expressing and solving combinatorial optimization problems with QUBO, QAOA, or related formulations."
+  },
+  "topics": [
+    {
+      "slug": "quantum-optimization-compared",
+      "title": "Quantum optimization libraries compared: QAOA, QUBO, and annealing"
+    },
+    {
+      "slug": "quantum-software-map",
+      "title": "Quantum computing software in 2026: the open-source map"
+    }
+  ],
+  "primaryLanguage": "Python",
+  "license": "Apache-2.0",
+  "summary": "A collection of quantum algorithms built using the Rigetti Forest platform.",
+  "description": "A collection of quantum algorithms built using the Rigetti Forest platform. Grove is licensed under the Apache 2.0 license.",
+  "whatItIs": [
+    "grove is an open-source project in the optimization and qubo category. It is maintained by rigetticomputing and primarily looks like a Python codebase. A collection of quantum algorithms built using the Rigetti Forest platform.",
+    "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches optimization and qubo workflows in practice. The repository README emphasizes: A collection of quantum algorithms built using the Rigetti Forest platform. Grove is licensed under the Apache 2.0 license. The Variational-Quantum-Eigensolver (VQE) The Quantum Approximate Optimization Algorithm (QAOA) The Quantum Fourier Transform (QFT) Phase Estimation Algorithm"
+  ],
+  "whoItsFor": "Teams exploring routing, scheduling, allocation, and other combinatorial problems that can be modeled as optimization workloads.",
+  "whatYouCanBuild": [
+    "Understand how this project models constrained optimization problems.",
+    "Compare QUBO, QAOA, and hybrid optimization workflows against classical baselines.",
+    "Identify pieces that could inform a practical planning stack like Qtangl."
+  ],
+  "readmeExcerpt": "A collection of quantum algorithms built using the Rigetti Forest platform. Grove is licensed under the Apache 2.0 license. The Variational-Quantum-Eigensolver (VQE) The Quantum Approximate Optimization Algorithm (QAOA) The Quantum Fourier Transform (QFT) Phase Estimation Algorithm",
+  "readmePath": "reference\\rigetticomputing__grove\\README.md",
+  "clonePath": "reference\\rigetticomputing__grove",
+  "stars": 0,
+  "lastPushedAt": null,
+  "githubTopics": [],
+  "featured": false,
+  "flagship": false,
+  "qtanglRelevant": false,
+  "archived": false,
+  "imagePath": null,
+  "relatedSlugs": [
+    "entropicalabs-openqaoa",
+    "cda-tum-mqt-qmap",
+    "jtiosue-qubovert",
+    "qiskit-qiskit-optimization",
+    "dwavesystems-dwave-sapi-dimod",
+    "dwavesystems-penaltymodel"
+  ]
+}

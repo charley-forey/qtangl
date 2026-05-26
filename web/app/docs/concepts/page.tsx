@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 
 import DocsShell from "@/components/docs/DocsShell";
 import { MAIN_CONTENT_ID } from "@/components/layout/PageShell";
@@ -64,6 +65,27 @@ export default function ConceptsPage() {
                 </div>
               ))}
             </div>
+          </Card>
+
+          <Card as="section" strong className="rounded-2xl">
+            <p className="text-label">Go deeper</p>
+            <h2 className="text-2xl font-semibold text-white">
+              Explore the ecosystem behind these concepts
+            </h2>
+            <p className="mt-4 text-sm leading-8 text-[var(--color-gray-300)]">
+              If you want to see how these ideas show up in real projects, open the{" "}
+              <Link href="/learn" className="text-white underline underline-offset-4">
+                Learn section
+              </Link>{" "}
+              or jump straight to{" "}
+              <Link
+                href="/learn/topics/start-writing-quantum-code"
+                className="text-white underline underline-offset-4"
+              >
+                the newcomer guide
+              </Link>
+              .
+            </p>
           </Card>
         </div>
       </DocsShell>

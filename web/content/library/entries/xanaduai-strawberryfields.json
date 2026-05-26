@@ -1,0 +1,52 @@
+{
+  "slug": "xanaduai-strawberryfields",
+  "owner": "xanaduai",
+  "name": "strawberryfields",
+  "title": "strawberryfields",
+  "repoUrl": "https://github.com/xanaduai/strawberryfields",
+  "homepageUrl": null,
+  "category": {
+    "slug": "photonics",
+    "title": "Photonics",
+    "description": "Frameworks for photonic quantum computing, boson sampling, and optical circuit representations."
+  },
+  "topics": [
+    {
+      "slug": "quantum-software-map",
+      "title": "Quantum computing software in 2026: the open-source map"
+    }
+  ],
+  "primaryLanguage": "Python",
+  "license": "Apache-2.0",
+  "summary": "<p align=\"center\"> <a href=\"https://github.com/XanaduAI/strawberryfields/actions?query=workflow%3ATests\"> <img src=\"https://img.shields.io/github/workflow/status/XanaduAI/strawberryfields/Tests/master?logo=github&style=flat-square\" /> </a> <a href=\"https://www.codefactor.io/repository/github/xanaduai/strawberryfields\"> <img src=\"https://img.shields.io/codefactor/grade/github/XanaduAI/strawberryfields/master?style=flat-square\" /> </a> <a href=\"https://codecov.io/gh/XanaduAI/strawberryfields\"> <img src=\"https://img.shields.io/codecov/c/github/xanaduai/strawberryfields/master.svg?style=popout-square\" /> </a> <a href=\"https://strawberryfields.readthedocs.io\"> <img src=\"https://img.shields.io/readthedocs/strawberryfields.svg?style=popout-square\" /> </a> <a href=\"https://pypi.org/project/StrawberryFields\"> <img src=\"https://img.shields.io/pypi/v/StrawberryFields.svg?style=popout-square\" /> </a>...",
+  "description": "<p align=\"center\"> <a href=\"https://github.com/XanaduAI/strawberryfields/actions?query=workflow%3ATests\"> <img src=\"https://img.shields.io/github/workflow/status/XanaduAI/strawberryfields/Tests/master?logo=github&style=flat-square\" /> </a> <a href=\"https://www.codefactor.io/repository/github/xanaduai/strawberryfields\"> <img src=\"https://img.shields.io/codefactor/grade/github/XanaduAI/strawberryfields/master?style=flat-square\" /> </a> <a href=\"https://codecov.io/gh/XanaduAI/strawberryfields\"> <img src=\"https://img.shields.io/codecov/c/github/xanaduai/strawberryfields/master.svg?style=popout-square\" /> </a> <a href=\"https://strawberryfields.readthedocs.io\"> <img src=\"https://img.shields.io/readthedocs/strawberryfields.svg?style=popout-square\" /> </a> <a href=\"https://pypi.org/project/StrawberryFields\"> <img src=\"https://img.shields.io/pypi/v/StrawberryFields.svg?style=popout-square\" /> </a> <a href=\"https://pypi.org/project/StrawberryFields\"> <img src=\"https://img.shields.io/pypi/pyversions/StrawberryFields.svg?style=popout-square\" /> </a> </p>",
+  "whatItIs": [
+    "strawberryfields is an open-source project in the photonics category. It is maintained by xanaduai and primarily looks like a Python codebase. <p align=\"center\"> <a href=\"https://github.com/XanaduAI/strawberryfields/actions?query=workflow%3ATests\"> <img src=\"https://img.shields.io/github/workflow/status/XanaduAI/strawberryfields/Tests/master?logo=github&style=flat-square\" /> </a> <a href=\"https://www.codefactor.io/repository/github/xanaduai/strawberryfields\"> <img src=\"https://img.shields.io/codefactor/grade/github/XanaduAI/strawberryfields/master?style=flat-square\" /> </a> <a href=\"https://codecov.io/gh/XanaduAI/strawberryfields\"> <img src=\"https://img.shields.io/codecov/c/github/xanaduai/strawberryfields/master.svg?style=popout-square\" /> </a> <a href=\"https://strawberryfields.readthedocs.io\"> <img src=\"https://img.shields.io/readthedocs/strawberryfields.svg?style=popout-square\" /> </a> <a href=\"https://pypi.org/project/StrawberryFields\"> <img src=\"https://img.shields.io/pypi/v/StrawberryFields.svg?style=popout-square\" /> </a>...",
+    "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches photonics workflows in practice. The repository README emphasizes: <p align=\"center\"> <a href=\"https://github.com/XanaduAI/strawberryfields/actions?query=workflow%3ATests\"> <img src=\"https://img.shields.io/github/workflow/status/XanaduAI/strawberryfields/Tests/master?logo=github&style=flat-square\" /> </a> <a href=\"https://www.codefactor.io/repository/github/xanaduai/strawberryfields\"> <img src=\"https://img.shields.io/codefactor/grade/github/XanaduAI/strawberryfields/master?style=flat-square\" /> </a> <a href=\"https://codecov.io/gh/XanaduAI/strawberryfields\"> <img src=\"https://img.shields.io/codecov/c/github/xanaduai/strawberryfields/master.svg?style=popout-square\" /> </a> <a href=\"https://strawberryfields.readthedocs.io\"> <img src=\"https://img.shields.io/readthedocs/strawberryfields.svg?style=popout-square\" /> </a> <a href=\"https://pypi.org/project/StrawberryFields\"> <img src=\"https://img.shields.io/pypi/v/StrawberryFields.svg?style=popout-square\" /> </a> <a href=\"https://pypi.org/project/StrawberryFields\"> <img src=\"https://img.shields.io/pypi/pyversions/StrawberryFields.svg?style=popout-square\" /> </a> </p> <p align=\"center\"> Strawberry Fields is a full-stack Python library..."
+  ],
+  "whoItsFor": "People exploring optical and photonic models of quantum computing, especially outside the usual gate-model framing.",
+  "whatYouCanBuild": [
+    "Understand how photonic circuits, modes, and optical programs are represented.",
+    "Compare photonic workflows with more familiar circuit-model SDKs.",
+    "Learn which parts of the photonics ecosystem are most approachable."
+  ],
+  "readmeExcerpt": "<p align=\"center\"> <a href=\"https://github.com/XanaduAI/strawberryfields/actions?query=workflow%3ATests\"> <img src=\"https://img.shields.io/github/workflow/status/XanaduAI/strawberryfields/Tests/master?logo=github&style=flat-square\" /> </a> <a href=\"https://www.codefactor.io/repository/github/xanaduai/strawberryfields\"> <img src=\"https://img.shields.io/codefactor/grade/github/XanaduAI/strawberryfields/master?style=flat-square\" /> </a> <a href=\"https://codecov.io/gh/XanaduAI/strawberryfields\"> <img src=\"https://img.shields.io/codecov/c/github/xanaduai/strawberryfields/master.svg?style=popout-square\" /> </a> <a href=\"https://strawberryfields.readthedocs.io\"> <img src=\"https://img.shields.io/readthedocs/strawberryfields.svg?style=popout-square\" /> </a> <a href=\"https://pypi.org/project/StrawberryFields\"> <img src=\"https://img.shields.io/pypi/v/StrawberryFields.svg?style=popout-square\" /> </a> <a href=\"https://pypi.org/project/StrawberryFields\"> <img src=\"https://img.shields.io/pypi/pyversions/StrawberryFields.svg?style=popout-square\" /> </a> </p> <p align=\"center\"> Strawberry Fields is a full-stack Python library for designing, simulating, and optimizing continuous-variable quantum optical circuits. </p>",
+  "readmePath": "reference\\xanaduai__strawberryfields\\README.md",
+  "clonePath": "reference\\xanaduai__strawberryfields",
+  "stars": 0,
+  "lastPushedAt": null,
+  "githubTopics": [],
+  "featured": false,
+  "flagship": true,
+  "qtanglRelevant": false,
+  "archived": false,
+  "imagePath": "/learn/flagship/xanaduai-strawberryfields.png",
+  "relatedSlugs": [
+    "quandela-perceval",
+    "xanaduai-blackbird",
+    "xanaduai-thewalrus",
+    "aws-amazon-braket-sdk-python",
+    "cqcl-tket",
+    "dwavesystems-dwave-ocean-sdk"
+  ]
+}

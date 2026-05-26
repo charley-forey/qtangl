@@ -1,0 +1,56 @@
+{
+  "slug": "unitaryfund-mitiq",
+  "owner": "unitaryfund",
+  "name": "mitiq",
+  "title": "mitiq",
+  "repoUrl": "https://github.com/unitaryfund/mitiq",
+  "homepageUrl": null,
+  "category": {
+    "slug": "error-correction-mitigation",
+    "title": "Error correction and mitigation",
+    "description": "Projects that help analyze, mitigate, or correct quantum errors and noisy computation."
+  },
+  "topics": [
+    {
+      "slug": "quantum-simulators-guide",
+      "title": "Open-source quantum simulators: what each one is good at"
+    },
+    {
+      "slug": "quantum-software-map",
+      "title": "Quantum computing software in 2026: the open-source map"
+    }
+  ],
+  "primaryLanguage": "Python",
+  "license": "LGPL",
+  "summary": "Mitiq [mitt \u2022 tick] is a Python toolkit for implementing error mitigation techniques on quantum computers.",
+  "description": "Mitiq [mitt \u2022 tick] is a Python toolkit for implementing error mitigation techniques on quantum computers.",
+  "whatItIs": [
+    "mitiq is an open-source project in the error correction and mitigation category. It is maintained by unitaryfund and primarily looks like a Python codebase. Mitiq [mitt \u2022 tick] is a Python toolkit for implementing error mitigation techniques on quantum computers.",
+    "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches error correction and mitigation workflows in practice. The repository README emphasizes: Mitiq [mitt \u2022 tick] is a Python toolkit for implementing error mitigation techniques on quantum computers. Current quantum computers are noisy due to interactions with the environment, imperfect gate applications, state preparation and measurement errors, etc. Error mitigation seeks to reduce these effects at the software level by..."
+  ],
+  "whoItsFor": "Researchers and advanced developers working on noise, reliability, and the realities of imperfect quantum hardware.",
+  "whatYouCanBuild": [
+    "Learn how this project frames error handling or mitigation.",
+    "Compare whether it targets analysis, simulation, or production-minded workflows.",
+    "Understand where noise-aware tooling fits in a modern stack."
+  ],
+  "readmeExcerpt": "Mitiq [mitt \u2022 tick] is a Python toolkit for implementing error mitigation techniques on quantum computers. Current quantum computers are noisy due to interactions with the environment, imperfect gate applications, state preparation and measurement errors, etc. Error mitigation seeks to reduce these effects at the software level by compiling quantum programs in clever ways.",
+  "readmePath": "reference\\unitaryfund__mitiq\\README.md",
+  "clonePath": "reference\\unitaryfund__mitiq",
+  "stars": 0,
+  "lastPushedAt": null,
+  "githubTopics": [],
+  "featured": false,
+  "flagship": true,
+  "qtanglRelevant": false,
+  "archived": false,
+  "imagePath": "/learn/flagship/unitaryfund-mitiq.png",
+  "relatedSlugs": [
+    "quantumlib-stim",
+    "jacobmarks-qtop",
+    "msrudolph-paulipropagation-jl",
+    "0tt3r-quac",
+    "adamisntdead-qusimpy",
+    "aniabrown-quest"
+  ]
+}

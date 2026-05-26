@@ -1,0 +1,52 @@
+{
+  "slug": "quandela-perceval",
+  "owner": "Quandela",
+  "name": "Perceval",
+  "title": "Perceval",
+  "repoUrl": "https://github.com/Quandela/Perceval",
+  "homepageUrl": null,
+  "category": {
+    "slug": "photonics",
+    "title": "Photonics",
+    "description": "Frameworks for photonic quantum computing, boson sampling, and optical circuit representations."
+  },
+  "topics": [
+    {
+      "slug": "quantum-software-map",
+      "title": "Quantum computing software in 2026: the open-source map"
+    }
+  ],
+  "primaryLanguage": "Python",
+  "license": "MIT",
+  "summary": "Perceval <a href=\"https://perceval.quandela.net\" target=\"_blank\"> <img src=\"logo-perceval.png\" width=\"50\" height=\"50\"> </a>",
+  "description": "Perceval <a href=\"https://perceval.quandela.net\" target=\"_blank\"> <img src=\"logo-perceval.png\" width=\"50\" height=\"50\"> </a>",
+  "whatItIs": [
+    "Perceval is an open-source project in the photonics category. It is maintained by Quandela and primarily looks like a Python codebase. Perceval <a href=\"https://perceval.quandela.net\" target=\"_blank\"> <img src=\"logo-perceval.png\" width=\"50\" height=\"50\"> </a>",
+    "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches photonics workflows in practice. The repository README emphasizes: Perceval <a href=\"https://perceval.quandela.net\" target=\"_blank\"> <img src=\"logo-perceval.png\" width=\"50\" height=\"50\"> </a> Through a simple object-oriented python API, Perceval provides tools for building a circuit with linear optics components, defining single-photon sources and their error model, manipulating Fock states, running simulations, reproducing published experimental papers results, and experimenting with a new..."
+  ],
+  "whoItsFor": "People exploring optical and photonic models of quantum computing, especially outside the usual gate-model framing.",
+  "whatYouCanBuild": [
+    "Understand how photonic circuits, modes, and optical programs are represented.",
+    "Compare photonic workflows with more familiar circuit-model SDKs.",
+    "Learn which parts of the photonics ecosystem are most approachable."
+  ],
+  "readmeExcerpt": "Perceval <a href=\"https://perceval.quandela.net\" target=\"_blank\"> <img src=\"logo-perceval.png\" width=\"50\" height=\"50\"> </a> Through a simple object-oriented python API, Perceval provides tools for building a circuit with linear optics components, defining single-photon sources and their error model, manipulating Fock states, running simulations, reproducing published experimental papers results, and experimenting with a new generation of quantum algorithms.",
+  "readmePath": "reference\\Quandela__Perceval\\README.md",
+  "clonePath": "reference\\Quandela__Perceval",
+  "stars": 0,
+  "lastPushedAt": null,
+  "githubTopics": [],
+  "featured": false,
+  "flagship": false,
+  "qtanglRelevant": false,
+  "archived": false,
+  "imagePath": null,
+  "relatedSlugs": [
+    "xanaduai-strawberryfields",
+    "xanaduai-blackbird",
+    "xanaduai-thewalrus",
+    "aws-amazon-braket-sdk-python",
+    "cqcl-tket",
+    "dwavesystems-dwave-ocean-sdk"
+  ]
+}

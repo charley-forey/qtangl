@@ -1,0 +1,56 @@
+{
+  "slug": "projectq-framework-projectq",
+  "owner": "ProjectQ-Framework",
+  "name": "ProjectQ",
+  "title": "ProjectQ",
+  "repoUrl": "https://github.com/ProjectQ-Framework/ProjectQ",
+  "homepageUrl": null,
+  "category": {
+    "slug": "general-purpose-sdks",
+    "title": "General-purpose SDKs",
+    "description": "Broad frameworks for building, simulating, and experimenting with quantum circuits across multiple domains."
+  },
+  "topics": [
+    {
+      "slug": "quantum-software-map",
+      "title": "Quantum computing software in 2026: the open-source map"
+    },
+    {
+      "slug": "start-writing-quantum-code",
+      "title": "How to start writing quantum code: an honest path"
+    }
+  ],
+  "primaryLanguage": "Python",
+  "license": "Apache-2.0",
+  "summary": "ProjectQ - An open source software framework for quantum computing ==================================================================",
+  "description": "ProjectQ - An open source software framework for quantum computing ==================================================================",
+  "whatItIs": [
+    "ProjectQ is an open-source project in the general-purpose sdks category. It is maintained by ProjectQ-Framework and primarily looks like a Python codebase. ProjectQ - An open source software framework for quantum computing ==================================================================",
+    "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches general-purpose sdks workflows in practice. The repository README emphasizes: ProjectQ - An open source software framework for quantum computing ================================================================== .. image:: https://img.shields.io/pypi/pyversions/projectq?label=Python :alt: PyPI - Python Version"
+  ],
+  "whoItsFor": "Developers who want a broad entry point for building circuits, experimenting with algorithms, and integrating quantum workflows into larger applications.",
+  "whatYouCanBuild": [
+    "Prototype end-to-end circuit workflows without committing to a niche backend too early.",
+    "Learn how the project represents circuits, gates, jobs, and results.",
+    "Compare how a major ecosystem frames practical quantum development."
+  ],
+  "readmeExcerpt": "ProjectQ - An open source software framework for quantum computing ================================================================== .. image:: https://img.shields.io/pypi/pyversions/projectq?label=Python :alt: PyPI - Python Version",
+  "readmePath": "reference\\ProjectQ-Framework__ProjectQ\\README.rst",
+  "clonePath": "reference\\ProjectQ-Framework__ProjectQ",
+  "stars": 0,
+  "lastPushedAt": null,
+  "githubTopics": [],
+  "featured": false,
+  "flagship": true,
+  "qtanglRelevant": false,
+  "archived": false,
+  "imagePath": "/learn/flagship/projectq-framework-projectq.png",
+  "relatedSlugs": [
+    "qiskit-qiskit",
+    "quantumlib-cirq",
+    "xanaduai-pennylane",
+    "quantumbfs-yao-jl",
+    "arlineq-arline-benchmarks",
+    "arlineq-arline-quantum"
+  ]
+}

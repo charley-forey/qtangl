@@ -1,0 +1,56 @@
+{
+  "slug": "quantumlib-stim",
+  "owner": "quantumlib",
+  "name": "Stim",
+  "title": "Stim",
+  "repoUrl": "https://github.com/quantumlib/Stim",
+  "homepageUrl": null,
+  "category": {
+    "slug": "error-correction-mitigation",
+    "title": "Error correction and mitigation",
+    "description": "Projects that help analyze, mitigate, or correct quantum errors and noisy computation."
+  },
+  "topics": [
+    {
+      "slug": "quantum-simulators-guide",
+      "title": "Open-source quantum simulators: what each one is good at"
+    },
+    {
+      "slug": "quantum-software-map",
+      "title": "Quantum computing software in 2026: the open-source map"
+    }
+  ],
+  "primaryLanguage": "C++",
+  "license": "Apache-2.0",
+  "summary": "High-performance simulation of quantum stabilizer circuits for quantum error correction.",
+  "description": "High-performance simulation of quantum stabilizer circuits for quantum error correction.",
+  "whatItIs": [
+    "Stim is an open-source project in the error correction and mitigation category. It is maintained by quantumlib and primarily looks like a C++ codebase. High-performance simulation of quantum stabilizer circuits for quantum error correction.",
+    "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches error correction and mitigation workflows in practice. The repository README emphasizes: High-performance simulation of quantum stabilizer circuits for quantum error correction. \u25fc\ufe0e\ufe0e&nbsp;&nbsp;What is Stim?<br> \u25fc\ufe0e\ufe0e&nbsp;&nbsp;How do I use Stim?<br> \u25fc\ufe0e&nbsp;&nbsp;How does Stim work?<br> \u25fc\ufe0e&nbsp;&nbsp;How do I cite Stim?<br> \u25fc\ufe0e&nbsp;&nbsp;*Subproject*: Sinter decoding sampler<br> \u25fc\ufe0e&nbsp;&nbsp;*Subproject*: Crumble interactive editor<br>"
+  ],
+  "whoItsFor": "Researchers and advanced developers working on noise, reliability, and the realities of imperfect quantum hardware.",
+  "whatYouCanBuild": [
+    "Learn how this project frames error handling or mitigation.",
+    "Compare whether it targets analysis, simulation, or production-minded workflows.",
+    "Understand where noise-aware tooling fits in a modern stack."
+  ],
+  "readmeExcerpt": "High-performance simulation of quantum stabilizer circuits for quantum error correction. \u25fc\ufe0e\ufe0e&nbsp;&nbsp;What is Stim?<br> \u25fc\ufe0e\ufe0e&nbsp;&nbsp;How do I use Stim?<br> \u25fc\ufe0e&nbsp;&nbsp;How does Stim work?<br> \u25fc\ufe0e&nbsp;&nbsp;How do I cite Stim?<br> \u25fc\ufe0e&nbsp;&nbsp;*Subproject*: Sinter decoding sampler<br> \u25fc\ufe0e&nbsp;&nbsp;*Subproject*: Crumble interactive editor<br>",
+  "readmePath": "reference\\quantumlib__Stim\\README.md",
+  "clonePath": "reference\\quantumlib__Stim",
+  "stars": 0,
+  "lastPushedAt": null,
+  "githubTopics": [],
+  "featured": true,
+  "flagship": true,
+  "qtanglRelevant": false,
+  "archived": false,
+  "imagePath": "/learn/flagship/quantumlib-stim.png",
+  "relatedSlugs": [
+    "unitaryfund-mitiq",
+    "jacobmarks-qtop",
+    "msrudolph-paulipropagation-jl",
+    "0tt3r-quac",
+    "adamisntdead-qusimpy",
+    "aniabrown-quest"
+  ]
+}

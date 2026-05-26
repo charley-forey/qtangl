@@ -1,0 +1,56 @@
+{
+  "slug": "stared-quantum-game",
+  "owner": "stared",
+  "name": "quantum-game",
+  "title": "quantum-game",
+  "repoUrl": "https://github.com/stared/quantum-game",
+  "homepageUrl": null,
+  "category": {
+    "slug": "games-learning",
+    "title": "Games and learning",
+    "description": "Interactive projects, puzzles, and educational resources for learning quantum computing concepts."
+  },
+  "topics": [
+    {
+      "slug": "quantum-software-map",
+      "title": "Quantum computing software in 2026: the open-source map"
+    },
+    {
+      "slug": "start-writing-quantum-code",
+      "title": "How to start writing quantum code: an honest path"
+    }
+  ],
+  "primaryLanguage": "JavaScript",
+  "license": "MIT",
+  "summary": "**A note: this repository is an old Quanutm Game (2014-2016), no longer maintained.",
+  "description": "**A note: this repository is an old Quanutm Game (2014-2016), no longer maintained. The new one (2019-) is at quantumgame.io.**",
+  "whatItIs": [
+    "quantum-game is an open-source project in the games and learning category. It is maintained by stared and primarily looks like a JavaScript codebase. **A note: this repository is an old Quanutm Game (2014-2016), no longer maintained.",
+    "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches games and learning workflows in practice. The repository README emphasizes: **A note: this repository is an old Quanutm Game (2014-2016), no longer maintained. The new one (2019-) is at quantumgame.io.** Quantum Game - play with photons, superposition and entanglement. In your browser! With true quantum mechanics underneath! The repository also appears to be archival or no longer actively maintained, which matters when evaluating it for current production use."
+  ],
+  "whoItsFor": "Beginners, educators, and curious developers who want a more approachable path into quantum concepts.",
+  "whatYouCanBuild": [
+    "Get a gentler introduction before diving into full SDKs.",
+    "See how different projects teach circuits, superposition, and measurement.",
+    "Identify resources that work well for onboarding or self-study."
+  ],
+  "readmeExcerpt": "**A note: this repository is an old Quanutm Game (2014-2016), no longer maintained. The new one (2019-) is at quantumgame.io.** Quantum Game - play with photons, superposition and entanglement. In your browser! With true quantum mechanics underneath!",
+  "readmePath": "reference\\stared__quantum-game\\README.md",
+  "clonePath": "reference\\stared__quantum-game",
+  "stars": 0,
+  "lastPushedAt": null,
+  "githubTopics": [],
+  "featured": false,
+  "flagship": true,
+  "qtanglRelevant": false,
+  "archived": true,
+  "imagePath": "/learn/flagship/stared-quantum-game.png",
+  "relatedSlugs": [
+    "microsoft-quantumkatas",
+    "strilanc-quirk",
+    "decodoku-a-game-to-benchmark-quantum-computers",
+    "decodoku-battleships-with-complementary-measurements",
+    "desireevl-quantum-catsweeper",
+    "entanglion-entanglion"
+  ]
+}

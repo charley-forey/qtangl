@@ -1,0 +1,56 @@
+{
+  "slug": "dwavesystems-dwave-system",
+  "owner": "dwavesystems",
+  "name": "dwave-system",
+  "title": "dwave-system",
+  "repoUrl": "https://github.com/dwavesystems/dwave-system",
+  "homepageUrl": null,
+  "category": {
+    "slug": "annealing-ising",
+    "title": "Annealing and Ising",
+    "description": "D-Wave and Ising-model tools for quantum annealing, embeddings, and heuristic search workflows."
+  },
+  "topics": [
+    {
+      "slug": "quantum-optimization-compared",
+      "title": "Quantum optimization libraries compared: QAOA, QUBO, and annealing"
+    },
+    {
+      "slug": "quantum-software-map",
+      "title": "Quantum computing software in 2026: the open-source map"
+    }
+  ],
+  "primaryLanguage": "Python",
+  "license": "Apache-2.0",
+  "summary": "image:: https://img.shields.io/pypi/pyversions/dwave-system.svg?style=flat :target: https://pypi.org/project/dwave-system :alt: PyPI - Python Version",
+  "description": ".. image:: https://img.shields.io/pypi/pyversions/dwave-system.svg?style=flat :target: https://pypi.org/project/dwave-system :alt: PyPI - Python Version",
+  "whatItIs": [
+    "dwave-system is an open-source project in the annealing and ising category. It is maintained by dwavesystems and primarily looks like a Python codebase. image:: https://img.shields.io/pypi/pyversions/dwave-system.svg?style=flat :target: https://pypi.org/project/dwave-system :alt: PyPI - Python Version",
+    "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches annealing and ising workflows in practice. The repository README emphasizes: .. image:: https://img.shields.io/pypi/pyversions/dwave-system.svg?style=flat :target: https://pypi.org/project/dwave-system :alt: PyPI - Python Version `dwave-system is an API for easily incorporating D-Wave quantum computers as a sampler in the Ocean software stack <https://docs.dwavequantum.com/en/latest/ocean/stack.html>_, directly or through the Leap <https://cloud.dwavesys.com/leap/>_ service's cloud-based hybrid solvers. It includes DWaveSampler, a dimod sampler that accepts and..."
+  ],
+  "whoItsFor": "Developers interested in Ising-model formulations, annealing workflows, and D-Wave-style solver ecosystems.",
+  "whatYouCanBuild": [
+    "See how annealing-oriented projects model optimization problems.",
+    "Understand embeddings, samplers, and the surrounding tooling needed in practice.",
+    "Compare annealing workflows against gate-model and hybrid alternatives."
+  ],
+  "readmeExcerpt": ".. image:: https://img.shields.io/pypi/pyversions/dwave-system.svg?style=flat :target: https://pypi.org/project/dwave-system :alt: PyPI - Python Version `dwave-system is an API for easily incorporating D-Wave quantum computers as a sampler in the Ocean software stack <https://docs.dwavequantum.com/en/latest/ocean/stack.html>_, directly or through the Leap <https://cloud.dwavesys.com/leap/>_ service's cloud-based hybrid solvers. It includes DWaveSampler, a dimod sampler that accepts and passes system parameters such as system identification and authentication down the stack, StrideHybridSolver, for Leap's Stride\u2122 hybrid solver, and others. It also includes several useful composites---layers of pre- and post-processing---that can be used with DWaveSampler` to handle minor-embedding, optimize chain strength, etc.",
+  "readmePath": "reference\\dwavesystems__dwave-system\\README.rst",
+  "clonePath": "reference\\dwavesystems__dwave-system",
+  "stars": 0,
+  "lastPushedAt": null,
+  "githubTopics": [],
+  "featured": false,
+  "flagship": false,
+  "qtanglRelevant": false,
+  "archived": false,
+  "imagePath": null,
+  "relatedSlugs": [
+    "dwavesystems-dwave-ocean-sdk",
+    "dwavesystems-dimod",
+    "dwavesystems-qbsolv",
+    "dwavesystems-chimera-embedding",
+    "dwavesystems-dwave-cloud-client",
+    "dwavesystems-dwave-embedding-utilities"
+  ]
+}

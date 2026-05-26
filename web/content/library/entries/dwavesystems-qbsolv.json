@@ -1,0 +1,56 @@
+{
+  "slug": "dwavesystems-qbsolv",
+  "owner": "dwavesystems",
+  "name": "qbsolv",
+  "title": "qbsolv",
+  "repoUrl": "https://github.com/dwavesystems/qbsolv",
+  "homepageUrl": null,
+  "category": {
+    "slug": "annealing-ising",
+    "title": "Annealing and Ising",
+    "description": "D-Wave and Ising-model tools for quantum annealing, embeddings, and heuristic search workflows."
+  },
+  "topics": [
+    {
+      "slug": "quantum-optimization-compared",
+      "title": "Quantum optimization libraries compared: QAOA, QUBO, and annealing"
+    },
+    {
+      "slug": "quantum-software-map",
+      "title": "Quantum computing software in 2026: the open-source map"
+    }
+  ],
+  "primaryLanguage": "Shell",
+  "license": "Apache-2.0",
+  "summary": "**NOTICE**: This repository is deprecated as of the end of 2021.",
+  "description": "**NOTICE**: This repository is deprecated as of the end of 2021. Support will be discontinued after March 2022. Please update your code to use Ocean's dwave-hybrid <https://docs.ocean.dwavesys.com/en/stable/docs_hybrid/sdk_index.html>_ or Leap's quantum-classical hybrid solvers <https://docs.dwavesys.com/docs/latest/doc_leap_hybrid.html>_ instead.",
+  "whatItIs": [
+    "qbsolv is an open-source project in the annealing and ising category. It is maintained by dwavesystems and primarily looks like a Shell codebase. **NOTICE**: This repository is deprecated as of the end of 2021.",
+    "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches annealing and ising workflows in practice. The repository README emphasizes: **NOTICE**: This repository is deprecated as of the end of 2021. Support will be discontinued after March 2022. Please update your code to use Ocean's dwave-hybrid <https://docs.ocean.dwavesys.com/en/stable/docs_hybrid/sdk_index.html>_ or Leap's quantum-classical hybrid solvers <https://docs.dwavesys.com/docs/latest/doc_leap_hybrid.html>_ instead. A decomposing solver that finds a minimum value of a large quadratic unconstrained binary... The repository also appears to be archival or no longer actively maintained, which matters when evaluating it for current production use."
+  ],
+  "whoItsFor": "Developers interested in Ising-model formulations, annealing workflows, and D-Wave-style solver ecosystems.",
+  "whatYouCanBuild": [
+    "See how annealing-oriented projects model optimization problems.",
+    "Understand embeddings, samplers, and the surrounding tooling needed in practice.",
+    "Compare annealing workflows against gate-model and hybrid alternatives."
+  ],
+  "readmeExcerpt": "**NOTICE**: This repository is deprecated as of the end of 2021. Support will be discontinued after March 2022. Please update your code to use Ocean's dwave-hybrid <https://docs.ocean.dwavesys.com/en/stable/docs_hybrid/sdk_index.html>_ or Leap's quantum-classical hybrid solvers <https://docs.dwavesys.com/docs/latest/doc_leap_hybrid.html>_ instead. A decomposing solver that finds a minimum value of a large quadratic unconstrained binary optimization (QUBO) problem by splitting it into pieces. The pieces are solved using a classical solver running the tabu algorithm. qbsolv also enables configuring a D-Wave system as the solver.",
+  "readmePath": "reference\\dwavesystems__qbsolv\\README.rst",
+  "clonePath": "reference\\dwavesystems__qbsolv",
+  "stars": 0,
+  "lastPushedAt": null,
+  "githubTopics": [],
+  "featured": false,
+  "flagship": true,
+  "qtanglRelevant": true,
+  "archived": true,
+  "imagePath": "/learn/flagship/dwavesystems-qbsolv.png",
+  "relatedSlugs": [
+    "dwavesystems-dwave-ocean-sdk",
+    "dwavesystems-dimod",
+    "dwavesystems-chimera-embedding",
+    "dwavesystems-dwave-cloud-client",
+    "dwavesystems-dwave-embedding-utilities",
+    "dwavesystems-dwave-micro-client-dimod"
+  ]
+}

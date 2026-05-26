@@ -1,0 +1,56 @@
+{
+  "slug": "softwareqinc-staq",
+  "owner": "softwareqinc",
+  "name": "staq",
+  "title": "staq",
+  "repoUrl": "https://github.com/softwareqinc/staq",
+  "homepageUrl": null,
+  "category": {
+    "slug": "compilers-languages",
+    "title": "Compilers and languages",
+    "description": "Compilers, intermediate representations, domain-specific languages, and transpilation tools for quantum programs."
+  },
+  "topics": [
+    {
+      "slug": "quantum-software-map",
+      "title": "Quantum computing software in 2026: the open-source map"
+    },
+    {
+      "slug": "start-writing-quantum-code",
+      "title": "How to start writing quantum code: an honest path"
+    }
+  ],
+  "primaryLanguage": "C++",
+  "license": "MIT",
+  "summary": "**staq** is a modern C++ library for the synthesis, transformation, optimization and compilation of quantum circuits.",
+  "description": "**staq** is a modern C++ library for the synthesis, transformation, optimization and compilation of quantum circuits. **staq** is written in standard C++17 and has very low external dependencies. It is usable either through the provided binary tools, or as a header-only library that can be included to provide direct support for parsing & manipulating circuits written in the OpenQASM 2.0...",
+  "whatItIs": [
+    "staq is an open-source project in the compilers and languages category. It is maintained by softwareqinc and primarily looks like a C++ codebase. **staq** is a modern C++ library for the synthesis, transformation, optimization and compilation of quantum circuits.",
+    "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches compilers and languages workflows in practice. The repository README emphasizes: **staq** is a modern C++ library for the synthesis, transformation, optimization and compilation of quantum circuits. **staq** is written in standard C++17 and has very low external dependencies. It is usable either through the provided binary tools, or as a header-only library that can be included to provide..."
+  ],
+  "whoItsFor": "Developers who want to understand the representations and compilers that sit between high-level code and runnable circuits.",
+  "whatYouCanBuild": [
+    "Compare IRs, DSLs, transpilers, and compiler assumptions across ecosystems.",
+    "Understand how high-level code becomes something a backend can execute.",
+    "Spot tools that matter when interoperability and compilation quality are important."
+  ],
+  "readmeExcerpt": "**staq** is a modern C++ library for the synthesis, transformation, optimization and compilation of quantum circuits. **staq** is written in standard C++17 and has very low external dependencies. It is usable either through the provided binary tools, or as a header-only library that can be included to provide direct support for parsing & manipulating circuits written in the OpenQASM 2.0 circuit description language. Inspired by Clang, **staq** is designed to manipulate OpenQASM 2.0 syntax trees directly, rather than through an intermediate representation which makes retrieving the original source code impossible. In particular, OpenQASM 2.0 circuits can be inspected and transformed (in most cases) without losing the original source structure. This...",
+  "readmePath": "reference\\softwareqinc__staq\\README.md",
+  "clonePath": "reference\\softwareqinc__staq",
+  "stars": 0,
+  "lastPushedAt": null,
+  "githubTopics": [],
+  "featured": false,
+  "flagship": false,
+  "qtanglRelevant": false,
+  "archived": false,
+  "imagePath": null,
+  "relatedSlugs": [
+    "cqcl-tket",
+    "nvidia-cuda-quantum",
+    "quantomatic-pyzx",
+    "avalon-lang-avaloni",
+    "aviggiano-qcl",
+    "dabacon-qsel"
+  ]
+}

@@ -1,0 +1,56 @@
+{
+  "slug": "vm6502q-qrack",
+  "owner": "vm6502q",
+  "name": "qrack",
+  "title": "qrack",
+  "repoUrl": "https://github.com/vm6502q/qrack",
+  "homepageUrl": null,
+  "category": {
+    "slug": "simulators",
+    "title": "Simulators",
+    "description": "Projects focused on state-vector, stabilizer, tensor-network, or hardware-inspired quantum simulation."
+  },
+  "topics": [
+    {
+      "slug": "quantum-simulators-guide",
+      "title": "Open-source quantum simulators: what each one is good at"
+    },
+    {
+      "slug": "quantum-software-map",
+      "title": "Quantum computing software in 2026: the open-source map"
+    }
+  ],
+  "primaryLanguage": "C++",
+  "license": "Custom / project-specific",
+  "summary": "The open source vm6502q/qrack library and its associated plugins and projects under the vm6502q organization header comprise a framework for full-stack quantum computing development, via high performance and fundamentally optimized simulation.",
+  "description": "The open source vm6502q/qrack library and its associated plugins and projects under the vm6502q organization header comprise a framework for full-stack quantum computing development, via high performance and fundamentally optimized simulation. The intent of \"Qrack\" is to provide maximum performance for the simulation of an ideal, virtually error-free quantum computer, across the broadest possible set of hardware and operating systems.",
+  "whatItIs": [
+    "qrack is an open-source project in the simulators category. It is maintained by vm6502q and primarily looks like a C++ codebase. The open source vm6502q/qrack library and its associated plugins and projects under the vm6502q organization header comprise a framework for full-stack quantum computing development, via high performance and fundamentally optimized simulation.",
+    "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches simulators workflows in practice. The repository README emphasizes: The open source vm6502q/qrack library and its associated plugins and projects under the vm6502q organization header comprise a framework for full-stack quantum computing development, via high performance and fundamentally optimized simulation. The intent of \"Qrack\" is to provide maximum performance for the simulation of an ideal, virtually error-free..."
+  ],
+  "whoItsFor": "Developers and researchers who need to test ideas locally before running on hardware or who want to compare simulation strategies.",
+  "whatYouCanBuild": [
+    "Benchmark how different simulation methods trade accuracy for runtime.",
+    "Inspect circuit behavior, noise assumptions, or state evolution offline.",
+    "Choose the right simulator for a debugging, teaching, or research workflow."
+  ],
+  "readmeExcerpt": "The open source vm6502q/qrack library and its associated plugins and projects under the vm6502q organization header comprise a framework for full-stack quantum computing development, via high performance and fundamentally optimized simulation. The intent of \"Qrack\" is to provide maximum performance for the simulation of an ideal, virtually error-free quantum computer, across the broadest possible set of hardware and operating systems. Using the C++11 standard, at base, Qrack has an external-dependency-free CPU simulator \"engine,\" as well as a GPU simulator engine that depends only on OpenCL. The QUnit layer provides novel, fundamental optimizations in the simulation algorithm, based on \"Schmidt decomposition,\" transformation of basis, 2 qubit controlled gate buffer caching, the...",
+  "readmePath": "reference\\vm6502q__qrack\\README.md",
+  "clonePath": "reference\\vm6502q__qrack",
+  "stars": 0,
+  "lastPushedAt": null,
+  "githubTopics": [],
+  "featured": false,
+  "flagship": false,
+  "qtanglRelevant": false,
+  "archived": false,
+  "imagePath": null,
+  "relatedSlugs": [
+    "0tt3r-quac",
+    "adamisntdead-qusimpy",
+    "aniabrown-quest",
+    "bbn-q-pysimulator",
+    "cda-tum-mqt-ddsim",
+    "dillanchang-qocs"
+  ]
+}

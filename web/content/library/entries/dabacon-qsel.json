@@ -1,0 +1,56 @@
+{
+  "slug": "dabacon-qsel",
+  "owner": "dabacon",
+  "name": "qsel",
+  "title": "qsel",
+  "repoUrl": "https://github.com/dabacon/qsel",
+  "homepageUrl": null,
+  "category": {
+    "slug": "compilers-languages",
+    "title": "Compilers and languages",
+    "description": "Compilers, intermediate representations, domain-specific languages, and transpilation tools for quantum programs."
+  },
+  "topics": [
+    {
+      "slug": "quantum-software-map",
+      "title": "Quantum computing software in 2026: the open-source map"
+    },
+    {
+      "slug": "start-writing-quantum-code",
+      "title": "How to start writing quantum code: an honest path"
+    }
+  ],
+  "primaryLanguage": "Python",
+  "license": "Apache-2.0",
+  "summary": "What makes quantum computers more powerful than classical computers?",
+  "description": "What makes quantum computers more powerful than classical computers? Ask any expert, or watch any public lecture on the subject and the answer is clear. **Entanglement** and **Superposition** are what give quantum computers their power over classical computers. If these two ideas are at the heart of the power of quantum computing, it therefore makes sense that any programing language...",
+  "whatItIs": [
+    "qsel is an open-source project in the compilers and languages category. It is maintained by dabacon and primarily looks like a Python codebase. What makes quantum computers more powerful than classical computers?",
+    "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches compilers and languages workflows in practice. The repository README emphasizes: What makes quantum computers more powerful than classical computers? Ask any expert, or watch any public lecture on the subject and the answer is clear. **Entanglement** and **Superposition** are what give quantum computers their power over classical computers. If these two ideas are at the heart of the..."
+  ],
+  "whoItsFor": "Developers who want to understand the representations and compilers that sit between high-level code and runnable circuits.",
+  "whatYouCanBuild": [
+    "Compare IRs, DSLs, transpilers, and compiler assumptions across ecosystems.",
+    "Understand how high-level code becomes something a backend can execute.",
+    "Spot tools that matter when interoperability and compilation quality are important."
+  ],
+  "readmeExcerpt": "What makes quantum computers more powerful than classical computers? Ask any expert, or watch any public lecture on the subject and the answer is clear. **Entanglement** and **Superposition** are what give quantum computers their power over classical computers. If these two ideas are at the heart of the power of quantum computing, it therefore makes sense that any programing language for quantum computing should make these two ideas front and center. This is where **Quantum Super Entangled Language** (qsel) comes in. It is a quantum programming language made entirely from superposition and entanglement. The qsel compiler is written in python because who needs strong typing when you are writing research...",
+  "readmePath": "reference\\dabacon__qsel\\README.md",
+  "clonePath": "reference\\dabacon__qsel",
+  "stars": 0,
+  "lastPushedAt": null,
+  "githubTopics": [],
+  "featured": false,
+  "flagship": false,
+  "qtanglRelevant": false,
+  "archived": false,
+  "imagePath": null,
+  "relatedSlugs": [
+    "cqcl-tket",
+    "nvidia-cuda-quantum",
+    "quantomatic-pyzx",
+    "avalon-lang-avaloni",
+    "aviggiano-qcl",
+    "epiqc-scaffcc"
+  ]
+}

@@ -1,0 +1,56 @@
+{
+  "slug": "mstechly-vqf",
+  "owner": "mstechly",
+  "name": "vqf",
+  "title": "vqf",
+  "repoUrl": "https://github.com/mstechly/vqf",
+  "homepageUrl": null,
+  "category": {
+    "slug": "optimization-qubo",
+    "title": "Optimization and QUBO",
+    "description": "Libraries for expressing and solving combinatorial optimization problems with QUBO, QAOA, or related formulations."
+  },
+  "topics": [
+    {
+      "slug": "quantum-optimization-compared",
+      "title": "Quantum optimization libraries compared: QAOA, QUBO, and annealing"
+    },
+    {
+      "slug": "quantum-software-map",
+      "title": "Quantum computing software in 2026: the open-source map"
+    }
+  ],
+  "primaryLanguage": "Python",
+  "license": "Apache-2.0",
+  "summary": "This repository contains implementation of the algorithm presented in the article \"Variational Quantum Factoring\", by Eric R.",
+  "description": "This repository contains implementation of the algorithm presented in the article \"Variational Quantum Factoring\", by Eric R. Anschuetz, Jonathan P. Olson, Al\u00e1n Aspuru-Guzik, Yudong Cao. It's available on arxiv.",
+  "whatItIs": [
+    "vqf is an open-source project in the optimization and qubo category. It is maintained by mstechly and primarily looks like a Python codebase. This repository contains implementation of the algorithm presented in the article \"Variational Quantum Factoring\", by Eric R.",
+    "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches optimization and qubo workflows in practice. The repository README emphasizes: This repository contains implementation of the algorithm presented in the article \"Variational Quantum Factoring\", by Eric R. Anschuetz, Jonathan P. Olson, Al\u00e1n Aspuru-Guzik, Yudong Cao. It's available on arxiv. The notation in the code refers directly to the notation in the paper."
+  ],
+  "whoItsFor": "Teams exploring routing, scheduling, allocation, and other combinatorial problems that can be modeled as optimization workloads.",
+  "whatYouCanBuild": [
+    "Understand how this project models constrained optimization problems.",
+    "Compare QUBO, QAOA, and hybrid optimization workflows against classical baselines.",
+    "Identify pieces that could inform a practical planning stack like Qtangl."
+  ],
+  "readmeExcerpt": "This repository contains implementation of the algorithm presented in the article \"Variational Quantum Factoring\", by Eric R. Anschuetz, Jonathan P. Olson, Al\u00e1n Aspuru-Guzik, Yudong Cao. It's available on arxiv. The notation in the code refers directly to the notation in the paper.",
+  "readmePath": "reference\\mstechly__vqf\\README.md",
+  "clonePath": "reference\\mstechly__vqf",
+  "stars": 0,
+  "lastPushedAt": null,
+  "githubTopics": [],
+  "featured": false,
+  "flagship": false,
+  "qtanglRelevant": false,
+  "archived": false,
+  "imagePath": null,
+  "relatedSlugs": [
+    "entropicalabs-openqaoa",
+    "cda-tum-mqt-qmap",
+    "jtiosue-qubovert",
+    "qiskit-qiskit-optimization",
+    "dwavesystems-dwave-sapi-dimod",
+    "dwavesystems-penaltymodel"
+  ]
+}

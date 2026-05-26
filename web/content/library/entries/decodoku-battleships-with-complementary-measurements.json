@@ -1,0 +1,56 @@
+{
+  "slug": "decodoku-battleships-with-complementary-measurements",
+  "owner": "decodoku",
+  "name": "Battleships_with_complementary_measurements",
+  "title": "Battleships_with_complementary_measurements",
+  "repoUrl": "https://github.com/decodoku/Battleships_with_complementary_measurements",
+  "homepageUrl": null,
+  "category": {
+    "slug": "games-learning",
+    "title": "Games and learning",
+    "description": "Interactive projects, puzzles, and educational resources for learning quantum computing concepts."
+  },
+  "topics": [
+    {
+      "slug": "quantum-software-map",
+      "title": "Quantum computing software in 2026: the open-source map"
+    },
+    {
+      "slug": "start-writing-quantum-code",
+      "title": "How to start writing quantum code: an honest path"
+    }
+  ],
+  "primaryLanguage": "Jupyter",
+  "license": "Unknown",
+  "summary": "Battleships with complementary measurements A game for a quantum computer.",
+  "description": "Battleships with complementary measurements A game for a quantum computer. More info here.",
+  "whatItIs": [
+    "Battleships_with_complementary_measurements is an open-source project in the games and learning category. It is maintained by decodoku and primarily looks like a Jupyter codebase. Battleships with complementary measurements A game for a quantum computer.",
+    "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches games and learning workflows in practice. The repository README emphasizes: Battleships with complementary measurements A game for a quantum computer. More info here."
+  ],
+  "whoItsFor": "Beginners, educators, and curious developers who want a more approachable path into quantum concepts.",
+  "whatYouCanBuild": [
+    "Get a gentler introduction before diving into full SDKs.",
+    "See how different projects teach circuits, superposition, and measurement.",
+    "Identify resources that work well for onboarding or self-study."
+  ],
+  "readmeExcerpt": "Battleships with complementary measurements A game for a quantum computer. More info here.",
+  "readmePath": "reference\\decodoku__Battleships_with_complementary_measurements\\README.md",
+  "clonePath": "reference\\decodoku__Battleships_with_complementary_measurements",
+  "stars": 0,
+  "lastPushedAt": null,
+  "githubTopics": [],
+  "featured": false,
+  "flagship": false,
+  "qtanglRelevant": false,
+  "archived": false,
+  "imagePath": null,
+  "relatedSlugs": [
+    "microsoft-quantumkatas",
+    "strilanc-quirk",
+    "stared-quantum-game",
+    "decodoku-a-game-to-benchmark-quantum-computers",
+    "desireevl-quantum-catsweeper",
+    "entanglion-entanglion"
+  ]
+}

@@ -1,0 +1,56 @@
+{
+  "slug": "haykkh-qsim",
+  "owner": "haykkh",
+  "name": "qSim",
+  "title": "qSim",
+  "repoUrl": "https://github.com/haykkh/qSim",
+  "homepageUrl": null,
+  "category": {
+    "slug": "games-learning",
+    "title": "Games and learning",
+    "description": "Interactive projects, puzzles, and educational resources for learning quantum computing concepts."
+  },
+  "topics": [
+    {
+      "slug": "quantum-software-map",
+      "title": "Quantum computing software in 2026: the open-source map"
+    },
+    {
+      "slug": "start-writing-quantum-code",
+      "title": "How to start writing quantum code: an honest path"
+    }
+  ],
+  "primaryLanguage": "C++",
+  "license": "MIT",
+  "summary": "I'm building this to learn **C++** and **Quantum Information Theory** simultaneously, so don't be surprised if they're both wrong.",
+  "description": "I'm building this to learn **C++** and **Quantum Information Theory** simultaneously, so don't be surprised if they're both wrong. Instead, feel free to create a new issue or a new pull request so you can rub in exactly what I did wrong in a concise, well commented manner.",
+  "whatItIs": [
+    "qSim is an open-source project in the games and learning category. It is maintained by haykkh and primarily looks like a C++ codebase. I'm building this to learn **C++** and **Quantum Information Theory** simultaneously, so don't be surprised if they're both wrong.",
+    "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches games and learning workflows in practice. The repository README emphasizes: I'm building this to learn **C++** and **Quantum Information Theory** simultaneously, so don't be surprised if they're both wrong. Instead, feel free to create a new issue or a new pull request so you can rub in exactly what I did wrong in a concise, well commented manner..."
+  ],
+  "whoItsFor": "Beginners, educators, and curious developers who want a more approachable path into quantum concepts.",
+  "whatYouCanBuild": [
+    "Get a gentler introduction before diving into full SDKs.",
+    "See how different projects teach circuits, superposition, and measurement.",
+    "Identify resources that work well for onboarding or self-study."
+  ],
+  "readmeExcerpt": "I'm building this to learn **C++** and **Quantum Information Theory** simultaneously, so don't be surprised if they're both wrong. Instead, feel free to create a new issue or a new pull request so you can rub in exactly what I did wrong in a concise, well commented manner. int main() { // initialize a 0> qubit math::Ket qubit = states::z0;",
+  "readmePath": "reference\\haykkh__qSim\\README.md",
+  "clonePath": "reference\\haykkh__qSim",
+  "stars": 0,
+  "lastPushedAt": null,
+  "githubTopics": [],
+  "featured": false,
+  "flagship": false,
+  "qtanglRelevant": false,
+  "archived": false,
+  "imagePath": null,
+  "relatedSlugs": [
+    "microsoft-quantumkatas",
+    "strilanc-quirk",
+    "stared-quantum-game",
+    "decodoku-a-game-to-benchmark-quantum-computers",
+    "decodoku-battleships-with-complementary-measurements",
+    "desireevl-quantum-catsweeper"
+  ]
+}

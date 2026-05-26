@@ -1,0 +1,56 @@
+{
+  "slug": "open-quantum-safe-openssl",
+  "owner": "open-quantum-safe",
+  "name": "openssl",
+  "title": "openssl",
+  "repoUrl": "https://github.com/open-quantum-safe/openssl",
+  "homepageUrl": null,
+  "category": {
+    "slug": "post-quantum-crypto",
+    "title": "Post-quantum cryptography",
+    "description": "Libraries and standards implementations for quantum-safe cryptography and related security tooling."
+  },
+  "topics": [
+    {
+      "slug": "post-quantum-crypto-libraries",
+      "title": "Post-quantum cryptography libraries you can use today"
+    },
+    {
+      "slug": "quantum-software-map",
+      "title": "Quantum computing software in 2026: the open-source map"
+    }
+  ],
+  "primaryLanguage": "C",
+  "license": "BSD",
+  "summary": "Copyright (c) 1998-2023 The OpenSSL Project Copyright (c) 1995-1998 Eric A.",
+  "description": "Copyright (c) 1998-2023 The OpenSSL Project Copyright (c) 1995-1998 Eric A. Young, Tim J. Hudson All rights reserved.",
+  "whatItIs": [
+    "openssl is an open-source project in the post-quantum cryptography category. It is maintained by open-quantum-safe and primarily looks like a C codebase. Copyright (c) 1998-2023 The OpenSSL Project Copyright (c) 1995-1998 Eric A.",
+    "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches post-quantum cryptography workflows in practice. The repository README emphasizes: Copyright (c) 1998-2023 The OpenSSL Project Copyright (c) 1995-1998 Eric A. Young, Tim J. Hudson All rights reserved. The OpenSSL Project is a collaborative effort to develop a robust, commercial-grade, fully featured, and Open Source toolkit implementing the Transport Layer Security (TLS) protocols (including SSLv3) as well as..."
+  ],
+  "whoItsFor": "Security-minded developers and teams looking for practical quantum-safe cryptography resources they can evaluate today.",
+  "whatYouCanBuild": [
+    "Identify which libraries are reference implementations versus production integrations.",
+    "Understand how PQC work differs from quantum-computing SDK work.",
+    "Find the right starting point for learning or experimentation."
+  ],
+  "readmeExcerpt": "Copyright (c) 1998-2023 The OpenSSL Project Copyright (c) 1995-1998 Eric A. Young, Tim J. Hudson All rights reserved. The OpenSSL Project is a collaborative effort to develop a robust, commercial-grade, fully featured, and Open Source toolkit implementing the Transport Layer Security (TLS) protocols (including SSLv3) as well as a full-strength general purpose cryptographic library.",
+  "readmePath": "reference\\open-quantum-safe__openssl\\README",
+  "clonePath": "reference\\open-quantum-safe__openssl",
+  "stars": 0,
+  "lastPushedAt": null,
+  "githubTopics": [],
+  "featured": false,
+  "flagship": false,
+  "qtanglRelevant": false,
+  "archived": false,
+  "imagePath": null,
+  "relatedSlugs": [
+    "open-quantum-safe-liboqs",
+    "open-quantum-safe-openssh-portable",
+    "pqclean-pqclean",
+    "theqrl-qrl",
+    "aws-amazon-braket-sdk-python",
+    "cqcl-tket"
+  ]
+}

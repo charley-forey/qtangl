@@ -1,0 +1,52 @@
+{
+  "slug": "wintershammer-qimp",
+  "owner": "wintershammer",
+  "name": "QImp",
+  "title": "QImp",
+  "repoUrl": "https://github.com/wintershammer/QImp",
+  "homepageUrl": null,
+  "category": {
+    "slug": "pulse-control",
+    "title": "Pulse and control",
+    "description": "Tooling for low-level pulse scheduling, experiment orchestration, and laboratory control around quantum hardware."
+  },
+  "topics": [
+    {
+      "slug": "quantum-software-map",
+      "title": "Quantum computing software in 2026: the open-source map"
+    }
+  ],
+  "primaryLanguage": "Python",
+  "license": "Unknown",
+  "summary": "QImp QImp is the experimental implementation of an interpreter for the quantum programming language Qumin.",
+  "description": "QImp QImp is the experimental implementation of an interpreter for the quantum programming language Qumin. For more info, check out the (still under-construction) tutorial over at my github page!",
+  "whatItIs": [
+    "QImp is an open-source project in the pulse and control category. It is maintained by wintershammer and primarily looks like a Python codebase. QImp QImp is the experimental implementation of an interpreter for the quantum programming language Qumin.",
+    "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches pulse and control workflows in practice. The repository README emphasizes: QImp QImp is the experimental implementation of an interpreter for the quantum programming language Qumin. For more info, check out the (still under-construction) tutorial over at my github page! Qumin is written in Python 3, so the latest version of the Python 3 interpreter must be installed in..."
+  ],
+  "whoItsFor": "Hardware-adjacent developers and researchers working closer to experiments, pulse schedules, or lab orchestration.",
+  "whatYouCanBuild": [
+    "See how low-level control stacks differ from higher-level SDKs.",
+    "Understand where pulse sequencing and experiment orchestration fit in the stack.",
+    "Learn which projects matter when hardware control is part of the workflow."
+  ],
+  "readmeExcerpt": "QImp QImp is the experimental implementation of an interpreter for the quantum programming language Qumin. For more info, check out the (still under-construction) tutorial over at my github page! Qumin is written in Python 3, so the latest version of the Python 3 interpreter must be installed in your computer. It also has the following dependencies: Parsimonious NumPy SciPy which can be installed via tools like pip.",
+  "readmePath": "reference\\wintershammer__QImp\\README.md",
+  "clonePath": "reference\\wintershammer__QImp",
+  "stars": 0,
+  "lastPushedAt": null,
+  "githubTopics": [],
+  "featured": false,
+  "flagship": false,
+  "qtanglRelevant": false,
+  "archived": false,
+  "imagePath": null,
+  "relatedSlugs": [
+    "m-labs-artiq",
+    "bbn-q-pyqgl2",
+    "bbn-q-pyqlab",
+    "bbn-q-qgl",
+    "bbn-q-qlab",
+    "bbn-q-qlab-jl"
+  ]
+}

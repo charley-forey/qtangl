@@ -1,0 +1,52 @@
+{
+  "slug": "bbn-q-quantuminfo-jl",
+  "owner": "BBN-Q",
+  "name": "QuantumInfo.jl",
+  "title": "QuantumInfo.jl",
+  "repoUrl": "https://github.com/BBN-Q/QuantumInfo.jl",
+  "homepageUrl": null,
+  "category": {
+    "slug": "visualization-tomography",
+    "title": "Visualization and tomography",
+    "description": "Tools for visualizing circuits, reasoning about states, and reconstructing quantum systems from measurements."
+  },
+  "topics": [
+    {
+      "slug": "quantum-software-map",
+      "title": "Quantum computing software in 2026: the open-source map"
+    }
+  ],
+  "primaryLanguage": "Julia",
+  "license": "Custom / project-specific",
+  "summary": "This Julia package contains functions that are convenient for common calculation in quantum information processing.",
+  "description": "This Julia package contains functions that are convenient for common calculation in quantum information processing.",
+  "whatItIs": [
+    "QuantumInfo.jl is an open-source project in the visualization and tomography category. It is maintained by BBN-Q and primarily looks like a Julia codebase. This Julia package contains functions that are convenient for common calculation in quantum information processing.",
+    "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches visualization and tomography workflows in practice. The repository README emphasizes: This Julia package contains functions that are convenient for common calculation in quantum information processing. This research was funded by the Intelligence Advanced Research Projects Activity (IARPA) Multi Qubit Coherent Operations (MQCO) program under Contract No. W911NF-10-1-0324. All statements of fact, opinion, or conclusions contained herein are those..."
+  ],
+  "whoItsFor": "People who learn best by seeing state structure, measurement results, or circuit behavior laid out visually.",
+  "whatYouCanBuild": [
+    "Understand how the project helps inspect or reconstruct quantum systems.",
+    "Compare visual tooling against more code-heavy workflows.",
+    "Use the resource as a bridge between theory, experiments, and debugging."
+  ],
+  "readmeExcerpt": "This Julia package contains functions that are convenient for common calculation in quantum information processing. This research was funded by the Intelligence Advanced Research Projects Activity (IARPA) Multi Qubit Coherent Operations (MQCO) program under Contract No. W911NF-10-1-0324. All statements of fact, opinion, or conclusions contained herein are those of the authors and should not be construed as representing the official views or policies of IARPA, ODNI, or the US Government.",
+  "readmePath": "reference\\BBN-Q__QuantumInfo.jl\\README.md",
+  "clonePath": "reference\\BBN-Q__QuantumInfo.jl",
+  "stars": 0,
+  "lastPushedAt": null,
+  "githubTopics": [],
+  "featured": false,
+  "flagship": false,
+  "qtanglRelevant": false,
+  "archived": false,
+  "imagePath": null,
+  "relatedSlugs": [
+    "artiste-qb-net-quantum-fog",
+    "bbn-q-quantumtomography-jl",
+    "bbn-q-quince",
+    "qct-iqc-qcviewer",
+    "ziofil-quantumgraphs",
+    "aws-amazon-braket-sdk-python"
+  ]
+}

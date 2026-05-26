@@ -1,0 +1,52 @@
+{
+  "slug": "tqsd-qunetsim",
+  "owner": "tqsd",
+  "name": "QuNetSim",
+  "title": "QuNetSim",
+  "repoUrl": "https://github.com/tqsd/QuNetSim",
+  "homepageUrl": null,
+  "category": {
+    "slug": "networking",
+    "title": "Networking",
+    "description": "Simulators and frameworks for quantum networking, distributed entanglement, and communication systems."
+  },
+  "topics": [
+    {
+      "slug": "quantum-software-map",
+      "title": "Quantum computing software in 2026: the open-source map"
+    }
+  ],
+  "primaryLanguage": "Python",
+  "license": "MIT",
+  "summary": "QuNetSim is a quantum-enabled network simulator that adds common quantum networking tasks like teleportation, superdense coding, sharing EPR pairs, etc.",
+  "description": "QuNetSim is a quantum-enabled network simulator that adds common quantum networking tasks like teleportation, superdense coding, sharing EPR pairs, etc. With QuNetSim, one can design and test robust quantum network protocols under various network conditions.",
+  "whatItIs": [
+    "QuNetSim is an open-source project in the networking category. It is maintained by tqsd and primarily looks like a Python codebase. QuNetSim is a quantum-enabled network simulator that adds common quantum networking tasks like teleportation, superdense coding, sharing EPR pairs, etc.",
+    "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches networking workflows in practice. The repository README emphasizes: QuNetSim is a quantum-enabled network simulator that adds common quantum networking tasks like teleportation, superdense coding, sharing EPR pairs, etc. With QuNetSim, one can design and test robust quantum network protocols under various network conditions. See https://tqsd.github.io/QuNetSim/ for documentation. To install the latest release via pip:"
+  ],
+  "whoItsFor": "Researchers and students exploring distributed quantum systems, communication protocols, and quantum internet concepts.",
+  "whatYouCanBuild": [
+    "See how the project models nodes, links, and entanglement distribution.",
+    "Understand what a networking-oriented workflow looks like in software.",
+    "Compare education-focused versus research-focused networking tools."
+  ],
+  "readmeExcerpt": "QuNetSim is a quantum-enabled network simulator that adds common quantum networking tasks like teleportation, superdense coding, sharing EPR pairs, etc. With QuNetSim, one can design and test robust quantum network protocols under various network conditions. See https://tqsd.github.io/QuNetSim/ for documentation. To install the latest release via pip:",
+  "readmePath": "reference\\tqsd__QuNetSim\\README.md",
+  "clonePath": "reference\\tqsd__QuNetSim",
+  "stars": 0,
+  "lastPushedAt": null,
+  "githubTopics": [],
+  "featured": false,
+  "flagship": false,
+  "qtanglRelevant": false,
+  "archived": false,
+  "imagePath": null,
+  "relatedSlugs": [
+    "stephaniewehner-simulaqron",
+    "aws-amazon-braket-sdk-python",
+    "cqcl-tket",
+    "dwavesystems-dwave-ocean-sdk",
+    "entropicalabs-openqaoa",
+    "microsoft-quantumkatas"
+  ]
+}

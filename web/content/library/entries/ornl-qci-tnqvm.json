@@ -1,0 +1,56 @@
+{
+  "slug": "ornl-qci-tnqvm",
+  "owner": "ornl-qci",
+  "name": "tnqvm",
+  "title": "tnqvm",
+  "repoUrl": "https://github.com/ornl-qci/tnqvm",
+  "homepageUrl": null,
+  "category": {
+    "slug": "simulators",
+    "title": "Simulators",
+    "description": "Projects focused on state-vector, stabilizer, tensor-network, or hardware-inspired quantum simulation."
+  },
+  "topics": [
+    {
+      "slug": "quantum-simulators-guide",
+      "title": "Open-source quantum simulators: what each one is good at"
+    },
+    {
+      "slug": "quantum-software-map",
+      "title": "Quantum computing software in 2026: the open-source map"
+    }
+  ],
+  "primaryLanguage": "C++",
+  "license": "Unknown",
+  "summary": "TNQVM Tensor Network XACC Accelerator These plugins for XACC provide an Accelerator implementation that leverages tensor network theory to simulate quantum circuits.",
+  "description": "TNQVM Tensor Network XACC Accelerator These plugins for XACC provide an Accelerator implementation that leverages tensor network theory to simulate quantum circuits.",
+  "whatItIs": [
+    "tnqvm is an open-source project in the simulators category. It is maintained by ornl-qci and primarily looks like a C++ codebase. TNQVM Tensor Network XACC Accelerator These plugins for XACC provide an Accelerator implementation that leverages tensor network theory to simulate quantum circuits.",
+    "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches simulators workflows in practice. The repository README emphasizes: TNQVM Tensor Network XACC Accelerator These plugins for XACC provide an Accelerator implementation that leverages tensor network theory to simulate quantum circuits. TNQVM can be built with ExaTN support, providing a tensor network processing backend that scales on Summit-like architectures. To enable this support, first follow the ExaTN..."
+  ],
+  "whoItsFor": "Developers and researchers who need to test ideas locally before running on hardware or who want to compare simulation strategies.",
+  "whatYouCanBuild": [
+    "Benchmark how different simulation methods trade accuracy for runtime.",
+    "Inspect circuit behavior, noise assumptions, or state evolution offline.",
+    "Choose the right simulator for a debugging, teaching, or research workflow."
+  ],
+  "readmeExcerpt": "TNQVM Tensor Network XACC Accelerator These plugins for XACC provide an Accelerator implementation that leverages tensor network theory to simulate quantum circuits. TNQVM can be built with ExaTN support, providing a tensor network processing backend that scales on Summit-like architectures. To enable this support, first follow the ExaTN README to build and install ExaTN. Now configure TNQVM with CMake and build/install To switch tensor processing backends use or in Python",
+  "readmePath": "reference\\ornl-qci__tnqvm\\README.md",
+  "clonePath": "reference\\ornl-qci__tnqvm",
+  "stars": 0,
+  "lastPushedAt": null,
+  "githubTopics": [],
+  "featured": false,
+  "flagship": false,
+  "qtanglRelevant": false,
+  "archived": false,
+  "imagePath": null,
+  "relatedSlugs": [
+    "0tt3r-quac",
+    "adamisntdead-qusimpy",
+    "aniabrown-quest",
+    "bbn-q-pysimulator",
+    "cda-tum-mqt-ddsim",
+    "dillanchang-qocs"
+  ]
+}

@@ -1,0 +1,56 @@
+{
+  "slug": "dwavesystems-dwave-embedding-utilities",
+  "owner": "dwavesystems",
+  "name": "dwave_embedding_utilities",
+  "title": "dwave_embedding_utilities",
+  "repoUrl": "https://github.com/dwavesystems/dwave_embedding_utilities",
+  "homepageUrl": null,
+  "category": {
+    "slug": "annealing-ising",
+    "title": "Annealing and Ising",
+    "description": "D-Wave and Ising-model tools for quantum annealing, embeddings, and heuristic search workflows."
+  },
+  "topics": [
+    {
+      "slug": "quantum-optimization-compared",
+      "title": "Quantum optimization libraries compared: QAOA, QUBO, and annealing"
+    },
+    {
+      "slug": "quantum-software-map",
+      "title": "Quantum computing software in 2026: the open-source map"
+    }
+  ],
+  "primaryLanguage": "Python",
+  "license": "Apache-2.0",
+  "summary": "This package provides utilities for mapping between source and target models.",
+  "description": "This package provides utilities for mapping between source and target models.",
+  "whatItIs": [
+    "dwave_embedding_utilities is an open-source project in the annealing and ising category. It is maintained by dwavesystems and primarily looks like a Python codebase. This package provides utilities for mapping between source and target models.",
+    "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches annealing and ising workflows in practice. The repository README emphasizes: This package provides utilities for mapping between source and target models. Released under the Apache License 2.0. See LICENSE_"
+  ],
+  "whoItsFor": "Developers interested in Ising-model formulations, annealing workflows, and D-Wave-style solver ecosystems.",
+  "whatYouCanBuild": [
+    "See how annealing-oriented projects model optimization problems.",
+    "Understand embeddings, samplers, and the surrounding tooling needed in practice.",
+    "Compare annealing workflows against gate-model and hybrid alternatives."
+  ],
+  "readmeExcerpt": "This package provides utilities for mapping between source and target models. Released under the Apache License 2.0. See LICENSE_",
+  "readmePath": "reference\\dwavesystems__dwave_embedding_utilities\\README.rst",
+  "clonePath": "reference\\dwavesystems__dwave_embedding_utilities",
+  "stars": 0,
+  "lastPushedAt": null,
+  "githubTopics": [],
+  "featured": false,
+  "flagship": false,
+  "qtanglRelevant": false,
+  "archived": false,
+  "imagePath": null,
+  "relatedSlugs": [
+    "dwavesystems-dwave-ocean-sdk",
+    "dwavesystems-dimod",
+    "dwavesystems-qbsolv",
+    "dwavesystems-chimera-embedding",
+    "dwavesystems-dwave-cloud-client",
+    "dwavesystems-dwave-micro-client-dimod"
+  ]
+}

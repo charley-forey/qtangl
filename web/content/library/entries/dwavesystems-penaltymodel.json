@@ -1,0 +1,56 @@
+{
+  "slug": "dwavesystems-penaltymodel",
+  "owner": "dwavesystems",
+  "name": "penaltymodel",
+  "title": "penaltymodel",
+  "repoUrl": "https://github.com/dwavesystems/penaltymodel",
+  "homepageUrl": null,
+  "category": {
+    "slug": "optimization-qubo",
+    "title": "Optimization and QUBO",
+    "description": "Libraries for expressing and solving combinatorial optimization problems with QUBO, QAOA, or related formulations."
+  },
+  "topics": [
+    {
+      "slug": "quantum-optimization-compared",
+      "title": "Quantum optimization libraries compared: QAOA, QUBO, and annealing"
+    },
+    {
+      "slug": "quantum-software-map",
+      "title": "Quantum computing software in 2026: the open-source map"
+    }
+  ],
+  "primaryLanguage": "Python",
+  "license": "Apache-2.0",
+  "summary": "For solving problems with constraints, we recommend using the hybrid solvers in the Leap :tm: service.",
+  "description": ":warning: *penaltymodel* is deprecated. For solving problems with constraints, we recommend using the hybrid solvers in the Leap :tm: service. You can find documentation for the hybrid solvers at https://docs.dwavequantum.com.",
+  "whatItIs": [
+    "penaltymodel is an open-source project in the optimization and qubo category. It is maintained by dwavesystems and primarily looks like a Python codebase. For solving problems with constraints, we recommend using the hybrid solvers in the Leap :tm: service.",
+    "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches optimization and qubo workflows in practice. The repository README emphasizes: :warning: *penaltymodel* is deprecated. For solving problems with constraints, we recommend using the hybrid solvers in the Leap :tm: service. You can find documentation for the hybrid solvers at https://docs.dwavequantum.com. One approach to solve a constraint satisfaction problem (CSP <https://en.wikipedia.org/wiki/Constraint_satisfaction_problem>_) using an Ising model <https://en.wikipedia.org/wiki/Ising_model>_ or a QUBO... The repository also appears to be archival or no longer actively maintained, which matters when evaluating it for current production use."
+  ],
+  "whoItsFor": "Teams exploring routing, scheduling, allocation, and other combinatorial problems that can be modeled as optimization workloads.",
+  "whatYouCanBuild": [
+    "Understand how this project models constrained optimization problems.",
+    "Compare QUBO, QAOA, and hybrid optimization workflows against classical baselines.",
+    "Identify pieces that could inform a practical planning stack like Qtangl."
+  ],
+  "readmeExcerpt": ":warning: *penaltymodel* is deprecated. For solving problems with constraints, we recommend using the hybrid solvers in the Leap :tm: service. You can find documentation for the hybrid solvers at https://docs.dwavequantum.com. One approach to solve a constraint satisfaction problem (CSP <https://en.wikipedia.org/wiki/Constraint_satisfaction_problem>_) using an Ising model <https://en.wikipedia.org/wiki/Ising_model>_ or a QUBO <https://en.wikipedia.org/wiki/Quadratic_unconstrained_binary_optimization>_, is to map each individual constraint in the CSP to a 'small' Ising model or QUBO. This mapping is called a *penalty model*.",
+  "readmePath": "reference\\dwavesystems__penaltymodel\\README.rst",
+  "clonePath": "reference\\dwavesystems__penaltymodel",
+  "stars": 0,
+  "lastPushedAt": null,
+  "githubTopics": [],
+  "featured": false,
+  "flagship": false,
+  "qtanglRelevant": false,
+  "archived": true,
+  "imagePath": null,
+  "relatedSlugs": [
+    "entropicalabs-openqaoa",
+    "cda-tum-mqt-qmap",
+    "jtiosue-qubovert",
+    "qiskit-qiskit-optimization",
+    "dwavesystems-dwave-sapi-dimod",
+    "goodchemistryco-tangelo"
+  ]
+}
