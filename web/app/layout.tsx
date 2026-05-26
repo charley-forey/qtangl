@@ -4,6 +4,7 @@ import "./globals.css";
 
 import Footer from "@/components/layout/Footer";
 import Navbar from "@/components/layout/Navbar";
+import { MAIN_CONTENT_ID } from "@/components/layout/PageShell";
 import { siteMetadata } from "@/lib/copy/product";
 
 const inter = Inter({
@@ -56,6 +57,12 @@ export default function RootLayout({
     >
       <body className="min-h-full bg-black text-white">
         <div className="quantum-shell relative flex min-h-screen flex-col overflow-x-hidden">
+          <a
+            href={`#${MAIN_CONTENT_ID}`}
+            className="sr-only fixed left-4 top-4 z-[60] rounded-full border border-[var(--border-strong)] bg-black px-4 py-2 text-sm text-white focus:not-sr-only"
+          >
+            Skip to content
+          </a>
           <Navbar />
           <div className="relative flex flex-1 flex-col">{children}</div>
           <Footer />

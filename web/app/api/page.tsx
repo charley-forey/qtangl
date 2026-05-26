@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 
 import CodeBlock from "@/components/docs/CodeBlock";
+import PageHero from "@/components/layout/PageHero";
+import PageShell from "@/components/layout/PageShell";
 import Section from "@/components/layout/Section";
 import Card from "@/components/ui/Card";
-import Eyebrow from "@/components/ui/Eyebrow";
 import {
   apiErrors,
   apiReferenceRequest,
@@ -17,20 +18,26 @@ export const metadata: Metadata = {
 
 export default function ApiPage() {
   return (
-    <main className="flex-1">
-      <Section className="pt-12 sm:pt-16">
-        <div className="max-w-3xl">
-          <Eyebrow>API reference</Eyebrow>
-          <h1 className="mt-4 text-4xl font-semibold tracking-tight text-white sm:text-5xl">
-            `POST /optimize`
-          </h1>
-          <p className="mt-5 text-lg leading-8 text-[var(--color-gray-300)]">
+    <PageShell>
+      <PageHero
+        eyebrow="API reference"
+        title="`POST /optimize`"
+        description={
+          <>
             Submit a schedule, route, or staffing problem and receive a readable
             summary, metrics, and structured plan output.
-          </p>
-        </div>
-      </Section>
-
+          </>
+        }
+        actions={[
+          { href: "/docs/api", label: "Read the API guide", variant: "primary" },
+          {
+            href: "/docs/data-formats",
+            label: "Review data formats",
+            variant: "secondary",
+          },
+        ]}
+        contentClassName="max-w-3xl"
+      />
       <Section className="pt-0">
         <div className="grid gap-6 lg:grid-cols-2">
           <CodeBlock title="Request" code={apiReferenceRequest} />
@@ -38,7 +45,7 @@ export default function ApiPage() {
         </div>
       </Section>
 
-      <Section className="pt-0">
+      <Section className="pt-0 pb-0">
         <div className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
           <Card className="rounded-2xl">
             <h2 className="text-2xl font-semibold text-white">Execution flow</h2>
@@ -62,6 +69,6 @@ export default function ApiPage() {
           </Card>
         </div>
       </Section>
-    </main>
+    </PageShell>
   );
 }

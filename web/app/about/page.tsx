@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 
 import Image from "next/image";
 
+import PageHero from "@/components/layout/PageHero";
+import PageShell from "@/components/layout/PageShell";
 import Section from "@/components/layout/Section";
 import ProbabilityGrid from "@/components/quantum/ProbabilityGrid";
 import Card from "@/components/ui/Card";
@@ -15,19 +17,12 @@ export const metadata: Metadata = {
 
 export default function AboutPage() {
   return (
-    <main className="flex-1">
-      <Section className="pt-12 sm:pt-16">
-        <div className="content-reading">
-          <Eyebrow>{aboutContent.eyebrow}</Eyebrow>
-          <h1 className="mt-4 text-4xl font-semibold tracking-tight text-white sm:text-5xl">
-            {aboutContent.title}
-          </h1>
-          <p className="mt-6 max-w-3xl text-lg leading-8 text-[var(--color-gray-300)]">
-            {aboutContent.intro}
-          </p>
-        </div>
-      </Section>
-
+    <PageShell>
+      <PageHero
+        eyebrow={aboutContent.eyebrow}
+        title={aboutContent.title}
+        description={aboutContent.intro}
+      />
       <Section className="pt-0">
         <Card strong className="relative overflow-hidden rounded-[2rem]">
           <ProbabilityGrid />
@@ -66,7 +61,7 @@ export default function AboutPage() {
         </Card>
       </Section>
 
-      <Section className="pt-0 pb-20 sm:pb-24">
+      <Section className="pt-0 pb-0">
         <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
           <Card className="rounded-2xl">
             <Eyebrow>Identity</Eyebrow>
@@ -88,6 +83,6 @@ export default function AboutPage() {
           </Card>
         </div>
       </Section>
-    </main>
+    </PageShell>
   );
 }

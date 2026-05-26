@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 
+import PageHero from "@/components/layout/PageHero";
+import PageShell from "@/components/layout/PageShell";
 import FeatureCard from "@/components/marketing/FeatureCard";
 import ProductPreview from "@/components/marketing/ProductPreview";
 import Section from "@/components/layout/Section";
@@ -20,19 +22,12 @@ export const metadata: Metadata = {
 
 export default function TechnologyPage() {
   return (
-    <main className="flex-1">
-      <Section className="pt-12 sm:pt-16">
-        <div className="content-reading">
-          <Eyebrow>{technologyPage.eyebrow}</Eyebrow>
-          <h1 className="mt-4 text-4xl font-semibold tracking-tight text-white sm:text-5xl">
-            {technologyPage.title}
-          </h1>
-          <p className="mt-6 max-w-3xl text-lg leading-8 text-[var(--color-gray-300)]">
-            {technologyPage.intro}
-          </p>
-        </div>
-      </Section>
-
+    <PageShell>
+      <PageHero
+        eyebrow={technologyPage.eyebrow}
+        title={technologyPage.title}
+        description={technologyPage.intro}
+      />
       <Section className="pt-0">
         <Card strong className="overflow-hidden rounded-[2rem] p-4 sm:p-6 lg:p-8">
           <div className="relative aspect-[16/10] overflow-hidden rounded-2xl border border-[var(--border)] bg-black/60">
@@ -119,7 +114,7 @@ export default function TechnologyPage() {
         </div>
       </Section>
 
-      <Section className="pt-0 pb-20 sm:pb-24">
+      <Section className="pt-0 pb-0">
         <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
           {useCases.map((useCase) => (
             <FeatureCard
@@ -138,6 +133,6 @@ export default function TechnologyPage() {
           ))}
         </div>
       </Section>
-    </main>
+    </PageShell>
   );
 }
