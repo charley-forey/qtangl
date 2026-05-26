@@ -1,11 +1,16 @@
 import { ComponentPropsWithoutRef, ElementType, ReactNode } from "react";
 
+type CardTone = "ghost" | "panel" | "strong" | "feature";
+type CardSize = "sm" | "md" | "lg";
+
 type CardOwnProps<T extends ElementType> = {
   as?: T;
   children: ReactNode;
   className?: string;
   interactive?: boolean;
   strong?: boolean;
+  tone?: CardTone;
+  size?: CardSize;
 };
 
 type CardProps<T extends ElementType> = CardOwnProps<T> &
@@ -17,18 +22,29 @@ export default function Card<T extends ElementType = "div">({
   className = "",
   interactive = false,
   strong = false,
+  tone,
+  size = "md",
   ...rest
 }: CardProps<T>) {
   const Component = as ?? "div";
+  const resolvedTone = tone ?? (strong ? "strong" : "panel");
+  const toneClass =
+    resolvedTone === "feature"
+      ? "surface-panel-feature"
+      : resolvedTone === "strong"
+        ? "surface-panel-strong"
+        : resolvedTone === "ghost"
+          ? "surface-panel-ghost"
+          : "surface-panel";
+  const sizeClass =
+    size === "sm" ? "card-size-sm" : size === "lg" ? "card-size-lg" : "card-size-md";
 
   return (
     <Component
       className={[
-        strong ? "surface-panel-strong" : "surface-panel",
-        "rounded-xl p-6",
-        interactive
-          ? "transition duration-300 hover:-translate-y-0.5 hover:border-[var(--border-strong)]"
-          : "",
+        toneClass,
+        sizeClass,
+        interactive ? "hover-lift" : "",
         className,
       ]
         .filter(Boolean)

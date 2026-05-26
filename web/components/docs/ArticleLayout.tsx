@@ -25,17 +25,15 @@ export default function ArticleLayout({
 }: ArticleLayoutProps) {
   return (
     <main className="flex-1">
-      <div className="mx-auto max-w-4xl px-6 py-16 sm:px-8 sm:py-24">
+      <div className="mx-auto max-w-[var(--container-reading)] px-6 py-16 sm:px-8 sm:py-24">
         <Eyebrow>{eyebrow}</Eyebrow>
-        <h1 className="mt-4 text-4xl font-semibold tracking-tight text-white sm:text-5xl">
-          {title}
-        </h1>
-        <p className="mt-6 max-w-3xl text-lg leading-8 text-[var(--color-gray-300)]">
+        <h1 className="heading-display gradient-text mt-4">{title}</h1>
+        <p className="text-body-lg mt-6 max-w-3xl text-[var(--color-gray-300)]">
           {intro}
         </p>
 
         {coverImage ? (
-          <Card strong className="relative mt-10 overflow-hidden rounded-[1.5rem] p-0">
+          <Card tone="feature" size="sm" className="relative mt-10 overflow-hidden rounded-[var(--radius-feature)] p-0">
             <div className="relative aspect-[16/9]">
               <Image
                 src={coverImage}
@@ -48,7 +46,7 @@ export default function ArticleLayout({
           </Card>
         ) : null}
 
-        <Card strong className="relative mt-10 overflow-hidden rounded-[1.75rem] p-0">
+        <Card tone="strong" size="sm" className="relative mt-10 overflow-hidden rounded-[var(--radius-feature)] p-0">
           <ProbabilityGrid />
           <div className="relative grid gap-6 px-8 py-10 sm:grid-cols-3">
             {articleOutcomeStrip.map((item) => (
@@ -62,7 +60,7 @@ export default function ArticleLayout({
           </div>
         </Card>
 
-        <article className="article-copy mt-12">{children}</article>
+        <article className="article-copy mt-12 text-[1.0625rem]">{children}</article>
       </div>
     </main>
   );

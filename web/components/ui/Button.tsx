@@ -35,17 +35,17 @@ function getClasses(
   className?: string
 ) {
   const base =
-    "inline-flex items-center justify-center gap-2 font-medium transition duration-200 focus-visible:outline-none";
+    "touch-target relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-full font-medium transition duration-300 focus-visible:outline-none";
   const sizeClass = size === "sm" ? "h-10 px-4 text-sm" : "h-12 px-6 text-sm";
   const variantClass =
     variant === "primary"
       ? unavailable
-        ? "rounded-full bg-neutral-200 text-black/60"
-        : "rounded-full bg-white text-black hover:bg-neutral-200"
+        ? "bg-neutral-200 text-black/60"
+        : "bg-white text-black shadow-[0_0_0_1px_rgba(255,255,255,0.12),0_14px_34px_rgba(255,255,255,0.08)] hover:-translate-y-0.5 hover:bg-neutral-100 hover:shadow-[0_0_0_1px_rgba(255,255,255,0.2),0_24px_50px_rgba(255,255,255,0.12)]"
       : variant === "secondary"
         ? unavailable
-          ? "rounded-full border border-[var(--border)] bg-transparent text-[var(--color-gray-500)]"
-          : "rounded-full border border-[var(--border)] bg-transparent text-white hover:border-[var(--border-strong)] hover:bg-white/[0.04]"
+          ? "border border-[var(--border)] bg-transparent text-[var(--color-gray-500)]"
+          : "border border-[var(--border)] bg-white/[0.02] text-white hover:-translate-y-0.5 hover:border-[var(--border-strong)] hover:bg-white/[0.05] hover:shadow-[0_0_0_1px_rgba(255,255,255,0.08),0_18px_45px_rgba(255,255,255,0.08)]"
         : unavailable
           ? "text-[var(--color-gray-500)]"
           : "text-[var(--color-gray-300)] hover:text-white";

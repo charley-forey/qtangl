@@ -12,31 +12,33 @@ import {
   apiReferenceRequest,
   apiReferenceResponse,
 } from "@/lib/constants";
+import { docsGuideCopy } from "@/lib/copy/docs";
 
 export const metadata: Metadata = {
   title: "API Guide",
   description:
-    "Understand the `/optimize` flow so you can submit jobs and read results quickly.",
+    "Understand the `/optimize` flow, method honesty, and returned measurements so you can integrate quickly.",
 };
 
 export default function DocsApiPage() {
   return (
     <div id={MAIN_CONTENT_ID} className="scroll-mt-24 sm:scroll-mt-28">
       <DocsShell
-        title="API guide"
-        description="The MVP centers on one endpoint: `/optimize`. Developers submit a planning problem, Qtangl evaluates feasible options, and the service returns a summary, metrics, and structured result."
+        title={docsGuideCopy.api.title}
+        description={docsGuideCopy.api.description}
       >
         <Card className="rounded-2xl">
-          <h2 className="text-2xl font-semibold text-white">Need the concise endpoint view?</h2>
+          <h2 className="text-2xl font-semibold text-white">
+            {docsGuideCopy.api.conciseEndpoint.title}
+          </h2>
           <p className="mt-4 text-sm leading-8 text-[var(--color-gray-300)]">
-            The guide explains how to integrate. The standalone reference keeps the
-            request, response, and error details together on one page.
+            {docsGuideCopy.api.conciseEndpoint.description}
           </p>
           <Link
             href="/api"
             className="touch-target mt-6 inline-flex items-center rounded-full border border-[var(--border)] px-4 py-2 text-sm text-white transition hover:border-[var(--border-strong)] hover:bg-white/[0.04]"
           >
-            Open API reference
+            {docsGuideCopy.api.conciseEndpoint.cta}
           </Link>
         </Card>
 
@@ -46,51 +48,47 @@ export default function DocsApiPage() {
         </div>
 
         <Card className="rounded-2xl">
-          <h2 className="text-2xl font-semibold text-white">What you get back</h2>
+          <h2 className="text-2xl font-semibold text-white">{docsGuideCopy.api.whatYouGetBack.title}</h2>
           <div className="mt-4 space-y-3 text-sm leading-7 text-[var(--color-gray-300)]">
-            <p>
-              `summary` is the first thing humans should read. It explains what the
-              plan accomplished in plain language.
-            </p>
-            <p>
-              `metrics` highlight value: duration, violations, savings, or other
-              numbers the team already tracks.
-            </p>
-            <p>
-              `details` hold solver metadata for developers and evaluators without
-              forcing every user to understand the optimization stack.
-            </p>
+            {docsGuideCopy.api.whatYouGetBack.items.map((item) => (
+              <p key={item}>{item}</p>
+            ))}
           </div>
         </Card>
 
         <Card className="rounded-2xl">
-          <h2 className="text-2xl font-semibold text-white">Pilot endpoint</h2>
+          <h2 className="text-2xl font-semibold text-white">{docsGuideCopy.api.pilotEndpoint.title}</h2>
           <p className="mt-4 text-sm leading-8 text-[var(--color-gray-300)]">
-            Point your pilot client to <span className="font-mono text-white">{qtanglApiBaseUrl}</span>.
-            Set `NEXT_PUBLIC_QTANGL_API_BASE_URL` when the staging backend is deployed.
+            {docsGuideCopy.api.pilotEndpoint.description}{" "}
+            <span className="font-mono text-white">{qtanglApiBaseUrl}</span>.
           </p>
         </Card>
 
         <div className="grid gap-6 md:grid-cols-2">
           <Card as="section" className="rounded-2xl">
-            <h2 className="text-2xl font-semibold text-white">Authentication</h2>
+            <h2 className="text-2xl font-semibold text-white">{docsGuideCopy.api.auth.title}</h2>
             <p className="mt-4 text-sm leading-8 text-[var(--color-gray-300)]">
-              The MVP assumes API-key based authentication. Requests include a bearer
-              token or API key header managed by the client application.
+              {docsGuideCopy.api.auth.description}
             </p>
           </Card>
 
           <Card as="section" strong className="rounded-2xl">
-            <h2 className="text-2xl font-semibold text-white">Rate limits</h2>
+            <h2 className="text-2xl font-semibold text-white">{docsGuideCopy.api.rateLimits.title}</h2>
             <p className="mt-4 text-sm leading-8 text-[var(--color-gray-300)]">
-              MVP rate limiting is capped at 10 requests per minute per API key. This
-              is enough for testing and pilot workflows without overcomplicating usage.
+              {docsGuideCopy.api.rateLimits.description}
             </p>
           </Card>
         </div>
 
+        <Card as="section" strong className="rounded-2xl">
+          <h2 className="text-2xl font-semibold text-white">{docsGuideCopy.api.methodHonesty.title}</h2>
+          <p className="mt-4 text-sm leading-8 text-[var(--color-gray-300)]">
+            {docsGuideCopy.api.methodHonesty.description}
+          </p>
+        </Card>
+
         <Card as="section" className="rounded-2xl">
-          <h2 className="text-2xl font-semibold text-white">Error handling</h2>
+          <h2 className="text-2xl font-semibold text-white">{docsGuideCopy.api.errors.title}</h2>
           <ul className="mt-4 space-y-3 text-sm leading-7 text-[var(--color-gray-300)]">
             {apiErrors.map((error) => (
               <li key={error}>{error}</li>

@@ -6,54 +6,36 @@ import TryPlanner from "@/components/marketing/TryPlanner";
 import Section from "@/components/layout/Section";
 import Card from "@/components/ui/Card";
 import Eyebrow from "@/components/ui/Eyebrow";
+import { tryPageCopy } from "@/lib/copy/try";
 
 export const metadata: Metadata = {
   title: "Try Qtangl",
   description:
-    "See how Qtangl turns planning inputs into ranked plans, summaries, and metrics before you integrate.",
+    `${tryPageCopy.eyebrow}: see how Qtangl turns planning inputs into ranked plans, summaries, and metrics before you integrate.`,
 };
 
 export default function TryPage() {
   return (
     <PageShell>
       <PageHero
-        eyebrow="Interactive demo"
-        title="See the workflow before you commit to the API."
-        description={
-          <>
-            Start with a familiar planning problem, review the ranked output, and
-            decide whether the next step is a pilot integration. This demo keeps the
-            inputs plain and the output visual.
-          </>
-        }
+        eyebrow={tryPageCopy.eyebrow}
+        title={tryPageCopy.title}
+        description={tryPageCopy.description}
       />
-      <Section className="pt-0">
+      <Section gap="tight">
         <TryPlanner />
       </Section>
 
-      <Section className="pt-0 pb-0">
+      <Section gap="tight" className="pb-0">
         <div className="grid gap-6 md:grid-cols-3">
-          <Card className="rounded-2xl">
-            <Eyebrow>Step 1</Eyebrow>
-            <p className="mt-4 text-sm leading-7 text-[var(--color-gray-300)]">
-              Start with the work, windows, crews, vehicles, or shifts your team
-              already tracks.
-            </p>
-          </Card>
-          <Card className="rounded-2xl">
-            <Eyebrow>Step 2</Eyebrow>
-            <p className="mt-4 text-sm leading-7 text-[var(--color-gray-300)]">
-              Review a ranked plan, a short summary, and the metric that explains
-              why the result is better than manual ordering.
-            </p>
-          </Card>
-          <Card className="rounded-2xl">
-            <Eyebrow>Step 3</Eyebrow>
-            <p className="mt-4 text-sm leading-7 text-[var(--color-gray-300)]">
-              Expand the API example when you are ready to connect the same workflow
-              to your own system.
-            </p>
-          </Card>
+          {tryPageCopy.steps.map((step) => (
+            <Card key={step.eyebrow} tone="strong" className="rounded-[var(--radius-xl)]">
+              <Eyebrow>{step.eyebrow}</Eyebrow>
+              <p className="mt-4 text-sm leading-7 text-[var(--color-gray-300)]">
+                {step.description}
+              </p>
+            </Card>
+          ))}
         </div>
       </Section>
     </PageShell>

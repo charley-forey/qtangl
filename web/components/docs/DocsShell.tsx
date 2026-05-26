@@ -23,7 +23,7 @@ export default function DocsShell({
 
   return (
     <main className="flex-1">
-      <div className="mx-auto grid w-full max-w-[var(--container-wide)] gap-8 px-5 py-14 sm:px-6 sm:py-16 md:px-8 lg:grid-cols-[250px_minmax(0,1fr)] lg:gap-10 lg:px-10 lg:py-20 xl:px-12 xl:py-24">
+      <div className="mx-auto grid w-full max-w-[var(--container-wide)] gap-8 px-5 py-14 sm:px-6 sm:py-16 md:px-8 lg:grid-cols-[280px_minmax(0,1fr)] lg:gap-10 lg:px-10 lg:py-20 xl:px-12 xl:py-24">
         <aside className="h-fit lg:sticky lg:top-24">
           <div className="lg:hidden">
             <Eyebrow>Docs</Eyebrow>
@@ -49,7 +49,7 @@ export default function DocsShell({
             </nav>
           </div>
 
-          <Card className="hidden rounded-2xl p-5 lg:block">
+          <Card tone="strong" size="lg" className="hidden rounded-[var(--radius-feature)] lg:block">
             <Eyebrow>Docs</Eyebrow>
             <nav className="mt-5 space-y-2">
               {docsNav.map((item) => {
@@ -76,10 +76,10 @@ export default function DocsShell({
 
         <section className="min-w-0">
           <Eyebrow>Developer portal</Eyebrow>
-          <h1 className="mt-4 max-w-4xl text-4xl font-semibold tracking-tight text-white sm:text-5xl">
+          <h1 className="heading-display gradient-text mt-4 max-w-4xl">
             {title}
           </h1>
-          <p className="mt-5 max-w-3xl text-lg leading-8 text-[var(--color-gray-300)]">
+          <p className="text-body-lg mt-5 max-w-3xl text-[var(--color-gray-300)]">
             {description}
           </p>
           <div className="mt-10 space-y-8">{children}</div>

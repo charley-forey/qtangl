@@ -32,21 +32,22 @@ export default function FeatureCard({
   return (
     <Card
       as="article"
-      strong
+      tone="feature"
+      size="lg"
       interactive={Boolean(href)}
-      className="relative h-full overflow-hidden rounded-[2rem] p-6 sm:p-7"
+      className="group relative h-full rounded-[var(--radius-feature)]"
       aria-labelledby={titleId}
     >
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(255,255,255,0.08),transparent_40%)]" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(255,255,255,0.1),transparent_40%)]" />
       <div className="relative">
         {imageSrc ? (
-          <div className="relative mb-6 aspect-[4/3] overflow-hidden rounded-2xl border border-[var(--border)] bg-black/60">
+          <div className="relative mb-6 aspect-[4/3] overflow-hidden rounded-[var(--radius-xl)] border border-[var(--border)] bg-black/60">
             <Image
               src={imageSrc}
               alt={resolvedImageAlt ?? title}
               fill
               sizes="(min-width: 1280px) 24vw, (min-width: 768px) 42vw, 100vw"
-              className="object-cover grayscale"
+              className="object-cover grayscale transition duration-500 group-hover:scale-[1.02]"
             />
           </div>
         ) : null}

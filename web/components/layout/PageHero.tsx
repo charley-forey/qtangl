@@ -1,7 +1,7 @@
-import Link from "next/link";
 import { ReactNode } from "react";
 
 import Section from "@/components/layout/Section";
+import Button from "@/components/ui/Button";
 import Eyebrow from "@/components/ui/Eyebrow";
 
 type PageHeroAction = {
@@ -26,31 +26,24 @@ export default function PageHero({
   contentClassName = "content-reading",
 }: PageHeroProps) {
   return (
-    <Section className="pt-12 sm:pt-16">
+    <Section gap="tight" className="pt-8 sm:pt-10">
       <div className={contentClassName}>
         <Eyebrow>{eyebrow}</Eyebrow>
-        <h1 className="mt-4 text-4xl font-semibold tracking-tight text-white sm:text-5xl">
-          {title}
-        </h1>
-        <p className="mt-6 max-w-3xl text-lg leading-8 text-[var(--color-gray-300)]">
+        <h1 className="heading-display gradient-text mt-4">{title}</h1>
+        <p className="text-body-lg mt-6 max-w-3xl text-[var(--color-gray-300)]">
           {description}
         </p>
 
         {actions?.length ? (
           <div className="mt-8 flex flex-wrap gap-3">
             {actions.map((action) => (
-              <Link
+              <Button
                 key={action.href}
                 href={action.href}
-                className={[
-                  "touch-target inline-flex items-center rounded-full border px-4 py-2 text-sm transition",
-                  action.variant === "secondary"
-                    ? "border-[var(--border)] text-[var(--color-gray-300)] hover:border-[var(--border-strong)] hover:text-white"
-                    : "border-[var(--border)] text-white hover:border-[var(--border-strong)] hover:bg-white/[0.04]",
-                ].join(" ")}
+                variant={action.variant === "secondary" ? "secondary" : "primary"}
               >
                 {action.label}
-              </Link>
+              </Button>
             ))}
           </div>
         ) : null}

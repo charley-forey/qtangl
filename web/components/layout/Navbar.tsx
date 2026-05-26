@@ -35,10 +35,10 @@ export default function Navbar() {
 
   return (
     <>
-      <header className="sticky top-0 z-50 border-b border-[var(--border)] bg-black/80 backdrop-blur-md">
+      <header className="header-shell header-hairline sticky top-0 z-50">
         <div
           className={[
-            "mx-auto flex w-full max-w-[var(--container-wide)] items-center justify-between gap-3 px-5 sm:px-6 md:px-8 lg:px-10 xl:px-12",
+            "mx-auto flex w-full max-w-[var(--container-wide)] items-center justify-between gap-4 px-5 sm:px-6 md:px-8 lg:px-10 xl:px-12",
             compressed ? "py-3" : "py-3.5 sm:py-4",
           ].join(" ")}
         >
@@ -50,9 +50,9 @@ export default function Navbar() {
               height={32}
               priority
             />
-            <div>
-              <div className="text-label text-white">Qtangl</div>
-              <div className="text-xs text-[var(--color-gray-400)]">
+            <div className="min-w-0">
+              <div className="brand-wordmark">Qtangl</div>
+              <div className="mt-1 text-xs text-[var(--color-gray-400)]">
                 {navbarCopy.subtitle}
               </div>
             </div>
@@ -73,7 +73,16 @@ export default function Navbar() {
                   }
                   aria-current={active ? "page" : undefined}
                 >
-                  {item.name}
+                  <span
+                    className={[
+                      "relative inline-flex pb-1",
+                      active
+                        ? "after:absolute after:bottom-0 after:left-0 after:h-px after:w-full after:bg-white/80"
+                        : "",
+                    ].join(" ")}
+                  >
+                    {item.name}
+                  </span>
                 </Link>
               );
             })}
@@ -82,13 +91,13 @@ export default function Navbar() {
           <div className="flex items-center gap-3">
             <Link
               href={navCta.href}
-              className="touch-target hidden items-center rounded-full border border-[var(--border)] px-4 py-2 text-sm text-white transition hover:border-[var(--border-strong)] hover:bg-white/[0.04] md:inline-flex"
+              className="touch-target hidden items-center rounded-full border border-[var(--border)] bg-white/[0.02] px-4 py-2 text-sm text-white transition hover:-translate-y-0.5 hover:border-[var(--border-strong)] hover:bg-white/[0.05] hover:shadow-[0_18px_45px_rgba(255,255,255,0.08)] md:inline-flex"
             >
               {navbarCopy.primaryCtaLabel}
             </Link>
             <button
               type="button"
-              className="touch-target inline-flex items-center rounded-full border border-[var(--border)] px-4 py-2 text-sm text-white transition hover:border-[var(--border-strong)] hover:bg-white/[0.04] md:hidden"
+              className="touch-target inline-flex items-center rounded-full border border-[var(--border)] bg-white/[0.02] px-4 py-2 text-sm text-white transition hover:border-[var(--border-strong)] hover:bg-white/[0.04] md:hidden"
               onClick={() => setOpen(true)}
               aria-controls="mobile-navigation"
               aria-expanded={open}

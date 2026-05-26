@@ -1,5 +1,6 @@
 import { ImageResponse } from "next/og";
 
+import { homeHero } from "@/lib/copy/home";
 import { siteMetadata } from "@/lib/copy/product";
 
 export const size = {
@@ -75,7 +76,7 @@ export default function OpenGraphImage() {
                 color: "rgba(255,255,255,0.7)",
               }}
             >
-              Qtangl
+              {homeHero.eyebrow}
             </div>
             <div style={{ fontSize: 54, lineHeight: 1.08, maxWidth: 760, fontWeight: 600 }}>
               {siteMetadata.oneLiner}

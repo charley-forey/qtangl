@@ -32,7 +32,7 @@ export default function CodeBlock({ title, code }: CodeBlockProps) {
     <div
       role="region"
       aria-labelledby={titleId}
-      className="overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--color-gray-950)]"
+      className="overflow-hidden rounded-[var(--radius-xl)] border border-[var(--border)] bg-[var(--color-gray-950)] shadow-[0_0_0_1px_rgba(255,255,255,0.03),0_18px_50px_rgba(0,0,0,0.24)]"
     >
       <div className="flex items-center justify-between border-b border-[var(--border)] px-4 py-3">
         <div className="flex items-center gap-3">

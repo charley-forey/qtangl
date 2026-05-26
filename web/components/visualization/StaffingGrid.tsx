@@ -9,7 +9,7 @@ export default function StaffingGrid({ plan }: StaffingGridProps) {
   const people = Array.from(new Set(plan.assignments.map((assignment) => assignment.person)));
 
   return (
-    <Card strong className="rounded-[1.5rem] p-5 sm:p-6">
+    <Card tone="feature" size="lg" className="h-full rounded-[var(--radius-feature)]">
       <p className="text-label">Visual plan</p>
       <h3 className="mt-2 text-xl font-semibold text-white">{plan.title}</h3>
 

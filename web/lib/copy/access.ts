@@ -1,5 +1,9 @@
+import { quantumLexicon } from "@/lib/copy/voice";
+
+const { entanglement, interference, measurement } = quantumLexicon;
+
 export const accessPanel = {
-  eyebrow: "Access",
+  eyebrow: "Entangle with us",
   title: "Tell us which planning workflow needs to improve next.",
   description:
     "Share the schedule, route, or staffing workflow that is slowing your team down. Qtangl is focused on pilot teams with a clear planning bottleneck and a realistic path to deployment.",
@@ -9,23 +13,23 @@ export const accessPanel = {
 
 export const accessPageCopy = {
   metadataDescription:
-    "Request pilot access to improve scheduling, routing, or staffing decisions with Qtangl.",
-  audienceEyebrow: "Who this is for",
+    "Request pilot access to improve scheduling, routing, or staffing decisions with Qtangl's quantum-aware planning workflow.",
+  audienceEyebrow: entanglement.label,
   audienceItems: [
-    "Operations teams dealing with scheduling, routing, or staffing bottlenecks.",
+    "Operations teams dealing with scheduling, routing, or staffing bottlenecks where many decisions are entangled.",
     "Platform teams embedding optimization into internal or customer-facing tools.",
     "Technical partners preparing for an API evaluation or pilot deployment.",
   ],
-  includeEyebrow: "What to include",
+  includeEyebrow: interference.label,
   includeDescription:
     "Share the workflow you want to improve, the constraints that matter most, and the tools your team already relies on today.",
 } as const;
 
 export const accessFormCopy = {
-  eyebrow: "Pilot access",
+  eyebrow: measurement.label,
   title: "Request pilot access",
   description:
-    "Tell us what you need to plan better and which systems are already in the loop.",
+    "Tell us what you need to plan better, which systems are already in the loop, and which measurement proves the workflow is improving.",
   helpfulNotes: [
     "Strong requests explain the planning problem, the systems involved, and the operational constraints that matter most.",
     "We currently prioritize design partners, API evaluation teams, and operations-heavy organizations preparing for a pilot.",

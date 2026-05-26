@@ -14,8 +14,9 @@ export default function ScheduleTimeline({ plan }: ScheduleTimelineProps) {
   return (
     <Card
       as="section"
-      strong
-      className="rounded-[1.5rem] p-5 sm:p-6"
+      tone="feature"
+      size="lg"
+      className="h-full rounded-[var(--radius-feature)]"
       aria-labelledby={titleId}
       aria-describedby={summaryId}
     >
@@ -52,7 +53,7 @@ export default function ScheduleTimeline({ plan }: ScheduleTimelineProps) {
                 <p className="text-sm font-medium text-white">{block.label}</p>
                 <p className="text-xs text-[var(--color-gray-400)]">{block.resource}</p>
               </div>
-              <div className="rounded-2xl border border-[var(--border)] bg-black/45 px-3 py-3">
+              <div className="rounded-[var(--radius-xl)] border border-[var(--border)] bg-black/45 px-3 py-3">
                 <div className="relative h-10 rounded-xl bg-white/[0.03]">
                   <div
                     className="absolute inset-y-1 rounded-lg border border-white/15 bg-white/[0.1] px-3 py-2 text-xs text-white"

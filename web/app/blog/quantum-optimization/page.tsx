@@ -3,52 +3,59 @@ import Link from "next/link";
 
 import ArticleLayout from "@/components/docs/ArticleLayout";
 import { MAIN_CONTENT_ID } from "@/components/layout/PageShell";
-import { blogClosingCta } from "@/lib/copy/articles";
+import HybridStackDiagram from "@/components/visualization/quantum/HybridStackDiagram";
+import MethodBadge from "@/components/visualization/quantum/MethodBadge";
+import { articles, blogClosingCta } from "@/lib/copy/articles";
+
+const article = articles.quantumOptimization;
 
 export const metadata: Metadata = {
-  title: "Why Quantum Optimization Matters",
+  title: article.title,
   description:
-    "Learn where quantum-assisted search can help teams evaluate harder planning problems.",
+    "Learn where quantum-assisted search can help teams evaluate harder planning problems without overstating the current stack.",
 };
 
 export default function QuantumOptimizationPage() {
   return (
     <div id={MAIN_CONTENT_ID} className="scroll-mt-24 sm:scroll-mt-28">
       <ArticleLayout
-        eyebrow="Quantum optimization basics"
-        title="Why quantum optimization matters for operational planning"
-        intro="Qtangl is not built around abstract quantum theory. It is built around the idea that real scheduling and routing problems stay hard when constraints stack on top of each other."
-        coverImage="/qtangl-technology-solver-grid.svg"
-        coverAlt="Black and white abstract technology illustration showing solver workflow panels and network geometry."
+        eyebrow={article.eyebrow}
+        title={article.title}
+        intro={article.intro}
+        coverImage={article.coverImage}
+        coverAlt={article.coverAlt}
       >
-        <section>
-          <h2>Start with the actual business problem</h2>
-          <p>
-            Most operations teams do not need a lecture on quantum computing. They
-            need a better way to decide which crew goes where, which route happens
-            next, and which trade or vehicle is blocked by capacity limits.
-          </p>
-        </section>
+        {article.sections.slice(0, 2).map((section) => (
+          <section key={section.title}>
+            <h2>{section.title}</h2>
+            {section.body.map((paragraph) => (
+              <p key={paragraph}>{paragraph}</p>
+            ))}
+          </section>
+        ))}
 
         <section>
-          <h2>QUBO is a modeling tool, not the product</h2>
+          <h2>How the honest stack is weighted</h2>
           <p>
-            Quadratic unconstrained binary optimization is one way to express a hard
-            decision problem in a solver-friendly format. Qtangl uses this kind of
-            formulation to map constraints and objectives into a structure that can be
-            evaluated systematically.
+            The brand can be quantum-forward without pretending the system is quantum-first.
+            The chart below shows where the runtime and orchestration weight lives today.
           </p>
+          <div className="mt-6">
+            <HybridStackDiagram />
+          </div>
+          <div className="mt-5">
+            <MethodBadge method="hybrid" />
+          </div>
         </section>
 
-        <section>
-          <h2>QAOA fits into a hybrid workflow</h2>
-          <p>
-            In the MVP story, QAOA is a method inside the system rather than the
-            system itself. Classical preprocessing shapes the problem, quantum-assisted
-            search explores candidates, and classical post-processing returns an
-            operational result that teams can use.
-          </p>
-        </section>
+        {article.sections.slice(2).map((section) => (
+          <section key={section.title}>
+            <h2>{section.title}</h2>
+            {section.body.map((paragraph) => (
+              <p key={paragraph}>{paragraph}</p>
+            ))}
+          </section>
+        ))}
 
         <section>
           <h2>{blogClosingCta.title}</h2>

@@ -1,8 +1,11 @@
 import Card from "@/components/ui/Card";
+import AmplitudeBars from "@/components/visualization/quantum/AmplitudeBars";
+import MethodBadge from "@/components/visualization/quantum/MethodBadge";
 import Eyebrow from "@/components/ui/Eyebrow";
 import PlanVisualization from "@/components/visualization/PlanVisualization";
 import { TryScenario, tryScenarios } from "@/lib/demo-data";
 import { homeProductPreview } from "@/lib/copy/home";
+import { homeAmplitudeBars } from "@/lib/copy/visualization";
 
 type ProductPreviewProps = {
   eyebrow?: string;
@@ -21,24 +24,24 @@ export default function ProductPreview({
 
   return (
     <div className="grid gap-6">
-      <div className="grid gap-6 xl:grid-cols-[0.78fr_1.22fr]">
-        <Card className="rounded-[1.75rem]">
+      <Card tone="strong" size="lg" className="rounded-[var(--radius-feature)]">
+        <div className="flex flex-wrap items-center justify-between gap-3">
           <Eyebrow>{eyebrow}</Eyebrow>
-          <h2 className="mt-4 text-3xl font-semibold tracking-tight text-white sm:text-4xl">
-            {title}
-          </h2>
-          <p className="mt-4 text-base leading-8 text-[var(--color-gray-300)]">
-            {description}
-          </p>
-          <div className="mt-6 space-y-3 text-sm leading-7 text-[var(--color-gray-300)]">
-            {homeProductPreview.details.map((detail) => (
-              <p key={detail}>{detail}</p>
-            ))}
-          </div>
-        </Card>
-      </div>
-
-      <PlanVisualization plan={activeScenario.plan} />
+          <MethodBadge method={(activeScenario.apiResponse.method as string | undefined) ?? "hybrid"} />
+        </div>
+        <h2 className="heading-section mt-4">{title}</h2>
+        <p className="mt-4 text-base leading-8 text-[var(--color-gray-300)]">{description}</p>
+        <div className="mt-6 max-w-3xl space-y-3 text-sm leading-7 text-[var(--color-gray-300)]">
+          {homeProductPreview.details.map((detail) => (
+            <p key={detail}>{detail}</p>
+          ))}
+        </div>
+      </Card>
+      <AmplitudeBars items={homeAmplitudeBars.map((item) => ({ ...item }))} />
+      <PlanVisualization
+        plan={activeScenario.plan}
+        method={(activeScenario.apiResponse.method as string | undefined) ?? "hybrid"}
+      />
     </div>
   );
 }

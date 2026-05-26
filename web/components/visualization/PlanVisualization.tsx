@@ -1,5 +1,7 @@
 import Card from "@/components/ui/Card";
 import type { PlanVisualization as PlanVisualizationModel } from "@/lib/demo-data";
+import { planVisualizationCopy } from "@/lib/copy/visualization";
+import MethodBadge from "@/components/visualization/quantum/MethodBadge";
 
 import PlanMetrics from "./PlanMetrics";
 import RoutePlanList from "./RoutePlanList";
@@ -8,17 +10,19 @@ import StaffingGrid from "./StaffingGrid";
 
 type PlanVisualizationProps = {
   plan: PlanVisualizationModel;
+  method?: string;
 };
 
-export default function PlanVisualization({ plan }: PlanVisualizationProps) {
+export default function PlanVisualization({ plan, method = "classical" }: PlanVisualizationProps) {
   return (
     <div className="grid gap-6">
-      <div className="grid gap-6 xl:grid-cols-[0.72fr_1.28fr]">
-        <Card className="rounded-[1.5rem] p-6">
-          <p className="text-label">Why this plan works</p>
-          <h2 className="mt-4 text-3xl font-semibold tracking-tight text-white">
-            {plan.summary}
-          </h2>
+      <div className="grid gap-6 xl:grid-cols-[0.72fr_1.28fr] xl:items-stretch">
+        <Card tone="strong" size="lg" className="h-full rounded-[var(--radius-xl)]">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <p className="text-label">{planVisualizationCopy.eyebrow}</p>
+            <MethodBadge method={method} />
+          </div>
+          <h2 className="heading-section mt-4">{plan.summary}</h2>
           <div className="mt-5 space-y-3 text-sm leading-7 text-[var(--color-gray-300)]">
             {plan.explanation.map((line) => (
               <p key={line}>{line}</p>

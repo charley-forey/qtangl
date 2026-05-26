@@ -21,10 +21,10 @@ export default function AccessPage() {
         title={accessPanel.title}
         description={accessPanel.description}
       />
-      <Section className="pt-0 pb-0">
+      <Section gap="tight" className="pb-0">
         <div className="grid gap-6 xl:grid-cols-[0.78fr_1.22fr]">
           <div className="space-y-6">
-            <Card className="rounded-2xl">
+            <Card tone="strong" className="rounded-[var(--radius-xl)]">
               <Eyebrow>{accessPageCopy.audienceEyebrow}</Eyebrow>
               <ul className="mt-4 space-y-3 text-sm leading-7 text-[var(--color-gray-300)]">
                 {accessPageCopy.audienceItems.map((item) => (
@@ -32,7 +32,7 @@ export default function AccessPage() {
                 ))}
               </ul>
             </Card>
-            <Card className="rounded-2xl">
+            <Card tone="strong" className="rounded-[var(--radius-xl)]">
               <Eyebrow>{accessPageCopy.includeEyebrow}</Eyebrow>
               <p className="mt-4 text-sm leading-7 text-[var(--color-gray-300)]">
                 {accessPageCopy.includeDescription}

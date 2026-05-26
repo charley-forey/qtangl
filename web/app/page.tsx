@@ -11,6 +11,7 @@ import Section from "@/components/layout/Section";
 import Card from "@/components/ui/Card";
 import Eyebrow from "@/components/ui/Eyebrow";
 import { homeProductPreview, homeSections, homeHero, homepageNarrative } from "@/lib/copy/home";
+import { quantumLexicon } from "@/lib/copy/voice";
 import {
   apiPreviewRequest,
   apiPreviewResponse,
@@ -27,25 +28,27 @@ export const metadata: Metadata = {
   description: siteMetadata.description,
 };
 
+const { interference } = quantumLexicon;
+
 export default function Home() {
   return (
     <PageShell>
-      <Section className="pt-12 sm:pt-16">
+      <Section gap="tight" className="pt-8 sm:pt-10">
         <Hero />
       </Section>
 
-      <Section>
+      <Section gap="tight">
         <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr]">
           <StateTransition>
             <div className="content-reading">
               <Eyebrow>{homepageNarrative.problemEyebrow}</Eyebrow>
-              <h2 className="mt-4 text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+              <h2 className="heading-section mt-4">
                 {homepageNarrative.problemTitle}
               </h2>
               <p className="mt-5 text-base leading-8 text-[var(--color-gray-300)]">
                 {homepageNarrative.problemDescription}
               </p>
-              <Card className="mt-6 rounded-2xl">
+              <Card tone="strong" className="mt-6 rounded-[var(--radius-xl)]">
                 <p className="text-sm leading-7 text-[var(--color-gray-200)]">
                   {homeHero.signal}
                 </p>
@@ -55,10 +58,11 @@ export default function Home() {
 
           <div className="grid gap-4 md:grid-cols-2">
             {problemPoints.map((point, index) => (
-              <StateTransition key={point} delay={0.05 * index}>
-                <Card className="h-full rounded-2xl p-5">
+              <StateTransition key={point.description} delay={0.05 * index}>
+                <Card tone="strong" size="md" className="h-full rounded-[var(--radius-xl)]">
+                  <p className="text-label">{point.eyebrow}</p>
                   <p className="text-sm leading-7 text-[var(--color-gray-300)]">
-                    {point}
+                    {point.description}
                   </p>
                 </Card>
               </StateTransition>
@@ -67,12 +71,12 @@ export default function Home() {
         </div>
       </Section>
 
-      <Section>
+      <Section gap="tight">
         <div className="grid gap-8 lg:grid-cols-[0.92fr_1.08fr]">
           <StateTransition>
             <div className="content-reading">
               <Eyebrow>{homeSections.solution.eyebrow}</Eyebrow>
-              <h2 className="mt-4 text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+              <h2 className="heading-section mt-4">
                 {homeSections.solution.title}
               </h2>
               <p className="mt-5 text-base leading-8 text-[var(--color-gray-300)]">
@@ -82,10 +86,11 @@ export default function Home() {
           </StateTransition>
           <div className="space-y-4">
             {solutionPoints.map((point, index) => (
-              <StateTransition key={point} delay={0.05 * index}>
-                <Card strong className="rounded-2xl p-5">
+              <StateTransition key={point.description} delay={0.05 * index}>
+                <Card tone="strong" size="md" className="rounded-[var(--radius-xl)]">
+                  <p className="text-label">{point.eyebrow}</p>
                   <p className="text-sm leading-7 text-[var(--color-gray-300)]">
-                    {point}
+                    {point.description}
                   </p>
                 </Card>
               </StateTransition>
@@ -96,14 +101,18 @@ export default function Home() {
         <div className="mt-10 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
           {platformHighlights.map((item, index) => (
             <StateTransition key={item.title} delay={0.05 * index}>
-              <FeatureCard title={item.title} description={item.description} />
+              <FeatureCard
+                eyebrow={item.eyebrow}
+                title={item.title}
+                description={item.description}
+              />
             </StateTransition>
           ))}
         </div>
       </Section>
 
-      <Section className="pt-0">
-        <StateTransition>
+      <Section gap="tight">
+        <StateTransition parallax parallaxOffset={12}>
           <ProductPreview
             eyebrow={homeProductPreview.eyebrow}
             title={homeProductPreview.title}
@@ -112,12 +121,12 @@ export default function Home() {
         </StateTransition>
       </Section>
 
-      <Section>
+      <Section gap="tight">
         <div className="flex items-end justify-between gap-4">
           <StateTransition>
             <div className="content-reading">
               <Eyebrow>{homepageNarrative.architectureEyebrow}</Eyebrow>
-              <h2 className="mt-4 text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+              <h2 className="heading-section mt-4">
                 {homepageNarrative.architectureTitle}
               </h2>
             </div>
@@ -126,8 +135,8 @@ export default function Home() {
         <div className="mt-10 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
           {workflowSteps.map((step, index) => (
             <StateTransition key={step.title} delay={0.05 * index}>
-              <Card strong className="h-full rounded-2xl p-6">
-                <div className="text-label text-white">0{index + 1}</div>
+              <Card tone="feature" size="lg" className="h-full rounded-[var(--radius-feature)]">
+                <div className="text-label text-white">{step.eyebrow}</div>
                 <h3 className="mt-4 text-xl font-semibold text-white">{step.title}</h3>
                 <p className="mt-3 text-sm leading-7 text-[var(--color-gray-300)]">
                   {step.description}
@@ -138,12 +147,12 @@ export default function Home() {
         </div>
       </Section>
 
-      <Section>
+      <Section gap="tight">
         <div className="flex items-end justify-between gap-4">
           <StateTransition>
             <div className="content-reading">
               <Eyebrow>{homepageNarrative.domainEyebrow}</Eyebrow>
-              <h2 className="mt-4 text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+              <h2 className="heading-section mt-4">
                 {homepageNarrative.domainTitle}
               </h2>
             </div>
@@ -164,6 +173,10 @@ export default function Home() {
                   {useCase.problem}
                 </p>
                 <p>
+                  <span className="font-semibold text-white">{interference.label}:</span>{" "}
+                  {useCase.interference}
+                </p>
+                <p>
                   <span className="font-semibold text-white">Outcome:</span>{" "}
                   {useCase.outcome}
                 </p>
@@ -177,12 +190,12 @@ export default function Home() {
         </div>
       </Section>
 
-      <Section>
+      <Section gap="tight">
         <div className="grid gap-8 lg:grid-cols-[0.88fr_1.12fr]">
           <StateTransition>
             <div className="content-reading">
               <Eyebrow>{homepageNarrative.interfaceEyebrow}</Eyebrow>
-              <h2 className="mt-4 text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+              <h2 className="heading-section mt-4">
                 {homepageNarrative.interfaceTitle}
               </h2>
               <p className="mt-5 text-base leading-8 text-[var(--color-gray-300)]">
@@ -201,7 +214,7 @@ export default function Home() {
         </div>
       </Section>
 
-      <Section className="pb-0">
+      <Section gap="tight" className="pb-0">
         <CTA />
       </Section>
     </PageShell>

@@ -4,19 +4,20 @@ import DocsShell from "@/components/docs/DocsShell";
 import { MAIN_CONTENT_ID } from "@/components/layout/PageShell";
 import Card from "@/components/ui/Card";
 import { dataFormatGuides } from "@/lib/demo-data";
+import { docsGuideCopy } from "@/lib/copy/docs";
 
 export const metadata: Metadata = {
   title: "Data Formats",
   description:
-    "Prepare schedule, routing, and staffing data so your first Qtangl request is ready to run.",
+    "Prepare schedule, routing, and staffing data for Qtangl's quantum-aware planning workflow.",
 };
 
 export default function DataFormatsPage() {
   return (
     <div id={MAIN_CONTENT_ID} className="scroll-mt-24 sm:scroll-mt-28">
       <DocsShell
-        title="Data formats"
-        description="Start with the fields your team already knows. These guides show what to send for schedules, routes, and staffing jobs before you touch the live API."
+        title={docsGuideCopy.dataFormats.title}
+        description={docsGuideCopy.dataFormats.description}
       >
         <div className="grid gap-6">
           {dataFormatGuides.map((guide) => (
@@ -44,7 +45,7 @@ export default function DataFormatsPage() {
               </div>
 
               <div className="mt-6 rounded-2xl border border-[var(--border)] bg-black/35 p-4">
-                <p className="text-label">CSV template columns</p>
+                <p className="text-label">{docsGuideCopy.dataFormats.csvTitle}</p>
                 <p className="mt-4 text-sm leading-7 text-[var(--color-gray-300)]">
                   {guide.csvColumns.join(", ")}
                 </p>

@@ -90,15 +90,13 @@ export default function AccessRequestForm() {
 
   if (formState.status === "success") {
     return (
-      <Card strong className="rounded-[2rem] p-6 sm:p-8 lg:p-10">
+      <Card tone="feature" size="lg" className="rounded-[var(--radius-feature)]">
         <div className="grid gap-6">
           <Eyebrow>Request received</Eyebrow>
-          <h2 className="text-3xl font-semibold tracking-tight text-white">
-            Access request submitted
-          </h2>
+          <h2 className="heading-section">Access request submitted</h2>
           <p className="text-base leading-8 text-[var(--color-gray-300)]">{formState.message}</p>
           <div
-            className="rounded-[1.5rem] border border-[var(--border)] bg-white/[0.03] p-5 text-sm leading-7 text-[var(--color-gray-300)]"
+            className="rounded-[var(--radius-xl)] border border-[var(--border)] bg-white/[0.03] p-5 text-sm leading-7 text-[var(--color-gray-300)]"
             role="status"
             aria-live="polite"
           >
@@ -111,13 +109,11 @@ export default function AccessRequestForm() {
   }
 
   return (
-    <Card strong className="rounded-[2rem] p-6 sm:p-8 lg:p-10">
+    <Card tone="feature" size="lg" className="rounded-[var(--radius-feature)]">
       <div className="grid gap-8 xl:grid-cols-[0.8fr_1.2fr]">
         <div>
           <Eyebrow>{accessFormCopy.eyebrow}</Eyebrow>
-          <h2 className="mt-4 text-3xl font-semibold tracking-tight text-white">
-            {accessFormCopy.title}
-          </h2>
+          <h2 className="heading-section mt-4">{accessFormCopy.title}</h2>
           <p className="mt-4 text-base leading-8 text-[var(--color-gray-300)]">
             {accessFormCopy.description}
           </p>

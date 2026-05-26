@@ -1,15 +1,17 @@
 import Button from "@/components/ui/Button";
-import Card from "@/components/ui/Card";
+import AnimatedBorderFrame from "@/components/ui/AnimatedBorderFrame";
 import Eyebrow from "@/components/ui/Eyebrow";
+import Glow from "@/components/ui/Glow";
 import { accessCtas, accessPanel } from "@/lib/copy/access";
 
 export default function CTA() {
   return (
-    <Card strong className="overflow-hidden rounded-[2rem] p-6 sm:p-8 lg:p-10">
-      <div className="grid gap-6 lg:grid-cols-[1fr_auto] lg:items-end">
+    <AnimatedBorderFrame className="overflow-hidden rounded-[var(--radius-feature)]">
+      <Glow className="hero-orb right-[-3rem] top-[-4rem] h-36 w-36 bg-white/18" />
+      <div className="relative grid gap-6 px-6 py-8 sm:px-8 lg:grid-cols-[1fr_auto] lg:items-end lg:px-10 lg:py-10">
         <div className="max-w-2xl">
           <Eyebrow>{accessPanel.eyebrow}</Eyebrow>
-          <h2 className="mt-4 text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+          <h2 className="heading-section gradient-text mt-4 sm:!text-4xl">
             {accessPanel.title}
           </h2>
           <p className="mt-4 text-base leading-8 text-[var(--color-gray-300)]">
@@ -26,6 +28,6 @@ export default function CTA() {
           </Button>
         </div>
       </div>
-    </Card>
+    </AnimatedBorderFrame>
   );
 }

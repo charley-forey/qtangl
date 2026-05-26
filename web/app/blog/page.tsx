@@ -5,28 +5,24 @@ import PageShell from "@/components/layout/PageShell";
 import FeatureCard from "@/components/marketing/FeatureCard";
 import Section from "@/components/layout/Section";
 import { blogPosts } from "@/lib/constants";
+import { blogIndexCopy } from "@/lib/copy/articles";
 
 export const metadata: Metadata = {
   title: "Blog",
   description:
-    "Learn practical ways to improve scheduling, routing, and staffing decisions.",
+    "Read field notes from Qtangl's quantum-aware planning stack.",
 };
 
 export default function BlogPage() {
   return (
     <PageShell>
       <PageHero
-        eyebrow="Blog"
-        title="Operational optimization, explained clearly."
-        description={
-          <>
-            The Qtangl blog focuses on practical optimization problems, hybrid
-            systems thinking, and the business cases behind better planning tools.
-          </>
-        }
+        eyebrow={blogIndexCopy.eyebrow}
+        title={blogIndexCopy.title}
+        description={blogIndexCopy.description}
         contentClassName="max-w-3xl"
       />
-      <Section className="pt-0 pb-0">
+      <Section gap="tight" className="pb-0">
         {/* WORKTREE-TODO(web/components): Add shared "Back to blog" affordance and article CTA slots in ArticleLayout when docs-owned components are in scope. */}
         <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
           {blogPosts.map((post) => (

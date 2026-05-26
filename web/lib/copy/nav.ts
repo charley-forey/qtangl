@@ -13,8 +13,8 @@ export const footerNav = [
 ] as const;
 
 export const navbarCopy = {
-  subtitle: "Planning API for operations teams",
-  primaryCtaLabel: "Try the planner",
+  subtitle: "Quantum-aware planning API",
+  primaryCtaLabel: "Collapse a plan",
   mobileMenuLabel: "Menu",
   mobileTitle: "Qtangl navigation",
 } as const;

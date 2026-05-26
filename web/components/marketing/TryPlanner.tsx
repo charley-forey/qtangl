@@ -7,7 +7,9 @@ import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
 import Eyebrow from "@/components/ui/Eyebrow";
 import PlanVisualization from "@/components/visualization/PlanVisualization";
+import CollapseMeter from "@/components/visualization/quantum/CollapseMeter";
 import { tryScenarios } from "@/lib/demo-data";
+import { tryPlannerCopy } from "@/lib/copy/try";
 
 type ScenarioId = (typeof tryScenarios)[number]["id"];
 
@@ -40,6 +42,7 @@ export default function TryPlanner() {
     () => tryScenarios.find((scenario) => scenario.id === activeScenarioId) ?? tryScenarios[0],
     [activeScenarioId]
   );
+  const activeScenarioCopy = tryPlannerCopy.scenarios[activeScenario.id];
 
   useEffect(() => {
     return () => {
@@ -122,27 +125,24 @@ export default function TryPlanner() {
 
   const scenarioPanelId = `${activeScenario.id}-scenario-panel`;
   const generationStatus = isGenerating
-    ? "Generating preview plan."
+    ? tryPlannerCopy.status.generating
     : hasGenerated
       ? `${activeScenario.label} preview ready.`
-      : "Plan preview hidden until you generate.";
+      : tryPlannerCopy.status.hidden;
 
   return (
     <div className="grid gap-8 xl:grid-cols-[0.82fr_1.18fr]">
-      <Card strong className="rounded-[2rem] p-6 sm:p-8">
-        <Eyebrow>Try it</Eyebrow>
-        <h2 className="mt-4 text-3xl font-semibold tracking-tight text-white">
-          Start with a familiar planning problem.
-        </h2>
+      <Card tone="feature" size="lg" className="rounded-[var(--radius-feature)]">
+        <Eyebrow>{tryPlannerCopy.eyebrow}</Eyebrow>
+        <h2 className="heading-section mt-4">{tryPlannerCopy.title}</h2>
         <p className="mt-4 text-base leading-8 text-[var(--color-gray-300)]">
-          This is a guided product demo, not a production connector. Edit the fields,
-          click generate, and see the kind of plan Qtangl is designed to return.
+          {tryPlannerCopy.description}
         </p>
 
         <div
           className="mt-6 flex flex-wrap gap-3"
           role="tablist"
-          aria-label="Planning scenarios"
+          aria-label={tryPlannerCopy.tabLabel}
         >
           {tryScenarios.map((scenario) => {
             const active = scenario.id === activeScenarioId;
@@ -179,9 +179,9 @@ export default function TryPlanner() {
           id={scenarioPanelId}
           aria-labelledby={`${activeScenario.id}-scenario-tab`}
         >
-          <h3 className="text-xl font-semibold text-white">{activeScenario.title}</h3>
+          <h3 className="text-xl font-semibold text-white">{activeScenarioCopy.title}</h3>
           <p className="mt-3 text-sm leading-7 text-[var(--color-gray-300)]">
-            {activeScenario.description}
+            {activeScenarioCopy.description}
           </p>
         </div>
 
@@ -213,14 +213,14 @@ export default function TryPlanner() {
 
         <div className="mt-8 flex flex-col gap-3 sm:flex-row">
           <Button type="button" onClick={handleGenerate} disabled={isGenerating}>
-            {isGenerating ? "Generating..." : "Generate Plan"}
+            {isGenerating ? tryPlannerCopy.buttons.generating : tryPlannerCopy.buttons.generate}
           </Button>
           <Button
             type="button"
             variant="secondary"
             onClick={() => setShowApi((current) => !current)}
           >
-            {showApi ? "Hide API example" : "See API request"}
+            {showApi ? tryPlannerCopy.buttons.hideApi : tryPlannerCopy.buttons.showApi}
           </Button>
         </div>
         <p className="mt-3 text-sm text-[var(--color-gray-400)]" aria-live="polite">
@@ -237,17 +237,29 @@ export default function TryPlanner() {
 
       <div className="space-y-6" aria-busy={isGenerating}>
         {hasGenerated ? (
-          <PlanVisualization plan={activeScenario.plan} />
+          <div className="space-y-6">
+            <CollapseMeter candidatesEvaluated={6} />
+            <PlanVisualization
+              plan={activeScenario.plan}
+              method={(activeScenario.apiResponse.method as string | undefined) ?? "classical"}
+            />
+          </div>
         ) : (
-          <Card strong className="rounded-[2rem] p-6 sm:p-8">
-            <Eyebrow>{isGenerating ? "Generating" : "Plan preview"}</Eyebrow>
-            <h3 className="mt-4 text-2xl font-semibold tracking-tight text-white">
-              {isGenerating ? "Building your preview..." : "Generate a preview plan"}
+          <Card tone="strong" size="lg" className="rounded-[var(--radius-feature)]">
+            <Eyebrow>
+              {isGenerating
+                ? tryPlannerCopy.preview.generatingEyebrow
+                : tryPlannerCopy.preview.idleEyebrow}
+            </Eyebrow>
+            <h3 className="heading-section mt-4 !text-2xl">
+              {isGenerating
+                ? tryPlannerCopy.preview.generatingTitle
+                : tryPlannerCopy.preview.idleTitle}
             </h3>
             <p className="mt-4 text-sm leading-7 text-[var(--color-gray-300)]">
               {isGenerating
-                ? "Qtangl is simulating a short planning pass so the preview feels intentional."
-                : "Adjust the scenario inputs on the left, then select Generate Plan to reveal the ranked output."}
+                ? tryPlannerCopy.preview.generatingDescription
+                : tryPlannerCopy.preview.idleDescription}
             </p>
           </Card>
         )}

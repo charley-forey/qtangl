@@ -7,7 +7,7 @@ import { footerBlurb, siteMetadata } from "@/lib/copy/product";
 export default function Footer() {
   return (
     <footer className="border-t border-[var(--border)] bg-black">
-      <div className="mx-auto grid w-full max-w-[var(--container-wide)] gap-10 px-[var(--gutter-mobile)] py-12 md:px-[var(--gutter-tablet)] lg:grid-cols-[1.35fr_0.9fr] lg:px-[var(--gutter-desktop)]">
+      <div className="mx-auto grid w-full max-w-[var(--container-wide)] gap-10 px-[var(--gutter-mobile)] py-14 md:px-[var(--gutter-tablet)] lg:grid-cols-[1.2fr_0.8fr_0.8fr] lg:px-[var(--gutter-desktop)] lg:py-16">
         <div className="max-w-2xl">
           <div className="flex items-center gap-3">
             <Image
@@ -17,20 +17,21 @@ export default function Footer() {
               height={32}
             />
             <div>
-              <p className="text-label text-white">{siteMetadata.name}</p>
-              <p className="text-sm text-[var(--color-gray-400)]">
+              <p className="brand-wordmark">{siteMetadata.name}</p>
+              <p className="mt-1 text-sm text-[var(--color-gray-400)]">
                 {siteMetadata.tagline}
               </p>
             </div>
           </div>
-          <p className="mt-5 max-w-xl text-sm leading-7 text-[var(--color-gray-300)]">
+          <p className="mt-6 max-w-xl text-sm leading-7 text-[var(--color-gray-300)]">
             {footerBlurb}
           </p>
+          <div className="mt-6 hairline-divider max-w-xl" />
         </div>
 
-        <div className="grid gap-6 text-sm text-[var(--color-gray-300)] sm:grid-cols-2">
+        <div className="space-y-4 text-sm text-[var(--color-gray-300)]">
+          <p className="text-label">{footerCopy.primaryHeading}</p>
           <div className="space-y-3">
-            <p className="text-label">{footerCopy.primaryHeading}</p>
             {nav.map((item) => (
               <Link
                 key={item.href}
@@ -41,8 +42,11 @@ export default function Footer() {
               </Link>
             ))}
           </div>
+        </div>
+
+        <div className="space-y-4 text-sm text-[var(--color-gray-300)]">
+          <p className="text-label">{footerCopy.secondaryHeading}</p>
           <div className="space-y-3">
-            <p className="text-label">{footerCopy.secondaryHeading}</p>
             {footerNav.map((item) => (
               <Link
                 key={item.href}
