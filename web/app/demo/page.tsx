@@ -29,18 +29,18 @@ export default function DemosPage() {
       />
 
       <Section gap="tight" className="pb-0">
-        <Eyebrow>{demosPageCopy.sandboxHeading}</Eyebrow>
-        <div className="mt-4 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-          <DemoCatalogCard demo={sandboxCatalogEntry} />
-        </div>
-      </Section>
-
-      <Section gap="tight" className="pb-0">
         <Eyebrow>{demosPageCopy.catalogHeading}</Eyebrow>
         <div className="mt-4 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
           {demoCatalog.map((demo) => (
             <DemoCatalogCard key={demo.slug} demo={demo} />
           ))}
+        </div>
+      </Section>
+
+      <Section gap="tight" className="pb-0">
+        <Eyebrow>{demosPageCopy.sandboxHeading}</Eyebrow>
+        <div className="mt-4 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+          <DemoCatalogCard demo={sandboxCatalogEntry} />
         </div>
       </Section>
     </PageShell>

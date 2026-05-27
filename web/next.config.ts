@@ -34,6 +34,12 @@ const nextConfig: NextConfig = {
         destination: "/sandbox",
         permanent: true,
       },
+      {
+        source: "/sandbox",
+        has: [{ type: "query", key: "view", value: "sandbox" }],
+        destination: "/sandbox",
+        permanent: true,
+      },
     ];
   },
 };
