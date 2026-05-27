@@ -81,27 +81,74 @@ export const technologyPage = {
   eyebrow: `${phase.label} diagram`,
   title: "Model constraints. Rank options. Return a plan your team runs.",
   intro:
-    "Structured inputs in. Ranked schedule, route, or allocation out — with enough detail for engineering and enough clarity for operations.",
+    "JSON planning state in. Ranked plan, summary, and measurements out — CP-SAT baseline every job, bounded QAOA on research candidates only.",
+  pipeline: {
+    eyebrow: "Solver pipeline",
+    title: "Five stages from request to executable plan.",
+    description:
+      "Parse, encode, search, rank, respond — each stage names the algorithm your integration team can audit.",
+  },
   sections: [
     {
       eyebrow: "Phase 1",
       title: "Capture constraints",
       description:
         "Jobs, resources, windows, dependencies, and objectives — structured, not scattered.",
+      underTheHood:
+        "Validate JSON, normalize fields, build the constraint graph before any solver call.",
     },
     {
       eyebrow: "Phase 2",
       title: "Run the solver workflow",
       description:
         "Build the model, evaluate candidates, pick the execution path that fits the problem.",
+      underTheHood:
+        "CP-SAT baseline on every job; QAOA only on bounded research-sized repair windows.",
     },
     {
       eyebrow: "Phase 3",
       title: "Return ranked output",
       description:
         "Executable plan plus metadata to review, compare, and push downstream.",
+      underTheHood:
+        "Pareto filter, amplitude scoring, collapse to one plan with honest method label.",
     },
   ],
+  comparison: {
+    eyebrow: `${interference.label} check`,
+    title: "Classical baseline vs hybrid-assisted search.",
+    description:
+      "Same feasibility guarantee. Hybrid adds bounded exploration — classical wins when QAOA cannot beat it.",
+  },
+  jsonContract: {
+    eyebrow: "API contract",
+    title: "What you send. What you get back.",
+    description:
+      "Same shape as /sandbox and /docs/api — tasks, constraints in; plan, summary, metrics, method out.",
+  },
+  latency: {
+    eyebrow: measurement.label,
+    title: "Latency and safe operating envelope.",
+    description:
+      "Response time grows with problem size. Hybrid adds a bounded band on research candidates only.",
+  },
+  glossary: {
+    eyebrow: "Lexicon",
+    title: "Quantum terms map to engineering language.",
+    description:
+      "Surface vocabulary for product and ops. Underneath: constraint graphs, solvers, and ranked JSON.",
+  },
+  decoherence: {
+    eyebrow: "Decoherence",
+    title: "When constraints break in production.",
+    description:
+      "The API does not hide failure — infeasibility, partial plans, and method disagreement are explicit.",
+  },
+  funnel: {
+    eyebrow: "Collapse",
+    title: "Why hundreds of candidates become one plan.",
+    description: "Click a stage to see the rejection reason.",
+  },
   preview: {
     eyebrow: "Execution preview",
     title: "Hard problem in. Ranked plan out.",

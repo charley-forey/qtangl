@@ -1,29 +1,35 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 
 import PageHero from "@/components/layout/PageHero";
 import PageShell from "@/components/layout/PageShell";
+import PhaseRibbon from "@/components/layout/PhaseRibbon";
+import Section from "@/components/layout/Section";
 import FeatureCard from "@/components/marketing/FeatureCard";
 import ProductPreview from "@/components/marketing/ProductPreview";
-import Section from "@/components/layout/Section";
-import EntanglementField from "@/components/quantum/EntanglementField";
 import Card from "@/components/ui/Card";
 import Eyebrow from "@/components/ui/Eyebrow";
-import CollapseMeter from "@/components/visualization/quantum/CollapseMeter";
+import JsonContract from "@/components/visualization/JsonContract";
+import CandidateFunnel from "@/components/visualization/quantum/CandidateFunnel";
+import DecoherencePanel from "@/components/visualization/quantum/DecoherencePanel";
 import HybridStackDiagram from "@/components/visualization/quantum/HybridStackDiagram";
 import InterferenceHeatmap from "@/components/visualization/quantum/InterferenceHeatmap";
+import LatencyEnvelope from "@/components/visualization/quantum/LatencyEnvelope";
+import LexiconGlossary from "@/components/visualization/quantum/LexiconGlossary";
+import MethodComparison from "@/components/visualization/quantum/MethodComparison";
+import PipelineDiagram from "@/components/visualization/quantum/PipelineDiagram";
 import {
   platformHighlights,
   useCases,
   workflowSteps,
 } from "@/lib/constants";
 import { technologyPage } from "@/lib/copy/product";
+import { phaseUnderTheHood } from "@/lib/copy/technology-deep";
 import { technologyInterferenceMap } from "@/lib/copy/visualization";
 import JsonLd from "@/components/seo/JsonLd";
 import { buildPageMetadata, buildSoftwareApplicationJsonLd } from "@/lib/seo";
 
 const technologyDescription =
-  "See the phase diagram behind Qtangl's classical-first, quantum-aware planning workflow.";
+  "Hybrid planning pipeline: CP-SAT baseline every job, bounded QAOA on research candidates, ranked JSON out.";
 
 export const metadata: Metadata = buildPageMetadata({
   path: "/technology",
@@ -39,35 +45,14 @@ export default function TechnologyPage() {
         title={technologyPage.title}
         description={technologyPage.intro}
       />
-      <Section gap="tight">
-        <Card tone="feature" size="lg" className="overflow-hidden rounded-[var(--radius-feature)]">
-          <div className="grid gap-4 lg:grid-cols-[1.1fr_0.9fr]">
-            <div className="relative aspect-[16/10] overflow-hidden rounded-[var(--radius-xl)] border border-[var(--border)] bg-black/60">
-              <Image
-                src="/qtangl-technology-solver-grid.svg"
-                alt="Black and white solver workflow diagram showing structured inputs, solver orchestration, and ranked output panels."
-                fill
-                priority
-                sizes="(min-width: 1280px) 52vw, (min-width: 768px) 88vw, 100vw"
-                className="object-cover grayscale"
-              />
-            </div>
-            <EntanglementField />
-          </div>
-          <div className="mt-6 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
-            {technologyPage.diagramLabels.map((label) => (
-              <div
-                key={label}
-                className="rounded-[var(--radius-xl)] border border-[var(--border)] bg-black/55 px-4 py-4 text-center text-sm text-[var(--color-gray-200)]"
-              >
-                {label}
-              </div>
-            ))}
-          </div>
-        </Card>
+
+      <PhaseRibbon />
+
+      <Section id="pipeline" gap="tight">
+        <PipelineDiagram />
       </Section>
 
-      <Section gap="tight">
+      <Section id="phases" gap="tight">
         <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
           {technologyPage.sections.map((section, index) => (
             <Card
@@ -81,12 +66,18 @@ export default function TechnologyPage() {
               <p className="mt-4 text-sm leading-7 text-[var(--color-gray-300)]">
                 {section.description}
               </p>
+              <p className="mt-4 border-t border-[var(--border)] pt-4 text-xs leading-6 text-[var(--color-gray-500)]">
+                <span className="font-semibold uppercase tracking-[0.14em] text-[var(--color-gray-400)]">
+                  Under the hood ·{" "}
+                </span>
+                {phaseUnderTheHood[index]?.operation ?? section.underTheHood}
+              </p>
             </Card>
           ))}
         </div>
       </Section>
 
-      <Section gap="tight">
+      <Section id="hybrid-stack" gap="tight">
         <div className="grid gap-6 xl:grid-cols-[1.15fr_0.85fr]">
           <HybridStackDiagram />
           <Card tone="strong" size="lg" className="rounded-[var(--radius-feature)]">
@@ -95,17 +86,37 @@ export default function TechnologyPage() {
             <p className="mt-4 text-sm leading-7 text-[var(--color-gray-300)]">
               {technologyPage.honesty.description}
             </p>
-            <CollapseMeter candidatesEvaluated={9} className="mt-6" />
+            <CandidateFunnel compact className="mt-6 border-0 bg-transparent p-0" />
           </Card>
         </div>
       </Section>
 
-      <Section gap="tight">
+      <Section id="interference" gap="tight">
         <InterferenceHeatmap
           xLabels={[...technologyInterferenceMap.xLabels]}
           yLabels={[...technologyInterferenceMap.yLabels]}
           values={technologyInterferenceMap.values.map((row) => [...row])}
         />
+      </Section>
+
+      <Section id="comparison" gap="tight">
+        <MethodComparison />
+      </Section>
+
+      <Section id="contract" gap="tight">
+        <JsonContract />
+      </Section>
+
+      <Section id="latency" gap="tight">
+        <LatencyEnvelope />
+      </Section>
+
+      <Section id="lexicon" gap="tight">
+        <LexiconGlossary />
+      </Section>
+
+      <Section id="decoherence" gap="tight">
+        <DecoherencePanel />
       </Section>
 
       <Section gap="tight">
@@ -128,7 +139,7 @@ export default function TechnologyPage() {
         </div>
       </Section>
 
-      <Section gap="tight">
+      <Section id="preview" gap="tight">
         <ProductPreview
           eyebrow={technologyPage.preview.eyebrow}
           title={technologyPage.preview.title}

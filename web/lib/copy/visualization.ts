@@ -1,6 +1,6 @@
 import { quantumLexicon } from "@/lib/copy/voice";
 
-const { amplitude, collapse, interference, phase } = quantumLexicon;
+const { amplitude, collapse, interference, measurement, phase } = quantumLexicon;
 
 export const methodBadgeCopy = {
   classical: {
@@ -46,20 +46,99 @@ export const hybridStackDiagramCopy = {
     {
       label: "Classical preprocessing",
       width: 48,
+      algorithm: "OR-Tools CP-SAT",
       description: "Normalize inputs, build constraints, and shape the optimization model.",
+      operations: [
+        "Schema validation and type normalization",
+        "Constraint graph construction",
+        "CSP/IP model encoding with slack variables",
+      ],
     },
     {
       label: "Quantum-assisted search (research)",
       width: 12,
+      algorithm: "QAOA p=1",
       description: "Bounded exploration on tiny research-sized candidates only.",
+      operations: [
+        "Repair-window QUBO encoding",
+        "QAOA reps=1, maxiter=12, shots=256",
+        "Classical wins when QAOA loses on objective",
+      ],
     },
     {
       label: "Classical post-processing",
       width: 40,
+      algorithm: "Re-rank + serialize",
       description: "Rank the winner, assemble the response, and return an executable plan.",
+      operations: [
+        "Pareto dominance filter",
+        "Amplitude scoring and collapse",
+        "JSON response with method label",
+      ],
     },
   ],
 } as const;
+
+export const pipelineDiagramCopy = {
+  eyebrow: "Solver pipeline",
+  title: "Five stages from request to executable plan.",
+  description:
+    "Parse, encode, search, rank, respond — each stage names the algorithm your team can audit.",
+} as const;
+
+export const candidateFunnelCopy = {
+  eyebrow: collapse.label,
+  title: "Why hundreds of candidates become one plan.",
+  description: "Select a stage to see the rejection reason.",
+} as const;
+
+export const methodComparisonCopy = {
+  eyebrow: interference.label,
+  title: "Classical baseline vs hybrid-assisted search.",
+  description:
+    "Same feasibility guarantee. Hybrid adds bounded exploration — classical wins when QAOA cannot beat it.",
+} as const;
+
+export const jsonContractCopy = {
+  eyebrow: "API contract",
+  title: "What you send. What you get back.",
+  description:
+    "Same shape as /sandbox and /docs/api — tasks, constraints in; plan, summary, metrics, method out.",
+} as const;
+
+export const latencyEnvelopeCopy = {
+  eyebrow: measurement.label,
+  title: "Latency and safe operating envelope.",
+  description:
+    "Response time grows with problem size. Hybrid adds a bounded band on research candidates only.",
+} as const;
+
+export const lexiconGlossaryCopy = {
+  eyebrow: "Lexicon",
+  title: "Quantum terms map to engineering language.",
+  description:
+    "Surface vocabulary for product and ops. Underneath: constraint graphs, solvers, and ranked JSON.",
+} as const;
+
+export const decoherencePanelCopy = {
+  eyebrow: "Decoherence",
+  title: "When constraints break in production.",
+  description:
+    "The API does not hide failure — infeasibility, partial plans, and method disagreement are explicit.",
+} as const;
+
+export const phaseRibbonItems = [
+  { id: "pipeline", label: "Pipeline" },
+  { id: "phases", label: "Phases" },
+  { id: "hybrid-stack", label: "Hybrid stack" },
+  { id: "interference", label: "Interference" },
+  { id: "comparison", label: "Methods" },
+  { id: "contract", label: "Contract" },
+  { id: "latency", label: "Latency" },
+  { id: "lexicon", label: "Lexicon" },
+  { id: "decoherence", label: "Failures" },
+  { id: "preview", label: "Preview" },
+] as const;
 
 export const homeAmplitudeBars = [
   {
