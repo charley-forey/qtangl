@@ -283,6 +283,81 @@
   min-width: 0;
 }
 
+.tech-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+@media (min-width: 640px) {
+  .tech-stack {
+    gap: 2rem;
+  }
+}
+
+.tech-grid-cards {
+  display: grid;
+  gap: 1rem;
+  align-items: stretch;
+}
+
+@media (min-width: 640px) {
+  .tech-grid-cards {
+    gap: 1.5rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .tech-grid-cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1280px) {
+  .tech-grid-cards {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.tech-scroll-x {
+  overflow-x: auto;
+  scrollbar-gutter: stable;
+  padding-bottom: 0.5rem;
+  -webkit-overflow-scrolling: touch;
+}
+
+.tech-scroll-fade {
+  position: relative;
+}
+
+.tech-scroll-fade::before,
+.tech-scroll-fade::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0.5rem;
+  width: 1.5rem;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.tech-scroll-fade::before {
+  left: 0;
+  background: linear-gradient(90deg, var(--background), transparent);
+}
+
+.tech-scroll-fade::after {
+  right: 0;
+  background: linear-gradient(270deg, var(--background), transparent);
+}
+
+@media (min-width: 768px) {
+  .tech-scroll-fade::before,
+  .tech-scroll-fade::after {
+    display: none;
+  }
+}
+
 .content-narrow {
   max-width: var(--container-narrow);
 }

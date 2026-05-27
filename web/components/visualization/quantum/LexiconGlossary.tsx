@@ -1,3 +1,4 @@
+import TechnologyBlock from "@/components/technology/TechnologyBlock";
 import { lexiconGlossaryCopy } from "@/lib/copy/visualization";
 import { glossaryEntries } from "@/lib/copy/technology-deep";
 
@@ -7,26 +8,20 @@ type LexiconGlossaryProps = {
 
 export default function LexiconGlossary({ className = "" }: LexiconGlossaryProps) {
   return (
-    <section
-      aria-label={lexiconGlossaryCopy.title}
-      className={[
-        "rounded-[var(--radius-feature)] border border-[var(--border)] bg-black/35 p-5 lg:p-6",
-        className,
-      ]
-        .filter(Boolean)
-        .join(" ")}
+    <TechnologyBlock
+      eyebrow={lexiconGlossaryCopy.eyebrow}
+      title={lexiconGlossaryCopy.title}
+      description={lexiconGlossaryCopy.description}
+      className={className}
     >
-      <p className="text-label">{lexiconGlossaryCopy.eyebrow}</p>
-      <h2 className="heading-section mt-4 !text-2xl">{lexiconGlossaryCopy.title}</h2>
-      <p className="mt-3 max-w-3xl text-sm leading-7 text-[var(--color-gray-300)]">
-        {lexiconGlossaryCopy.description}
-      </p>
-
-      <div className="mt-6 divide-y divide-[var(--border)] rounded-[var(--radius-lg)] border border-[var(--border)]">
-        {glossaryEntries.map((entry) => (
+      <div className="divide-y divide-[var(--border)] rounded-[var(--radius-lg)] border border-[var(--border)]">
+        {glossaryEntries.map((entry, index) => (
           <div
             key={entry.quantum}
-            className="grid gap-4 p-4 md:grid-cols-2 md:gap-8"
+            className={[
+              "grid gap-4 p-4 sm:p-5 md:grid-cols-2 md:gap-8",
+              index === glossaryEntries.length - 1 ? "rounded-b-[var(--radius-lg)]" : "",
+            ].join(" ")}
           >
             <div>
               <p className="text-sm font-semibold text-white">{entry.quantum}</p>
@@ -43,6 +38,6 @@ export default function LexiconGlossary({ className = "" }: LexiconGlossaryProps
           </div>
         ))}
       </div>
-    </section>
+    </TechnologyBlock>
   );
 }

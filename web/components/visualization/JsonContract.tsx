@@ -1,3 +1,8 @@
+"use client";
+
+import { useState } from "react";
+
+import TechnologyBlock from "@/components/technology/TechnologyBlock";
 import { apiPreviewRequest, apiPreviewResponse } from "@/lib/copy/api-examples";
 import { jsonContractCopy } from "@/lib/copy/visualization";
 import { jsonContractCallouts } from "@/lib/copy/technology-deep";
@@ -10,7 +15,53 @@ function formatJson(value: object) {
   return JSON.stringify(value, null, 2);
 }
 
-function AnnotatedBlock({
+function JsonCodeBlock({
+  json,
+  callouts,
+}: {
+  json: string;
+  callouts: readonly { line: number; label: string; detail: string }[];
+}) {
+  const lines = json.split("\n");
+
+  return (
+    <>
+      <pre className="max-h-[24rem] overflow-auto rounded-[var(--radius-lg)] border border-[var(--border)] bg-black/55 p-4 font-mono text-[11px] leading-6 text-[var(--color-gray-300)] sm:text-xs">
+        {lines.map((line, index) => {
+          const lineNumber = index + 1;
+          const callout = callouts.find((item) => item.line === lineNumber);
+
+          return (
+            <div
+              key={lineNumber}
+              className={callout ? "bg-white/[0.04] -mx-4 px-4" : undefined}
+            >
+              <code>
+                <span className="mr-3 inline-block w-5 select-none text-[var(--color-gray-600)] sm:mr-4 sm:w-6">
+                  {lineNumber}
+                </span>
+                {line}
+              </code>
+            </div>
+          );
+        })}
+      </pre>
+      <ul className="space-y-2 border-t border-[var(--border)] pt-4">
+        {callouts.map((item) => (
+          <li
+            key={item.label}
+            className="rounded-[var(--radius-md)] border border-[var(--border)] bg-white/[0.03] px-3 py-2"
+          >
+            <p className="font-mono text-xs text-white">{item.label}</p>
+            <p className="mt-1 text-xs leading-6 text-[var(--color-gray-500)]">{item.detail}</p>
+          </li>
+        ))}
+      </ul>
+    </>
+  );
+}
+
+function ContractColumn({
   title,
   json,
   callouts,
@@ -19,80 +70,75 @@ function AnnotatedBlock({
   json: string;
   callouts: readonly { line: number; label: string; detail: string }[];
 }) {
-  const lines = json.split("\n");
-
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex min-w-0 flex-col gap-4">
       <h3 className="text-sm font-semibold text-white">{title}</h3>
-      <div className="grid gap-4 lg:grid-cols-[1fr_auto]">
-        <pre className="overflow-x-auto rounded-[var(--radius-lg)] border border-[var(--border)] bg-black/55 p-4 font-mono text-xs leading-6 text-[var(--color-gray-300)]">
-          {lines.map((line, index) => {
-            const lineNumber = index + 1;
-            const callout = callouts.find((item) => item.line === lineNumber);
-
-            return (
-              <div
-                key={`${title}-${lineNumber}`}
-                className={callout ? "bg-white/[0.04] -mx-4 px-4" : undefined}
-              >
-                <code>
-                  <span className="mr-4 inline-block w-6 select-none text-[var(--color-gray-600)]">
-                    {lineNumber}
-                  </span>
-                  {line}
-                </code>
-              </div>
-            );
-          })}
-        </pre>
-        <ul className="space-y-3 lg:min-w-[12rem]">
-          {callouts.map((item) => (
-            <li
-              key={`${title}-${item.label}`}
-              className="rounded-[var(--radius-md)] border border-[var(--border)] bg-white/[0.03] px-3 py-2"
-            >
-              <p className="font-mono text-xs text-white">{item.label}</p>
-              <p className="mt-1 text-xs leading-6 text-[var(--color-gray-500)]">{item.detail}</p>
-            </li>
-          ))}
-        </ul>
-      </div>
+      <JsonCodeBlock json={json} callouts={callouts} />
     </div>
   );
 }
 
 export default function JsonContract({ className = "" }: JsonContractProps) {
+  const [mobileTab, setMobileTab] = useState<"request" | "response">("request");
   const requestJson = formatJson(apiPreviewRequest);
   const responseJson = formatJson(apiPreviewResponse);
 
   return (
-    <section
-      aria-label={jsonContractCopy.title}
-      className={[
-        "rounded-[var(--radius-feature)] border border-[var(--border)] bg-black/35 p-5 lg:p-6",
-        className,
-      ]
-        .filter(Boolean)
-        .join(" ")}
+    <TechnologyBlock
+      eyebrow={jsonContractCopy.eyebrow}
+      title={jsonContractCopy.title}
+      description={jsonContractCopy.description}
+      className={className}
+      contentClassName="grid-min-0"
     >
-      <p className="text-label">{jsonContractCopy.eyebrow}</p>
-      <h2 className="heading-section mt-4 !text-2xl">{jsonContractCopy.title}</h2>
-      <p className="mt-3 max-w-3xl text-sm leading-7 text-[var(--color-gray-300)]">
-        {jsonContractCopy.description}
-      </p>
+      <div className="flex gap-2 md:hidden" role="tablist" aria-label="API contract">
+        {(["request", "response"] as const).map((tab) => (
+          <button
+            key={tab}
+            type="button"
+            role="tab"
+            aria-selected={mobileTab === tab}
+            onClick={() => setMobileTab(tab)}
+            className={[
+              "touch-target flex-1 rounded-full border px-4 py-2 text-xs uppercase tracking-[0.16em] transition-colors",
+              mobileTab === tab
+                ? "border-[var(--border-strong)] bg-white/[0.08] text-white"
+                : "border-[var(--border)] text-[var(--color-gray-500)]",
+            ].join(" ")}
+          >
+            {tab}
+          </button>
+        ))}
+      </div>
 
-      <div className="mt-8 grid gap-10 xl:grid-cols-2">
-        <AnnotatedBlock
+      <div className="md:hidden">
+        {mobileTab === "request" ? (
+          <ContractColumn
+            title="Request"
+            json={requestJson}
+            callouts={jsonContractCallouts.request}
+          />
+        ) : (
+          <ContractColumn
+            title="Response"
+            json={responseJson}
+            callouts={jsonContractCallouts.response}
+          />
+        )}
+      </div>
+
+      <div className="hidden gap-8 md:grid xl:grid-cols-2 xl:gap-10">
+        <ContractColumn
           title="Request"
           json={requestJson}
           callouts={jsonContractCallouts.request}
         />
-        <AnnotatedBlock
+        <ContractColumn
           title="Response"
           json={responseJson}
           callouts={jsonContractCallouts.response}
         />
       </div>
-    </section>
+    </TechnologyBlock>
   );
 }

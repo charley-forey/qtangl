@@ -149,6 +149,12 @@ export const technologyPage = {
     title: "Why hundreds of candidates become one plan.",
     description: "Click a stage to see the rejection reason.",
   },
+  chapters: {
+    howItRuns: { eyebrow: "Pipeline", title: "How it runs" },
+    solverTruth: { eyebrow: "Method", title: "Solver truth" },
+    integrate: { eyebrow: "API", title: "Integrate" },
+    runIt: { eyebrow: "Output", title: "Run it" },
+  },
   preview: {
     eyebrow: "Execution preview",
     title: "Hard problem in. Ranked plan out.",

@@ -35,6 +35,8 @@ export const interferenceHeatmapCopy = {
   eyebrow: interference.label,
   title: "Constraint pressure across the planning state",
   description: "Brighter cells = more constraint pressure. Legible, not hidden.",
+  hint: "Click any cell to see which constraints collide and how the solver resolves them.",
+  popupClose: "Close",
 } as const;
 
 export const hybridStackDiagramCopy = {
@@ -45,6 +47,7 @@ export const hybridStackDiagramCopy = {
   bands: [
     {
       label: "Classical preprocessing",
+      shortLabel: "Preprocess",
       width: 48,
       algorithm: "OR-Tools CP-SAT",
       description: "Normalize inputs, build constraints, and shape the optimization model.",
@@ -56,6 +59,7 @@ export const hybridStackDiagramCopy = {
     },
     {
       label: "Quantum-assisted search (research)",
+      shortLabel: "QAOA band",
       width: 12,
       algorithm: "QAOA p=1",
       description: "Bounded exploration on tiny research-sized candidates only.",
@@ -67,6 +71,7 @@ export const hybridStackDiagramCopy = {
     },
     {
       label: "Classical post-processing",
+      shortLabel: "Post-process",
       width: 40,
       algorithm: "Re-rank + serialize",
       description: "Rank the winner, assemble the response, and return an executable plan.",
@@ -137,7 +142,18 @@ export const phaseRibbonItems = [
   { id: "latency", label: "Latency" },
   { id: "lexicon", label: "Lexicon" },
   { id: "decoherence", label: "Failures" },
+  { id: "platform", label: "Platform" },
   { id: "preview", label: "Preview" },
+  { id: "workflow", label: "Workflow" },
+  { id: "use-cases", label: "Use cases" },
+] as const;
+
+export const phaseRibbonGroupsMobile = [
+  { id: "pipeline", label: "Pipeline" },
+  { id: "hybrid-stack", label: "Solver" },
+  { id: "contract", label: "Integrate" },
+  { id: "preview", label: "Preview" },
+  { id: "use-cases", label: "Use cases" },
 ] as const;
 
 export const homeAmplitudeBars = [

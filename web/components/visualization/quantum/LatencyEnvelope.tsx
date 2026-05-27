@@ -1,3 +1,4 @@
+import TechnologyBlock from "@/components/technology/TechnologyBlock";
 import { latencyEnvelopeCopy } from "@/lib/copy/visualization";
 import { latencyChartData } from "@/lib/copy/technology-deep";
 
@@ -58,25 +59,20 @@ export default function LatencyEnvelope({ className = "" }: LatencyEnvelopeProps
   const envBottom = HEIGHT - PAD.bottom;
 
   return (
-    <section
-      aria-label={latencyEnvelopeCopy.title}
-      className={[
-        "rounded-[var(--radius-feature)] border border-[var(--border)] bg-black/35 p-5 lg:p-6",
-        className,
-      ]
-        .filter(Boolean)
-        .join(" ")}
+    <TechnologyBlock
+      eyebrow={latencyEnvelopeCopy.eyebrow}
+      title={latencyEnvelopeCopy.title}
+      description={latencyEnvelopeCopy.description}
+      className={className}
+      contentClassName="grid-min-0"
     >
-      <p className="text-label">{latencyEnvelopeCopy.eyebrow}</p>
-      <h2 className="heading-section mt-4 !text-2xl">{latencyEnvelopeCopy.title}</h2>
-      <p className="mt-3 max-w-3xl text-sm leading-7 text-[var(--color-gray-300)]">
-        {latencyEnvelopeCopy.description}
-      </p>
-
-      <div className="mt-6 overflow-x-auto">
+      <div className="w-full">
         <svg
           viewBox={`0 0 ${WIDTH} ${HEIGHT}`}
-          className="mx-auto w-full max-w-[36rem]"
+          width="100%"
+          height="auto"
+          preserveAspectRatio="xMidYMid meet"
+          className="mx-auto max-w-[36rem]"
           role="img"
           aria-label="Latency chart: problem size versus response time with safe operating envelope"
         >
@@ -147,7 +143,7 @@ export default function LatencyEnvelope({ className = "" }: LatencyEnvelopeProps
         </svg>
       </div>
 
-      <ul className="mt-5 space-y-2">
+      <ul className="space-y-2">
         {latencyChartData.notes.map((note) => (
           <li key={note} className="text-sm leading-7 text-[var(--color-gray-500)]">
             {note}
@@ -155,7 +151,7 @@ export default function LatencyEnvelope({ className = "" }: LatencyEnvelopeProps
         ))}
       </ul>
 
-      <div className="mt-4 flex flex-wrap gap-6 text-xs uppercase tracking-[0.18em] text-[var(--color-gray-500)]">
+      <div className="flex flex-wrap gap-4 sm:gap-6 text-xs uppercase tracking-[0.18em] text-[var(--color-gray-500)]">
         <span className="flex items-center gap-2">
           <span className="h-px w-8 bg-white/90" />
           Classical
@@ -165,6 +161,6 @@ export default function LatencyEnvelope({ className = "" }: LatencyEnvelopeProps
           Hybrid
         </span>
       </div>
-    </section>
+    </TechnologyBlock>
   );
 }
