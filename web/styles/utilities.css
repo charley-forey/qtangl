@@ -264,6 +264,15 @@
   max-width: var(--container-reading);
 }
 
+/* Prevent grid children from forcing horizontal page overflow (e.g. code blocks). */
+.grid-min-0 {
+  min-width: 0;
+}
+
+.grid-min-0 > * {
+  min-width: 0;
+}
+
 .content-narrow {
   max-width: var(--container-narrow);
 }

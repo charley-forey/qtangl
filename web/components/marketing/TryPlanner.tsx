@@ -131,8 +131,8 @@ export default function TryPlanner() {
       : tryPlannerCopy.status.hidden;
 
   return (
-    <div className="grid gap-8 xl:grid-cols-[0.82fr_1.18fr]">
-      <Card tone="feature" size="lg" className="rounded-[var(--radius-feature)]">
+    <div className="grid min-w-0 gap-8 xl:grid-cols-[0.82fr_1.18fr]">
+      <Card tone="feature" size="lg" className="min-w-0 rounded-[var(--radius-feature)]">
         <Eyebrow>{tryPlannerCopy.eyebrow}</Eyebrow>
         <h2 className="heading-section mt-4">{tryPlannerCopy.title}</h2>
         <p className="mt-4 text-base leading-8 text-[var(--color-gray-300)]">
@@ -226,16 +226,9 @@ export default function TryPlanner() {
         <p className="mt-3 text-sm text-[var(--color-gray-400)]" aria-live="polite">
           {generationStatus}
         </p>
-
-        {showApi ? (
-          <div className="mt-8 space-y-4">
-            <CodeBlock title="Example request" code={activeScenario.apiRequest} />
-            <CodeBlock title="Example response" code={activeScenario.apiResponse} />
-          </div>
-        ) : null}
       </Card>
 
-      <div className="space-y-6" aria-busy={isGenerating}>
+      <div className="min-w-0 space-y-6" aria-busy={isGenerating}>
         {hasGenerated ? (
           <div className="space-y-6">
             <CollapseMeter candidatesEvaluated={6} />
@@ -264,6 +257,13 @@ export default function TryPlanner() {
           </Card>
         )}
       </div>
+
+      {showApi ? (
+        <div className="grid min-w-0 gap-4 xl:col-span-2">
+          <CodeBlock title="Example request" code={activeScenario.apiRequest} />
+          <CodeBlock title="Example response" code={activeScenario.apiResponse} />
+        </div>
+      ) : null}
     </div>
   );
 }

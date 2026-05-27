@@ -32,12 +32,12 @@ export default function CodeBlock({ title, code }: CodeBlockProps) {
     <div
       role="region"
       aria-labelledby={titleId}
-      className="overflow-hidden rounded-[var(--radius-xl)] border border-[var(--border)] bg-[var(--color-gray-950)] shadow-[0_0_0_1px_rgba(255,255,255,0.03),0_18px_50px_rgba(0,0,0,0.24)]"
+      className="min-w-0 w-full max-w-full overflow-hidden rounded-[var(--radius-xl)] border border-[var(--border)] bg-[var(--color-gray-950)] shadow-[0_0_0_1px_rgba(255,255,255,0.03),0_18px_50px_rgba(0,0,0,0.24)]"
     >
-      <div className="flex items-center justify-between border-b border-[var(--border)] px-4 py-3">
-        <div className="flex items-center gap-3">
-          <span className="h-2 w-2 rounded-full bg-white" />
-          <span id={titleId} className="text-label text-[var(--color-gray-300)]">
+      <div className="flex items-center justify-between gap-3 border-b border-[var(--border)] px-4 py-3">
+        <div className="flex min-w-0 items-center gap-3">
+          <span className="h-2 w-2 shrink-0 rounded-full bg-white" />
+          <span id={titleId} className="text-label truncate text-[var(--color-gray-300)]">
             {label}
           </span>
         </div>
@@ -45,7 +45,7 @@ export default function CodeBlock({ title, code }: CodeBlockProps) {
           type="button"
           onClick={handleCopy}
           aria-label={`Copy ${label}`}
-          className="rounded-full border border-[var(--border)] px-3 py-1 text-xs text-[var(--color-gray-300)] transition hover:border-[var(--border-strong)] hover:text-white"
+          className="shrink-0 rounded-full border border-[var(--border)] px-3 py-1 text-xs text-[var(--color-gray-300)] transition hover:border-[var(--border-strong)] hover:text-white"
         >
           {copied ? "Copied" : "Copy"}
         </button>
@@ -53,8 +53,8 @@ export default function CodeBlock({ title, code }: CodeBlockProps) {
       <p className="sr-only" role="status" aria-live="polite">
         {copyMessage}
       </p>
-      <pre className="overflow-x-auto px-4 py-5 text-sm leading-7 text-[var(--color-gray-200)]">
-        <code>{renderedCode}</code>
+      <pre className="max-w-full overflow-x-auto px-4 py-4 text-xs leading-6 text-[var(--color-gray-200)] sm:px-5 sm:py-5 sm:text-sm sm:leading-7">
+        <code className="block min-w-0 whitespace-pre">{renderedCode}</code>
       </pre>
     </div>
   );

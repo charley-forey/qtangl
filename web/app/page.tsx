@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 
+import ApiPreviewSection from "@/components/marketing/ApiPreviewSection";
 import CTA from "@/components/marketing/CTA";
 import FeatureCard from "@/components/marketing/FeatureCard";
 import Hero from "@/components/marketing/Hero";
@@ -93,6 +94,12 @@ export default function Home() {
             </StateTransition>
           ))}
         </div>
+      </Section>
+
+      <Section gap="tight">
+        <StateTransition>
+          <ApiPreviewSection />
+        </StateTransition>
       </Section>
 
       <Section gap="tight" className="pb-0">

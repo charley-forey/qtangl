@@ -4,6 +4,7 @@ const {
   amplitude,
   collapse,
   interference,
+  measurement,
   observables,
   superposition,
 } = quantumLexicon;
@@ -35,6 +36,10 @@ export const homepageNarrative = {
   workflowTitle: "Rank every feasible plan. Run the one that wins.",
   domainEyebrow: observables.label,
   domainTitle: "Scheduling, routing, and staffing under real constraints.",
+  apiEyebrow: measurement.label,
+  apiTitle: "Demo first. API when you're ready.",
+  apiDescription:
+    "Send JSON. Get the same ranked plan, summary, and metrics your ops team already tracks.",
 } as const;
 
 export const homeProductPreview = {
