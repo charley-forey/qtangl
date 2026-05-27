@@ -1,0 +1,35 @@
+{
+  "source": "PBJ-shaped synthetic dataset grounded in public staffing distributions",
+  "rules": [
+    {
+      "id": "rest-10h",
+      "label": "Mandatory rest",
+      "description": "A nurse must have at least 10 hours between the end of one shift and the start of the next.",
+      "kind": "hard"
+    },
+    {
+      "id": "hours-60",
+      "label": "Weekly hours cap",
+      "description": "No nurse may exceed 60 scheduled hours in a rolling week without triggering an agency backfill.",
+      "kind": "soft"
+    },
+    {
+      "id": "seniority-bump",
+      "label": "Seniority bumping",
+      "description": "Senior staff can refuse mandatory overtime; junior staff are considered before agency.",
+      "kind": "soft"
+    },
+    {
+      "id": "skill-cover",
+      "label": "Skill coverage",
+      "description": "Cath lab coverage requires ACLS, ICU requires CCRN, and OR coverage requires a scrub/circulating-certified RN.",
+      "kind": "hard"
+    }
+  ],
+  "costLadder": {
+    "internalSwap": 1.0,
+    "voluntaryOvertime": 1.25,
+    "mandatoryOvertime": 1.5,
+    "agency": 2.4
+  }
+}

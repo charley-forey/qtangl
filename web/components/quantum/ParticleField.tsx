@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { useReducedMotion } from "framer-motion";
+
+import usePrefersReducedMotion from "@/lib/usePrefersReducedMotion";
 
 type ParticleFieldProps = {
   className?: string;
@@ -176,7 +177,7 @@ export default function ParticleField({
   density = 14,
 }: ParticleFieldProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const reduceMotion = useReducedMotion();
+  const reduceMotion = usePrefersReducedMotion();
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -192,19 +193,46 @@ export default function ParticleField({
     let width = 0;
     let height = 0;
     let frame = 0;
+    let lastPaint = 0;
+    let isInViewport = true;
+    let isDocumentVisible = document.visibilityState !== "hidden";
+
+    const getDensity = () => {
+      if (width < 768) {
+        return Math.max(8, Math.round(density * 0.55));
+      }
+
+      return density;
+    };
+
+    const draw = (time: number) => {
+      drawField(context, width, height, time, getDensity(), Boolean(reduceMotion));
+    };
+
+    const stop = () => {
+      if (!frame) {
+        return;
+      }
+
+      window.cancelAnimationFrame(frame);
+      frame = 0;
+    };
+
+    const shouldAnimate = () => !reduceMotion && isInViewport && isDocumentVisible;
 
     const resize = () => {
       const bounds = canvas.getBoundingClientRect();
       const nextWidth = Math.max(1, Math.floor(bounds.width));
       const nextHeight = Math.max(1, Math.floor(bounds.height));
-      const dpr = window.devicePixelRatio || 1;
+      const dprCap = nextWidth < 768 ? 1.25 : 1.5;
+      const dpr = Math.min(window.devicePixelRatio || 1, dprCap);
 
       width = nextWidth;
       height = nextHeight;
       canvas.width = Math.floor(nextWidth * dpr);
       canvas.height = Math.floor(nextHeight * dpr);
       context.setTransform(dpr, 0, 0, dpr, 0, 0);
-      drawField(context, width, height, performance.now(), density, Boolean(reduceMotion));
+      draw(performance.now());
     };
 
     const observer = new ResizeObserver(resize);
@@ -212,19 +240,69 @@ export default function ParticleField({
     resize();
 
     const render = (time: number) => {
-      drawField(context, width, height, time, density, Boolean(reduceMotion));
-      if (!reduceMotion) {
-        frame = window.requestAnimationFrame(render);
+      if (!shouldAnimate()) {
+        frame = 0;
+        return;
+      }
+
+      if (!lastPaint || time - lastPaint >= 1000 / 30) {
+        draw(time);
+        lastPaint = time;
+      }
+
+      frame = window.requestAnimationFrame(render);
+    };
+
+    const viewportObserver =
+      typeof IntersectionObserver === "undefined"
+        ? null
+        : new IntersectionObserver(
+            ([entry]) => {
+              isInViewport = entry.isIntersecting;
+
+              if (shouldAnimate()) {
+                if (!frame) {
+                  lastPaint = 0;
+                  frame = window.requestAnimationFrame(render);
+                }
+              } else {
+                stop();
+                draw(performance.now());
+              }
+            },
+            {
+              threshold: 0,
+              rootMargin: "240px 0px",
+            }
+          );
+
+    viewportObserver?.observe(canvas);
+
+    const handleVisibilityChange = () => {
+      isDocumentVisible = document.visibilityState !== "hidden";
+
+      if (shouldAnimate()) {
+        if (!frame) {
+          lastPaint = 0;
+          frame = window.requestAnimationFrame(render);
+        }
+      } else {
+        stop();
+        draw(performance.now());
       }
     };
 
-    if (!reduceMotion) {
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    if (shouldAnimate()) {
       frame = window.requestAnimationFrame(render);
     }
 
     return () => {
       observer.disconnect();
-      window.cancelAnimationFrame(frame);
+      viewportObserver?.disconnect();
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+      stop();
     };
   }, [density, reduceMotion]);
 

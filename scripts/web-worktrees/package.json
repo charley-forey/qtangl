@@ -1,0 +1,14 @@
+{
+  "name": "web-worktrees",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "launch": "tsx launch-agents.ts"
+  },
+  "dependencies": {
+    "@cursor/sdk": "latest"
+  },
+  "devDependencies": {
+    "tsx": "latest"
+  }
+}

@@ -8,6 +8,7 @@ import ProductPreview from "@/components/marketing/ProductPreview";
 import PageShell from "@/components/layout/PageShell";
 import StateTransition from "@/components/quantum/StateTransition";
 import Section from "@/components/layout/Section";
+import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
 import Eyebrow from "@/components/ui/Eyebrow";
 import { homeProductPreview, homeSections, homeHero, homepageNarrative } from "@/lib/copy/home";
@@ -69,6 +70,29 @@ export default function Home() {
             ))}
           </div>
         </div>
+      </Section>
+
+      <Section gap="tight">
+        <StateTransition>
+          <Card tone="feature" className="rounded-[var(--radius-feature)]">
+            <div className="grid gap-6 lg:grid-cols-[0.8fr_1.2fr] lg:items-end">
+              <div>
+                <Eyebrow>Headline demo</Eyebrow>
+                <h2 className="heading-section mt-4">Open the 04:11 hospital re-staffing demo</h2>
+                <p className="mt-4 text-base leading-8 text-[var(--color-gray-300)]">
+                  Watch a nurse call-out trigger a live CP-SAT solve, a replayed hybrid micro-solve,
+                  and an audit-ready scoreboard built for healthcare operations buyers.
+                </p>
+              </div>
+              <div className="flex flex-wrap gap-3 lg:justify-end">
+                <Button href="/demo/hospital">Open hospital demo</Button>
+                <Button href="/demo/hospital/methodology" variant="secondary">
+                  Read methodology
+                </Button>
+              </div>
+            </div>
+          </Card>
+        </StateTransition>
       </Section>
 
       <Section gap="tight">

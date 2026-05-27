@@ -3,6 +3,7 @@ from __future__ import annotations
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 
+from app.api.hospital import router as hospital_router
 from app.api.optimize import router as optimize_router
 
 app = FastAPI(
@@ -12,6 +13,7 @@ app = FastAPI(
 )
 
 app.include_router(optimize_router)
+app.include_router(hospital_router)
 
 
 @app.get("/health", tags=["health"])

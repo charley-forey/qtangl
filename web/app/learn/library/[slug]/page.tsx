@@ -286,7 +286,7 @@ export default async function LibraryResourcePage({ params }: ResourcePageProps)
           </Card>
 
           <Card tone="feature" size="lg" className="rounded-[var(--radius-feature)]">
-            <Eyebrow>Who it's for</Eyebrow>
+            <Eyebrow>Who it&apos;s for</Eyebrow>
             <p className="mt-5 text-sm leading-8 text-[var(--color-gray-300)]">
               {whoItsFor}
             </p>

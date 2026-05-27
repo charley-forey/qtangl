@@ -13,7 +13,15 @@ export const metadata: Metadata = {
   description: accessPageCopy.metadataDescription,
 };
 
-export default function AccessPage() {
+type AccessPageProps = {
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+};
+
+export default async function AccessPage({ searchParams }: AccessPageProps) {
+  const params = (await searchParams) ?? {};
+  const source = typeof params.source === "string" ? params.source : "";
+  const interest = typeof params.interest === "string" ? params.interest : "";
+
   return (
     <PageShell>
       <PageHero
@@ -26,6 +34,11 @@ export default function AccessPage() {
           <div className="space-y-6">
             <Card tone="strong" className="rounded-[var(--radius-xl)]">
               <Eyebrow>{accessPageCopy.audienceEyebrow}</Eyebrow>
+              {source ? (
+                <p className="mt-3 text-xs uppercase tracking-[0.18em] text-[var(--color-gray-500)]">
+                  Referred from: {source}
+                </p>
+              ) : null}
               <ul className="mt-4 space-y-3 text-sm leading-7 text-[var(--color-gray-300)]">
                 {accessPageCopy.audienceItems.map((item) => (
                   <li key={item}>{item}</li>
@@ -39,7 +52,7 @@ export default function AccessPage() {
               </p>
             </Card>
           </div>
-          <AccessRequestForm />
+          <AccessRequestForm source={source} defaultInterest={interest} />
         </div>
       </Section>
     </PageShell>

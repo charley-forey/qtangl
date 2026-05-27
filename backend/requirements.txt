@@ -7,3 +7,6 @@ qiskit-aer
 qiskit-optimization
 docplex
 ortools
+faker
+python-multipart
+qiskit-ibm-runtime

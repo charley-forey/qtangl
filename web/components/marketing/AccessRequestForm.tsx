@@ -7,6 +7,7 @@ import { requestAccess } from "@/app/access/actions";
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
 import Eyebrow from "@/components/ui/Eyebrow";
+import { trackEvent } from "@/lib/analytics";
 import { accessFormCopy, accessFormMessages } from "@/lib/copy/access";
 
 const fieldBaseClassName =
@@ -68,7 +69,15 @@ function Input({
   );
 }
 
-export default function AccessRequestForm() {
+type AccessRequestFormProps = {
+  source?: string;
+  defaultInterest?: string;
+};
+
+export default function AccessRequestForm({
+  source = "",
+  defaultInterest = "",
+}: AccessRequestFormProps) {
   const formRef = useRef<HTMLFormElement>(null);
   const [state, formAction, pending] = useActionState(
     requestAccess,
@@ -130,7 +139,9 @@ export default function AccessRequestForm() {
           className="grid gap-4 sm:gap-5"
           noValidate
           aria-busy={pending}
+          onSubmit={() => trackEvent("access_requested", { source, interest: defaultInterest })}
         >
+          <input type="hidden" name="source" value={source} />
           <fieldset disabled={pending} className="grid gap-4 border-0 p-0 sm:gap-5">
             <div
               className={`text-sm leading-7 ${
@@ -180,7 +191,7 @@ export default function AccessRequestForm() {
                     fieldBaseClassName,
                     getFieldClassName(Boolean(fieldErrors.interest)),
                   ].join(" ")}
-                  defaultValue=""
+                  defaultValue={defaultInterest}
                 >
                   <option value="" disabled>
                     {accessFormCopy.fields.interest.placeholder}

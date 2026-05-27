@@ -111,6 +111,13 @@
   padding-block: var(--section-space-mobile);
 }
 
+@supports (content-visibility: auto) {
+  .section-shell {
+    content-visibility: auto;
+    contain-intrinsic-size: 1px 840px;
+  }
+}
+
 .section-shell::before {
   content: "";
   position: absolute;
@@ -338,6 +345,22 @@
     linear-gradient(180deg, rgba(255, 255, 255, 0.05), transparent 70%),
     rgba(0, 0, 0, 0.76);
   backdrop-filter: blur(16px);
+}
+
+@media (hover: none), (pointer: coarse) {
+  :where(.surface-panel-feature)::before,
+  .hero-marquee-track {
+    animation: none;
+  }
+
+  .header-shell {
+    background: rgba(0, 0, 0, 0.92);
+    backdrop-filter: none;
+  }
+
+  .hero-orb {
+    filter: blur(28px);
+  }
 }
 
 .header-hairline {

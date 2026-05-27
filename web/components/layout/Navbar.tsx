@@ -20,22 +20,45 @@ function isActive(pathname: string, href: string) {
 export default function Navbar() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
-  const [compressed, setCompressed] = useState(false);
+  const [compressed, setCompressed] = useState(() =>
+    typeof window === "undefined" ? false : window.scrollY > 24
+  );
 
   useEffect(() => {
-    function onScroll() {
-      setCompressed(window.scrollY > 24);
+    let frame = 0;
+    let lastCompressed = window.scrollY > 24;
+
+    function syncCompressedState() {
+      frame = 0;
+
+      const nextCompressed = window.scrollY > 24;
+      if (nextCompressed !== lastCompressed) {
+        lastCompressed = nextCompressed;
+        setCompressed(nextCompressed);
+      }
     }
 
-    onScroll();
+    function onScroll() {
+      if (frame) {
+        return;
+      }
+
+      frame = window.requestAnimationFrame(syncCompressedState);
+    }
+
     window.addEventListener("scroll", onScroll, { passive: true });
 
-    return () => window.removeEventListener("scroll", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      if (frame) {
+        window.cancelAnimationFrame(frame);
+      }
+    };
   }, []);
 
   return (
     <>
-      <header className="header-shell header-hairline sticky top-0 z-50">
+      <header className="header-shell header-hairline fixed inset-x-0 top-0 z-50">
         <div
           className={[
             "mx-auto flex w-full max-w-[var(--container-wide)] items-center justify-between gap-4 px-5 sm:px-6 md:px-8 lg:px-10 xl:px-12",
@@ -107,6 +130,7 @@ export default function Navbar() {
           </div>
         </div>
       </header>
+      <div aria-hidden="true" className="h-16 sm:h-[4.5rem]" />
 
       <Modal open={open} onClose={() => setOpen(false)} title={navbarCopy.mobileTitle}>
         <div id="mobile-navigation" className="space-y-5">

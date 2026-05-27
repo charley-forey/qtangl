@@ -1,0 +1,45 @@
+{
+  "id": "callout-icu-mass",
+  "title": "ICU cascade call-out",
+  "summary": "Three ICU nurses call out on the same morning, forcing a rebalance across ICU, cath lab, and float coverage.",
+  "callOut": {
+    "id": "callout-icu-mass",
+    "nurseId": "nurse-devin-r",
+    "nurseName": "Devin Reyes",
+    "ward": "ICU",
+    "shiftId": "icu-1-day",
+    "start": "2026-05-26T06:30:00",
+    "end": "2026-05-26T18:30:00",
+    "urgencyMinutes": 41,
+    "requiredCertifications": [
+      "ACLS",
+      "CCRN"
+    ],
+    "channel": "text",
+    "reason": "Multi-call outage"
+  },
+  "manualBaseline": {
+    "decisionMinutes": 31,
+    "agencyCost": 9100,
+    "summary": "Manual balancing forces two agency nurses because the scheduler cannot see the best float chain fast enough."
+  },
+  "preferredCandidates": [
+    "nurse-priya-n",
+    "nurse-018",
+    "nurse-035"
+  ],
+  "counts": [
+    {
+      "bitstring": "001",
+      "weight": 21
+    },
+    {
+      "bitstring": "010",
+      "weight": 32
+    },
+    {
+      "bitstring": "100",
+      "weight": 47
+    }
+  ]
+}

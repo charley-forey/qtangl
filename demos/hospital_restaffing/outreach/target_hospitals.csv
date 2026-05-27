@@ -1,0 +1,52 @@
+hospital_name,city,state,bed_count,estimated_annual_ot_spend,chro_name,chro_linkedin,coo_name,coo_linkedin,email_pattern
+Regional Medical Center of Akron,Akron,OH,410,6200000,Avery Collins,https://www.linkedin.com/in/avery-collins-demo,Jordan Patel,https://www.linkedin.com/in/jordan-patel-demo,first.last@hospital.org
+Regional Medical Center of Albany,Albany,NY,385,5900000,Leah Thompson,https://www.linkedin.com/in/leah-thompson-demo,Marcus Reed,https://www.linkedin.com/in/marcus-reed-demo,first.last@hospital.org
+Regional Medical Center of Albuquerque,Albuquerque,NM,430,6700000,Naomi Garcia,https://www.linkedin.com/in/naomi-garcia-demo,Cameron Scott,https://www.linkedin.com/in/cameron-scott-demo,first.last@hospital.org
+Regional Medical Center of Amarillo,Amarillo,TX,332,4800000,Hannah Young,https://www.linkedin.com/in/hannah-young-demo,Devin Brooks,https://www.linkedin.com/in/devin-brooks-demo,first.last@hospital.org
+Regional Medical Center of Asheville,Asheville,NC,360,5300000,Sofia Carter,https://www.linkedin.com/in/sofia-carter-demo,Riley Hall,https://www.linkedin.com/in/riley-hall-demo,first.last@hospital.org
+Regional Medical Center of Augusta,Augusta,GA,398,6000000,Emma Flores,https://www.linkedin.com/in/emma-flores-demo,Noah Miller,https://www.linkedin.com/in/noah-miller-demo,first.last@hospital.org
+Regional Medical Center of Baton Rouge,Baton Rouge,LA,442,6900000,Priya Lewis,https://www.linkedin.com/in/priya-lewis-demo,Elena Walker,https://www.linkedin.com/in/elena-walker-demo,first.last@hospital.org
+Regional Medical Center of Boise,Boise,ID,351,5000000,Nora Ramirez,https://www.linkedin.com/in/nora-ramirez-demo,Mason Hayes,https://www.linkedin.com/in/mason-hayes-demo,first.last@hospital.org
+Regional Medical Center of Buffalo,Buffalo,NY,470,7400000,Mia Bennett,https://www.linkedin.com/in/mia-bennett-demo,Logan Turner,https://www.linkedin.com/in/logan-turner-demo,first.last@hospital.org
+Regional Medical Center of Charleston,Charleston,SC,345,5100000,Jasmine Allen,https://www.linkedin.com/in/jasmine-allen-demo,Ethan Brooks,https://www.linkedin.com/in/ethan-brooks-demo,first.last@hospital.org
+Regional Medical Center of Chattanooga,Chattanooga,TN,402,6100000,Camila Perry,https://www.linkedin.com/in/camila-perry-demo,Isaac Rivera,https://www.linkedin.com/in/isaac-rivera-demo,first.last@hospital.org
+Regional Medical Center of Colorado Springs,Colorado Springs,CO,455,7100000,Olivia Diaz,https://www.linkedin.com/in/olivia-diaz-demo,Wyatt Foster,https://www.linkedin.com/in/wyatt-foster-demo,first.last@hospital.org
+Regional Medical Center of Columbia,Columbia,SC,370,5400000,Talia Mitchell,https://www.linkedin.com/in/talia-mitchell-demo,Liam Simmons,https://www.linkedin.com/in/liam-simmons-demo,first.last@hospital.org
+Regional Medical Center of Dayton,Dayton,OH,392,5800000,Brooke Griffin,https://www.linkedin.com/in/brooke-griffin-demo,Gabriel Kelly,https://www.linkedin.com/in/gabriel-kelly-demo,first.last@hospital.org
+Regional Medical Center of Des Moines,Des Moines,IA,406,6200000,Eva Carter,https://www.linkedin.com/in/eva-carter-demo,Adrian Nguyen,https://www.linkedin.com/in/adrian-nguyen-demo,first.last@hospital.org
+Regional Medical Center of El Paso,El Paso,TX,448,7000000,Carmen Lopez,https://www.linkedin.com/in/carmen-lopez-demo,Caleb Ortiz,https://www.linkedin.com/in/caleb-ortiz-demo,first.last@hospital.org
+Regional Medical Center of Eugene,Eugene,OR,334,4900000,Amara James,https://www.linkedin.com/in/amara-james-demo,Leo Edwards,https://www.linkedin.com/in/leo-edwards-demo,first.last@hospital.org
+Regional Medical Center of Flint,Flint,MI,311,4500000,Jade Thompson,https://www.linkedin.com/in/jade-thompson-demo,Samuel Reed,https://www.linkedin.com/in/samuel-reed-demo,first.last@hospital.org
+Regional Medical Center of Fort Wayne,Fort Wayne,IN,365,5500000,Maya Campbell,https://www.linkedin.com/in/maya-campbell-demo,Andrew Young,https://www.linkedin.com/in/andrew-young-demo,first.last@hospital.org
+Regional Medical Center of Fresno,Fresno,CA,489,7800000,Leah Brooks,https://www.linkedin.com/in/leah-brooks-demo,Christopher Hall,https://www.linkedin.com/in/christopher-hall-demo,first.last@hospital.org
+Regional Medical Center of Grand Rapids,Grand Rapids,MI,431,6700000,Carla Foster,https://www.linkedin.com/in/carla-foster-demo,Owen Mitchell,https://www.linkedin.com/in/owen-mitchell-demo,first.last@hospital.org
+Regional Medical Center of Greenville,Greenville,SC,327,4700000,Naomi Kim,https://www.linkedin.com/in/naomi-kim-demo,Matthew Carter,https://www.linkedin.com/in/matthew-carter-demo,first.last@hospital.org
+Regional Medical Center of Honolulu,Honolulu,HI,382,5900000,Lina James,https://www.linkedin.com/in/lina-james-demo,Daniel Hughes,https://www.linkedin.com/in/daniel-hughes-demo,first.last@hospital.org
+Regional Medical Center of Huntsville,Huntsville,AL,348,5100000,Iris Scott,https://www.linkedin.com/in/iris-scott-demo,Jacob Allen,https://www.linkedin.com/in/jacob-allen-demo,first.last@hospital.org
+Regional Medical Center of Jackson,Jackson,MS,437,6800000,Jamie Bennett,https://www.linkedin.com/in/jamie-bennett-demo,Henry Carter,https://www.linkedin.com/in/henry-carter-demo,first.last@hospital.org
+Regional Medical Center of Knoxville,Knoxville,TN,419,6400000,Emma Lopez,https://www.linkedin.com/in/emma-lopez-demo,David Flores,https://www.linkedin.com/in/david-flores-demo,first.last@hospital.org
+Regional Medical Center of Lexington,Lexington,KY,353,5200000,Avery Hall,https://www.linkedin.com/in/avery-hall-demo,Julian Perry,https://www.linkedin.com/in/julian-perry-demo,first.last@hospital.org
+Regional Medical Center of Little Rock,Little Rock,AR,399,6000000,Sofia Mitchell,https://www.linkedin.com/in/sofia-mitchell-demo,Cooper Brooks,https://www.linkedin.com/in/cooper-brooks-demo,first.last@hospital.org
+Regional Medical Center of Louisville,Louisville,KY,476,7500000,Olivia Reed,https://www.linkedin.com/in/olivia-reed-demo,Jack Griffin,https://www.linkedin.com/in/jack-griffin-demo,first.last@hospital.org
+Regional Medical Center of Madison,Madison,WI,391,5800000,Priya Adams,https://www.linkedin.com/in/priya-adams-demo,Nathan Walker,https://www.linkedin.com/in/nathan-walker-demo,first.last@hospital.org
+Regional Medical Center of Mobile,Mobile,AL,344,5000000,Camila Rivera,https://www.linkedin.com/in/camila-rivera-demo,Thomas Kim,https://www.linkedin.com/in/thomas-kim-demo,first.last@hospital.org
+Regional Medical Center of Modesto,Modesto,CA,326,4700000,Nora Simmons,https://www.linkedin.com/in/nora-simmons-demo,Joshua Hayes,https://www.linkedin.com/in/joshua-hayes-demo,first.last@hospital.org
+Regional Medical Center of Norfolk,Norfolk,VA,412,6300000,Brooke Turner,https://www.linkedin.com/in/brooke-turner-demo,Joseph Kelly,https://www.linkedin.com/in/joseph-kelly-demo,first.last@hospital.org
+Regional Medical Center of Oklahoma City,Oklahoma City,OK,493,7900000,Jasmine Patel,https://www.linkedin.com/in/jasmine-patel-demo,William Walker,https://www.linkedin.com/in/william-walker-demo,first.last@hospital.org
+Regional Medical Center of Omaha,Omaha,NE,402,6100000,Eva Diaz,https://www.linkedin.com/in/eva-diaz-demo,Connor Bennett,https://www.linkedin.com/in/connor-bennett-demo,first.last@hospital.org
+Regional Medical Center of Pensacola,Pensacola,FL,338,4900000,Amara Griffin,https://www.linkedin.com/in/amara-griffin-demo,Asher Lopez,https://www.linkedin.com/in/asher-lopez-demo,first.last@hospital.org
+Regional Medical Center of Phoenix,Phoenix,AZ,500,8200000,Maya Flores,https://www.linkedin.com/in/maya-flores-demo,Aiden Scott,https://www.linkedin.com/in/aiden-scott-demo,first.last@hospital.org
+Regional Medical Center of Pittsburgh,Pittsburgh,PA,467,7300000,Leah Carter,https://www.linkedin.com/in/leah-carter-demo,Lucas Adams,https://www.linkedin.com/in/lucas-adams-demo,first.last@hospital.org
+Regional Medical Center of Providence,Providence,RI,341,5000000,Carmen Hall,https://www.linkedin.com/in/carmen-hall-demo,Gavin Ramirez,https://www.linkedin.com/in/gavin-ramirez-demo,first.last@hospital.org
+Regional Medical Center of Reno,Reno,NV,324,4600000,Talia Foster,https://www.linkedin.com/in/talia-foster-demo,Dylan Hughes,https://www.linkedin.com/in/dylan-hughes-demo,first.last@hospital.org
+Regional Medical Center of Richmond,Richmond,VA,458,7100000,Emma Reed,https://www.linkedin.com/in/emma-reed-demo,Anthony Young,https://www.linkedin.com/in/anthony-young-demo,first.last@hospital.org
+Regional Medical Center of Rochester,Rochester,NY,409,6200000,Naomi Brooks,https://www.linkedin.com/in/naomi-brooks-demo,Isaiah Thompson,https://www.linkedin.com/in/isaiah-thompson-demo,first.last@hospital.org
+Regional Medical Center of Sacramento,Sacramento,CA,474,7600000,Lina Rivera,https://www.linkedin.com/in/lina-rivera-demo,Carter James,https://www.linkedin.com/in/carter-james-demo,first.last@hospital.org
+Regional Medical Center of Salt Lake City,Salt Lake City,UT,396,5900000,Jade Lopez,https://www.linkedin.com/in/jade-lopez-demo,Charles Diaz,https://www.linkedin.com/in/charles-diaz-demo,first.last@hospital.org
+Regional Medical Center of San Antonio,San Antonio,TX,488,7800000,Hannah Mitchell,https://www.linkedin.com/in/hannah-mitchell-demo,Eli Walker,https://www.linkedin.com/in/eli-walker-demo,first.last@hospital.org
+Regional Medical Center of Spokane,Spokane,WA,336,4800000,Mia Kelly,https://www.linkedin.com/in/mia-kelly-demo,Alex Carter,https://www.linkedin.com/in/alex-carter-demo,first.last@hospital.org
+Regional Medical Center of Springfield,Springfield,MO,318,4500000,Carla Adams,https://www.linkedin.com/in/carla-adams-demo,Tyler Foster,https://www.linkedin.com/in/tyler-foster-demo,first.last@hospital.org
+Regional Medical Center of St. Petersburg,St. Petersburg,FL,377,5600000,Nora Young,https://www.linkedin.com/in/nora-young-demo,Brandon Lee,https://www.linkedin.com/in/brandon-lee-demo,first.last@hospital.org
+Regional Medical Center of Toledo,Toledo,OH,347,5100000,Iris Mitchell,https://www.linkedin.com/in/iris-mitchell-demo,Christian Brooks,https://www.linkedin.com/in/christian-brooks-demo,first.last@hospital.org
+Regional Medical Center of Tucson,Tucson,AZ,389,5800000,Priya Campbell,https://www.linkedin.com/in/priya-campbell-demo,Jonathan Ortiz,https://www.linkedin.com/in/jonathan-ortiz-demo,first.last@hospital.org
+Regional Medical Center of Tulsa,Tulsa,OK,423,6500000,Camila Reed,https://www.linkedin.com/in/camila-reed-demo,Ryan Garcia,https://www.linkedin.com/in/ryan-garcia-demo,first.last@hospital.org

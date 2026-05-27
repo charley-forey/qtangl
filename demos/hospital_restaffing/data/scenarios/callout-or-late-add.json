@@ -1,0 +1,45 @@
+{
+  "id": "callout-or-late-add",
+  "title": "OR late add-on case",
+  "summary": "An urgent OR case is added after 06:30 and the command center needs a scrub-certified RN without breaching fatigue rules.",
+  "callOut": {
+    "id": "callout-or-late-add",
+    "nurseId": "nurse-amara-j",
+    "nurseName": "Amara James",
+    "ward": "OR-A",
+    "shiftId": "or-a-1-day",
+    "start": "2026-05-26T09:00:00",
+    "end": "2026-05-26T21:00:00",
+    "urgencyMinutes": 63,
+    "requiredCertifications": [
+      "Scrub",
+      "Circulating"
+    ],
+    "channel": "pager",
+    "reason": "Late add-on case"
+  },
+  "manualBaseline": {
+    "decisionMinutes": 18,
+    "agencyCost": 3900,
+    "summary": "The manual plan pulls the nearest scrub-certified traveler, increasing cost and hand-off risk."
+  },
+  "preferredCandidates": [
+    "nurse-042",
+    "nurse-051",
+    "nurse-078"
+  ],
+  "counts": [
+    {
+      "bitstring": "001",
+      "weight": 24
+    },
+    {
+      "bitstring": "010",
+      "weight": 34
+    },
+    {
+      "bitstring": "100",
+      "weight": 42
+    }
+  ]
+}

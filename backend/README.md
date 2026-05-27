@@ -54,6 +54,13 @@ Required Railway environment variables:
 - `QTANGL_RATE_LIMIT_PER_MINUTE` (optional)
 - `QTANGL_ENABLE_QAOA=false` (recommended for Railway production)
 
+Hospital demo runtime notes:
+
+- The hospital demo endpoints live under `/hospital/*`.
+- Railway production does **not** need IBM Quantum credentials for the default demo mode.
+- The production-safe mode is: live classical solve + cached QPU trace replay.
+- The hospital fixture data is bundled into `backend/app/hospital/fixtures`, so the Docker image can serve the demo without mounting repo-root files.
+
 Recommended local/research QAOA variables:
 
 - `QTANGL_ENABLE_QAOA=true`
@@ -64,6 +71,11 @@ Recommended local/research QAOA variables:
 - `QTANGL_QAOA_MAXITER`
 - `QTANGL_QAOA_SHOTS`
 - `QTANGL_QAOA_SIMULATOR_METHOD`
+
+Optional IBM Runtime variables for offline trace refresh only:
+
+- `QISKIT_IBM_TOKEN`
+- `QISKIT_IBM_INSTANCE`
 
 Recommended local auth for Railway CLI:
 

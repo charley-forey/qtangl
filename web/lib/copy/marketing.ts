@@ -182,6 +182,19 @@ export const docsCards = [
 
 export const blogPosts = [
   {
+    slug: "hospital-restaffing",
+    href: "/blog/hospital-restaffing",
+    category: "Healthcare operations",
+    coverImage: "/use-case-workforce.png",
+    coverAlt:
+      "Black and white healthcare workforce planning illustration showing staffing boards, coverage windows, and optimization overlays.",
+    title: "Auditable nurse re-staffing: how hybrid optimization surfaces alternates that CP-SAT hides",
+    excerpt:
+      "A concrete look at hospital re-staffing, why the classical path still leads, and where a hybrid micro-solve adds value.",
+    description:
+      "See how the hospital demo turns a nurse call-out into a live classical solve, a replayed hybrid audit trace, and a buyer-facing scoreboard.",
+  },
+  {
     slug: "quantum-optimization",
     href: "/blog/quantum-optimization",
     category: "Quantum-forward thinking",

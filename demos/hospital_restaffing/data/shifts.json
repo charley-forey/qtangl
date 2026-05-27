@@ -1,0 +1,3656 @@
+[
+  {
+    "id": "cath-lab-1-1-day",
+    "dayIndex": 1,
+    "shiftName": "day",
+    "ward": "Cath Lab 1",
+    "start": "2026-05-26T06:30:00",
+    "end": "2026-05-26T18:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "ACLS"
+    ],
+    "minStaff": 3
+  },
+  {
+    "id": "cath-lab-1-1-swing",
+    "dayIndex": 1,
+    "shiftName": "swing",
+    "ward": "Cath Lab 1",
+    "start": "2026-05-26T14:30:00",
+    "end": "2026-05-27T02:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "ACLS"
+    ],
+    "minStaff": 3
+  },
+  {
+    "id": "cath-lab-1-1-night",
+    "dayIndex": 1,
+    "shiftName": "night",
+    "ward": "Cath Lab 1",
+    "start": "2026-05-26T18:30:00",
+    "end": "2026-05-27T06:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "ACLS"
+    ],
+    "minStaff": 3
+  },
+  {
+    "id": "cath-lab-2-1-day",
+    "dayIndex": 1,
+    "shiftName": "day",
+    "ward": "Cath Lab 2",
+    "start": "2026-05-26T06:30:00",
+    "end": "2026-05-26T18:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "ACLS"
+    ],
+    "minStaff": 3
+  },
+  {
+    "id": "cath-lab-2-1-swing",
+    "dayIndex": 1,
+    "shiftName": "swing",
+    "ward": "Cath Lab 2",
+    "start": "2026-05-26T14:30:00",
+    "end": "2026-05-27T02:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "ACLS"
+    ],
+    "minStaff": 3
+  },
+  {
+    "id": "cath-lab-2-1-night",
+    "dayIndex": 1,
+    "shiftName": "night",
+    "ward": "Cath Lab 2",
+    "start": "2026-05-26T18:30:00",
+    "end": "2026-05-27T06:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "ACLS"
+    ],
+    "minStaff": 3
+  },
+  {
+    "id": "icu-1-day",
+    "dayIndex": 1,
+    "shiftName": "day",
+    "ward": "ICU",
+    "start": "2026-05-26T06:30:00",
+    "end": "2026-05-26T18:30:00",
+    "durationHours": 12,
+    "priority": "critical",
+    "requiredCertifications": [
+      "ACLS",
+      "CCRN"
+    ],
+    "minStaff": 8
+  },
+  {
+    "id": "icu-1-swing",
+    "dayIndex": 1,
+    "shiftName": "swing",
+    "ward": "ICU",
+    "start": "2026-05-26T14:30:00",
+    "end": "2026-05-27T02:30:00",
+    "durationHours": 12,
+    "priority": "critical",
+    "requiredCertifications": [
+      "ACLS",
+      "CCRN"
+    ],
+    "minStaff": 8
+  },
+  {
+    "id": "icu-1-night",
+    "dayIndex": 1,
+    "shiftName": "night",
+    "ward": "ICU",
+    "start": "2026-05-26T18:30:00",
+    "end": "2026-05-27T06:30:00",
+    "durationHours": 12,
+    "priority": "critical",
+    "requiredCertifications": [
+      "ACLS",
+      "CCRN"
+    ],
+    "minStaff": 8
+  },
+  {
+    "id": "or-a-1-day",
+    "dayIndex": 1,
+    "shiftName": "day",
+    "ward": "OR-A",
+    "start": "2026-05-26T06:30:00",
+    "end": "2026-05-26T18:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "Circulating",
+      "Scrub"
+    ],
+    "minStaff": 4
+  },
+  {
+    "id": "or-a-1-swing",
+    "dayIndex": 1,
+    "shiftName": "swing",
+    "ward": "OR-A",
+    "start": "2026-05-26T14:30:00",
+    "end": "2026-05-27T02:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "Circulating",
+      "Scrub"
+    ],
+    "minStaff": 4
+  },
+  {
+    "id": "or-a-1-night",
+    "dayIndex": 1,
+    "shiftName": "night",
+    "ward": "OR-A",
+    "start": "2026-05-26T18:30:00",
+    "end": "2026-05-27T06:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "Circulating",
+      "Scrub"
+    ],
+    "minStaff": 4
+  },
+  {
+    "id": "or-b-1-day",
+    "dayIndex": 1,
+    "shiftName": "day",
+    "ward": "OR-B",
+    "start": "2026-05-26T06:30:00",
+    "end": "2026-05-26T18:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "Circulating",
+      "Scrub"
+    ],
+    "minStaff": 4
+  },
+  {
+    "id": "or-b-1-swing",
+    "dayIndex": 1,
+    "shiftName": "swing",
+    "ward": "OR-B",
+    "start": "2026-05-26T14:30:00",
+    "end": "2026-05-27T02:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "Circulating",
+      "Scrub"
+    ],
+    "minStaff": 4
+  },
+  {
+    "id": "or-b-1-night",
+    "dayIndex": 1,
+    "shiftName": "night",
+    "ward": "OR-B",
+    "start": "2026-05-26T18:30:00",
+    "end": "2026-05-27T06:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "Circulating",
+      "Scrub"
+    ],
+    "minStaff": 4
+  },
+  {
+    "id": "med-surg-1-day",
+    "dayIndex": 1,
+    "shiftName": "day",
+    "ward": "Med-Surg",
+    "start": "2026-05-26T06:30:00",
+    "end": "2026-05-26T18:30:00",
+    "durationHours": 12,
+    "priority": "standard",
+    "requiredCertifications": [
+      "BLS"
+    ],
+    "minStaff": 10
+  },
+  {
+    "id": "med-surg-1-swing",
+    "dayIndex": 1,
+    "shiftName": "swing",
+    "ward": "Med-Surg",
+    "start": "2026-05-26T14:30:00",
+    "end": "2026-05-27T02:30:00",
+    "durationHours": 12,
+    "priority": "standard",
+    "requiredCertifications": [
+      "BLS"
+    ],
+    "minStaff": 10
+  },
+  {
+    "id": "med-surg-1-night",
+    "dayIndex": 1,
+    "shiftName": "night",
+    "ward": "Med-Surg",
+    "start": "2026-05-26T18:30:00",
+    "end": "2026-05-27T06:30:00",
+    "durationHours": 12,
+    "priority": "standard",
+    "requiredCertifications": [
+      "BLS"
+    ],
+    "minStaff": 10
+  },
+  {
+    "id": "cath-lab-1-2-day",
+    "dayIndex": 2,
+    "shiftName": "day",
+    "ward": "Cath Lab 1",
+    "start": "2026-05-27T06:30:00",
+    "end": "2026-05-27T18:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "ACLS"
+    ],
+    "minStaff": 3
+  },
+  {
+    "id": "cath-lab-1-2-swing",
+    "dayIndex": 2,
+    "shiftName": "swing",
+    "ward": "Cath Lab 1",
+    "start": "2026-05-27T14:30:00",
+    "end": "2026-05-28T02:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "ACLS"
+    ],
+    "minStaff": 3
+  },
+  {
+    "id": "cath-lab-1-2-night",
+    "dayIndex": 2,
+    "shiftName": "night",
+    "ward": "Cath Lab 1",
+    "start": "2026-05-27T18:30:00",
+    "end": "2026-05-28T06:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "ACLS"
+    ],
+    "minStaff": 3
+  },
+  {
+    "id": "cath-lab-2-2-day",
+    "dayIndex": 2,
+    "shiftName": "day",
+    "ward": "Cath Lab 2",
+    "start": "2026-05-27T06:30:00",
+    "end": "2026-05-27T18:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "ACLS"
+    ],
+    "minStaff": 3
+  },
+  {
+    "id": "cath-lab-2-2-swing",
+    "dayIndex": 2,
+    "shiftName": "swing",
+    "ward": "Cath Lab 2",
+    "start": "2026-05-27T14:30:00",
+    "end": "2026-05-28T02:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "ACLS"
+    ],
+    "minStaff": 3
+  },
+  {
+    "id": "cath-lab-2-2-night",
+    "dayIndex": 2,
+    "shiftName": "night",
+    "ward": "Cath Lab 2",
+    "start": "2026-05-27T18:30:00",
+    "end": "2026-05-28T06:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "ACLS"
+    ],
+    "minStaff": 3
+  },
+  {
+    "id": "icu-2-day",
+    "dayIndex": 2,
+    "shiftName": "day",
+    "ward": "ICU",
+    "start": "2026-05-27T06:30:00",
+    "end": "2026-05-27T18:30:00",
+    "durationHours": 12,
+    "priority": "critical",
+    "requiredCertifications": [
+      "ACLS",
+      "CCRN"
+    ],
+    "minStaff": 8
+  },
+  {
+    "id": "icu-2-swing",
+    "dayIndex": 2,
+    "shiftName": "swing",
+    "ward": "ICU",
+    "start": "2026-05-27T14:30:00",
+    "end": "2026-05-28T02:30:00",
+    "durationHours": 12,
+    "priority": "critical",
+    "requiredCertifications": [
+      "ACLS",
+      "CCRN"
+    ],
+    "minStaff": 8
+  },
+  {
+    "id": "icu-2-night",
+    "dayIndex": 2,
+    "shiftName": "night",
+    "ward": "ICU",
+    "start": "2026-05-27T18:30:00",
+    "end": "2026-05-28T06:30:00",
+    "durationHours": 12,
+    "priority": "critical",
+    "requiredCertifications": [
+      "ACLS",
+      "CCRN"
+    ],
+    "minStaff": 8
+  },
+  {
+    "id": "or-a-2-day",
+    "dayIndex": 2,
+    "shiftName": "day",
+    "ward": "OR-A",
+    "start": "2026-05-27T06:30:00",
+    "end": "2026-05-27T18:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "Circulating",
+      "Scrub"
+    ],
+    "minStaff": 4
+  },
+  {
+    "id": "or-a-2-swing",
+    "dayIndex": 2,
+    "shiftName": "swing",
+    "ward": "OR-A",
+    "start": "2026-05-27T14:30:00",
+    "end": "2026-05-28T02:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "Circulating",
+      "Scrub"
+    ],
+    "minStaff": 4
+  },
+  {
+    "id": "or-a-2-night",
+    "dayIndex": 2,
+    "shiftName": "night",
+    "ward": "OR-A",
+    "start": "2026-05-27T18:30:00",
+    "end": "2026-05-28T06:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "Circulating",
+      "Scrub"
+    ],
+    "minStaff": 4
+  },
+  {
+    "id": "or-b-2-day",
+    "dayIndex": 2,
+    "shiftName": "day",
+    "ward": "OR-B",
+    "start": "2026-05-27T06:30:00",
+    "end": "2026-05-27T18:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "Circulating",
+      "Scrub"
+    ],
+    "minStaff": 4
+  },
+  {
+    "id": "or-b-2-swing",
+    "dayIndex": 2,
+    "shiftName": "swing",
+    "ward": "OR-B",
+    "start": "2026-05-27T14:30:00",
+    "end": "2026-05-28T02:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "Circulating",
+      "Scrub"
+    ],
+    "minStaff": 4
+  },
+  {
+    "id": "or-b-2-night",
+    "dayIndex": 2,
+    "shiftName": "night",
+    "ward": "OR-B",
+    "start": "2026-05-27T18:30:00",
+    "end": "2026-05-28T06:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "Circulating",
+      "Scrub"
+    ],
+    "minStaff": 4
+  },
+  {
+    "id": "med-surg-2-day",
+    "dayIndex": 2,
+    "shiftName": "day",
+    "ward": "Med-Surg",
+    "start": "2026-05-27T06:30:00",
+    "end": "2026-05-27T18:30:00",
+    "durationHours": 12,
+    "priority": "standard",
+    "requiredCertifications": [
+      "BLS"
+    ],
+    "minStaff": 10
+  },
+  {
+    "id": "med-surg-2-swing",
+    "dayIndex": 2,
+    "shiftName": "swing",
+    "ward": "Med-Surg",
+    "start": "2026-05-27T14:30:00",
+    "end": "2026-05-28T02:30:00",
+    "durationHours": 12,
+    "priority": "standard",
+    "requiredCertifications": [
+      "BLS"
+    ],
+    "minStaff": 10
+  },
+  {
+    "id": "med-surg-2-night",
+    "dayIndex": 2,
+    "shiftName": "night",
+    "ward": "Med-Surg",
+    "start": "2026-05-27T18:30:00",
+    "end": "2026-05-28T06:30:00",
+    "durationHours": 12,
+    "priority": "standard",
+    "requiredCertifications": [
+      "BLS"
+    ],
+    "minStaff": 10
+  },
+  {
+    "id": "cath-lab-1-3-day",
+    "dayIndex": 3,
+    "shiftName": "day",
+    "ward": "Cath Lab 1",
+    "start": "2026-05-28T06:30:00",
+    "end": "2026-05-28T18:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "ACLS"
+    ],
+    "minStaff": 3
+  },
+  {
+    "id": "cath-lab-1-3-swing",
+    "dayIndex": 3,
+    "shiftName": "swing",
+    "ward": "Cath Lab 1",
+    "start": "2026-05-28T14:30:00",
+    "end": "2026-05-29T02:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "ACLS"
+    ],
+    "minStaff": 3
+  },
+  {
+    "id": "cath-lab-1-3-night",
+    "dayIndex": 3,
+    "shiftName": "night",
+    "ward": "Cath Lab 1",
+    "start": "2026-05-28T18:30:00",
+    "end": "2026-05-29T06:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "ACLS"
+    ],
+    "minStaff": 3
+  },
+  {
+    "id": "cath-lab-2-3-day",
+    "dayIndex": 3,
+    "shiftName": "day",
+    "ward": "Cath Lab 2",
+    "start": "2026-05-28T06:30:00",
+    "end": "2026-05-28T18:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "ACLS"
+    ],
+    "minStaff": 3
+  },
+  {
+    "id": "cath-lab-2-3-swing",
+    "dayIndex": 3,
+    "shiftName": "swing",
+    "ward": "Cath Lab 2",
+    "start": "2026-05-28T14:30:00",
+    "end": "2026-05-29T02:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "ACLS"
+    ],
+    "minStaff": 3
+  },
+  {
+    "id": "cath-lab-2-3-night",
+    "dayIndex": 3,
+    "shiftName": "night",
+    "ward": "Cath Lab 2",
+    "start": "2026-05-28T18:30:00",
+    "end": "2026-05-29T06:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "ACLS"
+    ],
+    "minStaff": 3
+  },
+  {
+    "id": "icu-3-day",
+    "dayIndex": 3,
+    "shiftName": "day",
+    "ward": "ICU",
+    "start": "2026-05-28T06:30:00",
+    "end": "2026-05-28T18:30:00",
+    "durationHours": 12,
+    "priority": "critical",
+    "requiredCertifications": [
+      "ACLS",
+      "CCRN"
+    ],
+    "minStaff": 8
+  },
+  {
+    "id": "icu-3-swing",
+    "dayIndex": 3,
+    "shiftName": "swing",
+    "ward": "ICU",
+    "start": "2026-05-28T14:30:00",
+    "end": "2026-05-29T02:30:00",
+    "durationHours": 12,
+    "priority": "critical",
+    "requiredCertifications": [
+      "ACLS",
+      "CCRN"
+    ],
+    "minStaff": 8
+  },
+  {
+    "id": "icu-3-night",
+    "dayIndex": 3,
+    "shiftName": "night",
+    "ward": "ICU",
+    "start": "2026-05-28T18:30:00",
+    "end": "2026-05-29T06:30:00",
+    "durationHours": 12,
+    "priority": "critical",
+    "requiredCertifications": [
+      "ACLS",
+      "CCRN"
+    ],
+    "minStaff": 8
+  },
+  {
+    "id": "or-a-3-day",
+    "dayIndex": 3,
+    "shiftName": "day",
+    "ward": "OR-A",
+    "start": "2026-05-28T06:30:00",
+    "end": "2026-05-28T18:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "Circulating",
+      "Scrub"
+    ],
+    "minStaff": 4
+  },
+  {
+    "id": "or-a-3-swing",
+    "dayIndex": 3,
+    "shiftName": "swing",
+    "ward": "OR-A",
+    "start": "2026-05-28T14:30:00",
+    "end": "2026-05-29T02:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "Circulating",
+      "Scrub"
+    ],
+    "minStaff": 4
+  },
+  {
+    "id": "or-a-3-night",
+    "dayIndex": 3,
+    "shiftName": "night",
+    "ward": "OR-A",
+    "start": "2026-05-28T18:30:00",
+    "end": "2026-05-29T06:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "Circulating",
+      "Scrub"
+    ],
+    "minStaff": 4
+  },
+  {
+    "id": "or-b-3-day",
+    "dayIndex": 3,
+    "shiftName": "day",
+    "ward": "OR-B",
+    "start": "2026-05-28T06:30:00",
+    "end": "2026-05-28T18:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "Circulating",
+      "Scrub"
+    ],
+    "minStaff": 4
+  },
+  {
+    "id": "or-b-3-swing",
+    "dayIndex": 3,
+    "shiftName": "swing",
+    "ward": "OR-B",
+    "start": "2026-05-28T14:30:00",
+    "end": "2026-05-29T02:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "Circulating",
+      "Scrub"
+    ],
+    "minStaff": 4
+  },
+  {
+    "id": "or-b-3-night",
+    "dayIndex": 3,
+    "shiftName": "night",
+    "ward": "OR-B",
+    "start": "2026-05-28T18:30:00",
+    "end": "2026-05-29T06:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "Circulating",
+      "Scrub"
+    ],
+    "minStaff": 4
+  },
+  {
+    "id": "med-surg-3-day",
+    "dayIndex": 3,
+    "shiftName": "day",
+    "ward": "Med-Surg",
+    "start": "2026-05-28T06:30:00",
+    "end": "2026-05-28T18:30:00",
+    "durationHours": 12,
+    "priority": "standard",
+    "requiredCertifications": [
+      "BLS"
+    ],
+    "minStaff": 10
+  },
+  {
+    "id": "med-surg-3-swing",
+    "dayIndex": 3,
+    "shiftName": "swing",
+    "ward": "Med-Surg",
+    "start": "2026-05-28T14:30:00",
+    "end": "2026-05-29T02:30:00",
+    "durationHours": 12,
+    "priority": "standard",
+    "requiredCertifications": [
+      "BLS"
+    ],
+    "minStaff": 10
+  },
+  {
+    "id": "med-surg-3-night",
+    "dayIndex": 3,
+    "shiftName": "night",
+    "ward": "Med-Surg",
+    "start": "2026-05-28T18:30:00",
+    "end": "2026-05-29T06:30:00",
+    "durationHours": 12,
+    "priority": "standard",
+    "requiredCertifications": [
+      "BLS"
+    ],
+    "minStaff": 10
+  },
+  {
+    "id": "cath-lab-1-4-day",
+    "dayIndex": 4,
+    "shiftName": "day",
+    "ward": "Cath Lab 1",
+    "start": "2026-05-29T06:30:00",
+    "end": "2026-05-29T18:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "ACLS"
+    ],
+    "minStaff": 3
+  },
+  {
+    "id": "cath-lab-1-4-swing",
+    "dayIndex": 4,
+    "shiftName": "swing",
+    "ward": "Cath Lab 1",
+    "start": "2026-05-29T14:30:00",
+    "end": "2026-05-30T02:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "ACLS"
+    ],
+    "minStaff": 3
+  },
+  {
+    "id": "cath-lab-1-4-night",
+    "dayIndex": 4,
+    "shiftName": "night",
+    "ward": "Cath Lab 1",
+    "start": "2026-05-29T18:30:00",
+    "end": "2026-05-30T06:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "ACLS"
+    ],
+    "minStaff": 3
+  },
+  {
+    "id": "cath-lab-2-4-day",
+    "dayIndex": 4,
+    "shiftName": "day",
+    "ward": "Cath Lab 2",
+    "start": "2026-05-29T06:30:00",
+    "end": "2026-05-29T18:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "ACLS"
+    ],
+    "minStaff": 3
+  },
+  {
+    "id": "cath-lab-2-4-swing",
+    "dayIndex": 4,
+    "shiftName": "swing",
+    "ward": "Cath Lab 2",
+    "start": "2026-05-29T14:30:00",
+    "end": "2026-05-30T02:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "ACLS"
+    ],
+    "minStaff": 3
+  },
+  {
+    "id": "cath-lab-2-4-night",
+    "dayIndex": 4,
+    "shiftName": "night",
+    "ward": "Cath Lab 2",
+    "start": "2026-05-29T18:30:00",
+    "end": "2026-05-30T06:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "ACLS"
+    ],
+    "minStaff": 3
+  },
+  {
+    "id": "icu-4-day",
+    "dayIndex": 4,
+    "shiftName": "day",
+    "ward": "ICU",
+    "start": "2026-05-29T06:30:00",
+    "end": "2026-05-29T18:30:00",
+    "durationHours": 12,
+    "priority": "critical",
+    "requiredCertifications": [
+      "ACLS",
+      "CCRN"
+    ],
+    "minStaff": 8
+  },
+  {
+    "id": "icu-4-swing",
+    "dayIndex": 4,
+    "shiftName": "swing",
+    "ward": "ICU",
+    "start": "2026-05-29T14:30:00",
+    "end": "2026-05-30T02:30:00",
+    "durationHours": 12,
+    "priority": "critical",
+    "requiredCertifications": [
+      "ACLS",
+      "CCRN"
+    ],
+    "minStaff": 8
+  },
+  {
+    "id": "icu-4-night",
+    "dayIndex": 4,
+    "shiftName": "night",
+    "ward": "ICU",
+    "start": "2026-05-29T18:30:00",
+    "end": "2026-05-30T06:30:00",
+    "durationHours": 12,
+    "priority": "critical",
+    "requiredCertifications": [
+      "ACLS",
+      "CCRN"
+    ],
+    "minStaff": 8
+  },
+  {
+    "id": "or-a-4-day",
+    "dayIndex": 4,
+    "shiftName": "day",
+    "ward": "OR-A",
+    "start": "2026-05-29T06:30:00",
+    "end": "2026-05-29T18:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "Circulating",
+      "Scrub"
+    ],
+    "minStaff": 4
+  },
+  {
+    "id": "or-a-4-swing",
+    "dayIndex": 4,
+    "shiftName": "swing",
+    "ward": "OR-A",
+    "start": "2026-05-29T14:30:00",
+    "end": "2026-05-30T02:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "Circulating",
+      "Scrub"
+    ],
+    "minStaff": 4
+  },
+  {
+    "id": "or-a-4-night",
+    "dayIndex": 4,
+    "shiftName": "night",
+    "ward": "OR-A",
+    "start": "2026-05-29T18:30:00",
+    "end": "2026-05-30T06:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "Circulating",
+      "Scrub"
+    ],
+    "minStaff": 4
+  },
+  {
+    "id": "or-b-4-day",
+    "dayIndex": 4,
+    "shiftName": "day",
+    "ward": "OR-B",
+    "start": "2026-05-29T06:30:00",
+    "end": "2026-05-29T18:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "Circulating",
+      "Scrub"
+    ],
+    "minStaff": 4
+  },
+  {
+    "id": "or-b-4-swing",
+    "dayIndex": 4,
+    "shiftName": "swing",
+    "ward": "OR-B",
+    "start": "2026-05-29T14:30:00",
+    "end": "2026-05-30T02:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "Circulating",
+      "Scrub"
+    ],
+    "minStaff": 4
+  },
+  {
+    "id": "or-b-4-night",
+    "dayIndex": 4,
+    "shiftName": "night",
+    "ward": "OR-B",
+    "start": "2026-05-29T18:30:00",
+    "end": "2026-05-30T06:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "Circulating",
+      "Scrub"
+    ],
+    "minStaff": 4
+  },
+  {
+    "id": "med-surg-4-day",
+    "dayIndex": 4,
+    "shiftName": "day",
+    "ward": "Med-Surg",
+    "start": "2026-05-29T06:30:00",
+    "end": "2026-05-29T18:30:00",
+    "durationHours": 12,
+    "priority": "standard",
+    "requiredCertifications": [
+      "BLS"
+    ],
+    "minStaff": 10
+  },
+  {
+    "id": "med-surg-4-swing",
+    "dayIndex": 4,
+    "shiftName": "swing",
+    "ward": "Med-Surg",
+    "start": "2026-05-29T14:30:00",
+    "end": "2026-05-30T02:30:00",
+    "durationHours": 12,
+    "priority": "standard",
+    "requiredCertifications": [
+      "BLS"
+    ],
+    "minStaff": 10
+  },
+  {
+    "id": "med-surg-4-night",
+    "dayIndex": 4,
+    "shiftName": "night",
+    "ward": "Med-Surg",
+    "start": "2026-05-29T18:30:00",
+    "end": "2026-05-30T06:30:00",
+    "durationHours": 12,
+    "priority": "standard",
+    "requiredCertifications": [
+      "BLS"
+    ],
+    "minStaff": 10
+  },
+  {
+    "id": "cath-lab-1-5-day",
+    "dayIndex": 5,
+    "shiftName": "day",
+    "ward": "Cath Lab 1",
+    "start": "2026-05-30T06:30:00",
+    "end": "2026-05-30T18:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "ACLS"
+    ],
+    "minStaff": 3
+  },
+  {
+    "id": "cath-lab-1-5-swing",
+    "dayIndex": 5,
+    "shiftName": "swing",
+    "ward": "Cath Lab 1",
+    "start": "2026-05-30T14:30:00",
+    "end": "2026-05-31T02:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "ACLS"
+    ],
+    "minStaff": 3
+  },
+  {
+    "id": "cath-lab-1-5-night",
+    "dayIndex": 5,
+    "shiftName": "night",
+    "ward": "Cath Lab 1",
+    "start": "2026-05-30T18:30:00",
+    "end": "2026-05-31T06:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "ACLS"
+    ],
+    "minStaff": 3
+  },
+  {
+    "id": "cath-lab-2-5-day",
+    "dayIndex": 5,
+    "shiftName": "day",
+    "ward": "Cath Lab 2",
+    "start": "2026-05-30T06:30:00",
+    "end": "2026-05-30T18:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "ACLS"
+    ],
+    "minStaff": 3
+  },
+  {
+    "id": "cath-lab-2-5-swing",
+    "dayIndex": 5,
+    "shiftName": "swing",
+    "ward": "Cath Lab 2",
+    "start": "2026-05-30T14:30:00",
+    "end": "2026-05-31T02:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "ACLS"
+    ],
+    "minStaff": 3
+  },
+  {
+    "id": "cath-lab-2-5-night",
+    "dayIndex": 5,
+    "shiftName": "night",
+    "ward": "Cath Lab 2",
+    "start": "2026-05-30T18:30:00",
+    "end": "2026-05-31T06:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "ACLS"
+    ],
+    "minStaff": 3
+  },
+  {
+    "id": "icu-5-day",
+    "dayIndex": 5,
+    "shiftName": "day",
+    "ward": "ICU",
+    "start": "2026-05-30T06:30:00",
+    "end": "2026-05-30T18:30:00",
+    "durationHours": 12,
+    "priority": "critical",
+    "requiredCertifications": [
+      "ACLS",
+      "CCRN"
+    ],
+    "minStaff": 8
+  },
+  {
+    "id": "icu-5-swing",
+    "dayIndex": 5,
+    "shiftName": "swing",
+    "ward": "ICU",
+    "start": "2026-05-30T14:30:00",
+    "end": "2026-05-31T02:30:00",
+    "durationHours": 12,
+    "priority": "critical",
+    "requiredCertifications": [
+      "ACLS",
+      "CCRN"
+    ],
+    "minStaff": 8
+  },
+  {
+    "id": "icu-5-night",
+    "dayIndex": 5,
+    "shiftName": "night",
+    "ward": "ICU",
+    "start": "2026-05-30T18:30:00",
+    "end": "2026-05-31T06:30:00",
+    "durationHours": 12,
+    "priority": "critical",
+    "requiredCertifications": [
+      "ACLS",
+      "CCRN"
+    ],
+    "minStaff": 8
+  },
+  {
+    "id": "or-a-5-day",
+    "dayIndex": 5,
+    "shiftName": "day",
+    "ward": "OR-A",
+    "start": "2026-05-30T06:30:00",
+    "end": "2026-05-30T18:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "Circulating",
+      "Scrub"
+    ],
+    "minStaff": 4
+  },
+  {
+    "id": "or-a-5-swing",
+    "dayIndex": 5,
+    "shiftName": "swing",
+    "ward": "OR-A",
+    "start": "2026-05-30T14:30:00",
+    "end": "2026-05-31T02:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "Circulating",
+      "Scrub"
+    ],
+    "minStaff": 4
+  },
+  {
+    "id": "or-a-5-night",
+    "dayIndex": 5,
+    "shiftName": "night",
+    "ward": "OR-A",
+    "start": "2026-05-30T18:30:00",
+    "end": "2026-05-31T06:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "Circulating",
+      "Scrub"
+    ],
+    "minStaff": 4
+  },
+  {
+    "id": "or-b-5-day",
+    "dayIndex": 5,
+    "shiftName": "day",
+    "ward": "OR-B",
+    "start": "2026-05-30T06:30:00",
+    "end": "2026-05-30T18:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "Circulating",
+      "Scrub"
+    ],
+    "minStaff": 4
+  },
+  {
+    "id": "or-b-5-swing",
+    "dayIndex": 5,
+    "shiftName": "swing",
+    "ward": "OR-B",
+    "start": "2026-05-30T14:30:00",
+    "end": "2026-05-31T02:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "Circulating",
+      "Scrub"
+    ],
+    "minStaff": 4
+  },
+  {
+    "id": "or-b-5-night",
+    "dayIndex": 5,
+    "shiftName": "night",
+    "ward": "OR-B",
+    "start": "2026-05-30T18:30:00",
+    "end": "2026-05-31T06:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "Circulating",
+      "Scrub"
+    ],
+    "minStaff": 4
+  },
+  {
+    "id": "med-surg-5-day",
+    "dayIndex": 5,
+    "shiftName": "day",
+    "ward": "Med-Surg",
+    "start": "2026-05-30T06:30:00",
+    "end": "2026-05-30T18:30:00",
+    "durationHours": 12,
+    "priority": "standard",
+    "requiredCertifications": [
+      "BLS"
+    ],
+    "minStaff": 10
+  },
+  {
+    "id": "med-surg-5-swing",
+    "dayIndex": 5,
+    "shiftName": "swing",
+    "ward": "Med-Surg",
+    "start": "2026-05-30T14:30:00",
+    "end": "2026-05-31T02:30:00",
+    "durationHours": 12,
+    "priority": "standard",
+    "requiredCertifications": [
+      "BLS"
+    ],
+    "minStaff": 10
+  },
+  {
+    "id": "med-surg-5-night",
+    "dayIndex": 5,
+    "shiftName": "night",
+    "ward": "Med-Surg",
+    "start": "2026-05-30T18:30:00",
+    "end": "2026-05-31T06:30:00",
+    "durationHours": 12,
+    "priority": "standard",
+    "requiredCertifications": [
+      "BLS"
+    ],
+    "minStaff": 10
+  },
+  {
+    "id": "cath-lab-1-6-day",
+    "dayIndex": 6,
+    "shiftName": "day",
+    "ward": "Cath Lab 1",
+    "start": "2026-05-31T06:30:00",
+    "end": "2026-05-31T18:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "ACLS"
+    ],
+    "minStaff": 3
+  },
+  {
+    "id": "cath-lab-1-6-swing",
+    "dayIndex": 6,
+    "shiftName": "swing",
+    "ward": "Cath Lab 1",
+    "start": "2026-05-31T14:30:00",
+    "end": "2026-06-01T02:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "ACLS"
+    ],
+    "minStaff": 3
+  },
+  {
+    "id": "cath-lab-1-6-night",
+    "dayIndex": 6,
+    "shiftName": "night",
+    "ward": "Cath Lab 1",
+    "start": "2026-05-31T18:30:00",
+    "end": "2026-06-01T06:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "ACLS"
+    ],
+    "minStaff": 3
+  },
+  {
+    "id": "cath-lab-2-6-day",
+    "dayIndex": 6,
+    "shiftName": "day",
+    "ward": "Cath Lab 2",
+    "start": "2026-05-31T06:30:00",
+    "end": "2026-05-31T18:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "ACLS"
+    ],
+    "minStaff": 3
+  },
+  {
+    "id": "cath-lab-2-6-swing",
+    "dayIndex": 6,
+    "shiftName": "swing",
+    "ward": "Cath Lab 2",
+    "start": "2026-05-31T14:30:00",
+    "end": "2026-06-01T02:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "ACLS"
+    ],
+    "minStaff": 3
+  },
+  {
+    "id": "cath-lab-2-6-night",
+    "dayIndex": 6,
+    "shiftName": "night",
+    "ward": "Cath Lab 2",
+    "start": "2026-05-31T18:30:00",
+    "end": "2026-06-01T06:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "ACLS"
+    ],
+    "minStaff": 3
+  },
+  {
+    "id": "icu-6-day",
+    "dayIndex": 6,
+    "shiftName": "day",
+    "ward": "ICU",
+    "start": "2026-05-31T06:30:00",
+    "end": "2026-05-31T18:30:00",
+    "durationHours": 12,
+    "priority": "critical",
+    "requiredCertifications": [
+      "ACLS",
+      "CCRN"
+    ],
+    "minStaff": 8
+  },
+  {
+    "id": "icu-6-swing",
+    "dayIndex": 6,
+    "shiftName": "swing",
+    "ward": "ICU",
+    "start": "2026-05-31T14:30:00",
+    "end": "2026-06-01T02:30:00",
+    "durationHours": 12,
+    "priority": "critical",
+    "requiredCertifications": [
+      "ACLS",
+      "CCRN"
+    ],
+    "minStaff": 8
+  },
+  {
+    "id": "icu-6-night",
+    "dayIndex": 6,
+    "shiftName": "night",
+    "ward": "ICU",
+    "start": "2026-05-31T18:30:00",
+    "end": "2026-06-01T06:30:00",
+    "durationHours": 12,
+    "priority": "critical",
+    "requiredCertifications": [
+      "ACLS",
+      "CCRN"
+    ],
+    "minStaff": 8
+  },
+  {
+    "id": "or-a-6-day",
+    "dayIndex": 6,
+    "shiftName": "day",
+    "ward": "OR-A",
+    "start": "2026-05-31T06:30:00",
+    "end": "2026-05-31T18:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "Circulating",
+      "Scrub"
+    ],
+    "minStaff": 4
+  },
+  {
+    "id": "or-a-6-swing",
+    "dayIndex": 6,
+    "shiftName": "swing",
+    "ward": "OR-A",
+    "start": "2026-05-31T14:30:00",
+    "end": "2026-06-01T02:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "Circulating",
+      "Scrub"
+    ],
+    "minStaff": 4
+  },
+  {
+    "id": "or-a-6-night",
+    "dayIndex": 6,
+    "shiftName": "night",
+    "ward": "OR-A",
+    "start": "2026-05-31T18:30:00",
+    "end": "2026-06-01T06:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "Circulating",
+      "Scrub"
+    ],
+    "minStaff": 4
+  },
+  {
+    "id": "or-b-6-day",
+    "dayIndex": 6,
+    "shiftName": "day",
+    "ward": "OR-B",
+    "start": "2026-05-31T06:30:00",
+    "end": "2026-05-31T18:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "Circulating",
+      "Scrub"
+    ],
+    "minStaff": 4
+  },
+  {
+    "id": "or-b-6-swing",
+    "dayIndex": 6,
+    "shiftName": "swing",
+    "ward": "OR-B",
+    "start": "2026-05-31T14:30:00",
+    "end": "2026-06-01T02:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "Circulating",
+      "Scrub"
+    ],
+    "minStaff": 4
+  },
+  {
+    "id": "or-b-6-night",
+    "dayIndex": 6,
+    "shiftName": "night",
+    "ward": "OR-B",
+    "start": "2026-05-31T18:30:00",
+    "end": "2026-06-01T06:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "Circulating",
+      "Scrub"
+    ],
+    "minStaff": 4
+  },
+  {
+    "id": "med-surg-6-day",
+    "dayIndex": 6,
+    "shiftName": "day",
+    "ward": "Med-Surg",
+    "start": "2026-05-31T06:30:00",
+    "end": "2026-05-31T18:30:00",
+    "durationHours": 12,
+    "priority": "standard",
+    "requiredCertifications": [
+      "BLS"
+    ],
+    "minStaff": 10
+  },
+  {
+    "id": "med-surg-6-swing",
+    "dayIndex": 6,
+    "shiftName": "swing",
+    "ward": "Med-Surg",
+    "start": "2026-05-31T14:30:00",
+    "end": "2026-06-01T02:30:00",
+    "durationHours": 12,
+    "priority": "standard",
+    "requiredCertifications": [
+      "BLS"
+    ],
+    "minStaff": 10
+  },
+  {
+    "id": "med-surg-6-night",
+    "dayIndex": 6,
+    "shiftName": "night",
+    "ward": "Med-Surg",
+    "start": "2026-05-31T18:30:00",
+    "end": "2026-06-01T06:30:00",
+    "durationHours": 12,
+    "priority": "standard",
+    "requiredCertifications": [
+      "BLS"
+    ],
+    "minStaff": 10
+  },
+  {
+    "id": "cath-lab-1-7-day",
+    "dayIndex": 7,
+    "shiftName": "day",
+    "ward": "Cath Lab 1",
+    "start": "2026-06-01T06:30:00",
+    "end": "2026-06-01T18:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "ACLS"
+    ],
+    "minStaff": 3
+  },
+  {
+    "id": "cath-lab-1-7-swing",
+    "dayIndex": 7,
+    "shiftName": "swing",
+    "ward": "Cath Lab 1",
+    "start": "2026-06-01T14:30:00",
+    "end": "2026-06-02T02:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "ACLS"
+    ],
+    "minStaff": 3
+  },
+  {
+    "id": "cath-lab-1-7-night",
+    "dayIndex": 7,
+    "shiftName": "night",
+    "ward": "Cath Lab 1",
+    "start": "2026-06-01T18:30:00",
+    "end": "2026-06-02T06:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "ACLS"
+    ],
+    "minStaff": 3
+  },
+  {
+    "id": "cath-lab-2-7-day",
+    "dayIndex": 7,
+    "shiftName": "day",
+    "ward": "Cath Lab 2",
+    "start": "2026-06-01T06:30:00",
+    "end": "2026-06-01T18:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "ACLS"
+    ],
+    "minStaff": 3
+  },
+  {
+    "id": "cath-lab-2-7-swing",
+    "dayIndex": 7,
+    "shiftName": "swing",
+    "ward": "Cath Lab 2",
+    "start": "2026-06-01T14:30:00",
+    "end": "2026-06-02T02:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "ACLS"
+    ],
+    "minStaff": 3
+  },
+  {
+    "id": "cath-lab-2-7-night",
+    "dayIndex": 7,
+    "shiftName": "night",
+    "ward": "Cath Lab 2",
+    "start": "2026-06-01T18:30:00",
+    "end": "2026-06-02T06:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "ACLS"
+    ],
+    "minStaff": 3
+  },
+  {
+    "id": "icu-7-day",
+    "dayIndex": 7,
+    "shiftName": "day",
+    "ward": "ICU",
+    "start": "2026-06-01T06:30:00",
+    "end": "2026-06-01T18:30:00",
+    "durationHours": 12,
+    "priority": "critical",
+    "requiredCertifications": [
+      "ACLS",
+      "CCRN"
+    ],
+    "minStaff": 8
+  },
+  {
+    "id": "icu-7-swing",
+    "dayIndex": 7,
+    "shiftName": "swing",
+    "ward": "ICU",
+    "start": "2026-06-01T14:30:00",
+    "end": "2026-06-02T02:30:00",
+    "durationHours": 12,
+    "priority": "critical",
+    "requiredCertifications": [
+      "ACLS",
+      "CCRN"
+    ],
+    "minStaff": 8
+  },
+  {
+    "id": "icu-7-night",
+    "dayIndex": 7,
+    "shiftName": "night",
+    "ward": "ICU",
+    "start": "2026-06-01T18:30:00",
+    "end": "2026-06-02T06:30:00",
+    "durationHours": 12,
+    "priority": "critical",
+    "requiredCertifications": [
+      "ACLS",
+      "CCRN"
+    ],
+    "minStaff": 8
+  },
+  {
+    "id": "or-a-7-day",
+    "dayIndex": 7,
+    "shiftName": "day",
+    "ward": "OR-A",
+    "start": "2026-06-01T06:30:00",
+    "end": "2026-06-01T18:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "Circulating",
+      "Scrub"
+    ],
+    "minStaff": 4
+  },
+  {
+    "id": "or-a-7-swing",
+    "dayIndex": 7,
+    "shiftName": "swing",
+    "ward": "OR-A",
+    "start": "2026-06-01T14:30:00",
+    "end": "2026-06-02T02:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "Circulating",
+      "Scrub"
+    ],
+    "minStaff": 4
+  },
+  {
+    "id": "or-a-7-night",
+    "dayIndex": 7,
+    "shiftName": "night",
+    "ward": "OR-A",
+    "start": "2026-06-01T18:30:00",
+    "end": "2026-06-02T06:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "Circulating",
+      "Scrub"
+    ],
+    "minStaff": 4
+  },
+  {
+    "id": "or-b-7-day",
+    "dayIndex": 7,
+    "shiftName": "day",
+    "ward": "OR-B",
+    "start": "2026-06-01T06:30:00",
+    "end": "2026-06-01T18:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "Circulating",
+      "Scrub"
+    ],
+    "minStaff": 4
+  },
+  {
+    "id": "or-b-7-swing",
+    "dayIndex": 7,
+    "shiftName": "swing",
+    "ward": "OR-B",
+    "start": "2026-06-01T14:30:00",
+    "end": "2026-06-02T02:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "Circulating",
+      "Scrub"
+    ],
+    "minStaff": 4
+  },
+  {
+    "id": "or-b-7-night",
+    "dayIndex": 7,
+    "shiftName": "night",
+    "ward": "OR-B",
+    "start": "2026-06-01T18:30:00",
+    "end": "2026-06-02T06:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "Circulating",
+      "Scrub"
+    ],
+    "minStaff": 4
+  },
+  {
+    "id": "med-surg-7-day",
+    "dayIndex": 7,
+    "shiftName": "day",
+    "ward": "Med-Surg",
+    "start": "2026-06-01T06:30:00",
+    "end": "2026-06-01T18:30:00",
+    "durationHours": 12,
+    "priority": "standard",
+    "requiredCertifications": [
+      "BLS"
+    ],
+    "minStaff": 10
+  },
+  {
+    "id": "med-surg-7-swing",
+    "dayIndex": 7,
+    "shiftName": "swing",
+    "ward": "Med-Surg",
+    "start": "2026-06-01T14:30:00",
+    "end": "2026-06-02T02:30:00",
+    "durationHours": 12,
+    "priority": "standard",
+    "requiredCertifications": [
+      "BLS"
+    ],
+    "minStaff": 10
+  },
+  {
+    "id": "med-surg-7-night",
+    "dayIndex": 7,
+    "shiftName": "night",
+    "ward": "Med-Surg",
+    "start": "2026-06-01T18:30:00",
+    "end": "2026-06-02T06:30:00",
+    "durationHours": 12,
+    "priority": "standard",
+    "requiredCertifications": [
+      "BLS"
+    ],
+    "minStaff": 10
+  },
+  {
+    "id": "cath-lab-1-8-day",
+    "dayIndex": 8,
+    "shiftName": "day",
+    "ward": "Cath Lab 1",
+    "start": "2026-06-02T06:30:00",
+    "end": "2026-06-02T18:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "ACLS"
+    ],
+    "minStaff": 3
+  },
+  {
+    "id": "cath-lab-1-8-swing",
+    "dayIndex": 8,
+    "shiftName": "swing",
+    "ward": "Cath Lab 1",
+    "start": "2026-06-02T14:30:00",
+    "end": "2026-06-03T02:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "ACLS"
+    ],
+    "minStaff": 3
+  },
+  {
+    "id": "cath-lab-1-8-night",
+    "dayIndex": 8,
+    "shiftName": "night",
+    "ward": "Cath Lab 1",
+    "start": "2026-06-02T18:30:00",
+    "end": "2026-06-03T06:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "ACLS"
+    ],
+    "minStaff": 3
+  },
+  {
+    "id": "cath-lab-2-8-day",
+    "dayIndex": 8,
+    "shiftName": "day",
+    "ward": "Cath Lab 2",
+    "start": "2026-06-02T06:30:00",
+    "end": "2026-06-02T18:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "ACLS"
+    ],
+    "minStaff": 3
+  },
+  {
+    "id": "cath-lab-2-8-swing",
+    "dayIndex": 8,
+    "shiftName": "swing",
+    "ward": "Cath Lab 2",
+    "start": "2026-06-02T14:30:00",
+    "end": "2026-06-03T02:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "ACLS"
+    ],
+    "minStaff": 3
+  },
+  {
+    "id": "cath-lab-2-8-night",
+    "dayIndex": 8,
+    "shiftName": "night",
+    "ward": "Cath Lab 2",
+    "start": "2026-06-02T18:30:00",
+    "end": "2026-06-03T06:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "ACLS"
+    ],
+    "minStaff": 3
+  },
+  {
+    "id": "icu-8-day",
+    "dayIndex": 8,
+    "shiftName": "day",
+    "ward": "ICU",
+    "start": "2026-06-02T06:30:00",
+    "end": "2026-06-02T18:30:00",
+    "durationHours": 12,
+    "priority": "critical",
+    "requiredCertifications": [
+      "ACLS",
+      "CCRN"
+    ],
+    "minStaff": 8
+  },
+  {
+    "id": "icu-8-swing",
+    "dayIndex": 8,
+    "shiftName": "swing",
+    "ward": "ICU",
+    "start": "2026-06-02T14:30:00",
+    "end": "2026-06-03T02:30:00",
+    "durationHours": 12,
+    "priority": "critical",
+    "requiredCertifications": [
+      "ACLS",
+      "CCRN"
+    ],
+    "minStaff": 8
+  },
+  {
+    "id": "icu-8-night",
+    "dayIndex": 8,
+    "shiftName": "night",
+    "ward": "ICU",
+    "start": "2026-06-02T18:30:00",
+    "end": "2026-06-03T06:30:00",
+    "durationHours": 12,
+    "priority": "critical",
+    "requiredCertifications": [
+      "ACLS",
+      "CCRN"
+    ],
+    "minStaff": 8
+  },
+  {
+    "id": "or-a-8-day",
+    "dayIndex": 8,
+    "shiftName": "day",
+    "ward": "OR-A",
+    "start": "2026-06-02T06:30:00",
+    "end": "2026-06-02T18:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "Circulating",
+      "Scrub"
+    ],
+    "minStaff": 4
+  },
+  {
+    "id": "or-a-8-swing",
+    "dayIndex": 8,
+    "shiftName": "swing",
+    "ward": "OR-A",
+    "start": "2026-06-02T14:30:00",
+    "end": "2026-06-03T02:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "Circulating",
+      "Scrub"
+    ],
+    "minStaff": 4
+  },
+  {
+    "id": "or-a-8-night",
+    "dayIndex": 8,
+    "shiftName": "night",
+    "ward": "OR-A",
+    "start": "2026-06-02T18:30:00",
+    "end": "2026-06-03T06:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "Circulating",
+      "Scrub"
+    ],
+    "minStaff": 4
+  },
+  {
+    "id": "or-b-8-day",
+    "dayIndex": 8,
+    "shiftName": "day",
+    "ward": "OR-B",
+    "start": "2026-06-02T06:30:00",
+    "end": "2026-06-02T18:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "Circulating",
+      "Scrub"
+    ],
+    "minStaff": 4
+  },
+  {
+    "id": "or-b-8-swing",
+    "dayIndex": 8,
+    "shiftName": "swing",
+    "ward": "OR-B",
+    "start": "2026-06-02T14:30:00",
+    "end": "2026-06-03T02:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "Circulating",
+      "Scrub"
+    ],
+    "minStaff": 4
+  },
+  {
+    "id": "or-b-8-night",
+    "dayIndex": 8,
+    "shiftName": "night",
+    "ward": "OR-B",
+    "start": "2026-06-02T18:30:00",
+    "end": "2026-06-03T06:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "Circulating",
+      "Scrub"
+    ],
+    "minStaff": 4
+  },
+  {
+    "id": "med-surg-8-day",
+    "dayIndex": 8,
+    "shiftName": "day",
+    "ward": "Med-Surg",
+    "start": "2026-06-02T06:30:00",
+    "end": "2026-06-02T18:30:00",
+    "durationHours": 12,
+    "priority": "standard",
+    "requiredCertifications": [
+      "BLS"
+    ],
+    "minStaff": 10
+  },
+  {
+    "id": "med-surg-8-swing",
+    "dayIndex": 8,
+    "shiftName": "swing",
+    "ward": "Med-Surg",
+    "start": "2026-06-02T14:30:00",
+    "end": "2026-06-03T02:30:00",
+    "durationHours": 12,
+    "priority": "standard",
+    "requiredCertifications": [
+      "BLS"
+    ],
+    "minStaff": 10
+  },
+  {
+    "id": "med-surg-8-night",
+    "dayIndex": 8,
+    "shiftName": "night",
+    "ward": "Med-Surg",
+    "start": "2026-06-02T18:30:00",
+    "end": "2026-06-03T06:30:00",
+    "durationHours": 12,
+    "priority": "standard",
+    "requiredCertifications": [
+      "BLS"
+    ],
+    "minStaff": 10
+  },
+  {
+    "id": "cath-lab-1-9-day",
+    "dayIndex": 9,
+    "shiftName": "day",
+    "ward": "Cath Lab 1",
+    "start": "2026-06-03T06:30:00",
+    "end": "2026-06-03T18:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "ACLS"
+    ],
+    "minStaff": 3
+  },
+  {
+    "id": "cath-lab-1-9-swing",
+    "dayIndex": 9,
+    "shiftName": "swing",
+    "ward": "Cath Lab 1",
+    "start": "2026-06-03T14:30:00",
+    "end": "2026-06-04T02:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "ACLS"
+    ],
+    "minStaff": 3
+  },
+  {
+    "id": "cath-lab-1-9-night",
+    "dayIndex": 9,
+    "shiftName": "night",
+    "ward": "Cath Lab 1",
+    "start": "2026-06-03T18:30:00",
+    "end": "2026-06-04T06:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "ACLS"
+    ],
+    "minStaff": 3
+  },
+  {
+    "id": "cath-lab-2-9-day",
+    "dayIndex": 9,
+    "shiftName": "day",
+    "ward": "Cath Lab 2",
+    "start": "2026-06-03T06:30:00",
+    "end": "2026-06-03T18:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "ACLS"
+    ],
+    "minStaff": 3
+  },
+  {
+    "id": "cath-lab-2-9-swing",
+    "dayIndex": 9,
+    "shiftName": "swing",
+    "ward": "Cath Lab 2",
+    "start": "2026-06-03T14:30:00",
+    "end": "2026-06-04T02:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "ACLS"
+    ],
+    "minStaff": 3
+  },
+  {
+    "id": "cath-lab-2-9-night",
+    "dayIndex": 9,
+    "shiftName": "night",
+    "ward": "Cath Lab 2",
+    "start": "2026-06-03T18:30:00",
+    "end": "2026-06-04T06:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "ACLS"
+    ],
+    "minStaff": 3
+  },
+  {
+    "id": "icu-9-day",
+    "dayIndex": 9,
+    "shiftName": "day",
+    "ward": "ICU",
+    "start": "2026-06-03T06:30:00",
+    "end": "2026-06-03T18:30:00",
+    "durationHours": 12,
+    "priority": "critical",
+    "requiredCertifications": [
+      "ACLS",
+      "CCRN"
+    ],
+    "minStaff": 8
+  },
+  {
+    "id": "icu-9-swing",
+    "dayIndex": 9,
+    "shiftName": "swing",
+    "ward": "ICU",
+    "start": "2026-06-03T14:30:00",
+    "end": "2026-06-04T02:30:00",
+    "durationHours": 12,
+    "priority": "critical",
+    "requiredCertifications": [
+      "ACLS",
+      "CCRN"
+    ],
+    "minStaff": 8
+  },
+  {
+    "id": "icu-9-night",
+    "dayIndex": 9,
+    "shiftName": "night",
+    "ward": "ICU",
+    "start": "2026-06-03T18:30:00",
+    "end": "2026-06-04T06:30:00",
+    "durationHours": 12,
+    "priority": "critical",
+    "requiredCertifications": [
+      "ACLS",
+      "CCRN"
+    ],
+    "minStaff": 8
+  },
+  {
+    "id": "or-a-9-day",
+    "dayIndex": 9,
+    "shiftName": "day",
+    "ward": "OR-A",
+    "start": "2026-06-03T06:30:00",
+    "end": "2026-06-03T18:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "Circulating",
+      "Scrub"
+    ],
+    "minStaff": 4
+  },
+  {
+    "id": "or-a-9-swing",
+    "dayIndex": 9,
+    "shiftName": "swing",
+    "ward": "OR-A",
+    "start": "2026-06-03T14:30:00",
+    "end": "2026-06-04T02:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "Circulating",
+      "Scrub"
+    ],
+    "minStaff": 4
+  },
+  {
+    "id": "or-a-9-night",
+    "dayIndex": 9,
+    "shiftName": "night",
+    "ward": "OR-A",
+    "start": "2026-06-03T18:30:00",
+    "end": "2026-06-04T06:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "Circulating",
+      "Scrub"
+    ],
+    "minStaff": 4
+  },
+  {
+    "id": "or-b-9-day",
+    "dayIndex": 9,
+    "shiftName": "day",
+    "ward": "OR-B",
+    "start": "2026-06-03T06:30:00",
+    "end": "2026-06-03T18:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "Circulating",
+      "Scrub"
+    ],
+    "minStaff": 4
+  },
+  {
+    "id": "or-b-9-swing",
+    "dayIndex": 9,
+    "shiftName": "swing",
+    "ward": "OR-B",
+    "start": "2026-06-03T14:30:00",
+    "end": "2026-06-04T02:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "Circulating",
+      "Scrub"
+    ],
+    "minStaff": 4
+  },
+  {
+    "id": "or-b-9-night",
+    "dayIndex": 9,
+    "shiftName": "night",
+    "ward": "OR-B",
+    "start": "2026-06-03T18:30:00",
+    "end": "2026-06-04T06:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "Circulating",
+      "Scrub"
+    ],
+    "minStaff": 4
+  },
+  {
+    "id": "med-surg-9-day",
+    "dayIndex": 9,
+    "shiftName": "day",
+    "ward": "Med-Surg",
+    "start": "2026-06-03T06:30:00",
+    "end": "2026-06-03T18:30:00",
+    "durationHours": 12,
+    "priority": "standard",
+    "requiredCertifications": [
+      "BLS"
+    ],
+    "minStaff": 10
+  },
+  {
+    "id": "med-surg-9-swing",
+    "dayIndex": 9,
+    "shiftName": "swing",
+    "ward": "Med-Surg",
+    "start": "2026-06-03T14:30:00",
+    "end": "2026-06-04T02:30:00",
+    "durationHours": 12,
+    "priority": "standard",
+    "requiredCertifications": [
+      "BLS"
+    ],
+    "minStaff": 10
+  },
+  {
+    "id": "med-surg-9-night",
+    "dayIndex": 9,
+    "shiftName": "night",
+    "ward": "Med-Surg",
+    "start": "2026-06-03T18:30:00",
+    "end": "2026-06-04T06:30:00",
+    "durationHours": 12,
+    "priority": "standard",
+    "requiredCertifications": [
+      "BLS"
+    ],
+    "minStaff": 10
+  },
+  {
+    "id": "cath-lab-1-10-day",
+    "dayIndex": 10,
+    "shiftName": "day",
+    "ward": "Cath Lab 1",
+    "start": "2026-06-04T06:30:00",
+    "end": "2026-06-04T18:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "ACLS"
+    ],
+    "minStaff": 3
+  },
+  {
+    "id": "cath-lab-1-10-swing",
+    "dayIndex": 10,
+    "shiftName": "swing",
+    "ward": "Cath Lab 1",
+    "start": "2026-06-04T14:30:00",
+    "end": "2026-06-05T02:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "ACLS"
+    ],
+    "minStaff": 3
+  },
+  {
+    "id": "cath-lab-1-10-night",
+    "dayIndex": 10,
+    "shiftName": "night",
+    "ward": "Cath Lab 1",
+    "start": "2026-06-04T18:30:00",
+    "end": "2026-06-05T06:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "ACLS"
+    ],
+    "minStaff": 3
+  },
+  {
+    "id": "cath-lab-2-10-day",
+    "dayIndex": 10,
+    "shiftName": "day",
+    "ward": "Cath Lab 2",
+    "start": "2026-06-04T06:30:00",
+    "end": "2026-06-04T18:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "ACLS"
+    ],
+    "minStaff": 3
+  },
+  {
+    "id": "cath-lab-2-10-swing",
+    "dayIndex": 10,
+    "shiftName": "swing",
+    "ward": "Cath Lab 2",
+    "start": "2026-06-04T14:30:00",
+    "end": "2026-06-05T02:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "ACLS"
+    ],
+    "minStaff": 3
+  },
+  {
+    "id": "cath-lab-2-10-night",
+    "dayIndex": 10,
+    "shiftName": "night",
+    "ward": "Cath Lab 2",
+    "start": "2026-06-04T18:30:00",
+    "end": "2026-06-05T06:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "ACLS"
+    ],
+    "minStaff": 3
+  },
+  {
+    "id": "icu-10-day",
+    "dayIndex": 10,
+    "shiftName": "day",
+    "ward": "ICU",
+    "start": "2026-06-04T06:30:00",
+    "end": "2026-06-04T18:30:00",
+    "durationHours": 12,
+    "priority": "critical",
+    "requiredCertifications": [
+      "ACLS",
+      "CCRN"
+    ],
+    "minStaff": 8
+  },
+  {
+    "id": "icu-10-swing",
+    "dayIndex": 10,
+    "shiftName": "swing",
+    "ward": "ICU",
+    "start": "2026-06-04T14:30:00",
+    "end": "2026-06-05T02:30:00",
+    "durationHours": 12,
+    "priority": "critical",
+    "requiredCertifications": [
+      "ACLS",
+      "CCRN"
+    ],
+    "minStaff": 8
+  },
+  {
+    "id": "icu-10-night",
+    "dayIndex": 10,
+    "shiftName": "night",
+    "ward": "ICU",
+    "start": "2026-06-04T18:30:00",
+    "end": "2026-06-05T06:30:00",
+    "durationHours": 12,
+    "priority": "critical",
+    "requiredCertifications": [
+      "ACLS",
+      "CCRN"
+    ],
+    "minStaff": 8
+  },
+  {
+    "id": "or-a-10-day",
+    "dayIndex": 10,
+    "shiftName": "day",
+    "ward": "OR-A",
+    "start": "2026-06-04T06:30:00",
+    "end": "2026-06-04T18:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "Circulating",
+      "Scrub"
+    ],
+    "minStaff": 4
+  },
+  {
+    "id": "or-a-10-swing",
+    "dayIndex": 10,
+    "shiftName": "swing",
+    "ward": "OR-A",
+    "start": "2026-06-04T14:30:00",
+    "end": "2026-06-05T02:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "Circulating",
+      "Scrub"
+    ],
+    "minStaff": 4
+  },
+  {
+    "id": "or-a-10-night",
+    "dayIndex": 10,
+    "shiftName": "night",
+    "ward": "OR-A",
+    "start": "2026-06-04T18:30:00",
+    "end": "2026-06-05T06:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "Circulating",
+      "Scrub"
+    ],
+    "minStaff": 4
+  },
+  {
+    "id": "or-b-10-day",
+    "dayIndex": 10,
+    "shiftName": "day",
+    "ward": "OR-B",
+    "start": "2026-06-04T06:30:00",
+    "end": "2026-06-04T18:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "Circulating",
+      "Scrub"
+    ],
+    "minStaff": 4
+  },
+  {
+    "id": "or-b-10-swing",
+    "dayIndex": 10,
+    "shiftName": "swing",
+    "ward": "OR-B",
+    "start": "2026-06-04T14:30:00",
+    "end": "2026-06-05T02:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "Circulating",
+      "Scrub"
+    ],
+    "minStaff": 4
+  },
+  {
+    "id": "or-b-10-night",
+    "dayIndex": 10,
+    "shiftName": "night",
+    "ward": "OR-B",
+    "start": "2026-06-04T18:30:00",
+    "end": "2026-06-05T06:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "Circulating",
+      "Scrub"
+    ],
+    "minStaff": 4
+  },
+  {
+    "id": "med-surg-10-day",
+    "dayIndex": 10,
+    "shiftName": "day",
+    "ward": "Med-Surg",
+    "start": "2026-06-04T06:30:00",
+    "end": "2026-06-04T18:30:00",
+    "durationHours": 12,
+    "priority": "standard",
+    "requiredCertifications": [
+      "BLS"
+    ],
+    "minStaff": 10
+  },
+  {
+    "id": "med-surg-10-swing",
+    "dayIndex": 10,
+    "shiftName": "swing",
+    "ward": "Med-Surg",
+    "start": "2026-06-04T14:30:00",
+    "end": "2026-06-05T02:30:00",
+    "durationHours": 12,
+    "priority": "standard",
+    "requiredCertifications": [
+      "BLS"
+    ],
+    "minStaff": 10
+  },
+  {
+    "id": "med-surg-10-night",
+    "dayIndex": 10,
+    "shiftName": "night",
+    "ward": "Med-Surg",
+    "start": "2026-06-04T18:30:00",
+    "end": "2026-06-05T06:30:00",
+    "durationHours": 12,
+    "priority": "standard",
+    "requiredCertifications": [
+      "BLS"
+    ],
+    "minStaff": 10
+  },
+  {
+    "id": "cath-lab-1-11-day",
+    "dayIndex": 11,
+    "shiftName": "day",
+    "ward": "Cath Lab 1",
+    "start": "2026-06-05T06:30:00",
+    "end": "2026-06-05T18:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "ACLS"
+    ],
+    "minStaff": 3
+  },
+  {
+    "id": "cath-lab-1-11-swing",
+    "dayIndex": 11,
+    "shiftName": "swing",
+    "ward": "Cath Lab 1",
+    "start": "2026-06-05T14:30:00",
+    "end": "2026-06-06T02:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "ACLS"
+    ],
+    "minStaff": 3
+  },
+  {
+    "id": "cath-lab-1-11-night",
+    "dayIndex": 11,
+    "shiftName": "night",
+    "ward": "Cath Lab 1",
+    "start": "2026-06-05T18:30:00",
+    "end": "2026-06-06T06:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "ACLS"
+    ],
+    "minStaff": 3
+  },
+  {
+    "id": "cath-lab-2-11-day",
+    "dayIndex": 11,
+    "shiftName": "day",
+    "ward": "Cath Lab 2",
+    "start": "2026-06-05T06:30:00",
+    "end": "2026-06-05T18:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "ACLS"
+    ],
+    "minStaff": 3
+  },
+  {
+    "id": "cath-lab-2-11-swing",
+    "dayIndex": 11,
+    "shiftName": "swing",
+    "ward": "Cath Lab 2",
+    "start": "2026-06-05T14:30:00",
+    "end": "2026-06-06T02:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "ACLS"
+    ],
+    "minStaff": 3
+  },
+  {
+    "id": "cath-lab-2-11-night",
+    "dayIndex": 11,
+    "shiftName": "night",
+    "ward": "Cath Lab 2",
+    "start": "2026-06-05T18:30:00",
+    "end": "2026-06-06T06:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "ACLS"
+    ],
+    "minStaff": 3
+  },
+  {
+    "id": "icu-11-day",
+    "dayIndex": 11,
+    "shiftName": "day",
+    "ward": "ICU",
+    "start": "2026-06-05T06:30:00",
+    "end": "2026-06-05T18:30:00",
+    "durationHours": 12,
+    "priority": "critical",
+    "requiredCertifications": [
+      "ACLS",
+      "CCRN"
+    ],
+    "minStaff": 8
+  },
+  {
+    "id": "icu-11-swing",
+    "dayIndex": 11,
+    "shiftName": "swing",
+    "ward": "ICU",
+    "start": "2026-06-05T14:30:00",
+    "end": "2026-06-06T02:30:00",
+    "durationHours": 12,
+    "priority": "critical",
+    "requiredCertifications": [
+      "ACLS",
+      "CCRN"
+    ],
+    "minStaff": 8
+  },
+  {
+    "id": "icu-11-night",
+    "dayIndex": 11,
+    "shiftName": "night",
+    "ward": "ICU",
+    "start": "2026-06-05T18:30:00",
+    "end": "2026-06-06T06:30:00",
+    "durationHours": 12,
+    "priority": "critical",
+    "requiredCertifications": [
+      "ACLS",
+      "CCRN"
+    ],
+    "minStaff": 8
+  },
+  {
+    "id": "or-a-11-day",
+    "dayIndex": 11,
+    "shiftName": "day",
+    "ward": "OR-A",
+    "start": "2026-06-05T06:30:00",
+    "end": "2026-06-05T18:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "Circulating",
+      "Scrub"
+    ],
+    "minStaff": 4
+  },
+  {
+    "id": "or-a-11-swing",
+    "dayIndex": 11,
+    "shiftName": "swing",
+    "ward": "OR-A",
+    "start": "2026-06-05T14:30:00",
+    "end": "2026-06-06T02:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "Circulating",
+      "Scrub"
+    ],
+    "minStaff": 4
+  },
+  {
+    "id": "or-a-11-night",
+    "dayIndex": 11,
+    "shiftName": "night",
+    "ward": "OR-A",
+    "start": "2026-06-05T18:30:00",
+    "end": "2026-06-06T06:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "Circulating",
+      "Scrub"
+    ],
+    "minStaff": 4
+  },
+  {
+    "id": "or-b-11-day",
+    "dayIndex": 11,
+    "shiftName": "day",
+    "ward": "OR-B",
+    "start": "2026-06-05T06:30:00",
+    "end": "2026-06-05T18:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "Circulating",
+      "Scrub"
+    ],
+    "minStaff": 4
+  },
+  {
+    "id": "or-b-11-swing",
+    "dayIndex": 11,
+    "shiftName": "swing",
+    "ward": "OR-B",
+    "start": "2026-06-05T14:30:00",
+    "end": "2026-06-06T02:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "Circulating",
+      "Scrub"
+    ],
+    "minStaff": 4
+  },
+  {
+    "id": "or-b-11-night",
+    "dayIndex": 11,
+    "shiftName": "night",
+    "ward": "OR-B",
+    "start": "2026-06-05T18:30:00",
+    "end": "2026-06-06T06:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "Circulating",
+      "Scrub"
+    ],
+    "minStaff": 4
+  },
+  {
+    "id": "med-surg-11-day",
+    "dayIndex": 11,
+    "shiftName": "day",
+    "ward": "Med-Surg",
+    "start": "2026-06-05T06:30:00",
+    "end": "2026-06-05T18:30:00",
+    "durationHours": 12,
+    "priority": "standard",
+    "requiredCertifications": [
+      "BLS"
+    ],
+    "minStaff": 10
+  },
+  {
+    "id": "med-surg-11-swing",
+    "dayIndex": 11,
+    "shiftName": "swing",
+    "ward": "Med-Surg",
+    "start": "2026-06-05T14:30:00",
+    "end": "2026-06-06T02:30:00",
+    "durationHours": 12,
+    "priority": "standard",
+    "requiredCertifications": [
+      "BLS"
+    ],
+    "minStaff": 10
+  },
+  {
+    "id": "med-surg-11-night",
+    "dayIndex": 11,
+    "shiftName": "night",
+    "ward": "Med-Surg",
+    "start": "2026-06-05T18:30:00",
+    "end": "2026-06-06T06:30:00",
+    "durationHours": 12,
+    "priority": "standard",
+    "requiredCertifications": [
+      "BLS"
+    ],
+    "minStaff": 10
+  },
+  {
+    "id": "cath-lab-1-12-day",
+    "dayIndex": 12,
+    "shiftName": "day",
+    "ward": "Cath Lab 1",
+    "start": "2026-06-06T06:30:00",
+    "end": "2026-06-06T18:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "ACLS"
+    ],
+    "minStaff": 3
+  },
+  {
+    "id": "cath-lab-1-12-swing",
+    "dayIndex": 12,
+    "shiftName": "swing",
+    "ward": "Cath Lab 1",
+    "start": "2026-06-06T14:30:00",
+    "end": "2026-06-07T02:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "ACLS"
+    ],
+    "minStaff": 3
+  },
+  {
+    "id": "cath-lab-1-12-night",
+    "dayIndex": 12,
+    "shiftName": "night",
+    "ward": "Cath Lab 1",
+    "start": "2026-06-06T18:30:00",
+    "end": "2026-06-07T06:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "ACLS"
+    ],
+    "minStaff": 3
+  },
+  {
+    "id": "cath-lab-2-12-day",
+    "dayIndex": 12,
+    "shiftName": "day",
+    "ward": "Cath Lab 2",
+    "start": "2026-06-06T06:30:00",
+    "end": "2026-06-06T18:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "ACLS"
+    ],
+    "minStaff": 3
+  },
+  {
+    "id": "cath-lab-2-12-swing",
+    "dayIndex": 12,
+    "shiftName": "swing",
+    "ward": "Cath Lab 2",
+    "start": "2026-06-06T14:30:00",
+    "end": "2026-06-07T02:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "ACLS"
+    ],
+    "minStaff": 3
+  },
+  {
+    "id": "cath-lab-2-12-night",
+    "dayIndex": 12,
+    "shiftName": "night",
+    "ward": "Cath Lab 2",
+    "start": "2026-06-06T18:30:00",
+    "end": "2026-06-07T06:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "ACLS"
+    ],
+    "minStaff": 3
+  },
+  {
+    "id": "icu-12-day",
+    "dayIndex": 12,
+    "shiftName": "day",
+    "ward": "ICU",
+    "start": "2026-06-06T06:30:00",
+    "end": "2026-06-06T18:30:00",
+    "durationHours": 12,
+    "priority": "critical",
+    "requiredCertifications": [
+      "ACLS",
+      "CCRN"
+    ],
+    "minStaff": 8
+  },
+  {
+    "id": "icu-12-swing",
+    "dayIndex": 12,
+    "shiftName": "swing",
+    "ward": "ICU",
+    "start": "2026-06-06T14:30:00",
+    "end": "2026-06-07T02:30:00",
+    "durationHours": 12,
+    "priority": "critical",
+    "requiredCertifications": [
+      "ACLS",
+      "CCRN"
+    ],
+    "minStaff": 8
+  },
+  {
+    "id": "icu-12-night",
+    "dayIndex": 12,
+    "shiftName": "night",
+    "ward": "ICU",
+    "start": "2026-06-06T18:30:00",
+    "end": "2026-06-07T06:30:00",
+    "durationHours": 12,
+    "priority": "critical",
+    "requiredCertifications": [
+      "ACLS",
+      "CCRN"
+    ],
+    "minStaff": 8
+  },
+  {
+    "id": "or-a-12-day",
+    "dayIndex": 12,
+    "shiftName": "day",
+    "ward": "OR-A",
+    "start": "2026-06-06T06:30:00",
+    "end": "2026-06-06T18:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "Circulating",
+      "Scrub"
+    ],
+    "minStaff": 4
+  },
+  {
+    "id": "or-a-12-swing",
+    "dayIndex": 12,
+    "shiftName": "swing",
+    "ward": "OR-A",
+    "start": "2026-06-06T14:30:00",
+    "end": "2026-06-07T02:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "Circulating",
+      "Scrub"
+    ],
+    "minStaff": 4
+  },
+  {
+    "id": "or-a-12-night",
+    "dayIndex": 12,
+    "shiftName": "night",
+    "ward": "OR-A",
+    "start": "2026-06-06T18:30:00",
+    "end": "2026-06-07T06:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "Circulating",
+      "Scrub"
+    ],
+    "minStaff": 4
+  },
+  {
+    "id": "or-b-12-day",
+    "dayIndex": 12,
+    "shiftName": "day",
+    "ward": "OR-B",
+    "start": "2026-06-06T06:30:00",
+    "end": "2026-06-06T18:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "Circulating",
+      "Scrub"
+    ],
+    "minStaff": 4
+  },
+  {
+    "id": "or-b-12-swing",
+    "dayIndex": 12,
+    "shiftName": "swing",
+    "ward": "OR-B",
+    "start": "2026-06-06T14:30:00",
+    "end": "2026-06-07T02:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "Circulating",
+      "Scrub"
+    ],
+    "minStaff": 4
+  },
+  {
+    "id": "or-b-12-night",
+    "dayIndex": 12,
+    "shiftName": "night",
+    "ward": "OR-B",
+    "start": "2026-06-06T18:30:00",
+    "end": "2026-06-07T06:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "Circulating",
+      "Scrub"
+    ],
+    "minStaff": 4
+  },
+  {
+    "id": "med-surg-12-day",
+    "dayIndex": 12,
+    "shiftName": "day",
+    "ward": "Med-Surg",
+    "start": "2026-06-06T06:30:00",
+    "end": "2026-06-06T18:30:00",
+    "durationHours": 12,
+    "priority": "standard",
+    "requiredCertifications": [
+      "BLS"
+    ],
+    "minStaff": 10
+  },
+  {
+    "id": "med-surg-12-swing",
+    "dayIndex": 12,
+    "shiftName": "swing",
+    "ward": "Med-Surg",
+    "start": "2026-06-06T14:30:00",
+    "end": "2026-06-07T02:30:00",
+    "durationHours": 12,
+    "priority": "standard",
+    "requiredCertifications": [
+      "BLS"
+    ],
+    "minStaff": 10
+  },
+  {
+    "id": "med-surg-12-night",
+    "dayIndex": 12,
+    "shiftName": "night",
+    "ward": "Med-Surg",
+    "start": "2026-06-06T18:30:00",
+    "end": "2026-06-07T06:30:00",
+    "durationHours": 12,
+    "priority": "standard",
+    "requiredCertifications": [
+      "BLS"
+    ],
+    "minStaff": 10
+  },
+  {
+    "id": "cath-lab-1-13-day",
+    "dayIndex": 13,
+    "shiftName": "day",
+    "ward": "Cath Lab 1",
+    "start": "2026-06-07T06:30:00",
+    "end": "2026-06-07T18:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "ACLS"
+    ],
+    "minStaff": 3
+  },
+  {
+    "id": "cath-lab-1-13-swing",
+    "dayIndex": 13,
+    "shiftName": "swing",
+    "ward": "Cath Lab 1",
+    "start": "2026-06-07T14:30:00",
+    "end": "2026-06-08T02:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "ACLS"
+    ],
+    "minStaff": 3
+  },
+  {
+    "id": "cath-lab-1-13-night",
+    "dayIndex": 13,
+    "shiftName": "night",
+    "ward": "Cath Lab 1",
+    "start": "2026-06-07T18:30:00",
+    "end": "2026-06-08T06:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "ACLS"
+    ],
+    "minStaff": 3
+  },
+  {
+    "id": "cath-lab-2-13-day",
+    "dayIndex": 13,
+    "shiftName": "day",
+    "ward": "Cath Lab 2",
+    "start": "2026-06-07T06:30:00",
+    "end": "2026-06-07T18:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "ACLS"
+    ],
+    "minStaff": 3
+  },
+  {
+    "id": "cath-lab-2-13-swing",
+    "dayIndex": 13,
+    "shiftName": "swing",
+    "ward": "Cath Lab 2",
+    "start": "2026-06-07T14:30:00",
+    "end": "2026-06-08T02:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "ACLS"
+    ],
+    "minStaff": 3
+  },
+  {
+    "id": "cath-lab-2-13-night",
+    "dayIndex": 13,
+    "shiftName": "night",
+    "ward": "Cath Lab 2",
+    "start": "2026-06-07T18:30:00",
+    "end": "2026-06-08T06:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "ACLS"
+    ],
+    "minStaff": 3
+  },
+  {
+    "id": "icu-13-day",
+    "dayIndex": 13,
+    "shiftName": "day",
+    "ward": "ICU",
+    "start": "2026-06-07T06:30:00",
+    "end": "2026-06-07T18:30:00",
+    "durationHours": 12,
+    "priority": "critical",
+    "requiredCertifications": [
+      "ACLS",
+      "CCRN"
+    ],
+    "minStaff": 8
+  },
+  {
+    "id": "icu-13-swing",
+    "dayIndex": 13,
+    "shiftName": "swing",
+    "ward": "ICU",
+    "start": "2026-06-07T14:30:00",
+    "end": "2026-06-08T02:30:00",
+    "durationHours": 12,
+    "priority": "critical",
+    "requiredCertifications": [
+      "ACLS",
+      "CCRN"
+    ],
+    "minStaff": 8
+  },
+  {
+    "id": "icu-13-night",
+    "dayIndex": 13,
+    "shiftName": "night",
+    "ward": "ICU",
+    "start": "2026-06-07T18:30:00",
+    "end": "2026-06-08T06:30:00",
+    "durationHours": 12,
+    "priority": "critical",
+    "requiredCertifications": [
+      "ACLS",
+      "CCRN"
+    ],
+    "minStaff": 8
+  },
+  {
+    "id": "or-a-13-day",
+    "dayIndex": 13,
+    "shiftName": "day",
+    "ward": "OR-A",
+    "start": "2026-06-07T06:30:00",
+    "end": "2026-06-07T18:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "Circulating",
+      "Scrub"
+    ],
+    "minStaff": 4
+  },
+  {
+    "id": "or-a-13-swing",
+    "dayIndex": 13,
+    "shiftName": "swing",
+    "ward": "OR-A",
+    "start": "2026-06-07T14:30:00",
+    "end": "2026-06-08T02:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "Circulating",
+      "Scrub"
+    ],
+    "minStaff": 4
+  },
+  {
+    "id": "or-a-13-night",
+    "dayIndex": 13,
+    "shiftName": "night",
+    "ward": "OR-A",
+    "start": "2026-06-07T18:30:00",
+    "end": "2026-06-08T06:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "Circulating",
+      "Scrub"
+    ],
+    "minStaff": 4
+  },
+  {
+    "id": "or-b-13-day",
+    "dayIndex": 13,
+    "shiftName": "day",
+    "ward": "OR-B",
+    "start": "2026-06-07T06:30:00",
+    "end": "2026-06-07T18:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "Circulating",
+      "Scrub"
+    ],
+    "minStaff": 4
+  },
+  {
+    "id": "or-b-13-swing",
+    "dayIndex": 13,
+    "shiftName": "swing",
+    "ward": "OR-B",
+    "start": "2026-06-07T14:30:00",
+    "end": "2026-06-08T02:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "Circulating",
+      "Scrub"
+    ],
+    "minStaff": 4
+  },
+  {
+    "id": "or-b-13-night",
+    "dayIndex": 13,
+    "shiftName": "night",
+    "ward": "OR-B",
+    "start": "2026-06-07T18:30:00",
+    "end": "2026-06-08T06:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "Circulating",
+      "Scrub"
+    ],
+    "minStaff": 4
+  },
+  {
+    "id": "med-surg-13-day",
+    "dayIndex": 13,
+    "shiftName": "day",
+    "ward": "Med-Surg",
+    "start": "2026-06-07T06:30:00",
+    "end": "2026-06-07T18:30:00",
+    "durationHours": 12,
+    "priority": "standard",
+    "requiredCertifications": [
+      "BLS"
+    ],
+    "minStaff": 10
+  },
+  {
+    "id": "med-surg-13-swing",
+    "dayIndex": 13,
+    "shiftName": "swing",
+    "ward": "Med-Surg",
+    "start": "2026-06-07T14:30:00",
+    "end": "2026-06-08T02:30:00",
+    "durationHours": 12,
+    "priority": "standard",
+    "requiredCertifications": [
+      "BLS"
+    ],
+    "minStaff": 10
+  },
+  {
+    "id": "med-surg-13-night",
+    "dayIndex": 13,
+    "shiftName": "night",
+    "ward": "Med-Surg",
+    "start": "2026-06-07T18:30:00",
+    "end": "2026-06-08T06:30:00",
+    "durationHours": 12,
+    "priority": "standard",
+    "requiredCertifications": [
+      "BLS"
+    ],
+    "minStaff": 10
+  },
+  {
+    "id": "cath-lab-1-14-day",
+    "dayIndex": 14,
+    "shiftName": "day",
+    "ward": "Cath Lab 1",
+    "start": "2026-06-08T06:30:00",
+    "end": "2026-06-08T18:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "ACLS"
+    ],
+    "minStaff": 3
+  },
+  {
+    "id": "cath-lab-1-14-swing",
+    "dayIndex": 14,
+    "shiftName": "swing",
+    "ward": "Cath Lab 1",
+    "start": "2026-06-08T14:30:00",
+    "end": "2026-06-09T02:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "ACLS"
+    ],
+    "minStaff": 3
+  },
+  {
+    "id": "cath-lab-1-14-night",
+    "dayIndex": 14,
+    "shiftName": "night",
+    "ward": "Cath Lab 1",
+    "start": "2026-06-08T18:30:00",
+    "end": "2026-06-09T06:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "ACLS"
+    ],
+    "minStaff": 3
+  },
+  {
+    "id": "cath-lab-2-14-day",
+    "dayIndex": 14,
+    "shiftName": "day",
+    "ward": "Cath Lab 2",
+    "start": "2026-06-08T06:30:00",
+    "end": "2026-06-08T18:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "ACLS"
+    ],
+    "minStaff": 3
+  },
+  {
+    "id": "cath-lab-2-14-swing",
+    "dayIndex": 14,
+    "shiftName": "swing",
+    "ward": "Cath Lab 2",
+    "start": "2026-06-08T14:30:00",
+    "end": "2026-06-09T02:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "ACLS"
+    ],
+    "minStaff": 3
+  },
+  {
+    "id": "cath-lab-2-14-night",
+    "dayIndex": 14,
+    "shiftName": "night",
+    "ward": "Cath Lab 2",
+    "start": "2026-06-08T18:30:00",
+    "end": "2026-06-09T06:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "ACLS"
+    ],
+    "minStaff": 3
+  },
+  {
+    "id": "icu-14-day",
+    "dayIndex": 14,
+    "shiftName": "day",
+    "ward": "ICU",
+    "start": "2026-06-08T06:30:00",
+    "end": "2026-06-08T18:30:00",
+    "durationHours": 12,
+    "priority": "critical",
+    "requiredCertifications": [
+      "ACLS",
+      "CCRN"
+    ],
+    "minStaff": 8
+  },
+  {
+    "id": "icu-14-swing",
+    "dayIndex": 14,
+    "shiftName": "swing",
+    "ward": "ICU",
+    "start": "2026-06-08T14:30:00",
+    "end": "2026-06-09T02:30:00",
+    "durationHours": 12,
+    "priority": "critical",
+    "requiredCertifications": [
+      "ACLS",
+      "CCRN"
+    ],
+    "minStaff": 8
+  },
+  {
+    "id": "icu-14-night",
+    "dayIndex": 14,
+    "shiftName": "night",
+    "ward": "ICU",
+    "start": "2026-06-08T18:30:00",
+    "end": "2026-06-09T06:30:00",
+    "durationHours": 12,
+    "priority": "critical",
+    "requiredCertifications": [
+      "ACLS",
+      "CCRN"
+    ],
+    "minStaff": 8
+  },
+  {
+    "id": "or-a-14-day",
+    "dayIndex": 14,
+    "shiftName": "day",
+    "ward": "OR-A",
+    "start": "2026-06-08T06:30:00",
+    "end": "2026-06-08T18:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "Circulating",
+      "Scrub"
+    ],
+    "minStaff": 4
+  },
+  {
+    "id": "or-a-14-swing",
+    "dayIndex": 14,
+    "shiftName": "swing",
+    "ward": "OR-A",
+    "start": "2026-06-08T14:30:00",
+    "end": "2026-06-09T02:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "Circulating",
+      "Scrub"
+    ],
+    "minStaff": 4
+  },
+  {
+    "id": "or-a-14-night",
+    "dayIndex": 14,
+    "shiftName": "night",
+    "ward": "OR-A",
+    "start": "2026-06-08T18:30:00",
+    "end": "2026-06-09T06:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "Circulating",
+      "Scrub"
+    ],
+    "minStaff": 4
+  },
+  {
+    "id": "or-b-14-day",
+    "dayIndex": 14,
+    "shiftName": "day",
+    "ward": "OR-B",
+    "start": "2026-06-08T06:30:00",
+    "end": "2026-06-08T18:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "Circulating",
+      "Scrub"
+    ],
+    "minStaff": 4
+  },
+  {
+    "id": "or-b-14-swing",
+    "dayIndex": 14,
+    "shiftName": "swing",
+    "ward": "OR-B",
+    "start": "2026-06-08T14:30:00",
+    "end": "2026-06-09T02:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "Circulating",
+      "Scrub"
+    ],
+    "minStaff": 4
+  },
+  {
+    "id": "or-b-14-night",
+    "dayIndex": 14,
+    "shiftName": "night",
+    "ward": "OR-B",
+    "start": "2026-06-08T18:30:00",
+    "end": "2026-06-09T06:30:00",
+    "durationHours": 12,
+    "priority": "high",
+    "requiredCertifications": [
+      "Circulating",
+      "Scrub"
+    ],
+    "minStaff": 4
+  },
+  {
+    "id": "med-surg-14-day",
+    "dayIndex": 14,
+    "shiftName": "day",
+    "ward": "Med-Surg",
+    "start": "2026-06-08T06:30:00",
+    "end": "2026-06-08T18:30:00",
+    "durationHours": 12,
+    "priority": "standard",
+    "requiredCertifications": [
+      "BLS"
+    ],
+    "minStaff": 10
+  },
+  {
+    "id": "med-surg-14-swing",
+    "dayIndex": 14,
+    "shiftName": "swing",
+    "ward": "Med-Surg",
+    "start": "2026-06-08T14:30:00",
+    "end": "2026-06-09T02:30:00",
+    "durationHours": 12,
+    "priority": "standard",
+    "requiredCertifications": [
+      "BLS"
+    ],
+    "minStaff": 10
+  },
+  {
+    "id": "med-surg-14-night",
+    "dayIndex": 14,
+    "shiftName": "night",
+    "ward": "Med-Surg",
+    "start": "2026-06-08T18:30:00",
+    "end": "2026-06-09T06:30:00",
+    "durationHours": 12,
+    "priority": "standard",
+    "requiredCertifications": [
+      "BLS"
+    ],
+    "minStaff": 10
+  }
+]

@@ -1,0 +1,35 @@
+{
+  "backend": {
+    "name": "fake_brisbane",
+    "provider": "qiskit-aer fake-provider",
+    "calibrationTimestamp": "2026-05-25T20:14:00Z",
+    "status": "simulated_hardware_noise_model",
+    "medianT1Micros": 149.2,
+    "medianT2Micros": 88.4
+  },
+  "run": {
+    "shots": 256,
+    "reps": 1,
+    "optimizer": "SPSA",
+    "maxiter": 12,
+    "seed": 1234
+  },
+  "distribution": [
+    {
+      "bitstring": "100",
+      "count": 102,
+      "decodedCandidateId": "nurse-priya-n"
+    },
+    {
+      "bitstring": "010",
+      "count": 83,
+      "decodedCandidateId": "nurse-devin-r"
+    },
+    {
+      "bitstring": "001",
+      "count": 71,
+      "decodedCandidateId": "nurse-olivia-t"
+    }
+  ],
+  "summary": "Cached QPU-style evidence trace for the Sarah K. call-out scenario. The hybrid candidate matched the classical objective while surfacing three distinct alternates."
+}

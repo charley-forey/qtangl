@@ -34,6 +34,7 @@ export async function requestAccess(
   const interest = String(formData.get("interest") ?? "").trim();
   const currentTools = String(formData.get("currentTools") ?? "").trim();
   const message = String(formData.get("message") ?? "").trim();
+  const source = String(formData.get("source") ?? "").trim();
   const fieldErrors: AccessFieldErrors = {};
 
   if (!name) {
@@ -78,6 +79,7 @@ export async function requestAccess(
     interest,
     currentTools,
     message,
+    source,
     submittedAt: new Date().toISOString(),
   };
 
@@ -98,6 +100,7 @@ export async function requestAccess(
           `Email: ${email}`,
           `Company: ${company}`,
           `Interest: ${interest}`,
+          `Source: ${source || "not provided"}`,
           `Current tools: ${currentTools || "not provided"}`,
           "",
           message ? `Message:\n${message}` : "Message: none provided",

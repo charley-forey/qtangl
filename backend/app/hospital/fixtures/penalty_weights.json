@@ -1,0 +1,11 @@
+{
+  "hardConstraintMultiplier": 10.0,
+  "softWeights": {
+    "overtimeHours": 4.0,
+    "agencyUsage": 8.5,
+    "fatigueRisk": 5.5,
+    "fairnessDelta": 3.0,
+    "seniorityPreference": 2.5,
+    "crossWardPenalty": 1.75
+  }
+}

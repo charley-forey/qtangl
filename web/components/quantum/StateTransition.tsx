@@ -1,7 +1,8 @@
 "use client";
 
-import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
-import { ReactNode, useRef } from "react";
+import { ReactNode, useEffect, useRef, useState } from "react";
+
+import usePrefersReducedMotion from "@/lib/usePrefersReducedMotion";
 
 type StateTransitionProps = {
   children: ReactNode;
@@ -20,36 +21,64 @@ export default function StateTransition({
   parallax = false,
   parallaxOffset = 14,
 }: StateTransitionProps) {
-  const reduceMotion = useReducedMotion();
+  const reduceMotion = usePrefersReducedMotion();
   const ref = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start end", "end start"],
-  });
-  const parallaxY = useTransform(
-    scrollYProgress,
-    [0, 0.5, 1],
-    [parallaxOffset, 0, -parallaxOffset]
-  );
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    if (reduceMotion) {
+      return;
+    }
+
+    const element = ref.current;
+    if (!element || typeof IntersectionObserver === "undefined") {
+      const frame = window.requestAnimationFrame(() => setIsVisible(true));
+
+      return () => window.cancelAnimationFrame(frame);
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) {
+          return;
+        }
+
+        setIsVisible(true);
+        observer.disconnect();
+      },
+      {
+        threshold: 0.18,
+        rootMargin: "0px 0px -10% 0px",
+      }
+    );
+
+    observer.observe(element);
+
+    return () => observer.disconnect();
+  }, [reduceMotion]);
 
   if (reduceMotion) {
     return <div className={className}>{children}</div>;
   }
 
+  const hiddenOffset = parallax ? Math.max(distance, parallaxOffset) : distance;
+
   return (
-    <motion.div
+    <div
       ref={ref}
-      className={className}
-      initial={{ opacity: 0, y: distance }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.2 }}
-      transition={{
-        duration: 0.45,
-        delay,
-        ease: [0.22, 1, 0.36, 1],
+      className={[
+        "transform-gpu transition-[opacity,transform] duration-500 [transition-timing-function:cubic-bezier(0.22,1,0.36,1)]",
+        className,
+      ]
+        .filter(Boolean)
+        .join(" ")}
+      style={{
+        opacity: isVisible ? 1 : 0,
+        transform: isVisible ? "translate3d(0, 0, 0)" : `translate3d(0, ${hiddenOffset}px, 0)`,
+        transitionDelay: delay > 0 ? `${delay}s` : undefined,
       }}
     >
-      {parallax ? <motion.div style={{ y: parallaxY }}>{children}</motion.div> : children}
-    </motion.div>
+      {children}
+    </div>
   );
 }

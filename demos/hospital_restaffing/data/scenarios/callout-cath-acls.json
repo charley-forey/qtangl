@@ -1,0 +1,45 @@
+{
+  "id": "callout-cath-acls",
+  "title": "Cath lab ACLS call-out",
+  "summary": "Sarah K. calls out 49 minutes before the day shift in Cath Lab 2, leaving an ACLS-required procedural slot uncovered.",
+  "callOut": {
+    "id": "callout-sarah-k",
+    "nurseId": "nurse-sarah-k",
+    "nurseName": "Sarah Keller",
+    "ward": "Cath Lab 2",
+    "shiftId": "cath-lab-2-1-day",
+    "start": "2026-05-26T06:30:00",
+    "end": "2026-05-26T18:30:00",
+    "urgencyMinutes": 49,
+    "requiredCertifications": [
+      "ACLS",
+      "PALS"
+    ],
+    "channel": "phone",
+    "reason": "Sick call"
+  },
+  "manualBaseline": {
+    "decisionMinutes": 22,
+    "agencyCost": 4800,
+    "summary": "Charge nurse defaults to the safest agency backfill to preserve acuity coverage."
+  },
+  "preferredCandidates": [
+    "nurse-priya-n",
+    "nurse-devin-r",
+    "nurse-olivia-t"
+  ],
+  "counts": [
+    {
+      "bitstring": "001",
+      "weight": 27
+    },
+    {
+      "bitstring": "010",
+      "weight": 33
+    },
+    {
+      "bitstring": "100",
+      "weight": 40
+    }
+  ]
+}
