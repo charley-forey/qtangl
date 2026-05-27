@@ -11,12 +11,17 @@ import {
   apiReferenceResponse,
 } from "@/lib/constants";
 import { apiReferencePageCopy } from "@/lib/copy/docs";
+import JsonLd from "@/components/seo/JsonLd";
+import { buildPageMetadata, buildSoftwareApplicationJsonLd } from "@/lib/seo";
 
-export const metadata: Metadata = {
+const apiDescription =
+  "See exactly what to send to `/optimize`, what measurements come back, and how the method field is reported.";
+
+export const metadata: Metadata = buildPageMetadata({
+  path: "/api",
   title: "API Reference",
-  description:
-    "See exactly what to send to `/optimize`, what measurements come back, and how the method field is reported.",
-};
+  description: apiDescription,
+});
 
 export default function ApiPage() {
   return (
@@ -70,6 +75,13 @@ export default function ApiPage() {
           </Card>
         </div>
       </Section>
+      <JsonLd
+        data={buildSoftwareApplicationJsonLd({
+          path: "/api",
+          name: "Qtangl API",
+          description: apiDescription,
+        })}
+      />
     </PageShell>
   );
 }

@@ -13,12 +13,14 @@ import {
   apiReferenceResponse,
 } from "@/lib/constants";
 import { docsGuideCopy } from "@/lib/copy/docs";
+import { buildPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildPageMetadata({
+  path: "/docs/api",
   title: "API Guide",
   description:
     "Understand the `/optimize` flow, method honesty, and returned measurements so you can integrate quickly.",
-};
+});
 
 export default function DocsApiPage() {
   return (

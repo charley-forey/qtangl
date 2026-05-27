@@ -5,12 +5,14 @@ import { MAIN_CONTENT_ID } from "@/components/layout/PageShell";
 import Card from "@/components/ui/Card";
 import { dataFormatGuides } from "@/lib/demo-data";
 import { docsGuideCopy } from "@/lib/copy/docs";
+import { buildPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildPageMetadata({
+  path: "/docs/data-formats",
   title: "Data Formats",
   description:
     "Prepare schedule, routing, and staffing data for Qtangl's quantum-aware planning workflow.",
-};
+});
 
 export default function DataFormatsPage() {
   return (

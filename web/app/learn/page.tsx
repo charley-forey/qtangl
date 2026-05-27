@@ -16,12 +16,14 @@ import {
   getLibraryMeta,
   getQtanglRelevantEntries,
 } from "@/lib/library";
+import { buildPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildPageMetadata({
+  path: "/learn",
   title: "Learn",
   description:
     "Explore Qtangl's educational map of the open-source quantum software ecosystem.",
-};
+});
 
 export default async function LearnPage() {
   const [categories, featuredEntries, qtanglRelevantEntries, meta] = await Promise.all([

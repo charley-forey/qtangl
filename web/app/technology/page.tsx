@@ -19,12 +19,17 @@ import {
 } from "@/lib/constants";
 import { technologyPage } from "@/lib/copy/product";
 import { technologyInterferenceMap } from "@/lib/copy/visualization";
+import JsonLd from "@/components/seo/JsonLd";
+import { buildPageMetadata, buildSoftwareApplicationJsonLd } from "@/lib/seo";
 
-export const metadata: Metadata = {
+const technologyDescription =
+  "See the phase diagram behind Qtangl's classical-first, quantum-aware planning workflow.";
+
+export const metadata: Metadata = buildPageMetadata({
+  path: "/technology",
   title: "Technology",
-  description:
-    "See the phase diagram behind Qtangl's classical-first, quantum-aware planning workflow.",
-};
+  description: technologyDescription,
+});
 
 export default function TechnologyPage() {
   return (
@@ -177,6 +182,13 @@ export default function TechnologyPage() {
           ))}
         </div>
       </Section>
+      <JsonLd
+        data={buildSoftwareApplicationJsonLd({
+          path: "/technology",
+          name: "Qtangl Quantum Planning API",
+          description: technologyDescription,
+        })}
+      />
     </PageShell>
   );
 }

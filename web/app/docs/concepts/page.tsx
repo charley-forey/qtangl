@@ -7,12 +7,14 @@ import ProbabilityGrid from "@/components/quantum/ProbabilityGrid";
 import Card from "@/components/ui/Card";
 import HybridStackDiagram from "@/components/visualization/quantum/HybridStackDiagram";
 import { conceptsPage } from "@/lib/copy/docs";
+import { buildPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildPageMetadata({
+  path: "/docs/concepts",
   title: "Concepts",
   description:
     "Understand Qtangl's quantum-forward vocabulary, constraint model, and hybrid execution path.",
-};
+});
 
 export default function ConceptsPage() {
   return (

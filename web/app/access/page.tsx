@@ -7,11 +7,13 @@ import Section from "@/components/layout/Section";
 import Card from "@/components/ui/Card";
 import Eyebrow from "@/components/ui/Eyebrow";
 import { accessPageCopy, accessPanel } from "@/lib/copy/access";
+import { buildPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildPageMetadata({
+  path: "/access",
   title: "Access",
   description: accessPageCopy.metadataDescription,
-};
+});
 
 type AccessPageProps = {
   searchParams?: Promise<Record<string, string | string[] | undefined>>;

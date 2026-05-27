@@ -4,14 +4,20 @@ import Link from "next/link";
 import ArticleLayout from "@/components/docs/ArticleLayout";
 import { MAIN_CONTENT_ID } from "@/components/layout/PageShell";
 import { articles, blogClosingCta } from "@/lib/copy/articles";
+import JsonLd from "@/components/seo/JsonLd";
+import { buildBlogPostingJsonLd, buildPageMetadata } from "@/lib/seo";
 
 const article = articles.scheduling;
+const description =
+  "See how better scheduling workflows reduce manual replanning and improve staffing decisions.";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildPageMetadata({
+  path: "/blog/scheduling-use-cases",
   title: article.title,
-  description:
-    "See how better scheduling workflows reduce manual replanning and improve staffing decisions.",
-};
+  description,
+  type: "article",
+  absoluteTitle: true,
+});
 
 export default function SchedulingUseCasesPage() {
   return (
@@ -40,6 +46,13 @@ export default function SchedulingUseCasesPage() {
           </p>
         </section>
       </ArticleLayout>
+      <JsonLd
+        data={buildBlogPostingJsonLd({
+          path: "/blog/scheduling-use-cases",
+          headline: article.title,
+          description,
+        })}
+      />
     </div>
   );
 }

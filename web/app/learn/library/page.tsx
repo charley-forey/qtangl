@@ -6,12 +6,14 @@ import PageShell from "@/components/layout/PageShell";
 import Section from "@/components/layout/Section";
 import Card from "@/components/ui/Card";
 import { getLibraryCategories, getLibraryIndex } from "@/lib/library";
+import { buildPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildPageMetadata({
+  path: "/learn/library",
   title: "Library",
   description:
     "Browse Qtangl's index of open-source quantum software resources by category, language, and focus area.",
-};
+});
 
 export default async function LibraryIndexPage() {
   const [entries, categories] = await Promise.all([

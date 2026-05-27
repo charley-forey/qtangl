@@ -10,12 +10,14 @@ import {
   docsQuickstartResponse,
 } from "@/lib/constants";
 import { docsGuideCopy } from "@/lib/copy/docs";
+import { buildPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildPageMetadata({
+  path: "/docs/quickstart",
   title: "Quickstart",
   description:
     "Send your first planning job and inspect the ranked plan, measurements, and method details Qtangl returns.",
-};
+});
 
 export default function QuickstartPage() {
   return (

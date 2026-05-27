@@ -10,14 +10,17 @@ import Section from "@/components/layout/Section";
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
 import Eyebrow from "@/components/ui/Eyebrow";
+import JsonLd from "@/components/seo/JsonLd";
 import { homeHeadlineDemo, homepageNarrative } from "@/lib/copy/home";
 import { quantumWorkflowPoints, useCases } from "@/lib/constants";
 import { siteMetadata } from "@/lib/copy/product";
+import { buildOrganizationJsonLd, buildPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildPageMetadata({
+  path: "",
   title: "Home",
   description: siteMetadata.description,
-};
+});
 
 export default function Home() {
   return (
@@ -105,6 +108,7 @@ export default function Home() {
       <Section gap="tight" className="pb-0">
         <CTA />
       </Section>
+      <JsonLd data={buildOrganizationJsonLd()} />
     </PageShell>
   );
 }

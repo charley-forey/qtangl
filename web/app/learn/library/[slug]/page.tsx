@@ -9,7 +9,7 @@ import Section from "@/components/layout/Section";
 import Card from "@/components/ui/Card";
 import Eyebrow from "@/components/ui/Eyebrow";
 import { libraryEditorial } from "@/lib/copy/library-editorial";
-import { siteMetadata } from "@/lib/copy/product";
+import { buildPageMetadata } from "@/lib/seo";
 import {
   getLibraryEntryOrNull,
   getLibraryEntriesBySlugs,
@@ -55,22 +55,14 @@ export async function generateMetadata({
   const title = `${entry.title} | ${entry.category.title} library guide`;
   const description =
     editorial?.description || editorial?.summary || entry.description || entry.summary;
-  const url = `${siteMetadata.url}/learn/library/${entry.slug}`;
 
-  return {
+  return buildPageMetadata({
+    path: `/learn/library/${entry.slug}`,
     title,
     description,
-    alternates: {
-      canonical: url,
-    },
-    openGraph: {
-      title,
-      description,
-      url,
-      type: "article",
-      images: [`${url}/opengraph-image`],
-    },
-  };
+    type: "article",
+    image: `/learn/library/${entry.slug}/opengraph-image`,
+  });
 }
 
 export default async function LibraryResourcePage({ params }: ResourcePageProps) {

@@ -3,12 +3,21 @@ import Link from "next/link";
 
 import ArticleLayout from "@/components/docs/ArticleLayout";
 import { MAIN_CONTENT_ID } from "@/components/layout/PageShell";
+import JsonLd from "@/components/seo/JsonLd";
+import { buildBlogPostingJsonLd, buildPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Auditable nurse re-staffing: how hybrid optimization surfaces alternates that CP-SAT hides",
-  description:
-    "A concrete look at hospital re-staffing, why classical solvers still matter, and where a hybrid micro-solve adds value through diversity and auditability.",
-};
+const title =
+  "Auditable nurse re-staffing: how hybrid optimization surfaces alternates that CP-SAT hides";
+const description =
+  "A concrete look at hospital re-staffing, why classical solvers still matter, and where a hybrid micro-solve adds value through diversity and auditability.";
+
+export const metadata: Metadata = buildPageMetadata({
+  path: "/blog/hospital-restaffing",
+  title,
+  description,
+  type: "article",
+  absoluteTitle: true,
+});
 
 const sections = [
   {
@@ -89,6 +98,13 @@ export default function HospitalRestaffingBlogPage() {
           </p>
         </section>
       </ArticleLayout>
+      <JsonLd
+        data={buildBlogPostingJsonLd({
+          path: "/blog/hospital-restaffing",
+          headline: title,
+          description,
+        })}
+      />
     </div>
   );
 }

@@ -1,5 +1,6 @@
 declare global {
   interface Window {
+    gtag?: (...args: unknown[]) => void;
     plausible?: (eventName: string, options?: { props?: Record<string, unknown> }) => void;
     posthog?: { capture: (eventName: string, props?: Record<string, unknown>) => void };
   }
@@ -10,6 +11,7 @@ export function trackEvent(eventName: string, props?: Record<string, unknown>) {
     return;
   }
   try {
+    window.gtag?.("event", eventName, props);
     window.posthog?.capture(eventName, props);
     window.plausible?.(eventName, props ? { props } : undefined);
   } catch {

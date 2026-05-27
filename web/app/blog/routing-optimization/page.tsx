@@ -4,14 +4,20 @@ import Link from "next/link";
 import ArticleLayout from "@/components/docs/ArticleLayout";
 import { MAIN_CONTENT_ID } from "@/components/layout/PageShell";
 import { articles, blogClosingCta } from "@/lib/copy/articles";
+import JsonLd from "@/components/seo/JsonLd";
+import { buildBlogPostingJsonLd, buildPageMetadata } from "@/lib/seo";
 
 const article = articles.routing;
+const description =
+  "Learn how to build route plans teams can actually execute when windows and capacity matter.";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildPageMetadata({
+  path: "/blog/routing-optimization",
   title: article.title,
-  description:
-    "Learn how to build route plans teams can actually execute when windows and capacity matter.",
-};
+  description,
+  type: "article",
+  absoluteTitle: true,
+});
 
 export default function RoutingOptimizationPage() {
   return (
@@ -40,6 +46,13 @@ export default function RoutingOptimizationPage() {
           </p>
         </section>
       </ArticleLayout>
+      <JsonLd
+        data={buildBlogPostingJsonLd({
+          path: "/blog/routing-optimization",
+          headline: article.title,
+          description,
+        })}
+      />
     </div>
   );
 }

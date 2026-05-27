@@ -6,14 +6,20 @@ import { MAIN_CONTENT_ID } from "@/components/layout/PageShell";
 import HybridStackDiagram from "@/components/visualization/quantum/HybridStackDiagram";
 import MethodBadge from "@/components/visualization/quantum/MethodBadge";
 import { articles, blogClosingCta } from "@/lib/copy/articles";
+import JsonLd from "@/components/seo/JsonLd";
+import { buildBlogPostingJsonLd, buildPageMetadata } from "@/lib/seo";
 
 const article = articles.quantumOptimization;
+const description =
+  "Learn where quantum-assisted search can help teams evaluate harder planning problems without overstating the current stack.";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildPageMetadata({
+  path: "/blog/quantum-optimization",
   title: article.title,
-  description:
-    "Learn where quantum-assisted search can help teams evaluate harder planning problems without overstating the current stack.",
-};
+  description,
+  type: "article",
+  absoluteTitle: true,
+});
 
 export default function QuantumOptimizationPage() {
   return (
@@ -65,6 +71,13 @@ export default function QuantumOptimizationPage() {
           </p>
         </section>
       </ArticleLayout>
+      <JsonLd
+        data={buildBlogPostingJsonLd({
+          path: "/blog/quantum-optimization",
+          headline: article.title,
+          description,
+        })}
+      />
     </div>
   );
 }

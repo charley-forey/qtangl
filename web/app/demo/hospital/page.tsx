@@ -11,12 +11,21 @@ import { qtanglApiBaseUrl } from "@/lib/api";
 import { FALLBACK_SCENARIOS } from "@/lib/hospital-fallback";
 import { getHospitalRoster, getHospitalScenarios } from "@/lib/hospital";
 import type { HospitalRosterNurse, Scenario } from "@/lib/hospital";
+import JsonLd from "@/components/seo/JsonLd";
+import {
+  absoluteUrl,
+  buildHospitalDemoJsonLd,
+  buildPageMetadata,
+} from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Hospital re-staffing demo | Qtangl",
-  description:
-    "Executive demo: auditable nurse call-out coverage with classical optimization, hybrid alternates, and compliance-ready audit packs.",
-};
+const hospitalDemoDescription =
+  "Executive demo: auditable nurse call-out coverage with classical optimization, hybrid alternates, and compliance-ready audit packs.";
+
+export const metadata: Metadata = buildPageMetadata({
+  path: "/demo/hospital",
+  title: "Hospital re-staffing demo",
+  description: hospitalDemoDescription,
+});
 
 type PrefetchResult = {
   roster: HospitalRosterNurse[];
@@ -81,6 +90,12 @@ export default async function HospitalDemoPage() {
           />
         </Suspense>
       </Section>
+      <JsonLd
+        data={buildHospitalDemoJsonLd({
+          description: hospitalDemoDescription,
+          videoUrl: absoluteUrl("/demos/hospital/walkthrough.mp4"),
+        })}
+      />
     </PageShell>
   );
 }

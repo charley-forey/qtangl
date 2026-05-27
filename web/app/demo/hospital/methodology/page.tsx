@@ -9,12 +9,14 @@ import PageShell from "@/components/layout/PageShell";
 import Section from "@/components/layout/Section";
 import Button from "@/components/ui/Button";
 import { hospitalMethodologyCopy } from "@/lib/copy/methodology";
+import { buildPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Hospital demo methodology | Qtangl",
+export const metadata: Metadata = buildPageMetadata({
+  path: "/demo/hospital/methodology",
+  title: "Hospital demo methodology",
   description:
     "Sources, solver settings, and evidence files behind the hospital re-staffing executive demo.",
-};
+});
 
 export default function HospitalMethodologyPage() {
   return (

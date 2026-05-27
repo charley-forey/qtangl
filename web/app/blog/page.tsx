@@ -6,12 +6,14 @@ import FeatureCard from "@/components/marketing/FeatureCard";
 import Section from "@/components/layout/Section";
 import { blogPosts } from "@/lib/constants";
 import { blogIndexCopy } from "@/lib/copy/articles";
+import { buildPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildPageMetadata({
+  path: "/blog",
   title: "Blog",
   description:
     "Read field notes from Qtangl's quantum-aware planning stack.",
-};
+});
 
 export default function BlogPage() {
   return (

@@ -6,12 +6,14 @@ import FeatureCard from "@/components/marketing/FeatureCard";
 import Card from "@/components/ui/Card";
 import { docsCards } from "@/lib/constants";
 import { docsIndex } from "@/lib/copy/product";
+import { buildPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildPageMetadata({
+  path: "/docs",
   title: "Docs",
   description:
     "Send planning inputs. Read ranked plans, summaries, and measurements from Qtangl's quantum-aware API.",
-};
+});
 
 export default function DocsPage() {
   return (

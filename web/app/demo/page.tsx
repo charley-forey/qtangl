@@ -10,12 +10,14 @@ import Card from "@/components/ui/Card";
 import Eyebrow from "@/components/ui/Eyebrow";
 import { demoCatalog, demosPageCopy } from "@/lib/copy/demos";
 import { sandboxPageCopy } from "@/lib/copy/try";
+import { buildPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildPageMetadata({
+  path: "/demo",
   title: "Demos",
   description:
     "Explore Qtangl demos: hospital re-staffing live today, with construction and logistics workflows coming soon.",
-};
+});
 
 type DemoPageProps = {
   searchParams?: Promise<Record<string, string | string[] | undefined>>;

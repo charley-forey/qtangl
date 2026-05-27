@@ -6,7 +6,7 @@ import ArticleLayout from "@/components/docs/ArticleLayout";
 import LibraryResourceCard from "@/components/learn/LibraryResourceCard";
 import { MAIN_CONTENT_ID } from "@/components/layout/PageShell";
 import { libraryTopics } from "@/lib/copy/library-topics";
-import { siteMetadata } from "@/lib/copy/product";
+import { buildPageMetadata } from "@/lib/seo";
 import { getLibraryEntriesBySlugs } from "@/lib/library";
 
 type TopicPageProps = {
@@ -31,22 +31,12 @@ export async function generateMetadata({
     return {};
   }
 
-  const url = `${siteMetadata.url}/learn/topics/${topic.slug}`;
-
-  return {
+  return buildPageMetadata({
+    path: `/learn/topics/${topic.slug}`,
     title: topic.title,
     description: topic.description,
-    alternates: {
-      canonical: url,
-    },
-    openGraph: {
-      title: topic.title,
-      description: topic.description,
-      url,
-      type: "article",
-      images: ["/opengraph-image"],
-    },
-  };
+    type: "article",
+  });
 }
 
 export default async function LibraryTopicPage({ params }: TopicPageProps) {

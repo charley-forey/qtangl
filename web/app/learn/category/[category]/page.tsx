@@ -8,7 +8,7 @@ import PageShell from "@/components/layout/PageShell";
 import Section from "@/components/layout/Section";
 import Card from "@/components/ui/Card";
 import Eyebrow from "@/components/ui/Eyebrow";
-import { siteMetadata } from "@/lib/copy/product";
+import { buildPageMetadata } from "@/lib/seo";
 import {
   getCategoryBySlug,
   getLibraryCategories,
@@ -36,22 +36,13 @@ export async function generateMetadata({
 
   const title = `${category.title} | Quantum software category`;
   const description = category.description;
-  const url = `${siteMetadata.url}/learn/category/${category.slug}`;
 
-  return {
+  return buildPageMetadata({
+    path: `/learn/category/${category.slug}`,
     title,
     description,
-    alternates: {
-      canonical: url,
-    },
-    openGraph: {
-      title,
-      description,
-      url,
-      type: "website",
-      images: ["/opengraph-image"],
-    },
-  };
+    type: "website",
+  });
 }
 
 export default async function LibraryCategoryPage({ params }: CategoryPageProps) {

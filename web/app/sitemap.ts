@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 
+import { blogPosts } from "@/lib/copy/marketing";
 import { libraryTopicTeasers } from "@/lib/copy/library-topics";
 import { siteMetadata } from "@/lib/copy/product";
 import { getLibraryCategories, getLibraryIndex } from "@/lib/library";
@@ -25,9 +26,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/docs/api",
     "/api",
     "/blog",
-    "/blog/quantum-optimization",
-    "/blog/scheduling-use-cases",
-    "/blog/routing-optimization",
+    ...blogPosts.map((post) => post.href),
     "/learn",
     "/learn/library",
     ...libraryCategories.map((category) => `/learn/category/${category.slug}`),
@@ -38,7 +37,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   return routes.map((route) => ({
     url: `${siteMetadata.url}${route}`,
     lastModified: new Date(),
-    changeFrequency: route === "" ? "weekly" : "monthly",
-    priority: route === "" ? 1 : 0.7,
+    changeFrequency:
+      route === "" || route === "/demo/hospital" ? "weekly" : "monthly",
+    priority: route === "" ? 1 : route === "/demo/hospital" ? 0.9 : 0.7,
   }));
 }

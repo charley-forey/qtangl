@@ -8,12 +8,14 @@ import ProbabilityGrid from "@/components/quantum/ProbabilityGrid";
 import Card from "@/components/ui/Card";
 import Eyebrow from "@/components/ui/Eyebrow";
 import { aboutContent } from "@/lib/copy/product";
+import { buildPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildPageMetadata({
+  path: "/about",
   title: "About",
   description:
     "Qtangl builds coherent planning systems for teams deciding under hard constraints.",
-};
+});
 
 export default function AboutPage() {
   return (
