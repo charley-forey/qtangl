@@ -10,6 +10,7 @@ export const nav = [
 export const footerNav = [
   { name: "About", href: "/about" },
   { name: "API", href: "/api" },
+  { name: "Sandbox", href: "/sandbox" },
   { name: "Blog", href: "/blog" },
   { name: "Learn", href: "/learn" },
 ] as const;

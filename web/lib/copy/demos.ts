@@ -8,18 +8,32 @@ export type DemoCatalogEntry = {
   runtime?: string;
   status: DemoStatus;
   href?: string;
+  variant?: "workflow" | "sandbox";
+  badge?: string;
+  endpoint?: string;
 };
 
 export const demosPageCopy = {
   eyebrow: "Demos",
   title: "See Qtangl on real planning problems.",
   description:
-    "Full workflows for buyers. API sandbox for developers. Same ranked-plan output, different depth.",
-  tabs: {
-    catalog: "Demos",
-    sandbox: "API sandbox",
-  },
+    "Full workflows for buyers — nurse call-outs, crew delays, and tight delivery windows. Same ranked-plan output, operationally honest.",
+  catalogHeading: "Industry workflows",
+  sandboxHeading: "For developers",
 } as const;
+
+export const sandboxCatalogEntry: DemoCatalogEntry = {
+  slug: "sandbox",
+  sector: "Developers",
+  title: "API sandbox",
+  oneLiner:
+    "Send a real POST /optimize call, see ranked JSON and a visual plan — same response shape your app receives.",
+  status: "live",
+  href: "/sandbox",
+  variant: "sandbox",
+  badge: "Interactive",
+  endpoint: "POST /optimize",
+};
 
 export const demoCatalog: readonly DemoCatalogEntry[] = [
   {
@@ -31,6 +45,7 @@ export const demoCatalog: readonly DemoCatalogEntry[] = [
     runtime: "4:11",
     status: "live",
     href: "/demo/hospital",
+    variant: "workflow",
   },
   {
     slug: "construction",
@@ -39,6 +54,7 @@ export const demoCatalog: readonly DemoCatalogEntry[] = [
     oneLiner:
       "Resequence trades and inspections when one crew window moves — without rebuilding the job.",
     status: "coming-soon",
+    variant: "workflow",
   },
   {
     slug: "logistics",
@@ -47,5 +63,6 @@ export const demoCatalog: readonly DemoCatalogEntry[] = [
     oneLiner:
       "Re-route stops when a driver drops or customer windows tighten — ranked order, not guesswork.",
     status: "coming-soon",
+    variant: "workflow",
   },
 ] as const;

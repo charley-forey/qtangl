@@ -29,7 +29,7 @@ export const blogClosingCta = {
   title: "Try it on a real planning problem",
   description:
     "Send a sample schedule, route, or staffing job. Inspect the ranked plan before you integrate.",
-  href: "/demo?view=sandbox",
+  href: "/sandbox",
   label: "Open API sandbox",
 } as const;
 

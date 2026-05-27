@@ -1,11 +1,16 @@
 "use client";
 
+import { useMemo } from "react";
+
 import CodeBlock from "@/components/docs/CodeBlock";
+import SandboxPlanPreview from "@/components/marketing/SandboxPlanPreview";
 import Card from "@/components/ui/Card";
 import Eyebrow from "@/components/ui/Eyebrow";
 import MethodBadge from "@/components/visualization/quantum/MethodBadge";
+import { tryScenarios } from "@/lib/demo-data";
 import { qtanglApiBaseUrl } from "@/lib/api";
 import type { OptimizeResponse, SandboxLiveStatus } from "@/lib/optimize";
+import { solutionToPlan } from "@/lib/solutionToPlan";
 import { sandboxPageCopy, tryPlannerCopy } from "@/lib/copy/try";
 
 type SandboxResponseProps = {
@@ -13,6 +18,7 @@ type SandboxResponseProps = {
   status: SandboxLiveStatus;
   error?: string | null;
   isLoading?: boolean;
+  scenarioId?: (typeof tryScenarios)[number]["id"];
 };
 
 function statusLabel(status: SandboxLiveStatus, error?: string | null) {
@@ -38,15 +44,31 @@ export default function SandboxResponse({
   status,
   error = null,
   isLoading = false,
+  scenarioId = "schedule",
 }: SandboxResponseProps) {
   const metrics = response.metrics ? Object.entries(response.metrics) : [];
   const method = response.method === "hybrid" ? "hybrid" : "classical";
+
+  const scenario = useMemo(
+    () => tryScenarios.find((item) => item.id === scenarioId) ?? tryScenarios[0],
+    [scenarioId]
+  );
+
+  const plan = useMemo(
+    () => solutionToPlan(response, scenario),
+    [response, scenario]
+  );
 
   return (
     <Card tone="strong" size="lg" className="min-w-0 rounded-[var(--radius-feature)]">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <Eyebrow>Sandbox response</Eyebrow>
-        <MethodBadge method={method} />
+        <div className="flex flex-wrap items-center gap-2">
+          <MethodBadge method={method} />
+          <span className="text-xs text-[var(--color-gray-500)]">
+            {sandboxPageCopy.methodExplainer}
+          </span>
+        </div>
       </div>
 
       <p className="mt-4 text-sm leading-7 text-[var(--color-gray-400)]" aria-live="polite">
@@ -58,11 +80,25 @@ export default function SandboxResponse({
       ) : null}
 
       {response.summary ? (
-        <p className="mt-6 text-base leading-8 text-[var(--color-gray-200)]">{response.summary}</p>
+        <p
+          className={[
+            "mt-6 text-base leading-8 text-[var(--color-gray-200)]",
+            isLoading ? "animate-pulse opacity-60" : "",
+          ].join(" ")}
+        >
+          {response.summary}
+        </p>
       ) : null}
 
+      {!isLoading ? <SandboxPlanPreview plan={plan} /> : null}
+
       {metrics.length > 0 ? (
-        <dl className="mt-6 grid grid-cols-2 gap-4 border-t border-[var(--border)] pt-6">
+        <dl
+          className={[
+            "mt-6 grid grid-cols-2 gap-4 border-t border-[var(--border)] pt-6",
+            isLoading ? "animate-pulse opacity-60" : "",
+          ].join(" ")}
+        >
           {metrics.map(([key, value]) => (
             <div key={key}>
               <dt className="text-label text-[var(--color-gray-500)]">{formatMetricKey(key)}</dt>

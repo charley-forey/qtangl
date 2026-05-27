@@ -29,7 +29,9 @@ export default function PageHero({
     <Section gap="tight" className="pt-8 sm:pt-10">
       <div className={contentClassName}>
         <Eyebrow>{eyebrow}</Eyebrow>
-        <h1 className="heading-display gradient-text mt-4">{title}</h1>
+        <h1 className="heading-display gradient-text mt-4 overflow-visible pb-[0.1em]">
+          {title}
+        </h1>
         <p className="text-body-lg mt-6 max-w-3xl text-[var(--color-gray-300)]">
           {description}
         </p>

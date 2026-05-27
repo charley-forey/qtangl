@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 
 import CodeBlock from "@/components/docs/CodeBlock";
 import DocsShell from "@/components/docs/DocsShell";
@@ -37,6 +38,12 @@ export default function QuickstartPage() {
             <p>Pilot key: {qtanglSandboxApiKey}</p>
             <p>{docsGuideCopy.quickstart.submit.notes[2]}</p>
           </div>
+          <Link
+            href="/sandbox"
+            className="mt-5 inline-block text-sm font-medium text-white underline-offset-4 hover:underline"
+          >
+            Try it in the API sandbox →
+          </Link>
         </Card>
 
         <CodeBlock title="POST /optimize request" code={docsQuickstartRequest} />

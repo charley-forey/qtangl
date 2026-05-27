@@ -25,7 +25,13 @@ const nextConfig: NextConfig = {
     return [
       {
         source: "/try",
-        destination: "/demo?view=sandbox",
+        destination: "/sandbox",
+        permanent: true,
+      },
+      {
+        source: "/demo",
+        has: [{ type: "query", key: "view", value: "sandbox" }],
+        destination: "/sandbox",
         permanent: true,
       },
     ];
