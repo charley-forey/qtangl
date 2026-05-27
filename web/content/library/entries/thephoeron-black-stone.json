@@ -20,12 +20,15 @@
       "title": "Quantum computing software in 2026: the open-source map"
     }
   ],
-  "primaryLanguage": "Mixed",
+  "primaryLanguage": "Common Lisp",
+  "primaryLanguages": [
+    "Common Lisp"
+  ],
   "license": "MIT",
-  "summary": "Specification and Implementation of Quantum Common Lisp and the Black Stone Quantum Computer simulator, for modelling classical interface gate-model quantum computer programs.",
-  "description": "Specification and Implementation of Quantum Common Lisp and the Black Stone Quantum Computer simulator, for modelling classical interface gate-model quantum computer programs.",
+  "summary": "Specification and Implementation of Quantum Common Lisp, for gate-model quantum computers",
+  "description": "Specification and Implementation of Quantum Common Lisp, for gate-model quantum computers",
   "whatItIs": [
-    "black-stone is an open-source project in the simulators category. It is maintained by thephoeron and primarily looks like a Mixed codebase. Specification and Implementation of Quantum Common Lisp and the Black Stone Quantum Computer simulator, for modelling classical interface gate-model quantum computer programs.",
+    "black-stone is an open-source project in the simulators category. It is maintained by thephoeron and primarily looks like a Common Lisp codebase. Specification and Implementation of Quantum Common Lisp, for gate-model quantum computers",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches simulators workflows in practice. The repository README emphasizes: Specification and Implementation of Quantum Common Lisp and the Black Stone Quantum Computer simulator, for modelling classical interface gate-model quantum computer programs. Note: due to an unfortunate naming conflict with Omer's QCL, a quantum programming language based on the syntax of C, we will generally refer to Quantum..."
   ],
   "whoItsFor": "Developers and researchers who need to test ideas locally before running on hardware or who want to compare simulation strategies.",
@@ -36,21 +39,52 @@
   ],
   "readmeExcerpt": "Specification and Implementation of Quantum Common Lisp and the Black Stone Quantum Computer simulator, for modelling classical interface gate-model quantum computer programs. Note: due to an unfortunate naming conflict with Omer's QCL, a quantum programming language based on the syntax of C, we will generally refer to Quantum Common Lisp as *(qc\u03bb)*, or qclambda in the source.",
   "readmePath": "reference\\thephoeron__black-stone\\README.md",
+  "readmeMarkdownPath": "readmes/thephoeron-black-stone.md",
   "clonePath": "reference\\thephoeron__black-stone",
-  "stars": 0,
-  "lastPushedAt": null,
-  "githubTopics": [],
+  "stars": 70,
+  "lastPushedAt": "2017-02-17T16:14:41Z",
+  "defaultBranch": "master",
+  "githubTopics": [
+    "common-lisp",
+    "gate-model",
+    "quantum-common-lisp",
+    "quantum-computing",
+    "quantum-gates",
+    "quantum-programming-language",
+    "quantum-simulator"
+  ],
+  "quickstart": null,
+  "codeSamples": [],
+  "packageMeta": {},
+  "citationBibtex": null,
+  "supportedBackendSlugs": [],
+  "externalLinks": {
+    "docs": [
+      "http://quickdocs.org/badge/black-stone.svg",
+      "http://quickdocs.org/black-stone/",
+      "http://thephoeron.viewdocs.io/black-stone"
+    ],
+    "community": [
+      "https://gitter.im/thephoeron/black-stone](https://badges.gitter.im/Join%20Chat.svg",
+      "https://gitter.im/thephoeron/black-stone?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge"
+    ]
+  },
+  "openIssuesCount": 4,
+  "subscribersCount": 9,
+  "latestRelease": null,
+  "ownerType": "User",
+  "ownerUrl": "https://github.com/thephoeron",
   "featured": false,
   "flagship": false,
   "qtanglRelevant": false,
   "archived": false,
-  "imagePath": null,
+  "imagePath": "/learn/monogram/thephoeron-black-stone.svg",
   "relatedSlugs": [
+    "qiskit-qiskit-tutorial",
+    "qosf-os-quantum-software",
     "0tt3r-quac",
     "adamisntdead-qusimpy",
     "aniabrown-quest",
-    "bbn-q-pysimulator",
-    "cda-tum-mqt-ddsim",
-    "dillanchang-qocs"
+    "bbn-q-pysimulator"
   ]
 }

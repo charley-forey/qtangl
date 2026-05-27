@@ -4,7 +4,7 @@
   "name": "dwave-system",
   "title": "dwave-system",
   "repoUrl": "https://github.com/dwavesystems/dwave-system",
-  "homepageUrl": null,
+  "homepageUrl": "https://docs.ocean.dwavesys.com/",
   "category": {
     "slug": "annealing-ising",
     "title": "Annealing and Ising",
@@ -21,11 +21,15 @@
     }
   ],
   "primaryLanguage": "Python",
+  "primaryLanguages": [
+    "Python",
+    "JavaScript"
+  ],
   "license": "Apache-2.0",
-  "summary": "image:: https://img.shields.io/pypi/pyversions/dwave-system.svg?style=flat :target: https://pypi.org/project/dwave-system :alt: PyPI - Python Version",
-  "description": ".. image:: https://img.shields.io/pypi/pyversions/dwave-system.svg?style=flat :target: https://pypi.org/project/dwave-system :alt: PyPI - Python Version",
+  "summary": "An API for easily incorporating the D-Wave system as a sampler, either directly or through Leap's cloud-based hybrid samplers",
+  "description": "An API for easily incorporating the D-Wave system as a sampler, either directly or through Leap's cloud-based hybrid samplers",
   "whatItIs": [
-    "dwave-system is an open-source project in the annealing and ising category. It is maintained by dwavesystems and primarily looks like a Python codebase. image:: https://img.shields.io/pypi/pyversions/dwave-system.svg?style=flat :target: https://pypi.org/project/dwave-system :alt: PyPI - Python Version",
+    "dwave-system is an open-source project in the annealing and ising category. It is maintained by dwavesystems and primarily looks like a Python codebase. An API for easily incorporating the D-Wave system as a sampler, either directly or through Leap's cloud-based hybrid samplers",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches annealing and ising workflows in practice. The repository README emphasizes: .. image:: https://img.shields.io/pypi/pyversions/dwave-system.svg?style=flat :target: https://pypi.org/project/dwave-system :alt: PyPI - Python Version `dwave-system is an API for easily incorporating D-Wave quantum computers as a sampler in the Ocean software stack <https://docs.dwavequantum.com/en/latest/ocean/stack.html>_, directly or through the Leap <https://cloud.dwavesys.com/leap/>_ service's cloud-based hybrid solvers. It includes DWaveSampler, a dimod sampler that accepts and..."
   ],
   "whoItsFor": "Developers interested in Ising-model formulations, annealing workflows, and D-Wave-style solver ecosystems.",
@@ -36,15 +40,43 @@
   ],
   "readmeExcerpt": ".. image:: https://img.shields.io/pypi/pyversions/dwave-system.svg?style=flat :target: https://pypi.org/project/dwave-system :alt: PyPI - Python Version `dwave-system is an API for easily incorporating D-Wave quantum computers as a sampler in the Ocean software stack <https://docs.dwavequantum.com/en/latest/ocean/stack.html>_, directly or through the Leap <https://cloud.dwavesys.com/leap/>_ service's cloud-based hybrid solvers. It includes DWaveSampler, a dimod sampler that accepts and passes system parameters such as system identification and authentication down the stack, StrideHybridSolver, for Leap's Stride\u2122 hybrid solver, and others. It also includes several useful composites---layers of pre- and post-processing---that can be used with DWaveSampler` to handle minor-embedding, optimize chain strength, etc.",
   "readmePath": "reference\\dwavesystems__dwave-system\\README.rst",
+  "readmeMarkdownPath": "readmes/dwavesystems-dwave-system.md",
   "clonePath": "reference\\dwavesystems__dwave-system",
-  "stars": 0,
-  "lastPushedAt": null,
-  "githubTopics": [],
+  "stars": 96,
+  "lastPushedAt": "2026-03-04T17:33:37Z",
+  "defaultBranch": "master",
+  "githubTopics": [
+    "quantum-computing"
+  ],
+  "quickstart": null,
+  "codeSamples": [],
+  "packageMeta": {},
+  "citationBibtex": null,
+  "supportedBackendSlugs": [
+    "dwavesystems-dwave-ocean-sdk",
+    "dwavesystems-dimod"
+  ],
+  "externalLinks": {
+    "docs": [
+      "https://docs.dwavequantum.com/en/latest/ocean/stack.html",
+      "https://docs.dwavequantum.com/en/latest/ocean/contribute.html",
+      "https://docs.openstack.org/reno/",
+      "https://docs.openstack.org/reno/latest/user/usage.html"
+    ],
+    "pypi": [
+      "https://pypi.org/project/dwave-system"
+    ]
+  },
+  "openIssuesCount": 84,
+  "subscribersCount": 11,
+  "latestRelease": null,
+  "ownerType": "Organization",
+  "ownerUrl": "https://github.com/dwavesystems",
   "featured": false,
   "flagship": false,
   "qtanglRelevant": false,
   "archived": false,
-  "imagePath": null,
+  "imagePath": "/learn/monogram/dwavesystems-dwave-system.svg",
   "relatedSlugs": [
     "dwavesystems-dwave-ocean-sdk",
     "dwavesystems-dimod",

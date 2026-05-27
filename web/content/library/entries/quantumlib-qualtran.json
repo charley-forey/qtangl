@@ -4,7 +4,7 @@
   "name": "Qualtran",
   "title": "Qualtran",
   "repoUrl": "https://github.com/quantumlib/Qualtran",
-  "homepageUrl": null,
+  "homepageUrl": "https://qualtran.readthedocs.io/en/latest/",
   "category": {
     "slug": "benchmarks-analysis",
     "title": "Benchmarks and analysis",
@@ -17,11 +17,16 @@
     }
   ],
   "primaryLanguage": "Python",
+  "primaryLanguages": [
+    "Python",
+    "Jupyter",
+    "Shell"
+  ],
   "license": "Apache-2.0",
-  "summary": "<div align=\"center\"> <img alt=\"Qualtran logo\" width=\"340px\" src=\"https://raw.githubusercontent.com/quantumlib/Qualtran/refs/heads/main/docs/_static/qualtran-logo-mode-sensitive.svg\"> <br>",
-  "description": "<div align=\"center\"> <img alt=\"Qualtran logo\" width=\"340px\" src=\"https://raw.githubusercontent.com/quantumlib/Qualtran/refs/heads/main/docs/_static/qualtran-logo-mode-sensitive.svg\"> <br>",
+  "summary": "Q\u1d1c\u1d00\u029f\u1d1b\u0280\u1d00\u0274 is a Python library for expressing and analyzing Fault Tolerant Quantum algorithms.",
+  "description": "Q\u1d1c\u1d00\u029f\u1d1b\u0280\u1d00\u0274 is a Python library for expressing and analyzing Fault Tolerant Quantum algorithms.",
   "whatItIs": [
-    "Qualtran is an open-source project in the benchmarks and analysis category. It is maintained by quantumlib and primarily looks like a Python codebase. <div align=\"center\"> <img alt=\"Qualtran logo\" width=\"340px\" src=\"https://raw.githubusercontent.com/quantumlib/Qualtran/refs/heads/main/docs/_static/qualtran-logo-mode-sensitive.svg\"> <br>",
+    "Qualtran is an open-source project in the benchmarks and analysis category. It is maintained by quantumlib and primarily looks like a Python codebase. Q\u1d1c\u1d00\u029f\u1d1b\u0280\u1d00\u0274 is a Python library for expressing and analyzing Fault Tolerant Quantum algorithms.",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches benchmarks and analysis workflows in practice. The repository README emphasizes: <div align=\"center\"> <img alt=\"Qualtran logo\" width=\"340px\" src=\"https://raw.githubusercontent.com/quantumlib/Qualtran/refs/heads/main/docs/_static/qualtran-logo-mode-sensitive.svg\"> <br> Qualtran is a set of abstractions for representing quantum programs and a library of quantum algorithms expressed in that language to support quantum algorithms research."
   ],
   "whoItsFor": "Researchers and evaluators comparing toolchains, algorithms, hardware assumptions, or performance tradeoffs.",
@@ -32,21 +37,108 @@
   ],
   "readmeExcerpt": "<div align=\"center\"> <img alt=\"Qualtran logo\" width=\"340px\" src=\"https://raw.githubusercontent.com/quantumlib/Qualtran/refs/heads/main/docs/_static/qualtran-logo-mode-sensitive.svg\"> <br> Qualtran is a set of abstractions for representing quantum programs and a library of quantum algorithms expressed in that language to support quantum algorithms research.",
   "readmePath": "reference\\quantumlib__Qualtran\\README.md",
+  "readmeMarkdownPath": "readmes/quantumlib-qualtran.md",
   "clonePath": "reference\\quantumlib__Qualtran",
-  "stars": 0,
-  "lastPushedAt": null,
-  "githubTopics": [],
+  "stars": 349,
+  "lastPushedAt": "2026-05-22T21:22:16Z",
+  "defaultBranch": "main",
+  "githubTopics": [
+    "algorithms",
+    "api",
+    "cirq",
+    "conversion",
+    "google",
+    "google-quantum",
+    "python",
+    "python3",
+    "quantum",
+    "quantum-algorithms",
+    "quantum-circuit",
+    "quantum-computing",
+    "quantum-information-science",
+    "quantum-programming",
+    "quantum-programming-language",
+    "quantum-simulation",
+    "research",
+    "resource-estimation",
+    "sdk"
+  ],
+  "quickstart": null,
+  "codeSamples": [
+    {
+      "title": "1-Wiring-Up",
+      "language": "python",
+      "source": "# Quantum program 1\n# This program does nothing\n# \n# Registers:\n#   x: an 8-bit signed quantum integer\n\nfrom qualtran import BloqBuilder\nfrom qualtran import QInt\n\n# Start program construction\nbb = BloqBuilder()\n\n# Add input/output registers named 'x'\nx = bb.add_register('x', QInt(8))\n\ndo_nothing = bb.finalize(x=x)",
+      "path": "tutorials/quantum-programming/1-wiring-up.ipynb"
+    },
+    {
+      "title": "2-Bloqs",
+      "language": "python",
+      "source": "# Quantum program 2\n# Negate a quantum integer\n# \n# Registers:\n#   x: an 8-bit signed quantum integer\n\nfrom qualtran import BloqBuilder\nfrom qualtran import QInt\n\nfrom qualtran.bloqs.arithmetic import BitwiseNot, AddK\n\n# Set up input/output registers named 'x'\nbb = BloqBuilder()\nx = bb.add_register('x', QInt(8))\n\n# Do the sub-operations\nx = bb.add(BitwiseNot(QInt(8)), x=x)\nx = bb.add(AddK(QInt(8), k=1), x=x)\n\n# Finish up\nnegate = bb.finalize(x=x)\n\nimport qualtran.testing as qlt_testing\nqlt_testing.assert_valid_cbloq(negate)",
+      "path": "tutorials/quantum-programming/2-bloqs.ipynb"
+    },
+    {
+      "title": "3-Addressing-Bits",
+      "language": "python",
+      "source": "# Quantum program: QIntSwap\n# This program swaps two 4-bit integers, x <--> y.\n# \n# Registers:\n#   x: an 8-bit quantum integer\n#   y: an 8-bit quantum integer\n\n# Start writing our program.\nfrom qualtran import BloqBuilder\nfrom qualtran import QInt, QBit\nbb = BloqBuilder()\n\n# Add input/output registers named 'x' and 'y'.\nn = 4\nx = bb.add_register('x', QInt(n))\ny = bb.add_register('y', QInt(n))\n\n# Split integers into their individual bits\nxs = bb.split(x)\nys = bb.split(y)\n\nfrom qualtran.bloqs.basic_gates import TwoBitSwap\nfor i in range(n):\n    xs[i], ys[i] = bb.add(TwoBitSwap(), x=xs[i], y=ys[i])\n\n# Join bits back to a quantum integer\nx = bb.join(xs, QInt(n))\ny = bb.join(ys, QInt(n))\n\n# Finish up: map final soquets to output register names.\nswap_routine = bb.finalize(x=x, y=y)",
+      "path": "tutorials/quantum-programming/3-addressing-bits.ipynb"
+    }
+  ],
+  "packageMeta": {
+    "name": "qualtran",
+    "version": "py311",
+    "requiresPython": ">=3.11",
+    "dependencies": [
+      "attrs",
+      "cachetools",
+      "typing_extensions",
+      "networkx",
+      "numpy",
+      "sympy",
+      "cirq-core",
+      "fxpmath",
+      "galois",
+      "notebook",
+      "nbconvert",
+      "nbformat"
+    ]
+  },
+  "citationBibtex": "@software{qualtran,\n  title = {Qualtran},\n  author = {Unknown},\n  year = {2025},\n}\n",
+  "supportedBackendSlugs": [
+    "quantumlib-cirq",
+    "xanaduai-pennylane",
+    "quantumlib-openfermion"
+  ],
+  "externalLinks": {
+    "docs": [
+      "https://qualtran.readthedocs.io/en/latest/_infra/Bloqs-Tutorial.html",
+      "https://qualtran.readthedocs.io/en/latest/bloqs/index.html#bloqs-library",
+      "https://qualtran.readthedocs.io/",
+      "https://docs.github.com/github/managing-subscriptions-and-notifications-on-github/configuring-notifications"
+    ],
+    "paper": [
+      "https://arxiv.org/abs/2409.04643}"
+    ],
+    "pypi": [
+      "https://pypi.org/project/qualtran"
+    ]
+  },
+  "openIssuesCount": 266,
+  "subscribersCount": 23,
+  "latestRelease": null,
+  "ownerType": "Organization",
+  "ownerUrl": "https://github.com/quantumlib",
   "featured": false,
   "flagship": false,
   "qtanglRelevant": false,
   "archived": false,
-  "imagePath": null,
+  "imagePath": "/learn/monogram/quantumlib-qualtran.svg",
   "relatedSlugs": [
-    "bbn-q-qgl-jl",
+    "microsoft-quantumkatas",
+    "qiskit-qiskit",
+    "quantumlib-cirq",
+    "xanaduai-pennylane",
     "bbn-q-qsimulator-jl",
-    "cda-tum-mqt-bench",
-    "aws-amazon-braket-sdk-python",
-    "cqcl-tket",
-    "dwavesystems-dwave-ocean-sdk"
+    "cda-tum-mqt-bench"
   ]
 }

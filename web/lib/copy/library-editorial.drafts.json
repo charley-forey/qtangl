@@ -1,0 +1,2098 @@
+{
+  "0tt3r-quac": {
+    "summary": "QuaC (Quantum in C) is a parallel time dependent open quantum systems solver, written by Matthew Otten (mjotten@wisc.edu).",
+    "description": "QuaC (Quantum in C) is a parallel time dependent open quantum systems solver, written by Matthew Otten (mjotten@wisc.edu). QuaC utilizes PETSc (www.mcs.anl.gov/petsc) for parallelization and linear algebra and features are still regularly being added.",
+    "whatItIs": [
+      "QuaC is maintained by 0tt3r and sits in the Simulators lane of the open-source quantum map.",
+      "QuaC (Quantum in C) is a parallel time dependent open quantum systems solver, written by Matthew Otten (mjotten@wisc.edu)."
+    ],
+    "whoItsFor": "Developers and researchers who need to test ideas locally before running on hardware or who want to compare simulation strategies.",
+    "whatYouCanBuild": [
+      "Benchmark how different simulation methods trade accuracy for runtime.",
+      "Inspect circuit behavior, noise assumptions, or state evolution offline.",
+      "Choose the right simulator for a debugging, teaching, or research workflow."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "adamisntdead-qusimpy": {
+    "summary": "Qusim.py is a toy multi-qubit quantum computer simulator, written in 150 lines of python",
+    "description": "Qusim.py is a toy multi-qubit quantum computer simulator, written in 150 lines of python",
+    "whatItIs": [
+      "QuSimPy is maintained by adamisntdead and sits in the Simulators lane of the open-source quantum map.",
+      "Qusim.py is a toy multi-qubit quantum computer simulator, written in 150 lines of python"
+    ],
+    "whoItsFor": "Developers and researchers who need to test ideas locally before running on hardware or who want to compare simulation strategies.",
+    "whatYouCanBuild": [
+      "Benchmark how different simulation methods trade accuracy for runtime.",
+      "Inspect circuit behavior, noise assumptions, or state evolution offline.",
+      "Choose the right simulator for a debugging, teaching, or research workflow."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "aniabrown-quest": {
+    "summary": "Because this file doubles as the doxygen mainpage, it must use absolute paths.",
+    "description": "Because this file doubles as the doxygen mainpage, it must use absolute paths.",
+    "whatItIs": [
+      "QuEST is maintained by aniabrown and sits in the Simulators lane of the open-source quantum map.",
+      "Because this file doubles as the doxygen mainpage, it must use absolute paths."
+    ],
+    "whoItsFor": "Developers and researchers who need to test ideas locally before running on hardware or who want to compare simulation strategies.",
+    "whatYouCanBuild": [
+      "Benchmark how different simulation methods trade accuracy for runtime.",
+      "Inspect circuit behavior, noise assumptions, or state evolution offline.",
+      "Choose the right simulator for a debugging, teaching, or research workflow."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "arlineq-arline-benchmarks": {
+    "summary": "**Arline Benchmarks** platform allows to benchmark various algorithms for quantum circuit mapping/compression against each other on a list of predefined hardware types and target circuit classes.",
+    "description": "**Arline Benchmarks** platform allows to benchmark various algorithms for quantum circuit mapping/compression against each other on a list of predefined hardware types and target circuit classes.",
+    "whatItIs": [
+      "arline_benchmarks is maintained by ArlineQ and sits in the General-purpose SDKs lane of the open-source quantum map.",
+      "**Arline Benchmarks** platform allows to benchmark various algorithms for quantum circuit mapping/compression against each other on a list of predefined hardware types and target circuit classes. It commonly appears alongside quantumlib-cirq, quantomatic-pyzx, qiskit-qiskit in example workflows."
+    ],
+    "whoItsFor": "Developers who want a broad entry point for building circuits, experimenting with algorithms, and integrating quantum workflows into larger applications.",
+    "whatYouCanBuild": [
+      "Prototype end-to-end circuit workflows without committing to a niche backend too early.",
+      "Learn how the project represents circuits, gates, jobs, and results.",
+      "Compare how a major ecosystem frames practical quantum development."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "arlineq-arline-quantum": {
+    "summary": "**Arline Quantum** is an open-source library providing basic functionality for creating and manipulating quantum circuits.",
+    "description": "**Arline Quantum** is an open-source library providing basic functionality for creating and manipulating quantum circuits. It also contains a list of mock quantum hardware.",
+    "whatItIs": [
+      "arline_quantum is maintained by ArlineQ and sits in the General-purpose SDKs lane of the open-source quantum map.",
+      "**Arline Quantum** is an open-source library providing basic functionality for creating and manipulating quantum circuits. It commonly appears alongside qiskit-qiskit, quantumlib-cirq, quantomatic-pyzx in example workflows."
+    ],
+    "whoItsFor": "Developers who want a broad entry point for building circuits, experimenting with algorithms, and integrating quantum workflows into larger applications.",
+    "whatYouCanBuild": [
+      "Prototype end-to-end circuit workflows without committing to a niche backend too early.",
+      "Learn how the project represents circuits, gates, jobs, and results.",
+      "Compare how a major ecosystem frames practical quantum development."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "artiste-qb-net-quantum-edward": {
+    "summary": "You can install Quantum Edward from the Python package manager pip using: If you are useing JupyterNotebook, use: and restart the kernel.",
+    "description": "You can install Quantum Edward from the Python package manager pip using: If you are useing JupyterNotebook, use: and restart the kernel.",
+    "whatItIs": [
+      "Quantum_Edward is maintained by artiste-qb-net and sits in the Quantum machine learning lane of the open-source quantum map.",
+      "You can install Quantum Edward from the Python package manager pip using: If you are useing JupyterNotebook, use: and restart the kernel."
+    ],
+    "whoItsFor": "Researchers and practitioners experimenting with quantum machine learning, variational models, and differentiable circuit stacks.",
+    "whatYouCanBuild": [
+      "Learn how the project connects model training ideas to quantum primitives.",
+      "Inspect the assumptions behind differentiable or ML-oriented workflows.",
+      "Compare how serious or experimental the ML story really is."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "artiste-qb-net-quantum-fog": {
+    "summary": "Quantum Fog at GitHub What is Quantum Fog?",
+    "description": "Quantum Fog at GitHub What is Quantum Fog?",
+    "whatItIs": [
+      "quantum-fog is maintained by artiste-qb-net and sits in the Visualization and tomography lane of the open-source quantum map.",
+      "Quantum Fog at GitHub What is Quantum Fog?"
+    ],
+    "whoItsFor": "People who learn best by seeing state structure, measurement results, or circuit behavior laid out visually.",
+    "whatYouCanBuild": [
+      "Understand how the project helps inspect or reconstruct quantum systems.",
+      "Compare visual tooling against more code-heavy workflows.",
+      "Use the resource as a bridge between theory, experiments, and debugging."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "artiste-qb-net-qubiter": {
+    "summary": "The following Jupyter notebook is a good introduction to Qubiter's basic features.",
+    "description": "The following Jupyter notebook is a good introduction to Qubiter's basic features. Other notebooks in Qubiter's jupyter_notebook folder discuss more advanced features:",
+    "whatItIs": [
+      "qubiter is maintained by artiste-qb-net and sits in the General-purpose SDKs lane of the open-source quantum map.",
+      "The following Jupyter notebook is a good introduction to Qubiter's basic features. It commonly appears alongside quantumlib-openfermion, quantumlib-cirq, qiskit-qiskit in example workflows."
+    ],
+    "whoItsFor": "Developers who want a broad entry point for building circuits, experimenting with algorithms, and integrating quantum workflows into larger applications.",
+    "whatYouCanBuild": [
+      "Prototype end-to-end circuit workflows without committing to a niche backend too early.",
+      "Learn how the project represents circuits, gates, jobs, and results.",
+      "Compare how a major ecosystem frames practical quantum development."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "avalon-lang-avaloni": {
+    "summary": "Quantum computing is progressing slowly but surely.",
+    "description": "Quantum computing is progressing slowly but surely. And as it progresses, tools are going to be needed to program quantum computers.",
+    "whatItIs": [
+      "avaloni is maintained by avalon-lang and sits in the Compilers and languages lane of the open-source quantum map.",
+      "Quantum computing is progressing slowly but surely."
+    ],
+    "whoItsFor": "Developers who want to understand the representations and compilers that sit between high-level code and runnable circuits.",
+    "whatYouCanBuild": [
+      "Compare IRs, DSLs, transpilers, and compiler assumptions across ecosystems.",
+      "Understand how high-level code becomes something a backend can execute.",
+      "Spot tools that matter when interoperability and compilation quality are important."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "aviggiano-qcl": {
+    "summary": "QCL is one of the first implemented quantum programming languages",
+    "description": "QCL is one of the first implemented quantum programming languages",
+    "whatItIs": [
+      "qcl is maintained by aviggiano and sits in the Compilers and languages lane of the open-source quantum map.",
+      "QCL is one of the first implemented quantum programming languages"
+    ],
+    "whoItsFor": "Developers who want to understand the representations and compilers that sit between high-level code and runnable circuits.",
+    "whatYouCanBuild": [
+      "Compare IRs, DSLs, transpilers, and compiler assumptions across ecosystems.",
+      "Understand how high-level code becomes something a backend can execute.",
+      "Spot tools that matter when interoperability and compilation quality are important."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "bbn-q-adapt": {
+    "summary": "Adapt is a package for more efficiently sampling parameter space by paying attention to the information content in observed data.",
+    "description": "Adapt is a package for more efficiently sampling parameter space by paying attention to the information content in observed data. Please check out example.ipynb, example-1D.py, and example-2D.py for a usage information.",
+    "whatItIs": [
+      "Adapt is maintained by BBN-Q and sits in the General-purpose SDKs lane of the open-source quantum map.",
+      "Adapt is a package for more efficiently sampling parameter space by paying attention to the information content in observed data."
+    ],
+    "whoItsFor": "Developers who want a broad entry point for building circuits, experimenting with algorithms, and integrating quantum workflows into larger applications.",
+    "whatYouCanBuild": [
+      "Prototype end-to-end circuit workflows without committing to a niche backend too early.",
+      "Learn how the project represents circuits, gates, jobs, and results.",
+      "Compare how a major ecosystem frames practical quantum development."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "bbn-q-cliffords-jl": {
+    "summary": "This library allows for efficient calculation of Clifford circuits by tracking the evolution of X and Z generators (the so-called **tableau** representation).",
+    "description": "This library allows for efficient calculation of Clifford circuits by tracking the evolution of X and Z generators (the so-called **tableau** representation). No special effort has been made to strictly minimize the number of bits needed to store each Clifford. Rather, the goal was clarity. One unique feature compared to other such utilities is that we also efficiently track the...",
+    "whatItIs": [
+      "Cliffords.jl is maintained by BBN-Q and sits in the General-purpose SDKs lane of the open-source quantum map.",
+      "This library allows for efficient calculation of Clifford circuits by tracking the evolution of X and Z generators (the so-called **tableau** representation)."
+    ],
+    "whoItsFor": "Developers who want a broad entry point for building circuits, experimenting with algorithms, and integrating quantum workflows into larger applications.",
+    "whatYouCanBuild": [
+      "Prototype end-to-end circuit workflows without committing to a niche backend too early.",
+      "Learn how the project represents circuits, gates, jobs, and results.",
+      "Compare how a major ecosystem frames practical quantum development."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "bbn-q-pyqgl2": {
+    "summary": "This is the QGL2 language compiler.",
+    "description": "This is the QGL2 language compiler. QGL2 is a python-like language for programming quantum computers. It is a \"low-level language\" in the sense that programs directly specify gates at the physical layer, but with many of the niceties of a high-level programming language provided by the python host language.",
+    "whatItIs": [
+      "pyqgl2 is maintained by BBN-Q and sits in the Pulse and control lane of the open-source quantum map.",
+      "This is the QGL2 language compiler."
+    ],
+    "whoItsFor": "Hardware-adjacent developers and researchers working closer to experiments, pulse schedules, or lab orchestration.",
+    "whatYouCanBuild": [
+      "See how low-level control stacks differ from higher-level SDKs.",
+      "Understand where pulse sequencing and experiment orchestration fit in the stack.",
+      "Learn which projects matter when hardware control is part of the workflow."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "bbn-q-pyqlab": {
+    "summary": "This is a python package for managing instruments and control parameters for superconducting qubit systems.",
+    "description": "This is a python package for managing instruments and control parameters for superconducting qubit systems. It complements the Qlab repository by providing simple GUIs for creating the JSON settings structures used by Qlab.",
+    "whatItIs": [
+      "PyQLab is maintained by BBN-Q and sits in the Pulse and control lane of the open-source quantum map.",
+      "This is a python package for managing instruments and control parameters for superconducting qubit systems."
+    ],
+    "whoItsFor": "Hardware-adjacent developers and researchers working closer to experiments, pulse schedules, or lab orchestration.",
+    "whatYouCanBuild": [
+      "See how low-level control stacks differ from higher-level SDKs.",
+      "Understand where pulse sequencing and experiment orchestration fit in the stack.",
+      "Learn which projects matter when hardware control is part of the workflow."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "bbn-q-pysimulator": {
+    "summary": "A python framework for qubit simulations and optimal control.",
+    "description": "A python framework for qubit simulations and optimal control. This code provides classes to assist in setting up Hamiltonians for multi-qubit superconducting qubit simulations. After setting up the system there is both a pure python and a C++ implementation of an open and closed system simulator and an optimal control module based on the GRAPE algorithm. The C++ backend relies...",
+    "whatItIs": [
+      "PySimulator is maintained by BBN-Q and sits in the Simulators lane of the open-source quantum map.",
+      "A python framework for qubit simulations and optimal control."
+    ],
+    "whoItsFor": "Developers and researchers who need to test ideas locally before running on hardware or who want to compare simulation strategies.",
+    "whatYouCanBuild": [
+      "Benchmark how different simulation methods trade accuracy for runtime.",
+      "Inspect circuit behavior, noise assumptions, or state evolution offline.",
+      "Choose the right simulator for a debugging, teaching, or research workflow."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "bbn-q-qgl-jl": {
+    "summary": "The package is not yet registered with METADATA.jl and so must be cloned with",
+    "description": "The package is not yet registered with METADATA.jl and so must be cloned with",
+    "whatItIs": [
+      "QGL.jl is maintained by BBN-Q and sits in the Benchmarks and analysis lane of the open-source quantum map.",
+      "The package is not yet registered with METADATA.jl and so must be cloned with"
+    ],
+    "whoItsFor": "Researchers and evaluators comparing toolchains, algorithms, hardware assumptions, or performance tradeoffs.",
+    "whatYouCanBuild": [
+      "Learn what this project measures and why it matters.",
+      "Compare benchmarking assumptions instead of taking headline claims at face value.",
+      "Use the resource to evaluate ecosystems more critically."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "bbn-q-qgl": {
+    "summary": "Quantum Gate Language (QGL) is a domain specific language embedded in python for specifying pulse sequences.",
+    "description": "Quantum Gate Language (QGL) is a domain specific language embedded in python for specifying pulse sequences.",
+    "whatItIs": [
+      "QGL is maintained by BBN-Q and sits in the Pulse and control lane of the open-source quantum map.",
+      "Quantum Gate Language (QGL) is a domain specific language embedded in python for specifying pulse sequences."
+    ],
+    "whoItsFor": "Hardware-adjacent developers and researchers working closer to experiments, pulse schedules, or lab orchestration.",
+    "whatYouCanBuild": [
+      "See how low-level control stacks differ from higher-level SDKs.",
+      "Understand where pulse sequencing and experiment orchestration fit in the stack.",
+      "Learn which projects matter when hardware control is part of the workflow."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "bbn-q-qlab-jl": {
+    "summary": "Data manipulation and analysis tools tailored for quantum computing experiments in conjunction with Auspex.",
+    "description": "Data manipulation and analysis tools tailored for quantum computing experiments in conjunction with Auspex. Currently working with Julia v1.0.",
+    "whatItIs": [
+      "Qlab.jl is maintained by BBN-Q and sits in the Pulse and control lane of the open-source quantum map.",
+      "Data manipulation and analysis tools tailored for quantum computing experiments in conjunction with Auspex."
+    ],
+    "whoItsFor": "Hardware-adjacent developers and researchers working closer to experiments, pulse schedules, or lab orchestration.",
+    "whatYouCanBuild": [
+      "See how low-level control stacks differ from higher-level SDKs.",
+      "Understand where pulse sequencing and experiment orchestration fit in the stack.",
+      "Learn which projects matter when hardware control is part of the workflow."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "bbn-q-qlab": {
+    "summary": "To get started, simply download and unzip the latest release.",
+    "description": "To get started, simply download and unzip the latest release. Or, if you want the tip of the development repository, clone a local copy with",
+    "whatItIs": [
+      "Qlab is maintained by BBN-Q and sits in the Pulse and control lane of the open-source quantum map.",
+      "To get started, simply download and unzip the latest release."
+    ],
+    "whoItsFor": "Hardware-adjacent developers and researchers working closer to experiments, pulse schedules, or lab orchestration.",
+    "whatYouCanBuild": [
+      "See how low-level control stacks differ from higher-level SDKs.",
+      "Understand where pulse sequencing and experiment orchestration fit in the stack.",
+      "Learn which projects matter when hardware control is part of the workflow."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "bbn-q-qsimulator-jl": {
+    "summary": "Package for simulating time dynamics of quantum systems with a focus on superconducting qubits.",
+    "description": "Package for simulating time dynamics of quantum systems with a focus on superconducting qubits.",
+    "whatItIs": [
+      "QSimulator.jl is maintained by BBN-Q and sits in the Benchmarks and analysis lane of the open-source quantum map.",
+      "Package for simulating time dynamics of quantum systems with a focus on superconducting qubits."
+    ],
+    "whoItsFor": "Researchers and evaluators comparing toolchains, algorithms, hardware assumptions, or performance tradeoffs.",
+    "whatYouCanBuild": [
+      "Learn what this project measures and why it matters.",
+      "Compare benchmarking assumptions instead of taking headline claims at face value.",
+      "Use the resource to evaluate ecosystems more critically."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "bbn-q-quantuminfo-jl": {
+    "summary": "This Julia package contains functions that are convenient for common calculation in quantum information processing.",
+    "description": "This Julia package contains functions that are convenient for common calculation in quantum information processing.",
+    "whatItIs": [
+      "QuantumInfo.jl is maintained by BBN-Q and sits in the Visualization and tomography lane of the open-source quantum map.",
+      "This Julia package contains functions that are convenient for common calculation in quantum information processing."
+    ],
+    "whoItsFor": "People who learn best by seeing state structure, measurement results, or circuit behavior laid out visually.",
+    "whatYouCanBuild": [
+      "Understand how the project helps inspect or reconstruct quantum systems.",
+      "Compare visual tooling against more code-heavy workflows.",
+      "Use the resource as a bridge between theory, experiments, and debugging."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "bbn-q-quantumtomography-jl": {
+    "summary": "This is a package that provides basic routines to perform quantum tomography of finite dimensional systems.",
+    "description": "This is a package that provides basic routines to perform quantum tomography of finite dimensional systems.",
+    "whatItIs": [
+      "QuantumTomography.jl is maintained by BBN-Q and sits in the Visualization and tomography lane of the open-source quantum map.",
+      "This is a package that provides basic routines to perform quantum tomography of finite dimensional systems."
+    ],
+    "whoItsFor": "People who learn best by seeing state structure, measurement results, or circuit behavior laid out visually.",
+    "whatYouCanBuild": [
+      "Understand how the project helps inspect or reconstruct quantum systems.",
+      "Compare visual tooling against more code-heavy workflows.",
+      "Use the resource as a bridge between theory, experiments, and debugging."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "bbn-q-quince": {
+    "summary": "This project is intended as an alternative means of defining the topology of an experiment, and will augment certain functionality of PyQLab's ExpSettingsGUI.",
+    "description": "This project is intended as an alternative means of defining the topology of an experiment, and will augment certain functionality of PyQLab's ExpSettingsGUI. Currently envisioned use cases:",
+    "whatItIs": [
+      "Quince is maintained by BBN-Q and sits in the Visualization and tomography lane of the open-source quantum map.",
+      "This project is intended as an alternative means of defining the topology of an experiment, and will augment certain functionality of PyQLab's ExpSettingsGUI."
+    ],
+    "whoItsFor": "People who learn best by seeing state structure, measurement results, or circuit behavior laid out visually.",
+    "whatYouCanBuild": [
+      "Understand how the project helps inspect or reconstruct quantum systems.",
+      "Compare visual tooling against more code-heavy workflows.",
+      "Use the resource as a bridge between theory, experiments, and debugging."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "bbn-q-randomquantum-jl": {
+    "summary": "This Julia package provides functions to sample from various random matrix ensebles associated with quantum information applications.",
+    "description": "This Julia package provides functions to sample from various random matrix ensebles associated with quantum information applications.",
+    "whatItIs": [
+      "RandomQuantum.jl is maintained by BBN-Q and sits in the General-purpose SDKs lane of the open-source quantum map.",
+      "This Julia package provides functions to sample from various random matrix ensebles associated with quantum information applications."
+    ],
+    "whoItsFor": "Developers who want a broad entry point for building circuits, experimenting with algorithms, and integrating quantum workflows into larger applications.",
+    "whatYouCanBuild": [
+      "Prototype end-to-end circuit workflows without committing to a niche backend too early.",
+      "Learn how the project represents circuits, gates, jobs, and results.",
+      "Compare how a major ecosystem frames practical quantum development."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "cda-tum-mqt-bench": {
+    "summary": "<p align=\"center\"> <a href=\"https://mqt.readthedocs.io\"> <picture> <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://raw.githubusercontent.com/munich-quantum-toolkit/.github/refs/heads/main/docs/_static/logo-mqt-dark.svg\" width=\"60%\"> <img src=\"https://raw.githubusercontent.com/munich-quantum-toolkit/.github/refs/heads/main/docs/_static/logo-mqt-light.svg\" width=\"60%\" alt=\"MQT Logo\"> </picture> </a> </p>",
+    "description": "<p align=\"center\"> <a href=\"https://mqt.readthedocs.io\"> <picture> <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://raw.githubusercontent.com/munich-quantum-toolkit/.github/refs/heads/main/docs/_static/logo-mqt-dark.svg\" width=\"60%\"> <img src=\"https://raw.githubusercontent.com/munich-quantum-toolkit/.github/refs/heads/main/docs/_static/logo-mqt-light.svg\" width=\"60%\" alt=\"MQT Logo\"> </picture> </a> </p>",
+    "whatItIs": [
+      "mqt-bench is maintained by cda-tum and sits in the Benchmarks and analysis lane of the open-source quantum map.",
+      "<p align=\"center\"> <a href=\"https://mqt.readthedocs.io\"> <picture> <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://raw.githubusercontent.com/munich-quantum-toolkit/.github/refs/heads/main/docs/_static/logo-mqt-dark.svg\" width=\"60%\"> <img src=\"https://raw.githubusercontent.com/munich-quantum-toolkit/.github/refs/heads/main/docs/_static/logo-mqt-light.svg\" width=\"60%\" alt=\"MQT Logo\"> </picture> </a> </p> It commonly appears alongside qiskit-qiskit in example workflows."
+    ],
+    "whoItsFor": "Researchers and evaluators comparing toolchains, algorithms, hardware assumptions, or performance tradeoffs.",
+    "whatYouCanBuild": [
+      "Learn what this project measures and why it matters.",
+      "Compare benchmarking assumptions instead of taking headline claims at face value.",
+      "Use the resource to evaluate ecosystems more critically."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "cda-tum-mqt-dasqa": {
+    "summary": "<p align=\"center\"> <a href=\"https://mqt.readthedocs.io\"> <picture> <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://raw.githubusercontent.com/cda-tum/mqt/main/docs/_static/mqt_light.png\" width=\"60%\"> <img src=\"https://raw.githubusercontent.com/cda-tum/mqt/main/docs/_static/mqt_dark.png\" width=\"60%\" alt=\"MQT Logo\"> </picture> </a> </p>",
+    "description": "<p align=\"center\"> <a href=\"https://mqt.readthedocs.io\"> <picture> <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://raw.githubusercontent.com/cda-tum/mqt/main/docs/_static/mqt_light.png\" width=\"60%\"> <img src=\"https://raw.githubusercontent.com/cda-tum/mqt/main/docs/_static/mqt_dark.png\" width=\"60%\" alt=\"MQT Logo\"> </picture> </a> </p>",
+    "whatItIs": [
+      "mqt-dasqa is maintained by cda-tum and sits in the Quantum chemistry lane of the open-source quantum map.",
+      "<p align=\"center\"> <a href=\"https://mqt.readthedocs.io\"> <picture> <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://raw.githubusercontent.com/cda-tum/mqt/main/docs/_static/mqt_light.png\" width=\"60%\"> <img src=\"https://raw.githubusercontent.com/cda-tum/mqt/main/docs/_static/mqt_dark.png\" width=\"60%\" alt=\"MQT Logo\"> </picture> </a> </p> It commonly appears alongside qiskit-qiskit in example workflows."
+    ],
+    "whoItsFor": "Researchers, students, and developers exploring how quantum software is used for chemistry and electronic-structure problems.",
+    "whatYouCanBuild": [
+      "See how chemistry problems are mapped into quantum-friendly representations.",
+      "Understand the workflow around Hamiltonians, ansatze, and measurement loops.",
+      "Compare beginner-friendly entry points into chemistry-focused quantum tooling."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "cda-tum-mqt-ddsim": {
+    "summary": "<p align=\"center\"> <a href=\"https://mqt.readthedocs.io\"> <picture> <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://raw.githubusercontent.com/munich-quantum-toolkit/.github/refs/heads/main/docs/_static/mqt-banner-dark.svg\" width=\"90%\"> <img src=\"https://raw.githubusercontent.com/munich-quantum-toolkit/.github/refs/heads/main/docs/_static/mqt-banner-light.svg\" width=\"90%\" alt=\"MQT Banner\"> </picture> </a> </p>",
+    "description": "<p align=\"center\"> <a href=\"https://mqt.readthedocs.io\"> <picture> <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://raw.githubusercontent.com/munich-quantum-toolkit/.github/refs/heads/main/docs/_static/mqt-banner-dark.svg\" width=\"90%\"> <img src=\"https://raw.githubusercontent.com/munich-quantum-toolkit/.github/refs/heads/main/docs/_static/mqt-banner-light.svg\" width=\"90%\" alt=\"MQT Banner\"> </picture> </a> </p>",
+    "whatItIs": [
+      "mqt-ddsim is maintained by cda-tum and sits in the Simulators lane of the open-source quantum map.",
+      "<p align=\"center\"> <a href=\"https://mqt.readthedocs.io\"> <picture> <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://raw.githubusercontent.com/munich-quantum-toolkit/.github/refs/heads/main/docs/_static/mqt-banner-dark.svg\" width=\"90%\"> <img src=\"https://raw.githubusercontent.com/munich-quantum-toolkit/.github/refs/heads/main/docs/_static/mqt-banner-light.svg\" width=\"90%\" alt=\"MQT Banner\"> </picture> </a> </p> It commonly appears alongside qiskit-qiskit in example workflows."
+    ],
+    "whoItsFor": "Developers and researchers who need to test ideas locally before running on hardware or who want to compare simulation strategies.",
+    "whatYouCanBuild": [
+      "Benchmark how different simulation methods trade accuracy for runtime.",
+      "Inspect circuit behavior, noise assumptions, or state evolution offline.",
+      "Choose the right simulator for a debugging, teaching, or research workflow."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "cda-tum-mqt-qudits": {
+    "summary": "> [!NOTE] > This project is currently in low maintenance mode.",
+    "description": "> [!NOTE] > This project is currently in low maintenance mode. > We will still fix bugs and accept pull requests, but we will not actively develop new features.",
+    "whatItIs": [
+      "mqt-qudits is maintained by cda-tum and sits in the General-purpose SDKs lane of the open-source quantum map.",
+      "> [!NOTE] > This project is currently in low maintenance mode."
+    ],
+    "whoItsFor": "Developers who want a broad entry point for building circuits, experimenting with algorithms, and integrating quantum workflows into larger applications.",
+    "whatYouCanBuild": [
+      "Prototype end-to-end circuit workflows without committing to a niche backend too early.",
+      "Learn how the project represents circuits, gates, jobs, and results.",
+      "Compare how a major ecosystem frames practical quantum development."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "corbett-quantumcomputing": {
+    "summary": "Quintuple This is an implementation of IBM's Quantum Experience in simulation; a 5-qubit quantum computer with a limited set of gates \"the world\u2019s first quantum computing platform delivered via the IBM Cloud\".",
+    "description": "Quintuple This is an implementation of IBM's Quantum Experience in simulation; a 5-qubit quantum computer with a limited set of gates \"the world\u2019s first quantum computing platform delivered via the IBM Cloud\". Their implementation is available at http://www.research.ibm.com/quantum/.",
+    "whatItIs": [
+      "QuantumComputing is maintained by corbett and sits in the General-purpose SDKs lane of the open-source quantum map.",
+      "Quintuple This is an implementation of IBM's Quantum Experience in simulation; a 5-qubit quantum computer with a limited set of gates \"the world\u2019s first quantum computing platform delivered via the IBM Cloud\"."
+    ],
+    "whoItsFor": "Developers who want a broad entry point for building circuits, experimenting with algorithms, and integrating quantum workflows into larger applications.",
+    "whatYouCanBuild": [
+      "Prototype end-to-end circuit workflows without committing to a niche backend too early.",
+      "Learn how the project represents circuits, gates, jobs, and results.",
+      "Compare how a major ecosystem frames practical quantum development."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "dabacon-qsel": {
+    "summary": "What makes quantum computers more powerful than classical computers?",
+    "description": "What makes quantum computers more powerful than classical computers? Ask any expert, or watch any public lecture on the subject and the answer is clear. **Entanglement** and **Superposition** are what give quantum computers their power over classical computers. If these two ideas are at the heart of the power of quantum computing, it therefore makes sense that any programing language...",
+    "whatItIs": [
+      "qsel is maintained by dabacon and sits in the Compilers and languages lane of the open-source quantum map.",
+      "What makes quantum computers more powerful than classical computers?"
+    ],
+    "whoItsFor": "Developers who want to understand the representations and compilers that sit between high-level code and runnable circuits.",
+    "whatYouCanBuild": [
+      "Compare IRs, DSLs, transpilers, and compiler assumptions across ecosystems.",
+      "Understand how high-level code becomes something a backend can execute.",
+      "Spot tools that matter when interoperability and compilation quality are important."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "decodoku-a-game-to-benchmark-quantum-computers": {
+    "summary": "Quantum Awesomeness A Game to Benchmark Quantum Computers",
+    "description": "Quantum Awesomeness A Game to Benchmark Quantum Computers",
+    "whatItIs": [
+      "A_Game_to_Benchmark_Quantum_Computers is maintained by decodoku and sits in the Games and learning lane of the open-source quantum map.",
+      "Quantum Awesomeness A Game to Benchmark Quantum Computers It commonly appears alongside qiskit-qiskit, projectq-framework-projectq, quantumlib-cirq in example workflows."
+    ],
+    "whoItsFor": "Beginners, educators, and curious developers who want a more approachable path into quantum concepts.",
+    "whatYouCanBuild": [
+      "Get a gentler introduction before diving into full SDKs.",
+      "See how different projects teach circuits, superposition, and measurement.",
+      "Identify resources that work well for onboarding or self-study."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "decodoku-battleships-with-complementary-measurements": {
+    "summary": "Battleships with complementary measurements A game for a quantum computer.",
+    "description": "Battleships with complementary measurements A game for a quantum computer. More info here.",
+    "whatItIs": [
+      "Battleships_with_complementary_measurements is maintained by decodoku and sits in the Games and learning lane of the open-source quantum map.",
+      "Battleships with complementary measurements A game for a quantum computer."
+    ],
+    "whoItsFor": "Beginners, educators, and curious developers who want a more approachable path into quantum concepts.",
+    "whatYouCanBuild": [
+      "Get a gentler introduction before diving into full SDKs.",
+      "See how different projects teach circuits, superposition, and measurement.",
+      "Identify resources that work well for onboarding or self-study."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "desireevl-quantum-catsweeper": {
+    "summary": "This is a super simple game loosely based on Minesweeper Flags and runs on the IBM Quantum computer or simulator.",
+    "description": "This is a super simple game loosely based on Minesweeper Flags and runs on the IBM Quantum computer or simulator.",
+    "whatItIs": [
+      "quantum-catsweeper is maintained by desireevl and sits in the Games and learning lane of the open-source quantum map.",
+      "This is a super simple game loosely based on Minesweeper Flags and runs on the IBM Quantum computer or simulator. It commonly appears alongside qiskit-qiskit in example workflows."
+    ],
+    "whoItsFor": "Beginners, educators, and curious developers who want a more approachable path into quantum concepts.",
+    "whatYouCanBuild": [
+      "Get a gentler introduction before diving into full SDKs.",
+      "See how different projects teach circuits, superposition, and measurement.",
+      "Identify resources that work well for onboarding or self-study."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "dillanchang-qocs": {
+    "summary": "``` =============================================================================== =================[ QOCS - Quantum OCaml Circuit Simulator ]==================== ===============================================================================",
+    "description": "``` =============================================================================== =================[ QOCS - Quantum OCaml Circuit Simulator ]==================== ===============================================================================",
+    "whatItIs": [
+      "QOCS is maintained by dillanchang and sits in the Simulators lane of the open-source quantum map.",
+      "``` =============================================================================== =================[ QOCS - Quantum OCaml Circuit Simulator ]==================== ==============================================================================="
+    ],
+    "whoItsFor": "Developers and researchers who need to test ideas locally before running on hardware or who want to compare simulation strategies.",
+    "whatYouCanBuild": [
+      "Benchmark how different simulation methods trade accuracy for runtime.",
+      "Inspect circuit behavior, noise assumptions, or state evolution offline.",
+      "Choose the right simulator for a debugging, teaching, or research workflow."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "dwavesystems-chimera-embedding": {
+    "summary": "This is a repository for algorithms to generate native-structured embeddings.",
+    "description": "This is a repository for algorithms to generate native-structured embeddings.",
+    "whatItIs": [
+      "chimera-embedding is maintained by dwavesystems and sits in the Annealing and Ising lane of the open-source quantum map.",
+      "This is a repository for algorithms to generate native-structured embeddings."
+    ],
+    "whoItsFor": "Developers interested in Ising-model formulations, annealing workflows, and D-Wave-style solver ecosystems.",
+    "whatYouCanBuild": [
+      "See how annealing-oriented projects model optimization problems.",
+      "Understand embeddings, samplers, and the surrounding tooling needed in practice.",
+      "Compare annealing workflows against gate-model and hybrid alternatives."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "dwavesystems-dwave-cloud-client": {
+    "summary": "image:: https://badge.fury.io/py/dwave-cloud-client.svg :target: https://badge.fury.io/py/dwave-cloud-client :alt: Latest version on PyPI",
+    "description": ".. image:: https://badge.fury.io/py/dwave-cloud-client.svg :target: https://badge.fury.io/py/dwave-cloud-client :alt: Latest version on PyPI",
+    "whatItIs": [
+      "dwave-cloud-client is maintained by dwavesystems and sits in the Annealing and Ising lane of the open-source quantum map.",
+      "image:: https://badge.fury.io/py/dwave-cloud-client.svg :target: https://badge.fury.io/py/dwave-cloud-client :alt: Latest version on PyPI It commonly appears alongside dwavesystems-dimod, dwavesystems-dwave-ocean-sdk in example workflows."
+    ],
+    "whoItsFor": "Developers interested in Ising-model formulations, annealing workflows, and D-Wave-style solver ecosystems.",
+    "whatYouCanBuild": [
+      "See how annealing-oriented projects model optimization problems.",
+      "Understand embeddings, samplers, and the surrounding tooling needed in practice.",
+      "Compare annealing workflows against gate-model and hybrid alternatives."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "dwavesystems-dwave-embedding-utilities": {
+    "summary": "This package provides utilities for mapping between source and target models.",
+    "description": "This package provides utilities for mapping between source and target models.",
+    "whatItIs": [
+      "dwave_embedding_utilities is maintained by dwavesystems and sits in the Annealing and Ising lane of the open-source quantum map.",
+      "This package provides utilities for mapping between source and target models. It commonly appears alongside dwavesystems-dimod in example workflows."
+    ],
+    "whoItsFor": "Developers interested in Ising-model formulations, annealing workflows, and D-Wave-style solver ecosystems.",
+    "whatYouCanBuild": [
+      "See how annealing-oriented projects model optimization problems.",
+      "Understand embeddings, samplers, and the surrounding tooling needed in practice.",
+      "Compare annealing workflows against gate-model and hybrid alternatives."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "dwavesystems-dwave-micro-client-dimod": {
+    "summary": "image:: https://travis-ci.org/dwavesystems/dwave_micro_client_dimod.svg?branch=master :target: https://travis-ci.org/dwavesystems/dwave_micro_client_dimod :alt: Travis Status",
+    "description": ".. image:: https://travis-ci.org/dwavesystems/dwave_micro_client_dimod.svg?branch=master :target: https://travis-ci.org/dwavesystems/dwave_micro_client_dimod :alt: Travis Status",
+    "whatItIs": [
+      "dwave_micro_client_dimod is maintained by dwavesystems and sits in the Annealing and Ising lane of the open-source quantum map.",
+      "image:: https://travis-ci.org/dwavesystems/dwave_micro_client_dimod.svg?branch=master :target: https://travis-ci.org/dwavesystems/dwave_micro_client_dimod :alt: Travis Status It commonly appears alongside dwavesystems-dimod in example workflows."
+    ],
+    "whoItsFor": "Developers interested in Ising-model formulations, annealing workflows, and D-Wave-style solver ecosystems.",
+    "whatYouCanBuild": [
+      "See how annealing-oriented projects model optimization problems.",
+      "Understand embeddings, samplers, and the surrounding tooling needed in practice.",
+      "Compare annealing workflows against gate-model and hybrid alternatives."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "dwavesystems-dwave-neal": {
+    "summary": "A simulated annealing sampler can be used for approximate Boltzmann sampling or heuristic optimization.",
+    "description": "A simulated annealing sampler can be used for approximate Boltzmann sampling or heuristic optimization. This implementation approaches the equilibrium distribution by performing updates at a sequence of increasing beta values, `beta_schedule`, terminating at the target beta. Each spin is updated once in a fixed order per point in the beta_schedule according to a Metropolis- Hastings update. When beta is large...",
+    "whatItIs": [
+      "dwave-neal is maintained by dwavesystems and sits in the Annealing and Ising lane of the open-source quantum map.",
+      "A simulated annealing sampler can be used for approximate Boltzmann sampling or heuristic optimization. It commonly appears alongside dwavesystems-dimod in example workflows."
+    ],
+    "whoItsFor": "Developers interested in Ising-model formulations, annealing workflows, and D-Wave-style solver ecosystems.",
+    "whatYouCanBuild": [
+      "See how annealing-oriented projects model optimization problems.",
+      "Understand embeddings, samplers, and the surrounding tooling needed in practice.",
+      "Compare annealing workflows against gate-model and hybrid alternatives."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "dwavesystems-dwave-networkx": {
+    "summary": "dwave-graphs provides tools for working with quantum processing unit (QPU) topology graphs, such as the Pegasus used on the Advantage\\ :sup:TM quantum computer, and implementations of graph-theory algorithms on D-Wave quantum computers...",
+    "description": "dwave-graphs provides tools for working with quantum processing unit (QPU) topology graphs, such as the Pegasus used on the Advantage\\ :sup:TM quantum computer, and implementations of graph-theory algorithms on D-Wave quantum computers and other binary quadratic model (BQM) samplers.",
+    "whatItIs": [
+      "dwave_networkx is maintained by dwavesystems and sits in the Annealing and Ising lane of the open-source quantum map.",
+      "dwave-graphs provides tools for working with quantum processing unit (QPU) topology graphs, such as the Pegasus used on the Advantage\\ :sup:TM quantum computer, and implementations of graph-theory algorithms on D-Wave quantum computers... It commonly appears alongside dwavesystems-dwave-ocean-sdk, dwavesystems-dimod in example workflows."
+    ],
+    "whoItsFor": "Developers interested in Ising-model formulations, annealing workflows, and D-Wave-style solver ecosystems.",
+    "whatYouCanBuild": [
+      "See how annealing-oriented projects model optimization problems.",
+      "Understand embeddings, samplers, and the surrounding tooling needed in practice.",
+      "Compare annealing workflows against gate-model and hybrid alternatives."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "dwavesystems-dwave-sapi-dimod": {
+    "summary": "sample_qubo and sample_ising work only for problems that fit directly onto the solver's structure",
+    "description": "sample_qubo and sample_ising work only for problems that fit directly onto the solver's structure",
+    "whatItIs": [
+      "dwave_sapi_dimod is maintained by dwavesystems and sits in the Optimization and QUBO lane of the open-source quantum map.",
+      "sample_qubo and sample_ising work only for problems that fit directly onto the solver's structure It commonly appears alongside dwavesystems-dimod in example workflows."
+    ],
+    "whoItsFor": "Teams exploring routing, scheduling, allocation, and other combinatorial problems that can be modeled as optimization workloads.",
+    "whatYouCanBuild": [
+      "Understand how this project models constrained optimization problems.",
+      "Compare QUBO, QAOA, and hybrid optimization workflows against classical baselines.",
+      "Identify pieces that could inform a practical planning stack like Qtangl."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "dwavesystems-dwave-system": {
+    "summary": "image:: https://img.shields.io/pypi/pyversions/dwave-system.svg?style=flat :target: https://pypi.org/project/dwave-system :alt: PyPI - Python Version",
+    "description": ".. image:: https://img.shields.io/pypi/pyversions/dwave-system.svg?style=flat :target: https://pypi.org/project/dwave-system :alt: PyPI - Python Version",
+    "whatItIs": [
+      "dwave-system is maintained by dwavesystems and sits in the Annealing and Ising lane of the open-source quantum map.",
+      "image:: https://img.shields.io/pypi/pyversions/dwave-system.svg?style=flat :target: https://pypi.org/project/dwave-system :alt: PyPI - Python Version It commonly appears alongside dwavesystems-dwave-ocean-sdk, dwavesystems-dimod in example workflows."
+    ],
+    "whoItsFor": "Developers interested in Ising-model formulations, annealing workflows, and D-Wave-style solver ecosystems.",
+    "whatYouCanBuild": [
+      "See how annealing-oriented projects model optimization problems.",
+      "Understand embeddings, samplers, and the surrounding tooling needed in practice.",
+      "Compare annealing workflows against gate-model and hybrid alternatives."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "dwavesystems-dwavebinarycsp": {
+    "summary": "For solving problems with constraints, we recommend using the hybrid solvers in the Leap :tm: service.",
+    "description": ":warning: *dwavebinarycsp* is deprecated. For solving problems with constraints, we recommend using the hybrid solvers in the Leap :tm: service. You can find documentation for the hybrid solvers at https://docs.ocean.dwavesys.com.",
+    "whatItIs": [
+      "dwavebinarycsp is maintained by dwavesystems and sits in the General-purpose SDKs lane of the open-source quantum map.",
+      "For solving problems with constraints, we recommend using the hybrid solvers in the Leap :tm: service. It commonly appears alongside dwavesystems-dimod, dwavesystems-dwave-ocean-sdk in example workflows."
+    ],
+    "whoItsFor": "Developers who want a broad entry point for building circuits, experimenting with algorithms, and integrating quantum workflows into larger applications.",
+    "whatYouCanBuild": [
+      "Prototype end-to-end circuit workflows without committing to a niche backend too early.",
+      "Learn how the project represents circuits, gates, jobs, and results.",
+      "Compare how a major ecosystem frames practical quantum development."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "dwavesystems-minorminer": {
+    "summary": "minorminer is a heuristic tool for minor embedding: given a minor and target graph, it tries to find a mapping that embeds the minor into the target.",
+    "description": "minorminer is a heuristic tool for minor embedding: given a minor and target graph, it tries to find a mapping that embeds the minor into the target.",
+    "whatItIs": [
+      "minorminer is maintained by dwavesystems and sits in the Annealing and Ising lane of the open-source quantum map.",
+      "minorminer is a heuristic tool for minor embedding: given a minor and target graph, it tries to find a mapping that embeds the minor into the target. It commonly appears alongside dwavesystems-dimod, dwavesystems-dwave-ocean-sdk in example workflows."
+    ],
+    "whoItsFor": "Developers interested in Ising-model formulations, annealing workflows, and D-Wave-style solver ecosystems.",
+    "whatYouCanBuild": [
+      "See how annealing-oriented projects model optimization problems.",
+      "Understand embeddings, samplers, and the surrounding tooling needed in practice.",
+      "Compare annealing workflows against gate-model and hybrid alternatives."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "dwavesystems-penaltymodel": {
+    "summary": "For solving problems with constraints, we recommend using the hybrid solvers in the Leap :tm: service.",
+    "description": ":warning: *penaltymodel* is deprecated. For solving problems with constraints, we recommend using the hybrid solvers in the Leap :tm: service. You can find documentation for the hybrid solvers at https://docs.dwavequantum.com.",
+    "whatItIs": [
+      "penaltymodel is maintained by dwavesystems and sits in the Optimization and QUBO lane of the open-source quantum map.",
+      "For solving problems with constraints, we recommend using the hybrid solvers in the Leap :tm: service. It commonly appears alongside dwavesystems-dimod in example workflows."
+    ],
+    "whoItsFor": "Teams exploring routing, scheduling, allocation, and other combinatorial problems that can be modeled as optimization workloads.",
+    "whatYouCanBuild": [
+      "Understand how this project models constrained optimization problems.",
+      "Compare QUBO, QAOA, and hybrid optimization workflows against classical baselines.",
+      "Identify pieces that could inform a practical planning stack like Qtangl."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "eclipse-qrisp-qrisp": {
+    "summary": "Qrisp is a high-level quantum programming framework that allows for intuitive development of quantum algorithms.",
+    "description": "Qrisp is a high-level quantum programming framework that allows for intuitive development of quantum algorithms. It provides a rich set of tools and abstractions to make quantum computing more accessible to developers and researchers. By automating many steps one usually encounters when programming a quantum computer, introducing quantum types, and many more features Qrisp makes quantum programming more user-friendly yet...",
+    "whatItIs": [
+      "Qrisp is maintained by eclipse-qrisp and sits in the General-purpose SDKs lane of the open-source quantum map.",
+      "Qrisp is a high-level quantum programming framework that allows for intuitive development of quantum algorithms. It commonly appears alongside qiskit-qiskit, quantumlib-cirq, xanaduai-pennylane in example workflows."
+    ],
+    "whoItsFor": "Developers who want a broad entry point for building circuits, experimenting with algorithms, and integrating quantum workflows into larger applications.",
+    "whatYouCanBuild": [
+      "Prototype end-to-end circuit workflows without committing to a niche backend too early.",
+      "Learn how the project represents circuits, gates, jobs, and results.",
+      "Compare how a major ecosystem frames practical quantum development."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "entanglion-entanglion": {
+    "summary": "**2 PLAYERS AGES 14 & UP 45 MINUTES**",
+    "description": "**2 PLAYERS AGES 14 & UP 45 MINUTES**",
+    "whatItIs": [
+      "entanglion is maintained by Entanglion and sits in the Games and learning lane of the open-source quantum map.",
+      "**2 PLAYERS AGES 14 & UP 45 MINUTES**"
+    ],
+    "whoItsFor": "Beginners, educators, and curious developers who want a more approachable path into quantum concepts.",
+    "whatYouCanBuild": [
+      "Get a gentler introduction before diving into full SDKs.",
+      "See how different projects teach circuits, superposition, and measurement.",
+      "Identify resources that work well for onboarding or self-study."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "epiqc-scaffcc": {
+    "summary": "***Important Note:*** starting with version 4.0, the argument orders of CNOT and Toffoli have been changed and standardized to CNOT(control, target) and Toffoli(control1, control2, target) respectively.",
+    "description": "***Important Note:*** starting with version 4.0, the argument orders of CNOT and Toffoli have been changed and standardized to CNOT(control, target) and Toffoli(control1, control2, target) respectively. Previously, the target argument was first. All of the benchmarks (in Algorithms/) now conform to the new ordering. Also starting with version 4.0, rotation decomposition and Toffoli decomposition are disabled by default. They can...",
+    "whatItIs": [
+      "ScaffCC is maintained by epiqc and sits in the Compilers and languages lane of the open-source quantum map.",
+      "***Important Note:*** starting with version 4.0, the argument orders of CNOT and Toffoli have been changed and standardized to CNOT(control, target) and Toffoli(control1, control2, target) respectively. It commonly appears alongside qiskit-qiskit in example workflows."
+    ],
+    "whoItsFor": "Developers who want to understand the representations and compilers that sit between high-level code and runnable circuits.",
+    "whatYouCanBuild": [
+      "Compare IRs, DSLs, transpilers, and compiler assumptions across ecosystems.",
+      "Understand how high-level code becomes something a backend can execute.",
+      "Spot tools that matter when interoperability and compilation quality are important."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "gbanegas-libquantumjava": {
+    "summary": "This is a crude translation from th C implementation of libquantum to a Java version.",
+    "description": "This is a crude translation from th C implementation of libquantum to a Java version.",
+    "whatItIs": [
+      "libQuantumJava is maintained by gbanegas and sits in the General-purpose SDKs lane of the open-source quantum map.",
+      "This is a crude translation from th C implementation of libquantum to a Java version."
+    ],
+    "whoItsFor": "Developers who want a broad entry point for building circuits, experimenting with algorithms, and integrating quantum workflows into larger applications.",
+    "whatYouCanBuild": [
+      "Prototype end-to-end circuit workflows without committing to a niche backend too early.",
+      "Learn how the project represents circuits, gates, jobs, and results.",
+      "Compare how a major ecosystem frames practical quantum development."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "goodchemistryco-tangelo": {
+    "summary": "<p align=\"center\"> <a href=\"https://github.com/goodchemistryco/Tangelo/blob/main/LICENSE\"> <img src=\"https://img.shields.io/badge/License-Apache_2.0-green\" alt=\"license\"> </a> <img src=\"https://img.shields.io/badge/OS-Linux%20MacOS%20Windows-7373e3\" alt=\"systems\"> <a href=\"https://github.com/goodchemistryco/Tangelo/tree/develop\"> <img src=\"https://img.shields.io/badge/DevBranch-develop-yellow\" alt=\"dev_branch\"> </a> </p>",
+    "description": "<p align=\"center\"> <a href=\"https://github.com/goodchemistryco/Tangelo/blob/main/LICENSE\"> <img src=\"https://img.shields.io/badge/License-Apache_2.0-green\" alt=\"license\"> </a> <img src=\"https://img.shields.io/badge/OS-Linux%20MacOS%20Windows-7373e3\" alt=\"systems\"> <a href=\"https://github.com/goodchemistryco/Tangelo/tree/develop\"> <img src=\"https://img.shields.io/badge/DevBranch-develop-yellow\" alt=\"dev_branch\"> </a> </p>",
+    "whatItIs": [
+      "Tangelo is maintained by goodchemistryco and sits in the Optimization and QUBO lane of the open-source quantum map.",
+      "<p align=\"center\"> <a href=\"https://github.com/goodchemistryco/Tangelo/blob/main/LICENSE\"> <img src=\"https://img.shields.io/badge/License-Apache_2.0-green\" alt=\"license\"> </a> <img src=\"https://img.shields.io/badge/OS-Linux%20MacOS%20Windows-7373e3\" alt=\"systems\"> <a href=\"https://github.com/goodchemistryco/Tangelo/tree/develop\"> <img src=\"https://img.shields.io/badge/DevBranch-develop-yellow\" alt=\"dev_branch\"> </a> </p> It commonly appears alongside quantumlib-cirq, quantumlib-openfermion, aws-amazon-braket-sdk-python in example workflows."
+    ],
+    "whoItsFor": "Teams exploring routing, scheduling, allocation, and other combinatorial problems that can be modeled as optimization workloads.",
+    "whatYouCanBuild": [
+      "Understand how this project models constrained optimization problems.",
+      "Compare QUBO, QAOA, and hybrid optimization workflows against classical baselines.",
+      "Identify pieces that could inform a practical planning stack like Qtangl."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "grey-area-qcircuits": {
+    "summary": "QCircuits is a Python package for the simulation and study of quantum computers based on the quantum circuit model <https://en.wikipedia.org/wiki/Quantum_circuit>_.",
+    "description": "QCircuits is a Python package for the simulation and study of quantum computers based on the quantum circuit model <https://en.wikipedia.org/wiki/Quantum_circuit>_. It has been designed to have a simple, lightweight interface and to be easy to use, particularly for those new to quantum computing.",
+    "whatItIs": [
+      "qcircuits is maintained by grey-area and sits in the General-purpose SDKs lane of the open-source quantum map.",
+      "QCircuits is a Python package for the simulation and study of quantum computers based on the quantum circuit model <https://en.wikipedia.org/wiki/Quantum_circuit>_."
+    ],
+    "whoItsFor": "Developers who want a broad entry point for building circuits, experimenting with algorithms, and integrating quantum workflows into larger applications.",
+    "whatYouCanBuild": [
+      "Prototype end-to-end circuit workflows without committing to a niche backend too early.",
+      "Learn how the project represents circuits, gates, jobs, and results.",
+      "Compare how a major ecosystem frames practical quantum development."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "haykkh-qsim": {
+    "summary": "I'm building this to learn **C++** and **Quantum Information Theory** simultaneously, so don't be surprised if they're both wrong.",
+    "description": "I'm building this to learn **C++** and **Quantum Information Theory** simultaneously, so don't be surprised if they're both wrong. Instead, feel free to create a new issue or a new pull request so you can rub in exactly what I did wrong in a concise, well commented manner.",
+    "whatItIs": [
+      "qSim is maintained by haykkh and sits in the Games and learning lane of the open-source quantum map.",
+      "I'm building this to learn **C++** and **Quantum Information Theory** simultaneously, so don't be surprised if they're both wrong."
+    ],
+    "whoItsFor": "Beginners, educators, and curious developers who want a more approachable path into quantum concepts.",
+    "whatYouCanBuild": [
+      "Get a gentler introduction before diving into full SDKs.",
+      "See how different projects teach circuits, superposition, and measurement.",
+      "Identify resources that work well for onboarding or self-study."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "iic-jku-ddsim": {
+    "summary": "<p align=\"center\"> <a href=\"https://mqt.readthedocs.io\"> <picture> <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://raw.githubusercontent.com/munich-quantum-toolkit/.github/refs/heads/main/docs/_static/mqt-banner-dark.svg\" width=\"90%\"> <img src=\"https://raw.githubusercontent.com/munich-quantum-toolkit/.github/refs/heads/main/docs/_static/mqt-banner-light.svg\" width=\"90%\" alt=\"MQT Banner\"> </picture> </a> </p>",
+    "description": "<p align=\"center\"> <a href=\"https://mqt.readthedocs.io\"> <picture> <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://raw.githubusercontent.com/munich-quantum-toolkit/.github/refs/heads/main/docs/_static/mqt-banner-dark.svg\" width=\"90%\"> <img src=\"https://raw.githubusercontent.com/munich-quantum-toolkit/.github/refs/heads/main/docs/_static/mqt-banner-light.svg\" width=\"90%\" alt=\"MQT Banner\"> </picture> </a> </p>",
+    "whatItIs": [
+      "ddsim is maintained by iic-jku and sits in the Simulators lane of the open-source quantum map.",
+      "<p align=\"center\"> <a href=\"https://mqt.readthedocs.io\"> <picture> <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://raw.githubusercontent.com/munich-quantum-toolkit/.github/refs/heads/main/docs/_static/mqt-banner-dark.svg\" width=\"90%\"> <img src=\"https://raw.githubusercontent.com/munich-quantum-toolkit/.github/refs/heads/main/docs/_static/mqt-banner-light.svg\" width=\"90%\" alt=\"MQT Banner\"> </picture> </a> </p> It commonly appears alongside qiskit-qiskit in example workflows."
+    ],
+    "whoItsFor": "Developers and researchers who need to test ideas locally before running on hardware or who want to compare simulation strategies.",
+    "whatYouCanBuild": [
+      "Benchmark how different simulation methods trade accuracy for runtime.",
+      "Inspect circuit behavior, noise assumptions, or state evolution offline.",
+      "Choose the right simulator for a debugging, teaching, or research workflow."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "indisoluble-swiftquantumcomputing": {
+    "summary": "Run this application to check the performance of this simulator in your computer.",
+    "description": "Run this application to check the performance of this simulator in your computer. Execute swift run sqc-measure-performance -h to see all available options.",
+    "whatItIs": [
+      "SwiftQuantumComputing is maintained by indisoluble and sits in the Pulse and control lane of the open-source quantum map.",
+      "Run this application to check the performance of this simulator in your computer."
+    ],
+    "whoItsFor": "Hardware-adjacent developers and researchers working closer to experiments, pulse schedules, or lab orchestration.",
+    "whatYouCanBuild": [
+      "See how low-level control stacks differ from higher-level SDKs.",
+      "Understand where pulse sequencing and experiment orchestration fit in the stack.",
+      "Learn which projects matter when hardware control is part of the workflow."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "intel-intel-qs": {
+    "summary": "Intel Quantum Simulator (Intel-QS), also known as qHiPSTER (The Quantum High Performance Software Testing Environment), is a simulator of quantum circuits optimized to take maximum advantage of multi-core and multi-nodes architectures.",
+    "description": "Intel Quantum Simulator (Intel-QS), also known as qHiPSTER (The Quantum High Performance Software Testing Environment), is a simulator of quantum circuits optimized to take maximum advantage of multi-core and multi-nodes architectures. It is based on a complete representation of the qubit state, but avoids the explicit representation of gates and other quantum operations in terms of matrices. Intel-QS uses the...",
+    "whatItIs": [
+      "intel-qs is maintained by intel and sits in the Simulators lane of the open-source quantum map.",
+      "Intel Quantum Simulator (Intel-QS), also known as qHiPSTER (The Quantum High Performance Software Testing Environment), is a simulator of quantum circuits optimized to take maximum advantage of multi-core and multi-nodes architectures."
+    ],
+    "whoItsFor": "Developers and researchers who need to test ideas locally before running on hardware or who want to compare simulation strategies.",
+    "whatYouCanBuild": [
+      "Benchmark how different simulation methods trade accuracy for runtime.",
+      "Inspect circuit behavior, noise assumptions, or state evolution offline.",
+      "Choose the right simulator for a debugging, teaching, or research workflow."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "jacobmarks-qtop": {
+    "summary": "QTop *** NOTE: This software is not being actively maintained.",
+    "description": "QTop *** NOTE: This software is not being actively maintained. Use at your own risk.",
+    "whatItIs": [
+      "QTop is maintained by jacobmarks and sits in the Error correction and mitigation lane of the open-source quantum map.",
+      "QTop *** NOTE: This software is not being actively maintained."
+    ],
+    "whoItsFor": "Researchers and advanced developers working on noise, reliability, and the realities of imperfect quantum hardware.",
+    "whatYouCanBuild": [
+      "Learn how this project frames error handling or mitigation.",
+      "Compare whether it targets analysis, simulation, or production-minded workflows.",
+      "Understand where noise-aware tooling fits in a modern stack."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "javafxpert-quantum-toy-piano-ibmq": {
+    "summary": "quantum-toy-piano-ibmq is an open-source quantum project.",
+    "description": "quantum-toy-piano-ibmq is an open-source quantum project.",
+    "whatItIs": [
+      "quantum-toy-piano-ibmq is maintained by JavaFXpert and sits in the General-purpose SDKs lane of the open-source quantum map.",
+      "quantum-toy-piano-ibmq is an open-source quantum project."
+    ],
+    "whoItsFor": "Developers who want a broad entry point for building circuits, experimenting with algorithms, and integrating quantum workflows into larger applications.",
+    "whatYouCanBuild": [
+      "Prototype end-to-end circuit workflows without committing to a niche backend too early.",
+      "Learn how the project represents circuits, gates, jobs, and results.",
+      "Compare how a major ecosystem frames practical quantum development."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "javafxpert-quantum-toy-piano": {
+    "summary": "quantum-toy-piano is an open-source quantum project.",
+    "description": "quantum-toy-piano is an open-source quantum project.",
+    "whatItIs": [
+      "quantum-toy-piano is maintained by JavaFXpert and sits in the General-purpose SDKs lane of the open-source quantum map.",
+      "quantum-toy-piano is an open-source quantum project."
+    ],
+    "whoItsFor": "Developers who want a broad entry point for building circuits, experimenting with algorithms, and integrating quantum workflows into larger applications.",
+    "whatYouCanBuild": [
+      "Prototype end-to-end circuit workflows without committing to a niche backend too early.",
+      "Learn how the project represents circuits, gates, jobs, and results.",
+      "Compare how a major ecosystem frames practical quantum development."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "javafxpert-quil-syntax-highlighter": {
+    "summary": "quil-syntax-highlighter is an open-source quantum project.",
+    "description": "quil-syntax-highlighter is an open-source quantum project.",
+    "whatItIs": [
+      "quil-syntax-highlighter is maintained by JavaFXpert and sits in the Compilers and languages lane of the open-source quantum map.",
+      "quil-syntax-highlighter is an open-source quantum project."
+    ],
+    "whoItsFor": "Developers who want to understand the representations and compilers that sit between high-level code and runnable circuits.",
+    "whatYouCanBuild": [
+      "Compare IRs, DSLs, transpilers, and compiler assumptions across ecosystems.",
+      "Understand how high-level code becomes something a backend can execute.",
+      "Spot tools that matter when interoperability and compilation quality are important."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "jeffwass-squankum": {
+    "summary": "Welcome to Squankum -------- Currently Squankum lets you :",
+    "description": "Welcome to Squankum -------- Currently Squankum lets you :",
+    "whatItIs": [
+      "Squankum is maintained by jeffwass and sits in the Games and learning lane of the open-source quantum map.",
+      "Welcome to Squankum -------- Currently Squankum lets you :"
+    ],
+    "whoItsFor": "Beginners, educators, and curious developers who want a more approachable path into quantum concepts.",
+    "whatYouCanBuild": [
+      "Get a gentler introduction before diving into full SDKs.",
+      "See how different projects teach circuits, superposition, and measurement.",
+      "Identify resources that work well for onboarding or self-study."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "jpaykin-qwire": {
+    "summary": "This is a Coq implementation of the QWIRE quantum programming language, described in the following papers by Jennifer Paykin, Robert Rand, Dong-Ho Lee and Steve Zdancewic: [QWIRE: a core language for quantum...",
+    "description": "This is a Coq implementation of the QWIRE quantum programming language, described in the following papers by Jennifer Paykin, Robert Rand, Dong-Ho Lee and Steve Zdancewic: [QWIRE: a core language for quantum circuits][1]. [QWIRE Practice: Formal Verification of Quantum Circuits in Coq][2] [ReQWIRE: Reasoning about Reversible Quantum Circuits][3] [Phantom Types for Quantum Programs][4]",
+    "whatItIs": [
+      "QWIRE is maintained by jpaykin and sits in the Compilers and languages lane of the open-source quantum map.",
+      "This is a Coq implementation of the QWIRE quantum programming language, described in the following papers by Jennifer Paykin, Robert Rand, Dong-Ho Lee and Steve Zdancewic: [QWIRE: a core language for quantum..."
+    ],
+    "whoItsFor": "Developers who want to understand the representations and compilers that sit between high-level code and runnable circuits.",
+    "whatYouCanBuild": [
+      "Compare IRs, DSLs, transpilers, and compiler assumptions across ecosystems.",
+      "Understand how high-level code becomes something a backend can execute.",
+      "Spot tools that matter when interoperability and compilation quality are important."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "jpzwolak-qflow-lite": {
+    "summary": "This document is intended as a User Guide for anyone interested in training a machine learning (ML) model using the quantum dot dataset available on data.nist.gov.",
+    "description": "This document is intended as a User Guide for anyone interested in training a machine learning (ML) model using the quantum dot dataset available on data.nist.gov. For more details about the project, pease refer to the Project description document.",
+    "whatItIs": [
+      "QFlow-lite is maintained by jpzwolak and sits in the Quantum machine learning lane of the open-source quantum map.",
+      "This document is intended as a User Guide for anyone interested in training a machine learning (ML) model using the quantum dot dataset available on data.nist.gov."
+    ],
+    "whoItsFor": "Researchers and practitioners experimenting with quantum machine learning, variational models, and differentiable circuit stacks.",
+    "whatYouCanBuild": [
+      "Learn how the project connects model training ideas to quantum primitives.",
+      "Inspect the assumptions behind differentiable or ML-oriented workflows.",
+      "Compare how serious or experimental the ML story really is."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "kelzheng-bloqit": {
+    "summary": "**2 players**: a *Sender* and a *Blocker* **1 computer** to pass between you",
+    "description": "**2 players**: a *Sender* and a *Blocker* **1 computer** to pass between you",
+    "whatItIs": [
+      "bloqit is maintained by kelzheng and sits in the General-purpose SDKs lane of the open-source quantum map.",
+      "**2 players**: a *Sender* and a *Blocker* **1 computer** to pass between you"
+    ],
+    "whoItsFor": "Developers who want a broad entry point for building circuits, experimenting with algorithms, and integrating quantum workflows into larger applications.",
+    "whatYouCanBuild": [
+      "Prototype end-to-end circuit workflows without committing to a niche backend too early.",
+      "Learn how the project represents circuits, gates, jobs, and results.",
+      "Compare how a major ecosystem frames practical quantum development."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "ken-nakanishi-qupy": {
+    "summary": "QuPy: Quantum circuit simulator for both CPU and GPU",
+    "description": "QuPy: Quantum circuit simulator for both CPU and GPU",
+    "whatItIs": [
+      "qupy is maintained by ken-nakanishi and sits in the General-purpose SDKs lane of the open-source quantum map.",
+      "QuPy: Quantum circuit simulator for both CPU and GPU"
+    ],
+    "whoItsFor": "Developers who want a broad entry point for building circuits, experimenting with algorithms, and integrating quantum workflows into larger applications.",
+    "whatYouCanBuild": [
+      "Prototype end-to-end circuit workflows without committing to a niche backend too early.",
+      "Learn how the project represents circuits, gates, jobs, and results.",
+      "Compare how a major ecosystem frames practical quantum development."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "lanl-c2dwave": {
+    "summary": "Translate a subset of C to Verilog",
+    "description": "Translate a subset of C to Verilog",
+    "whatItIs": [
+      "c2dwave is maintained by lanl and sits in the Annealing and Ising lane of the open-source quantum map.",
+      "Translate a subset of C to Verilog"
+    ],
+    "whoItsFor": "Developers interested in Ising-model formulations, annealing workflows, and D-Wave-style solver ecosystems.",
+    "whatYouCanBuild": [
+      "See how annealing-oriented projects model optimization problems.",
+      "Understand embeddings, samplers, and the surrounding tooling needed in practice.",
+      "Compare annealing workflows against gate-model and hybrid alternatives."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "lanl-edif2qmasm": {
+    "summary": "Run hardware descriptions on a quantum annealer",
+    "description": "Run hardware descriptions on a quantum annealer",
+    "whatItIs": [
+      "edif2qmasm is maintained by lanl and sits in the Annealing and Ising lane of the open-source quantum map.",
+      "Run hardware descriptions on a quantum annealer"
+    ],
+    "whoItsFor": "Developers interested in Ising-model formulations, annealing workflows, and D-Wave-style solver ecosystems.",
+    "whatYouCanBuild": [
+      "See how annealing-oriented projects model optimization problems.",
+      "Understand embeddings, samplers, and the surrounding tooling needed in practice.",
+      "Compare annealing workflows against gate-model and hybrid alternatives."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "lanl-qa-prolog": {
+    "summary": "Quantum Annealing Prolog",
+    "description": "Quantum Annealing Prolog",
+    "whatItIs": [
+      "QA-Prolog is maintained by lanl and sits in the Annealing and Ising lane of the open-source quantum map.",
+      "Quantum Annealing Prolog"
+    ],
+    "whoItsFor": "Developers interested in Ising-model formulations, annealing workflows, and D-Wave-style solver ecosystems.",
+    "whatYouCanBuild": [
+      "See how annealing-oriented projects model optimization problems.",
+      "Understand embeddings, samplers, and the surrounding tooling needed in practice.",
+      "Compare annealing workflows against gate-model and hybrid alternatives."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "lanl-qmasm": {
+    "summary": "Quantum macro assembler for D-Wave systems",
+    "description": "Quantum macro assembler for D-Wave systems",
+    "whatItIs": [
+      "qmasm is maintained by lanl and sits in the Compilers and languages lane of the open-source quantum map.",
+      "Quantum macro assembler for D-Wave systems It commonly appears alongside dwavesystems-dwave-ocean-sdk, dwavesystems-dimod in example workflows."
+    ],
+    "whoItsFor": "Developers who want to understand the representations and compilers that sit between high-level code and runnable circuits.",
+    "whatYouCanBuild": [
+      "Compare IRs, DSLs, transpilers, and compiler assumptions across ecosystems.",
+      "Understand how high-level code becomes something a backend can execute.",
+      "Spot tools that matter when interoperability and compilation quality are important."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "mapmeld-jsquil": {
+    "summary": "Quantum computer instructions for JavaScript developers",
+    "description": "Quantum computer instructions for JavaScript developers",
+    "whatItIs": [
+      "jsquil is maintained by mapmeld and sits in the General-purpose SDKs lane of the open-source quantum map.",
+      "Quantum computer instructions for JavaScript developers"
+    ],
+    "whoItsFor": "Developers who want a broad entry point for building circuits, experimenting with algorithms, and integrating quantum workflows into larger applications.",
+    "whatYouCanBuild": [
+      "Prototype end-to-end circuit workflows without committing to a niche backend too early.",
+      "Learn how the project represents circuits, gates, jobs, and results.",
+      "Compare how a major ecosystem frames practical quantum development."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "mrdimosthenis-quantumpuzzlegenerator": {
+    "summary": "Puzzle game for Android and iOS, written in F#",
+    "description": "Puzzle game for Android and iOS, written in F#",
+    "whatItIs": [
+      "QuantumPuzzleGenerator is maintained by mrdimosthenis and sits in the Games and learning lane of the open-source quantum map.",
+      "Puzzle game for Android and iOS, written in F#"
+    ],
+    "whoItsFor": "Beginners, educators, and curious developers who want a more approachable path into quantum concepts.",
+    "whatYouCanBuild": [
+      "Get a gentler introduction before diving into full SDKs.",
+      "See how different projects teach circuits, superposition, and measurement.",
+      "Identify resources that work well for onboarding or self-study."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "msrudolph-paulipropagation-jl": {
+    "summary": "A Julia library for Pauli propagation simulation of quantum circuits and quantum systems.",
+    "description": "A Julia library for Pauli propagation simulation of quantum circuits and quantum systems.",
+    "whatItIs": [
+      "PauliPropagation.jl is maintained by MSRudolph and sits in the Error correction and mitigation lane of the open-source quantum map.",
+      "A Julia library for Pauli propagation simulation of quantum circuits and quantum systems."
+    ],
+    "whoItsFor": "Researchers and advanced developers working on noise, reliability, and the realities of imperfect quantum hardware.",
+    "whatYouCanBuild": [
+      "Learn how this project frames error handling or mitigation.",
+      "Compare whether it targets analysis, simulation, or production-minded workflows.",
+      "Understand where noise-aware tooling fits in a modern stack."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "mstechly-quantum-tsp-tutorials": {
+    "summary": "This repository contains code with tutorials of how to approach optimization problems using quantum computing.",
+    "description": "This repository contains code with tutorials of how to approach optimization problems using quantum computing.",
+    "whatItIs": [
+      "quantum_tsp_tutorials is maintained by mstechly and sits in the Games and learning lane of the open-source quantum map.",
+      "This repository contains code with tutorials of how to approach optimization problems using quantum computing."
+    ],
+    "whoItsFor": "Beginners, educators, and curious developers who want a more approachable path into quantum concepts.",
+    "whatYouCanBuild": [
+      "Get a gentler introduction before diving into full SDKs.",
+      "See how different projects teach circuits, superposition, and measurement.",
+      "Identify resources that work well for onboarding or self-study."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "mstechly-vqf": {
+    "summary": "Implementation of Variational Quantum Factoring algorithm.",
+    "description": "Implementation of Variational Quantum Factoring algorithm.",
+    "whatItIs": [
+      "vqf is maintained by mstechly and sits in the Optimization and QUBO lane of the open-source quantum map.",
+      "Implementation of Variational Quantum Factoring algorithm."
+    ],
+    "whoItsFor": "Teams exploring routing, scheduling, allocation, and other combinatorial problems that can be modeled as optimization workloads.",
+    "whatYouCanBuild": [
+      "Understand how this project models constrained optimization problems.",
+      "Compare QUBO, QAOA, and hybrid optimization workflows against classical baselines.",
+      "Identify pieces that could inform a practical planning stack like Qtangl."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "nathanshammah-piqs": {
+    "summary": "Permutational Invariance Quantum Solver for Lindblad open quantum system dynamics",
+    "description": "Permutational Invariance Quantum Solver for Lindblad open quantum system dynamics",
+    "whatItIs": [
+      "piqs is maintained by nathanshammah and sits in the Optimization and QUBO lane of the open-source quantum map.",
+      "Permutational Invariance Quantum Solver for Lindblad open quantum system dynamics"
+    ],
+    "whoItsFor": "Teams exploring routing, scheduling, allocation, and other combinatorial problems that can be modeled as optimization workloads.",
+    "whatYouCanBuild": [
+      "Understand how this project models constrained optimization problems.",
+      "Compare QUBO, QAOA, and hybrid optimization workflows against classical baselines.",
+      "Identify pieces that could inform a practical planning stack like Qtangl."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "open-quantum-safe-openssh-portable": {
+    "summary": "Fork of OpenSSH that includes prototype quantum-resistant key exchange and authentication in SSH based on liboqs.",
+    "description": "Fork of OpenSSH that includes prototype quantum-resistant key exchange and authentication in SSH based on liboqs.",
+    "whatItIs": [
+      "openssh-portable is maintained by open-quantum-safe and sits in the Post-quantum cryptography lane of the open-source quantum map.",
+      "Fork of OpenSSH that includes prototype quantum-resistant key exchange and authentication in SSH based on liboqs."
+    ],
+    "whoItsFor": "Security-minded developers and teams looking for practical quantum-safe cryptography resources they can evaluate today.",
+    "whatYouCanBuild": [
+      "Identify which libraries are reference implementations versus production integrations.",
+      "Understand how PQC work differs from quantum-computing SDK work.",
+      "Find the right starting point for learning or experimentation."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "open-quantum-safe-openssl": {
+    "summary": "[DEPRECATED \u2014 See notice in README.md and switch to OpenSSL 3 OQS Provider] Fork of OpenSSL 1.1.1 that includes prototype quantum-resistant algorithms and ciphersuites based on liboqs",
+    "description": "[DEPRECATED \u2014 See notice in README.md and switch to OpenSSL 3 OQS Provider] Fork of OpenSSL 1.1.1 that includes prototype quantum-resistant algorithms and ciphersuites based on liboqs",
+    "whatItIs": [
+      "openssl is maintained by open-quantum-safe and sits in the Post-quantum cryptography lane of the open-source quantum map.",
+      "[DEPRECATED \u2014 See notice in README.md and switch to OpenSSL 3 OQS Provider] Fork of OpenSSL 1.1.1 that includes prototype quantum-resistant algorithms and ciphersuites based on liboqs"
+    ],
+    "whoItsFor": "Security-minded developers and teams looking for practical quantum-safe cryptography resources they can evaluate today.",
+    "whatYouCanBuild": [
+      "Identify which libraries are reference implementations versus production integrations.",
+      "Understand how PQC work differs from quantum-computing SDK work.",
+      "Find the right starting point for learning or experimentation."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "ornl-qci-tnqvm": {
+    "summary": "Tensor Network QPU Simulator for Eclipse XACC",
+    "description": "Tensor Network QPU Simulator for Eclipse XACC",
+    "whatItIs": [
+      "tnqvm is maintained by ornl-qci and sits in the Simulators lane of the open-source quantum map.",
+      "Tensor Network QPU Simulator for Eclipse XACC"
+    ],
+    "whoItsFor": "Developers and researchers who need to test ideas locally before running on hardware or who want to compare simulation strategies.",
+    "whatYouCanBuild": [
+      "Benchmark how different simulation methods trade accuracy for runtime.",
+      "Inspect circuit behavior, noise assumptions, or state evolution offline.",
+      "Choose the right simulator for a debugging, teaching, or research workflow."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "ornl-qci-xacc-vqe": {
+    "summary": "DEPRECATED - Variational quantum eigensolver built on XACC",
+    "description": "DEPRECATED - Variational quantum eigensolver built on XACC",
+    "whatItIs": [
+      "xacc-vqe is maintained by ornl-qci and sits in the Quantum chemistry lane of the open-source quantum map.",
+      "DEPRECATED - Variational quantum eigensolver built on XACC It commonly appears alongside quantumlib-openfermion, projectq-framework-projectq in example workflows."
+    ],
+    "whoItsFor": "Researchers, students, and developers exploring how quantum software is used for chemistry and electronic-structure problems.",
+    "whatYouCanBuild": [
+      "See how chemistry problems are mapped into quantum-friendly representations.",
+      "Understand the workflow around Hamiltonians, ansatze, and measurement loops.",
+      "Compare beginner-friendly entry points into chemistry-focused quantum tooling."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "ornl-qci-xacc": {
+    "summary": "XACC - eXtreme-scale Accelerator programming framework",
+    "description": "XACC - eXtreme-scale Accelerator programming framework",
+    "whatItIs": [
+      "xacc is maintained by ORNL-QCI and sits in the Cloud and interoperability lane of the open-source quantum map.",
+      "XACC - eXtreme-scale Accelerator programming framework It commonly appears alongside qiskit-qiskit, quantumlib-cirq, dwavesystems-dwave-ocean-sdk in example workflows."
+    ],
+    "whoItsFor": "Teams that need to connect multiple providers, runtimes, or software ecosystems instead of staying in one stack.",
+    "whatYouCanBuild": [
+      "See how the project smooths over provider or runtime boundaries.",
+      "Understand tradeoffs between portability and provider-specific features.",
+      "Compare where interoperability helps versus where it adds abstraction."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "pasqal-io-qadence": {
+    "summary": "Digital-analog quantum programming interface",
+    "description": "Digital-analog quantum programming interface",
+    "whatItIs": [
+      "qadence is maintained by pasqal-io and sits in the Quantum machine learning lane of the open-source quantum map.",
+      "Digital-analog quantum programming interface It commonly appears alongside quantumlib-openfermion in example workflows."
+    ],
+    "whoItsFor": "Researchers and practitioners experimenting with quantum machine learning, variational models, and differentiable circuit stacks.",
+    "whatYouCanBuild": [
+      "Learn how the project connects model training ideas to quantum primitives.",
+      "Inspect the assumptions behind differentiable or ML-oriented workflows.",
+      "Compare how serious or experimental the ML story really is."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "pennylaneai-catalyst": {
+    "summary": "A JIT compiler for hybrid quantum programs in PennyLane",
+    "description": "A JIT compiler for hybrid quantum programs in PennyLane",
+    "whatItIs": [
+      "catalyst is maintained by PennyLaneAI and sits in the Compilers and languages lane of the open-source quantum map.",
+      "A JIT compiler for hybrid quantum programs in PennyLane It commonly appears alongside xanaduai-pennylane in example workflows."
+    ],
+    "whoItsFor": "Developers who want to understand the representations and compilers that sit between high-level code and runnable circuits.",
+    "whatYouCanBuild": [
+      "Compare IRs, DSLs, transpilers, and compiler assumptions across ecosystems.",
+      "Understand how high-level code becomes something a backend can execute.",
+      "Spot tools that matter when interoperability and compilation quality are important."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "perak-quantum-circuit": {
+    "summary": "Quantum Circuit Simulator implemented in JavaScript",
+    "description": "Quantum Circuit Simulator implemented in JavaScript",
+    "whatItIs": [
+      "quantum-circuit is maintained by perak and sits in the Compilers and languages lane of the open-source quantum map.",
+      "Quantum Circuit Simulator implemented in JavaScript"
+    ],
+    "whoItsFor": "Developers who want to understand the representations and compilers that sit between high-level code and runnable circuits.",
+    "whatYouCanBuild": [
+      "Compare IRs, DSLs, transpilers, and compiler assumptions across ecosystems.",
+      "Understand how high-level code becomes something a backend can execute.",
+      "Spot tools that matter when interoperability and compilation quality are important."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "pqclean-pqclean": {
+    "summary": "Clean, portable, tested implementations of post-quantum cryptography",
+    "description": "Clean, portable, tested implementations of post-quantum cryptography",
+    "whatItIs": [
+      "PQClean is maintained by PQClean and sits in the Post-quantum cryptography lane of the open-source quantum map.",
+      "Clean, portable, tested implementations of post-quantum cryptography"
+    ],
+    "whoItsFor": "Security-minded developers and teams looking for practical quantum-safe cryptography resources they can evaluate today.",
+    "whatYouCanBuild": [
+      "Identify which libraries are reference implementations versus production integrations.",
+      "Understand how PQC work differs from quantum-computing SDK work.",
+      "Find the right starting point for learning or experimentation."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "projectq-framework-fermilib": {
+    "summary": "FermiLib: Open source software for analyzing fermionic quantum simulation algorithms",
+    "description": "FermiLib: Open source software for analyzing fermionic quantum simulation algorithms",
+    "whatItIs": [
+      "FermiLib is maintained by ProjectQ-Framework and sits in the Quantum chemistry lane of the open-source quantum map.",
+      "FermiLib: Open source software for analyzing fermionic quantum simulation algorithms It commonly appears alongside projectq-framework-projectq in example workflows."
+    ],
+    "whoItsFor": "Researchers, students, and developers exploring how quantum software is used for chemistry and electronic-structure problems.",
+    "whatYouCanBuild": [
+      "See how chemistry problems are mapped into quantum-friendly representations.",
+      "Understand the workflow around Hamiltonians, ansatze, and measurement loops.",
+      "Compare beginner-friendly entry points into chemistry-focused quantum tooling."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "q-compiler-universalqcompiler": {
+    "summary": "Synthesizing arbitrary quantum computations",
+    "description": "Synthesizing arbitrary quantum computations",
+    "whatItIs": [
+      "UniversalQCompiler is maintained by Q-Compiler and sits in the Compilers and languages lane of the open-source quantum map.",
+      "Synthesizing arbitrary quantum computations It commonly appears alongside projectq-framework-projectq in example workflows."
+    ],
+    "whoItsFor": "Developers who want to understand the representations and compilers that sit between high-level code and runnable circuits.",
+    "whatYouCanBuild": [
+      "Compare IRs, DSLs, transpilers, and compiler assumptions across ecosystems.",
+      "Understand how high-level code becomes something a backend can execute.",
+      "Spot tools that matter when interoperability and compilation quality are important."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "qbraid-qbraid": {
+    "summary": "A platform-agnostic quantum runtime framework",
+    "description": "A platform-agnostic quantum runtime framework",
+    "whatItIs": [
+      "qBraid is maintained by qBraid and sits in the Cloud and interoperability lane of the open-source quantum map.",
+      "A platform-agnostic quantum runtime framework It commonly appears alongside aws-amazon-braket-sdk-python, quantumlib-cirq, xanaduai-pennylane in example workflows."
+    ],
+    "whoItsFor": "Teams that need to connect multiple providers, runtimes, or software ecosystems instead of staying in one stack.",
+    "whatYouCanBuild": [
+      "See how the project smooths over provider or runtime boundaries.",
+      "Understand tradeoffs between portability and provider-specific features.",
+      "Compare where interoperability helps versus where it adds abstraction."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "qcgpu-qcgpu-rust": {
+    "summary": "High Performance Tools for Quantum Computing",
+    "description": "High Performance Tools for Quantum Computing",
+    "whatItIs": [
+      "qcgpu-rust is maintained by QCGPU and sits in the General-purpose SDKs lane of the open-source quantum map.",
+      "High Performance Tools for Quantum Computing It commonly appears alongside qiskit-qiskit, projectq-framework-projectq in example workflows."
+    ],
+    "whoItsFor": "Developers who want a broad entry point for building circuits, experimenting with algorithms, and integrating quantum workflows into larger applications.",
+    "whatYouCanBuild": [
+      "Prototype end-to-end circuit workflows without committing to a niche backend too early.",
+      "Learn how the project represents circuits, gates, jobs, and results.",
+      "Compare how a major ecosystem frames practical quantum development."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "qchackers-jquil": {
+    "summary": "A Java library for quantum programming using Quil.",
+    "description": "A Java library for quantum programming using Quil.",
+    "whatItIs": [
+      "jquil is maintained by QCHackers and sits in the General-purpose SDKs lane of the open-source quantum map.",
+      "A Java library for quantum programming using Quil."
+    ],
+    "whoItsFor": "Developers who want a broad entry point for building circuits, experimenting with algorithms, and integrating quantum workflows into larger applications.",
+    "whatYouCanBuild": [
+      "Prototype end-to-end circuit workflows without committing to a niche backend too early.",
+      "Learn how the project represents circuits, gates, jobs, and results.",
+      "Compare how a major ecosystem frames practical quantum development."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "qct-iqc-qacg": {
+    "summary": "Quantum Arithmetic Circuit Generator",
+    "description": "Quantum Arithmetic Circuit Generator",
+    "whatItIs": [
+      "qacg is maintained by QCT-IQC and sits in the Compilers and languages lane of the open-source quantum map.",
+      "Quantum Arithmetic Circuit Generator"
+    ],
+    "whoItsFor": "Developers who want to understand the representations and compilers that sit between high-level code and runnable circuits.",
+    "whatYouCanBuild": [
+      "Compare IRs, DSLs, transpilers, and compiler assumptions across ecosystems.",
+      "Understand how high-level code becomes something a backend can execute.",
+      "Spot tools that matter when interoperability and compilation quality are important."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "qct-iqc-qcviewer": {
+    "summary": "A visual quantum circuit design and simulation tool.",
+    "description": "A visual quantum circuit design and simulation tool.",
+    "whatItIs": [
+      "QCViewer is maintained by QCT-IQC and sits in the Visualization and tomography lane of the open-source quantum map.",
+      "A visual quantum circuit design and simulation tool."
+    ],
+    "whoItsFor": "People who learn best by seeing state structure, measurement results, or circuit behavior laid out visually.",
+    "whatYouCanBuild": [
+      "Understand how the project helps inspect or reconstruct quantum systems.",
+      "Compare visual tooling against more code-heavy workflows.",
+      "Use the resource as a bridge between theory, experiments, and debugging."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "qe-lab-openql": {
+    "summary": "OpenQL: A Portable Quantum Programming Framework for Quantum Accelerators.",
+    "description": "OpenQL: A Portable Quantum Programming Framework for Quantum Accelerators. https://dl.acm.org/doi/10.1145/3474222",
+    "whatItIs": [
+      "OpenQL is maintained by QE-Lab and sits in the Compilers and languages lane of the open-source quantum map.",
+      "OpenQL: A Portable Quantum Programming Framework for Quantum Accelerators."
+    ],
+    "whoItsFor": "Developers who want to understand the representations and compilers that sit between high-level code and runnable circuits.",
+    "whatYouCanBuild": [
+      "Compare IRs, DSLs, transpilers, and compiler assumptions across ecosystems.",
+      "Understand how high-level code becomes something a backend can execute.",
+      "Spot tools that matter when interoperability and compilation quality are important."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "qiskit-openqasm": {
+    "summary": "Quantum assembly language for extended quantum circuits",
+    "description": "Quantum assembly language for extended quantum circuits",
+    "whatItIs": [
+      "openqasm is maintained by QISKit and sits in the Compilers and languages lane of the open-source quantum map.",
+      "Quantum assembly language for extended quantum circuits"
+    ],
+    "whoItsFor": "Developers who want to understand the representations and compilers that sit between high-level code and runnable circuits.",
+    "whatYouCanBuild": [
+      "Compare IRs, DSLs, transpilers, and compiler assumptions across ecosystems.",
+      "Understand how high-level code becomes something a backend can execute.",
+      "Spot tools that matter when interoperability and compilation quality are important."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "qiskit-qiskit-aer": {
+    "summary": "Aer is a high performance simulator for quantum circuits that includes noise models",
+    "description": "Aer is a high performance simulator for quantum circuits that includes noise models",
+    "whatItIs": [
+      "qiskit-aer is maintained by Qiskit and sits in the Simulators lane of the open-source quantum map.",
+      "Aer is a high performance simulator for quantum circuits that includes noise models It commonly appears alongside qiskit-qiskit in example workflows."
+    ],
+    "whoItsFor": "Developers and researchers who need to test ideas locally before running on hardware or who want to compare simulation strategies.",
+    "whatYouCanBuild": [
+      "Benchmark how different simulation methods trade accuracy for runtime.",
+      "Inspect circuit behavior, noise assumptions, or state evolution offline.",
+      "Choose the right simulator for a debugging, teaching, or research workflow."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "qiskit-qiskit-finance": {
+    "summary": "Quantum Finance",
+    "description": "Quantum Finance",
+    "whatItIs": [
+      "qiskit-finance is maintained by Qiskit and sits in the General-purpose SDKs lane of the open-source quantum map.",
+      "Quantum Finance It commonly appears alongside qiskit-qiskit in example workflows."
+    ],
+    "whoItsFor": "Developers who want a broad entry point for building circuits, experimenting with algorithms, and integrating quantum workflows into larger applications.",
+    "whatYouCanBuild": [
+      "Prototype end-to-end circuit workflows without committing to a niche backend too early.",
+      "Learn how the project represents circuits, gates, jobs, and results.",
+      "Compare how a major ecosystem frames practical quantum development."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "qiskit-qiskit-js": {
+    "summary": ":atom_symbol: Qiskit (Quantum Information Science Kit) for JavaScript",
+    "description": ":atom_symbol: Qiskit (Quantum Information Science Kit) for JavaScript",
+    "whatItIs": [
+      "qiskit-js is maintained by Qiskit and sits in the Compilers and languages lane of the open-source quantum map.",
+      ":atom_symbol: Qiskit (Quantum Information Science Kit) for JavaScript"
+    ],
+    "whoItsFor": "Developers who want to understand the representations and compilers that sit between high-level code and runnable circuits.",
+    "whatYouCanBuild": [
+      "Compare IRs, DSLs, transpilers, and compiler assumptions across ecosystems.",
+      "Understand how high-level code becomes something a backend can execute.",
+      "Spot tools that matter when interoperability and compilation quality are important."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "qiskit-qiskit-machine-learning": {
+    "summary": "An open-source library built on Qiskit for quantum machine learning tasks at scale on quantum hardware and classical simulators",
+    "description": "An open-source library built on Qiskit for quantum machine learning tasks at scale on quantum hardware and classical simulators",
+    "whatItIs": [
+      "qiskit-machine-learning is maintained by Qiskit and sits in the Quantum machine learning lane of the open-source quantum map.",
+      "An open-source library built on Qiskit for quantum machine learning tasks at scale on quantum hardware and classical simulators It commonly appears alongside qiskit-qiskit in example workflows."
+    ],
+    "whoItsFor": "Researchers and practitioners experimenting with quantum machine learning, variational models, and differentiable circuit stacks.",
+    "whatYouCanBuild": [
+      "Learn how the project connects model training ideas to quantum primitives.",
+      "Inspect the assumptions behind differentiable or ML-oriented workflows.",
+      "Compare how serious or experimental the ML story really is."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "qiskit-qiskit-nature": {
+    "summary": "Qiskit Nature is an open-source, quantum computing, framework for solving quantum mechanical natural science problems.",
+    "description": "Qiskit Nature is an open-source, quantum computing, framework for solving quantum mechanical natural science problems.",
+    "whatItIs": [
+      "qiskit-nature is maintained by Qiskit and sits in the Quantum chemistry lane of the open-source quantum map.",
+      "Qiskit Nature is an open-source, quantum computing, framework for solving quantum mechanical natural science problems. It commonly appears alongside qiskit-qiskit in example workflows."
+    ],
+    "whoItsFor": "Researchers, students, and developers exploring how quantum software is used for chemistry and electronic-structure problems.",
+    "whatYouCanBuild": [
+      "See how chemistry problems are mapped into quantum-friendly representations.",
+      "Understand the workflow around Hamiltonians, ansatze, and measurement loops.",
+      "Compare beginner-friendly entry points into chemistry-focused quantum tooling."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "qiskit-qiskit-terra": {
+    "summary": "Qiskit is an open-source SDK for working with quantum computers at the level of extended quantum circuits, operators, and primitives.",
+    "description": "Qiskit is an open-source SDK for working with quantum computers at the level of extended quantum circuits, operators, and primitives.",
+    "whatItIs": [
+      "qiskit-terra is maintained by Qiskit and sits in the General-purpose SDKs lane of the open-source quantum map.",
+      "Qiskit is an open-source SDK for working with quantum computers at the level of extended quantum circuits, operators, and primitives. It commonly appears alongside qiskit-qiskit in example workflows."
+    ],
+    "whoItsFor": "Developers who want a broad entry point for building circuits, experimenting with algorithms, and integrating quantum workflows into larger applications.",
+    "whatYouCanBuild": [
+      "Prototype end-to-end circuit workflows without committing to a niche backend too early.",
+      "Learn how the project represents circuits, gates, jobs, and results.",
+      "Compare how a major ecosystem frames practical quantum development."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "qiskit-qiskit-tutorial": {
+    "summary": "A collection of Jupyter notebooks showing how to use the Qiskit SDK",
+    "description": "A collection of Jupyter notebooks showing how to use the Qiskit SDK",
+    "whatItIs": [
+      "qiskit-tutorial is maintained by QISKit and sits in the Simulators lane of the open-source quantum map.",
+      "A collection of Jupyter notebooks showing how to use the Qiskit SDK"
+    ],
+    "whoItsFor": "Developers and researchers who need to test ideas locally before running on hardware or who want to compare simulation strategies.",
+    "whatYouCanBuild": [
+      "Benchmark how different simulation methods trade accuracy for runtime.",
+      "Inspect circuit behavior, noise assumptions, or state evolution offline.",
+      "Choose the right simulator for a debugging, teaching, or research workflow."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "qosf-os-quantum-software": {
+    "summary": "Curated list of open-source quantum software projects.",
+    "description": "Curated list of open-source quantum software projects.",
+    "whatItIs": [
+      "os_quantum_software is maintained by qosf and sits in the Simulators lane of the open-source quantum map.",
+      "Curated list of open-source quantum software projects."
+    ],
+    "whoItsFor": "Developers and researchers who need to test ideas locally before running on hardware or who want to compare simulation strategies.",
+    "whatYouCanBuild": [
+      "Benchmark how different simulation methods trade accuracy for runtime.",
+      "Inspect circuit behavior, noise assumptions, or state evolution offline.",
+      "Choose the right simulator for a debugging, teaching, or research workflow."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "qosf-qosf-org": {
+    "summary": "Web portal of Quantum Open Source Foundation",
+    "description": "Web portal of Quantum Open Source Foundation",
+    "whatItIs": [
+      "qosf.org is maintained by qosf and sits in the General-purpose SDKs lane of the open-source quantum map.",
+      "Web portal of Quantum Open Source Foundation"
+    ],
+    "whoItsFor": "Developers who want a broad entry point for building circuits, experimenting with algorithms, and integrating quantum workflows into larger applications.",
+    "whatYouCanBuild": [
+      "Prototype end-to-end circuit workflows without committing to a niche backend too early.",
+      "Learn how the project represents circuits, gates, jobs, and results.",
+      "Compare how a major ecosystem frames practical quantum development."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "quandela-perceval": {
+    "summary": "An open source framework for programming photonic quantum computers",
+    "description": "An open source framework for programming photonic quantum computers",
+    "whatItIs": [
+      "Perceval is maintained by Quandela and sits in the Photonics lane of the open-source quantum map.",
+      "An open source framework for programming photonic quantum computers"
+    ],
+    "whoItsFor": "People exploring optical and photonic models of quantum computing, especially outside the usual gate-model framing.",
+    "whatYouCanBuild": [
+      "Understand how photonic circuits, modes, and optical programs are represented.",
+      "Compare photonic workflows with more familiar circuit-model SDKs.",
+      "Learn which parts of the photonics ecosystem are most approachable."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "quantum-tii-qibo": {
+    "summary": "Qibo is an open-source full stack API for quantum simulation and quantum hardware control.",
+    "description": "Qibo is an open-source full stack API for quantum simulation and quantum hardware control.",
+    "whatItIs": [
+      "qibo is maintained by Quantum-TII and sits in the General-purpose SDKs lane of the open-source quantum map.",
+      "Qibo is an open-source full stack API for quantum simulation and quantum hardware control. It commonly appears alongside quantumlib-cirq, qiskit-qiskit, quantumlib-stim in example workflows."
+    ],
+    "whoItsFor": "Developers who want a broad entry point for building circuits, experimenting with algorithms, and integrating quantum workflows into larger applications.",
+    "whatYouCanBuild": [
+      "Prototype end-to-end circuit workflows without committing to a niche backend too early.",
+      "Learn how the project represents circuits, gates, jobs, and results.",
+      "Compare how a major ecosystem frames practical quantum development."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "quantumlib-qualtran": {
+    "summary": "<div align=\"center\"> <img alt=\"Qualtran logo\" width=\"340px\" src=\"https://raw.githubusercontent.com/quantumlib/Qualtran/refs/heads/main/docs/_static/qualtran-logo-mode-sensitive.svg\"> <br>",
+    "description": "<div align=\"center\"> <img alt=\"Qualtran logo\" width=\"340px\" src=\"https://raw.githubusercontent.com/quantumlib/Qualtran/refs/heads/main/docs/_static/qualtran-logo-mode-sensitive.svg\"> <br>",
+    "whatItIs": [
+      "Qualtran is maintained by quantumlib and sits in the Benchmarks and analysis lane of the open-source quantum map.",
+      "<div align=\"center\"> <img alt=\"Qualtran logo\" width=\"340px\" src=\"https://raw.githubusercontent.com/quantumlib/Qualtran/refs/heads/main/docs/_static/qualtran-logo-mode-sensitive.svg\"> <br> It commonly appears alongside quantumlib-cirq, xanaduai-pennylane, quantumlib-openfermion in example workflows."
+    ],
+    "whoItsFor": "Researchers and evaluators comparing toolchains, algorithms, hardware assumptions, or performance tradeoffs.",
+    "whatYouCanBuild": [
+      "Learn what this project measures and why it matters.",
+      "Compare benchmarking assumptions instead of taking headline claims at face value.",
+      "Use the resource to evaluate ecosystems more critically."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "quantumutils-quantum-utils-mathematica": {
+    "summary": "QuantumUtils for Mathematica is a software library for quantum information scientists.",
+    "description": "QuantumUtils for Mathematica is a software library for quantum information scientists. Features include:",
+    "whatItIs": [
+      "quantum-utils-mathematica is maintained by QuantumUtils and sits in the Simulators lane of the open-source quantum map.",
+      "QuantumUtils for Mathematica is a software library for quantum information scientists."
+    ],
+    "whoItsFor": "Developers and researchers who need to test ideas locally before running on hardware or who want to compare simulation strategies.",
+    "whatYouCanBuild": [
+      "Benchmark how different simulation methods trade accuracy for runtime.",
+      "Inspect circuit behavior, noise assumptions, or state evolution offline.",
+      "Choose the right simulator for a debugging, teaching, or research workflow."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "qutech-qupulse": {
+    "summary": "qupulse: A Quantum compUting PULse parametrization and SEquencing framework",
+    "description": "qupulse: A Quantum compUting PULse parametrization and SEquencing framework",
+    "whatItIs": [
+      "qupulse is maintained by qutech and sits in the Pulse and control lane of the open-source quantum map.",
+      "qupulse: A Quantum compUting PULse parametrization and SEquencing framework"
+    ],
+    "whoItsFor": "Hardware-adjacent developers and researchers working closer to experiments, pulse schedules, or lab orchestration.",
+    "whatYouCanBuild": [
+      "See how low-level control stacks differ from higher-level SDKs.",
+      "Understand where pulse sequencing and experiment orchestration fit in the stack.",
+      "Learn which projects matter when hardware control is part of the workflow."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "rigetti-quantumflow": {
+    "summary": ">Notice: This is research code that will not necessarily be maintained to >support further releases of Forest and other Rigetti Software.",
+    "description": ">Notice: This is research code that will not necessarily be maintained to >support further releases of Forest and other Rigetti Software. We welcome >bug reports and PRs but make no guarantee about fixes or responses.",
+    "whatItIs": [
+      "quantumflow is maintained by rigetti and sits in the Compilers and languages lane of the open-source quantum map.",
+      ">Notice: This is research code that will not necessarily be maintained to >support further releases of Forest and other Rigetti Software."
+    ],
+    "whoItsFor": "Developers who want to understand the representations and compilers that sit between high-level code and runnable circuits.",
+    "whatYouCanBuild": [
+      "Compare IRs, DSLs, transpilers, and compiler assumptions across ecosystems.",
+      "Understand how high-level code becomes something a backend can execute.",
+      "Spot tools that matter when interoperability and compilation quality are important."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "rigetti-quilc": {
+    "summary": "Quilc is an advanced optimizing compiler for the quantum instruction language Quil, licensed under the Apache 2.0 license.",
+    "description": "Quilc is an advanced optimizing compiler for the quantum instruction language Quil, licensed under the Apache 2.0 license.",
+    "whatItIs": [
+      "quilc is maintained by rigetti and sits in the Compilers and languages lane of the open-source quantum map.",
+      "Quilc is an advanced optimizing compiler for the quantum instruction language Quil, licensed under the Apache 2.0 license."
+    ],
+    "whoItsFor": "Developers who want to understand the representations and compilers that sit between high-level code and runnable circuits.",
+    "whatYouCanBuild": [
+      "Compare IRs, DSLs, transpilers, and compiler assumptions across ecosystems.",
+      "Understand how high-level code becomes something a backend can execute.",
+      "Spot tools that matter when interoperability and compilation quality are important."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "rigetti-qvm": {
+    "summary": "This is the official Quil-Lang *Quantum Virtual Machine* (QVM), a flexible and efficient simulator for Quil.",
+    "description": "This is the official Quil-Lang *Quantum Virtual Machine* (QVM), a flexible and efficient simulator for Quil.",
+    "whatItIs": [
+      "qvm is maintained by rigetti and sits in the Compilers and languages lane of the open-source quantum map.",
+      "This is the official Quil-Lang *Quantum Virtual Machine* (QVM), a flexible and efficient simulator for Quil."
+    ],
+    "whoItsFor": "Developers who want to understand the representations and compilers that sit between high-level code and runnable circuits.",
+    "whatYouCanBuild": [
+      "Compare IRs, DSLs, transpilers, and compiler assumptions across ecosystems.",
+      "Understand how high-level code becomes something a backend can execute.",
+      "Spot tools that matter when interoperability and compilation quality are important."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "rigetticomputing-grove": {
+    "summary": "A collection of quantum algorithms built using the Rigetti Forest platform.",
+    "description": "A collection of quantum algorithms built using the Rigetti Forest platform. Grove is licensed under the Apache 2.0 license.",
+    "whatItIs": [
+      "grove is maintained by rigetticomputing and sits in the Optimization and QUBO lane of the open-source quantum map.",
+      "A collection of quantum algorithms built using the Rigetti Forest platform."
+    ],
+    "whoItsFor": "Teams exploring routing, scheduling, allocation, and other combinatorial problems that can be modeled as optimization workloads.",
+    "whatYouCanBuild": [
+      "Understand how this project models constrained optimization problems.",
+      "Compare QUBO, QAOA, and hybrid optimization workflows against classical baselines.",
+      "Identify pieces that could inform a practical planning stack like Qtangl."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "rigetticomputing-pyquil": {
+    "summary": "PyQuil is a Python library for quantum programming using Quil, the quantum instruction language developed at Rigetti Computing.",
+    "description": "PyQuil is a Python library for quantum programming using Quil, the quantum instruction language developed at Rigetti Computing. PyQuil serves three main functions:",
+    "whatItIs": [
+      "pyquil is maintained by rigetticomputing and sits in the Compilers and languages lane of the open-source quantum map.",
+      "PyQuil is a Python library for quantum programming using Quil, the quantum instruction language developed at Rigetti Computing."
+    ],
+    "whoItsFor": "Developers who want to understand the representations and compilers that sit between high-level code and runnable circuits.",
+    "whatYouCanBuild": [
+      "Compare IRs, DSLs, transpilers, and compiler assumptions across ecosystems.",
+      "Understand how high-level code becomes something a backend can execute.",
+      "Spot tools that matter when interoperability and compilation quality are important."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "rigetticomputing-reference-qvm": {
+    "summary": "The referenceqvm is the reference implementation of the QVM outlined in the arXiv:1608:03355 by Robert Smith, Spike Curtis, and Will Zeng.",
+    "description": "The referenceqvm is the reference implementation of the QVM outlined in the arXiv:1608:03355 by Robert Smith, Spike Curtis, and Will Zeng. It is a research package that supports rapid prototyping and development of quantum programs using pyQuil.",
+    "whatItIs": [
+      "reference-qvm is maintained by rigetticomputing and sits in the Compilers and languages lane of the open-source quantum map.",
+      "The referenceqvm is the reference implementation of the QVM outlined in the arXiv:1608:03355 by Robert Smith, Spike Curtis, and Will Zeng."
+    ],
+    "whoItsFor": "Developers who want to understand the representations and compilers that sit between high-level code and runnable circuits.",
+    "whatYouCanBuild": [
+      "Compare IRs, DSLs, transpilers, and compiler assumptions across ecosystems.",
+      "Understand how high-level code becomes something a backend can execute.",
+      "Spot tools that matter when interoperability and compilation quality are important."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "rogercolbeck-qi": {
+    "summary": "This is a Mathematica package containing commands for implementing functionalities commonly needed in quantum information processing.",
+    "description": "This is a Mathematica package containing commands for implementing functionalities commonly needed in quantum information processing. These are useful for doing theoretical computations on quantum information protocols. For instance, one could easily use it to work through the teleportation protocol with a perfect Bell state, and then to see what happens to the fidelity of the output state when a...",
+    "whatItIs": [
+      "QI is maintained by rogercolbeck and sits in the Compilers and languages lane of the open-source quantum map.",
+      "This is a Mathematica package containing commands for implementing functionalities commonly needed in quantum information processing."
+    ],
+    "whoItsFor": "Developers who want to understand the representations and compilers that sit between high-level code and runnable circuits.",
+    "whatYouCanBuild": [
+      "Compare IRs, DSLs, transpilers, and compiler assumptions across ecosystems.",
+      "Understand how high-level code becomes something a backend can execute.",
+      "Spot tools that matter when interoperability and compilation quality are important."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "rqc-qapp-quantumcomputingbot": {
+    "summary": "Monitoring the load of IBM Q processors from IBM Quantum Experience (data for 24 hours).",
+    "description": "Monitoring the load of IBM Q processors from IBM Quantum Experience (data for 24 hours).",
+    "whatItIs": [
+      "QuantumComputingBot is maintained by RQC-QApp and sits in the General-purpose SDKs lane of the open-source quantum map.",
+      "Monitoring the load of IBM Q processors from IBM Quantum Experience (data for 24 hours)."
+    ],
+    "whoItsFor": "Developers who want a broad entry point for building circuits, experimenting with algorithms, and integrating quantum workflows into larger applications.",
+    "whatYouCanBuild": [
+      "Prototype end-to-end circuit workflows without committing to a niche backend too early.",
+      "Learn how the project represents circuits, gates, jobs, and results.",
+      "Compare how a major ecosystem frames practical quantum development."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "sequencing-dev-sequencing": {
+    "summary": "`sequencing is a Python package for simulating realistic quantum control sequences using QuTiP.",
+    "description": "`sequencing is a Python package for simulating realistic quantum control sequences using QuTiP. Built for researchers and quantum engineers, sequencing` provides an intuitive framework for constructing models of quantum systems composed of many modes and generating complex time-dependent control Hamiltonians for master equation simulations.",
+    "whatItIs": [
+      "sequencing is maintained by sequencing-dev and sits in the Pulse and control lane of the open-source quantum map.",
+      "`sequencing is a Python package for simulating realistic quantum control sequences using QuTiP."
+    ],
+    "whoItsFor": "Hardware-adjacent developers and researchers working closer to experiments, pulse schedules, or lab orchestration.",
+    "whatYouCanBuild": [
+      "See how low-level control stacks differ from higher-level SDKs.",
+      "Understand where pulse sequencing and experiment orchestration fit in the stack.",
+      "Learn which projects matter when hardware control is part of the workflow."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "softwareqinc-qpp": {
+    "summary": "**Quantum++** is a modern C++ general purpose quantum computing library, composed solely of template header files.",
+    "description": "**Quantum++** is a modern C++ general purpose quantum computing library, composed solely of template header files. **Quantum++** is written in standard C++17 and has very low external dependencies, using only the Eigen linear algebra header-only template library and, if available, the OpenMP multiprocessing library.",
+    "whatItIs": [
+      "qpp is maintained by softwareqinc and sits in the Simulators lane of the open-source quantum map.",
+      "**Quantum++** is a modern C++ general purpose quantum computing library, composed solely of template header files."
+    ],
+    "whoItsFor": "Developers and researchers who need to test ideas locally before running on hardware or who want to compare simulation strategies.",
+    "whatYouCanBuild": [
+      "Benchmark how different simulation methods trade accuracy for runtime.",
+      "Inspect circuit behavior, noise assumptions, or state evolution offline.",
+      "Choose the right simulator for a debugging, teaching, or research workflow."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "softwareqinc-staq": {
+    "summary": "**staq** is a modern C++ library for the synthesis, transformation, optimization and compilation of quantum circuits.",
+    "description": "**staq** is a modern C++ library for the synthesis, transformation, optimization and compilation of quantum circuits. **staq** is written in standard C++17 and has very low external dependencies. It is usable either through the provided binary tools, or as a header-only library that can be included to provide direct support for parsing & manipulating circuits written in the OpenQASM 2.0...",
+    "whatItIs": [
+      "staq is maintained by softwareqinc and sits in the Compilers and languages lane of the open-source quantum map.",
+      "**staq** is a modern C++ library for the synthesis, transformation, optimization and compilation of quantum circuits."
+    ],
+    "whoItsFor": "Developers who want to understand the representations and compilers that sit between high-level code and runnable circuits.",
+    "whatYouCanBuild": [
+      "Compare IRs, DSLs, transpilers, and compiler assumptions across ecosystems.",
+      "Understand how high-level code becomes something a backend can execute.",
+      "Spot tools that matter when interoperability and compilation quality are important."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "stephaniewehner-simulaqron": {
+    "summary": "The purpose of this simulator of quantum network nodes is to allow you to develop new applications for a future quantum internet, while we do not yet have real quantum network nodes...",
+    "description": "The purpose of this simulator of quantum network nodes is to allow you to develop new applications for a future quantum internet, while we do not yet have real quantum network nodes available for testing.",
+    "whatItIs": [
+      "SimulaQron is maintained by StephanieWehner and sits in the Networking lane of the open-source quantum map.",
+      "The purpose of this simulator of quantum network nodes is to allow you to develop new applications for a future quantum internet, while we do not yet have real quantum network nodes... It commonly appears alongside projectq-framework-projectq in example workflows."
+    ],
+    "whoItsFor": "Researchers and students exploring distributed quantum systems, communication protocols, and quantum internet concepts.",
+    "whatYouCanBuild": [
+      "See how the project models nodes, links, and entanglement distribution.",
+      "Understand what a networking-oriented workflow looks like in software.",
+      "Compare education-focused versus research-focused networking tools."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "subwayharearmy-sudoq": {
+    "summary": "SudoQ A Sudoku solver that leverages D-Wave's Quantum Computer.",
+    "description": "SudoQ A Sudoku solver that leverages D-Wave's Quantum Computer. Meant to be a first project, a tutorial of sorts for Quantum Annealing using D-Wave architecture. Addresses QUBO set-up and solving.",
+    "whatItIs": [
+      "SudoQ is maintained by subwayHareArmy and sits in the Games and learning lane of the open-source quantum map.",
+      "SudoQ A Sudoku solver that leverages D-Wave's Quantum Computer."
+    ],
+    "whoItsFor": "Beginners, educators, and curious developers who want a more approachable path into quantum concepts.",
+    "whatYouCanBuild": [
+      "Get a gentler introduction before diving into full SDKs.",
+      "See how different projects teach circuits, superposition, and measurement.",
+      "Identify resources that work well for onboarding or self-study."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "theoryinpractice-aqc-virtual-embedding": {
+    "summary": "Virtual Hardware Embedding Suite for Adiabatic Quantum Computing",
+    "description": "Virtual Hardware Embedding Suite for Adiabatic Quantum Computing",
+    "whatItIs": [
+      "aqc-virtual-embedding is maintained by TheoryInPractice and sits in the Annealing and Ising lane of the open-source quantum map.",
+      "Virtual Hardware Embedding Suite for Adiabatic Quantum Computing"
+    ],
+    "whoItsFor": "Developers interested in Ising-model formulations, annealing workflows, and D-Wave-style solver ecosystems.",
+    "whatYouCanBuild": [
+      "See how annealing-oriented projects model optimization problems.",
+      "Understand embeddings, samplers, and the surrounding tooling needed in practice.",
+      "Compare annealing workflows against gate-model and hybrid alternatives."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "thephoeron-black-stone": {
+    "summary": "Specification and Implementation of Quantum Common Lisp and the Black Stone Quantum Computer simulator, for modelling classical interface gate-model quantum computer programs.",
+    "description": "Specification and Implementation of Quantum Common Lisp and the Black Stone Quantum Computer simulator, for modelling classical interface gate-model quantum computer programs.",
+    "whatItIs": [
+      "black-stone is maintained by thephoeron and sits in the Simulators lane of the open-source quantum map.",
+      "Specification and Implementation of Quantum Common Lisp and the Black Stone Quantum Computer simulator, for modelling classical interface gate-model quantum computer programs."
+    ],
+    "whoItsFor": "Developers and researchers who need to test ideas locally before running on hardware or who want to compare simulation strategies.",
+    "whatYouCanBuild": [
+      "Benchmark how different simulation methods trade accuracy for runtime.",
+      "Inspect circuit behavior, noise assumptions, or state evolution offline.",
+      "Choose the right simulator for a debugging, teaching, or research workflow."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "thephoeron-quipper-language": {
+    "summary": "This file is part of Quipper.",
+    "description": "This file is part of Quipper. Copyright (C) 2011-2014. Please see the file COPYRIGHT for a list of authors, copyright holders, licensing, and other details. All rights reserved.",
+    "whatItIs": [
+      "quipper-language is maintained by thephoeron and sits in the Compilers and languages lane of the open-source quantum map.",
+      "This file is part of Quipper."
+    ],
+    "whoItsFor": "Developers who want to understand the representations and compilers that sit between high-level code and runnable circuits.",
+    "whatYouCanBuild": [
+      "Compare IRs, DSLs, transpilers, and compiler assumptions across ecosystems.",
+      "Understand how high-level code becomes something a backend can execute.",
+      "Spot tools that matter when interoperability and compilation quality are important."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "theqrl-qrl": {
+    "summary": "> Python-based blockchain ledger utilizing hash-based one-time merkle tree signature scheme (XMSS) instead of ECDSA.",
+    "description": "> Python-based blockchain ledger utilizing hash-based one-time merkle tree signature scheme (XMSS) instead of ECDSA. Proof-of-work block selection via the cryptonight algorithm. Future transition to POS with signed iterative hash chain reveal scheme which is both probabilistic and random (https://github.com/theQRL/pos). > > Hash-based signatures means larger transactions (3kb per tx, binary), longer keypair generation times and the need to record...",
+    "whatItIs": [
+      "QRL is maintained by theQRL and sits in the Post-quantum cryptography lane of the open-source quantum map.",
+      "> Python-based blockchain ledger utilizing hash-based one-time merkle tree signature scheme (XMSS) instead of ECDSA."
+    ],
+    "whoItsFor": "Security-minded developers and teams looking for practical quantum-safe cryptography resources they can evaluate today.",
+    "whatYouCanBuild": [
+      "Identify which libraries are reference implementations versus production integrations.",
+      "Understand how PQC work differs from quantum-computing SDK work.",
+      "Find the right starting point for learning or experimentation."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "tqsd-qunetsim": {
+    "summary": "QuNetSim is a quantum-enabled network simulator that adds common quantum networking tasks like teleportation, superdense coding, sharing EPR pairs, etc.",
+    "description": "QuNetSim is a quantum-enabled network simulator that adds common quantum networking tasks like teleportation, superdense coding, sharing EPR pairs, etc. With QuNetSim, one can design and test robust quantum network protocols under various network conditions.",
+    "whatItIs": [
+      "QuNetSim is maintained by tqsd and sits in the Networking lane of the open-source quantum map.",
+      "QuNetSim is a quantum-enabled network simulator that adds common quantum networking tasks like teleportation, superdense coding, sharing EPR pairs, etc. It commonly appears alongside projectq-framework-projectq in example workflows."
+    ],
+    "whoItsFor": "Researchers and students exploring distributed quantum systems, communication protocols, and quantum internet concepts.",
+    "whatYouCanBuild": [
+      "See how the project models nodes, links, and entanglement distribution.",
+      "Understand what a networking-oriented workflow looks like in software.",
+      "Compare education-focused versus research-focused networking tools."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "vm6502q-qrack": {
+    "summary": "The open source vm6502q/qrack library and its associated plugins and projects under the vm6502q organization header comprise a framework for full-stack quantum computing development, via high performance and fundamentally optimized simulation.",
+    "description": "The open source vm6502q/qrack library and its associated plugins and projects under the vm6502q organization header comprise a framework for full-stack quantum computing development, via high performance and fundamentally optimized simulation. The intent of \"Qrack\" is to provide maximum performance for the simulation of an ideal, virtually error-free quantum computer, across the broadest possible set of hardware and operating systems.",
+    "whatItIs": [
+      "qrack is maintained by vm6502q and sits in the Simulators lane of the open-source quantum map.",
+      "The open source vm6502q/qrack library and its associated plugins and projects under the vm6502q organization header comprise a framework for full-stack quantum computing development, via high performance and fundamentally optimized simulation. It commonly appears alongside qiskit-qiskit, quantumlib-openfermion, xanaduai-pennylane in example workflows."
+    ],
+    "whoItsFor": "Developers and researchers who need to test ideas locally before running on hardware or who want to compare simulation strategies.",
+    "whatYouCanBuild": [
+      "Benchmark how different simulation methods trade accuracy for runtime.",
+      "Inspect circuit behavior, noise assumptions, or state evolution offline.",
+      "Choose the right simulator for a debugging, teaching, or research workflow."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "vprusso-toqito": {
+    "summary": "<p align=\"center\"> <picture> <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://raw.githubusercontent.com/vprusso/toqito/master/docs/content/figures/logo-dark.svg\" width=\"60%\"> <img src=\"https://raw.githubusercontent.com/vprusso/toqito/master/docs/content/figures/logo.svg\" width=\"60%\"> </picture> </p>",
+    "description": "<p align=\"center\"> <picture> <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://raw.githubusercontent.com/vprusso/toqito/master/docs/content/figures/logo-dark.svg\" width=\"60%\"> <img src=\"https://raw.githubusercontent.com/vprusso/toqito/master/docs/content/figures/logo.svg\" width=\"60%\"> </picture> </p>",
+    "whatItIs": [
+      "toqito is maintained by vprusso and sits in the General-purpose SDKs lane of the open-source quantum map.",
+      "<p align=\"center\"> <picture> <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://raw.githubusercontent.com/vprusso/toqito/master/docs/content/figures/logo-dark.svg\" width=\"60%\"> <img src=\"https://raw.githubusercontent.com/vprusso/toqito/master/docs/content/figures/logo.svg\" width=\"60%\"> </picture> </p>"
+    ],
+    "whoItsFor": "Developers who want a broad entry point for building circuits, experimenting with algorithms, and integrating quantum workflows into larger applications.",
+    "whatYouCanBuild": [
+      "Prototype end-to-end circuit workflows without committing to a niche backend too early.",
+      "Learn how the project represents circuits, gates, jobs, and results.",
+      "Compare how a major ecosystem frames practical quantum development."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "weinbe58-quspin": {
+    "summary": "QuSpin is an open-source Python package for Exact Diagonalization and quantum dynamics of arbitrary boson, fermion and spin many-body systems, supporting the use of various (user-defined) symmetries in one and higher dimensional...",
+    "description": "QuSpin is an open-source Python package for Exact Diagonalization and quantum dynamics of arbitrary boson, fermion and spin many-body systems, supporting the use of various (user-defined) symmetries in one and higher dimensional lattice systems and (imaginary) time evolution following a user-specified driving protocol.",
+    "whatItIs": [
+      "QuSpin is maintained by weinbe58 and sits in the Quantum chemistry lane of the open-source quantum map.",
+      "QuSpin is an open-source Python package for Exact Diagonalization and quantum dynamics of arbitrary boson, fermion and spin many-body systems, supporting the use of various (user-defined) symmetries in one and higher dimensional..."
+    ],
+    "whoItsFor": "Researchers, students, and developers exploring how quantum software is used for chemistry and electronic-structure problems.",
+    "whatYouCanBuild": [
+      "See how chemistry problems are mapped into quantum-friendly representations.",
+      "Understand the workflow around Hamiltonians, ansatze, and measurement loops.",
+      "Compare beginner-friendly entry points into chemistry-focused quantum tooling."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "wintershammer-qimp": {
+    "summary": "QImp QImp is the experimental implementation of an interpreter for the quantum programming language Qumin.",
+    "description": "QImp QImp is the experimental implementation of an interpreter for the quantum programming language Qumin. For more info, check out the (still under-construction) tutorial over at my github page!",
+    "whatItIs": [
+      "QImp is maintained by wintershammer and sits in the Pulse and control lane of the open-source quantum map.",
+      "QImp QImp is the experimental implementation of an interpreter for the quantum programming language Qumin."
+    ],
+    "whoItsFor": "Hardware-adjacent developers and researchers working closer to experiments, pulse schedules, or lab orchestration.",
+    "whatYouCanBuild": [
+      "See how low-level control stacks differ from higher-level SDKs.",
+      "Understand where pulse sequencing and experiment orchestration fit in the stack.",
+      "Learn which projects matter when hardware control is part of the workflow."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "xanaduai-blackbird": {
+    "summary": "image:: https://img.shields.io/github/workflow/status/XanaduAI/blackbird/Tests/master?logo=github&style=flat-square :alt: GitHub Workflow Status (branch) :target: https://github.com/XanaduAI/blackbird/actions?query=workflow%3ATests",
+    "description": ".. image:: https://img.shields.io/github/workflow/status/XanaduAI/blackbird/Tests/master?logo=github&style=flat-square :alt: GitHub Workflow Status (branch) :target: https://github.com/XanaduAI/blackbird/actions?query=workflow%3ATests",
+    "whatItIs": [
+      "blackbird is maintained by XanaduAI and sits in the Photonics lane of the open-source quantum map.",
+      "image:: https://img.shields.io/github/workflow/status/XanaduAI/blackbird/Tests/master?logo=github&style=flat-square :alt: GitHub Workflow Status (branch) :target: https://github.com/XanaduAI/blackbird/actions?query=workflow%3ATests"
+    ],
+    "whoItsFor": "People exploring optical and photonic models of quantum computing, especially outside the usual gate-model framing.",
+    "whatYouCanBuild": [
+      "Understand how photonic circuits, modes, and optical programs are represented.",
+      "Compare photonic workflows with more familiar circuit-model SDKs.",
+      "Learn which parts of the photonics ecosystem are most approachable."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "xanaduai-thewalrus": {
+    "summary": "image:: https://img.shields.io/codecov/c/github/xanaduai/thewalrus/master.svg?style=flat :alt: Codecov coverage :target: https://codecov.io/gh/XanaduAI/thewalrus",
+    "description": ".. image:: https://img.shields.io/codecov/c/github/xanaduai/thewalrus/master.svg?style=flat :alt: Codecov coverage :target: https://codecov.io/gh/XanaduAI/thewalrus",
+    "whatItIs": [
+      "thewalrus is maintained by xanaduAI and sits in the Photonics lane of the open-source quantum map.",
+      "image:: https://img.shields.io/codecov/c/github/xanaduai/thewalrus/master.svg?style=flat :alt: Codecov coverage :target: https://codecov.io/gh/XanaduAI/thewalrus"
+    ],
+    "whoItsFor": "People exploring optical and photonic models of quantum computing, especially outside the usual gate-model framing.",
+    "whatYouCanBuild": [
+      "Understand how photonic circuits, modes, and optical programs are represented.",
+      "Compare photonic workflows with more familiar circuit-model SDKs.",
+      "Learn which parts of the photonics ecosystem are most approachable."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  },
+  "ziofil-quantumgraphs": {
+    "summary": "Introduction This package is for growing random graphs and trees by using continuous quantum walks:",
+    "description": "Introduction This package is for growing random graphs and trees by using continuous quantum walks:",
+    "whatItIs": [
+      "QuantumGraphs is maintained by ziofil and sits in the Visualization and tomography lane of the open-source quantum map.",
+      "Introduction This package is for growing random graphs and trees by using continuous quantum walks:"
+    ],
+    "whoItsFor": "People who learn best by seeing state structure, measurement results, or circuit behavior laid out visually.",
+    "whatYouCanBuild": [
+      "Understand how the project helps inspect or reconstruct quantum systems.",
+      "Compare visual tooling against more code-heavy workflows.",
+      "Use the resource as a bridge between theory, experiments, and debugging."
+    ],
+    "lastVerifiedAt": "2026-05-27",
+    "verifiedBy": "Qtangl generator"
+  }
+}

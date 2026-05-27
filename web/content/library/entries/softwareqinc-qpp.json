@@ -4,7 +4,7 @@
   "name": "qpp",
   "title": "qpp",
   "repoUrl": "https://github.com/softwareqinc/qpp",
-  "homepageUrl": null,
+  "homepageUrl": "https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0208073",
   "category": {
     "slug": "simulators",
     "title": "Simulators",
@@ -21,11 +21,16 @@
     }
   ],
   "primaryLanguage": "C++",
+  "primaryLanguages": [
+    "C++",
+    "OpenQASM",
+    "Python"
+  ],
   "license": "MIT",
-  "summary": "**Quantum++** is a modern C++ general purpose quantum computing library, composed solely of template header files.",
-  "description": "**Quantum++** is a modern C++ general purpose quantum computing library, composed solely of template header files. **Quantum++** is written in standard C++17 and has very low external dependencies, using only the Eigen linear algebra header-only template library and, if available, the OpenMP multiprocessing library.",
+  "summary": "Modern C++ quantum computing library",
+  "description": "Modern C++ quantum computing library",
   "whatItIs": [
-    "qpp is an open-source project in the simulators category. It is maintained by softwareqinc and primarily looks like a C++ codebase. **Quantum++** is a modern C++ general purpose quantum computing library, composed solely of template header files.",
+    "qpp is an open-source project in the simulators category. It is maintained by softwareqinc and primarily looks like a C++ codebase. Modern C++ quantum computing library",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches simulators workflows in practice. The repository README emphasizes: **Quantum++** is a modern C++ general purpose quantum computing library, composed solely of template header files. **Quantum++** is written in standard C++17 and has very low external dependencies, using only the Eigen linear algebra header-only template library and, if available, the OpenMP multiprocessing library. **Quantum++** is not restricted..."
   ],
   "whoItsFor": "Developers and researchers who need to test ideas locally before running on hardware or who want to compare simulation strategies.",
@@ -36,21 +41,50 @@
   ],
   "readmeExcerpt": "**Quantum++** is a modern C++ general purpose quantum computing library, composed solely of template header files. **Quantum++** is written in standard C++17 and has very low external dependencies, using only the Eigen linear algebra header-only template library and, if available, the OpenMP multiprocessing library. **Quantum++** is not restricted to qubit systems or specific quantum information processing tasks, being capable of simulating arbitrary quantum processes. The main design factors taken in consideration were the ease of use, high portability, and high performance. The library's simulation capabilities are only restricted by the amount of available physical memory.",
   "readmePath": "reference\\softwareqinc__qpp\\README.md",
+  "readmeMarkdownPath": "readmes/softwareqinc-qpp.md",
   "clonePath": "reference\\softwareqinc__qpp",
-  "stars": 0,
-  "lastPushedAt": null,
-  "githubTopics": [],
+  "stars": 661,
+  "lastPushedAt": "2026-05-14T11:57:14Z",
+  "defaultBranch": "main",
+  "githubTopics": [
+    "c-plus-plus",
+    "cpp",
+    "cpp11",
+    "cpp17",
+    "quantum",
+    "quantum-computing",
+    "quantum-development-kit",
+    "simulator"
+  ],
+  "quickstart": null,
+  "codeSamples": [],
+  "packageMeta": {
+    "name": "pyqpp",
+    "version": "7.0.3",
+    "requiresPython": ">=3.9",
+    "dependencies": [
+      "numpy"
+    ]
+  },
+  "citationBibtex": null,
+  "supportedBackendSlugs": [],
+  "externalLinks": {},
+  "openIssuesCount": 2,
+  "subscribersCount": 30,
+  "latestRelease": null,
+  "ownerType": "Organization",
+  "ownerUrl": "https://github.com/softwareQinc",
   "featured": false,
   "flagship": false,
   "qtanglRelevant": false,
   "archived": false,
-  "imagePath": null,
+  "imagePath": "/learn/monogram/softwareqinc-qpp.svg",
   "relatedSlugs": [
+    "qiskit-qiskit-tutorial",
+    "qosf-os-quantum-software",
     "0tt3r-quac",
     "adamisntdead-qusimpy",
     "aniabrown-quest",
-    "bbn-q-pysimulator",
-    "cda-tum-mqt-ddsim",
-    "dillanchang-qocs"
+    "bbn-q-pysimulator"
   ]
 }

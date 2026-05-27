@@ -4,7 +4,7 @@
   "name": "qiskit-nature",
   "title": "qiskit-nature",
   "repoUrl": "https://github.com/Qiskit/qiskit-nature",
-  "homepageUrl": null,
+  "homepageUrl": "https://qiskit-community.github.io/qiskit-nature/",
   "category": {
     "slug": "quantum-chemistry",
     "title": "Quantum chemistry",
@@ -21,11 +21,16 @@
     }
   ],
   "primaryLanguage": "Python",
+  "primaryLanguages": [
+    "Python",
+    "Jupyter",
+    "Shell"
+  ],
   "license": "Apache-2.0",
-  "summary": "**Qiskit Nature** is an open-source framework which supports solving quantum mechanical natural science problems using quantum computing algorithms.",
-  "description": "**Qiskit Nature** is an open-source framework which supports solving quantum mechanical natural science problems using quantum computing algorithms. This includes finding ground and excited states of electronic and vibrational structure problems, measuring the dipole moments of molecular systems, solving the Ising and Fermi-Hubbard models on lattices, and much more.",
+  "summary": "Qiskit Nature is an open-source, quantum computing, framework for solving quantum mechanical natural science problems.",
+  "description": "Qiskit Nature is an open-source, quantum computing, framework for solving quantum mechanical natural science problems.",
   "whatItIs": [
-    "qiskit-nature is an open-source project in the quantum chemistry category. It is maintained by Qiskit and primarily looks like a Python codebase. **Qiskit Nature** is an open-source framework which supports solving quantum mechanical natural science problems using quantum computing algorithms.",
+    "qiskit-nature is an open-source project in the quantum chemistry category. It is maintained by Qiskit and primarily looks like a Python codebase. Qiskit Nature is an open-source, quantum computing, framework for solving quantum mechanical natural science problems.",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches quantum chemistry workflows in practice. The repository README emphasizes: **Qiskit Nature** is an open-source framework which supports solving quantum mechanical natural science problems using quantum computing algorithms. This includes finding ground and excited states of electronic and vibrational structure problems, measuring the dipole moments of molecular systems, solving the Ising and Fermi-Hubbard models on lattices, and much..."
   ],
   "whoItsFor": "Researchers, students, and developers exploring how quantum software is used for chemistry and electronic-structure problems.",
@@ -36,21 +41,42 @@
   ],
   "readmeExcerpt": "**Qiskit Nature** is an open-source framework which supports solving quantum mechanical natural science problems using quantum computing algorithms. This includes finding ground and excited states of electronic and vibrational structure problems, measuring the dipole moments of molecular systems, solving the Ising and Fermi-Hubbard models on lattices, and much more. data loading from chemistry drivers or file formats second-quantized operator construction and manipulation translating from the second-quantized to the qubit space a quantum circuit library of natural science targeted ansatze natural science specific algorithms and utilities to make the use of algorithms from Qiskit Algorithms easier and much more",
   "readmePath": "reference\\Qiskit__qiskit-nature\\README.md",
+  "readmeMarkdownPath": "readmes/qiskit-qiskit-nature.md",
   "clonePath": "reference\\Qiskit__qiskit-nature",
-  "stars": 0,
-  "lastPushedAt": null,
-  "githubTopics": [],
+  "stars": 385,
+  "lastPushedAt": "2026-05-26T08:54:41Z",
+  "defaultBranch": "main",
+  "githubTopics": [
+    "qiskit"
+  ],
+  "quickstart": null,
+  "codeSamples": [],
+  "packageMeta": {},
+  "citationBibtex": "@software{qiskitnature,\n  title = {Qiskit Nature},\n  author = {Unknown},\n  year = {2023},\n  doi = {10.5281/zenodo.7828767},\n}\n",
+  "supportedBackendSlugs": [
+    "qiskit-qiskit"
+  ],
+  "externalLinks": {
+    "pypi": [
+      "https://pypi.org/project/qiskit-nature/"
+    ]
+  },
+  "openIssuesCount": 58,
+  "subscribersCount": 18,
+  "latestRelease": null,
+  "ownerType": "Organization",
+  "ownerUrl": "https://github.com/qiskit-community",
   "featured": false,
   "flagship": false,
   "qtanglRelevant": false,
   "archived": false,
-  "imagePath": null,
+  "imagePath": "/learn/monogram/qiskit-qiskit-nature.svg",
   "relatedSlugs": [
     "quantumlib-openfermion",
     "aspuru-guzik-group-tequila",
     "cda-tum-mqt-dasqa",
+    "eclipse-qrisp-qrisp",
     "ornl-qci-xacc-vqe",
-    "pasqal-io-qadence",
     "projectq-framework-fermilib"
   ]
 }

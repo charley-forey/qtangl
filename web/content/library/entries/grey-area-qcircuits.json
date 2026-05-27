@@ -4,7 +4,7 @@
   "name": "qcircuits",
   "title": "qcircuits",
   "repoUrl": "https://github.com/grey-area/qcircuits",
-  "homepageUrl": null,
+  "homepageUrl": "http://www.awebb.info/qcircuits/index.html",
   "category": {
     "slug": "general-purpose-sdks",
     "title": "General-purpose SDKs",
@@ -21,11 +21,16 @@
     }
   ],
   "primaryLanguage": "Python",
+  "primaryLanguages": [
+    "Python",
+    "LaTeX",
+    "Shell"
+  ],
   "license": "MIT",
-  "summary": "QCircuits is a Python package for the simulation and study of quantum computers based on the quantum circuit model <https://en.wikipedia.org/wiki/Quantum_circuit>_.",
-  "description": "QCircuits is a Python package for the simulation and study of quantum computers based on the quantum circuit model <https://en.wikipedia.org/wiki/Quantum_circuit>_. It has been designed to have a simple, lightweight interface and to be easy to use, particularly for those new to quantum computing.",
+  "summary": "A Python package for simulating small-scale quantum computers.",
+  "description": "A Python package for simulating small-scale quantum computers.",
   "whatItIs": [
-    "qcircuits is an open-source project in the general-purpose sdks category. It is maintained by grey-area and primarily looks like a Python codebase. QCircuits is a Python package for the simulation and study of quantum computers based on the quantum circuit model <https://en.wikipedia.org/wiki/Quantum_circuit>_.",
+    "qcircuits is an open-source project in the general-purpose sdks category. It is maintained by grey-area and primarily looks like a Python codebase. A Python package for simulating small-scale quantum computers.",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches general-purpose sdks workflows in practice. The repository README emphasizes: QCircuits is a Python package for the simulation and study of quantum computers based on the quantum circuit model <https://en.wikipedia.org/wiki/Quantum_circuit>_. It has been designed to have a simple, lightweight interface and to be easy to use, particularly for those new to quantum computing. # Instantiating the operators we..."
   ],
   "whoItsFor": "Developers who want a broad entry point for building circuits, experimenting with algorithms, and integrating quantum workflows into larger applications.",
@@ -36,21 +41,53 @@
   ],
   "readmeExcerpt": "QCircuits is a Python package for the simulation and study of quantum computers based on the quantum circuit model <https://en.wikipedia.org/wiki/Quantum_circuit>_. It has been designed to have a simple, lightweight interface and to be easy to use, particularly for those new to quantum computing. # Instantiating the operators we will need CNOT = qc.CNOT() H = qc.Hadamard() X = qc.PauliX() Z = qc.PauliZ()",
   "readmePath": "reference\\grey-area__qcircuits\\README.rst",
+  "readmeMarkdownPath": "readmes/grey-area-qcircuits.md",
   "clonePath": "reference\\grey-area__qcircuits",
-  "stars": 0,
-  "lastPushedAt": null,
+  "stars": 59,
+  "lastPushedAt": "2022-07-08T02:24:26Z",
+  "defaultBranch": "master",
   "githubTopics": [],
+  "quickstart": null,
+  "codeSamples": [
+    {
+      "title": "Deutsch Algorithm",
+      "language": "python",
+      "source": "import qcircuits as qc\nimport numpy as np\n# Deutsch's Algorithhm:\n# We use interference to determine if f(0) = f(1) using a single function evaluation.\n# Construct a Boolean function that is constant or balanced\ndef construct_problem():\n    answers = np.random.randint(0, 2, size=2)\n    def f(bit):\n        return answers[bit]\n    return f\ndef deutsch_algorithm(f):\n    U_f = qc.U_f(f, d=2)\n    H = qc.Hadamard()\n    phi = H(qc.zeros()) * H(qc.ones())\n    phi = U_f(phi)\n    phi = H(phi, qubit_indices=[0])\n    measurement = phi.measure(qubit_indices=0)\n    return measurement\nif __name__ == '__main__':\n    f = construct_problem()\n    parity = f(0) == f(1)\n    measurement = deutsch_algorithm(f)\n    print('f(0): {}, f(1): {}'.format(f(0), f(1)))\n    print('f(0) == f(1): {}'.format(parity))\n    print('Measurement: {}'.format(measurement))",
+      "path": "examples/deutsch_algorithm.py"
+    },
+    {
+      "title": "Deutsch Jozsa Algorithm",
+      "language": "python",
+      "source": "import qcircuits as qc\nimport numpy as np\nimport random\n# Deutsch-Jozsa Algorithhm:\n# We are presented with a Boolean function that is either constant or\n# balanced (i.e., 0 for half of inputs, 1 for the other half).\n# We make use of interference to determine whether the function is constant\n# or balanced in a single function evaluation.\n# Construct a Boolean function that is constant or balanced\ndef construct_problem(d=1, problem_type='constant'):\n    num_inputs = 2**d\n    answers = np.zeros(num_inputs, dtype=np.int32)\n    if problem_type == 'constant':\n        answers[:] = int(np.random.random() < 0.5)\n    else: # function is balanced\n        indices = np.random.choice(num_inputs, size=num_inputs//2, replace=False)\n        answers[indices] = 1\n    def f(*bits):\n        index = sum(v * 2**i for i, v in enumerate(bits))\n        return answers[index]\n    return f\ndef deutsch_jozsa_algorithm(d, f):\n    # The operators we will need\n    U_f = qc.U_f(f, d=d+1)\n    H_d = qc.Hadamard(d)\n    H = qc.Hadamard()\n    state = qc.zeros(d) * qc.ones(1)\n    state = (H_d * H)(state)\n    state = U_f(state)\n    state = H_d(state, qubit_indices=range(d))\n    measurements = state.measure(qubit_indices=range(d))\n    return measurements\nif __name__ == '__main__':\n    d = 10\n    problem_type = random.choice(['constant', 'balanced'])\n    f = construct_problem(d, problem_type)\n    measurements = deutsch_jozsa_algorithm(d, f)\n    print('Problem type: {}'.format(problem_type))\n    print('Measurement: {}'.format(measurements))\n    print('Observed all zeros: {}'.format(not any(measurements)))",
+      "path": "examples/deutsch_jozsa_algorithm.py"
+    },
+    {
+      "title": "Grover Algorithm",
+      "language": "python",
+      "source": "import qcircuits as qc\nimport numpy as np\nimport random\n# Grover's algorithm (search)\n# Given a boolean function f, Grover's algorithm finds an x such that\n# f(x) = 1.\n# If there are N values of x, and M possible solutions, it requires\n# O(sqrt(N/M)) time.\n# Here, we construct a search problem with 1 solution amongst 1024\n# possible answers, and find the solution with 25 applications of\n# the Grover iteration operator.\n# Construct a Boolean function that is 1 in exactly one place\ndef construct_problem(d=10):\n    num_inputs = 2**d\n    answers = np.zeros(num_inputs, dtype=np.int32)\n    answers[np.random.randint(0, num_inputs)] = 1\n    def f(*bits):\n        index = sum(v * 2**i for i, v in enumerate(bits))\n        return answers[index]\n    return f\ndef grover_algorithm(d, f):\n    # The operators we will need\n    Oracle = qc.U_f(f, d=d+1)\n    H_d = qc.Hadamard(d)\n    H = qc.Hadamard()\n    N = 2**d\n    zero_projector = np.zeros((N, N))\n    zero_projector[0, 0] = 1\n    Inversion = H_d((2 * qc.Operator.from_matrix(zero_projector) - qc.Identity(d))(H_d))\n    Grover = Inversion(Oracle, qubit_indices=range(d))\n    # Initial state\n    state = qc.zeros(d) * qc.ones(1)\n    state = (H_d * H)(state)\n    # Number of Grover iterations\n    angle_to_rotate = np.arccos(np.sqrt(1 / N))\n    rotation_angle = 2 * np.arcsin(np.sqrt(1 / N))\n    iterations = int(round(angle_to_rotate / rotation_angle))\n    for i in range(iterations):\n        state = Grover(state)\n    measurements = state.measure(qubit_indices=range(d))",
+      "path": "examples/grover_algorithm.py"
+    }
+  ],
+  "packageMeta": {},
+  "citationBibtex": null,
+  "supportedBackendSlugs": [],
+  "externalLinks": {},
+  "openIssuesCount": 3,
+  "subscribersCount": 2,
+  "latestRelease": null,
+  "ownerType": "User",
+  "ownerUrl": "https://github.com/grey-area",
   "featured": false,
   "flagship": false,
   "qtanglRelevant": false,
   "archived": false,
-  "imagePath": null,
+  "imagePath": "/learn/monogram/grey-area-qcircuits.svg",
   "relatedSlugs": [
     "qiskit-qiskit",
     "quantumlib-cirq",
     "xanaduai-pennylane",
-    "projectq-framework-projectq",
+    "qiskit-qiskit-terra",
     "quantumbfs-yao-jl",
-    "arlineq-arline-benchmarks"
+    "microsoft-quantumkatas"
   ]
 }

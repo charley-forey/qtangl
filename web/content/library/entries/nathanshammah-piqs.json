@@ -21,11 +21,16 @@
     }
   ],
   "primaryLanguage": "Python",
-  "license": "BSD",
-  "summary": "Permutational Invariant Quantum Solver (PIQS) <img src=\"https://github.com/nathanshammah/piqs/blob/master/doc/piqs_logo.png\" width=\"80\" height=\"80\"/>",
-  "description": "Permutational Invariant Quantum Solver (PIQS) <img src=\"https://github.com/nathanshammah/piqs/blob/master/doc/piqs_logo.png\" width=\"80\" height=\"80\"/>",
+  "primaryLanguages": [
+    "Python",
+    "Jupyter",
+    "C++"
+  ],
+  "license": "BSD-3-Clause",
+  "summary": "Permutational Invariance Quantum Solver for Lindblad open quantum system dynamics",
+  "description": "Permutational Invariance Quantum Solver for Lindblad open quantum system dynamics",
   "whatItIs": [
-    "piqs is an open-source project in the optimization and qubo category. It is maintained by nathanshammah and primarily looks like a Python codebase. Permutational Invariant Quantum Solver (PIQS) <img src=\"https://github.com/nathanshammah/piqs/blob/master/doc/piqs_logo.png\" width=\"80\" height=\"80\"/>",
+    "piqs is an open-source project in the optimization and qubo category. It is maintained by nathanshammah and primarily looks like a Python codebase. Permutational Invariance Quantum Solver for Lindblad open quantum system dynamics",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches optimization and qubo workflows in practice. The repository README emphasizes: Permutational Invariant Quantum Solver (PIQS) <img src=\"https://github.com/nathanshammah/piqs/blob/master/doc/piqs_logo.png\" width=\"80\" height=\"80\"/> _PIQS is not actively maintained anymore as an independent package, but it's been ported to QuTiP and you can use its functionalities as qutip.piqs. Find out more in the related QuTiP documentation and tutorials on the permutational invariant Lindbald..."
   ],
   "whoItsFor": "Teams exploring routing, scheduling, allocation, and other combinatorial problems that can be modeled as optimization workloads.",
@@ -36,15 +41,37 @@
   ],
   "readmeExcerpt": "Permutational Invariant Quantum Solver (PIQS) <img src=\"https://github.com/nathanshammah/piqs/blob/master/doc/piqs_logo.png\" width=\"80\" height=\"80\"/> _PIQS is not actively maintained anymore as an independent package, but it's been ported to QuTiP and you can use its functionalities as qutip.piqs. Find out more in the related QuTiP documentation and tutorials on the permutational invariant Lindbald solver._",
   "readmePath": "reference\\nathanshammah__piqs\\README.md",
+  "readmeMarkdownPath": "readmes/nathanshammah-piqs.md",
   "clonePath": "reference\\nathanshammah__piqs",
-  "stars": 0,
-  "lastPushedAt": null,
+  "stars": 19,
+  "lastPushedAt": "2024-04-23T17:00:21Z",
+  "defaultBranch": "master",
   "githubTopics": [],
+  "quickstart": null,
+  "codeSamples": [],
+  "packageMeta": {},
+  "citationBibtex": null,
+  "supportedBackendSlugs": [],
+  "externalLinks": {
+    "docs": [
+      "https://qutip.readthedocs.io/en/qutip-5.0.x/guide/guide-piqs.html",
+      "http://piqs.readthedocs.io/en/latest/",
+      "http://piqs.readthedocs.io/"
+    ],
+    "paper": [
+      "https://arxiv.org/abs/1805.05129"
+    ]
+  },
+  "openIssuesCount": 7,
+  "subscribersCount": 2,
+  "latestRelease": null,
+  "ownerType": "User",
+  "ownerUrl": "https://github.com/nathanshammah",
   "featured": false,
   "flagship": false,
   "qtanglRelevant": false,
   "archived": false,
-  "imagePath": null,
+  "imagePath": "/learn/monogram/nathanshammah-piqs.svg",
   "relatedSlugs": [
     "entropicalabs-openqaoa",
     "cda-tum-mqt-qmap",

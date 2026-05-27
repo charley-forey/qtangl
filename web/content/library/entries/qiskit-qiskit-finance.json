@@ -4,7 +4,7 @@
   "name": "qiskit-finance",
   "title": "qiskit-finance",
   "repoUrl": "https://github.com/Qiskit/qiskit-finance",
-  "homepageUrl": null,
+  "homepageUrl": "https://qiskit-community.github.io/qiskit-finance/",
   "category": {
     "slug": "general-purpose-sdks",
     "title": "General-purpose SDKs",
@@ -21,11 +21,16 @@
     }
   ],
   "primaryLanguage": "Python",
+  "primaryLanguages": [
+    "Python",
+    "Jupyter",
+    "Shell"
+  ],
   "license": "Apache-2.0",
-  "summary": "**Qiskit Finance** is an open-source framework that contains uncertainty components for stock/securities problems, applications, such as portfolio optimization, and data providers to source real or random data to finance experiments.",
-  "description": "**Qiskit Finance** is an open-source framework that contains uncertainty components for stock/securities problems, applications, such as portfolio optimization, and data providers to source real or random data to finance experiments.",
+  "summary": "Quantum Finance",
+  "description": "Quantum Finance",
   "whatItIs": [
-    "qiskit-finance is an open-source project in the general-purpose sdks category. It is maintained by Qiskit and primarily looks like a Python codebase. **Qiskit Finance** is an open-source framework that contains uncertainty components for stock/securities problems, applications, such as portfolio optimization, and data providers to source real or random data to finance experiments.",
+    "qiskit-finance is an open-source project in the general-purpose sdks category. It is maintained by Qiskit and primarily looks like a Python codebase. Quantum Finance",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches general-purpose sdks workflows in practice. The repository README emphasizes: **Qiskit Finance** is an open-source framework that contains uncertainty components for stock/securities problems, applications, such as portfolio optimization, and data providers to source real or random data to finance experiments. We encourage installing Qiskit Finance via the pip tool (a python package manager)."
   ],
   "whoItsFor": "Developers who want a broad entry point for building circuits, experimenting with algorithms, and integrating quantum workflows into larger applications.",
@@ -36,21 +41,43 @@
   ],
   "readmeExcerpt": "**Qiskit Finance** is an open-source framework that contains uncertainty components for stock/securities problems, applications, such as portfolio optimization, and data providers to source real or random data to finance experiments. We encourage installing Qiskit Finance via the pip tool (a python package manager).",
   "readmePath": "reference\\Qiskit__qiskit-finance\\README.md",
+  "readmeMarkdownPath": "readmes/qiskit-qiskit-finance.md",
   "clonePath": "reference\\Qiskit__qiskit-finance",
-  "stars": 0,
-  "lastPushedAt": null,
+  "stars": 319,
+  "lastPushedAt": "2025-12-12T19:08:07Z",
+  "defaultBranch": "main",
   "githubTopics": [],
+  "quickstart": {
+    "language": "python",
+    "source": "import numpy as np\nfrom qiskit.primitives import Sampler\nfrom qiskit_algorithms import AmplitudeEstimation\nfrom qiskit_finance.circuit.library import NormalDistribution\nfrom qiskit_finance.applications import FixedIncomePricing\n\n# Create a suitable multivariate distribution\nnum_qubits = [2, 2]\nbounds = [(0, 0.12), (0, 0.24)]\nmvnd = NormalDistribution(\n    num_qubits, mu=[0.12, 0.24], sigma=0.01 * np.eye(2), bounds=bounds\n)\n\n# Create fixed income component\nfixed_income = FixedIncomePricing(\n    num_qubits,\n    np.eye(2),\n    np.zeros(2),\n    cash_flow=[1.0, 2.0],\n    rescaling_factor=0.125,\n    bounds=bounds,\n    uncertainty_model=mvnd,\n)\n\n# the FixedIncomeExpectedValue provides us with the necessary rescalings\n\n# create the A operator for amplitude estimation\nproblem = fixed_income.to_estimation_problem()\n\n# Set number of evaluation qubits (samples)\nnum_eval_qubits = 5\n\n# Construct and run amplitude estimation\nsampler = Sampler()\nalgo = AmplitudeEstimation(num_eval_qubits=num_eval_qubits, sampler=sampler)\nresult = algo.estimate(problem)\n\nprint(f\"Estimated value:\\t{fixed_income.interpret(result):.4f}\")\nprint(f\"Probability:    \\t{result.max_probability:.4f}\")"
+  },
+  "codeSamples": [],
+  "packageMeta": {},
+  "citationBibtex": null,
+  "supportedBackendSlugs": [
+    "qiskit-qiskit"
+  ],
+  "externalLinks": {
+    "pypi": [
+      "https://pypi.org/project/qiskit-finance/"
+    ]
+  },
+  "openIssuesCount": 12,
+  "subscribersCount": 12,
+  "latestRelease": null,
+  "ownerType": "Organization",
+  "ownerUrl": "https://github.com/qiskit-community",
   "featured": false,
   "flagship": false,
   "qtanglRelevant": false,
   "archived": false,
-  "imagePath": null,
+  "imagePath": "/learn/monogram/qiskit-qiskit-finance.svg",
   "relatedSlugs": [
     "qiskit-qiskit",
     "quantumlib-cirq",
     "xanaduai-pennylane",
-    "projectq-framework-projectq",
+    "qiskit-qiskit-terra",
     "quantumbfs-yao-jl",
-    "arlineq-arline-benchmarks"
+    "microsoft-quantumkatas"
   ]
 }

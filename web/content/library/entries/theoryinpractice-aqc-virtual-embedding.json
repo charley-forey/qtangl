@@ -21,11 +21,16 @@
     }
   ],
   "primaryLanguage": "C++",
-  "license": "BSD",
-  "summary": "Virtual Hardware Embedding Suite for Adiabatic Quantum Computing",
-  "description": "Virtual Hardware Embedding Suite for Adiabatic Quantum Computing",
+  "primaryLanguages": [
+    "C++",
+    "C/C++",
+    "Python"
+  ],
+  "license": "BSD-3-Clause",
+  "summary": "Adiabatic Quantum Computing -- embedding your problems into quantum computers",
+  "description": "Adiabatic Quantum Computing -- embedding your problems into quantum computers",
   "whatItIs": [
-    "aqc-virtual-embedding is an open-source project in the annealing and ising category. It is maintained by TheoryInPractice and primarily looks like a C++ codebase. Virtual Hardware Embedding Suite for Adiabatic Quantum Computing",
+    "aqc-virtual-embedding is an open-source project in the annealing and ising category. It is maintained by TheoryInPractice and primarily looks like a C++ codebase. Adiabatic Quantum Computing -- embedding your problems into quantum computers",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches annealing and ising workflows in practice. The repository README emphasizes: Virtual Hardware Embedding Suite for Adiabatic Quantum Computing Adiabatic quantum computing has evolved in recent years from a theoretical field into an immensely practical area, a change partially sparked by D-Wave System's quantum annealing hardware. These multimillion-dollar quantum annealers offer the potential to solve optimization problems millions of..."
   ],
   "whoItsFor": "Developers interested in Ising-model formulations, annealing workflows, and D-Wave-style solver ecosystems.",
@@ -36,15 +41,32 @@
   ],
   "readmeExcerpt": "Virtual Hardware Embedding Suite for Adiabatic Quantum Computing Adiabatic quantum computing has evolved in recent years from a theoretical field into an immensely practical area, a change partially sparked by D-Wave System's quantum annealing hardware. These multimillion-dollar quantum annealers offer the potential to solve optimization problems millions of times faster than classical heuristics, prompting researchers at Google, NASA and Lockheed Martin to study how these computers can be applied to complex real-world problems such as NASA rover missions. Unfortunately, compiling (embedding) an optimization problem into the annealing hardware is itself a difficult optimization problem and a major bottleneck currently preventing widespread adoption. Additionally, while finding a single embedding is difficult...",
   "readmePath": "reference\\TheoryInPractice__aqc-virtual-embedding\\README.md",
+  "readmeMarkdownPath": "readmes/theoryinpractice-aqc-virtual-embedding.md",
   "clonePath": "reference\\TheoryInPractice__aqc-virtual-embedding",
-  "stars": 0,
-  "lastPushedAt": null,
+  "stars": 9,
+  "lastPushedAt": "2018-10-26T21:19:22Z",
+  "defaultBranch": "master",
   "githubTopics": [],
+  "quickstart": null,
+  "codeSamples": [],
+  "packageMeta": {},
+  "citationBibtex": null,
+  "supportedBackendSlugs": [],
+  "externalLinks": {
+    "paper": [
+      "https://arxiv.org/pdf/1411.2680.pdf"
+    ]
+  },
+  "openIssuesCount": 0,
+  "subscribersCount": 3,
+  "latestRelease": null,
+  "ownerType": "Organization",
+  "ownerUrl": "https://github.com/TheoryInPractice",
   "featured": false,
   "flagship": false,
   "qtanglRelevant": false,
   "archived": false,
-  "imagePath": null,
+  "imagePath": "/learn/monogram/theoryinpractice-aqc-virtual-embedding.svg",
   "relatedSlugs": [
     "dwavesystems-dwave-ocean-sdk",
     "dwavesystems-dimod",

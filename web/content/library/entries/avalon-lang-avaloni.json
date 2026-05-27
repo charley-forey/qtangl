@@ -21,11 +21,15 @@
     }
   ],
   "primaryLanguage": "C++",
+  "primaryLanguages": [
+    "C++",
+    "C/C++"
+  ],
   "license": "MIT",
-  "summary": "Quantum computing is progressing slowly but surely.",
-  "description": "Quantum computing is progressing slowly but surely. And as it progresses, tools are going to be needed to program quantum computers.",
+  "summary": "Interpreter of the Avalon programming language.",
+  "description": "Interpreter of the Avalon programming language.",
   "whatItIs": [
-    "avaloni is an open-source project in the compilers and languages category. It is maintained by avalon-lang and primarily looks like a C++ codebase. Quantum computing is progressing slowly but surely.",
+    "avaloni is an open-source project in the compilers and languages category. It is maintained by avalon-lang and primarily looks like a C++ codebase. Interpreter of the Avalon programming language.",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches compilers and languages workflows in practice. The repository README emphasizes: Quantum computing is progressing slowly but surely. And as it progresses, tools are going to be needed to program quantum computers. Avalon is a programming language aimed at a specific class of quantum computers called classical-quantum hybrid quantum computers. A hybrid classical-quantum computer has the property of having..."
   ],
   "whoItsFor": "Developers who want to understand the representations and compilers that sit between high-level code and runnable circuits.",
@@ -36,21 +40,47 @@
   ],
   "readmeExcerpt": "Quantum computing is progressing slowly but surely. And as it progresses, tools are going to be needed to program quantum computers. Avalon is a programming language aimed at a specific class of quantum computers called classical-quantum hybrid quantum computers. A hybrid classical-quantum computer has the property of having a classical computer driving (telling) the quantum computer what to do. These computers are being built by IBM and Rigetti and Avalon seeks to target both, starting with Rigetti.",
   "readmePath": "reference\\avalon-lang__avaloni\\README.md",
+  "readmeMarkdownPath": "readmes/avalon-lang-avaloni.md",
   "clonePath": "reference\\avalon-lang__avaloni",
-  "stars": 0,
-  "lastPushedAt": null,
-  "githubTopics": [],
+  "stars": 23,
+  "lastPushedAt": "2018-12-16T15:00:13Z",
+  "defaultBranch": "master",
+  "githubTopics": [
+    "avalon",
+    "interpreter",
+    "programming-language",
+    "quantum-computing"
+  ],
+  "quickstart": {
+    "language": "python",
+    "source": "import io\nimport quant\n\ndef __main__ = (val args : [string]) -> void:\n    -- initialize quantum variables\n    val source = 0q1,\n        destination = 0q0,\n        ancilla = 0q0\n\n    -- create an entanglement between the destination and the ancilla\n    Quant.had(ref destination)\n    Quant.cx(ref destination, ref ancilla)\n\n    -- perform the teleportation\n    Quant.cx(ref source, ref ancilla)\n    Quant.had(ref source)\n\n    -- measure the source and the ancilla\n    var source_bit = cast(ref source) -> bit,\n        ancilla_bit = cast(ref ancilla) -> bit\n\n    -- perform phase correction on the destination\n    if source_bit == 0b1:\n        Quant.pz(ref destination)\n    if ancilla_bit == 0b1:\n        Quant.px(ref destination)\n\n    -- measure and print the destination which should contain <0q1>\n    var destination_bit = cast(ref destination) -> bit\n    Io.println(string(destination_bit))\n\n    return"
+  },
+  "codeSamples": [],
+  "packageMeta": {},
+  "citationBibtex": null,
+  "supportedBackendSlugs": [],
+  "externalLinks": {
+    "docs": [
+      "https://avalon-lang.readthedocs.io/en/latest",
+      "https://avalon-lang.readthedocs.io/en/latest/installation.html"
+    ]
+  },
+  "openIssuesCount": 0,
+  "subscribersCount": 4,
+  "latestRelease": null,
+  "ownerType": "Organization",
+  "ownerUrl": "https://github.com/avalon-lang",
   "featured": false,
   "flagship": false,
   "qtanglRelevant": false,
   "archived": false,
-  "imagePath": null,
+  "imagePath": "/learn/monogram/avalon-lang-avaloni.svg",
   "relatedSlugs": [
     "cqcl-tket",
     "nvidia-cuda-quantum",
-    "quantomatic-pyzx",
-    "aviggiano-qcl",
-    "dabacon-qsel",
-    "epiqc-scaffcc"
+    "microsoft-quantumkatas",
+    "qiskit-openqasm",
+    "qiskit-qiskit",
+    "quantomatic-pyzx"
   ]
 }

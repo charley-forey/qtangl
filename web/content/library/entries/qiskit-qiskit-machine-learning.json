@@ -4,7 +4,7 @@
   "name": "qiskit-machine-learning",
   "title": "qiskit-machine-learning",
   "repoUrl": "https://github.com/Qiskit/qiskit-machine-learning",
-  "homepageUrl": null,
+  "homepageUrl": "https://qiskit-community.github.io/qiskit-machine-learning/",
   "category": {
     "slug": "quantum-ml",
     "title": "Quantum machine learning",
@@ -17,11 +17,16 @@
     }
   ],
   "primaryLanguage": "Python",
+  "primaryLanguages": [
+    "Python",
+    "Jupyter",
+    "Shell"
+  ],
   "license": "Apache-2.0",
-  "summary": "Qiskit Machine Learning introduces fundamental computational building blocks, such as Quantum Kernels and Quantum Neural Networks, used in various applications including classification and regression.",
-  "description": "Qiskit Machine Learning introduces fundamental computational building blocks, such as Quantum Kernels and Quantum Neural Networks, used in various applications including classification and regression.",
+  "summary": "An open-source library built on Qiskit for quantum machine learning tasks at scale on quantum hardware and classical simulators",
+  "description": "An open-source library built on Qiskit for quantum machine learning tasks at scale on quantum hardware and classical simulators",
   "whatItIs": [
-    "qiskit-machine-learning is an open-source project in the quantum machine learning category. It is maintained by Qiskit and primarily looks like a Python codebase. Qiskit Machine Learning introduces fundamental computational building blocks, such as Quantum Kernels and Quantum Neural Networks, used in various applications including classification and regression.",
+    "qiskit-machine-learning is an open-source project in the quantum machine learning category. It is maintained by Qiskit and primarily looks like a Python codebase. An open-source library built on Qiskit for quantum machine learning tasks at scale on quantum hardware and classical simulators",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches quantum machine learning workflows in practice. The repository README emphasizes: Qiskit Machine Learning introduces fundamental computational building blocks, such as Quantum Kernels and Quantum Neural Networks, used in various applications including classification and regression. This library is part of the Qiskit Community ecosystem, a collection of high-level libraries that are based on the Qiskit software development kit. As..."
   ],
   "whoItsFor": "Researchers and practitioners experimenting with quantum machine learning, variational models, and differentiable circuit stacks.",
@@ -32,21 +37,59 @@
   ],
   "readmeExcerpt": "Qiskit Machine Learning introduces fundamental computational building blocks, such as Quantum Kernels and Quantum Neural Networks, used in various applications including classification and regression. This library is part of the Qiskit Community ecosystem, a collection of high-level libraries that are based on the Qiskit software development kit. As of version 0.7, Qiskit Machine Learning is co-maintained by IBM and the Hartree Centre, part of the UK Science and Technologies Facilities Council (STFC).",
   "readmePath": "reference\\Qiskit__qiskit-machine-learning\\README.md",
+  "readmeMarkdownPath": "readmes/qiskit-qiskit-machine-learning.md",
   "clonePath": "reference\\Qiskit__qiskit-machine-learning",
-  "stars": 0,
-  "lastPushedAt": null,
-  "githubTopics": [],
+  "stars": 1055,
+  "lastPushedAt": "2026-05-07T07:23:34Z",
+  "defaultBranch": "main",
+  "githubTopics": [
+    "machine-learning",
+    "qiskit",
+    "quantum-computing"
+  ],
+  "quickstart": {
+    "language": "python",
+    "source": "from qiskit.circuit.library import n_local, zz_feature_map\nfrom qiskit_machine_learning.optimizers import COBYLA\nfrom qiskit_machine_learning.utils import algorithm_globals\n\nfrom qiskit_machine_learning.algorithms import VQC\nfrom qiskit_machine_learning.datasets import ad_hoc_data\n\nseed = 1376\nalgorithm_globals.random_seed = seed\n\n# Use ad hoc data set for training and test data\nfeature_dim = 2  # dimension of each data point\ntraining_size = 20\ntest_size = 10\n\n# training features, training labels, test features, test labels as np.ndarray,\n# one hot encoding for labels\ntraining_features, training_labels, test_features, test_labels = ad_hoc_data(\n    training_size=training_size, test_size=test_size, n=feature_dim, gap=0.3\n)\n\nfeature_map = zz_feature_map(feature_dimension=feature_dim, reps=2, entanglement=\"linear\")\nansatz = n_local(feature_map.num_qubits, [\"ry\", \"rz\"], \"cz\", reps=3)\nvqc = VQC(\n    feature_map=feature_map,\n    ansatz=ansatz,\n    optimizer=COBYLA(maxiter=100),\n)\nvqc.fit(training_features, training_labels)\n\nscore = vqc.score(test_features, test_labels)\nprint(f\"Testing accuracy: {score:0.2f}\")"
+  },
+  "codeSamples": [],
+  "packageMeta": {},
+  "citationBibtex": null,
+  "supportedBackendSlugs": [
+    "qiskit-qiskit"
+  ],
+  "externalLinks": {
+    "docs": [
+      "https://img.shields.io/badge/GitHub%20Pages-Documentation-blue.svg",
+      "https://img.shields.io/badge/Documentation-blue.svg",
+      "https://nlopt.readthedocs.io/en/latest/",
+      "https://nlopt.readthedocs.io/en/latest/NLopt_Installation/"
+    ],
+    "paper": [
+      "https://arxiv.org/abs/2505.17756"
+    ],
+    "community": [
+      "https://qiskit.enterprise.slack.com/archives/C07JE3V55C1"
+    ],
+    "pypi": [
+      "https://pypi.org/project/qiskit-machine-learning/"
+    ]
+  },
+  "openIssuesCount": 27,
+  "subscribersCount": 19,
+  "latestRelease": null,
+  "ownerType": "Organization",
+  "ownerUrl": "https://github.com/qiskit-community",
   "featured": false,
   "flagship": false,
   "qtanglRelevant": false,
   "archived": false,
-  "imagePath": null,
+  "imagePath": "/learn/monogram/qiskit-qiskit-machine-learning.svg",
   "relatedSlugs": [
+    "microsoft-quantumkatas",
+    "qiskit-qiskit",
+    "quantumlib-cirq",
+    "xanaduai-pennylane",
     "artiste-qb-net-quantum-edward",
-    "jpzwolak-qflow-lite",
-    "aws-amazon-braket-sdk-python",
-    "cqcl-tket",
-    "dwavesystems-dwave-ocean-sdk",
-    "entropicalabs-openqaoa"
+    "jpzwolak-qflow-lite"
   ]
 }

@@ -21,11 +21,14 @@
     }
   ],
   "primaryLanguage": "Python",
+  "primaryLanguages": [
+    "Python"
+  ],
   "license": "Apache-2.0",
-  "summary": "This repository contains implementation of the algorithm presented in the article \"Variational Quantum Factoring\", by Eric R.",
-  "description": "This repository contains implementation of the algorithm presented in the article \"Variational Quantum Factoring\", by Eric R. Anschuetz, Jonathan P. Olson, Al\u00e1n Aspuru-Guzik, Yudong Cao. It's available on arxiv.",
+  "summary": "Implementation of Variational Quantum Factoring algorithm.",
+  "description": "Implementation of Variational Quantum Factoring algorithm.",
   "whatItIs": [
-    "vqf is an open-source project in the optimization and qubo category. It is maintained by mstechly and primarily looks like a Python codebase. This repository contains implementation of the algorithm presented in the article \"Variational Quantum Factoring\", by Eric R.",
+    "vqf is an open-source project in the optimization and qubo category. It is maintained by mstechly and primarily looks like a Python codebase. Implementation of Variational Quantum Factoring algorithm.",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches optimization and qubo workflows in practice. The repository README emphasizes: This repository contains implementation of the algorithm presented in the article \"Variational Quantum Factoring\", by Eric R. Anschuetz, Jonathan P. Olson, Al\u00e1n Aspuru-Guzik, Yudong Cao. It's available on arxiv. The notation in the code refers directly to the notation in the paper."
   ],
   "whoItsFor": "Teams exploring routing, scheduling, allocation, and other combinatorial problems that can be modeled as optimization workloads.",
@@ -36,15 +39,38 @@
   ],
   "readmeExcerpt": "This repository contains implementation of the algorithm presented in the article \"Variational Quantum Factoring\", by Eric R. Anschuetz, Jonathan P. Olson, Al\u00e1n Aspuru-Guzik, Yudong Cao. It's available on arxiv. The notation in the code refers directly to the notation in the paper.",
   "readmePath": "reference\\mstechly__vqf\\README.md",
+  "readmeMarkdownPath": "readmes/mstechly-vqf.md",
   "clonePath": "reference\\mstechly__vqf",
-  "stars": 0,
-  "lastPushedAt": null,
-  "githubTopics": [],
+  "stars": 55,
+  "lastPushedAt": "2026-04-13T17:09:12Z",
+  "defaultBranch": "master",
+  "githubTopics": [
+    "factoring-integers",
+    "optimization-algorithms",
+    "qaoa",
+    "quantum-computing"
+  ],
+  "quickstart": null,
+  "codeSamples": [],
+  "packageMeta": {},
+  "citationBibtex": null,
+  "supportedBackendSlugs": [],
+  "externalLinks": {
+    "paper": [
+      "https://arxiv.org/abs/1808.08927",
+      "https://arxiv.org/pdf/1411.6758.pdf"
+    ]
+  },
+  "openIssuesCount": 2,
+  "subscribersCount": 3,
+  "latestRelease": null,
+  "ownerType": "User",
+  "ownerUrl": "https://github.com/mstechly",
   "featured": false,
   "flagship": false,
   "qtanglRelevant": false,
   "archived": false,
-  "imagePath": null,
+  "imagePath": "/learn/monogram/mstechly-vqf.svg",
   "relatedSlugs": [
     "entropicalabs-openqaoa",
     "cda-tum-mqt-qmap",

@@ -4,7 +4,7 @@
   "name": "liboqs",
   "title": "liboqs",
   "repoUrl": "https://github.com/open-quantum-safe/liboqs",
-  "homepageUrl": null,
+  "homepageUrl": "https://openquantumsafe.org/",
   "category": {
     "slug": "post-quantum-crypto",
     "title": "Post-quantum cryptography",
@@ -20,12 +20,17 @@
       "title": "Quantum computing software in 2026: the open-source map"
     }
   ],
-  "primaryLanguage": "C/C++",
+  "primaryLanguage": "C",
+  "primaryLanguages": [
+    "C/C++",
+    "C",
+    "Python"
+  ],
   "license": "MIT",
-  "summary": "liboqs is an open source C library for quantum-safe cryptographic algorithms.",
-  "description": "liboqs is an open source C library for quantum-safe cryptographic algorithms.",
+  "summary": "C library for prototyping and experimenting with quantum-resistant cryptography",
+  "description": "C library for prototyping and experimenting with quantum-resistant cryptography",
   "whatItIs": [
-    "liboqs is an open-source project in the post-quantum cryptography category. It is maintained by open-quantum-safe and primarily looks like a C/C++ codebase. liboqs is an open source C library for quantum-safe cryptographic algorithms.",
+    "liboqs is an open-source project in the post-quantum cryptography category. It is maintained by open-quantum-safe and primarily looks like a C codebase. C library for prototyping and experimenting with quantum-resistant cryptography",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches post-quantum cryptography workflows in practice. The repository README emphasizes: liboqs is an open source C library for quantum-safe cryptographic algorithms. liboqs Overview Status Supported Algorithms Key encapsulation mechanisms Signature schemes Stateful signature schemes Limitations and Security Platform limitations Support limitations Quickstart Linux and Mac Windows Cross compilation Documentation Contributing License Acknowledgements"
   ],
   "whoItsFor": "Security-minded developers and teams looking for practical quantum-safe cryptography resources they can evaluate today.",
@@ -36,21 +41,39 @@
   ],
   "readmeExcerpt": "liboqs is an open source C library for quantum-safe cryptographic algorithms. liboqs Overview Status Supported Algorithms Key encapsulation mechanisms Signature schemes Stateful signature schemes Limitations and Security Platform limitations Support limitations Quickstart Linux and Mac Windows Cross compilation Documentation Contributing License Acknowledgements",
   "readmePath": "reference\\open-quantum-safe__liboqs\\README.md",
+  "readmeMarkdownPath": "readmes/open-quantum-safe-liboqs.md",
   "clonePath": "reference\\open-quantum-safe__liboqs",
-  "stars": 0,
-  "lastPushedAt": null,
-  "githubTopics": [],
+  "stars": 2946,
+  "lastPushedAt": "2026-05-27T17:24:20Z",
+  "defaultBranch": "main",
+  "githubTopics": [
+    "cryptography",
+    "key-exchange-algorithms",
+    "lattice-based-crypto",
+    "post-quantum-cryptography"
+  ],
+  "quickstart": null,
+  "codeSamples": [],
+  "packageMeta": {},
+  "citationBibtex": null,
+  "supportedBackendSlugs": [],
+  "externalLinks": {},
+  "openIssuesCount": 90,
+  "subscribersCount": 88,
+  "latestRelease": null,
+  "ownerType": "Organization",
+  "ownerUrl": "https://github.com/open-quantum-safe",
   "featured": true,
   "flagship": true,
   "qtanglRelevant": false,
   "archived": false,
-  "imagePath": "/learn/flagship/open-quantum-safe-liboqs.png",
+  "imagePath": "/learn/og/open-quantum-safe-liboqs.png",
   "relatedSlugs": [
     "open-quantum-safe-openssh-portable",
     "open-quantum-safe-openssl",
     "pqclean-pqclean",
     "theqrl-qrl",
-    "aws-amazon-braket-sdk-python",
-    "cqcl-tket"
+    "microsoft-quantumkatas",
+    "qiskit-qiskit"
   ]
 }

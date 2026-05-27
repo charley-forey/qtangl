@@ -4,7 +4,7 @@
   "name": "openqasm",
   "title": "openqasm",
   "repoUrl": "https://github.com/QISKit/openqasm",
-  "homepageUrl": null,
+  "homepageUrl": "https://openqasm.com",
   "category": {
     "slug": "compilers-languages",
     "title": "Compilers and languages",
@@ -20,12 +20,17 @@
       "title": "How to start writing quantum code: an honest path"
     }
   ],
-  "primaryLanguage": "LaTeX",
+  "primaryLanguage": "Python",
+  "primaryLanguages": [
+    "LaTeX",
+    "OpenQASM",
+    "Python"
+  ],
   "license": "Apache-2.0",
-  "summary": "OpenQASM is an imperative programming language for describing quantum circuits.",
-  "description": "OpenQASM is an imperative programming language for describing quantum circuits. It is capable of describing universal quantum computing using the circuit model, measurement-based model, and near-term quantum computing experiments.",
+  "summary": "Quantum assembly language for extended quantum circuits",
+  "description": "Quantum assembly language for extended quantum circuits",
   "whatItIs": [
-    "openqasm is an open-source project in the compilers and languages category. It is maintained by QISKit and primarily looks like a LaTeX codebase. OpenQASM is an imperative programming language for describing quantum circuits.",
+    "openqasm is an open-source project in the compilers and languages category. It is maintained by QISKit and primarily looks like a Python codebase. Quantum assembly language for extended quantum circuits",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches compilers and languages workflows in practice. The repository README emphasizes: OpenQASM is an imperative programming language for describing quantum circuits. It is capable of describing universal quantum computing using the circuit model, measurement-based model, and near-term quantum computing experiments. This repo contains the OpenQASM specification, examples, and tools for the OpenQASM intermediate representation."
   ],
   "whoItsFor": "Developers who want to understand the representations and compilers that sit between high-level code and runnable circuits.",
@@ -36,21 +41,43 @@
   ],
   "readmeExcerpt": "OpenQASM is an imperative programming language for describing quantum circuits. It is capable of describing universal quantum computing using the circuit model, measurement-based model, and near-term quantum computing experiments. This repo contains the OpenQASM specification, examples, and tools for the OpenQASM intermediate representation.",
   "readmePath": "reference\\QISKit__openqasm\\README.md",
+  "readmeMarkdownPath": "readmes/qiskit-openqasm.md",
   "clonePath": "reference\\QISKit__openqasm",
-  "stars": 0,
-  "lastPushedAt": null,
-  "githubTopics": [],
+  "stars": 1468,
+  "lastPushedAt": "2026-05-27T15:46:07Z",
+  "defaultBranch": "main",
+  "githubTopics": [
+    "openqasm",
+    "quantum-computing",
+    "quantum-information"
+  ],
+  "quickstart": null,
+  "codeSamples": [],
+  "packageMeta": {},
+  "citationBibtex": null,
+  "supportedBackendSlugs": [],
+  "externalLinks": {
+    "paper": [
+      "https://arxiv.org/abs/2104.14722",
+      "https://arxiv.org/abs/1707.03429"
+    ]
+  },
+  "openIssuesCount": 103,
+  "subscribersCount": 86,
+  "latestRelease": null,
+  "ownerType": "Organization",
+  "ownerUrl": "https://github.com/openqasm",
   "featured": false,
   "flagship": false,
   "qtanglRelevant": false,
   "archived": false,
-  "imagePath": null,
+  "imagePath": "/learn/monogram/qiskit-openqasm.svg",
   "relatedSlugs": [
     "cqcl-tket",
     "nvidia-cuda-quantum",
+    "microsoft-quantumkatas",
+    "qiskit-qiskit",
     "quantomatic-pyzx",
-    "avalon-lang-avaloni",
-    "aviggiano-qcl",
-    "dabacon-qsel"
+    "quantumlib-cirq"
   ]
 }

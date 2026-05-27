@@ -17,11 +17,14 @@
     }
   ],
   "primaryLanguage": "Julia",
+  "primaryLanguages": [
+    "Julia"
+  ],
   "license": "Custom / project-specific",
-  "summary": "This Julia package contains functions that are convenient for common calculation in quantum information processing.",
-  "description": "This Julia package contains functions that are convenient for common calculation in quantum information processing.",
+  "summary": "Julia library for quantum information related calculations.",
+  "description": "Julia library for quantum information related calculations.",
   "whatItIs": [
-    "QuantumInfo.jl is an open-source project in the visualization and tomography category. It is maintained by BBN-Q and primarily looks like a Julia codebase. This Julia package contains functions that are convenient for common calculation in quantum information processing.",
+    "QuantumInfo.jl is an open-source project in the visualization and tomography category. It is maintained by BBN-Q and primarily looks like a Julia codebase. Julia library for quantum information related calculations.",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches visualization and tomography workflows in practice. The repository README emphasizes: This Julia package contains functions that are convenient for common calculation in quantum information processing. This research was funded by the Intelligence Advanced Research Projects Activity (IARPA) Multi Qubit Coherent Operations (MQCO) program under Contract No. W911NF-10-1-0324. All statements of fact, opinion, or conclusions contained herein are those..."
   ],
   "whoItsFor": "People who learn best by seeing state structure, measurement results, or circuit behavior laid out visually.",
@@ -32,21 +35,34 @@
   ],
   "readmeExcerpt": "This Julia package contains functions that are convenient for common calculation in quantum information processing. This research was funded by the Intelligence Advanced Research Projects Activity (IARPA) Multi Qubit Coherent Operations (MQCO) program under Contract No. W911NF-10-1-0324. All statements of fact, opinion, or conclusions contained herein are those of the authors and should not be construed as representing the official views or policies of IARPA, ODNI, or the US Government.",
   "readmePath": "reference\\BBN-Q__QuantumInfo.jl\\README.md",
+  "readmeMarkdownPath": "readmes/bbn-q-quantuminfo-jl.md",
   "clonePath": "reference\\BBN-Q__QuantumInfo.jl",
-  "stars": 0,
-  "lastPushedAt": null,
+  "stars": 18,
+  "lastPushedAt": "2022-02-21T06:59:56Z",
+  "defaultBranch": "master",
   "githubTopics": [],
+  "quickstart": null,
+  "codeSamples": [],
+  "packageMeta": {},
+  "citationBibtex": null,
+  "supportedBackendSlugs": [],
+  "externalLinks": {},
+  "openIssuesCount": 3,
+  "subscribersCount": 7,
+  "latestRelease": null,
+  "ownerType": "Organization",
+  "ownerUrl": "https://github.com/BBN-Q",
   "featured": false,
   "flagship": false,
   "qtanglRelevant": false,
   "archived": false,
-  "imagePath": null,
+  "imagePath": "/learn/monogram/bbn-q-quantuminfo-jl.svg",
   "relatedSlugs": [
+    "microsoft-quantumkatas",
+    "qiskit-qiskit",
+    "quantumlib-cirq",
+    "xanaduai-pennylane",
     "artiste-qb-net-quantum-fog",
-    "bbn-q-quantumtomography-jl",
-    "bbn-q-quince",
-    "qct-iqc-qcviewer",
-    "ziofil-quantumgraphs",
-    "aws-amazon-braket-sdk-python"
+    "bbn-q-quantumtomography-jl"
   ]
 }

@@ -21,11 +21,14 @@
     }
   ],
   "primaryLanguage": "Python",
+  "primaryLanguages": [
+    "Python"
+  ],
   "license": "MIT",
-  "summary": "Tequila is an abstraction framework for (variational) quantum algorithms.",
-  "description": "Tequila is an abstraction framework for (variational) quantum algorithms. It operates on abstract data structures allowing the formulation, combination, automatic differentiation and optimization of generalized objectives. Tequila can execute the underlying quantum expectation values on state of the art simulators as well as on real quantum devices.",
+  "summary": "A High-Level Abstraction Framework for Quantum Algorithms",
+  "description": "A High-Level Abstraction Framework for Quantum Algorithms",
   "whatItIs": [
-    "tequila is an open-source project in the quantum chemistry category. It is maintained by aspuru-guzik-group and primarily looks like a Python codebase. Tequila is an abstraction framework for (variational) quantum algorithms.",
+    "tequila is an open-source project in the quantum chemistry category. It is maintained by aspuru-guzik-group and primarily looks like a Python codebase. A High-Level Abstraction Framework for Quantum Algorithms",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches quantum chemistry workflows in practice. The repository README emphasizes: Tequila is an abstraction framework for (variational) quantum algorithms. It operates on abstract data structures allowing the formulation, combination, automatic differentiation and optimization of generalized objectives. Tequila can execute the underlying quantum expectation values on state of the art simulators as well as on real quantum devices. Get..."
   ],
   "whoItsFor": "Researchers, students, and developers exploring how quantum software is used for chemistry and electronic-structure problems.",
@@ -36,20 +39,49 @@
   ],
   "readmeExcerpt": "Tequila is an abstraction framework for (variational) quantum algorithms. It operates on abstract data structures allowing the formulation, combination, automatic differentiation and optimization of generalized objectives. Tequila can execute the underlying quantum expectation values on state of the art simulators as well as on real quantum devices. Get started with our collection of *Tutorials* *Documentation*",
   "readmePath": "reference\\aspuru-guzik-group__tequila\\README.md",
+  "readmeMarkdownPath": "readmes/aspuru-guzik-group-tequila.md",
   "clonePath": "reference\\aspuru-guzik-group__tequila",
-  "stars": 0,
-  "lastPushedAt": null,
+  "stars": 428,
+  "lastPushedAt": "2026-05-27T15:58:25Z",
+  "defaultBranch": "master",
   "githubTopics": [],
+  "quickstart": {
+    "language": "python",
+    "source": "import tequila as tq\n\n# initialize molecule (also works over .xyz files --> see next example)\ngeomstring=\"Li 0.0 0.0 0.0\\nH 0.0 0.0 1.6\"\nmol = tq.Molecule(geometry=geomstring)\n\n# get the qubit hamiltonian\nH = mol.make_hamiltonian()\n\n# get the ansatz (circuit)\nU = mol.make_ansatz(name=\"SPA\") # or e.g. UpCCGSD\n\n# define the expectation value\nE = tq.ExpectationValue(H=H, U=U)\n\n# minimize the expectation value\nresult = tq.minimize(E)\n\n# optional:compute classical reference energies\n# needs pyscf as well\ncisd = mol.compute_energy(\"cisd\")\nfci = mol.compute_energy(\"fci\")\n\nprint(\"VQE : {:+2.8}f\".format(result.energy))\nprint(\"CISD: {:+2.8}f\".format(cisd))\nprint(\"FCI : {:+2.8}f\".format(fci))"
+  },
+  "codeSamples": [],
+  "packageMeta": {},
+  "citationBibtex": "@software{tequilaaplatformforrapid,\n  title = {Tequila: A platform for rapid development of quantum algorithms},\n  author = {Unknown},\n  year = {2020},\n}\n",
+  "supportedBackendSlugs": [
+    "quantumlib-openfermion",
+    "quantomatic-pyzx",
+    "aws-amazon-braket-sdk-python",
+    "qiskit-qiskit",
+    "quantumlib-cirq"
+  ],
+  "externalLinks": {
+    "paper": [
+      "https://arxiv.org/abs/2011.03057",
+      "https://arxiv.org/abs/2011.05938",
+      "https://arxiv.org/abs/2008.02819",
+      "https://arxiv.org/abs/2009.13545"
+    ]
+  },
+  "openIssuesCount": 8,
+  "subscribersCount": 12,
+  "latestRelease": null,
+  "ownerType": "Organization",
+  "ownerUrl": "https://github.com/tequilahub",
   "featured": false,
   "flagship": true,
   "qtanglRelevant": false,
   "archived": false,
-  "imagePath": "/learn/flagship/aspuru-guzik-group-tequila.png",
+  "imagePath": "/learn/og/aspuru-guzik-group-tequila.png",
   "relatedSlugs": [
     "quantumlib-openfermion",
     "cda-tum-mqt-dasqa",
+    "eclipse-qrisp-qrisp",
     "ornl-qci-xacc-vqe",
-    "pasqal-io-qadence",
     "projectq-framework-fermilib",
     "qiskit-qiskit-nature"
   ]

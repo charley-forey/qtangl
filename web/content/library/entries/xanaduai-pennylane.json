@@ -4,7 +4,7 @@
   "name": "pennylane",
   "title": "pennylane",
   "repoUrl": "https://github.com/XanaduAI/pennylane",
-  "homepageUrl": null,
+  "homepageUrl": "https://pennylane.ai",
   "category": {
     "slug": "general-purpose-sdks",
     "title": "General-purpose SDKs",
@@ -21,11 +21,16 @@
     }
   ],
   "primaryLanguage": "Python",
+  "primaryLanguages": [
+    "Python",
+    "OpenQASM",
+    "LaTeX"
+  ],
   "license": "Apache-2.0",
-  "summary": "<p align=\"center\"> <a href=\"https://github.com/PennyLaneAI/pennylane/actions?query=workflow%3ATests\"> <img src=\"https://img.shields.io/github/actions/workflow/status/PennyLaneAI/PennyLane/tests.yml?branch=main&style=flat-square\" /> </a> <a href=\"https://codecov.io/gh/PennyLaneAI/pennylane\"> <img src=\"https://img.shields.io/codecov/c/github/PennyLaneAI/pennylane/main.svg?logo=codecov&style=flat-square\" /> </a> <a href=\"https://docs.pennylane.ai/en/latest\"> <img src=\"https://readthedocs.com/projects/xanaduai-pennylane/badge/?version=latest&style=flat-square\" /> </a> <a href=\"https://pypi.org/project/PennyLane\"> <img src=\"https://img.shields.io/pypi/v/PennyLane.svg?style=flat-square\" /> </a> <a href=\"https://discuss.pennylane.ai\"> <img src=\"https://img.shields.io/discourse/https/discuss.pennylane.ai/posts.svg?logo=discourse&style=flat-square\" /> </a>...",
-  "description": "<p align=\"center\"> <a href=\"https://github.com/PennyLaneAI/pennylane/actions?query=workflow%3ATests\"> <img src=\"https://img.shields.io/github/actions/workflow/status/PennyLaneAI/PennyLane/tests.yml?branch=main&style=flat-square\" /> </a> <a href=\"https://codecov.io/gh/PennyLaneAI/pennylane\"> <img src=\"https://img.shields.io/codecov/c/github/PennyLaneAI/pennylane/main.svg?logo=codecov&style=flat-square\" /> </a> <a href=\"https://docs.pennylane.ai/en/latest\"> <img src=\"https://readthedocs.com/projects/xanaduai-pennylane/badge/?version=latest&style=flat-square\" /> </a> <a href=\"https://pypi.org/project/PennyLane\"> <img src=\"https://img.shields.io/pypi/v/PennyLane.svg?style=flat-square\" /> </a> <a href=\"https://discuss.pennylane.ai\"> <img src=\"https://img.shields.io/discourse/https/discuss.pennylane.ai/posts.svg?logo=discourse&style=flat-square\" /> </a> <a href=\"https://www.apache.org/licenses/LICENSE-2.0\"> <img src=\"https://img.shields.io/pypi/l/PennyLane.svg?logo=apache&style=flat-square\" /> </a> </p>",
+  "summary": "PennyLane is an open-source quantum software platform for quantum computing, quantum machine learning, and quantum chemistry.",
+  "description": "PennyLane is an open-source quantum software platform for quantum computing, quantum machine learning, and quantum chemistry. Create meaningful quantum algorithms, from inspiration to implementation.",
   "whatItIs": [
-    "pennylane is an open-source project in the general-purpose sdks category. It is maintained by XanaduAI and primarily looks like a Python codebase. <p align=\"center\"> <a href=\"https://github.com/PennyLaneAI/pennylane/actions?query=workflow%3ATests\"> <img src=\"https://img.shields.io/github/actions/workflow/status/PennyLaneAI/PennyLane/tests.yml?branch=main&style=flat-square\" /> </a> <a href=\"https://codecov.io/gh/PennyLaneAI/pennylane\"> <img src=\"https://img.shields.io/codecov/c/github/PennyLaneAI/pennylane/main.svg?logo=codecov&style=flat-square\" /> </a> <a href=\"https://docs.pennylane.ai/en/latest\"> <img src=\"https://readthedocs.com/projects/xanaduai-pennylane/badge/?version=latest&style=flat-square\" /> </a> <a href=\"https://pypi.org/project/PennyLane\"> <img src=\"https://img.shields.io/pypi/v/PennyLane.svg?style=flat-square\" /> </a> <a href=\"https://discuss.pennylane.ai\"> <img src=\"https://img.shields.io/discourse/https/discuss.pennylane.ai/posts.svg?logo=discourse&style=flat-square\" /> </a>...",
+    "pennylane is an open-source project in the general-purpose sdks category. It is maintained by XanaduAI and primarily looks like a Python codebase. PennyLane is an open-source quantum software platform for quantum computing, quantum machine learning, and quantum chemistry.",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches general-purpose sdks workflows in practice. The repository README emphasizes: <p align=\"center\"> <a href=\"https://github.com/PennyLaneAI/pennylane/actions?query=workflow%3ATests\"> <img src=\"https://img.shields.io/github/actions/workflow/status/PennyLaneAI/PennyLane/tests.yml?branch=main&style=flat-square\" /> </a> <a href=\"https://codecov.io/gh/PennyLaneAI/pennylane\"> <img src=\"https://img.shields.io/codecov/c/github/PennyLaneAI/pennylane/main.svg?logo=codecov&style=flat-square\" /> </a> <a href=\"https://docs.pennylane.ai/en/latest\"> <img src=\"https://readthedocs.com/projects/xanaduai-pennylane/badge/?version=latest&style=flat-square\" /> </a> <a href=\"https://pypi.org/project/PennyLane\"> <img src=\"https://img.shields.io/pypi/v/PennyLane.svg?style=flat-square\" /> </a> <a href=\"https://discuss.pennylane.ai\"> <img src=\"https://img.shields.io/discourse/https/discuss.pennylane.ai/posts.svg?logo=discourse&style=flat-square\" /> </a> <a href=\"https://www.apache.org/licenses/LICENSE-2.0\"> <img src=\"https://img.shields.io/pypi/l/PennyLane.svg?logo=apache&style=flat-square\" /> </a> </p> <p align=\"center\"> <a href=\"https://pennylane.ai\">PennyLane</a> is an open-source quantum software..."
   ],
   "whoItsFor": "Developers who want a broad entry point for building circuits, experimenting with algorithms, and integrating quantum workflows into larger applications.",
@@ -36,21 +41,90 @@
   ],
   "readmeExcerpt": "<p align=\"center\"> <a href=\"https://github.com/PennyLaneAI/pennylane/actions?query=workflow%3ATests\"> <img src=\"https://img.shields.io/github/actions/workflow/status/PennyLaneAI/PennyLane/tests.yml?branch=main&style=flat-square\" /> </a> <a href=\"https://codecov.io/gh/PennyLaneAI/pennylane\"> <img src=\"https://img.shields.io/codecov/c/github/PennyLaneAI/pennylane/main.svg?logo=codecov&style=flat-square\" /> </a> <a href=\"https://docs.pennylane.ai/en/latest\"> <img src=\"https://readthedocs.com/projects/xanaduai-pennylane/badge/?version=latest&style=flat-square\" /> </a> <a href=\"https://pypi.org/project/PennyLane\"> <img src=\"https://img.shields.io/pypi/v/PennyLane.svg?style=flat-square\" /> </a> <a href=\"https://discuss.pennylane.ai\"> <img src=\"https://img.shields.io/discourse/https/discuss.pennylane.ai/posts.svg?logo=discourse&style=flat-square\" /> </a> <a href=\"https://www.apache.org/licenses/LICENSE-2.0\"> <img src=\"https://img.shields.io/pypi/l/PennyLane.svg?logo=apache&style=flat-square\" /> </a> </p> <p align=\"center\"> <a href=\"https://pennylane.ai\">PennyLane</a> is an open-source quantum software platform for <a href=\"https://pennylane.ai/qml/quantum-computing/\">quantum computing</a>, <a href=\"https://pennylane.ai/topics/quantum-machine-learning\">quantum machine learning</a>, and <a href=\"https://pennylane.ai/topics/hamiltonian-simulation\">quantum chemistry</a>. </p>",
   "readmePath": "reference\\XanaduAI__pennylane\\README.md",
+  "readmeMarkdownPath": "readmes/xanaduai-pennylane.md",
   "clonePath": "reference\\XanaduAI__pennylane",
-  "stars": 0,
-  "lastPushedAt": null,
-  "githubTopics": [],
+  "stars": 3229,
+  "lastPushedAt": "2026-05-27T21:46:39Z",
+  "defaultBranch": "main",
+  "githubTopics": [
+    "autograd",
+    "automatic-differentiation",
+    "cirq",
+    "deep-learning",
+    "differentiable-computing",
+    "jax",
+    "machine-learning",
+    "neural-network",
+    "optimization",
+    "python",
+    "pytorch",
+    "qiskit",
+    "qml",
+    "quantum",
+    "quantum-chemistry",
+    "quantum-computing",
+    "quantum-machine-learning",
+    "tensorflow"
+  ],
+  "quickstart": null,
+  "codeSamples": [],
+  "packageMeta": {
+    "name": "pennylane",
+    "requiresPython": ">=3.11",
+    "dependencies": [
+      "scipy",
+      "networkx",
+      "rustworkx",
+      "autograd",
+      "appdirs",
+      "autoray",
+      "cachetools",
+      "pennylane-lightning",
+      "requests",
+      "tomlkit",
+      "typing_extensions",
+      "packaging"
+    ]
+  },
+  "citationBibtex": null,
+  "supportedBackendSlugs": [
+    "xanaduai-pennylane",
+    "qiskit-qiskit",
+    "quantumlib-cirq",
+    "quantumlib-openfermion",
+    "quantumlib-stim",
+    "quantomatic-pyzx"
+  ],
+  "externalLinks": {
+    "docs": [
+      "https://docs.pennylane.ai/en/latest",
+      "https://readthedocs.com/projects/xanaduai-pennylane/badge/?version=latest&style=flat-square",
+      "https://docs.pennylane.ai/en/stable/introduction/chemistry.html",
+      "https://docs.pennylane.ai/en/stable/development/release_notes.html"
+    ],
+    "paper": [
+      "https://arxiv.org/abs/1811.04968"
+    ],
+    "pypi": [
+      "https://pypi.org/project/PennyLane"
+    ]
+  },
+  "openIssuesCount": 358,
+  "subscribersCount": 47,
+  "latestRelease": null,
+  "ownerType": "Organization",
+  "ownerUrl": "https://github.com/PennyLaneAI",
   "featured": true,
   "flagship": true,
   "qtanglRelevant": true,
   "archived": false,
-  "imagePath": "/learn/flagship/xanaduai-pennylane.png",
+  "imagePath": "/learn/og/xanaduai-pennylane.png",
   "relatedSlugs": [
     "qiskit-qiskit",
     "quantumlib-cirq",
-    "projectq-framework-projectq",
+    "qiskit-qiskit-terra",
     "quantumbfs-yao-jl",
-    "arlineq-arline-benchmarks",
-    "arlineq-arline-quantum"
+    "microsoft-quantumkatas",
+    "projectq-framework-projectq"
   ]
 }

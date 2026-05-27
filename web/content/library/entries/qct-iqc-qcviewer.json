@@ -4,7 +4,7 @@
   "name": "QCViewer",
   "title": "QCViewer",
   "repoUrl": "https://github.com/QCT-IQC/QCViewer",
-  "homepageUrl": null,
+  "homepageUrl": "http://qcirc.iqc.uwaterloo.ca/",
   "category": {
     "slug": "visualization-tomography",
     "title": "Visualization and tomography",
@@ -16,12 +16,17 @@
       "title": "Quantum computing software in 2026: the open-source map"
     }
   ],
-  "primaryLanguage": "C/C++",
+  "primaryLanguage": "C++",
+  "primaryLanguages": [
+    "C/C++",
+    "C++",
+    "LaTeX"
+  ],
   "license": "LGPL",
-  "summary": "Go into the build directory and choose the folder corresponding to the build type you want.",
-  "description": "Go into the build directory and choose the folder corresponding to the build type you want. Enter the folder and run./build.",
+  "summary": "A visual quantum circuit design and simulation tool.",
+  "description": "A visual quantum circuit design and simulation tool.",
   "whatItIs": [
-    "QCViewer is an open-source project in the visualization and tomography category. It is maintained by QCT-IQC and primarily looks like a C/C++ codebase. Go into the build directory and choose the folder corresponding to the build type you want.",
+    "QCViewer is an open-source project in the visualization and tomography category. It is maintained by QCT-IQC and primarily looks like a C++ codebase. A visual quantum circuit design and simulation tool.",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches visualization and tomography workflows in practice. The repository README emphasizes: Go into the build directory and choose the folder corresponding to the build type you want. Enter the folder and run./build. libpoppler-glib-dev libgtkmm-2.4-dev bison flex cmake boost >= 1.52.0 libboost-dev libboost-filesystem-dev libboost-program-options-dev libboost-system-dev cairo >= 1.10.2 mpfr"
   ],
   "whoItsFor": "People who learn best by seeing state structure, measurement results, or circuit behavior laid out visually.",
@@ -32,21 +37,34 @@
   ],
   "readmeExcerpt": "Go into the build directory and choose the folder corresponding to the build type you want. Enter the folder and run./build. libpoppler-glib-dev libgtkmm-2.4-dev bison flex cmake boost >= 1.52.0 libboost-dev libboost-filesystem-dev libboost-program-options-dev libboost-system-dev cairo >= 1.10.2 mpfr",
   "readmePath": "reference\\QCT-IQC__QCViewer\\README",
+  "readmeMarkdownPath": "readmes/qct-iqc-qcviewer.md",
   "clonePath": "reference\\QCT-IQC__QCViewer",
-  "stars": 0,
-  "lastPushedAt": null,
+  "stars": 7,
+  "lastPushedAt": "2015-09-18T18:32:29Z",
+  "defaultBranch": "master",
   "githubTopics": [],
+  "quickstart": null,
+  "codeSamples": [],
+  "packageMeta": {},
+  "citationBibtex": null,
+  "supportedBackendSlugs": [],
+  "externalLinks": {},
+  "openIssuesCount": 0,
+  "subscribersCount": 2,
+  "latestRelease": null,
+  "ownerType": "Organization",
+  "ownerUrl": "https://github.com/QCT-IQC",
   "featured": false,
   "flagship": false,
   "qtanglRelevant": false,
   "archived": false,
-  "imagePath": null,
+  "imagePath": "/learn/monogram/qct-iqc-qcviewer.svg",
   "relatedSlugs": [
+    "microsoft-quantumkatas",
+    "qiskit-qiskit",
+    "quantumlib-cirq",
+    "xanaduai-pennylane",
     "artiste-qb-net-quantum-fog",
-    "bbn-q-quantuminfo-jl",
-    "bbn-q-quantumtomography-jl",
-    "bbn-q-quince",
-    "ziofil-quantumgraphs",
-    "aws-amazon-braket-sdk-python"
+    "bbn-q-quantuminfo-jl"
   ]
 }

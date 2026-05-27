@@ -4,7 +4,7 @@
   "name": "blackbird",
   "title": "blackbird",
   "repoUrl": "https://github.com/XanaduAI/blackbird",
-  "homepageUrl": null,
+  "homepageUrl": "https://quantum-blackbird.readthedocs.io",
   "category": {
     "slug": "photonics",
     "title": "Photonics",
@@ -16,12 +16,17 @@
       "title": "Quantum computing software in 2026: the open-source map"
     }
   ],
-  "primaryLanguage": "Python",
+  "primaryLanguage": "C++",
+  "primaryLanguages": [
+    "Python",
+    "C++",
+    "C/C++"
+  ],
   "license": "Apache-2.0",
-  "summary": "image:: https://img.shields.io/github/workflow/status/XanaduAI/blackbird/Tests/master?logo=github&style=flat-square :alt: GitHub Workflow Status (branch) :target: https://github.com/XanaduAI/blackbird/actions?query=workflow%3ATests",
-  "description": ".. image:: https://img.shields.io/github/workflow/status/XanaduAI/blackbird/Tests/master?logo=github&style=flat-square :alt: GitHub Workflow Status (branch) :target: https://github.com/XanaduAI/blackbird/actions?query=workflow%3ATests",
+  "summary": "Blackbird is a quantum assembly language for continuous-variable quantum computation, that can be used to program Xanadu's quantum photonics hardware and Strawberry Fields simulator.",
+  "description": "Blackbird is a quantum assembly language for continuous-variable quantum computation, that can be used to program Xanadu's quantum photonics hardware and Strawberry Fields simulator.",
   "whatItIs": [
-    "blackbird is an open-source project in the photonics category. It is maintained by XanaduAI and primarily looks like a Python codebase. image:: https://img.shields.io/github/workflow/status/XanaduAI/blackbird/Tests/master?logo=github&style=flat-square :alt: GitHub Workflow Status (branch) :target: https://github.com/XanaduAI/blackbird/actions?query=workflow%3ATests",
+    "blackbird is an open-source project in the photonics category. It is maintained by XanaduAI and primarily looks like a C++ codebase. Blackbird is a quantum assembly language for continuous-variable quantum computation, that can be used to program Xanadu's quantum photonics hardware and Strawberry Fields simulator.",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches photonics workflows in practice. The repository README emphasizes: .. image:: https://img.shields.io/github/workflow/status/XanaduAI/blackbird/Tests/master?logo=github&style=flat-square :alt: GitHub Workflow Status (branch) :target: https://github.com/XanaduAI/blackbird/actions?query=workflow%3ATests .. image:: https://img.shields.io/codecov/c/github/xanaduai/blackbird/master.svg?style=for-the-badge :alt: Codecov coverage :target: https://codecov.io/gh/XanaduAI/blackbird"
   ],
   "whoItsFor": "People exploring optical and photonic models of quantum computing, especially outside the usual gate-model framing.",
@@ -32,21 +37,52 @@
   ],
   "readmeExcerpt": ".. image:: https://img.shields.io/github/workflow/status/XanaduAI/blackbird/Tests/master?logo=github&style=flat-square :alt: GitHub Workflow Status (branch) :target: https://github.com/XanaduAI/blackbird/actions?query=workflow%3ATests .. image:: https://img.shields.io/codecov/c/github/xanaduai/blackbird/master.svg?style=for-the-badge :alt: Codecov coverage :target: https://codecov.io/gh/XanaduAI/blackbird",
   "readmePath": "reference\\XanaduAI__blackbird\\README.rst",
+  "readmeMarkdownPath": "readmes/xanaduai-blackbird.md",
   "clonePath": "reference\\XanaduAI__blackbird",
-  "stars": 0,
-  "lastPushedAt": null,
-  "githubTopics": [],
+  "stars": 77,
+  "lastPushedAt": "2022-10-18T15:01:46Z",
+  "defaultBranch": "master",
+  "githubTopics": [
+    "antlr4",
+    "parser",
+    "quantum",
+    "quantum-algorithms",
+    "quantum-computing",
+    "quantum-optics",
+    "quantum-programming-language"
+  ],
+  "quickstart": null,
+  "codeSamples": [],
+  "packageMeta": {},
+  "citationBibtex": null,
+  "supportedBackendSlugs": [],
+  "externalLinks": {
+    "docs": [
+      "https://quantum-blackbird.readthedocs.io",
+      "https://quantum-blackbird.readthedocs.io/en/latest/installing.html",
+      "https://quantum-blackbird.readthedocs.io/en/latest/syntax.html",
+      "https://quantum-blackbird.readthedocs.io/en/latest/blackbird_python/init.html"
+    ],
+    "paper": [
+      "https://arxiv.org/abs/1804.03159"
+    ]
+  },
+  "openIssuesCount": 5,
+  "subscribersCount": 10,
+  "latestRelease": null,
+  "ownerType": "Organization",
+  "ownerUrl": "https://github.com/XanaduAI",
   "featured": false,
   "flagship": false,
   "qtanglRelevant": false,
   "archived": false,
-  "imagePath": null,
+  "imagePath": "/learn/monogram/xanaduai-blackbird.svg",
   "relatedSlugs": [
+    "microsoft-quantumkatas",
+    "qiskit-qiskit",
+    "quantumlib-cirq",
+    "xanaduai-pennylane",
     "xanaduai-strawberryfields",
-    "quandela-perceval",
-    "xanaduai-thewalrus",
-    "aws-amazon-braket-sdk-python",
-    "cqcl-tket",
-    "dwavesystems-dwave-ocean-sdk"
+    "open-quantum-safe-liboqs"
   ]
 }

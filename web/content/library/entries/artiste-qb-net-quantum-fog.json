@@ -16,12 +16,17 @@
       "title": "Quantum computing software in 2026: the open-source map"
     }
   ],
-  "primaryLanguage": "Python",
-  "license": "BSD",
-  "summary": "Quantum Fog at GitHub What is Quantum Fog?",
-  "description": "Quantum Fog at GitHub What is Quantum Fog?",
+  "primaryLanguage": "Jupyter Notebook",
+  "primaryLanguages": [
+    "Python",
+    "C/C++",
+    "C++"
+  ],
+  "license": "BSD-3-Clause",
+  "summary": "Python tools for analyzing both classical and quantum Bayesian Networks",
+  "description": "Python tools for analyzing both classical and quantum Bayesian Networks",
   "whatItIs": [
-    "quantum-fog is an open-source project in the visualization and tomography category. It is maintained by artiste-qb-net and primarily looks like a Python codebase. Quantum Fog at GitHub What is Quantum Fog?",
+    "quantum-fog is an open-source project in the visualization and tomography category. It is maintained by artiste-qb-net and primarily looks like a Jupyter Notebook codebase. Python tools for analyzing both classical and quantum Bayesian Networks",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches visualization and tomography workflows in practice. The repository README emphasizes: Quantum Fog at GitHub What is Quantum Fog? Quantum Fog (QFog) is an app for modelling physical situations that exhibit quantum mechanical behavior. It's a tool for investigating and discussing quantum measurement problems graphically, in terms of network diagrams called quantum Bayesian networks."
   ],
   "whoItsFor": "People who learn best by seeing state structure, measurement results, or circuit behavior laid out visually.",
@@ -32,21 +37,37 @@
   ],
   "readmeExcerpt": "Quantum Fog at GitHub What is Quantum Fog? Quantum Fog (QFog) is an app for modelling physical situations that exhibit quantum mechanical behavior. It's a tool for investigating and discussing quantum measurement problems graphically, in terms of network diagrams called quantum Bayesian networks.",
   "readmePath": "reference\\artiste-qb-net__quantum-fog\\README.md",
+  "readmeMarkdownPath": "readmes/artiste-qb-net-quantum-fog.md",
   "clonePath": "reference\\artiste-qb-net__quantum-fog",
-  "stars": 0,
-  "lastPushedAt": null,
-  "githubTopics": [],
+  "stars": 80,
+  "lastPushedAt": "2023-02-13T21:37:16Z",
+  "defaultBranch": "master",
+  "githubTopics": [
+    "bayesian-networks",
+    "quantum-computing"
+  ],
+  "quickstart": null,
+  "codeSamples": [],
+  "packageMeta": {},
+  "citationBibtex": null,
+  "supportedBackendSlugs": [],
+  "externalLinks": {},
+  "openIssuesCount": 12,
+  "subscribersCount": 11,
+  "latestRelease": null,
+  "ownerType": "Organization",
+  "ownerUrl": "https://github.com/artiste-qb-net",
   "featured": false,
   "flagship": false,
   "qtanglRelevant": false,
   "archived": false,
-  "imagePath": null,
+  "imagePath": "/learn/monogram/artiste-qb-net-quantum-fog.svg",
   "relatedSlugs": [
+    "microsoft-quantumkatas",
+    "qiskit-qiskit",
+    "quantumlib-cirq",
+    "xanaduai-pennylane",
     "bbn-q-quantuminfo-jl",
-    "bbn-q-quantumtomography-jl",
-    "bbn-q-quince",
-    "qct-iqc-qcviewer",
-    "ziofil-quantumgraphs",
-    "aws-amazon-braket-sdk-python"
+    "bbn-q-quantumtomography-jl"
   ]
 }

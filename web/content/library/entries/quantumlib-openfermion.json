@@ -4,7 +4,7 @@
   "name": "OpenFermion",
   "title": "OpenFermion",
   "repoUrl": "https://github.com/quantumlib/OpenFermion",
-  "homepageUrl": null,
+  "homepageUrl": "https://quantumai.google/openfermion",
   "category": {
     "slug": "quantum-chemistry",
     "title": "Quantum chemistry",
@@ -21,11 +21,16 @@
     }
   ],
   "primaryLanguage": "Python",
+  "primaryLanguages": [
+    "Python",
+    "Jupyter",
+    "Shell"
+  ],
   "license": "Apache-2.0",
-  "summary": "Features &ndash; Installation &ndash; Plugins &ndash; Documentation &ndash; Contributing &ndash; Citing &ndash; Authors &ndash; Contact",
-  "description": "Features &ndash; Installation &ndash; Plugins &ndash; Documentation &ndash; Contributing &ndash; Citing &ndash; Authors &ndash; Contact",
+  "summary": "Python package for compiling and analyzing quantum algorithms to simulate electronic structures.",
+  "description": "Python package for compiling and analyzing quantum algorithms to simulate electronic structures.",
   "whatItIs": [
-    "OpenFermion is an open-source project in the quantum chemistry category. It is maintained by quantumlib and primarily looks like a Python codebase. Features &ndash; Installation &ndash; Plugins &ndash; Documentation &ndash; Contributing &ndash; Citing &ndash; Authors &ndash; Contact",
+    "OpenFermion is an open-source project in the quantum chemistry category. It is maintained by quantumlib and primarily looks like a Python codebase. Python package for compiling and analyzing quantum algorithms to simulate electronic structures.",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches quantum chemistry workflows in practice. The repository README emphasizes: Features &ndash; Installation &ndash; Plugins &ndash; Documentation &ndash; Contributing &ndash; Citing &ndash; Authors &ndash; Contact OpenFermion is an open-source Python package for compiling and analyzing quantum algorithms to simulate fermionic systems, including quantum chemistry. Among other features, it includes data structures and tools for obtaining and manipulating representations..."
   ],
   "whoItsFor": "Researchers, students, and developers exploring how quantum software is used for chemistry and electronic-structure problems.",
@@ -36,20 +41,70 @@
   ],
   "readmeExcerpt": "Features &ndash; Installation &ndash; Plugins &ndash; Documentation &ndash; Contributing &ndash; Citing &ndash; Authors &ndash; Contact OpenFermion is an open-source Python package for compiling and analyzing quantum algorithms to simulate fermionic systems, including quantum chemistry. Among other features, it includes data structures and tools for obtaining and manipulating representations of fermionic and qubit Hamiltonians. More information can be found in the release paper.",
   "readmePath": "reference\\quantumlib__OpenFermion\\README.md",
+  "readmeMarkdownPath": "readmes/quantumlib-openfermion.md",
   "clonePath": "reference\\quantumlib__OpenFermion",
-  "stars": 0,
-  "lastPushedAt": null,
-  "githubTopics": [],
+  "stars": 1697,
+  "lastPushedAt": "2026-05-26T00:08:31Z",
+  "defaultBranch": "main",
+  "githubTopics": [
+    "algorithms",
+    "cirq",
+    "colab",
+    "electronic-structure",
+    "fermion",
+    "google-quantum",
+    "high-performance",
+    "jupyter-notebook",
+    "python",
+    "quantum",
+    "quantum-algorithms",
+    "quantum-chemistry",
+    "quantum-circuit",
+    "quantum-computing",
+    "quantum-information",
+    "quantum-programming",
+    "quantum-programming-language",
+    "quantum-simulation",
+    "sdk",
+    "simulation"
+  ],
+  "quickstart": null,
+  "codeSamples": [],
+  "packageMeta": {},
+  "citationBibtex": "@software{openfermion,\n  title = {OpenFermion},\n  author = {Unknown},\n  year = {2024},\n}\n",
+  "supportedBackendSlugs": [
+    "quantumlib-openfermion",
+    "quantumlib-cirq"
+  ],
+  "externalLinks": {
+    "docs": [
+      "https://quantumai.google/openfermion",
+      "https://quantumai.google/openfermion/install",
+      "https://quantumai.google/reference/python/openfermion/all_symbols",
+      "https://quantumai.google/openfermion/tutorials/intro_to_openfermion"
+    ],
+    "paper": [
+      "https://arxiv.org/abs/1710.07629"
+    ],
+    "pypi": [
+      "https://pypi.org/project/OpenFermion"
+    ]
+  },
+  "openIssuesCount": 60,
+  "subscribersCount": 106,
+  "latestRelease": null,
+  "ownerType": "Organization",
+  "ownerUrl": "https://github.com/quantumlib",
   "featured": true,
   "flagship": true,
   "qtanglRelevant": false,
   "archived": false,
-  "imagePath": "/learn/flagship/quantumlib-openfermion.png",
+  "imagePath": "/learn/og/quantumlib-openfermion.png",
   "relatedSlugs": [
     "aspuru-guzik-group-tequila",
     "cda-tum-mqt-dasqa",
+    "eclipse-qrisp-qrisp",
     "ornl-qci-xacc-vqe",
-    "pasqal-io-qadence",
     "projectq-framework-fermilib",
     "qiskit-qiskit-nature"
   ]

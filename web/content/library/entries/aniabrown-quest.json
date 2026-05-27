@@ -4,7 +4,7 @@
   "name": "QuEST",
   "title": "QuEST",
   "repoUrl": "https://github.com/aniabrown/QuEST",
-  "homepageUrl": null,
+  "homepageUrl": "https://quest.qtechtheory.org/",
   "category": {
     "slug": "simulators",
     "title": "Simulators",
@@ -21,11 +21,16 @@
     }
   ],
   "primaryLanguage": "C++",
-  "license": "Unknown",
-  "summary": "Because this file doubles as the doxygen mainpage, it must use absolute paths.",
-  "description": "Because this file doubles as the doxygen mainpage, it must use absolute paths.",
+  "primaryLanguages": [
+    "C++",
+    "C/C++",
+    "C"
+  ],
+  "license": "MIT",
+  "summary": "A multithreaded, distributed, GPU-accelerated simulator of quantum computers",
+  "description": "A multithreaded, distributed, GPU-accelerated simulator of quantum computers",
   "whatItIs": [
-    "QuEST is an open-source project in the simulators category. It is maintained by aniabrown and primarily looks like a C++ codebase. Because this file doubles as the doxygen mainpage, it must use absolute paths.",
+    "QuEST is an open-source project in the simulators category. It is maintained by aniabrown and primarily looks like a C++ codebase. A multithreaded, distributed, GPU-accelerated simulator of quantum computers",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches simulators workflows in practice. The repository README emphasizes: Because this file doubles as the doxygen mainpage, it must use absolute paths. <a href=\"https://quest.qtechtheory.org\"> <img src=\"https://raw.githubusercontent.com/QuEST-Kit/QuEST/refs/heads/main/utils/docs/logos/banner.png\" alt=\"The QuEST logo\" width=400> </a> The repository also appears to be archival or no longer actively maintained, which matters when evaluating it for current production use."
   ],
   "whoItsFor": "Developers and researchers who need to test ideas locally before running on hardware or who want to compare simulation strategies.",
@@ -36,21 +41,42 @@
   ],
   "readmeExcerpt": "Because this file doubles as the doxygen mainpage, it must use absolute paths. <a href=\"https://quest.qtechtheory.org\"> <img src=\"https://raw.githubusercontent.com/QuEST-Kit/QuEST/refs/heads/main/utils/docs/logos/banner.png\" alt=\"The QuEST logo\" width=400> </a>",
   "readmePath": "reference\\aniabrown__QuEST\\README.md",
+  "readmeMarkdownPath": "readmes/aniabrown-quest.md",
   "clonePath": "reference\\aniabrown__QuEST",
-  "stars": 0,
-  "lastPushedAt": null,
+  "stars": 473,
+  "lastPushedAt": "2026-05-27T21:42:54Z",
+  "defaultBranch": "main",
   "githubTopics": [],
+  "quickstart": {
+    "language": "bash",
+    "source": "git clone https://github.com/quest-kit/QuEST.git\ncd QuEST"
+  },
+  "codeSamples": [],
+  "packageMeta": {},
+  "citationBibtex": null,
+  "supportedBackendSlugs": [],
+  "externalLinks": {
+    "docs": [
+      "https://rocm.docs.amd.com/projects/HIP/en/docs-develop/what_is_hip.html",
+      "https://docs.amd.com/bundle/HIP-Programming-Guide-v5.3"
+    ]
+  },
+  "openIssuesCount": 48,
+  "subscribersCount": 18,
+  "latestRelease": null,
+  "ownerType": "Organization",
+  "ownerUrl": "https://github.com/QuEST-Kit",
   "featured": false,
   "flagship": false,
   "qtanglRelevant": false,
   "archived": true,
-  "imagePath": null,
+  "imagePath": "/learn/monogram/aniabrown-quest.svg",
   "relatedSlugs": [
+    "qiskit-qiskit-tutorial",
+    "qosf-os-quantum-software",
     "0tt3r-quac",
     "adamisntdead-qusimpy",
     "bbn-q-pysimulator",
-    "cda-tum-mqt-ddsim",
-    "dillanchang-qocs",
-    "iic-jku-ddsim"
+    "cda-tum-mqt-ddsim"
   ]
 }

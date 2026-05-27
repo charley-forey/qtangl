@@ -6,47 +6,70 @@
   "repoUrl": "https://github.com/BBN-Q/QGL.jl",
   "homepageUrl": null,
   "category": {
-    "slug": "benchmarks-analysis",
-    "title": "Benchmarks and analysis",
-    "description": "Benchmark suites, performance studies, and analysis tooling for comparing quantum software and hardware workflows."
+    "slug": "compilers-languages",
+    "title": "Compilers and languages",
+    "description": "Compilers, intermediate representations, domain-specific languages, and transpilation tools for quantum programs."
   },
   "topics": [
     {
       "slug": "quantum-software-map",
       "title": "Quantum computing software in 2026: the open-source map"
+    },
+    {
+      "slug": "start-writing-quantum-code",
+      "title": "How to start writing quantum code: an honest path"
     }
   ],
   "primaryLanguage": "Julia",
-  "license": "Apache-2.0",
-  "summary": "The package is not yet registered with METADATA.jl and so must be cloned with",
-  "description": "The package is not yet registered with METADATA.jl and so must be cloned with",
-  "whatItIs": [
-    "QGL.jl is an open-source project in the benchmarks and analysis category. It is maintained by BBN-Q and primarily looks like a Julia codebase. The package is not yet registered with METADATA.jl and so must be cloned with",
-    "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches benchmarks and analysis workflows in practice. The repository README emphasizes: The package is not yet registered with METADATA.jl and so must be cloned with Preliminary benchmarks show speed-ups for Python QGL of ~25-30X."
+  "primaryLanguages": [
+    "Julia"
   ],
-  "whoItsFor": "Researchers and evaluators comparing toolchains, algorithms, hardware assumptions, or performance tradeoffs.",
+  "license": "Apache-2.0",
+  "summary": "A performance orientated QGL compiler.",
+  "description": "A performance orientated QGL compiler.",
+  "whatItIs": [
+    "QGL.jl is an open-source project in the compilers and languages category. It is maintained by BBN-Q and primarily looks like a Julia codebase. A performance orientated QGL compiler.",
+    "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches compilers and languages workflows in practice. The repository README emphasizes: The package is not yet registered with METADATA.jl and so must be cloned with Preliminary benchmarks show speed-ups for Python QGL of ~25-30X."
+  ],
+  "whoItsFor": "Developers who want to understand the representations and compilers that sit between high-level code and runnable circuits.",
   "whatYouCanBuild": [
-    "Learn what this project measures and why it matters.",
-    "Compare benchmarking assumptions instead of taking headline claims at face value.",
-    "Use the resource to evaluate ecosystems more critically."
+    "Compare IRs, DSLs, transpilers, and compiler assumptions across ecosystems.",
+    "Understand how high-level code becomes something a backend can execute.",
+    "Spot tools that matter when interoperability and compilation quality are important."
   ],
   "readmeExcerpt": "The package is not yet registered with METADATA.jl and so must be cloned with Preliminary benchmarks show speed-ups for Python QGL of ~25-30X.",
   "readmePath": "reference\\BBN-Q__QGL.jl\\README.md",
+  "readmeMarkdownPath": "readmes/bbn-q-qgl-jl.md",
   "clonePath": "reference\\BBN-Q__QGL.jl",
-  "stars": 0,
-  "lastPushedAt": null,
-  "githubTopics": [],
+  "stars": 13,
+  "lastPushedAt": "2023-12-19T14:44:37Z",
+  "defaultBranch": "master",
+  "githubTopics": [
+    "julia-language",
+    "quantum-computing"
+  ],
+  "quickstart": null,
+  "codeSamples": [],
+  "packageMeta": {},
+  "citationBibtex": null,
+  "supportedBackendSlugs": [],
+  "externalLinks": {},
+  "openIssuesCount": 7,
+  "subscribersCount": 8,
+  "latestRelease": null,
+  "ownerType": "Organization",
+  "ownerUrl": "https://github.com/BBN-Q",
   "featured": false,
   "flagship": false,
   "qtanglRelevant": false,
   "archived": false,
-  "imagePath": null,
+  "imagePath": "/learn/monogram/bbn-q-qgl-jl.svg",
   "relatedSlugs": [
-    "bbn-q-qsimulator-jl",
-    "cda-tum-mqt-bench",
-    "quantumlib-qualtran",
-    "aws-amazon-braket-sdk-python",
     "cqcl-tket",
-    "dwavesystems-dwave-ocean-sdk"
+    "nvidia-cuda-quantum",
+    "microsoft-quantumkatas",
+    "qiskit-openqasm",
+    "qiskit-qiskit",
+    "quantomatic-pyzx"
   ]
 }

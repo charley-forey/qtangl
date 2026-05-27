@@ -20,12 +20,15 @@
       "title": "Quantum computing software in 2026: the open-source map"
     }
   ],
-  "primaryLanguage": "Python",
-  "license": "BSD",
+  "primaryLanguage": "Mathematica",
+  "primaryLanguages": [
+    "Python"
+  ],
+  "license": "BSD-3-Clause",
   "summary": "QuantumUtils for Mathematica is a software library for quantum information scientists.",
-  "description": "QuantumUtils for Mathematica is a software library for quantum information scientists. Features include:",
+  "description": "QuantumUtils for Mathematica is a software library for quantum information scientists.",
   "whatItIs": [
-    "quantum-utils-mathematica is an open-source project in the simulators category. It is maintained by QuantumUtils and primarily looks like a Python codebase. QuantumUtils for Mathematica is a software library for quantum information scientists.",
+    "quantum-utils-mathematica is an open-source project in the simulators category. It is maintained by QuantumUtils and primarily looks like a Mathematica codebase. QuantumUtils for Mathematica is a software library for quantum information scientists.",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches simulators workflows in practice. The repository README emphasizes: QuantumUtils for Mathematica is a software library for quantum information scientists. Features include: Multi-partite tensor manipulations Quantum system modelling including qudits, circuits, spins, and cavities Symbolic Lie algebra simplification for spin and cavity systems Quantum channels in multiple representations Numerical and symbolic simulators for open and closed quantum..."
   ],
   "whoItsFor": "Developers and researchers who need to test ideas locally before running on hardware or who want to compare simulation strategies.",
@@ -36,21 +39,34 @@
   ],
   "readmeExcerpt": "QuantumUtils for Mathematica is a software library for quantum information scientists. Features include: Multi-partite tensor manipulations Quantum system modelling including qudits, circuits, spins, and cavities Symbolic Lie algebra simplification for spin and cavity systems Quantum channels in multiple representations Numerical and symbolic simulators for open and closed quantum system evolution An implementation of GRadient Ascent Pulse Engineering including distortions Perturbative expansion tools such as the Magnus series, the Zassenhaus formula, and matrix power series Visualization functions for displaying matrices, quantum states, data etc.",
   "readmePath": "reference\\QuantumUtils__quantum-utils-mathematica\\README.md",
+  "readmeMarkdownPath": "readmes/quantumutils-quantum-utils-mathematica.md",
   "clonePath": "reference\\QuantumUtils__quantum-utils-mathematica",
-  "stars": 0,
-  "lastPushedAt": null,
+  "stars": 78,
+  "lastPushedAt": "2018-05-30T15:57:25Z",
+  "defaultBranch": "master",
   "githubTopics": [],
+  "quickstart": null,
+  "codeSamples": [],
+  "packageMeta": {},
+  "citationBibtex": null,
+  "supportedBackendSlugs": [],
+  "externalLinks": {},
+  "openIssuesCount": 14,
+  "subscribersCount": 13,
+  "latestRelease": null,
+  "ownerType": "Organization",
+  "ownerUrl": "https://github.com/QuantumUtils",
   "featured": false,
   "flagship": false,
   "qtanglRelevant": false,
   "archived": false,
-  "imagePath": null,
+  "imagePath": "/learn/monogram/quantumutils-quantum-utils-mathematica.svg",
   "relatedSlugs": [
+    "qiskit-qiskit-tutorial",
+    "qosf-os-quantum-software",
     "0tt3r-quac",
     "adamisntdead-qusimpy",
     "aniabrown-quest",
-    "bbn-q-pysimulator",
-    "cda-tum-mqt-ddsim",
-    "dillanchang-qocs"
+    "bbn-q-pysimulator"
   ]
 }

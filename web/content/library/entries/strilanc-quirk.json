@@ -4,7 +4,7 @@
   "name": "Quirk",
   "title": "Quirk",
   "repoUrl": "https://github.com/Strilanc/Quirk",
-  "homepageUrl": null,
+  "homepageUrl": "http://algassert.com/quirk",
   "category": {
     "slug": "games-learning",
     "title": "Games and learning",
@@ -21,11 +21,14 @@
     }
   ],
   "primaryLanguage": "JavaScript",
+  "primaryLanguages": [
+    "JavaScript"
+  ],
   "license": "Apache-2.0",
-  "summary": "Quirk is a toy quantum circuit simulator, intended to help people in learning about quantum computing.",
-  "description": "Quirk is a toy quantum circuit simulator, intended to help people in learning about quantum computing.",
+  "summary": "A drag-and-drop quantum circuit simulator that runs in your browser.",
+  "description": "A drag-and-drop quantum circuit simulator that runs in your browser. A toy for exploring and understanding small quantum circuits.",
   "whatItIs": [
-    "Quirk is an open-source project in the games and learning category. It is maintained by Strilanc and primarily looks like a JavaScript codebase. Quirk is a toy quantum circuit simulator, intended to help people in learning about quantum computing.",
+    "Quirk is an open-source project in the games and learning category. It is maintained by Strilanc and primarily looks like a JavaScript codebase. A drag-and-drop quantum circuit simulator that runs in your browser.",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches games and learning workflows in practice. The repository README emphasizes: Quirk is a toy quantum circuit simulator, intended to help people in learning about quantum computing. If you want to quickly explore the behavior of a small quantum circuit, Quirk is the tool for you. There's no installing or configuring or scripting: just go to **algassert.com/quirk**, drag gates..."
   ],
   "whoItsFor": "Beginners, educators, and curious developers who want a more approachable path into quantum concepts.",
@@ -36,21 +39,41 @@
   ],
   "readmeExcerpt": "Quirk is a toy quantum circuit simulator, intended to help people in learning about quantum computing. If you want to quickly explore the behavior of a small quantum circuit, Quirk is the tool for you. There's no installing or configuring or scripting: just go to **algassert.com/quirk**, drag gates onto the circuit, and the output displays will update in real time.",
   "readmePath": "reference\\Strilanc__Quirk\\README.md",
+  "readmeMarkdownPath": "readmes/strilanc-quirk.md",
   "clonePath": "reference\\Strilanc__Quirk",
-  "stars": 0,
-  "lastPushedAt": null,
-  "githubTopics": [],
+  "stars": 1080,
+  "lastPushedAt": "2024-07-16T13:15:51Z",
+  "defaultBranch": "master",
+  "githubTopics": [
+    "quantum-circuit",
+    "quantum-computing",
+    "simulation"
+  ],
+  "quickstart": null,
+  "codeSamples": [],
+  "packageMeta": {
+    "name": "quirk-quantum-circuit-simulator",
+    "version": "2.3.2"
+  },
+  "citationBibtex": null,
+  "supportedBackendSlugs": [],
+  "externalLinks": {},
+  "openIssuesCount": 53,
+  "subscribersCount": 45,
+  "latestRelease": null,
+  "ownerType": "User",
+  "ownerUrl": "https://github.com/Strilanc",
   "featured": true,
   "flagship": true,
   "qtanglRelevant": false,
   "archived": false,
-  "imagePath": "/learn/flagship/strilanc-quirk.png",
+  "imagePath": "/learn/og/strilanc-quirk.png",
   "relatedSlugs": [
     "microsoft-quantumkatas",
+    "qiskit-qiskit",
+    "quantumlib-cirq",
     "stared-quantum-game",
-    "decodoku-a-game-to-benchmark-quantum-computers",
-    "decodoku-battleships-with-complementary-measurements",
-    "desireevl-quantum-catsweeper",
-    "entanglion-entanglion"
+    "xanaduai-pennylane",
+    "decodoku-a-game-to-benchmark-quantum-computers"
   ]
 }

@@ -21,11 +21,14 @@
     }
   ],
   "primaryLanguage": "Python",
+  "primaryLanguages": [
+    "Python"
+  ],
   "license": "MIT",
-  "summary": "QuPy is a quantum circuit simulator for both CPU and GPU.",
-  "description": "QuPy is a quantum circuit simulator for both CPU and GPU.",
+  "summary": "QuPy: Quantum circuit simulator for both CPU and GPU",
+  "description": "QuPy: Quantum circuit simulator for both CPU and GPU",
   "whatItIs": [
-    "qupy is an open-source project in the general-purpose sdks category. It is maintained by ken-nakanishi and primarily looks like a Python codebase. QuPy is a quantum circuit simulator for both CPU and GPU.",
+    "qupy is an open-source project in the general-purpose sdks category. It is maintained by ken-nakanishi and primarily looks like a Python codebase. QuPy: Quantum circuit simulator for both CPU and GPU",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches general-purpose sdks workflows in practice. The repository README emphasizes: QuPy is a quantum circuit simulator for both CPU and GPU. The features of QuPy are as follows. **fast**: You can experiment with your idea quickly! **simple**: You can experiment with your idea easily!"
   ],
   "whoItsFor": "Developers who want a broad entry point for building circuits, experimenting with algorithms, and integrating quantum workflows into larger applications.",
@@ -36,21 +39,41 @@
   ],
   "readmeExcerpt": "QuPy is a quantum circuit simulator for both CPU and GPU. The features of QuPy are as follows. **fast**: You can experiment with your idea quickly! **simple**: You can experiment with your idea easily!",
   "readmePath": "reference\\ken-nakanishi__qupy\\README.md",
+  "readmeMarkdownPath": "readmes/ken-nakanishi-qupy.md",
   "clonePath": "reference\\ken-nakanishi__qupy",
-  "stars": 0,
-  "lastPushedAt": null,
+  "stars": 45,
+  "lastPushedAt": "2019-05-21T05:53:22Z",
+  "defaultBranch": "master",
   "githubTopics": [],
+  "quickstart": {
+    "language": "python",
+    "source": ">>> import numpy as np\n>>> from qupy import Qubits\n>>> from qupy.operator import H, X, rz, swap\n\n>>> q = Qubits(3)\n>>> print(q.get_state())\n[1.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j]\n\n>>> q.gate(H, target=0)\n>>> q.gate(H, target=1)\n>>> print(q.get_state())\n[0.5+0.j 0. +0.j 0.5+0.j 0. +0.j 0.5+0.j 0. +0.j 0.5+0.j 0. +0.j]\n\n>>> q.set_state('011')\n>>> print(q.get_state())\n[0.+0.j 0.+0.j 0.+0.j 1.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j]\n\n>>> q.gate(X, target=2)\n>>> print(q.get_state())\n[0.+0.j 0.+0.j 1.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j]\n\n>>> q.set_state([0, 1, 0, 0, 0, 0, 0, 0])\n>>> print(q.get_state())\n[0.+0.j 1.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j]\n\n>>> q.gate(X, target=2)\n>>> print(q.get_state())\n[1.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j]\n\n>>> q.gate(H, target=0)\n>>> q.gate(H, target=1)\n>>> q.gate(X, target=2, control=(0, 1))\n>>> q.gate(X, target=0, control=1, control_0=2)\n>>> q.gate(swap, target=(0, 2))\n>>> q.gate(rz(np.pi / 8), target=2, control_0=1)\n>>> print(q.get_state())\n[0.49039264-0.09754516j 0.49039264+0.09754516j 0.        +0.j\n 0.5       +0.j         0.        +0.j         0.        +0.j\n 0.        +0.j         0.5       +0.j        ]\n\n>>> iswap = np.array([[1, 0, 0, 0],\n...                   [0, 0, 1j, 0],\n...                   [0, 1j, 0, 0],\n...                   [0, 0, 0, 1]])\n\n>>> q.gate(iswap, target=(2, 1))\n>>> print(q.get_state())\n[ 0.49039264-0.09754516j  0.        +0.j         -0.09754516+0.49039264j\n  0.5       +0.j          0.        +0.j          0.        +0.j\n  0.        +0.j          0.5       +0.j        ]\n\n>>> res = q.project(target=0)\n>>> print(res)\n0\n>>> print(q.get_state())\n[ 0.56625665-0.11263545j  0.        +0.j         -0.11263545+0.56625665j\n  0.57735027+0.j          0.        +0.j          0.        +0.j\n  0.        +0.j          0.        +0.j        ]\n\n>>> q.gate(H, target=1)\n>>> q.gate(swap, target=(2, 0), control=1)\n>>> print(q.get_state())\n[ 0.32075862+0.32075862j  0.40824829+0.j          0.4800492 -0.4800492j\n  0.        +0.j          0.        +0.j          0.        +0.j\n -0.40824829+0.j          0.        +0.j        ]\n\n>>> res = q.project(target=1)\n>>> print(res)\n1\n>>> print(q.get_state())\n[ 0.        +0.j          0.        +0.j          0.60597922-0.60597922j\n  0.        +0.j          0.        +0.j          0.        +0.j\n -0.51534296+0.j          0.        +0.j        ]\n\n>>> hamiltonian = {'XXI': 1, 'IIZ': -0.5}\n>>> print(q.expect(hamiltonian))\n-0.4999999999999999\n>>> hamiltonian = np.kron(np.kron(X, X), X)\n>>> print(q.expect(hamiltonian))\n0.0"
+  },
+  "codeSamples": [],
+  "packageMeta": {},
+  "citationBibtex": null,
+  "supportedBackendSlugs": [],
+  "externalLinks": {
+    "docs": [
+      "https://qupy.readthedocs.io/en/latest/qupy.html"
+    ]
+  },
+  "openIssuesCount": 2,
+  "subscribersCount": 4,
+  "latestRelease": null,
+  "ownerType": "User",
+  "ownerUrl": "https://github.com/ken-nakanishi",
   "featured": false,
   "flagship": false,
   "qtanglRelevant": false,
   "archived": false,
-  "imagePath": null,
+  "imagePath": "/learn/monogram/ken-nakanishi-qupy.svg",
   "relatedSlugs": [
     "qiskit-qiskit",
     "quantumlib-cirq",
     "xanaduai-pennylane",
-    "projectq-framework-projectq",
+    "qiskit-qiskit-terra",
     "quantumbfs-yao-jl",
-    "arlineq-arline-benchmarks"
+    "microsoft-quantumkatas"
   ]
 }

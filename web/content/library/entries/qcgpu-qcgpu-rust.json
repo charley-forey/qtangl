@@ -21,11 +21,15 @@
     }
   ],
   "primaryLanguage": "Python",
+  "primaryLanguages": [
+    "Python",
+    "Jupyter"
+  ],
   "license": "MIT",
-  "summary": "Open Source, High Performance & Hardware Accelerated, Quantum Computer Simulator.",
-  "description": "Open Source, High Performance & Hardware Accelerated, Quantum Computer Simulator. Read the research paper.",
+  "summary": "High Performance Tools for Quantum Computing",
+  "description": "High Performance Tools for Quantum Computing",
   "whatItIs": [
-    "qcgpu-rust is an open-source project in the general-purpose sdks category. It is maintained by QCGPU and primarily looks like a Python codebase. Open Source, High Performance & Hardware Accelerated, Quantum Computer Simulator.",
+    "qcgpu-rust is an open-source project in the general-purpose sdks category. It is maintained by QCGPU and primarily looks like a Python codebase. High Performance Tools for Quantum Computing",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches general-purpose sdks workflows in practice. The repository README emphasizes: Open Source, High Performance & Hardware Accelerated, Quantum Computer Simulator. Read the research paper. Written with OpenCL. Accelerated your simulations with GPUs and other accelerators, while still running cross device and cross platform. Simulation of arbitrary quantum circuits Includes example algorithm implementations Support for arbitrary gate creation/application, with..."
   ],
   "whoItsFor": "Developers who want a broad entry point for building circuits, experimenting with algorithms, and integrating quantum workflows into larger applications.",
@@ -36,21 +40,68 @@
   ],
   "readmeExcerpt": "Open Source, High Performance & Hardware Accelerated, Quantum Computer Simulator. Read the research paper. Written with OpenCL. Accelerated your simulations with GPUs and other accelerators, while still running cross device and cross platform. Simulation of arbitrary quantum circuits Includes example algorithm implementations Support for arbitrary gate creation/application, with many built in.",
   "readmePath": "reference\\QCGPU__qcgpu-rust\\README.md",
+  "readmeMarkdownPath": "readmes/qcgpu-qcgpu-rust.md",
   "clonePath": "reference\\QCGPU__qcgpu-rust",
-  "stars": 0,
-  "lastPushedAt": null,
-  "githubTopics": [],
+  "stars": 449,
+  "lastPushedAt": "2023-07-06T21:24:36Z",
+  "defaultBranch": "master",
+  "githubTopics": [
+    "gate",
+    "opencl",
+    "python",
+    "quantum",
+    "quantum-computer-simulator",
+    "quantum-computing",
+    "qubits"
+  ],
+  "quickstart": null,
+  "codeSamples": [
+    {
+      "title": "Bell State",
+      "language": "python",
+      "source": "# -*- coding: utf-8 -*-\n\"\"\"\nBell State / EPR Pair\n=====================\nThe Bell State, also known as the EPR pair (after Einstein, Podosky and Rosen)\nis the simplest example of entanglement.\nThe Bell State is defined as the maximally entangled quantum state of two qubits.\n\"\"\"\ndef bell_state():\n    import qcgpu\n    print(\"Creating Bell State\")\n    state = qcgpu.State(2)\n    state.h(0)\n    state.cx(0, 1)\n    print(\"Measurement Results:\")\n    print(state.measure(samples = 1000))\nif __name__== \"__main__\":\n  bell_state()",
+      "path": "examples/bell_state.py"
+    },
+    {
+      "title": "Bernstein Vazirani",
+      "language": "python",
+      "source": "# -*- coding: utf-8 -*-\n\"\"\"\nBernstein-Vazirani Algorithm\n============================\nThis algorithm finds a hidden integer :math:`a \\in \\{ 0, 1\\}^n` from\nan oracle :math:`f_a` which returns a bit :math:`a \\cdot x \\equiv \\sum_i a_i x_i \\mod 2`\nfor an input :math:`x \\in \\{0,1\\}^n`.\nA classical oracle returns :math:`f_a(x) = a \\dot x \\mod 2`, while the quantum oracle\nmust be queried with superpositions of input :math:`x`'s.\nTo solve this problem classically, the hidden integer can be found by checking the\noracle with the inputs :math:`x = 1,2,\\dots,2^i,2^{n-1}`, where each\nquery reveals the :math:`i`th bit of :math:`a` (:math:`a_i`).\nThis is the optimal classical solution, and is :math:`O(n)`. Using a quantum oracle and the\nBernstein-Vazirani algorithm, :math:`a` can be found with just one query to the oracle.\nThe Algorithm\n-------------\n1. Initialize :math:`n` qubits in the state :math:`\\lvert 0, \\dots, 0\\rangle`.\n2. Apply the Hadamard gate :math:`H` to each qubit.\n3. Apply the inner product oracle.\n4. Apply the Hadamard gate :math:`H` to each qubit.\n5. Measure the register\nFrom this procedure, we find that the registers measured value is equal to that of\nthe original hidden integer.\n\"\"\"\ndef bernstein_vazirani():\n    import qcgpu\n    num_qubits = 7 # The number of qubits to use\n    a = 101 # The hidden integer, bitstring is 1100101\n    register = qcgpu.State(num_qubits) # Create a new quantum register\n    register.apply_all(qcgpu.gate.h()) # Apply a hadamard gate to each qubit\n    # Apply the inner products oracle\n    for i in range(num_qubits):\n        if a & (1 << i) != 0:\n            register.z(i)\n    register.apply_all(qcgpu.gate.h()) # Apply a hadamard gate to each qubit\n    results = register.measure(samples=1000) # Measure the register (sample 1000 times)\n    print(results)\nif __name__== \"__main__\":\n  bernstein_vazirani()",
+      "path": "examples/bernstein_vazirani.py"
+    },
+    {
+      "title": "Deutsch-Jozsa",
+      "language": "python",
+      "source": "import qcgpu\n# 3 qubits, f(x) = x_0 NOT x_1 x_2\n# Balanced\nbalanced_state = qcgpu.State(3)\nbalanced_state.apply_all(qcgpu.gate.h())\n# Oracle U_f\nbalanced_state.h(2)\nbalanced_state.z(0)\nbalanced_state.cx(1, 2)\nbalanced_state.h(2)\nbalanced_state.apply_all(qcgpu.gate.h())\noutcomes = balanced_state.measure(samples = 1000)\nif int(max(outcomes, key=outcomes.get)) == 0:\n    print('constant')\nelse:\n    print('balanced')\n# 3 qubits, f(x) = 0\n# Constant\nconstant_state = qcgpu.State(3)\nconstant_state.apply_all(qcgpu.gate.h())\n# Oracle is equivalent to the identity gate, \n# thus has no effect on the state\nconstant_state.apply_all(qcgpu.gate.h())\noutcomes = constant_state.measure(samples = 1000)\nif int(max(outcomes, key=outcomes.get)) == 0:\n    print('constant')\nelse:\n    print('balanced')",
+      "path": "examples/deutsch-jozsa.py"
+    }
+  ],
+  "packageMeta": {},
+  "citationBibtex": null,
+  "supportedBackendSlugs": [
+    "qiskit-qiskit",
+    "projectq-framework-projectq"
+  ],
+  "externalLinks": {
+    "paper": [
+      "https://arxiv.org/abs/1805.00988"
+    ]
+  },
+  "openIssuesCount": 5,
+  "subscribersCount": 18,
+  "latestRelease": null,
+  "ownerType": "Organization",
+  "ownerUrl": "https://github.com/libtangle",
   "featured": false,
   "flagship": false,
   "qtanglRelevant": false,
   "archived": false,
-  "imagePath": null,
+  "imagePath": "/learn/monogram/qcgpu-qcgpu-rust.svg",
   "relatedSlugs": [
     "qiskit-qiskit",
     "quantumlib-cirq",
     "xanaduai-pennylane",
-    "projectq-framework-projectq",
+    "qiskit-qiskit-terra",
     "quantumbfs-yao-jl",
-    "arlineq-arline-benchmarks"
+    "microsoft-quantumkatas"
   ]
 }

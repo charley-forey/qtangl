@@ -3,6 +3,9 @@ import Link from "next/link";
 
 import Card from "@/components/ui/Card";
 import type { LibraryIndexEntry } from "@/lib/library";
+import { formatRelativeDate, isNewThisMonth } from "@/lib/library-utils";
+
+import ResourceChips from "./ResourceChips";
 
 type LibraryResourceCardProps = {
   entry: LibraryIndexEntry;
@@ -15,6 +18,24 @@ export default function LibraryResourceCard({
   showCategory = true,
   showImage = false,
 }: LibraryResourceCardProps) {
+  const relativeDate = formatRelativeDate(entry.lastPushedAt);
+  const chips = [
+    entry.primaryLanguage
+      ? {
+          label: entry.primaryLanguage,
+          title:
+            entry.primaryLanguages.length > 1
+              ? entry.primaryLanguages.join(", ")
+              : undefined,
+        }
+      : null,
+    entry.license ? { label: entry.license } : null,
+    entry.flagship ? { label: "Flagship", tone: "strong" as const } : null,
+    entry.qtanglRelevant ? { label: "Qtangl relevant", tone: "strong" as const } : null,
+    entry.archived ? { label: "Archive", tone: "muted" as const } : null,
+    isNewThisMonth(entry.lastPushedAt) ? { label: "New this month", tone: "strong" as const } : null,
+  ].filter(Boolean) as Parameters<typeof ResourceChips>[0]["chips"];
+
   return (
     <Card
       as="article"
@@ -59,29 +80,17 @@ export default function LibraryResourceCard({
           {entry.summary}
         </p>
 
-        <div className="mt-5 flex flex-wrap gap-2">
-          <span className="rounded-full border border-[var(--border)] px-3 py-1 text-xs text-[var(--color-gray-300)]">
-            {entry.primaryLanguage}
-          </span>
-          <span className="rounded-full border border-[var(--border)] px-3 py-1 text-xs text-[var(--color-gray-300)]">
-            {entry.license}
-          </span>
-          {entry.flagship ? (
-            <span className="rounded-full border border-[var(--border-strong)] bg-white/[0.06] px-3 py-1 text-xs text-white">
-              Flagship
-            </span>
-          ) : null}
-          {entry.qtanglRelevant ? (
-            <span className="rounded-full border border-[var(--border-strong)] bg-white/[0.06] px-3 py-1 text-xs text-white">
-              Qtangl relevant
-            </span>
-          ) : null}
-          {entry.archived ? (
-            <span className="rounded-full border border-[var(--border)] px-3 py-1 text-xs text-[var(--color-gray-400)]">
-              Archive
-            </span>
-          ) : null}
+        <div className="mt-5">
+          <ResourceChips chips={chips} />
         </div>
+
+        {relativeDate || entry.stars > 0 ? (
+          <p className="mt-4 text-xs text-[var(--color-gray-400)]">
+            {entry.stars > 0 ? `${entry.stars.toLocaleString()} stars` : null}
+            {entry.stars > 0 && relativeDate ? " · " : null}
+            {relativeDate}
+          </p>
+        ) : null}
       </div>
     </Card>
   );

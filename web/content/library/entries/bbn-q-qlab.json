@@ -16,12 +16,17 @@
       "title": "Quantum computing software in 2026: the open-source map"
     }
   ],
-  "primaryLanguage": "Python",
+  "primaryLanguage": "MATLAB",
+  "primaryLanguages": [
+    "Python",
+    "C",
+    "C/C++"
+  ],
   "license": "Apache-2.0",
-  "summary": "To get started, simply download and unzip the latest release.",
-  "description": "To get started, simply download and unzip the latest release. Or, if you want the tip of the development repository, clone a local copy with",
+  "summary": "Measurement and control software for superconducting qubits.",
+  "description": "Measurement and control software for superconducting qubits.",
   "whatItIs": [
-    "Qlab is an open-source project in the pulse and control category. It is maintained by BBN-Q and primarily looks like a Python codebase. To get started, simply download and unzip the latest release.",
+    "Qlab is an open-source project in the pulse and control category. It is maintained by BBN-Q and primarily looks like a MATLAB codebase. Measurement and control software for superconducting qubits.",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches pulse and control workflows in practice. The repository README emphasizes: To get started, simply download and unzip the latest release. Or, if you want the tip of the development repository, clone a local copy with Navigate to the QLab directory and run the installQLab.m script to setup the preferences. It will also prompt you with the correct folders..."
   ],
   "whoItsFor": "Hardware-adjacent developers and researchers working closer to experiments, pulse schedules, or lab orchestration.",
@@ -32,21 +37,34 @@
   ],
   "readmeExcerpt": "To get started, simply download and unzip the latest release. Or, if you want the tip of the development repository, clone a local copy with Navigate to the QLab directory and run the installQLab.m script to setup the preferences. It will also prompt you with the correct folders to add to the path.",
   "readmePath": "reference\\BBN-Q__Qlab\\README.md",
+  "readmeMarkdownPath": "readmes/bbn-q-qlab.md",
   "clonePath": "reference\\BBN-Q__Qlab",
-  "stars": 0,
-  "lastPushedAt": null,
+  "stars": 38,
+  "lastPushedAt": "2021-07-09T18:33:37Z",
+  "defaultBranch": "develop",
   "githubTopics": [],
+  "quickstart": null,
+  "codeSamples": [],
+  "packageMeta": {},
+  "citationBibtex": null,
+  "supportedBackendSlugs": [],
+  "externalLinks": {},
+  "openIssuesCount": 8,
+  "subscribersCount": 23,
+  "latestRelease": null,
+  "ownerType": "Organization",
+  "ownerUrl": "https://github.com/BBN-Q",
   "featured": false,
   "flagship": false,
   "qtanglRelevant": false,
   "archived": false,
-  "imagePath": null,
+  "imagePath": "/learn/monogram/bbn-q-qlab.svg",
   "relatedSlugs": [
     "m-labs-artiq",
-    "bbn-q-pyqgl2",
-    "bbn-q-pyqlab",
-    "bbn-q-qgl",
-    "bbn-q-qlab-jl",
-    "indisoluble-swiftquantumcomputing"
+    "microsoft-quantumkatas",
+    "qiskit-qiskit",
+    "quantumlib-cirq",
+    "xanaduai-pennylane",
+    "bbn-q-pyqgl2"
   ]
 }

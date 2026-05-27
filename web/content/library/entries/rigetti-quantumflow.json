@@ -4,11 +4,11 @@
   "name": "quantumflow",
   "title": "quantumflow",
   "repoUrl": "https://github.com/rigetti/quantumflow",
-  "homepageUrl": null,
+  "homepageUrl": "https://quantumflow.readthedocs.io/",
   "category": {
-    "slug": "compilers-languages",
-    "title": "Compilers and languages",
-    "description": "Compilers, intermediate representations, domain-specific languages, and transpilation tools for quantum programs."
+    "slug": "general-purpose-sdks",
+    "title": "General-purpose SDKs",
+    "description": "Broad frameworks for building, simulating, and experimenting with quantum circuits across multiple domains."
   },
   "topics": [
     {
@@ -21,36 +21,78 @@
     }
   ],
   "primaryLanguage": "Python",
-  "license": "Apache-2.0",
-  "summary": ">Notice: This is research code that will not necessarily be maintained to >support further releases of Forest and other Rigetti Software.",
-  "description": ">Notice: This is research code that will not necessarily be maintained to >support further releases of Forest and other Rigetti Software. We welcome >bug reports and PRs but make no guarantee about fixes or responses.",
-  "whatItIs": [
-    "quantumflow is an open-source project in the compilers and languages category. It is maintained by rigetti and primarily looks like a Python codebase. >Notice: This is research code that will not necessarily be maintained to >support further releases of Forest and other Rigetti Software.",
-    "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches compilers and languages workflows in practice. The repository README emphasizes: >Notice: This is research code that will not necessarily be maintained to >support further releases of Forest and other Rigetti Software. We welcome >bug reports and PRs but make no guarantee about fixes or responses. It is easiest to install QuantumFlow's requirements using conda."
+  "primaryLanguages": [
+    "Python",
+    "Quil",
+    "Jupyter"
   ],
-  "whoItsFor": "Developers who want to understand the representations and compilers that sit between high-level code and runnable circuits.",
+  "license": "Apache-2.0",
+  "summary": "QuantumFlow: A Quantum Algorithms Development Toolkit",
+  "description": "QuantumFlow: A Quantum Algorithms Development Toolkit",
+  "whatItIs": [
+    "quantumflow is an open-source project in the general-purpose sdks category. It is maintained by rigetti and primarily looks like a Python codebase. QuantumFlow: A Quantum Algorithms Development Toolkit",
+    "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches general-purpose sdks workflows in practice. The repository README emphasizes: >Notice: This is research code that will not necessarily be maintained to >support further releases of Forest and other Rigetti Software. We welcome >bug reports and PRs but make no guarantee about fixes or responses. It is easiest to install QuantumFlow's requirements using conda."
+  ],
+  "whoItsFor": "Developers who want a broad entry point for building circuits, experimenting with algorithms, and integrating quantum workflows into larger applications.",
   "whatYouCanBuild": [
-    "Compare IRs, DSLs, transpilers, and compiler assumptions across ecosystems.",
-    "Understand how high-level code becomes something a backend can execute.",
-    "Spot tools that matter when interoperability and compilation quality are important."
+    "Prototype end-to-end circuit workflows without committing to a niche backend too early.",
+    "Learn how the project represents circuits, gates, jobs, and results.",
+    "Compare how a major ecosystem frames practical quantum development."
   ],
   "readmeExcerpt": ">Notice: This is research code that will not necessarily be maintained to >support further releases of Forest and other Rigetti Software. We welcome >bug reports and PRs but make no guarantee about fixes or responses. It is easiest to install QuantumFlow's requirements using conda.",
   "readmePath": "reference\\rigetti__quantumflow\\README.md",
+  "readmeMarkdownPath": "readmes/rigetti-quantumflow.md",
   "clonePath": "reference\\rigetti__quantumflow",
-  "stars": 0,
-  "lastPushedAt": null,
-  "githubTopics": [],
+  "stars": 98,
+  "lastPushedAt": "2019-06-03T03:20:31Z",
+  "defaultBranch": "master",
+  "githubTopics": [
+    "automatic-differentiation",
+    "quantum-algorithms",
+    "quantum-computing",
+    "quantum-machine-learning"
+  ],
+  "quickstart": null,
+  "codeSamples": [
+    {
+      "title": "Circuit Identities",
+      "language": "python",
+      "source": "circ0 = qf.Circuit()\ncirc0 += qf.Z(0)            # Z gate on qubit 0\ncirc0 += qf.CNOT(0, 1)      # Controlled not gate: control is qubit 0, target is qubit 1\nqf.circuit_to_image(circ0)  # Convert circuit to LaTex, then to PNG image",
+      "path": "examples/circuit_identities.ipynb"
+    },
+    {
+      "title": "Circuit Identities",
+      "language": "python",
+      "source": "#!/usr/bin/env python\n#\n# This source code is licensed under the Apache License, Version 2.0 found in\n# the LICENSE.txt file in the root directory of this source tree.\n\"\"\"A collection of useful circuit identities\"\"\"\nfrom itertools import zip_longest\nimport numpy as np\nfrom quantumflow import (\n    I, H, X, Y, Z, CNOT, CZ, SWAP, ISWAP, CANONICAL, XX, YY, ZZ, S,\n    CCNOT, RZ, Circuit, ccnot_circuit, gates_close, RX, CPHASE, TZ,\n    CPHASE00, CPHASE10, CPHASE01)\ndef identities():\n    \"\"\" Return a list of circuit identities, each consisting of a name, and\n    two equivalent Circuits.\"\"\"\n    circuit_identities = []\n    # Pick random parameter\n    theta = np.pi * np.random.uniform()\n    # Single qubit gate identities\n    name = \"Hadamard is own inverse\"\n    circ0 = Circuit([H(0), H(0)])\n    circ1 = Circuit([I(0)])\n    circuit_identities.append([name, circ0, circ1])\n    name = \"Hadamards convert X to Z\"\n    circ0 = Circuit([H(0), X(0), H(0)])\n    circ1 = Circuit([Z(0)])\n    circuit_identities.append([name, circ0, circ1])\n    name = \"Hadamards convert Z to X\"\n    circ0 = Circuit([H(0), Z(0), H(0)])\n    circ1 = Circuit([X(0)])\n    circuit_identities.append([name, circ0, circ1])\n    name = \"S sandwich converts X to Y\"\n    circ0 = Circuit([S(0).H, X(0), S(0)])\n    circ1 = Circuit([Y(0)])\n    circuit_identities.append([name, circ0, circ1])\n    name = \"S sandwich converts Y to X\"\n    circ0 = Circuit([S(0), Y(0), S(0).H])\n    circ1 = Circuit([X(0)])\n    circuit_identities.append([name, circ0, circ1])\n    name = \"Hadamards convert RZ to RX\"\n    circ0 = Circuit([H(0), RZ(theta, 0), H(0)])",
+      "path": "examples/circuit_identities.py"
+    },
+    {
+      "title": "Circuit Visulizations",
+      "language": "python",
+      "source": "#!/usr/bin/env python\n#\n# This source code is licensed under the Apache License, Version 2.0 found in\n# the LICENSE.txt file in the root directory of this source tree.\n\"\"\"\nQuantumFlow: Example visualizations of Circuits using LaTeX.\nRequires external dependencies `pdflatex` and `poppler`.\n\"\"\"\nimport shutil\nimport sys\nimport quantumflow as qf\nfrom pyquil.quil import Program\nfrom pyquil.gates import Z, CNOT, CZ, CCNOT\nif shutil.which('pdflatex') is None:\n    print('Failed: External dependency `pdflatex` not found.')\n    sys.exit()\nif shutil.which('pdftocairo') is None:\n    print('Failed: External dependency `pdftocairo` not found. '\n          'Install `poppler`.')\n    sys.exit()\n# Display Bell state preparation\nqf.circuit_to_image(qf.ghz_circuit([0, 1])).show()\n# 4-qubit GHZ state preparation\nqf.circuit_to_image(qf.ghz_circuit([0, 1, 2, 3])).show()\n# 4-qubit ripple add\ncirc = qf.addition_circuit(['a[0]', 'a[1]', 'a[2]', 'a[3]'],\n                           ['b[0]', 'b[1]', 'b[2]', 'b[3]'],\n                           ['cin', 'cout'])\norder = ['cin', 'a[0]', 'b[0]', 'a[1]', 'b[1]', 'a[2]', 'b[2]', 'a[3]',\n         'b[3]', 'cout']\nlatex = qf.circuit_to_latex(circ, order)\nimg = qf.render_latex(latex)\nimg.show()\n# Visualize pyquil protoquil programs\nprog = Program()\nprog = prog.inst(Z(0))\nprog = prog.inst(CNOT(0, 1))\nprog = prog.inst(CZ(0, 1))\nprog = prog.inst(CCNOT(0, 1, 2))\nqf.forest.pyquil_to_image(prog).show()",
+      "path": "examples/circuit_visulizations.py"
+    }
+  ],
+  "packageMeta": {},
+  "citationBibtex": null,
+  "supportedBackendSlugs": [],
+  "externalLinks": {},
+  "openIssuesCount": 0,
+  "subscribersCount": 13,
+  "latestRelease": null,
+  "ownerType": "Organization",
+  "ownerUrl": "https://github.com/rigetti",
   "featured": false,
   "flagship": false,
   "qtanglRelevant": false,
   "archived": false,
-  "imagePath": null,
+  "imagePath": "/learn/monogram/rigetti-quantumflow.svg",
   "relatedSlugs": [
-    "cqcl-tket",
-    "nvidia-cuda-quantum",
-    "quantomatic-pyzx",
-    "avalon-lang-avaloni",
-    "aviggiano-qcl",
-    "dabacon-qsel"
+    "qiskit-qiskit",
+    "quantumlib-cirq",
+    "xanaduai-pennylane",
+    "qiskit-qiskit-terra",
+    "quantumbfs-yao-jl",
+    "microsoft-quantumkatas"
   ]
 }

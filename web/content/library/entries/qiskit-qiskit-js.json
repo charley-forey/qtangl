@@ -21,12 +21,16 @@
     }
   ],
   "primaryLanguage": "JavaScript",
+  "primaryLanguages": [
+    "JavaScript",
+    "OpenQASM"
+  ],
   "license": "Apache-2.0",
-  "summary": ":atom_symbol: Quantum Information Science Kit for JavaScript, I was born as a clone of my big brother.",
-  "description": ":atom_symbol: Quantum Information Science Kit for JavaScript, I was born as a clone of my big brother.",
+  "summary": ":atom_symbol: Qiskit (Quantum Information Science Kit) for JavaScript",
+  "description": ":atom_symbol: Qiskit (Quantum Information Science Kit) for JavaScript",
   "whatItIs": [
-    "qiskit-js is an open-source project in the compilers and languages category. It is maintained by Qiskit and primarily looks like a JavaScript codebase. :atom_symbol: Quantum Information Science Kit for JavaScript, I was born as a clone of my big brother.",
-    "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches compilers and languages workflows in practice. The repository README emphasizes: :atom_symbol: Quantum Information Science Kit for JavaScript, I was born as a clone of my big brother. <div align=\"center\"> <p> <img src=\"https://diego-plan9.github.io/_static/qiskit-logo-white-no-margin.gif\" alt=\"logo\"> </p> <p> <sub>:gift: Follow us on <a href=\"https://twitter.com/qiskit\"><code>Twitter</code></a> if you like this project</sub> </p> </div>"
+    "qiskit-js is an open-source project in the compilers and languages category. It is maintained by Qiskit and primarily looks like a JavaScript codebase. :atom_symbol: Qiskit (Quantum Information Science Kit) for JavaScript",
+    "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches compilers and languages workflows in practice. The repository README emphasizes: :atom_symbol: Quantum Information Science Kit for JavaScript, I was born as a clone of my big brother. <div align=\"center\"> <p> <img src=\"https://diego-plan9.github.io/_static/qiskit-logo-white-no-margin.gif\" alt=\"logo\"> </p> <p> <sub>:gift: Follow us on <a href=\"https://twitter.com/qiskit\"><code>Twitter</code></a> if you like this project</sub> </p> </div> The repository also appears to be archival or no longer actively maintained, which matters when evaluating it for current production use."
   ],
   "whoItsFor": "Developers who want to understand the representations and compilers that sit between high-level code and runnable circuits.",
   "whatYouCanBuild": [
@@ -36,21 +40,37 @@
   ],
   "readmeExcerpt": ":atom_symbol: Quantum Information Science Kit for JavaScript, I was born as a clone of my big brother. <div align=\"center\"> <p> <img src=\"https://diego-plan9.github.io/_static/qiskit-logo-white-no-margin.gif\" alt=\"logo\"> </p> <p> <sub>:gift: Follow us on <a href=\"https://twitter.com/qiskit\"><code>Twitter</code></a> if you like this project</sub> </p> </div>",
   "readmePath": "reference\\Qiskit__qiskit-js\\README.md",
+  "readmeMarkdownPath": "readmes/qiskit-qiskit-js.md",
   "clonePath": "reference\\Qiskit__qiskit-js",
-  "stars": 0,
-  "lastPushedAt": null,
+  "stars": 116,
+  "lastPushedAt": "2019-09-08T16:19:40Z",
+  "defaultBranch": "master",
   "githubTopics": [],
+  "quickstart": null,
+  "codeSamples": [],
+  "packageMeta": {
+    "name": "qiskit-js",
+    "version": null
+  },
+  "citationBibtex": null,
+  "supportedBackendSlugs": [],
+  "externalLinks": {},
+  "openIssuesCount": 20,
+  "subscribersCount": 0,
+  "latestRelease": null,
+  "ownerType": "Organization",
+  "ownerUrl": "https://github.com/qiskit-community",
   "featured": false,
   "flagship": false,
   "qtanglRelevant": false,
-  "archived": false,
-  "imagePath": null,
+  "archived": true,
+  "imagePath": "/learn/monogram/qiskit-qiskit-js.svg",
   "relatedSlugs": [
     "cqcl-tket",
     "nvidia-cuda-quantum",
-    "quantomatic-pyzx",
-    "avalon-lang-avaloni",
-    "aviggiano-qcl",
-    "dabacon-qsel"
+    "microsoft-quantumkatas",
+    "qiskit-openqasm",
+    "qiskit-qiskit",
+    "quantomatic-pyzx"
   ]
 }

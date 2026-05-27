@@ -21,11 +21,16 @@
     }
   ],
   "primaryLanguage": "C++",
-  "license": "BSD",
-  "summary": "XACC Plugins and Programs for the Variational Quantum Eigensolver",
-  "description": "XACC Plugins and Programs for the Variational Quantum Eigensolver",
+  "primaryLanguages": [
+    "C++",
+    "Python",
+    "C/C++"
+  ],
+  "license": "BSD-3-Clause",
+  "summary": "DEPRECATED - Variational quantum eigensolver built on XACC",
+  "description": "DEPRECATED - Variational quantum eigensolver built on XACC",
   "whatItIs": [
-    "xacc-vqe is an open-source project in the quantum chemistry category. It is maintained by ornl-qci and primarily looks like a C++ codebase. XACC Plugins and Programs for the Variational Quantum Eigensolver",
+    "xacc-vqe is an open-source project in the quantum chemistry category. It is maintained by ornl-qci and primarily looks like a C++ codebase. DEPRECATED - Variational quantum eigensolver built on XACC",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches quantum chemistry workflows in practice. The repository README emphasizes: XACC Plugins and Programs for the Variational Quantum Eigensolver Questions, bug reporting and issue tracking are provided by GitHub. Please report all bugs by creating a new issue with the bug tag. You can ask questions by creating a new issue with the question tag."
   ],
   "whoItsFor": "Researchers, students, and developers exploring how quantum software is used for chemistry and electronic-structure problems.",
@@ -36,20 +41,62 @@
   ],
   "readmeExcerpt": "XACC Plugins and Programs for the Variational Quantum Eigensolver Questions, bug reporting and issue tracking are provided by GitHub. Please report all bugs by creating a new issue with the bug tag. You can ask questions by creating a new issue with the question tag.",
   "readmePath": "reference\\ornl-qci__xacc-vqe\\README.md",
+  "readmeMarkdownPath": "readmes/ornl-qci-xacc-vqe.md",
   "clonePath": "reference\\ornl-qci__xacc-vqe",
-  "stars": 0,
-  "lastPushedAt": null,
+  "stars": 14,
+  "lastPushedAt": "2019-07-09T14:00:12Z",
+  "defaultBranch": "master",
   "githubTopics": [],
+  "quickstart": {
+    "language": "bash",
+    "source": "$ export PY_INC_DIR=$(python -c \"import sysconfig; print(sysconfig.get_paths()['platinclude'])\")\n$ cmake .. -DXACC_DIR=$(python -m pyxacc -L) -DPYTHON_INCLUDE_DIR=$PY_INC_DIR\n$ make install"
+  },
+  "codeSamples": [
+    {
+      "title": "D2",
+      "language": "python",
+      "source": "import sys\nimport xacc\nimport xaccvqe\nfrom xaccvqe import PauliOperator\nxacc.Initialize(['--compiler','quil'])\n#ibm = xacc.getAccelerator('ibm')\ntnqvm = xacc.getAccelerator('tnqvm')\nbuffer = tnqvm.createBuffer('q', 2)\nham = PauliOperator(5.906709445) + \\\n        PauliOperator({0:'X',1:'X'}, -2.1433) + \\\n        PauliOperator({0:'Y',1:'Y'}, -2.1433) + \\\n        PauliOperator({0:'Z'}, .21829) + \\\n        PauliOperator({1:'Z'}, -6.125)\nxacc.setOption('ibm-shots','8192')\n#xacc.setOption('vqe-backend','vqe-bayesopt')\n#xacc.setOption('bo-n-iter','20')\n@xaccvqe.qpu.vqe(accelerator=tnqvm, observable=ham)\ndef ansatz(buffer, t0):\n    X(0)\n    Ry(t0, 1)\n    CNOT(1, 0)\n# Run VQE with given ansatz kernel\ninitAngle = .5\nansatz(buffer, initAngle)\nprint(buffer.listExtraInfoKeys())\nprint('Energy = ', buffer.getInformation('vqe-energy'))\nprint('Opt Angles = ', buffer.getInformation('vqe-angles'))\n# Print all children names\n#print (buffer.getChildrenNames())\n# Get all children with the given name\n#children = buffer.getChildren('Z0')\n#for c in children:\n    # Print any info the children may have \n#    print(c.listExtraInfoKeys(), c.getInformation('kernel'), c.getInformation('parameters'))\n# Get all children that have 'parameters' information equal to [0.5]\n#cs = buffer.getChildren('parameters',[0.5])\n#for c in cs:\n    # Print the kernel name and the parameter ([0.5]) and the exp value\n#    print(c.getInformation('kernel'), c.getInformation('parameters'), c.getExpectationValueZ())\n# Get all unique children parameters ",
+      "path": "examples/deuteron/python/d2.py"
+    },
+    {
+      "title": "D3",
+      "language": "python",
+      "source": "import xacc\nimport xaccvqe\nfrom xaccvqe import PauliOperator\nxacc.Initialize(['--compiler','quil'])\nibm = xacc.getAccelerator('local-ibm')\ntnqvm = xacc.getAccelerator('tnqvm')\nrigetti = xacc.getAccelerator('rigetti')\n#buffer = ibm.createBuffer('q', 2)\nbuffer = tnqvm.createBuffer('q', 2)\nh2 = PauliOperator(5.906709445) + \\\n        PauliOperator({0:'X',1:'X'}, -2.1433) + \\\n        PauliOperator({0:'Y',1:'Y'}, -2.1433) + \\\n        PauliOperator({0:'Z'}, .21829) + \\\n        PauliOperator({1:'Z'}, -6.125)\nh3 = h2 + PauliOperator(9.625) + \\\n    PauliOperator({1:'X',2:'X'}, -3.913119) + \\\n    PauliOperator({1:'Y',2:'Y'}, -3.913119) + \\\n    PauliOperator({2:'Z'}, -9.625)\n@xaccvqe.qpu.vqe(accelerator=tnqvm, observable=h3)\ndef ansatz(buffer, t0, t1):\n    X(0)\n    Ry(t0, 2)\n    CNOT(2, 0)\n    Ry(t1, 1)\n    CNOT(0,1)\n    Ry(-t1, 1)\n    CNOT(0,1)\n    CNOT(1,0)\n# Run VQE with given ansatz kernel\ninitAngle = .2\nansatz(buffer, initAngle, initAngle)\nprint(buffer.listExtraInfoKeys())\nprint('Energy = ', buffer.getInformation('vqe-energy'))\nprint('Opt Angles = ', buffer.getInformation('vqe-angles'))",
+      "path": "examples/deuteron/python/d3.py"
+    },
+    {
+      "title": "Test Many Dynamic Params",
+      "language": "python",
+      "source": "import sys\nimport xacc\nimport xaccvqe\nfrom xaccvqe import PauliOperator\nimport numpy as np\nxacc.Initialize()\ntnqvm = xacc.getAccelerator('tnqvm')\nbuffer = tnqvm.createBuffer('q', 2)\nham = PauliOperator(5.906709445) + \\\n        PauliOperator({0:'X',1:'X'}, -2.1433) + \\\n        PauliOperator({0:'Y',1:'Y'}, -2.1433) + \\\n        PauliOperator({0:'Z'}, .21829) + \\\n        PauliOperator({1:'Z'}, -6.125)\nxacc.setOption('itensor-svd-cutoff','1e-16')\n# Hardware Efficient Ansatz xacc kernel\n@xaccvqe.qpu.energy(accelerator=tnqvm, observable=ham)\ndef ansatz(buffer, *args):\n    xacc(hwe,layers=2,n_qubits=2,connectivity='[[0,1]]')\n# XACC Kernels can display number of required nParameters\n# and be persisted to qasm string\nprint(ansatz.nParameters()) \nprint(ansatz.getFunction().toString('q'))\n# Generate an initial random set of vqe params \n# of the correct number of parameters and execute\nansatz(buffer, *np.random.uniform(low=-np.pi,high=np.pi, size=(ansatz.nParameters(),)))\nprint(buffer.listExtraInfoKeys())\nprint('Energy = ', buffer.getInformation('vqe-energy'))\nprint('Opt Angles = ', buffer.getInformation('vqe-angles'))\nxacc.Finalize()",
+      "path": "examples/py_decorators/test_many_dynamic_params.py"
+    }
+  ],
+  "packageMeta": {},
+  "citationBibtex": null,
+  "supportedBackendSlugs": [
+    "quantumlib-openfermion",
+    "projectq-framework-projectq"
+  ],
+  "externalLinks": {
+    "docs": [
+      "https://xacc.readthedocs.io"
+    ]
+  },
+  "openIssuesCount": 13,
+  "subscribersCount": 2,
+  "latestRelease": null,
+  "ownerType": "Organization",
+  "ownerUrl": "https://github.com/ORNL-QCI",
   "featured": false,
   "flagship": false,
   "qtanglRelevant": false,
   "archived": false,
-  "imagePath": null,
+  "imagePath": "/learn/monogram/ornl-qci-xacc-vqe.svg",
   "relatedSlugs": [
     "quantumlib-openfermion",
     "aspuru-guzik-group-tequila",
     "cda-tum-mqt-dasqa",
-    "pasqal-io-qadence",
+    "eclipse-qrisp-qrisp",
     "projectq-framework-fermilib",
     "qiskit-qiskit-nature"
   ]

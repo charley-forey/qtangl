@@ -21,11 +21,14 @@
     }
   ],
   "primaryLanguage": "Julia",
+  "primaryLanguages": [
+    "Julia"
+  ],
   "license": "Custom / project-specific",
-  "summary": "This library allows for efficient calculation of Clifford circuits by tracking the evolution of X and Z generators (the so-called **tableau** representation).",
-  "description": "This library allows for efficient calculation of Clifford circuits by tracking the evolution of X and Z generators (the so-called **tableau** representation). No special effort has been made to strictly minimize the number of bits needed to store each Clifford. Rather, the goal was clarity. One unique feature compared to other such utilities is that we also efficiently track the...",
+  "summary": "Efficient calculation of Clifford circuits in Julia.",
+  "description": "Efficient calculation of Clifford circuits in Julia.",
   "whatItIs": [
-    "Cliffords.jl is an open-source project in the general-purpose sdks category. It is maintained by BBN-Q and primarily looks like a Julia codebase. This library allows for efficient calculation of Clifford circuits by tracking the evolution of X and Z generators (the so-called **tableau** representation).",
+    "Cliffords.jl is an open-source project in the general-purpose sdks category. It is maintained by BBN-Q and primarily looks like a Julia codebase. Efficient calculation of Clifford circuits in Julia.",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches general-purpose sdks workflows in practice. The repository README emphasizes: This library allows for efficient calculation of Clifford circuits by tracking the evolution of X and Z generators (the so-called **tableau** representation). No special effort has been made to strictly minimize the number of bits needed to store each Clifford. Rather, the goal was clarity. One unique feature..."
   ],
   "whoItsFor": "Developers who want a broad entry point for building circuits, experimenting with algorithms, and integrating quantum workflows into larger applications.",
@@ -36,21 +39,34 @@
   ],
   "readmeExcerpt": "This library allows for efficient calculation of Clifford circuits by tracking the evolution of X and Z generators (the so-called **tableau** representation). No special effort has been made to strictly minimize the number of bits needed to store each Clifford. Rather, the goal was clarity. One unique feature compared to other such utilities is that we also efficiently track the inverse operations. This is useful to, e.g., compute 'undo' gates in randomized benchmarking sequences. single-qubit Pauli operators X * Y => iZ",
   "readmePath": "reference\\BBN-Q__Cliffords.jl\\README.md",
+  "readmeMarkdownPath": "readmes/bbn-q-cliffords-jl.md",
   "clonePath": "reference\\BBN-Q__Cliffords.jl",
-  "stars": 0,
-  "lastPushedAt": null,
+  "stars": 46,
+  "lastPushedAt": "2021-07-01T16:44:20Z",
+  "defaultBranch": "master",
   "githubTopics": [],
+  "quickstart": null,
+  "codeSamples": [],
+  "packageMeta": {},
+  "citationBibtex": null,
+  "supportedBackendSlugs": [],
+  "externalLinks": {},
+  "openIssuesCount": 3,
+  "subscribersCount": 13,
+  "latestRelease": null,
+  "ownerType": "Organization",
+  "ownerUrl": "https://github.com/BBN-Q",
   "featured": false,
   "flagship": false,
   "qtanglRelevant": false,
   "archived": false,
-  "imagePath": null,
+  "imagePath": "/learn/monogram/bbn-q-cliffords-jl.svg",
   "relatedSlugs": [
     "qiskit-qiskit",
     "quantumlib-cirq",
     "xanaduai-pennylane",
-    "projectq-framework-projectq",
+    "qiskit-qiskit-terra",
     "quantumbfs-yao-jl",
-    "arlineq-arline-benchmarks"
+    "microsoft-quantumkatas"
   ]
 }

@@ -4,7 +4,7 @@
   "name": "dwave_micro_client_dimod",
   "title": "dwave_micro_client_dimod",
   "repoUrl": "https://github.com/dwavesystems/dwave_micro_client_dimod",
-  "homepageUrl": null,
+  "homepageUrl": "http://dwave-micro-client-dimod.readthedocs.io",
   "category": {
     "slug": "annealing-ising",
     "title": "Annealing and Ising",
@@ -21,12 +21,15 @@
     }
   ],
   "primaryLanguage": "Python",
+  "primaryLanguages": [
+    "Python"
+  ],
   "license": "Apache-2.0",
-  "summary": "image:: https://travis-ci.org/dwavesystems/dwave_micro_client_dimod.svg?branch=master :target: https://travis-ci.org/dwavesystems/dwave_micro_client_dimod :alt: Travis Status",
-  "description": ".. image:: https://travis-ci.org/dwavesystems/dwave_micro_client_dimod.svg?branch=master :target: https://travis-ci.org/dwavesystems/dwave_micro_client_dimod :alt: Travis Status",
+  "summary": "dimod wrapper for the D-Wave Micro Client",
+  "description": "dimod wrapper for the D-Wave Micro Client",
   "whatItIs": [
-    "dwave_micro_client_dimod is an open-source project in the annealing and ising category. It is maintained by dwavesystems and primarily looks like a Python codebase. image:: https://travis-ci.org/dwavesystems/dwave_micro_client_dimod.svg?branch=master :target: https://travis-ci.org/dwavesystems/dwave_micro_client_dimod :alt: Travis Status",
-    "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches annealing and ising workflows in practice. The repository README emphasizes: .. image:: https://travis-ci.org/dwavesystems/dwave_micro_client_dimod.svg?branch=master :target: https://travis-ci.org/dwavesystems/dwave_micro_client_dimod :alt: Travis Status .. image:: https://coveralls.io/repos/github/dwavesystems/dwave_micro_client_dimod/badge.svg?branch=master :target: https://coveralls.io/github/dwavesystems/dwave_micro_client_dimod?branch=master :alt: Coverage Report"
+    "dwave_micro_client_dimod is an open-source project in the annealing and ising category. It is maintained by dwavesystems and primarily looks like a Python codebase. dimod wrapper for the D-Wave Micro Client",
+    "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches annealing and ising workflows in practice. The repository README emphasizes: .. image:: https://travis-ci.org/dwavesystems/dwave_micro_client_dimod.svg?branch=master :target: https://travis-ci.org/dwavesystems/dwave_micro_client_dimod :alt: Travis Status .. image:: https://coveralls.io/repos/github/dwavesystems/dwave_micro_client_dimod/badge.svg?branch=master :target: https://coveralls.io/github/dwavesystems/dwave_micro_client_dimod?branch=master :alt: Coverage Report The repository also appears to be archival or no longer actively maintained, which matters when evaluating it for current production use."
   ],
   "whoItsFor": "Developers interested in Ising-model formulations, annealing workflows, and D-Wave-style solver ecosystems.",
   "whatYouCanBuild": [
@@ -36,15 +39,35 @@
   ],
   "readmeExcerpt": ".. image:: https://travis-ci.org/dwavesystems/dwave_micro_client_dimod.svg?branch=master :target: https://travis-ci.org/dwavesystems/dwave_micro_client_dimod :alt: Travis Status .. image:: https://coveralls.io/repos/github/dwavesystems/dwave_micro_client_dimod/badge.svg?branch=master :target: https://coveralls.io/github/dwavesystems/dwave_micro_client_dimod?branch=master :alt: Coverage Report",
   "readmePath": "reference\\dwavesystems__dwave_micro_client_dimod\\README.rst",
+  "readmeMarkdownPath": "readmes/dwavesystems-dwave-micro-client-dimod.md",
   "clonePath": "reference\\dwavesystems__dwave_micro_client_dimod",
-  "stars": 0,
-  "lastPushedAt": null,
+  "stars": 8,
+  "lastPushedAt": "2018-02-21T22:32:38Z",
+  "defaultBranch": "master",
   "githubTopics": [],
+  "quickstart": null,
+  "codeSamples": [],
+  "packageMeta": {},
+  "citationBibtex": null,
+  "supportedBackendSlugs": [
+    "dwavesystems-dimod"
+  ],
+  "externalLinks": {
+    "docs": [
+      "https://readthedocs.org/projects/dwave_micro_client_dimod/badge/?version=latest",
+      "http://dwave_micro_client_dimod.readthedocs.io/en/latest/?badge=latest"
+    ]
+  },
+  "openIssuesCount": 1,
+  "subscribersCount": 3,
+  "latestRelease": null,
+  "ownerType": "Organization",
+  "ownerUrl": "https://github.com/dwavesystems",
   "featured": false,
   "flagship": false,
   "qtanglRelevant": false,
-  "archived": false,
-  "imagePath": null,
+  "archived": true,
+  "imagePath": "/learn/monogram/dwavesystems-dwave-micro-client-dimod.svg",
   "relatedSlugs": [
     "dwavesystems-dwave-ocean-sdk",
     "dwavesystems-dimod",

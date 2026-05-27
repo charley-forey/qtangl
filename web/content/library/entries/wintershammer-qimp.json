@@ -17,11 +17,14 @@
     }
   ],
   "primaryLanguage": "Python",
-  "license": "Unknown",
-  "summary": "QImp QImp is the experimental implementation of an interpreter for the quantum programming language Qumin.",
-  "description": "QImp QImp is the experimental implementation of an interpreter for the quantum programming language Qumin. For more info, check out the (still under-construction) tutorial over at my github page!",
+  "primaryLanguages": [
+    "Python"
+  ],
+  "license": null,
+  "summary": "The Qumin Interpreter and Matrix libraries Project",
+  "description": "The Qumin Interpreter and Matrix libraries Project",
   "whatItIs": [
-    "QImp is an open-source project in the pulse and control category. It is maintained by wintershammer and primarily looks like a Python codebase. QImp QImp is the experimental implementation of an interpreter for the quantum programming language Qumin.",
+    "QImp is an open-source project in the pulse and control category. It is maintained by wintershammer and primarily looks like a Python codebase. The Qumin Interpreter and Matrix libraries Project",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches pulse and control workflows in practice. The repository README emphasizes: QImp QImp is the experimental implementation of an interpreter for the quantum programming language Qumin. For more info, check out the (still under-construction) tutorial over at my github page! Qumin is written in Python 3, so the latest version of the Python 3 interpreter must be installed in..."
   ],
   "whoItsFor": "Hardware-adjacent developers and researchers working closer to experiments, pulse schedules, or lab orchestration.",
@@ -32,21 +35,34 @@
   ],
   "readmeExcerpt": "QImp QImp is the experimental implementation of an interpreter for the quantum programming language Qumin. For more info, check out the (still under-construction) tutorial over at my github page! Qumin is written in Python 3, so the latest version of the Python 3 interpreter must be installed in your computer. It also has the following dependencies: Parsimonious NumPy SciPy which can be installed via tools like pip.",
   "readmePath": "reference\\wintershammer__QImp\\README.md",
+  "readmeMarkdownPath": "readmes/wintershammer-qimp.md",
   "clonePath": "reference\\wintershammer__QImp",
-  "stars": 0,
-  "lastPushedAt": null,
+  "stars": 6,
+  "lastPushedAt": "2017-05-28T18:55:56Z",
+  "defaultBranch": "master",
   "githubTopics": [],
+  "quickstart": null,
+  "codeSamples": [],
+  "packageMeta": {},
+  "citationBibtex": null,
+  "supportedBackendSlugs": [],
+  "externalLinks": {},
+  "openIssuesCount": 0,
+  "subscribersCount": 2,
+  "latestRelease": null,
+  "ownerType": "User",
+  "ownerUrl": "https://github.com/wintershammer",
   "featured": false,
   "flagship": false,
   "qtanglRelevant": false,
   "archived": false,
-  "imagePath": null,
+  "imagePath": "/learn/monogram/wintershammer-qimp.svg",
   "relatedSlugs": [
     "m-labs-artiq",
-    "bbn-q-pyqgl2",
-    "bbn-q-pyqlab",
-    "bbn-q-qgl",
-    "bbn-q-qlab",
-    "bbn-q-qlab-jl"
+    "microsoft-quantumkatas",
+    "qiskit-qiskit",
+    "quantumlib-cirq",
+    "xanaduai-pennylane",
+    "bbn-q-pyqgl2"
   ]
 }

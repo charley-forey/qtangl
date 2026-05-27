@@ -4,7 +4,7 @@
   "name": "QuNetSim",
   "title": "QuNetSim",
   "repoUrl": "https://github.com/tqsd/QuNetSim",
-  "homepageUrl": null,
+  "homepageUrl": "https://tqsd.github.io/QuNetSim/",
   "category": {
     "slug": "networking",
     "title": "Networking",
@@ -17,11 +17,16 @@
     }
   ],
   "primaryLanguage": "Python",
+  "primaryLanguages": [
+    "Python",
+    "JavaScript",
+    "Shell"
+  ],
   "license": "MIT",
-  "summary": "QuNetSim is a quantum-enabled network simulator that adds common quantum networking tasks like teleportation, superdense coding, sharing EPR pairs, etc.",
-  "description": "QuNetSim is a quantum-enabled network simulator that adds common quantum networking tasks like teleportation, superdense coding, sharing EPR pairs, etc. With QuNetSim, one can design and test robust quantum network protocols under various network conditions.",
+  "summary": "A quantum network simulation framework.",
+  "description": "A quantum network simulation framework.",
   "whatItIs": [
-    "QuNetSim is an open-source project in the networking category. It is maintained by tqsd and primarily looks like a Python codebase. QuNetSim is a quantum-enabled network simulator that adds common quantum networking tasks like teleportation, superdense coding, sharing EPR pairs, etc.",
+    "QuNetSim is an open-source project in the networking category. It is maintained by tqsd and primarily looks like a Python codebase. A quantum network simulation framework.",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches networking workflows in practice. The repository README emphasizes: QuNetSim is a quantum-enabled network simulator that adds common quantum networking tasks like teleportation, superdense coding, sharing EPR pairs, etc. With QuNetSim, one can design and test robust quantum network protocols under various network conditions. See https://tqsd.github.io/QuNetSim/ for documentation. To install the latest release via pip:"
   ],
   "whoItsFor": "Researchers and students exploring distributed quantum systems, communication protocols, and quantum internet concepts.",
@@ -32,21 +37,62 @@
   ],
   "readmeExcerpt": "QuNetSim is a quantum-enabled network simulator that adds common quantum networking tasks like teleportation, superdense coding, sharing EPR pairs, etc. With QuNetSim, one can design and test robust quantum network protocols under various network conditions. See https://tqsd.github.io/QuNetSim/ for documentation. To install the latest release via pip:",
   "readmePath": "reference\\tqsd__QuNetSim\\README.md",
+  "readmeMarkdownPath": "readmes/tqsd-qunetsim.md",
   "clonePath": "reference\\tqsd__QuNetSim",
-  "stars": 0,
-  "lastPushedAt": null,
-  "githubTopics": [],
+  "stars": 144,
+  "lastPushedAt": "2024-04-02T21:30:07Z",
+  "defaultBranch": "master",
+  "githubTopics": [
+    "quantum-internet",
+    "quantum-network-simulator",
+    "unitaryfund"
+  ],
+  "quickstart": {
+    "language": "python",
+    "source": "from qunetsim.components import Host, Network\n\nnetwork = Network.get_instance()\nnetwork.start()\n\nalice = Host('Alice')\nbob = Host('Bob')\n\nalice.add_connection(bob.host_id)\nbob.add_connection(alice.host_id)\n\nalice.start()\nbob.start()\n\nnetwork.add_hosts([alice, bob])\n\n# Block Alice to wait for qubit arrive from Bob\nalice.send_epr(bob.host_id, await_ack=True)\nq_alice = alice.get_epr(bob.host_id)\nq_bob = bob.get_epr(alice.host_id)\n\nprint(\"EPR is in state: %d, %d\" % (q_alice.measure(), q_bob.measure()))\nnetwork.stop(True)"
+  },
+  "codeSamples": [
+    {
+      "title": "Anonymous",
+      "language": "python",
+      "source": "import time\nfrom qunetsim.components import Host\nfrom qunetsim.components import Network\nimport random\nfrom qunetsim.objects import Qubit\ndef distribute(host, nodes):\n    # distribute=True => sender doesn't keep part of the GHZ\n    host.send_ghz(nodes, distribute=True)\ndef sender(host, distributor, r, epr_id):\n    q = host.get_ghz(distributor, wait=10)\n    b = random.choice(['0', '1'])\n    host.send_broadcast(b)\n    if b == '1':\n        q.Z()\n    host.add_epr(r, q, q_id=epr_id)\n    sending_qubit = Qubit(host)\n    sending_qubit.X()\n    print('Sending %s' % sending_qubit.id)\n    # Generate EPR if none shouldn't change anything, but if there is\n    # no shared entanglement between s and r, then there should\n    # be a mistake in the protocol\n    host.send_teleport(r, sending_qubit, generate_epr_if_none=False, await_ack=False)\n    host.empty_classical()\ndef receiver(host, distributor, s, epr_id):\n    q = host.get_ghz(distributor, wait=10)\n    b = random.choice(['0', '1'])\n    host.send_broadcast(b)\n    messages = []\n    # Await broadcast messages from all parties\n    while len(messages) < 3:\n        messages = host.classical\n        messages = [x for x in messages if x.content != 'ACK']\n        time.sleep(0.5)\n    print([m.content for m in messages])\n    parity = int(b)\n    for m in messages:\n        if m.sender != s:\n            parity = parity ^ int(m.content)\n    if parity == 1:\n        q.Z()",
+      "path": "examples/anonymous_transfer/anonymous.py"
+    },
+    {
+      "title": "Bb84 Protocol",
+      "language": "python",
+      "source": "# -*- coding: utf-8 -*-\nimport numpy as np\nimport binascii\nfrom random import getrandbits\nfrom qunetsim.components.host import Host\nfrom qunetsim.components.network import Network\nfrom qunetsim.objects import Qubit\nfrom qunetsim.objects import Logger\nLogger.DISABLED = True\nclass BB84:\n    def __init__(self):\n        print(\"Welcome to BB84 demo\")\n    def select_encoding(self, length):\n        alice_bitstring = \"\"\n        alice_bases = \"\"\n        for i in range(length):\n            alice_bitstring += (str(getrandbits(1)))\n            alice_bases += (str(getrandbits(1)))\n            # 0 means (0,1) basis and 1 means(+,-)basis\n        return alice_bitstring, alice_bases\n    def select_measurement(self, length):   # Bob bases\n        bases = \"\"\n        for i in range(length):\n            bases += (str(getrandbits(1)))\n        return bases\n    def encode(self, host_sender, bitstring, bases):\n        encoded_qubits = []\n        for i in range(len(bitstring)):\n            q = Qubit(host_sender)\n            if bases[i] == \"0\":\n                if bitstring[i] == \"0\":\n                    pass  # initialized in 0\n                elif bitstring[i] == \"1\":\n                    q.X()\n            elif bases[i] == \"1\":\n                if bitstring[i] == \"0\":\n                    q.H()\n                elif bitstring[i] == \"1\":\n                    q.X()\n                    q.H()",
+      "path": "examples/BB84/BB84_protocol.py"
+    },
+    {
+      "title": "Checksum",
+      "language": "python",
+      "source": "import time\nimport numpy as np\nfrom qunetsim.components import Host\nfrom qunetsim.components import Network\nfrom qunetsim.objects import Logger\nfrom qunetsim.objects import Qubit\nWAIT_TIME = 10\ndef checksum_sender(host, q_size, receiver_id, checksum_size_per_qubit):\n    bit_arr = np.random.randint(2, size=q_size)\n    Logger.get_instance().log('Bit array to be sent: ' + str(bit_arr))\n    qubits = []\n    for i in range(q_size):\n        q_tmp = Qubit(host)\n        if bit_arr[i] == 1:\n            q_tmp.X()\n        qubits.append(q_tmp)\n    check_qubits = host.add_checksum(qubits, checksum_size_per_qubit)\n    checksum_size = int(q_size / checksum_size_per_qubit)\n    qubits.append(check_qubits)\n    checksum_cnt = 0\n    for i in range(q_size + checksum_size):\n        if i < q_size:\n            q = qubits[i]\n        else:\n            q = qubits[q_size][checksum_cnt]\n            checksum_cnt = checksum_cnt + 1\n        host.send_qubit(receiver_id, q, await_ack=True)\ndef checksum_receiver(host, q_size, sender_id, checksum_size_per_qubit):\n    qubits = []\n    checksum_size = int(q_size / checksum_size_per_qubit)\n    while len(qubits) < (q_size + checksum_size):\n        q = host.get_qubit(sender_id, wait=WAIT_TIME)\n        qubits.append(q)\n        Logger.get_instance().log(str(host.host_id) + ': received qubit')\n    checksum_qubits = []\n    checksum_cnt = 0\n    for i in range(len(qubits)):\n        if checksum_cnt < checksum_size:\n            checksum_qubits.append(qubits[q_size + i]['q'])\n            checksum_cnt = checksum_cnt + 1",
+      "path": "examples/checksum/checksum.py"
+    }
+  ],
+  "packageMeta": {},
+  "citationBibtex": null,
+  "supportedBackendSlugs": [
+    "projectq-framework-projectq"
+  ],
+  "externalLinks": {},
+  "openIssuesCount": 23,
+  "subscribersCount": 9,
+  "latestRelease": null,
+  "ownerType": "Organization",
+  "ownerUrl": "https://github.com/tqsd",
   "featured": false,
   "flagship": false,
   "qtanglRelevant": false,
   "archived": false,
-  "imagePath": null,
+  "imagePath": "/learn/monogram/tqsd-qunetsim.svg",
   "relatedSlugs": [
-    "stephaniewehner-simulaqron",
-    "aws-amazon-braket-sdk-python",
-    "cqcl-tket",
-    "dwavesystems-dwave-ocean-sdk",
-    "entropicalabs-openqaoa",
-    "microsoft-quantumkatas"
+    "microsoft-quantumkatas",
+    "qiskit-qiskit",
+    "quantumlib-cirq",
+    "xanaduai-pennylane",
+    "open-quantum-safe-liboqs",
+    "stephaniewehner-simulaqron"
   ]
 }

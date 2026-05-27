@@ -4,7 +4,7 @@
   "name": "Perceval",
   "title": "Perceval",
   "repoUrl": "https://github.com/Quandela/Perceval",
-  "homepageUrl": null,
+  "homepageUrl": "https://perceval.quandela.net",
   "category": {
     "slug": "photonics",
     "title": "Photonics",
@@ -17,11 +17,16 @@
     }
   ],
   "primaryLanguage": "Python",
+  "primaryLanguages": [
+    "Python",
+    "Jupyter",
+    "Shell"
+  ],
   "license": "MIT",
-  "summary": "Perceval <a href=\"https://perceval.quandela.net\" target=\"_blank\"> <img src=\"logo-perceval.png\" width=\"50\" height=\"50\"> </a>",
-  "description": "Perceval <a href=\"https://perceval.quandela.net\" target=\"_blank\"> <img src=\"logo-perceval.png\" width=\"50\" height=\"50\"> </a>",
+  "summary": "An open source framework for programming photonic quantum computers",
+  "description": "An open source framework for programming photonic quantum computers",
   "whatItIs": [
-    "Perceval is an open-source project in the photonics category. It is maintained by Quandela and primarily looks like a Python codebase. Perceval <a href=\"https://perceval.quandela.net\" target=\"_blank\"> <img src=\"logo-perceval.png\" width=\"50\" height=\"50\"> </a>",
+    "Perceval is an open-source project in the photonics category. It is maintained by Quandela and primarily looks like a Python codebase. An open source framework for programming photonic quantum computers",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches photonics workflows in practice. The repository README emphasizes: Perceval <a href=\"https://perceval.quandela.net\" target=\"_blank\"> <img src=\"logo-perceval.png\" width=\"50\" height=\"50\"> </a> Through a simple object-oriented python API, Perceval provides tools for building a circuit with linear optics components, defining single-photon sources and their error model, manipulating Fock states, running simulations, reproducing published experimental papers results, and experimenting with a new..."
   ],
   "whoItsFor": "People exploring optical and photonic models of quantum computing, especially outside the usual gate-model framing.",
@@ -32,21 +37,44 @@
   ],
   "readmeExcerpt": "Perceval <a href=\"https://perceval.quandela.net\" target=\"_blank\"> <img src=\"logo-perceval.png\" width=\"50\" height=\"50\"> </a> Through a simple object-oriented python API, Perceval provides tools for building a circuit with linear optics components, defining single-photon sources and their error model, manipulating Fock states, running simulations, reproducing published experimental papers results, and experimenting with a new generation of quantum algorithms.",
   "readmePath": "reference\\Quandela__Perceval\\README.md",
+  "readmeMarkdownPath": "readmes/quandela-perceval.md",
   "clonePath": "reference\\Quandela__Perceval",
-  "stars": 0,
-  "lastPushedAt": null,
-  "githubTopics": [],
+  "stars": 202,
+  "lastPushedAt": "2026-05-25T15:40:44Z",
+  "defaultBranch": "main",
+  "githubTopics": [
+    "physics-simulation",
+    "quantum",
+    "quantum-computing"
+  ],
+  "quickstart": null,
+  "codeSamples": [],
+  "packageMeta": {},
+  "citationBibtex": null,
+  "supportedBackendSlugs": [],
+  "externalLinks": {
+    "docs": [
+      "https://github.com/Quandela/Perceval/actions/workflows/build-and-deploy-docs.yml/badge.svg",
+      "https://github.com/Quandela/Perceval/actions/workflows/build-and-deploy-docs.ym",
+      "https://pytest-benchmark.readthedocs.io/en/stable/usage.html"
+    ]
+  },
+  "openIssuesCount": 3,
+  "subscribersCount": 9,
+  "latestRelease": null,
+  "ownerType": "Organization",
+  "ownerUrl": "https://github.com/Quandela",
   "featured": false,
   "flagship": false,
   "qtanglRelevant": false,
   "archived": false,
-  "imagePath": null,
+  "imagePath": "/learn/monogram/quandela-perceval.svg",
   "relatedSlugs": [
+    "microsoft-quantumkatas",
+    "qiskit-qiskit",
+    "quantumlib-cirq",
+    "xanaduai-pennylane",
     "xanaduai-strawberryfields",
-    "xanaduai-blackbird",
-    "xanaduai-thewalrus",
-    "aws-amazon-braket-sdk-python",
-    "cqcl-tket",
-    "dwavesystems-dwave-ocean-sdk"
+    "open-quantum-safe-liboqs"
   ]
 }

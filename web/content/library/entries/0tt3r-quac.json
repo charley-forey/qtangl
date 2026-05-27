@@ -21,11 +21,16 @@
     }
   ],
   "primaryLanguage": "C",
+  "primaryLanguages": [
+    "C",
+    "C/C++",
+    "LaTeX"
+  ],
   "license": "MIT",
-  "summary": "QuaC (Quantum in C) is a parallel time dependent open quantum systems solver, written by Matthew Otten (mjotten@wisc.edu).",
-  "description": "QuaC (Quantum in C) is a parallel time dependent open quantum systems solver, written by Matthew Otten (mjotten@wisc.edu). QuaC utilizes PETSc (www.mcs.anl.gov/petsc) for parallelization and linear algebra and features are still regularly being added.",
+  "summary": "Time Dependent Open Quantum Systems Solver written by Matthew Otten (mjotten@wisc.edu)",
+  "description": "Time Dependent Open Quantum Systems Solver written by Matthew Otten (mjotten@wisc.edu)",
   "whatItIs": [
-    "QuaC is an open-source project in the simulators category. It is maintained by 0tt3r and primarily looks like a C codebase. QuaC (Quantum in C) is a parallel time dependent open quantum systems solver, written by Matthew Otten (mjotten@wisc.edu).",
+    "QuaC is an open-source project in the simulators category. It is maintained by 0tt3r and primarily looks like a C codebase. Time Dependent Open Quantum Systems Solver written by Matthew Otten (mjotten@wisc.edu)",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches simulators workflows in practice. The repository README emphasizes: QuaC (Quantum in C) is a parallel time dependent open quantum systems solver, written by Matthew Otten (mjotten@wisc.edu). QuaC utilizes PETSc (www.mcs.anl.gov/petsc) for parallelization and linear algebra and features are still regularly being added. QuaC strives to make the process of translating the physics equations into parallel code..."
   ],
   "whoItsFor": "Developers and researchers who need to test ideas locally before running on hardware or who want to compare simulation strategies.",
@@ -36,21 +41,37 @@
   ],
   "readmeExcerpt": "QuaC (Quantum in C) is a parallel time dependent open quantum systems solver, written by Matthew Otten (mjotten@wisc.edu). QuaC utilizes PETSc (www.mcs.anl.gov/petsc) for parallelization and linear algebra and features are still regularly being added. QuaC strives to make the process of translating the physics equations into parallel code as simple as possible. QuaC supports both features for both general open quantum systems (such as Jaynes-Cummings models or simulations of physical systems such as neutral atoms, nitrogen vacancies, spin-boson models, etc) as well as specific quantum information features for qubits, such as gates and circuits.",
   "readmePath": "reference\\0tt3r__QuaC\\README.md",
+  "readmeMarkdownPath": "readmes/0tt3r-quac.md",
   "clonePath": "reference\\0tt3r__QuaC",
-  "stars": 0,
-  "lastPushedAt": null,
+  "stars": 30,
+  "lastPushedAt": "2024-07-04T13:05:23Z",
+  "defaultBranch": "main",
   "githubTopics": [],
+  "quickstart": {
+    "language": "python",
+    "source": "import matplotlib.pyplot as plt\nimport numpy as np\ndata = np.loadtxt(\"out\",skiprows=2)\nplt.plot(data[:,1],data[:,2],label=\"QD Pop\")\nplt.plot(data[:,1],data[:,3],label=\"Cavity Pop\")\nplt.xlabel(\"Time\")\nplt.ylabel(\"Pops\")\nplt.legend()\nplt.tight_layout()\nplt.show()"
+  },
+  "codeSamples": [],
+  "packageMeta": {},
+  "citationBibtex": null,
+  "supportedBackendSlugs": [],
+  "externalLinks": {},
+  "openIssuesCount": 1,
+  "subscribersCount": 6,
+  "latestRelease": null,
+  "ownerType": "User",
+  "ownerUrl": "https://github.com/0tt3r",
   "featured": false,
   "flagship": false,
   "qtanglRelevant": false,
   "archived": false,
-  "imagePath": null,
+  "imagePath": "/learn/monogram/0tt3r-quac.svg",
   "relatedSlugs": [
+    "qiskit-qiskit-tutorial",
+    "qosf-os-quantum-software",
     "adamisntdead-qusimpy",
     "aniabrown-quest",
     "bbn-q-pysimulator",
-    "cda-tum-mqt-ddsim",
-    "dillanchang-qocs",
-    "iic-jku-ddsim"
+    "cda-tum-mqt-ddsim"
   ]
 }

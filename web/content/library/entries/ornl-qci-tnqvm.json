@@ -21,11 +21,16 @@
     }
   ],
   "primaryLanguage": "C++",
-  "license": "Unknown",
-  "summary": "TNQVM Tensor Network XACC Accelerator These plugins for XACC provide an Accelerator implementation that leverages tensor network theory to simulate quantum circuits.",
-  "description": "TNQVM Tensor Network XACC Accelerator These plugins for XACC provide an Accelerator implementation that leverages tensor network theory to simulate quantum circuits.",
+  "primaryLanguages": [
+    "C++",
+    "C/C++",
+    "OpenQASM"
+  ],
+  "license": null,
+  "summary": "Tensor Network QPU Simulator for Eclipse XACC",
+  "description": "Tensor Network QPU Simulator for Eclipse XACC",
   "whatItIs": [
-    "tnqvm is an open-source project in the simulators category. It is maintained by ornl-qci and primarily looks like a C++ codebase. TNQVM Tensor Network XACC Accelerator These plugins for XACC provide an Accelerator implementation that leverages tensor network theory to simulate quantum circuits.",
+    "tnqvm is an open-source project in the simulators category. It is maintained by ornl-qci and primarily looks like a C++ codebase. Tensor Network QPU Simulator for Eclipse XACC",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches simulators workflows in practice. The repository README emphasizes: TNQVM Tensor Network XACC Accelerator These plugins for XACC provide an Accelerator implementation that leverages tensor network theory to simulate quantum circuits. TNQVM can be built with ExaTN support, providing a tensor network processing backend that scales on Summit-like architectures. To enable this support, first follow the ExaTN..."
   ],
   "whoItsFor": "Developers and researchers who need to test ideas locally before running on hardware or who want to compare simulation strategies.",
@@ -36,21 +41,57 @@
   ],
   "readmeExcerpt": "TNQVM Tensor Network XACC Accelerator These plugins for XACC provide an Accelerator implementation that leverages tensor network theory to simulate quantum circuits. TNQVM can be built with ExaTN support, providing a tensor network processing backend that scales on Summit-like architectures. To enable this support, first follow the ExaTN README to build and install ExaTN. Now configure TNQVM with CMake and build/install To switch tensor processing backends use or in Python",
   "readmePath": "reference\\ornl-qci__tnqvm\\README.md",
+  "readmeMarkdownPath": "readmes/ornl-qci-tnqvm.md",
   "clonePath": "reference\\ornl-qci__tnqvm",
-  "stars": 0,
-  "lastPushedAt": null,
+  "stars": 44,
+  "lastPushedAt": "2025-03-05T20:50:25Z",
+  "defaultBranch": "master",
   "githubTopics": [],
+  "quickstart": null,
+  "codeSamples": [
+    {
+      "title": "Hello-Checkpoint",
+      "language": "python",
+      "source": "import random\nimport numpy as np\nimport pyxacc as xacc\ndef write_qasm(rounds, nQ):\n    \"\"\"\"\n    Parameters\n    ----------\n    nQ: int, number of qubits\n    entanglers: tuple of tuples whose length determines the circuit depth\n                sub-tuples enumerates CNOT's acting at a given depth level\n    Returns\n    -------\n    param_counter: number of variational parameters in circuit\n    \"\"\"\n    file_name = \"Supremacy_1D_{0}_qubits_{1}_rounds.qasm\".format(nQ, rounds)\n    file = open(file_name, \"w\")\n    file.write(\"__qpu__ f(AcceleratorBuffer b) {\\n\")\n    local_gates = ('X', 'Y', 'Z', 'RX', 'RY', 'RZ', 'H')\n    if nQ%2==0: # even\n        evens = tuple((i, i+1) for i in range(nQ) if i%2==0)\n        odds = tuple((i, i+1) for i in range(nQ) if i%2==1)\n    if nQ%2==1: # odd\n        evens = tuple((i, i+1) for i in range(nQ-2) if i%2==0)\n        odds = tuple((i, i+1) for i in range(nQ) if i%2==1)\n    for i in range(nQ): \n        file.write('H ' + str(i) + '\\n')  # initial Hadamards\n    # random gates\n    for i in range(rounds):\n        for j in range(nQ): \n            gate = random.choice(local_gates)\n            if 'R' in gate:\n                angle = str(np.random.uniform(0,np.pi));\n                file.write('{} '.format(str(gate) + '('+str(angle)+')') + str(j) + '\\n')\n            else:\n                file.write('{} '.format(str(gate)) + str(j) + ' \\n')\n        for e in evens:\n            file.write('CNOT {0} {1}\\n'.format(*e))\n        for e in odds:\n            file.write('CNOT {0} {1}\\n'.format(*e))\n    file.write(\"}\")",
+      "path": "examples/plos_one_experiments/experiments/.ipynb_checkpoints/hello-checkpoint.py"
+    },
+    {
+      "title": "Untitled-Checkpoint",
+      "language": "python",
+      "source": "import numpy as np\n\nr2 = np.genfromtxt('profile_tnqvm_2_rounds.csv', delimiter=',', names=['r','n','m'])\nr4 = np.genfromtxt('profile_tnqvm_4_rounds.csv', delimiter=',', names=['r','n','m'])\nr6 = np.genfromtxt('profile_tnqvm_6_rounds.csv', delimiter=',', names=['r','n','m'])\nr8 = np.genfromtxt('profile_tnqvm_8_rounds.csv', delimiter=',', names=['r','n','m'])\nr10 = np.genfromtxt('profile_tnqvm_10_rounds.csv', delimiter=',', names=['r','n','m'])\n\nimport matplotlib.pyplot as plt\n%matplotlib inline\nplt.figure(figsize=(15,10))\nplt.rc('font', family='serif', serif='cm10')\nplt.rc('text', usetex=True)\nplt.rcParams['text.latex.preamble'] = [r'\\boldmath']\nplt.rc('xtick', labelsize=20)\nplt.rc('ytick', labelsize=20)\n\nplt.rc('lines', lw=2)\nplt.rc('axes', linewidth=2)\nplt.rcParams[\"font.weight\"] = \"bold\"\nplt.rcParams[\"axes.labelweight\"] = \"bold\"\nplt.xlabel(r'Number of Qubits', fontsize=20)\nplt.ylabel(r'Memory (MB)', fontsize=20)\nplt.semilogy(r2['n'], r2['m'], '-', color='b', label='2 Rounds')\nplt.semilogy(r4['n'], r4['m'], '-', color='r', label='4 Rounds')\nplt.semilogy(r6['n'], r6['m'], '-', color='g', label='6 Rounds')\nplt.semilogy(r8['n'], r8['m'], '-', color='m', label='8 Rounds')\nplt.semilogy(r10['n'], r10['m'], '-', color='y', label='10 Rounds')\nplt.legend()\n#plt.savefig(\"2ndquant_2x2_2qbit_ibmqx5_theta_sweep_energy.pdf\",bbox_inches='tight')\nplt.show()",
+      "path": "examples/plos_one_experiments/experiments/.ipynb_checkpoints/Untitled-checkpoint.ipynb"
+    },
+    {
+      "title": "Profile Tnqvm",
+      "language": "python",
+      "source": "import random\nimport numpy as np\nimport pyxacc as xacc\nimport argparse\nimport sys\ndef parse_args(args):\n    parser = argparse.ArgumentParser()\n    parser.add_argument('-n',type=int,required=True)\n    parser.add_argument('-r',type=int,required=True)\n    opts = parser.parse_args(args)\n    return opts\ndef write_qasm(rounds, nQ):\n    \"\"\"\"\n    Parameters\n    ----------\n    nQ: int, number of qubits\n    entanglers: tuple of tuples whose length determines the circuit depth\n                sub-tuples enumerates CNOT's acting at a given depth level\n    Returns\n    -------\n    param_counter: number of variational parameters in circuit\n    \"\"\"\n    file_name = \"Supremacy_1D_{0}_qubits_{1}_rounds.qasm\".format(nQ, rounds)\n    file = open(file_name, \"w\")\n    file.write(\"__qpu__ f(AcceleratorBuffer b) {\\n\")\n    local_gates = ('X', 'Y', 'Z', 'RX', 'RY', 'RZ', 'H')\n    if nQ%2==0: # even\n        evens = tuple((i, i+1) for i in range(nQ) if i%2==0)\n        odds = tuple((i, i+1) for i in range(nQ-1) if i%2==1)\n    if nQ%2==1: # odd\n        evens = tuple((i, i+1) for i in range(nQ-2) if i%2==0)\n        odds = tuple((i, i+1) for i in range(nQ) if i%2==1)\n    for i in range(nQ): \n        file.write('H ' + str(i) + '\\n')  # initial Hadamards\n    # random gates\n    for i in range(rounds):\n        for j in range(nQ): \n            gate = random.choice(local_gates)\n            if 'R' in gate:\n                angle = str(np.random.uniform(0,np.pi));",
+      "path": "examples/plos_one_experiments/experiments/profile_tnqvm.py"
+    }
+  ],
+  "packageMeta": {},
+  "citationBibtex": null,
+  "supportedBackendSlugs": [],
+  "externalLinks": {
+    "docs": [
+      "https://xacc.readthedocs.io"
+    ]
+  },
+  "openIssuesCount": 6,
+  "subscribersCount": 5,
+  "latestRelease": null,
+  "ownerType": "Organization",
+  "ownerUrl": "https://github.com/ORNL-QCI",
   "featured": false,
   "flagship": false,
   "qtanglRelevant": false,
   "archived": false,
-  "imagePath": null,
+  "imagePath": "/learn/monogram/ornl-qci-tnqvm.svg",
   "relatedSlugs": [
+    "qiskit-qiskit-tutorial",
+    "qosf-os-quantum-software",
     "0tt3r-quac",
     "adamisntdead-qusimpy",
     "aniabrown-quest",
-    "bbn-q-pysimulator",
-    "cda-tum-mqt-ddsim",
-    "dillanchang-qocs"
+    "bbn-q-pysimulator"
   ]
 }

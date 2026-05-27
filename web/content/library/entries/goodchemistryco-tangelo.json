@@ -4,7 +4,7 @@
   "name": "Tangelo",
   "title": "Tangelo",
   "repoUrl": "https://github.com/goodchemistryco/Tangelo",
-  "homepageUrl": null,
+  "homepageUrl": "https://sandbox-quantum.github.io/Tangelo/",
   "category": {
     "slug": "optimization-qubo",
     "title": "Optimization and QUBO",
@@ -25,11 +25,16 @@
     }
   ],
   "primaryLanguage": "Python",
+  "primaryLanguages": [
+    "Python",
+    "OpenQASM",
+    "Shell"
+  ],
   "license": "Apache-2.0",
-  "summary": "<p align=\"center\"> <a href=\"https://github.com/goodchemistryco/Tangelo/blob/main/LICENSE\"> <img src=\"https://img.shields.io/badge/License-Apache_2.0-green\" alt=\"license\"> </a> <img src=\"https://img.shields.io/badge/OS-Linux%20MacOS%20Windows-7373e3\" alt=\"systems\"> <a href=\"https://github.com/goodchemistryco/Tangelo/tree/develop\"> <img src=\"https://img.shields.io/badge/DevBranch-develop-yellow\" alt=\"dev_branch\"> </a> </p>",
-  "description": "<p align=\"center\"> <a href=\"https://github.com/goodchemistryco/Tangelo/blob/main/LICENSE\"> <img src=\"https://img.shields.io/badge/License-Apache_2.0-green\" alt=\"license\"> </a> <img src=\"https://img.shields.io/badge/OS-Linux%20MacOS%20Windows-7373e3\" alt=\"systems\"> <a href=\"https://github.com/goodchemistryco/Tangelo/tree/develop\"> <img src=\"https://img.shields.io/badge/DevBranch-develop-yellow\" alt=\"dev_branch\"> </a> </p>",
+  "summary": "A python package for exploring end-to-end chemistry workflows on quantum computers and simulators.",
+  "description": "A python package for exploring end-to-end chemistry workflows on quantum computers and simulators.",
   "whatItIs": [
-    "Tangelo is an open-source project in the optimization and qubo category. It is maintained by goodchemistryco and primarily looks like a Python codebase. <p align=\"center\"> <a href=\"https://github.com/goodchemistryco/Tangelo/blob/main/LICENSE\"> <img src=\"https://img.shields.io/badge/License-Apache_2.0-green\" alt=\"license\"> </a> <img src=\"https://img.shields.io/badge/OS-Linux%20MacOS%20Windows-7373e3\" alt=\"systems\"> <a href=\"https://github.com/goodchemistryco/Tangelo/tree/develop\"> <img src=\"https://img.shields.io/badge/DevBranch-develop-yellow\" alt=\"dev_branch\"> </a> </p>",
+    "Tangelo is an open-source project in the optimization and qubo category. It is maintained by goodchemistryco and primarily looks like a Python codebase. A python package for exploring end-to-end chemistry workflows on quantum computers and simulators.",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches optimization and qubo workflows in practice. The repository README emphasizes: <p align=\"center\"> <a href=\"https://github.com/goodchemistryco/Tangelo/blob/main/LICENSE\"> <img src=\"https://img.shields.io/badge/License-Apache_2.0-green\" alt=\"license\"> </a> <img src=\"https://img.shields.io/badge/OS-Linux%20MacOS%20Windows-7373e3\" alt=\"systems\"> <a href=\"https://github.com/goodchemistryco/Tangelo/tree/develop\"> <img src=\"https://img.shields.io/badge/DevBranch-develop-yellow\" alt=\"dev_branch\"> </a> </p> Tangelo is an open-source Python package maintained by SandboxAQ <https://www.sandboxaq.com/>_, focusing on the development of quantum chemistry simulation workflows on quantum computers. It was developed as an engine to accelerate..."
   ],
   "whoItsFor": "Teams exploring routing, scheduling, allocation, and other combinatorial problems that can be modeled as optimization workloads.",
@@ -40,15 +45,51 @@
   ],
   "readmeExcerpt": "<p align=\"center\"> <a href=\"https://github.com/goodchemistryco/Tangelo/blob/main/LICENSE\"> <img src=\"https://img.shields.io/badge/License-Apache_2.0-green\" alt=\"license\"> </a> <img src=\"https://img.shields.io/badge/OS-Linux%20MacOS%20Windows-7373e3\" alt=\"systems\"> <a href=\"https://github.com/goodchemistryco/Tangelo/tree/develop\"> <img src=\"https://img.shields.io/badge/DevBranch-develop-yellow\" alt=\"dev_branch\"> </a> </p> Tangelo is an open-source Python package maintained by SandboxAQ <https://www.sandboxaq.com/>_, focusing on the development of quantum chemistry simulation workflows on quantum computers. It was developed as an engine to accelerate research, and takes advantage of other popular frameworks to harness the innovation in our field.",
   "readmePath": "reference\\goodchemistryco__Tangelo\\README.rst",
+  "readmeMarkdownPath": "readmes/goodchemistryco-tangelo.md",
   "clonePath": "reference\\goodchemistryco__Tangelo",
-  "stars": 0,
-  "lastPushedAt": null,
-  "githubTopics": [],
+  "stars": 137,
+  "lastPushedAt": "2026-01-07T16:22:52Z",
+  "defaultBranch": "main",
+  "githubTopics": [
+    "chemistry",
+    "drug-design",
+    "drug-discovery",
+    "ft",
+    "nisq",
+    "quantum",
+    "quantum-algorithms",
+    "quantum-chemistry",
+    "quantum-computing"
+  ],
+  "quickstart": null,
+  "codeSamples": [],
+  "packageMeta": {},
+  "citationBibtex": null,
+  "supportedBackendSlugs": [
+    "quantumlib-cirq",
+    "quantumlib-openfermion",
+    "aws-amazon-braket-sdk-python",
+    "qiskit-qiskit",
+    "quantumlib-stim",
+    "xanaduai-pennylane",
+    "projectq-framework-projectq"
+  ],
+  "externalLinks": {
+    "paper": [
+      "https://arxiv.org/abs/2206.12424",
+      "https://arxiv.org/abs/2206.12424}"
+    ]
+  },
+  "openIssuesCount": 12,
+  "subscribersCount": 8,
+  "latestRelease": null,
+  "ownerType": "Organization",
+  "ownerUrl": "https://github.com/sandbox-quantum",
   "featured": false,
   "flagship": false,
   "qtanglRelevant": true,
   "archived": false,
-  "imagePath": null,
+  "imagePath": "/learn/monogram/goodchemistryco-tangelo.svg",
   "relatedSlugs": [
     "entropicalabs-openqaoa",
     "cda-tum-mqt-qmap",

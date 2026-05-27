@@ -4,7 +4,7 @@
   "name": "dwave-neal",
   "title": "dwave-neal",
   "repoUrl": "https://github.com/dwavesystems/dwave-neal",
-  "homepageUrl": null,
+  "homepageUrl": "https://docs.ocean.dwavesys.com/projects/neal/en/latest",
   "category": {
     "slug": "annealing-ising",
     "title": "Annealing and Ising",
@@ -21,11 +21,16 @@
     }
   ],
   "primaryLanguage": "Python",
+  "primaryLanguages": [
+    "Python",
+    "C++",
+    "C/C++"
+  ],
   "license": "Apache-2.0",
-  "summary": "A simulated annealing sampler can be used for approximate Boltzmann sampling or heuristic optimization.",
-  "description": "A simulated annealing sampler can be used for approximate Boltzmann sampling or heuristic optimization. This implementation approaches the equilibrium distribution by performing updates at a sequence of increasing beta values, `beta_schedule`, terminating at the target beta. Each spin is updated once in a fixed order per point in the beta_schedule according to a Metropolis- Hastings update. When beta is large...",
+  "summary": "An implementation of a simulated annealing sampler for general Ising model graphs in C++ with a dimod Python wrapper.",
+  "description": "An implementation of a simulated annealing sampler for general Ising model graphs in C++ with a dimod Python wrapper.",
   "whatItIs": [
-    "dwave-neal is an open-source project in the annealing and ising category. It is maintained by dwavesystems and primarily looks like a Python codebase. A simulated annealing sampler can be used for approximate Boltzmann sampling or heuristic optimization.",
+    "dwave-neal is an open-source project in the annealing and ising category. It is maintained by dwavesystems and primarily looks like a Python codebase. An implementation of a simulated annealing sampler for general Ising model graphs in C++ with a dimod Python wrapper.",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches annealing and ising workflows in practice. The repository README emphasizes: A simulated annealing sampler can be used for approximate Boltzmann sampling or heuristic optimization. This implementation approaches the equilibrium distribution by performing updates at a sequence of increasing beta values, `beta_schedule`, terminating at the target beta. Each spin is updated once in a fixed order per point in..."
   ],
   "whoItsFor": "Developers interested in Ising-model formulations, annealing workflows, and D-Wave-style solver ecosystems.",
@@ -36,15 +41,39 @@
   ],
   "readmeExcerpt": "A simulated annealing sampler can be used for approximate Boltzmann sampling or heuristic optimization. This implementation approaches the equilibrium distribution by performing updates at a sequence of increasing beta values, `beta_schedule`, terminating at the target beta. Each spin is updated once in a fixed order per point in the beta_schedule according to a Metropolis- Hastings update. When beta is large the target distribution concentrates, at equilibrium, over ground states of the model. Samples are guaranteed to match the equilibrium for long 'smooth' beta schedules. For more information, see Kirkpatrick, S.; Gelatt Jr, C. D.; Vecchi, M. P. (1983). \"Optimization by Simulated Annealing\". Science. 220 (4598): 671\u2013680",
   "readmePath": "reference\\dwavesystems__dwave-neal\\README.rst",
+  "readmeMarkdownPath": "readmes/dwavesystems-dwave-neal.md",
   "clonePath": "reference\\dwavesystems__dwave-neal",
-  "stars": 0,
-  "lastPushedAt": null,
+  "stars": 62,
+  "lastPushedAt": "2022-11-25T23:44:04Z",
+  "defaultBranch": "master",
   "githubTopics": [],
+  "quickstart": null,
+  "codeSamples": [],
+  "packageMeta": {},
+  "citationBibtex": null,
+  "supportedBackendSlugs": [
+    "dwavesystems-dimod"
+  ],
+  "externalLinks": {
+    "docs": [
+      "https://readthedocs.com/projects/d-wave-systems-dwave-neal/badge/?version=latest",
+      "https://docs.ocean.dwavesys.com/projects/neal/en/latest/?badge=latest",
+      "https://docs.ocean.dwavesys.com/en/stable/contributing.html"
+    ],
+    "pypi": [
+      "https://pypi.org/project/dwave-neal"
+    ]
+  },
+  "openIssuesCount": 5,
+  "subscribersCount": 7,
+  "latestRelease": null,
+  "ownerType": "Organization",
+  "ownerUrl": "https://github.com/dwavesystems",
   "featured": false,
   "flagship": false,
   "qtanglRelevant": false,
   "archived": false,
-  "imagePath": null,
+  "imagePath": "/learn/monogram/dwavesystems-dwave-neal.svg",
   "relatedSlugs": [
     "dwavesystems-dwave-ocean-sdk",
     "dwavesystems-dimod",

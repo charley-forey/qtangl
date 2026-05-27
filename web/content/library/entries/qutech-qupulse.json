@@ -17,11 +17,15 @@
     }
   ],
   "primaryLanguage": "Python",
-  "license": "Unknown",
-  "summary": "qupulse: A Quantum compUting PULse parametrization and SEquencing framework",
-  "description": "qupulse: A Quantum compUting PULse parametrization and SEquencing framework",
+  "primaryLanguages": [
+    "Python",
+    "Jupyter"
+  ],
+  "license": "LGPL-3.0-or-later",
+  "summary": "Quantum Computing Toolkit for Qubit Control",
+  "description": "Quantum Computing Toolkit for Qubit Control",
   "whatItIs": [
-    "qupulse is an open-source project in the pulse and control category. It is maintained by qutech and primarily looks like a Python codebase. qupulse: A Quantum compUting PULse parametrization and SEquencing framework",
+    "qupulse is an open-source project in the pulse and control category. It is maintained by qutech and primarily looks like a Python codebase. Quantum Computing Toolkit for Qubit Control",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches pulse and control workflows in practice. The repository README emphasizes: qupulse: A Quantum compUting PULse parametrization and SEquencing framework The qupulse project aims to produce a software toolkit facilitating experiments involving pulse driven state manipulation of physical qubits."
   ],
   "whoItsFor": "Hardware-adjacent developers and researchers working closer to experiments, pulse schedules, or lab orchestration.",
@@ -32,21 +36,54 @@
   ],
   "readmeExcerpt": "qupulse: A Quantum compUting PULse parametrization and SEquencing framework The qupulse project aims to produce a software toolkit facilitating experiments involving pulse driven state manipulation of physical qubits.",
   "readmePath": "reference\\qutech__qupulse\\README.md",
+  "readmeMarkdownPath": "readmes/qutech-qupulse.md",
   "clonePath": "reference\\qutech__qupulse",
-  "stars": 0,
-  "lastPushedAt": null,
+  "stars": 59,
+  "lastPushedAt": "2026-01-28T13:52:48Z",
+  "defaultBranch": "master",
   "githubTopics": [],
+  "quickstart": null,
+  "codeSamples": [],
+  "packageMeta": {
+    "name": "qupulse",
+    "version": "6.0",
+    "requiresPython": ">=3.10",
+    "dependencies": [
+      "frozendict",
+      "lazy_loader",
+      "numpy",
+      "sympy",
+      "gmpy2"
+    ]
+  },
+  "citationBibtex": null,
+  "supportedBackendSlugs": [],
+  "externalLinks": {
+    "docs": [
+      "https://readthedocs.org/projects/qupulse/badge/?version=latest",
+      "http://qupulse.readthedocs.org/en/latest/?badge=latest",
+      "https://qupulse.readthedocs.io/en/latest/"
+    ],
+    "pypi": [
+      "https://pypi.org/project/qupulse/"
+    ]
+  },
+  "openIssuesCount": 77,
+  "subscribersCount": 8,
+  "latestRelease": null,
+  "ownerType": "Organization",
+  "ownerUrl": "https://github.com/qutech",
   "featured": false,
   "flagship": false,
   "qtanglRelevant": false,
   "archived": false,
-  "imagePath": null,
+  "imagePath": "/learn/monogram/qutech-qupulse.svg",
   "relatedSlugs": [
     "m-labs-artiq",
-    "bbn-q-pyqgl2",
-    "bbn-q-pyqlab",
-    "bbn-q-qgl",
-    "bbn-q-qlab",
-    "bbn-q-qlab-jl"
+    "microsoft-quantumkatas",
+    "qiskit-qiskit",
+    "quantumlib-cirq",
+    "xanaduai-pennylane",
+    "bbn-q-pyqgl2"
   ]
 }

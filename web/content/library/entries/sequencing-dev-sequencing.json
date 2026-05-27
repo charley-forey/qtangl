@@ -4,7 +4,7 @@
   "name": "sequencing",
   "title": "sequencing",
   "repoUrl": "https://github.com/sequencing-dev/sequencing",
-  "homepageUrl": null,
+  "homepageUrl": "https://sequencing.readthedocs.io",
   "category": {
     "slug": "pulse-control",
     "title": "Pulse and control",
@@ -17,11 +17,15 @@
     }
   ],
   "primaryLanguage": "Python",
-  "license": "BSD",
-  "summary": "`sequencing is a Python package for simulating realistic quantum control sequences using QuTiP.",
-  "description": "`sequencing is a Python package for simulating realistic quantum control sequences using QuTiP. Built for researchers and quantum engineers, sequencing` provides an intuitive framework for constructing models of quantum systems composed of many modes and generating complex time-dependent control Hamiltonians for master equation simulations.",
+  "primaryLanguages": [
+    "Python",
+    "Jupyter"
+  ],
+  "license": "BSD-3-Clause",
+  "summary": "Simulate realistic quantum control sequences using QuTiP",
+  "description": "Simulate realistic quantum control sequences using QuTiP",
   "whatItIs": [
-    "sequencing is an open-source project in the pulse and control category. It is maintained by sequencing-dev and primarily looks like a Python codebase. `sequencing is a Python package for simulating realistic quantum control sequences using QuTiP.",
+    "sequencing is an open-source project in the pulse and control category. It is maintained by sequencing-dev and primarily looks like a Python codebase. Simulate realistic quantum control sequences using QuTiP",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches pulse and control workflows in practice. The repository README emphasizes: `sequencing is a Python package for simulating realistic quantum control sequences using QuTiP. Built for researchers and quantum engineers, sequencing` provides an intuitive framework for constructing models of quantum systems composed of many modes and generating complex time-dependent control Hamiltonians for master equation simulations. The documentation for sequencing..."
   ],
   "whoItsFor": "Hardware-adjacent developers and researchers working closer to experiments, pulse schedules, or lab orchestration.",
@@ -32,21 +36,51 @@
   ],
   "readmeExcerpt": "`sequencing is a Python package for simulating realistic quantum control sequences using QuTiP. Built for researchers and quantum engineers, sequencing` provides an intuitive framework for constructing models of quantum systems composed of many modes and generating complex time-dependent control Hamiltonians for master equation simulations. The documentation for sequencing is available at: sequencing.readthedocs.io",
   "readmePath": "reference\\sequencing-dev__sequencing\\README.md",
+  "readmeMarkdownPath": "readmes/sequencing-dev-sequencing.md",
   "clonePath": "reference\\sequencing-dev__sequencing",
-  "stars": 0,
-  "lastPushedAt": null,
-  "githubTopics": [],
+  "stars": 15,
+  "lastPushedAt": "2022-09-09T17:25:30Z",
+  "defaultBranch": "main",
+  "githubTopics": [
+    "python",
+    "quantum",
+    "quantum-circuit",
+    "quantum-computing",
+    "quantum-information",
+    "quantum-mechanics",
+    "qubits",
+    "qutip",
+    "superconducting-qubits"
+  ],
+  "quickstart": null,
+  "codeSamples": [],
+  "packageMeta": {},
+  "citationBibtex": null,
+  "supportedBackendSlugs": [],
+  "externalLinks": {
+    "docs": [
+      "https://readthedocs.org/projects/sequencing/badge/?version=latest",
+      "https://sequencing.readthedocs.io/en/latest/?badge=latest",
+      "https://sequencing.readthedocs.io/",
+      "https://sequencing.readthedocs.io/en/latest/installation.html"
+    ]
+  },
+  "openIssuesCount": 6,
+  "subscribersCount": 3,
+  "latestRelease": null,
+  "ownerType": "Organization",
+  "ownerUrl": "https://github.com/sequencing-dev",
   "featured": false,
   "flagship": false,
   "qtanglRelevant": false,
   "archived": false,
-  "imagePath": null,
+  "imagePath": "/learn/monogram/sequencing-dev-sequencing.svg",
   "relatedSlugs": [
     "m-labs-artiq",
-    "bbn-q-pyqgl2",
-    "bbn-q-pyqlab",
-    "bbn-q-qgl",
-    "bbn-q-qlab",
-    "bbn-q-qlab-jl"
+    "microsoft-quantumkatas",
+    "qiskit-qiskit",
+    "quantumlib-cirq",
+    "xanaduai-pennylane",
+    "bbn-q-pyqgl2"
   ]
 }

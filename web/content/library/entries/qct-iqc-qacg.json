@@ -20,12 +20,15 @@
       "title": "How to start writing quantum code: an honest path"
     }
   ],
-  "primaryLanguage": "LaTeX",
-  "license": "BSD",
-  "summary": "Currently it is a collection of Haskell modules that generate various circuits.",
-  "description": "Currently it is a collection of Haskell modules that generate various circuits. When finished it should provide a command line utility from which various circuits can be requested by providing a name and parameters",
+  "primaryLanguage": "Haskell",
+  "primaryLanguages": [
+    "LaTeX"
+  ],
+  "license": "BSD-3-Clause",
+  "summary": "Quantum Arithmetic Circuit Generator",
+  "description": "Quantum Arithmetic Circuit Generator",
   "whatItIs": [
-    "qacg is an open-source project in the compilers and languages category. It is maintained by QCT-IQC and primarily looks like a LaTeX codebase. Currently it is a collection of Haskell modules that generate various circuits.",
+    "qacg is an open-source project in the compilers and languages category. It is maintained by QCT-IQC and primarily looks like a Haskell codebase. Quantum Arithmetic Circuit Generator",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches compilers and languages workflows in practice. The repository README emphasizes: Currently it is a collection of Haskell modules that generate various circuits. When finished it should provide a command line utility from which various circuits can be requested by providing a name and parameters"
   ],
   "whoItsFor": "Developers who want to understand the representations and compilers that sit between high-level code and runnable circuits.",
@@ -36,21 +39,34 @@
   ],
   "readmeExcerpt": "Currently it is a collection of Haskell modules that generate various circuits. When finished it should provide a command line utility from which various circuits can be requested by providing a name and parameters",
   "readmePath": "reference\\QCT-IQC__qacg\\README",
+  "readmeMarkdownPath": "readmes/qct-iqc-qacg.md",
   "clonePath": "reference\\QCT-IQC__qacg",
-  "stars": 0,
-  "lastPushedAt": null,
+  "stars": 6,
+  "lastPushedAt": "2013-08-22T06:53:49Z",
+  "defaultBranch": "master",
   "githubTopics": [],
+  "quickstart": null,
+  "codeSamples": [],
+  "packageMeta": {},
+  "citationBibtex": null,
+  "supportedBackendSlugs": [],
+  "externalLinks": {},
+  "openIssuesCount": 0,
+  "subscribersCount": 3,
+  "latestRelease": null,
+  "ownerType": "Organization",
+  "ownerUrl": "https://github.com/QCT-IQC",
   "featured": false,
   "flagship": false,
   "qtanglRelevant": false,
   "archived": false,
-  "imagePath": null,
+  "imagePath": "/learn/monogram/qct-iqc-qacg.svg",
   "relatedSlugs": [
     "cqcl-tket",
     "nvidia-cuda-quantum",
-    "quantomatic-pyzx",
-    "avalon-lang-avaloni",
-    "aviggiano-qcl",
-    "dabacon-qsel"
+    "microsoft-quantumkatas",
+    "qiskit-openqasm",
+    "qiskit-qiskit",
+    "quantomatic-pyzx"
   ]
 }

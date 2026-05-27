@@ -17,11 +17,14 @@
     }
   ],
   "primaryLanguage": "Julia",
+  "primaryLanguages": [
+    "Julia"
+  ],
   "license": "Apache-2.0",
-  "summary": "This is a package that provides basic routines to perform quantum tomography of finite dimensional systems.",
-  "description": "This is a package that provides basic routines to perform quantum tomography of finite dimensional systems.",
+  "summary": "Julia package to perform quantum state and process tomography",
+  "description": "Julia package to perform quantum state and process tomography",
   "whatItIs": [
-    "QuantumTomography.jl is an open-source project in the visualization and tomography category. It is maintained by BBN-Q and primarily looks like a Julia codebase. This is a package that provides basic routines to perform quantum tomography of finite dimensional systems.",
+    "QuantumTomography.jl is an open-source project in the visualization and tomography category. It is maintained by BBN-Q and primarily looks like a Julia codebase. Julia package to perform quantum state and process tomography",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches visualization and tomography workflows in practice. The repository README emphasizes: This is a package that provides basic routines to perform quantum tomography of finite dimensional systems. Given the estimated means and variances of the observations, tomography proceeds by finding the state, process, or measurements that optimize some figure of merit -- either the likelihood or the \u03c7\u00b2 statistic..."
   ],
   "whoItsFor": "People who learn best by seeing state structure, measurement results, or circuit behavior laid out visually.",
@@ -32,21 +35,34 @@
   ],
   "readmeExcerpt": "This is a package that provides basic routines to perform quantum tomography of finite dimensional systems. Given the estimated means and variances of the observations, tomography proceeds by finding the state, process, or measurements that optimize some figure of merit -- either the likelihood or the \u03c7\u00b2 statistic -- often with the additional constraint the reconstruction be physical (e.g., correspond to a valid quantum mechanical object).",
   "readmePath": "reference\\BBN-Q__QuantumTomography.jl\\README.md",
+  "readmeMarkdownPath": "readmes/bbn-q-quantumtomography-jl.md",
   "clonePath": "reference\\BBN-Q__QuantumTomography.jl",
-  "stars": 0,
-  "lastPushedAt": null,
+  "stars": 34,
+  "lastPushedAt": "2026-04-16T20:19:50Z",
+  "defaultBranch": "master",
   "githubTopics": [],
+  "quickstart": null,
+  "codeSamples": [],
+  "packageMeta": {},
+  "citationBibtex": null,
+  "supportedBackendSlugs": [],
+  "externalLinks": {},
+  "openIssuesCount": 6,
+  "subscribersCount": 14,
+  "latestRelease": null,
+  "ownerType": "Organization",
+  "ownerUrl": "https://github.com/BBN-Q",
   "featured": false,
   "flagship": false,
   "qtanglRelevant": false,
   "archived": false,
-  "imagePath": null,
+  "imagePath": "/learn/monogram/bbn-q-quantumtomography-jl.svg",
   "relatedSlugs": [
+    "microsoft-quantumkatas",
+    "qiskit-qiskit",
+    "quantumlib-cirq",
+    "xanaduai-pennylane",
     "artiste-qb-net-quantum-fog",
-    "bbn-q-quantuminfo-jl",
-    "bbn-q-quince",
-    "qct-iqc-qcviewer",
-    "ziofil-quantumgraphs",
-    "aws-amazon-braket-sdk-python"
+    "bbn-q-quantuminfo-jl"
   ]
 }

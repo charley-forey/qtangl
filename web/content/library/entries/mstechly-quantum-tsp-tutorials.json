@@ -20,12 +20,16 @@
       "title": "How to start writing quantum code: an honest path"
     }
   ],
-  "primaryLanguage": "Python",
+  "primaryLanguage": "Jupyter Notebook",
+  "primaryLanguages": [
+    "Python",
+    "Jupyter"
+  ],
   "license": "Apache-2.0",
-  "summary": "This repository contains code with tutorials on how to approach optimization problems using quantum computing.",
-  "description": "This repository contains code with tutorials on how to approach optimization problems using quantum computing. I used Travelling Salesman Problem for this tutorials, though the idea is, that after finishing it, you should be able to implement any similar optimization problem.",
+  "summary": "This repository contains code with tutorials of how to approach optimization problems using quantum computing.",
+  "description": "This repository contains code with tutorials of how to approach optimization problems using quantum computing.",
   "whatItIs": [
-    "quantum_tsp_tutorials is an open-source project in the games and learning category. It is maintained by mstechly and primarily looks like a Python codebase. This repository contains code with tutorials on how to approach optimization problems using quantum computing.",
+    "quantum_tsp_tutorials is an open-source project in the games and learning category. It is maintained by mstechly and primarily looks like a Jupyter Notebook codebase. This repository contains code with tutorials of how to approach optimization problems using quantum computing.",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches games and learning workflows in practice. The repository README emphasizes: This repository contains code with tutorials on how to approach optimization problems using quantum computing. I used Travelling Salesman Problem for this tutorials, though the idea is, that after finishing it, you should be able to implement any similar optimization problem. I have created this tutorial with specific..."
   ],
   "whoItsFor": "Beginners, educators, and curious developers who want a more approachable path into quantum concepts.",
@@ -36,21 +40,57 @@
   ],
   "readmeExcerpt": "This repository contains code with tutorials on how to approach optimization problems using quantum computing. I used Travelling Salesman Problem for this tutorials, though the idea is, that after finishing it, you should be able to implement any similar optimization problem. I have created this tutorial with specific audience in mind. It means people, who: are curious about quantum computing, don't have any background in quantum physics, have some programming experience, really want to learn this topic.",
   "readmePath": "reference\\mstechly__quantum_tsp_tutorials\\README.md",
+  "readmeMarkdownPath": "readmes/mstechly-quantum-tsp-tutorials.md",
   "clonePath": "reference\\mstechly__quantum_tsp_tutorials",
-  "stars": 0,
-  "lastPushedAt": null,
-  "githubTopics": [],
+  "stars": 107,
+  "lastPushedAt": "2023-06-25T22:17:11Z",
+  "defaultBranch": "master",
+  "githubTopics": [
+    "optimization-problem",
+    "quantum-computing",
+    "tutorial"
+  ],
+  "quickstart": null,
+  "codeSamples": [
+    {
+      "title": "01 Introduction To Tsp",
+      "language": "python",
+      "source": "def create_cities(N):\n    \"\"\"\n    Creates an array of random points of size N.\n    \"\"\"\n    cities = []\n    for i in range(N):\n        cities.append(np.random.rand(2) * 10)\n    return np.array(cities)",
+      "path": "tutorials/01_Introduction_to_TSP.ipynb"
+    },
+    {
+      "title": "02 Qaoa",
+      "language": "python",
+      "source": "import numpy as np\nfrom grove.pyqaoa.maxcut_qaoa import maxcut_qaoa\nimport pyquil.api as api\nqvm_connection = api.QVMConnection()",
+      "path": "tutorials/02_QAOA.ipynb"
+    },
+    {
+      "title": "03 Naive Approach",
+      "language": "python",
+      "source": "import numpy as np\n%matplotlib inline\n\n\ndef points_order_to_binary_state(points_order):\n    \"\"\"\n    Transforms the order of points from the standard representation: [0, 1, 2],\n    to the binary one: [1,0,0,0,1,0,0,0,1]\n    \"\"\"\n    number_of_points = len(points_order)\n    binary_state = np.zeros((len(points_order))**2)\n    for j in range(len(points_order)):\n        p = points_order[j]\n        binary_state[(number_of_points) * (j) + (p)] = 1\n    return binary_state\n\ndef binary_state_to_points_order(binary_state):\n    \"\"\"\n    Transforms the the order of points from the binary representation: [1,0,0,0,1,0,0,0,1],\n    to the binary one: [0, 1, 2]\n    \"\"\"\n    points_order = []\n    number_of_points = int(np.sqrt(len(binary_state)))\n    for p in range(number_of_points):\n        for j in range(number_of_points):\n            if binary_state[(number_of_points) * p + j] == 1:\n                points_order.append(j)\n    return points_order",
+      "path": "tutorials/03_Naive_approach.ipynb"
+    }
+  ],
+  "packageMeta": {},
+  "citationBibtex": null,
+  "supportedBackendSlugs": [],
+  "externalLinks": {},
+  "openIssuesCount": 1,
+  "subscribersCount": 4,
+  "latestRelease": null,
+  "ownerType": "User",
+  "ownerUrl": "https://github.com/mstechly",
   "featured": false,
   "flagship": false,
   "qtanglRelevant": false,
   "archived": false,
-  "imagePath": null,
+  "imagePath": "/learn/monogram/mstechly-quantum-tsp-tutorials.svg",
   "relatedSlugs": [
     "microsoft-quantumkatas",
     "strilanc-quirk",
+    "qiskit-qiskit",
+    "quantumlib-cirq",
     "stared-quantum-game",
-    "decodoku-a-game-to-benchmark-quantum-computers",
-    "decodoku-battleships-with-complementary-measurements",
-    "desireevl-quantum-catsweeper"
+    "xanaduai-pennylane"
   ]
 }

@@ -17,11 +17,16 @@
     }
   ],
   "primaryLanguage": "Python",
+  "primaryLanguages": [
+    "Python",
+    "Jupyter",
+    "Shell"
+  ],
   "license": "Apache-2.0",
-  "summary": "Quantum Gate Language (QGL) is a domain specific language embedded in python for specifying pulse sequences.",
-  "description": "Quantum Gate Language (QGL) is a domain specific language embedded in python for specifying pulse sequences.",
+  "summary": "Quantum Gate Language (QGL) is a domain specific language embedded in python for specifying quantum gate sequences.",
+  "description": "Quantum Gate Language (QGL) is a domain specific language embedded in python for specifying quantum gate sequences.",
   "whatItIs": [
-    "QGL is an open-source project in the pulse and control category. It is maintained by BBN-Q and primarily looks like a Python codebase. Quantum Gate Language (QGL) is a domain specific language embedded in python for specifying pulse sequences.",
+    "QGL is an open-source project in the pulse and control category. It is maintained by BBN-Q and primarily looks like a Python codebase. Quantum Gate Language (QGL) is a domain specific language embedded in python for specifying quantum gate sequences.",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches pulse and control workflows in practice. The repository README emphasizes: Quantum Gate Language (QGL) is a domain specific language embedded in python for specifying pulse sequences. Our \"getting started\" documentation is published online from the local file. This documentation includes dependency, installation and basic programming information. The documentation is organized into the following sections:"
   ],
   "whoItsFor": "Hardware-adjacent developers and researchers working closer to experiments, pulse schedules, or lab orchestration.",
@@ -32,21 +37,36 @@
   ],
   "readmeExcerpt": "Quantum Gate Language (QGL) is a domain specific language embedded in python for specifying pulse sequences. Our \"getting started\" documentation is published online from the local file. This documentation includes dependency, installation and basic programming information. The documentation is organized into the following sections:",
   "readmePath": "reference\\BBN-Q__QGL\\README.md",
+  "readmeMarkdownPath": "readmes/bbn-q-qgl.md",
   "clonePath": "reference\\BBN-Q__QGL",
-  "stars": 0,
-  "lastPushedAt": null,
-  "githubTopics": [],
+  "stars": 33,
+  "lastPushedAt": "2026-05-21T18:35:58Z",
+  "defaultBranch": "develop",
+  "githubTopics": [
+    "quantum-computing"
+  ],
+  "quickstart": null,
+  "codeSamples": [],
+  "packageMeta": {},
+  "citationBibtex": null,
+  "supportedBackendSlugs": [],
+  "externalLinks": {},
+  "openIssuesCount": 36,
+  "subscribersCount": 12,
+  "latestRelease": null,
+  "ownerType": "Organization",
+  "ownerUrl": "https://github.com/BBN-Q",
   "featured": false,
   "flagship": false,
   "qtanglRelevant": false,
   "archived": false,
-  "imagePath": null,
+  "imagePath": "/learn/monogram/bbn-q-qgl.svg",
   "relatedSlugs": [
     "m-labs-artiq",
-    "bbn-q-pyqgl2",
-    "bbn-q-pyqlab",
-    "bbn-q-qlab",
-    "bbn-q-qlab-jl",
-    "indisoluble-swiftquantumcomputing"
+    "microsoft-quantumkatas",
+    "qiskit-qiskit",
+    "quantumlib-cirq",
+    "xanaduai-pennylane",
+    "bbn-q-pyqgl2"
   ]
 }

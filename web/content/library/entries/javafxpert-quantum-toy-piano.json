@@ -20,12 +20,13 @@
       "title": "How to start writing quantum code: an honest path"
     }
   ],
-  "primaryLanguage": "Mixed",
-  "license": "Unknown",
+  "primaryLanguage": null,
+  "primaryLanguages": [],
+  "license": null,
   "summary": "quantum-toy-piano is an open-source quantum project.",
   "description": "",
   "whatItIs": [
-    "quantum-toy-piano is an open-source project in the general-purpose sdks category. It is maintained by JavaFXpert and primarily looks like a Mixed codebase. quantum-toy-piano is an open-source quantum project.",
+    "quantum-toy-piano is an open-source project in the general-purpose sdks category. It is maintained by JavaFXpert and primarily looks like a multi-language codebase. quantum-toy-piano is an open-source quantum project.",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches general-purpose sdks workflows in practice."
   ],
   "whoItsFor": "Developers who want a broad entry point for building circuits, experimenting with algorithms, and integrating quantum workflows into larger applications.",
@@ -36,21 +37,34 @@
   ],
   "readmeExcerpt": "",
   "readmePath": null,
+  "readmeMarkdownPath": "readmes/javafxpert-quantum-toy-piano.md",
   "clonePath": null,
   "stars": 0,
   "lastPushedAt": null,
+  "defaultBranch": "main",
   "githubTopics": [],
+  "quickstart": null,
+  "codeSamples": [],
+  "packageMeta": {},
+  "citationBibtex": null,
+  "supportedBackendSlugs": [],
+  "externalLinks": {},
+  "openIssuesCount": null,
+  "subscribersCount": null,
+  "latestRelease": null,
+  "ownerType": null,
+  "ownerUrl": null,
   "featured": false,
   "flagship": false,
   "qtanglRelevant": false,
   "archived": false,
-  "imagePath": null,
+  "imagePath": "/learn/monogram/javafxpert-quantum-toy-piano.svg",
   "relatedSlugs": [
     "qiskit-qiskit",
     "quantumlib-cirq",
     "xanaduai-pennylane",
-    "projectq-framework-projectq",
+    "qiskit-qiskit-terra",
     "quantumbfs-yao-jl",
-    "arlineq-arline-benchmarks"
+    "microsoft-quantumkatas"
   ]
 }

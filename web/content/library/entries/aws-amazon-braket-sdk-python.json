@@ -4,7 +4,7 @@
   "name": "amazon-braket-sdk-python",
   "title": "amazon-braket-sdk-python",
   "repoUrl": "https://github.com/aws/amazon-braket-sdk-python",
-  "homepageUrl": null,
+  "homepageUrl": "https://aws.amazon.com/braket/",
   "category": {
     "slug": "cloud-interop",
     "title": "Cloud and interoperability",
@@ -21,11 +21,14 @@
     }
   ],
   "primaryLanguage": "Python",
+  "primaryLanguages": [
+    "Python"
+  ],
   "license": "Apache-2.0",
-  "summary": "The Amazon Braket Python SDK is an open source library that provides a framework that you can use to interact with quantum computing hardware devices through Amazon Braket.",
-  "description": "The Amazon Braket Python SDK is an open source library that provides a framework that you can use to interact with quantum computing hardware devices through Amazon Braket.",
+  "summary": "A Python SDK for interacting with quantum devices on Amazon Braket",
+  "description": "A Python SDK for interacting with quantum devices on Amazon Braket",
   "whatItIs": [
-    "amazon-braket-sdk-python is an open-source project in the cloud and interoperability category. It is maintained by aws and primarily looks like a Python codebase. The Amazon Braket Python SDK is an open source library that provides a framework that you can use to interact with quantum computing hardware devices through Amazon Braket.",
+    "amazon-braket-sdk-python is an open-source project in the cloud and interoperability category. It is maintained by aws and primarily looks like a Python codebase. A Python SDK for interacting with quantum devices on Amazon Braket",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches cloud and interoperability workflows in practice. The repository README emphasizes: The Amazon Braket Python SDK is an open source library that provides a framework that you can use to interact with quantum computing hardware devices through Amazon Braket. Prerequisites Before you begin working with the Amazon Braket SDK, make sure that you've installed or configured the following prerequisites."
   ],
   "whoItsFor": "Teams that need to connect multiple providers, runtimes, or software ecosystems instead of staying in one stack.",
@@ -36,21 +39,89 @@
   ],
   "readmeExcerpt": "The Amazon Braket Python SDK is an open source library that provides a framework that you can use to interact with quantum computing hardware devices through Amazon Braket. Prerequisites Before you begin working with the Amazon Braket SDK, make sure that you've installed or configured the following prerequisites.",
   "readmePath": "reference\\aws__amazon-braket-sdk-python\\README.md",
+  "readmeMarkdownPath": "readmes/aws-amazon-braket-sdk-python.md",
   "clonePath": "reference\\aws__amazon-braket-sdk-python",
-  "stars": 0,
-  "lastPushedAt": null,
-  "githubTopics": [],
+  "stars": 367,
+  "lastPushedAt": "2026-05-27T21:29:10Z",
+  "defaultBranch": "main",
+  "githubTopics": [
+    "amazon-braket",
+    "amazon-web-services",
+    "python",
+    "quantum",
+    "quantum-computing"
+  ],
+  "quickstart": {
+    "language": "python",
+    "source": "import boto3\nfrom braket.aws import AwsDevice\nfrom braket.circuits import Circuit\nfrom braket.devices import Devices\n\ndevice = AwsDevice(Devices.Amazon.SV1)\n\nbell = Circuit().h(0).cnot(0, 1)\ntask = device.run(bell, shots=100)\nprint(task.result().measurement_counts)"
+  },
+  "codeSamples": [
+    {
+      "title": "Ahs Lattice Factory",
+      "language": "python",
+      "source": "#\n# Licensed under the Apache License, Version 2.0 (the \"License\"). You\n# may not use this file except in compliance with the License. A copy of\n# the License is located at\n#\n#     http://aws.amazon.com/apache2.0/\n#\n# or in the \"license\" file accompanying this file. This file is\n# distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF\n# ANY KIND, either express or implied. See the License for the specific\n# language governing permissions and limitations under the License.\n\"\"\"\nDemonstration of AHS AtomArrangement factory methods.\nThis example shows how to use the new factory methods to create common\nlattice arrangements for Analog Hamiltonian Simulation (AHS).\n\"\"\"\nfrom braket.ahs import AtomArrangement, Canvas, SiteType\n# Define a canvas (boundary region) where atoms can be placed\ncanvas_boundary = [\n    (0, 0),  # Bottom-left corner\n    (30e-6, 0),  # Bottom-right corner\n    (30e-6, 30e-6),  # Top-right corner\n    (0, 30e-6),  # Top-left corner\n]\ncanvas = Canvas(canvas_boundary)\nprint(\"AHS AtomArrangement Factory Methods Demo\")\nprint(\"=\" * 50)\n# 1. Square Lattice\nprint(\"\\n1. Square Lattice:\")\nspacing = 5e-6\nsquare_arrangement = AtomArrangement.from_square_lattice(spacing, canvas)\nprint(f\"   Created {len(square_arrangement)} atoms in square lattice\")\nprint(f\"   Spacing: {spacing * 1e6:.1f} \u03bcm\")\n# 2. Rectangular Lattice\nprint(\"\\n2. Rectangular Lattice:\")\nspacing_x = 4e-6\nspacing_y = 6e-6\nrect_arrangement = AtomArrangement.from_rectangular_lattice(spacing_x, spacing_y, canvas)\nprint(f\"   Created {len(rect_arrangement)} atoms in rectangular lattice\")\nprint(f\"   X spacing: {spacing_x * 1e6:.1f} \u03bcm, Y spacing: {spacing_y * 1e6:.1f} \u03bcm\")",
+      "path": "examples/ahs_lattice_factory.py"
+    },
+    {
+      "title": "Bell",
+      "language": "python",
+      "source": "#\n# Licensed under the Apache License, Version 2.0 (the \"License\"). You\n# may not use this file except in compliance with the License. A copy of\n# the License is located at\n#\n#     http://aws.amazon.com/apache2.0/\n#\n# or in the \"license\" file accompanying this file. This file is\n# distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF\n# ANY KIND, either express or implied. See the License for the specific\n# language governing permissions and limitations under the License.\nfrom braket.aws import AwsDevice\nfrom braket.circuits import Circuit\nfrom braket.devices import Devices\ndevice = AwsDevice(Devices.Amazon.SV1)\n# https://wikipedia.org/wiki/Bell_state\nbell = Circuit().h(0).cnot(0, 1)\ntask = device.run(bell, shots=100)\nprint(task.result().measurement_counts)",
+      "path": "examples/bell.py"
+    },
+    {
+      "title": "Bell Result Types",
+      "language": "python",
+      "source": "#\n# Licensed under the Apache License, Version 2.0 (the \"License\"). You\n# may not use this file except in compliance with the License. A copy of\n# the License is located at\n#\n#     http://aws.amazon.com/apache2.0/\n#\n# or in the \"license\" file accompanying this file. This file is\n# distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF\n# ANY KIND, either express or implied. See the License for the specific\n# language governing permissions and limitations under the License.\nfrom braket.circuits import Circuit, observables\nfrom braket.devices import LocalSimulator\ndevice = LocalSimulator()\nprint(\"Example for shots=0\")\n# Result types can be requested in the circuit\n# Example of result types for shots=0\nbell = (\n    Circuit()\n    .h(0)\n    .cnot(0, 1)\n    .probability(target=[0])\n    .expectation(observable=observables.Z(1))\n    .amplitude(state=[\"00\"])\n    .state_vector()\n)\n# State vector and amplitude can only be requested when shots=0 for a simulator\n# When shots=0 for a simulator, probability, expectation, variance are the exact values,\n# not calculated from measurements\n# Users cannot request Sample as a result when shots=0\nresult = device.run(bell).result()\nprint(\"Marginal probability for target 0 in computational basis:\", result.values[0])\nprint(\"Expectation of target 1 in the computational basis:\", result.values[1])\nprint(\"Amplitude of state 00:\", result.values[2])\nprint(\"State vector:\", result.values[3])\nprint(\"\\nExample for shots>0\")\n# Example of result types for shots > 0\nbell = (\n    Circuit()\n    .h(0)",
+      "path": "examples/bell_result_types.py"
+    }
+  ],
+  "packageMeta": {
+    "name": "amazon-braket-sdk",
+    "version": "py311",
+    "requiresPython": ">= 3.11",
+    "dependencies": [
+      "amazon-braket-schemas",
+      "amazon-braket-default-simulator",
+      "oqpy",
+      "backoff",
+      "boltons",
+      "boto3",
+      "cloudpickle",
+      "nest-asyncio",
+      "networkx",
+      "numpy",
+      "openpulse",
+      "openqasm3"
+    ]
+  },
+  "citationBibtex": null,
+  "supportedBackendSlugs": [
+    "aws-amazon-braket-sdk-python"
+  ],
+  "externalLinks": {
+    "docs": [
+      "https://amazon-braket-sdk-python.readthedocs.io",
+      "https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_manage-attach-detach.html",
+      "https://boto3.amazonaws.com/v1/documentation/api/latest/guide/quickstart.html",
+      "https://docs.aws.amazon.com/braket/latest/developerguide/braket-devices.html"
+    ]
+  },
+  "openIssuesCount": 34,
+  "subscribersCount": 38,
+  "latestRelease": null,
+  "ownerType": "Organization",
+  "ownerUrl": "https://github.com/amazon-braket",
   "featured": true,
   "flagship": true,
   "qtanglRelevant": true,
   "archived": false,
-  "imagePath": "/learn/flagship/aws-amazon-braket-sdk-python.png",
+  "imagePath": "/learn/og/aws-amazon-braket-sdk-python.png",
   "relatedSlugs": [
     "ornl-qci-xacc",
     "qbraid-qbraid",
-    "dwavesystems-dwave-ocean-sdk",
-    "entropicalabs-openqaoa",
-    "cda-tum-mqt-qmap",
-    "dwavesystems-dimod"
+    "microsoft-quantumkatas",
+    "qiskit-qiskit",
+    "quantumlib-cirq",
+    "xanaduai-pennylane"
   ]
 }

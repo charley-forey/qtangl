@@ -4,7 +4,7 @@
   "name": "dwave_embedding_utilities",
   "title": "dwave_embedding_utilities",
   "repoUrl": "https://github.com/dwavesystems/dwave_embedding_utilities",
-  "homepageUrl": null,
+  "homepageUrl": "http://d-wave-embedding-utilities.readthedocs.io/en/latest/",
   "category": {
     "slug": "annealing-ising",
     "title": "Annealing and Ising",
@@ -21,12 +21,15 @@
     }
   ],
   "primaryLanguage": "Python",
+  "primaryLanguages": [
+    "Python"
+  ],
   "license": "Apache-2.0",
-  "summary": "This package provides utilities for mapping between source and target models.",
-  "description": "This package provides utilities for mapping between source and target models.",
+  "summary": "Provides utilities for mapping between source and target models.",
+  "description": "Provides utilities for mapping between source and target models.",
   "whatItIs": [
-    "dwave_embedding_utilities is an open-source project in the annealing and ising category. It is maintained by dwavesystems and primarily looks like a Python codebase. This package provides utilities for mapping between source and target models.",
-    "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches annealing and ising workflows in practice. The repository README emphasizes: This package provides utilities for mapping between source and target models. Released under the Apache License 2.0. See LICENSE_"
+    "dwave_embedding_utilities is an open-source project in the annealing and ising category. It is maintained by dwavesystems and primarily looks like a Python codebase. Provides utilities for mapping between source and target models.",
+    "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches annealing and ising workflows in practice. The repository README emphasizes: This package provides utilities for mapping between source and target models. Released under the Apache License 2.0. See LICENSE_ The repository also appears to be archival or no longer actively maintained, which matters when evaluating it for current production use."
   ],
   "whoItsFor": "Developers interested in Ising-model formulations, annealing workflows, and D-Wave-style solver ecosystems.",
   "whatYouCanBuild": [
@@ -36,15 +39,35 @@
   ],
   "readmeExcerpt": "This package provides utilities for mapping between source and target models. Released under the Apache License 2.0. See LICENSE_",
   "readmePath": "reference\\dwavesystems__dwave_embedding_utilities\\README.rst",
+  "readmeMarkdownPath": "readmes/dwavesystems-dwave-embedding-utilities.md",
   "clonePath": "reference\\dwavesystems__dwave_embedding_utilities",
-  "stars": 0,
-  "lastPushedAt": null,
+  "stars": 11,
+  "lastPushedAt": "2018-03-06T00:43:30Z",
+  "defaultBranch": "master",
   "githubTopics": [],
+  "quickstart": null,
+  "codeSamples": [],
+  "packageMeta": {},
+  "citationBibtex": null,
+  "supportedBackendSlugs": [
+    "dwavesystems-dimod"
+  ],
+  "externalLinks": {
+    "docs": [
+      "https://readthedocs.org/projects/d-wave-embedding-utilities/badge/?version=latest",
+      "http://d-wave-embedding-utilities.readthedocs.io/en/latest/?badge=latest"
+    ]
+  },
+  "openIssuesCount": 4,
+  "subscribersCount": 3,
+  "latestRelease": null,
+  "ownerType": "Organization",
+  "ownerUrl": "https://github.com/dwavesystems",
   "featured": false,
   "flagship": false,
   "qtanglRelevant": false,
-  "archived": false,
-  "imagePath": null,
+  "archived": true,
+  "imagePath": "/learn/monogram/dwavesystems-dwave-embedding-utilities.svg",
   "relatedSlugs": [
     "dwavesystems-dwave-ocean-sdk",
     "dwavesystems-dimod",

@@ -4,7 +4,7 @@
   "name": "mqt-bench",
   "title": "mqt-bench",
   "repoUrl": "https://github.com/cda-tum/mqt-bench",
-  "homepageUrl": null,
+  "homepageUrl": "https://mqt-bench.app/",
   "category": {
     "slug": "benchmarks-analysis",
     "title": "Benchmarks and analysis",
@@ -17,11 +17,14 @@
     }
   ],
   "primaryLanguage": "Python",
+  "primaryLanguages": [
+    "Python"
+  ],
   "license": "MIT",
-  "summary": "<p align=\"center\"> <a href=\"https://mqt.readthedocs.io\"> <picture> <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://raw.githubusercontent.com/munich-quantum-toolkit/.github/refs/heads/main/docs/_static/logo-mqt-dark.svg\" width=\"60%\"> <img src=\"https://raw.githubusercontent.com/munich-quantum-toolkit/.github/refs/heads/main/docs/_static/logo-mqt-light.svg\" width=\"60%\" alt=\"MQT Logo\"> </picture> </a> </p>",
-  "description": "<p align=\"center\"> <a href=\"https://mqt.readthedocs.io\"> <picture> <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://raw.githubusercontent.com/munich-quantum-toolkit/.github/refs/heads/main/docs/_static/logo-mqt-dark.svg\" width=\"60%\"> <img src=\"https://raw.githubusercontent.com/munich-quantum-toolkit/.github/refs/heads/main/docs/_static/logo-mqt-light.svg\" width=\"60%\" alt=\"MQT Logo\"> </picture> </a> </p>",
+  "summary": "MQT Bench - An MQT Tool for Benchmarking Quantum Software Tools",
+  "description": "MQT Bench - An MQT Tool for Benchmarking Quantum Software Tools",
   "whatItIs": [
-    "mqt-bench is an open-source project in the benchmarks and analysis category. It is maintained by cda-tum and primarily looks like a Python codebase. <p align=\"center\"> <a href=\"https://mqt.readthedocs.io\"> <picture> <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://raw.githubusercontent.com/munich-quantum-toolkit/.github/refs/heads/main/docs/_static/logo-mqt-dark.svg\" width=\"60%\"> <img src=\"https://raw.githubusercontent.com/munich-quantum-toolkit/.github/refs/heads/main/docs/_static/logo-mqt-light.svg\" width=\"60%\" alt=\"MQT Logo\"> </picture> </a> </p>",
+    "mqt-bench is an open-source project in the benchmarks and analysis category. It is maintained by cda-tum and primarily looks like a Python codebase. MQT Bench - An MQT Tool for Benchmarking Quantum Software Tools",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches benchmarks and analysis workflows in practice. The repository README emphasizes: <p align=\"center\"> <a href=\"https://mqt.readthedocs.io\"> <picture> <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://raw.githubusercontent.com/munich-quantum-toolkit/.github/refs/heads/main/docs/_static/logo-mqt-dark.svg\" width=\"60%\"> <img src=\"https://raw.githubusercontent.com/munich-quantum-toolkit/.github/refs/heads/main/docs/_static/logo-mqt-light.svg\" width=\"60%\" alt=\"MQT Logo\"> </picture> </a> </p> MQT Bench - Benchmarking Software and Design Automation Tools for Quantum Computing"
   ],
   "whoItsFor": "Researchers and evaluators comparing toolchains, algorithms, hardware assumptions, or performance tradeoffs.",
@@ -32,21 +35,58 @@
   ],
   "readmeExcerpt": "<p align=\"center\"> <a href=\"https://mqt.readthedocs.io\"> <picture> <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://raw.githubusercontent.com/munich-quantum-toolkit/.github/refs/heads/main/docs/_static/logo-mqt-dark.svg\" width=\"60%\"> <img src=\"https://raw.githubusercontent.com/munich-quantum-toolkit/.github/refs/heads/main/docs/_static/logo-mqt-light.svg\" width=\"60%\" alt=\"MQT Logo\"> </picture> </a> </p> MQT Bench - Benchmarking Software and Design Automation Tools for Quantum Computing",
   "readmePath": "reference\\cda-tum__mqt-bench\\README.md",
+  "readmeMarkdownPath": "readmes/cda-tum-mqt-bench.md",
   "clonePath": "reference\\cda-tum__mqt-bench",
-  "stars": 0,
-  "lastPushedAt": null,
-  "githubTopics": [],
+  "stars": 118,
+  "lastPushedAt": "2026-05-20T00:42:41Z",
+  "defaultBranch": "main",
+  "githubTopics": [
+    "benchmarking",
+    "performance-testing",
+    "quantum-circuits",
+    "quantum-computing"
+  ],
+  "quickstart": null,
+  "codeSamples": [],
+  "packageMeta": {
+    "name": "mqt.bench",
+    "version": "9.0",
+    "requiresPython": ">=3.10, !=3.14.1",
+    "dependencies": [
+      "qiskit"
+    ]
+  },
+  "citationBibtex": null,
+  "supportedBackendSlugs": [
+    "qiskit-qiskit"
+  ],
+  "externalLinks": {
+    "docs": [
+      "https://mqt.readthedocs.io/projects/bench",
+      "https://mqt.readthedocs.io",
+      "https://img.shields.io/badge/documentation-blue?style=for-the-badge&logo=read%20the%20docs",
+      "https://mqt.readthedocs.io/projects/bench/en/latest/benchmark_selection.html"
+    ],
+    "pypi": [
+      "https://pypi.org/project/mqt.bench/"
+    ]
+  },
+  "openIssuesCount": 17,
+  "subscribersCount": 4,
+  "latestRelease": null,
+  "ownerType": "Organization",
+  "ownerUrl": "https://github.com/munich-quantum-toolkit",
   "featured": false,
   "flagship": false,
   "qtanglRelevant": false,
   "archived": false,
-  "imagePath": null,
+  "imagePath": "/learn/monogram/cda-tum-mqt-bench.svg",
   "relatedSlugs": [
-    "bbn-q-qgl-jl",
+    "microsoft-quantumkatas",
+    "qiskit-qiskit",
+    "quantumlib-cirq",
+    "xanaduai-pennylane",
     "bbn-q-qsimulator-jl",
-    "quantumlib-qualtran",
-    "aws-amazon-braket-sdk-python",
-    "cqcl-tket",
-    "dwavesystems-dwave-ocean-sdk"
+    "open-quantum-safe-liboqs"
   ]
 }

@@ -4,7 +4,7 @@
   "name": "qiskit-optimization",
   "title": "qiskit-optimization",
   "repoUrl": "https://github.com/Qiskit/qiskit-optimization",
-  "homepageUrl": null,
+  "homepageUrl": "https://qiskit-community.github.io/qiskit-optimization/",
   "category": {
     "slug": "optimization-qubo",
     "title": "Optimization and QUBO",
@@ -21,11 +21,16 @@
     }
   ],
   "primaryLanguage": "Python",
+  "primaryLanguages": [
+    "Python",
+    "Jupyter",
+    "Shell"
+  ],
   "license": "Apache-2.0",
-  "summary": "> [!WARNING] > **Qiskit Optimization is no longer officially supported by IBM**.",
-  "description": "> [!WARNING] > **Qiskit Optimization is no longer officially supported by IBM**. > While you may continue to use or extend it under the Apache 2.0 license, please note that it is provided as-is and without official support. For a fully supported solution and extended mapping features, migrate to the qiskit-addon-opt-mapper library.",
+  "summary": "Quantum Optimization",
+  "description": "Quantum Optimization",
   "whatItIs": [
-    "qiskit-optimization is an open-source project in the optimization and qubo category. It is maintained by Qiskit and primarily looks like a Python codebase. > [!WARNING] > **Qiskit Optimization is no longer officially supported by IBM**.",
+    "qiskit-optimization is an open-source project in the optimization and qubo category. It is maintained by Qiskit and primarily looks like a Python codebase. Quantum Optimization",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches optimization and qubo workflows in practice. The repository README emphasizes: > [!WARNING] > **Qiskit Optimization is no longer officially supported by IBM**. > While you may continue to use or extend it under the Apache 2.0 license, please note that it is provided as-is and without official support. For a fully supported solution and extended mapping features, migrate..."
   ],
   "whoItsFor": "Teams exploring routing, scheduling, allocation, and other combinatorial problems that can be modeled as optimization workloads.",
@@ -36,15 +41,39 @@
   ],
   "readmeExcerpt": "> [!WARNING] > **Qiskit Optimization is no longer officially supported by IBM**. > While you may continue to use or extend it under the Apache 2.0 license, please note that it is provided as-is and without official support. For a fully supported solution and extended mapping features, migrate to the qiskit-addon-opt-mapper library. **Qiskit Optimization** is an open-source framework that covers the whole range from high-level modeling of optimization problems, with automatic conversion of problems to different required representations, to a suite of easy-to-use quantum optimization algorithms that are ready to run on classical simulators, as well as on real quantum devices via Qiskit.",
   "readmePath": "reference\\Qiskit__qiskit-optimization\\README.md",
+  "readmeMarkdownPath": "readmes/qiskit-qiskit-optimization.md",
   "clonePath": "reference\\Qiskit__qiskit-optimization",
-  "stars": 0,
-  "lastPushedAt": null,
-  "githubTopics": [],
+  "stars": 281,
+  "lastPushedAt": "2026-04-01T05:54:16Z",
+  "defaultBranch": "main",
+  "githubTopics": [
+    "qiskit"
+  ],
+  "quickstart": {
+    "language": "python",
+    "source": "from docplex.mp.model import Model\n\nfrom qiskit_optimization.algorithms import MinimumEigenOptimizer\nfrom qiskit_optimization.translators import from_docplex_mp\nfrom qiskit_optimization.utils import algorithm_globals\nfrom qiskit_optimization.minimum_eigensolvers import QAOA\nfrom qiskit_optimization.optimizers import SPSA\n\nfrom qiskit.transpiler.preset_passmanagers import generate_preset_pass_manager\nfrom qiskit_aer import AerSimulator\nfrom qiskit_aer.primitives import SamplerV2\n\n# Generate a graph of 4 nodes\nn = 4\nedges = [(0, 1, 1.0), (0, 2, 1.0), (0, 3, 1.0), (1, 2, 1.0), (2, 3, 1.0)]  # (node_i, node_j, weight)\n\n# Formulate the problem as a Docplex model\nmodel = Model()\n\n# Create n binary variables\nx = model.binary_var_list(n)\n\n# Define the objective function to be maximized\nmodel.maximize(model.sum(w * x[i] * (1 - x[j]) + w * (1 - x[i]) * x[j] for i, j, w in edges))\n\n# Fix node 0 to be 1 to break the symmetry of the max-cut solution\nmodel.add(x[0] == 1)\n\n# Convert the Docplex model into a `QuadraticProgram` object\nproblem = from_docplex_mp(model)\n\n# Run quantum algorithm QAOA on qasm simulator\nseed = 1234\nalgorithm_globals.random_seed = seed\n\nspsa = SPSA(maxiter=250)\nsampler = SamplerV2(seed=seed, default_shots=10000)\npass_manager = generate_preset_pass_manager(optimization_level=1, backend=AerSimulator())\nqaoa = QAOA(sampler=sampler, optimizer=spsa, reps=5, pass_manager=pass_manager)\nalgorithm = MinimumEigenOptimizer(qaoa)\nresult = algorithm.solve(problem)\nprint(result.prettyprint())  # prints solution, x=[1, 0, 1, 0], the cost, fval=4"
+  },
+  "codeSamples": [],
+  "packageMeta": {},
+  "citationBibtex": null,
+  "supportedBackendSlugs": [
+    "qiskit-qiskit"
+  ],
+  "externalLinks": {
+    "pypi": [
+      "https://pypi.org/project/qiskit-optimization/"
+    ]
+  },
+  "openIssuesCount": 22,
+  "subscribersCount": 9,
+  "latestRelease": null,
+  "ownerType": "Organization",
+  "ownerUrl": "https://github.com/qiskit-community",
   "featured": false,
   "flagship": true,
   "qtanglRelevant": true,
   "archived": false,
-  "imagePath": "/learn/flagship/qiskit-qiskit-optimization.png",
+  "imagePath": "/learn/og/qiskit-qiskit-optimization.png",
   "relatedSlugs": [
     "entropicalabs-openqaoa",
     "cda-tum-mqt-qmap",

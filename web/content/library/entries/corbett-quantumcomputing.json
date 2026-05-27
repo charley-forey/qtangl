@@ -21,11 +21,14 @@
     }
   ],
   "primaryLanguage": "Python",
-  "license": "LGPL",
-  "summary": "Quintuple This is an implementation of IBM's Quantum Experience in simulation; a 5-qubit quantum computer with a limited set of gates \"the world\u2019s first quantum computing platform delivered via the IBM Cloud\".",
-  "description": "Quintuple This is an implementation of IBM's Quantum Experience in simulation; a 5-qubit quantum computer with a limited set of gates \"the world\u2019s first quantum computing platform delivered via the IBM Cloud\". Their implementation is available at http://www.research.ibm.com/quantum/.",
+  "primaryLanguages": [
+    "Python"
+  ],
+  "license": "GPL-3.0",
+  "summary": "This is an implementation of IBM's Quantum Experience in simulation; a 5-qubit quantum computer with a limited set of gates.",
+  "description": "This is an implementation of IBM's Quantum Experience in simulation; a 5-qubit quantum computer with a limited set of gates. Please cite me if you end up using this academically.",
   "whatItIs": [
-    "QuantumComputing is an open-source project in the general-purpose sdks category. It is maintained by corbett and primarily looks like a Python codebase. Quintuple This is an implementation of IBM's Quantum Experience in simulation; a 5-qubit quantum computer with a limited set of gates \"the world\u2019s first quantum computing platform delivered via the IBM Cloud\".",
+    "QuantumComputing is an open-source project in the general-purpose sdks category. It is maintained by corbett and primarily looks like a Python codebase. This is an implementation of IBM's Quantum Experience in simulation; a 5-qubit quantum computer with a limited set of gates.",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches general-purpose sdks workflows in practice. The repository README emphasizes: Quintuple This is an implementation of IBM's Quantum Experience in simulation; a 5-qubit quantum computer with a limited set of gates \"the world\u2019s first quantum computing platform delivered via the IBM Cloud\". Their implementation is available at http://www.research.ibm.com/quantum/. This code allows you to execute code printed from the..."
   ],
   "whoItsFor": "Developers who want a broad entry point for building circuits, experimenting with algorithms, and integrating quantum workflows into larger applications.",
@@ -36,21 +39,47 @@
   ],
   "readmeExcerpt": "Quintuple This is an implementation of IBM's Quantum Experience in simulation; a 5-qubit quantum computer with a limited set of gates \"the world\u2019s first quantum computing platform delivered via the IBM Cloud\". Their implementation is available at http://www.research.ibm.com/quantum/. This code allows you to execute code printed from the Quantum Composer in the following syntax:",
   "readmePath": "reference\\corbett__QuantumComputing\\README.md",
+  "readmeMarkdownPath": "readmes/corbett-quantumcomputing.md",
   "clonePath": "reference\\corbett__QuantumComputing",
-  "stars": 0,
-  "lastPushedAt": null,
-  "githubTopics": [],
+  "stars": 627,
+  "lastPushedAt": "2022-12-29T04:35:18Z",
+  "defaultBranch": "master",
+  "githubTopics": [
+    "gate",
+    "ibm-quantum-experience",
+    "ibm-syntax",
+    "quantum-computing",
+    "qubits"
+  ],
+  "quickstart": {
+    "language": "python",
+    "source": "from QuantumComputer import *\nghz_example_code=\"\"\"h q[0];\n\t\th q[1];\n\t\tx q[2];\n\t\tcx q[1], q[2];\n\t\tcx q[0], q[2];\n\t\th q[0];\n\t\th q[1];\n\t\th q[2];\"\"\"\nqc=QuantumComputer()\nqc.execute(ghz_example_code)\nProbability.pretty_print_probabilities(qc.qubits.get_quantum_register_containing(\"q0\").get_state())"
+  },
+  "codeSamples": [],
+  "packageMeta": {},
+  "citationBibtex": null,
+  "supportedBackendSlugs": [],
+  "externalLinks": {
+    "paper": [
+      "http://arxiv.org/abs/1606.09225"
+    ]
+  },
+  "openIssuesCount": 3,
+  "subscribersCount": 75,
+  "latestRelease": null,
+  "ownerType": "User",
+  "ownerUrl": "https://github.com/corbett",
   "featured": false,
   "flagship": false,
   "qtanglRelevant": false,
   "archived": false,
-  "imagePath": null,
+  "imagePath": "/learn/monogram/corbett-quantumcomputing.svg",
   "relatedSlugs": [
     "qiskit-qiskit",
     "quantumlib-cirq",
     "xanaduai-pennylane",
-    "projectq-framework-projectq",
+    "qiskit-qiskit-terra",
     "quantumbfs-yao-jl",
-    "arlineq-arline-benchmarks"
+    "microsoft-quantumkatas"
   ]
 }

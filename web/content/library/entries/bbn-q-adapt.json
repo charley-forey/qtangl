@@ -20,12 +20,17 @@
       "title": "How to start writing quantum code: an honest path"
     }
   ],
-  "primaryLanguage": "Python",
+  "primaryLanguage": "Jupyter Notebook",
+  "primaryLanguages": [
+    "Python",
+    "Jupyter",
+    "Shell"
+  ],
   "license": "Apache-2.0",
-  "summary": "Adapt is a package for more efficiently sampling parameter space by paying attention to the information content in observed data.",
-  "description": "Adapt is a package for more efficiently sampling parameter space by paying attention to the information content in observed data. Please check out example.ipynb, example-1D.py, and example-2D.py for a usage information.",
+  "summary": "Algorithms for adaptive refinement of measurements",
+  "description": "Algorithms for adaptive refinement of measurements",
   "whatItIs": [
-    "Adapt is an open-source project in the general-purpose sdks category. It is maintained by BBN-Q and primarily looks like a Python codebase. Adapt is a package for more efficiently sampling parameter space by paying attention to the information content in observed data.",
+    "Adapt is an open-source project in the general-purpose sdks category. It is maintained by BBN-Q and primarily looks like a Jupyter Notebook codebase. Algorithms for adaptive refinement of measurements",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches general-purpose sdks workflows in practice. The repository README emphasizes: Adapt is a package for more efficiently sampling parameter space by paying attention to the information content in observed data. Please check out example.ipynb, example-1D.py, and example-2D.py for a usage information."
   ],
   "whoItsFor": "Developers who want a broad entry point for building circuits, experimenting with algorithms, and integrating quantum workflows into larger applications.",
@@ -36,21 +41,34 @@
   ],
   "readmeExcerpt": "Adapt is a package for more efficiently sampling parameter space by paying attention to the information content in observed data. Please check out example.ipynb, example-1D.py, and example-2D.py for a usage information.",
   "readmePath": "reference\\BBN-Q__Adapt\\README.md",
+  "readmeMarkdownPath": "readmes/bbn-q-adapt.md",
   "clonePath": "reference\\BBN-Q__Adapt",
-  "stars": 0,
-  "lastPushedAt": null,
+  "stars": 8,
+  "lastPushedAt": "2023-03-08T21:18:06Z",
+  "defaultBranch": "master",
   "githubTopics": [],
+  "quickstart": null,
+  "codeSamples": [],
+  "packageMeta": {},
+  "citationBibtex": null,
+  "supportedBackendSlugs": [],
+  "externalLinks": {},
+  "openIssuesCount": 0,
+  "subscribersCount": 6,
+  "latestRelease": null,
+  "ownerType": "Organization",
+  "ownerUrl": "https://github.com/BBN-Q",
   "featured": false,
   "flagship": false,
   "qtanglRelevant": false,
   "archived": false,
-  "imagePath": null,
+  "imagePath": "/learn/monogram/bbn-q-adapt.svg",
   "relatedSlugs": [
     "qiskit-qiskit",
     "quantumlib-cirq",
     "xanaduai-pennylane",
-    "projectq-framework-projectq",
+    "qiskit-qiskit-terra",
     "quantumbfs-yao-jl",
-    "arlineq-arline-benchmarks"
+    "microsoft-quantumkatas"
   ]
 }

@@ -6,9 +6,9 @@
   "repoUrl": "https://github.com/haykkh/qSim",
   "homepageUrl": null,
   "category": {
-    "slug": "games-learning",
-    "title": "Games and learning",
-    "description": "Interactive projects, puzzles, and educational resources for learning quantum computing concepts."
+    "slug": "general-purpose-sdks",
+    "title": "General-purpose SDKs",
+    "description": "Broad frameworks for building, simulating, and experimenting with quantum circuits across multiple domains."
   },
   "topics": [
     {
@@ -21,36 +21,53 @@
     }
   ],
   "primaryLanguage": "C++",
-  "license": "MIT",
-  "summary": "I'm building this to learn **C++** and **Quantum Information Theory** simultaneously, so don't be surprised if they're both wrong.",
-  "description": "I'm building this to learn **C++** and **Quantum Information Theory** simultaneously, so don't be surprised if they're both wrong. Instead, feel free to create a new issue or a new pull request so you can rub in exactly what I did wrong in a concise, well commented manner.",
-  "whatItIs": [
-    "qSim is an open-source project in the games and learning category. It is maintained by haykkh and primarily looks like a C++ codebase. I'm building this to learn **C++** and **Quantum Information Theory** simultaneously, so don't be surprised if they're both wrong.",
-    "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches games and learning workflows in practice. The repository README emphasizes: I'm building this to learn **C++** and **Quantum Information Theory** simultaneously, so don't be surprised if they're both wrong. Instead, feel free to create a new issue or a new pull request so you can rub in exactly what I did wrong in a concise, well commented manner..."
+  "primaryLanguages": [
+    "C++",
+    "C/C++"
   ],
-  "whoItsFor": "Beginners, educators, and curious developers who want a more approachable path into quantum concepts.",
+  "license": "MIT",
+  "summary": "Quantum computer simulator library",
+  "description": "Quantum computer simulator library",
+  "whatItIs": [
+    "qSim is an open-source project in the general-purpose sdks category. It is maintained by haykkh and primarily looks like a C++ codebase. Quantum computer simulator library",
+    "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches general-purpose sdks workflows in practice. The repository README emphasizes: I'm building this to learn **C++** and **Quantum Information Theory** simultaneously, so don't be surprised if they're both wrong. Instead, feel free to create a new issue or a new pull request so you can rub in exactly what I did wrong in a concise, well commented manner..."
+  ],
+  "whoItsFor": "Developers who want a broad entry point for building circuits, experimenting with algorithms, and integrating quantum workflows into larger applications.",
   "whatYouCanBuild": [
-    "Get a gentler introduction before diving into full SDKs.",
-    "See how different projects teach circuits, superposition, and measurement.",
-    "Identify resources that work well for onboarding or self-study."
+    "Prototype end-to-end circuit workflows without committing to a niche backend too early.",
+    "Learn how the project represents circuits, gates, jobs, and results.",
+    "Compare how a major ecosystem frames practical quantum development."
   ],
   "readmeExcerpt": "I'm building this to learn **C++** and **Quantum Information Theory** simultaneously, so don't be surprised if they're both wrong. Instead, feel free to create a new issue or a new pull request so you can rub in exactly what I did wrong in a concise, well commented manner. int main() { // initialize a 0> qubit math::Ket qubit = states::z0;",
   "readmePath": "reference\\haykkh__qSim\\README.md",
+  "readmeMarkdownPath": "readmes/haykkh-qsim.md",
   "clonePath": "reference\\haykkh__qSim",
-  "stars": 0,
-  "lastPushedAt": null,
+  "stars": 10,
+  "lastPushedAt": "2022-08-15T20:22:55Z",
+  "defaultBranch": "master",
   "githubTopics": [],
+  "quickstart": null,
+  "codeSamples": [],
+  "packageMeta": {},
+  "citationBibtex": null,
+  "supportedBackendSlugs": [],
+  "externalLinks": {},
+  "openIssuesCount": 0,
+  "subscribersCount": 2,
+  "latestRelease": null,
+  "ownerType": "User",
+  "ownerUrl": "https://github.com/haykkh",
   "featured": false,
   "flagship": false,
   "qtanglRelevant": false,
   "archived": false,
-  "imagePath": null,
+  "imagePath": "/learn/monogram/haykkh-qsim.svg",
   "relatedSlugs": [
-    "microsoft-quantumkatas",
-    "strilanc-quirk",
-    "stared-quantum-game",
-    "decodoku-a-game-to-benchmark-quantum-computers",
-    "decodoku-battleships-with-complementary-measurements",
-    "desireevl-quantum-catsweeper"
+    "qiskit-qiskit",
+    "quantumlib-cirq",
+    "xanaduai-pennylane",
+    "qiskit-qiskit-terra",
+    "quantumbfs-yao-jl",
+    "microsoft-quantumkatas"
   ]
 }

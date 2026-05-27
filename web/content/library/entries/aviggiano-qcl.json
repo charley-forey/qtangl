@@ -21,11 +21,16 @@
     }
   ],
   "primaryLanguage": "C++",
-  "license": "GPL",
-  "summary": "QCL is one of the first implemented quantum programming languages",
-  "description": "QCL is one of the first implemented quantum programming languages",
+  "primaryLanguages": [
+    "C++",
+    "C/C++",
+    "Shell"
+  ],
+  "license": "GPL-2.0",
+  "summary": "Quantum Computation Language port from http://tph.tuwien.ac.at/~oemer/qcl.html",
+  "description": "Quantum Computation Language port from http://tph.tuwien.ac.at/~oemer/qcl.html",
   "whatItIs": [
-    "qcl is an open-source project in the compilers and languages category. It is maintained by aviggiano and primarily looks like a C++ codebase. QCL is one of the first implemented quantum programming languages",
+    "qcl is an open-source project in the compilers and languages category. It is maintained by aviggiano and primarily looks like a C++ codebase. Quantum Computation Language port from http://tph.tuwien.ac.at/~oemer/qcl.html",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches compilers and languages workflows in practice. The repository README emphasizes: QCL is one of the first implemented quantum programming languages This is a github port from the project's official homepage. The idea is to ease the contribution of programmers interested in quantum computing, through guides, documentation, tests and the development of the core language itself."
   ],
   "whoItsFor": "Developers who want to understand the representations and compilers that sit between high-level code and runnable circuits.",
@@ -36,21 +41,39 @@
   ],
   "readmeExcerpt": "QCL is one of the first implemented quantum programming languages This is a github port from the project's official homepage. The idea is to ease the contribution of programmers interested in quantum computing, through guides, documentation, tests and the development of the core language itself.",
   "readmePath": "reference\\aviggiano__qcl\\README.md",
+  "readmeMarkdownPath": "readmes/aviggiano-qcl.md",
   "clonePath": "reference\\aviggiano__qcl",
-  "stars": 0,
-  "lastPushedAt": null,
-  "githubTopics": [],
+  "stars": 43,
+  "lastPushedAt": "2018-01-13T18:48:31Z",
+  "defaultBranch": "master",
+  "githubTopics": [
+    "qcl",
+    "quantum",
+    "quantum-algorithms",
+    "quantum-computing"
+  ],
+  "quickstart": null,
+  "codeSamples": [],
+  "packageMeta": {},
+  "citationBibtex": null,
+  "supportedBackendSlugs": [],
+  "externalLinks": {},
+  "openIssuesCount": 2,
+  "subscribersCount": 2,
+  "latestRelease": null,
+  "ownerType": "User",
+  "ownerUrl": "https://github.com/aviggiano",
   "featured": false,
   "flagship": false,
   "qtanglRelevant": false,
   "archived": false,
-  "imagePath": null,
+  "imagePath": "/learn/monogram/aviggiano-qcl.svg",
   "relatedSlugs": [
     "cqcl-tket",
     "nvidia-cuda-quantum",
-    "quantomatic-pyzx",
-    "avalon-lang-avaloni",
-    "dabacon-qsel",
-    "epiqc-scaffcc"
+    "microsoft-quantumkatas",
+    "qiskit-openqasm",
+    "qiskit-qiskit",
+    "quantomatic-pyzx"
   ]
 }

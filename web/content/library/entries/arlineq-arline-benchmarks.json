@@ -4,7 +4,7 @@
   "name": "arline_benchmarks",
   "title": "arline_benchmarks",
   "repoUrl": "https://github.com/ArlineQ/arline_benchmarks",
-  "homepageUrl": null,
+  "homepageUrl": "https://arlineq.wixsite.com/arline",
   "category": {
     "slug": "general-purpose-sdks",
     "title": "General-purpose SDKs",
@@ -21,11 +21,16 @@
     }
   ],
   "primaryLanguage": "Python",
-  "license": "GPL",
-  "summary": "**Arline Benchmarks** platform allows to benchmark various algorithms for quantum circuit mapping/compression against each other on a list of predefined hardware types and target circuit classes.",
-  "description": "**Arline Benchmarks** platform allows to benchmark various algorithms for quantum circuit mapping/compression against each other on a list of predefined hardware types and target circuit classes.",
+  "primaryLanguages": [
+    "Python",
+    "OpenQASM",
+    "Shell"
+  ],
+  "license": "AGPL-3.0",
+  "summary": "Arline Benchmarks platform allows to benchmark various algorithms for quantum circuit mapping/compression against each other on a list of predefined hardware types and target circuit classes",
+  "description": "Arline Benchmarks platform allows to benchmark various algorithms for quantum circuit mapping/compression against each other on a list of predefined hardware types and target circuit classes",
   "whatItIs": [
-    "arline_benchmarks is an open-source project in the general-purpose sdks category. It is maintained by ArlineQ and primarily looks like a Python codebase. **Arline Benchmarks** platform allows to benchmark various algorithms for quantum circuit mapping/compression against each other on a list of predefined hardware types and target circuit classes.",
+    "arline_benchmarks is an open-source project in the general-purpose sdks category. It is maintained by ArlineQ and primarily looks like a Python codebase. Arline Benchmarks platform allows to benchmark various algorithms for quantum circuit mapping/compression against each other on a list of predefined hardware types and target circuit classes",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches general-purpose sdks workflows in practice. The repository README emphasizes: **Arline Benchmarks** platform allows to benchmark various algorithms for quantum circuit mapping/compression against each other on a list of predefined hardware types and target circuit classes. Arline Benchmarks has been recently used by Oxford Quantum Circuits team for compiler performance testing (see blog post)."
   ],
   "whoItsFor": "Developers who want a broad entry point for building circuits, experimenting with algorithms, and integrating quantum workflows into larger applications.",
@@ -36,21 +41,51 @@
   ],
   "readmeExcerpt": "**Arline Benchmarks** platform allows to benchmark various algorithms for quantum circuit mapping/compression against each other on a list of predefined hardware types and target circuit classes. Arline Benchmarks has been recently used by Oxford Quantum Circuits team for compiler performance testing (see blog post).",
   "readmePath": "reference\\ArlineQ__arline_benchmarks\\README.md",
+  "readmeMarkdownPath": "readmes/arlineq-arline-benchmarks.md",
   "clonePath": "reference\\ArlineQ__arline_benchmarks",
-  "stars": 0,
-  "lastPushedAt": null,
-  "githubTopics": [],
+  "stars": 32,
+  "lastPushedAt": "2022-03-02T17:21:54Z",
+  "defaultBranch": "master",
+  "githubTopics": [
+    "benchmark",
+    "benchmarking",
+    "benchmarking-framework",
+    "benchmarks",
+    "python",
+    "quantum",
+    "quantum-benchmarks",
+    "quantum-computing"
+  ],
+  "quickstart": null,
+  "codeSamples": [],
+  "packageMeta": {},
+  "citationBibtex": null,
+  "supportedBackendSlugs": [
+    "quantumlib-cirq",
+    "quantomatic-pyzx",
+    "qiskit-qiskit"
+  ],
+  "externalLinks": {
+    "docs": [
+      "https://arline-benchmarks.readthedocs.io/en/latest/"
+    ]
+  },
+  "openIssuesCount": 3,
+  "subscribersCount": 4,
+  "latestRelease": null,
+  "ownerType": "Organization",
+  "ownerUrl": "https://github.com/ArlineQ",
   "featured": false,
   "flagship": false,
   "qtanglRelevant": false,
   "archived": false,
-  "imagePath": null,
+  "imagePath": "/learn/monogram/arlineq-arline-benchmarks.svg",
   "relatedSlugs": [
     "qiskit-qiskit",
     "quantumlib-cirq",
     "xanaduai-pennylane",
-    "projectq-framework-projectq",
+    "qiskit-qiskit-terra",
     "quantumbfs-yao-jl",
-    "arlineq-arline-quantum"
+    "microsoft-quantumkatas"
   ]
 }

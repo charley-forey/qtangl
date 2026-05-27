@@ -20,16 +20,22 @@
         "title": "How to start writing quantum code: an honest path"
       }
     ],
-    "primaryLanguage": "Jupyter",
+    "primaryLanguage": "Jupyter Notebook",
+    "primaryLanguages": [
+      "Jupyter",
+      "Python",
+      "LaTeX"
+    ],
     "license": "Apache-2.0",
-    "summary": "Quantum Awesomeness A Game to Benchmark Quantum Computers",
-    "description": "Quantum Awesomeness A Game to Benchmark Quantum Computers",
-    "stars": 0,
+    "summary": "Simple puzzles implemented on quantum devices",
+    "description": "Simple puzzles implemented on quantum devices",
+    "stars": 49,
+    "lastPushedAt": "2024-08-16T07:42:06Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/decodoku-a-game-to-benchmark-quantum-computers.svg"
   },
   {
     "slug": "bbn-q-adapt",
@@ -52,16 +58,22 @@
         "title": "How to start writing quantum code: an honest path"
       }
     ],
-    "primaryLanguage": "Python",
+    "primaryLanguage": "Jupyter Notebook",
+    "primaryLanguages": [
+      "Python",
+      "Jupyter",
+      "Shell"
+    ],
     "license": "Apache-2.0",
-    "summary": "Adapt is a package for more efficiently sampling parameter space by paying attention to the information content in observed data.",
-    "description": "Adapt is a package for more efficiently sampling parameter space by paying attention to the information content in observed data. Please check out example.ipynb, example-1D.py, and example-2D.py for a usage information.",
-    "stars": 0,
+    "summary": "Algorithms for adaptive refinement of measurements",
+    "description": "Algorithms for adaptive refinement of measurements",
+    "stars": 8,
+    "lastPushedAt": "2023-03-08T21:18:06Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/bbn-q-adapt.svg"
   },
   {
     "slug": "aws-amazon-braket-sdk-python",
@@ -85,15 +97,19 @@
       }
     ],
     "primaryLanguage": "Python",
+    "primaryLanguages": [
+      "Python"
+    ],
     "license": "Apache-2.0",
-    "summary": "The Amazon Braket Python SDK is an open source library that provides a framework that you can use to interact with quantum computing hardware devices through Amazon Braket.",
-    "description": "The Amazon Braket Python SDK is an open source library that provides a framework that you can use to interact with quantum computing hardware devices through Amazon Braket.",
-    "stars": 0,
+    "summary": "A Python SDK for interacting with quantum devices on Amazon Braket",
+    "description": "A Python SDK for interacting with quantum devices on Amazon Braket",
+    "stars": 367,
+    "lastPushedAt": "2026-05-27T21:29:10Z",
     "featured": true,
     "flagship": true,
     "qtanglRelevant": true,
     "archived": false,
-    "imagePath": "/learn/flagship/aws-amazon-braket-sdk-python.png"
+    "imagePath": "/learn/og/aws-amazon-braket-sdk-python.png"
   },
   {
     "slug": "theoryinpractice-aqc-virtual-embedding",
@@ -117,15 +133,21 @@
       }
     ],
     "primaryLanguage": "C++",
-    "license": "BSD",
-    "summary": "Virtual Hardware Embedding Suite for Adiabatic Quantum Computing",
-    "description": "Virtual Hardware Embedding Suite for Adiabatic Quantum Computing",
-    "stars": 0,
+    "primaryLanguages": [
+      "C++",
+      "C/C++",
+      "Python"
+    ],
+    "license": "BSD-3-Clause",
+    "summary": "Adiabatic Quantum Computing -- embedding your problems into quantum computers",
+    "description": "Adiabatic Quantum Computing -- embedding your problems into quantum computers",
+    "stars": 9,
+    "lastPushedAt": "2018-10-26T21:19:22Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/theoryinpractice-aqc-virtual-embedding.svg"
   },
   {
     "slug": "arlineq-arline-benchmarks",
@@ -149,15 +171,21 @@
       }
     ],
     "primaryLanguage": "Python",
-    "license": "GPL",
-    "summary": "**Arline Benchmarks** platform allows to benchmark various algorithms for quantum circuit mapping/compression against each other on a list of predefined hardware types and target circuit classes.",
-    "description": "**Arline Benchmarks** platform allows to benchmark various algorithms for quantum circuit mapping/compression against each other on a list of predefined hardware types and target circuit classes.",
-    "stars": 0,
+    "primaryLanguages": [
+      "Python",
+      "OpenQASM",
+      "Shell"
+    ],
+    "license": "AGPL-3.0",
+    "summary": "Arline Benchmarks platform allows to benchmark various algorithms for quantum circuit mapping/compression against each other on a list of predefined hardware types and target circuit classes",
+    "description": "Arline Benchmarks platform allows to benchmark various algorithms for quantum circuit mapping/compression against each other on a list of predefined hardware types and target circuit classes",
+    "stars": 32,
+    "lastPushedAt": "2022-03-02T17:21:54Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/arlineq-arline-benchmarks.svg"
   },
   {
     "slug": "arlineq-arline-quantum",
@@ -181,15 +209,20 @@
       }
     ],
     "primaryLanguage": "Python",
-    "license": "GPL",
-    "summary": "**Arline Quantum** is an open-source library providing basic functionality for creating and manipulating quantum circuits.",
-    "description": "**Arline Quantum** is an open-source library providing basic functionality for creating and manipulating quantum circuits. It also contains a list of mock quantum hardware.",
-    "stars": 0,
+    "primaryLanguages": [
+      "Python",
+      "OpenQASM"
+    ],
+    "license": "AGPL-3.0",
+    "summary": "Arline Quantum is an open-source library providing basic functionality for creating and manipulating quantum circuits.",
+    "description": "Arline Quantum is an open-source library providing basic functionality for creating and manipulating quantum circuits. It also contains a list of mock quantum hardware",
+    "stars": 16,
+    "lastPushedAt": "2024-01-01T23:13:44Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/arlineq-arline-quantum.svg"
   },
   {
     "slug": "m-labs-artiq",
@@ -209,15 +242,21 @@
       }
     ],
     "primaryLanguage": "Python",
-    "license": "Custom / project-specific",
-    "summary": "Repository moved to https://git.m-labs.hk/M-Labs/artiq",
-    "description": "Repository moved to https://git.m-labs.hk/M-Labs/artiq",
-    "stars": 0,
+    "primaryLanguages": [
+      "Python",
+      "Rust",
+      "LaTeX"
+    ],
+    "license": "LGPL-3.0",
+    "summary": "A leading-edge control system for quantum information experiments",
+    "description": "A leading-edge control system for quantum information experiments",
+    "stars": 515,
+    "lastPushedAt": "2026-01-18T10:40:16Z",
     "featured": false,
     "flagship": true,
     "qtanglRelevant": false,
-    "archived": false,
-    "imagePath": "/learn/flagship/m-labs-artiq.png"
+    "archived": true,
+    "imagePath": "/learn/og/m-labs-artiq.png"
   },
   {
     "slug": "avalon-lang-avaloni",
@@ -241,15 +280,20 @@
       }
     ],
     "primaryLanguage": "C++",
+    "primaryLanguages": [
+      "C++",
+      "C/C++"
+    ],
     "license": "MIT",
-    "summary": "Quantum computing is progressing slowly but surely.",
-    "description": "Quantum computing is progressing slowly but surely. And as it progresses, tools are going to be needed to program quantum computers.",
-    "stars": 0,
+    "summary": "Interpreter of the Avalon programming language.",
+    "description": "Interpreter of the Avalon programming language.",
+    "stars": 23,
+    "lastPushedAt": "2018-12-16T15:00:13Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/avalon-lang-avaloni.svg"
   },
   {
     "slug": "decodoku-battleships-with-complementary-measurements",
@@ -272,16 +316,20 @@
         "title": "How to start writing quantum code: an honest path"
       }
     ],
-    "primaryLanguage": "Jupyter",
-    "license": "Unknown",
+    "primaryLanguage": "Jupyter Notebook",
+    "primaryLanguages": [
+      "Jupyter"
+    ],
+    "license": null,
     "summary": "Battleships with complementary measurements A game for a quantum computer.",
     "description": "Battleships with complementary measurements A game for a quantum computer. More info here.",
-    "stars": 0,
+    "stars": 10,
+    "lastPushedAt": "2018-02-02T22:15:06Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/decodoku-battleships-with-complementary-measurements.svg"
   },
   {
     "slug": "thephoeron-black-stone",
@@ -304,16 +352,20 @@
         "title": "Quantum computing software in 2026: the open-source map"
       }
     ],
-    "primaryLanguage": "Mixed",
+    "primaryLanguage": "Common Lisp",
+    "primaryLanguages": [
+      "Common Lisp"
+    ],
     "license": "MIT",
-    "summary": "Specification and Implementation of Quantum Common Lisp and the Black Stone Quantum Computer simulator, for modelling classical interface gate-model quantum computer programs.",
-    "description": "Specification and Implementation of Quantum Common Lisp and the Black Stone Quantum Computer simulator, for modelling classical interface gate-model quantum computer programs.",
-    "stars": 0,
+    "summary": "Specification and Implementation of Quantum Common Lisp, for gate-model quantum computers",
+    "description": "Specification and Implementation of Quantum Common Lisp, for gate-model quantum computers",
+    "stars": 70,
+    "lastPushedAt": "2017-02-17T16:14:41Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/thephoeron-black-stone.svg"
   },
   {
     "slug": "xanaduai-blackbird",
@@ -332,16 +384,22 @@
         "title": "Quantum computing software in 2026: the open-source map"
       }
     ],
-    "primaryLanguage": "Python",
+    "primaryLanguage": "C++",
+    "primaryLanguages": [
+      "Python",
+      "C++",
+      "C/C++"
+    ],
     "license": "Apache-2.0",
-    "summary": "image:: https://img.shields.io/github/workflow/status/XanaduAI/blackbird/Tests/master?logo=github&style=flat-square :alt: GitHub Workflow Status (branch) :target: https://github.com/XanaduAI/blackbird/actions?query=workflow%3ATests",
-    "description": ".. image:: https://img.shields.io/github/workflow/status/XanaduAI/blackbird/Tests/master?logo=github&style=flat-square :alt: GitHub Workflow Status (branch) :target: https://github.com/XanaduAI/blackbird/actions?query=workflow%3ATests",
-    "stars": 0,
+    "summary": "Blackbird is a quantum assembly language for continuous-variable quantum computation, that can be used to program Xanadu's quantum photonics hardware and Strawberry Fields simulator.",
+    "description": "Blackbird is a quantum assembly language for continuous-variable quantum computation, that can be used to program Xanadu's quantum photonics hardware and Strawberry Fields simulator.",
+    "stars": 77,
+    "lastPushedAt": "2022-10-18T15:01:46Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/xanaduai-blackbird.svg"
   },
   {
     "slug": "kelzheng-bloqit",
@@ -365,15 +423,21 @@
       }
     ],
     "primaryLanguage": "Python",
-    "license": "Unknown",
-    "summary": "**2 players**: a *Sender* and a *Blocker* **1 computer** to pass between you",
-    "description": "**2 players**: a *Sender* and a *Blocker* **1 computer** to pass between you",
-    "stars": 0,
+    "primaryLanguages": [
+      "Python",
+      "C/C++",
+      "C#"
+    ],
+    "license": null,
+    "summary": "A tiny qubit duel",
+    "description": "A tiny qubit duel",
+    "stars": 8,
+    "lastPushedAt": "2020-02-01T12:50:15Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/kelzheng-bloqit.svg"
   },
   {
     "slug": "lanl-c2dwave",
@@ -396,16 +460,21 @@
         "title": "Quantum computing software in 2026: the open-source map"
       }
     ],
-    "primaryLanguage": "C",
-    "license": "BSD",
-    "summary": "This program compiles C programs, written using a very small subset of C, to a form suitable for running on a D-Wave quantum annealer by translating through Verilog to D-Wave APIs.",
-    "description": "This program compiles C programs, written using a very small subset of C, to a form suitable for running on a D-Wave quantum annealer by translating through Verilog to D-Wave APIs.",
-    "stars": 0,
+    "primaryLanguage": "C++",
+    "primaryLanguages": [
+      "C",
+      "C++"
+    ],
+    "license": "BSD-3-Clause",
+    "summary": "Translate a subset of C to Verilog",
+    "description": "Translate a subset of C to Verilog",
+    "stars": 12,
+    "lastPushedAt": "2019-05-08T16:27:43Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/lanl-c2dwave.svg"
   },
   {
     "slug": "pennylaneai-catalyst",
@@ -414,9 +483,9 @@
     "name": "catalyst",
     "repoUrl": "https://github.com/PennyLaneAI/catalyst",
     "category": {
-      "slug": "general-purpose-sdks",
-      "title": "General-purpose SDKs",
-      "description": "Broad frameworks for building, simulating, and experimenting with quantum circuits across multiple domains."
+      "slug": "compilers-languages",
+      "title": "Compilers and languages",
+      "description": "Compilers, intermediate representations, domain-specific languages, and transpilation tools for quantum programs."
     },
     "topics": [
       {
@@ -429,15 +498,21 @@
       }
     ],
     "primaryLanguage": "Python",
+    "primaryLanguages": [
+      "Python",
+      "C++",
+      "C/C++"
+    ],
     "license": "Apache-2.0",
-    "summary": "<p align=\"center\"> <img src=\"https://raw.githubusercontent.com/PennyLaneAI/catalyst/main/doc/_static/pl-catalyst-logo-lightmode.png#gh-light-mode-only\" width=\"700px\"> <img src=\"./doc/_static/pl-catalyst-logo-darkmode.png#gh-dark-mode-only\" width=\"700px\" onerror=\"this.style.display='none'\" alt=\"\"/> </p>",
-    "description": "<p align=\"center\"> <img src=\"https://raw.githubusercontent.com/PennyLaneAI/catalyst/main/doc/_static/pl-catalyst-logo-lightmode.png#gh-light-mode-only\" width=\"700px\"> <img src=\"./doc/_static/pl-catalyst-logo-darkmode.png#gh-dark-mode-only\" width=\"700px\" onerror=\"this.style.display='none'\" alt=\"\"/> </p>",
-    "stars": 0,
+    "summary": "A JIT compiler for hybrid quantum programs in PennyLane",
+    "description": "A JIT compiler for hybrid quantum programs in PennyLane",
+    "stars": 211,
+    "lastPushedAt": "2026-05-27T21:17:38Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/pennylaneai-catalyst.svg"
   },
   {
     "slug": "dwavesystems-chimera-embedding",
@@ -461,15 +536,20 @@
       }
     ],
     "primaryLanguage": "Python",
+    "primaryLanguages": [
+      "Python",
+      "C"
+    ],
     "license": "Apache-2.0",
     "summary": "This is a repository for algorithms to generate native-structured embeddings.",
     "description": "This is a repository for algorithms to generate native-structured embeddings.",
-    "stars": 0,
+    "stars": 28,
+    "lastPushedAt": "2019-06-25T18:25:24Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/dwavesystems-chimera-embedding.svg"
   },
   {
     "slug": "quantumlib-cirq",
@@ -493,15 +573,21 @@
       }
     ],
     "primaryLanguage": "Python",
+    "primaryLanguages": [
+      "Python",
+      "Jupyter",
+      "TypeScript"
+    ],
     "license": "Apache-2.0",
-    "summary": "Python package for writing, manipulating, and running quantum circuits on quantum computers and simulators.",
-    "description": "Python package for writing, manipulating, and running quantum circuits on quantum computers and simulators.",
-    "stars": 0,
+    "summary": "Python framework for creating, editing, and running Noisy Intermediate-Scale Quantum (NISQ) circuits.",
+    "description": "Python framework for creating, editing, and running Noisy Intermediate-Scale Quantum (NISQ) circuits.",
+    "stars": 4971,
+    "lastPushedAt": "2026-05-27T20:52:07Z",
     "featured": true,
     "flagship": true,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": "/learn/flagship/quantumlib-cirq.png"
+    "imagePath": "/learn/og/quantumlib-cirq.png"
   },
   {
     "slug": "bbn-q-cliffords-jl",
@@ -525,15 +611,19 @@
       }
     ],
     "primaryLanguage": "Julia",
+    "primaryLanguages": [
+      "Julia"
+    ],
     "license": "Custom / project-specific",
-    "summary": "This library allows for efficient calculation of Clifford circuits by tracking the evolution of X and Z generators (the so-called **tableau** representation).",
-    "description": "This library allows for efficient calculation of Clifford circuits by tracking the evolution of X and Z generators (the so-called **tableau** representation). No special effort has been made to strictly minimize the number of bits needed to store each Clifford. Rather, the goal was clarity. One unique feature compared to other such utilities is that we also efficiently track the...",
-    "stars": 0,
+    "summary": "Efficient calculation of Clifford circuits in Julia.",
+    "description": "Efficient calculation of Clifford circuits in Julia.",
+    "stars": 46,
+    "lastPushedAt": "2021-07-01T16:44:20Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/bbn-q-cliffords-jl.svg"
   },
   {
     "slug": "nvidia-cuda-quantum",
@@ -557,15 +647,21 @@
       }
     ],
     "primaryLanguage": "C++",
+    "primaryLanguages": [
+      "C++",
+      "Python",
+      "C/C++"
+    ],
     "license": "Apache-2.0",
-    "summary": "The CUDA-Q Platform for hybrid quantum-classical computers enables integration and programming of quantum processing units (QPUs), GPUs, and CPUs in one system.",
-    "description": "The CUDA-Q Platform for hybrid quantum-classical computers enables integration and programming of quantum processing units (QPUs), GPUs, and CPUs in one system. This repository contains the source code for all C++ and Python tools provided by the CUDA-Q toolkit, including the nvq++ compiler, the CUDA-Q runtime, as well as a selection of integrated CPU and GPU backends for rapid application...",
-    "stars": 0,
+    "summary": "C++ and Python support for the CUDA Quantum programming model for heterogeneous quantum-classical workflows",
+    "description": "C++ and Python support for the CUDA Quantum programming model for heterogeneous quantum-classical workflows",
+    "stars": 1048,
+    "lastPushedAt": "2026-05-27T21:30:02Z",
     "featured": false,
     "flagship": true,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": "/learn/flagship/nvidia-cuda-quantum.png"
+    "imagePath": "/learn/og/nvidia-cuda-quantum.png"
   },
   {
     "slug": "iic-jku-ddsim",
@@ -588,16 +684,22 @@
         "title": "Quantum computing software in 2026: the open-source map"
       }
     ],
-    "primaryLanguage": "Python",
+    "primaryLanguage": "C++",
+    "primaryLanguages": [
+      "Python",
+      "C++",
+      "Shell"
+    ],
     "license": "MIT",
-    "summary": "<p align=\"center\"> <a href=\"https://mqt.readthedocs.io\"> <picture> <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://raw.githubusercontent.com/munich-quantum-toolkit/.github/refs/heads/main/docs/_static/mqt-banner-dark.svg\" width=\"90%\"> <img src=\"https://raw.githubusercontent.com/munich-quantum-toolkit/.github/refs/heads/main/docs/_static/mqt-banner-light.svg\" width=\"90%\" alt=\"MQT Banner\"> </picture> </a> </p>",
-    "description": "<p align=\"center\"> <a href=\"https://mqt.readthedocs.io\"> <picture> <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://raw.githubusercontent.com/munich-quantum-toolkit/.github/refs/heads/main/docs/_static/mqt-banner-dark.svg\" width=\"90%\"> <img src=\"https://raw.githubusercontent.com/munich-quantum-toolkit/.github/refs/heads/main/docs/_static/mqt-banner-light.svg\" width=\"90%\" alt=\"MQT Banner\"> </picture> </a> </p>",
-    "stars": 0,
+    "summary": "MQT DDSIM - A quantum circuit simulator based on decision diagrams written in C++",
+    "description": "MQT DDSIM - A quantum circuit simulator based on decision diagrams written in C++",
+    "stars": 160,
+    "lastPushedAt": "2026-05-26T00:42:17Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/iic-jku-ddsim.svg"
   },
   {
     "slug": "dwavesystems-dimod",
@@ -621,15 +723,21 @@
       }
     ],
     "primaryLanguage": "Python",
+    "primaryLanguages": [
+      "Python",
+      "C++",
+      "C/C++"
+    ],
     "license": "Apache-2.0",
-    "summary": "dimod is a shared API for samplers.",
-    "description": "dimod is a shared API for samplers. It provides:",
-    "stars": 0,
+    "summary": "A shared API for QUBO/Ising samplers.",
+    "description": "A shared API for QUBO/Ising samplers.",
+    "stars": 142,
+    "lastPushedAt": "2026-05-14T17:24:57Z",
     "featured": false,
     "flagship": true,
     "qtanglRelevant": true,
     "archived": false,
-    "imagePath": "/learn/flagship/dwavesystems-dimod.png"
+    "imagePath": "/learn/og/dwavesystems-dimod.png"
   },
   {
     "slug": "dwavesystems-dwave-cloud-client",
@@ -653,15 +761,20 @@
       }
     ],
     "primaryLanguage": "Python",
+    "primaryLanguages": [
+      "Python",
+      "JavaScript"
+    ],
     "license": "Apache-2.0",
-    "summary": "image:: https://badge.fury.io/py/dwave-cloud-client.svg :target: https://badge.fury.io/py/dwave-cloud-client :alt: Latest version on PyPI",
-    "description": ".. image:: https://badge.fury.io/py/dwave-cloud-client.svg :target: https://badge.fury.io/py/dwave-cloud-client :alt: Latest version on PyPI",
-    "stars": 0,
+    "summary": "A minimal implementation of the REST interface used to communicate with D-Wave Solver API (SAPI) servers.",
+    "description": "A minimal implementation of the REST interface used to communicate with D-Wave Solver API (SAPI) servers.",
+    "stars": 62,
+    "lastPushedAt": "2026-05-26T21:20:55Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/dwavesystems-dwave-cloud-client.svg"
   },
   {
     "slug": "dwavesystems-dwave-neal",
@@ -685,15 +798,21 @@
       }
     ],
     "primaryLanguage": "Python",
+    "primaryLanguages": [
+      "Python",
+      "C++",
+      "C/C++"
+    ],
     "license": "Apache-2.0",
-    "summary": "A simulated annealing sampler can be used for approximate Boltzmann sampling or heuristic optimization.",
-    "description": "A simulated annealing sampler can be used for approximate Boltzmann sampling or heuristic optimization. This implementation approaches the equilibrium distribution by performing updates at a sequence of increasing beta values, `beta_schedule`, terminating at the target beta. Each spin is updated once in a fixed order per point in the beta_schedule according to a Metropolis- Hastings update. When beta is large...",
-    "stars": 0,
+    "summary": "An implementation of a simulated annealing sampler for general Ising model graphs in C++ with a dimod Python wrapper.",
+    "description": "An implementation of a simulated annealing sampler for general Ising model graphs in C++ with a dimod Python wrapper.",
+    "stars": 62,
+    "lastPushedAt": "2022-11-25T23:44:04Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/dwavesystems-dwave-neal.svg"
   },
   {
     "slug": "dwavesystems-dwave-ocean-sdk",
@@ -717,15 +836,21 @@
       }
     ],
     "primaryLanguage": "Python",
+    "primaryLanguages": [
+      "Python",
+      "JavaScript",
+      "Jupyter"
+    ],
     "license": "Apache-2.0",
-    "summary": "Ocean SDK <https://docs.dwavequantum.com/en/latest/ocean/>_ is D-Wave's <https://www.dwavequantum.com/>_ suite of tools for solving hard problems with quantum computers.",
-    "description": "Ocean SDK <https://docs.dwavequantum.com/en/latest/ocean/>_ is D-Wave's <https://www.dwavequantum.com/>_ suite of tools for solving hard problems with quantum computers.",
-    "stars": 0,
+    "summary": "Installer for D-Wave's Ocean tools",
+    "description": "Installer for D-Wave's Ocean tools",
+    "stars": 524,
+    "lastPushedAt": "2026-05-27T13:35:08Z",
     "featured": true,
     "flagship": true,
     "qtanglRelevant": true,
     "archived": false,
-    "imagePath": "/learn/flagship/dwavesystems-dwave-ocean-sdk.png"
+    "imagePath": "/learn/og/dwavesystems-dwave-ocean-sdk.png"
   },
   {
     "slug": "dwavesystems-dwave-system",
@@ -749,15 +874,20 @@
       }
     ],
     "primaryLanguage": "Python",
+    "primaryLanguages": [
+      "Python",
+      "JavaScript"
+    ],
     "license": "Apache-2.0",
-    "summary": "image:: https://img.shields.io/pypi/pyversions/dwave-system.svg?style=flat :target: https://pypi.org/project/dwave-system :alt: PyPI - Python Version",
-    "description": ".. image:: https://img.shields.io/pypi/pyversions/dwave-system.svg?style=flat :target: https://pypi.org/project/dwave-system :alt: PyPI - Python Version",
-    "stars": 0,
+    "summary": "An API for easily incorporating the D-Wave system as a sampler, either directly or through Leap's cloud-based hybrid samplers",
+    "description": "An API for easily incorporating the D-Wave system as a sampler, either directly or through Leap's cloud-based hybrid samplers",
+    "stars": 96,
+    "lastPushedAt": "2026-03-04T17:33:37Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/dwavesystems-dwave-system.svg"
   },
   {
     "slug": "dwavesystems-dwave-embedding-utilities",
@@ -781,15 +911,19 @@
       }
     ],
     "primaryLanguage": "Python",
+    "primaryLanguages": [
+      "Python"
+    ],
     "license": "Apache-2.0",
-    "summary": "This package provides utilities for mapping between source and target models.",
-    "description": "This package provides utilities for mapping between source and target models.",
-    "stars": 0,
+    "summary": "Provides utilities for mapping between source and target models.",
+    "description": "Provides utilities for mapping between source and target models.",
+    "stars": 11,
+    "lastPushedAt": "2018-03-06T00:43:30Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
-    "archived": false,
-    "imagePath": null
+    "archived": true,
+    "imagePath": "/learn/monogram/dwavesystems-dwave-embedding-utilities.svg"
   },
   {
     "slug": "dwavesystems-dwave-micro-client-dimod",
@@ -813,15 +947,19 @@
       }
     ],
     "primaryLanguage": "Python",
+    "primaryLanguages": [
+      "Python"
+    ],
     "license": "Apache-2.0",
-    "summary": "image:: https://travis-ci.org/dwavesystems/dwave_micro_client_dimod.svg?branch=master :target: https://travis-ci.org/dwavesystems/dwave_micro_client_dimod :alt: Travis Status",
-    "description": ".. image:: https://travis-ci.org/dwavesystems/dwave_micro_client_dimod.svg?branch=master :target: https://travis-ci.org/dwavesystems/dwave_micro_client_dimod :alt: Travis Status",
-    "stars": 0,
+    "summary": "dimod wrapper for the D-Wave Micro Client",
+    "description": "dimod wrapper for the D-Wave Micro Client",
+    "stars": 8,
+    "lastPushedAt": "2018-02-21T22:32:38Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
-    "archived": false,
-    "imagePath": null
+    "archived": true,
+    "imagePath": "/learn/monogram/dwavesystems-dwave-micro-client-dimod.svg"
   },
   {
     "slug": "dwavesystems-dwave-networkx",
@@ -845,15 +983,20 @@
       }
     ],
     "primaryLanguage": "Python",
+    "primaryLanguages": [
+      "Python",
+      "JavaScript"
+    ],
     "license": "Apache-2.0",
-    "summary": "dwave-graphs provides tools for working with quantum processing unit (QPU) topology graphs, such as the Pegasus used on the Advantage\\ :sup:TM quantum computer, and implementations of graph-theory algorithms on D-Wave quantum computers...",
-    "description": "dwave-graphs provides tools for working with quantum processing unit (QPU) topology graphs, such as the Pegasus used on the Advantage\\ :sup:TM quantum computer, and implementations of graph-theory algorithms on D-Wave quantum computers and other binary quadratic model (BQM) samplers.",
-    "stars": 0,
+    "summary": "A package providing graphs and algorithms relevant to working with the D-Wave quantum computers.",
+    "description": "A package providing graphs and algorithms relevant to working with the D-Wave quantum computers.",
+    "stars": 94,
+    "lastPushedAt": "2026-04-29T20:04:29Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/dwavesystems-dwave-networkx.svg"
   },
   {
     "slug": "dwavesystems-dwave-sapi-dimod",
@@ -877,15 +1020,19 @@
       }
     ],
     "primaryLanguage": "Python",
+    "primaryLanguages": [
+      "Python"
+    ],
     "license": "Apache-2.0",
-    "summary": "sample_qubo and sample_ising work only for problems that fit directly onto the solver's structure",
-    "description": "sample_qubo and sample_ising work only for problems that fit directly onto the solver's structure",
-    "stars": 0,
+    "summary": "dimod wrapper for D-Wave's SAPI Client Library",
+    "description": "dimod wrapper for D-Wave's SAPI Client Library",
+    "stars": 9,
+    "lastPushedAt": "2018-02-21T20:44:27Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
-    "archived": false,
-    "imagePath": null
+    "archived": true,
+    "imagePath": "/learn/monogram/dwavesystems-dwave-sapi-dimod.svg"
   },
   {
     "slug": "dwavesystems-dwavebinarycsp",
@@ -909,15 +1056,20 @@
       }
     ],
     "primaryLanguage": "Python",
+    "primaryLanguages": [
+      "Python",
+      "JavaScript"
+    ],
     "license": "Apache-2.0",
-    "summary": "For solving problems with constraints, we recommend using the hybrid solvers in the Leap :tm: service.",
-    "description": ":warning: *dwavebinarycsp* is deprecated. For solving problems with constraints, we recommend using the hybrid solvers in the Leap :tm: service. You can find documentation for the hybrid solvers at https://docs.ocean.dwavesys.com.",
-    "stars": 0,
+    "summary": "Map constraint satisfaction problems with binary variables to binary quadratic models.",
+    "description": "Map constraint satisfaction problems with binary variables to binary quadratic models.",
+    "stars": 21,
+    "lastPushedAt": "2025-03-18T12:51:17Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": true,
-    "imagePath": null
+    "imagePath": "/learn/monogram/dwavesystems-dwavebinarycsp.svg"
   },
   {
     "slug": "lanl-edif2qmasm",
@@ -941,15 +1093,19 @@
       }
     ],
     "primaryLanguage": "Go",
-    "license": "BSD",
-    "summary": "edif2qmasm makes it possible to run Verilog or VHDL programs on a D-Wave quantum annealer.",
-    "description": "edif2qmasm makes it possible to run Verilog or VHDL programs on a D-Wave quantum annealer.",
-    "stars": 0,
+    "primaryLanguages": [
+      "Go"
+    ],
+    "license": "BSD-3-Clause",
+    "summary": "Run hardware descriptions on a quantum annealer",
+    "description": "Run hardware descriptions on a quantum annealer",
+    "stars": 25,
+    "lastPushedAt": "2022-09-23T05:45:22Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/lanl-edif2qmasm.svg"
   },
   {
     "slug": "entanglion-entanglion",
@@ -972,16 +1128,18 @@
         "title": "How to start writing quantum code: an honest path"
       }
     ],
-    "primaryLanguage": "Mixed",
-    "license": "Creative Commons",
-    "summary": "**2 PLAYERS AGES 14 & UP 45 MINUTES**",
-    "description": "**2 PLAYERS AGES 14 & UP 45 MINUTES**",
-    "stars": 0,
+    "primaryLanguage": null,
+    "primaryLanguages": [],
+    "license": "CC",
+    "summary": "The world's first open source quantum computing board game",
+    "description": "The world's first open source quantum computing board game",
+    "stars": 475,
+    "lastPushedAt": "2023-06-30T16:22:40Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/entanglion-entanglion.svg"
   },
   {
     "slug": "projectq-framework-fermilib",
@@ -1005,15 +1163,20 @@
       }
     ],
     "primaryLanguage": "Python",
+    "primaryLanguages": [
+      "Python",
+      "Jupyter"
+    ],
     "license": "Apache-2.0",
-    "summary": "FermiLib - Open source software for analyzing quantum simulation algorithms ===========================================================================",
-    "description": "FermiLib - Open source software for analyzing quantum simulation algorithms ===========================================================================",
-    "stars": 0,
+    "summary": "FermiLib: Open source software for analyzing fermionic quantum simulation algorithms",
+    "description": "FermiLib: Open source software for analyzing fermionic quantum simulation algorithms",
+    "stars": 90,
+    "lastPushedAt": "2018-05-04T08:32:34Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/projectq-framework-fermilib.svg"
   },
   {
     "slug": "rigetticomputing-grove",
@@ -1037,15 +1200,21 @@
       }
     ],
     "primaryLanguage": "Python",
+    "primaryLanguages": [
+      "Python",
+      "Jupyter",
+      "JavaScript"
+    ],
     "license": "Apache-2.0",
-    "summary": "A collection of quantum algorithms built using the Rigetti Forest platform.",
-    "description": "A collection of quantum algorithms built using the Rigetti Forest platform. Grove is licensed under the Apache 2.0 license.",
-    "stars": 0,
+    "summary": "Quantum algorithms built using pyQuil.",
+    "description": "Quantum algorithms built using pyQuil.",
+    "stars": 384,
+    "lastPushedAt": "2021-12-02T19:36:56Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/rigetticomputing-grove.svg"
   },
   {
     "slug": "intel-intel-qs",
@@ -1069,15 +1238,21 @@
       }
     ],
     "primaryLanguage": "C++",
+    "primaryLanguages": [
+      "C++",
+      "C",
+      "Shell"
+    ],
     "license": "Apache-2.0",
-    "summary": "Intel Quantum Simulator (Intel-QS), also known as qHiPSTER (The Quantum High Performance Software Testing Environment), is a simulator of quantum circuits optimized to take maximum advantage of multi-core and multi-nodes architectures.",
-    "description": "Intel Quantum Simulator (Intel-QS), also known as qHiPSTER (The Quantum High Performance Software Testing Environment), is a simulator of quantum circuits optimized to take maximum advantage of multi-core and multi-nodes architectures. It is based on a complete representation of the qubit state, but avoids the explicit representation of gates and other quantum operations in terms of matrices. Intel-QS uses the...",
-    "stars": 0,
+    "summary": "High-performance simulator of quantum circuits",
+    "description": "High-performance simulator of quantum circuits",
+    "stars": 261,
+    "lastPushedAt": "2026-05-26T15:15:42Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/intel-intel-qs.svg"
   },
   {
     "slug": "qchackers-jquil",
@@ -1086,9 +1261,9 @@
     "name": "jquil",
     "repoUrl": "https://github.com/QCHackers/jquil",
     "category": {
-      "slug": "compilers-languages",
-      "title": "Compilers and languages",
-      "description": "Compilers, intermediate representations, domain-specific languages, and transpilation tools for quantum programs."
+      "slug": "general-purpose-sdks",
+      "title": "General-purpose SDKs",
+      "description": "Broad frameworks for building, simulating, and experimenting with quantum circuits across multiple domains."
     },
     "topics": [
       {
@@ -1101,15 +1276,19 @@
       }
     ],
     "primaryLanguage": "Java",
+    "primaryLanguages": [
+      "Java"
+    ],
     "license": "Apache-2.0",
-    "summary": "Open ~/.jquilconfig.properties and enter your Forest User Id and API key:",
-    "description": "Open ~/.jquilconfig.properties and enter your Forest User Id and API key:",
-    "stars": 0,
+    "summary": "A Java library for quantum programming using Quil.",
+    "description": "A Java library for quantum programming using Quil.",
+    "stars": 16,
+    "lastPushedAt": "2018-07-23T03:05:53Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/qchackers-jquil.svg"
   },
   {
     "slug": "mapmeld-jsquil",
@@ -1133,15 +1312,19 @@
       }
     ],
     "primaryLanguage": "JavaScript",
+    "primaryLanguages": [
+      "JavaScript"
+    ],
     "license": "Apache-2.0",
-    "summary": "JavaScript interface for writing Quil programs, based on Rigetti Computing's <a href='https://github.com/rigetticomputing/pyquil'>pyQuil package</a>.",
-    "description": "JavaScript interface for writing Quil programs, based on Rigetti Computing's <a href='https://github.com/rigetticomputing/pyquil'>pyQuil package</a>.",
-    "stars": 0,
+    "summary": "Quantum computer instructions for JavaScript developers",
+    "description": "Quantum computer instructions for JavaScript developers",
+    "stars": 51,
+    "lastPushedAt": "2020-06-24T23:24:11Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/mapmeld-jsquil.svg"
   },
   {
     "slug": "open-quantum-safe-liboqs",
@@ -1164,16 +1347,22 @@
         "title": "Quantum computing software in 2026: the open-source map"
       }
     ],
-    "primaryLanguage": "C/C++",
+    "primaryLanguage": "C",
+    "primaryLanguages": [
+      "C/C++",
+      "C",
+      "Python"
+    ],
     "license": "MIT",
-    "summary": "liboqs is an open source C library for quantum-safe cryptographic algorithms.",
-    "description": "liboqs is an open source C library for quantum-safe cryptographic algorithms.",
-    "stars": 0,
+    "summary": "C library for prototyping and experimenting with quantum-resistant cryptography",
+    "description": "C library for prototyping and experimenting with quantum-resistant cryptography",
+    "stars": 2946,
+    "lastPushedAt": "2026-05-27T17:24:20Z",
     "featured": true,
     "flagship": true,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": "/learn/flagship/open-quantum-safe-liboqs.png"
+    "imagePath": "/learn/og/open-quantum-safe-liboqs.png"
   },
   {
     "slug": "gbanegas-libquantumjava",
@@ -1197,15 +1386,20 @@
       }
     ],
     "primaryLanguage": "Java",
+    "primaryLanguages": [
+      "Java",
+      "JavaScript"
+    ],
     "license": "Apache-2.0",
     "summary": "This is a crude translation from th C implementation of libquantum to a Java version.",
     "description": "This is a crude translation from th C implementation of libquantum to a Java version.",
-    "stars": 0,
+    "stars": 8,
+    "lastPushedAt": "2018-08-07T08:34:20Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/gbanegas-libquantumjava.svg"
   },
   {
     "slug": "dwavesystems-minorminer",
@@ -1229,15 +1423,21 @@
       }
     ],
     "primaryLanguage": "Python",
+    "primaryLanguages": [
+      "Python",
+      "C++",
+      "C"
+    ],
     "license": "Apache-2.0",
     "summary": "minorminer is a heuristic tool for minor embedding: given a minor and target graph, it tries to find a mapping that embeds the minor into the target.",
     "description": "minorminer is a heuristic tool for minor embedding: given a minor and target graph, it tries to find a mapping that embeds the minor into the target.",
-    "stars": 0,
+    "stars": 53,
+    "lastPushedAt": "2026-01-27T20:22:21Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/dwavesystems-minorminer.svg"
   },
   {
     "slug": "unitaryfund-mitiq",
@@ -1261,15 +1461,21 @@
       }
     ],
     "primaryLanguage": "Python",
-    "license": "LGPL",
-    "summary": "Mitiq [mitt \u2022 tick] is a Python toolkit for implementing error mitigation techniques on quantum computers.",
-    "description": "Mitiq [mitt \u2022 tick] is a Python toolkit for implementing error mitigation techniques on quantum computers.",
-    "stars": 0,
+    "primaryLanguages": [
+      "Python",
+      "Jupyter",
+      "OpenQASM"
+    ],
+    "license": "GPL-3.0",
+    "summary": "Mitiq is an open source toolkit for implementing error mitigation techniques on most current intermediate-scale quantum computers.",
+    "description": "Mitiq is an open source toolkit for implementing error mitigation techniques on most current intermediate-scale quantum computers.",
+    "stars": 432,
+    "lastPushedAt": "2026-05-27T16:28:57Z",
     "featured": false,
     "flagship": true,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": "/learn/flagship/unitaryfund-mitiq.png"
+    "imagePath": "/learn/og/unitaryfund-mitiq.png"
   },
   {
     "slug": "cda-tum-mqt-bench",
@@ -1289,15 +1495,19 @@
       }
     ],
     "primaryLanguage": "Python",
+    "primaryLanguages": [
+      "Python"
+    ],
     "license": "MIT",
-    "summary": "<p align=\"center\"> <a href=\"https://mqt.readthedocs.io\"> <picture> <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://raw.githubusercontent.com/munich-quantum-toolkit/.github/refs/heads/main/docs/_static/logo-mqt-dark.svg\" width=\"60%\"> <img src=\"https://raw.githubusercontent.com/munich-quantum-toolkit/.github/refs/heads/main/docs/_static/logo-mqt-light.svg\" width=\"60%\" alt=\"MQT Logo\"> </picture> </a> </p>",
-    "description": "<p align=\"center\"> <a href=\"https://mqt.readthedocs.io\"> <picture> <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://raw.githubusercontent.com/munich-quantum-toolkit/.github/refs/heads/main/docs/_static/logo-mqt-dark.svg\" width=\"60%\"> <img src=\"https://raw.githubusercontent.com/munich-quantum-toolkit/.github/refs/heads/main/docs/_static/logo-mqt-light.svg\" width=\"60%\" alt=\"MQT Logo\"> </picture> </a> </p>",
-    "stars": 0,
+    "summary": "MQT Bench - An MQT Tool for Benchmarking Quantum Software Tools",
+    "description": "MQT Bench - An MQT Tool for Benchmarking Quantum Software Tools",
+    "stars": 118,
+    "lastPushedAt": "2026-05-20T00:42:41Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/cda-tum-mqt-bench.svg"
   },
   {
     "slug": "cda-tum-mqt-dasqa",
@@ -1321,15 +1531,21 @@
       }
     ],
     "primaryLanguage": "Python",
+    "primaryLanguages": [
+      "Python",
+      "Jupyter",
+      "OpenQASM"
+    ],
     "license": "MIT",
-    "summary": "<p align=\"center\"> <a href=\"https://mqt.readthedocs.io\"> <picture> <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://raw.githubusercontent.com/cda-tum/mqt/main/docs/_static/mqt_light.png\" width=\"60%\"> <img src=\"https://raw.githubusercontent.com/cda-tum/mqt/main/docs/_static/mqt_dark.png\" width=\"60%\" alt=\"MQT Logo\"> </picture> </a> </p>",
-    "description": "<p align=\"center\"> <a href=\"https://mqt.readthedocs.io\"> <picture> <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://raw.githubusercontent.com/cda-tum/mqt/main/docs/_static/mqt_light.png\" width=\"60%\"> <img src=\"https://raw.githubusercontent.com/cda-tum/mqt/main/docs/_static/mqt_dark.png\" width=\"60%\" alt=\"MQT Logo\"> </picture> </a> </p>",
-    "stars": 0,
+    "summary": "MQT DASQA - Designer for Superconducting Quantum Architectures",
+    "description": "MQT DASQA - Designer for Superconducting Quantum Architectures",
+    "stars": 21,
+    "lastPushedAt": "2025-03-14T20:46:17Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/cda-tum-mqt-dasqa.svg"
   },
   {
     "slug": "cda-tum-mqt-ddsim",
@@ -1352,16 +1568,22 @@
         "title": "Quantum computing software in 2026: the open-source map"
       }
     ],
-    "primaryLanguage": "Python",
+    "primaryLanguage": "C++",
+    "primaryLanguages": [
+      "Python",
+      "C++",
+      "Shell"
+    ],
     "license": "MIT",
-    "summary": "<p align=\"center\"> <a href=\"https://mqt.readthedocs.io\"> <picture> <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://raw.githubusercontent.com/munich-quantum-toolkit/.github/refs/heads/main/docs/_static/mqt-banner-dark.svg\" width=\"90%\"> <img src=\"https://raw.githubusercontent.com/munich-quantum-toolkit/.github/refs/heads/main/docs/_static/mqt-banner-light.svg\" width=\"90%\" alt=\"MQT Banner\"> </picture> </a> </p>",
-    "description": "<p align=\"center\"> <a href=\"https://mqt.readthedocs.io\"> <picture> <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://raw.githubusercontent.com/munich-quantum-toolkit/.github/refs/heads/main/docs/_static/mqt-banner-dark.svg\" width=\"90%\"> <img src=\"https://raw.githubusercontent.com/munich-quantum-toolkit/.github/refs/heads/main/docs/_static/mqt-banner-light.svg\" width=\"90%\" alt=\"MQT Banner\"> </picture> </a> </p>",
-    "stars": 0,
+    "summary": "MQT DDSIM - A quantum circuit simulator based on decision diagrams written in C++",
+    "description": "MQT DDSIM - A quantum circuit simulator based on decision diagrams written in C++",
+    "stars": 160,
+    "lastPushedAt": "2026-05-26T00:42:17Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/cda-tum-mqt-ddsim.svg"
   },
   {
     "slug": "cda-tum-mqt-qmap",
@@ -1384,16 +1606,22 @@
         "title": "Quantum computing software in 2026: the open-source map"
       }
     ],
-    "primaryLanguage": "OpenQASM",
+    "primaryLanguage": "C++",
+    "primaryLanguages": [
+      "OpenQASM",
+      "C++",
+      "Python"
+    ],
     "license": "MIT",
-    "summary": "<p align=\"center\"> <a href=\"https://mqt.readthedocs.io\"> <picture> <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://raw.githubusercontent.com/munich-quantum-toolkit/.github/refs/heads/main/docs/_static/mqt-banner-dark.svg\" width=\"90%\"> <img src=\"https://raw.githubusercontent.com/munich-quantum-toolkit/.github/refs/heads/main/docs/_static/mqt-banner-light.svg\" width=\"90%\" alt=\"MQT Banner\"> </picture> </a> </p>",
-    "description": "<p align=\"center\"> <a href=\"https://mqt.readthedocs.io\"> <picture> <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://raw.githubusercontent.com/munich-quantum-toolkit/.github/refs/heads/main/docs/_static/mqt-banner-dark.svg\" width=\"90%\"> <img src=\"https://raw.githubusercontent.com/munich-quantum-toolkit/.github/refs/heads/main/docs/_static/mqt-banner-light.svg\" width=\"90%\" alt=\"MQT Banner\"> </picture> </a> </p>",
-    "stars": 0,
+    "summary": "MQT QMAP - A tool for Quantum Circuit Mapping written in C++",
+    "description": "MQT QMAP - A tool for Quantum Circuit Mapping written in C++",
+    "stars": 138,
+    "lastPushedAt": "2026-05-25T01:55:50Z",
     "featured": false,
     "flagship": true,
     "qtanglRelevant": true,
     "archived": false,
-    "imagePath": "/learn/flagship/cda-tum-mqt-qmap.png"
+    "imagePath": "/learn/og/cda-tum-mqt-qmap.png"
   },
   {
     "slug": "cda-tum-mqt-qudits",
@@ -1417,15 +1645,20 @@
       }
     ],
     "primaryLanguage": "Python",
+    "primaryLanguages": [
+      "Python",
+      "C++"
+    ],
     "license": "MIT",
-    "summary": "> [!NOTE] > This project is currently in low maintenance mode.",
-    "description": "> [!NOTE] > This project is currently in low maintenance mode. > We will still fix bugs and accept pull requests, but we will not actively develop new features.",
-    "stars": 0,
+    "summary": "A Framework For Mixed-Dimensional Qudit Quantum Computing",
+    "description": "A Framework For Mixed-Dimensional Qudit Quantum Computing",
+    "stars": 35,
+    "lastPushedAt": "2026-05-26T02:28:43Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/cda-tum-mqt-qudits.svg"
   },
   {
     "slug": "quantumlib-openfermion",
@@ -1449,15 +1682,21 @@
       }
     ],
     "primaryLanguage": "Python",
+    "primaryLanguages": [
+      "Python",
+      "Jupyter",
+      "Shell"
+    ],
     "license": "Apache-2.0",
-    "summary": "Features &ndash; Installation &ndash; Plugins &ndash; Documentation &ndash; Contributing &ndash; Citing &ndash; Authors &ndash; Contact",
-    "description": "Features &ndash; Installation &ndash; Plugins &ndash; Documentation &ndash; Contributing &ndash; Citing &ndash; Authors &ndash; Contact",
-    "stars": 0,
+    "summary": "Python package for compiling and analyzing quantum algorithms to simulate electronic structures.",
+    "description": "Python package for compiling and analyzing quantum algorithms to simulate electronic structures.",
+    "stars": 1697,
+    "lastPushedAt": "2026-05-26T00:08:31Z",
     "featured": true,
     "flagship": true,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": "/learn/flagship/quantumlib-openfermion.png"
+    "imagePath": "/learn/og/quantumlib-openfermion.png"
   },
   {
     "slug": "entropicalabs-openqaoa",
@@ -1481,15 +1720,21 @@
       }
     ],
     "primaryLanguage": "Python",
-    "license": "Custom / project-specific",
-    "summary": "<picture> <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://github.com/entropicalabs/openqaoa/blob/main/.github/images/openqaoa_logo_offW.png\" width=\"650\"> <img alt=\"OpenQAOA\" src=\"https://github.com/entropicalabs/openqaoa/blob/main/.github/images/openqaoa_logo.png\" width=\"650\"> </picture>",
-    "description": "<picture> <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://github.com/entropicalabs/openqaoa/blob/main/.github/images/openqaoa_logo_offW.png\" width=\"650\"> <img alt=\"OpenQAOA\" src=\"https://github.com/entropicalabs/openqaoa/blob/main/.github/images/openqaoa_logo.png\" width=\"650\"> </picture>",
-    "stars": 0,
+    "primaryLanguages": [
+      "Python",
+      "Jupyter",
+      "Shell"
+    ],
+    "license": "MIT",
+    "summary": "Multi-backend SDK for quantum optimisation",
+    "description": "Multi-backend SDK for quantum optimisation",
+    "stars": 139,
+    "lastPushedAt": "2024-08-29T06:53:19Z",
     "featured": true,
     "flagship": true,
     "qtanglRelevant": true,
     "archived": false,
-    "imagePath": "/learn/flagship/entropicalabs-openqaoa.png"
+    "imagePath": "/learn/og/entropicalabs-openqaoa.png"
   },
   {
     "slug": "qiskit-openqasm",
@@ -1512,16 +1757,22 @@
         "title": "How to start writing quantum code: an honest path"
       }
     ],
-    "primaryLanguage": "LaTeX",
+    "primaryLanguage": "Python",
+    "primaryLanguages": [
+      "LaTeX",
+      "OpenQASM",
+      "Python"
+    ],
     "license": "Apache-2.0",
-    "summary": "OpenQASM is an imperative programming language for describing quantum circuits.",
-    "description": "OpenQASM is an imperative programming language for describing quantum circuits. It is capable of describing universal quantum computing using the circuit model, measurement-based model, and near-term quantum computing experiments.",
-    "stars": 0,
+    "summary": "Quantum assembly language for extended quantum circuits",
+    "description": "Quantum assembly language for extended quantum circuits",
+    "stars": 1468,
+    "lastPushedAt": "2026-05-27T15:46:07Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/qiskit-openqasm.svg"
   },
   {
     "slug": "qe-lab-openql",
@@ -1544,16 +1795,22 @@
         "title": "How to start writing quantum code: an honest path"
       }
     ],
-    "primaryLanguage": "C/C++",
+    "primaryLanguage": "C++",
+    "primaryLanguages": [
+      "C/C++",
+      "C++",
+      "OpenQASM"
+    ],
     "license": "Apache-2.0",
-    "summary": "OpenQL is a framework for high-level quantum programming in C++/Python.",
-    "description": "OpenQL is a framework for high-level quantum programming in C++/Python. The framework provides a compiler for compiling and optimizing quantum code. The compiler produces the intermediate quantum assembly language and the compiled micro-code for various target platforms. While the microcode is platform-specific, the quantum assembly code (in cQASM format) is hardware-agnostic and can be simulated on the QX simulator.",
-    "stars": 0,
+    "summary": "OpenQL: A Portable Quantum Programming Framework for Quantum Accelerators.",
+    "description": "OpenQL: A Portable Quantum Programming Framework for Quantum Accelerators. https://dl.acm.org/doi/10.1145/3474222",
+    "stars": 109,
+    "lastPushedAt": "2024-09-03T22:11:46Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/qe-lab-openql.svg"
   },
   {
     "slug": "open-quantum-safe-openssh-portable",
@@ -1577,15 +1834,21 @@
       }
     ],
     "primaryLanguage": "C",
-    "license": "Unknown",
-    "summary": "Please read https://www.openssh.com/report.html for bug reporting instructions and note that we do not use Github for bug reporting.",
-    "description": "Please read https://www.openssh.com/report.html for bug reporting instructions and note that we do not use Github for bug reporting.",
-    "stars": 0,
+    "primaryLanguages": [
+      "C",
+      "Shell",
+      "C/C++"
+    ],
+    "license": "BSD-3-Clause",
+    "summary": "Fork of OpenSSH that includes prototype quantum-resistant key exchange and authentication in SSH based on liboqs.",
+    "description": "Fork of OpenSSH that includes prototype quantum-resistant key exchange and authentication in SSH based on liboqs.",
+    "stars": 232,
+    "lastPushedAt": "2026-03-16T19:33:37Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/open-quantum-safe-openssh-portable.svg"
   },
   {
     "slug": "open-quantum-safe-openssl",
@@ -1609,15 +1872,21 @@
       }
     ],
     "primaryLanguage": "C",
-    "license": "BSD",
-    "summary": "Copyright (c) 1998-2023 The OpenSSL Project Copyright (c) 1995-1998 Eric A.",
-    "description": "Copyright (c) 1998-2023 The OpenSSL Project Copyright (c) 1995-1998 Eric A. Young, Tim J. Hudson All rights reserved.",
-    "stars": 0,
+    "primaryLanguages": [
+      "C",
+      "C/C++",
+      "Shell"
+    ],
+    "license": "BSD-3-Clause",
+    "summary": "[DEPRECATED \u2014 See notice in README.md and switch to OpenSSL 3 OQS Provider] Fork of OpenSSL 1.1.1 that includes prototype quantum-resistant algorithms and ciphersuites based on liboqs",
+    "description": "[DEPRECATED \u2014 See notice in README.md and switch to OpenSSL 3 OQS Provider] Fork of OpenSSL 1.1.1 that includes prototype quantum-resistant algorithms and ciphersuites based on liboqs",
+    "stars": 307,
+    "lastPushedAt": "2026-01-05T13:58:03Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
-    "archived": false,
-    "imagePath": null
+    "archived": true,
+    "imagePath": "/learn/monogram/open-quantum-safe-openssl.svg"
   },
   {
     "slug": "qosf-os-quantum-software",
@@ -1626,30 +1895,32 @@
     "name": "os_quantum_software",
     "repoUrl": "https://github.com/qosf/os_quantum_software",
     "category": {
-      "slug": "general-purpose-sdks",
-      "title": "General-purpose SDKs",
-      "description": "Broad frameworks for building, simulating, and experimenting with quantum circuits across multiple domains."
+      "slug": "simulators",
+      "title": "Simulators",
+      "description": "Projects focused on state-vector, stabilizer, tensor-network, or hardware-inspired quantum simulation."
     },
     "topics": [
       {
-        "slug": "quantum-software-map",
-        "title": "Quantum computing software in 2026: the open-source map"
+        "slug": "quantum-simulators-guide",
+        "title": "Open-source quantum simulators: what each one is good at"
       },
       {
-        "slug": "start-writing-quantum-code",
-        "title": "How to start writing quantum code: an honest path"
+        "slug": "quantum-software-map",
+        "title": "Quantum computing software in 2026: the open-source map"
       }
     ],
-    "primaryLanguage": "Mixed",
-    "license": "Creative Commons",
-    "summary": "Curated list of open-source developed quantum software projects.",
-    "description": "Curated list of open-source developed quantum software projects.",
-    "stars": 0,
+    "primaryLanguage": null,
+    "primaryLanguages": [],
+    "license": "CC0-1.0",
+    "summary": "Curated list of open-source quantum software projects.",
+    "description": "Curated list of open-source quantum software projects.",
+    "stars": 2105,
+    "lastPushedAt": "2026-05-01T05:35:12Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/qosf-os-quantum-software.svg"
   },
   {
     "slug": "msrudolph-paulipropagation-jl",
@@ -1673,15 +1944,20 @@
       }
     ],
     "primaryLanguage": "Julia",
+    "primaryLanguages": [
+      "Julia",
+      "Jupyter"
+    ],
     "license": "Apache-2.0",
-    "summary": "PauliPropagation.jl PauliPropagation.jl is a Julia package for simulating Pauli propagation in quantum circuits and systems.",
-    "description": "PauliPropagation.jl PauliPropagation.jl is a Julia package for simulating Pauli propagation in quantum circuits and systems. It focuses on simulating the evolution of observables expressed in the Pauli basis under the action of unitary gates and non-unitary channels in a quantum circuit.",
-    "stars": 0,
+    "summary": "A Julia library for Pauli propagation simulation of quantum circuits and quantum systems.",
+    "description": "A Julia library for Pauli propagation simulation of quantum circuits and quantum systems.",
+    "stars": 138,
+    "lastPushedAt": "2026-04-17T09:28:07Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/msrudolph-paulipropagation-jl.svg"
   },
   {
     "slug": "dwavesystems-penaltymodel",
@@ -1705,15 +1981,20 @@
       }
     ],
     "primaryLanguage": "Python",
+    "primaryLanguages": [
+      "Python",
+      "JavaScript"
+    ],
     "license": "Apache-2.0",
-    "summary": "For solving problems with constraints, we recommend using the hybrid solvers in the Leap :tm: service.",
-    "description": ":warning: *penaltymodel* is deprecated. For solving problems with constraints, we recommend using the hybrid solvers in the Leap :tm: service. You can find documentation for the hybrid solvers at https://docs.dwavequantum.com.",
-    "stars": 0,
+    "summary": "Utilities and interfaces for using penalty models.",
+    "description": "Utilities and interfaces for using penalty models.",
+    "stars": 19,
+    "lastPushedAt": "2025-08-26T16:26:42Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": true,
-    "imagePath": null
+    "imagePath": "/learn/monogram/dwavesystems-penaltymodel.svg"
   },
   {
     "slug": "xanaduai-pennylane",
@@ -1737,15 +2018,21 @@
       }
     ],
     "primaryLanguage": "Python",
+    "primaryLanguages": [
+      "Python",
+      "OpenQASM",
+      "LaTeX"
+    ],
     "license": "Apache-2.0",
-    "summary": "<p align=\"center\"> <a href=\"https://github.com/PennyLaneAI/pennylane/actions?query=workflow%3ATests\"> <img src=\"https://img.shields.io/github/actions/workflow/status/PennyLaneAI/PennyLane/tests.yml?branch=main&style=flat-square\" /> </a> <a href=\"https://codecov.io/gh/PennyLaneAI/pennylane\"> <img src=\"https://img.shields.io/codecov/c/github/PennyLaneAI/pennylane/main.svg?logo=codecov&style=flat-square\" /> </a> <a href=\"https://docs.pennylane.ai/en/latest\"> <img src=\"https://readthedocs.com/projects/xanaduai-pennylane/badge/?version=latest&style=flat-square\" /> </a> <a href=\"https://pypi.org/project/PennyLane\"> <img src=\"https://img.shields.io/pypi/v/PennyLane.svg?style=flat-square\" /> </a> <a href=\"https://discuss.pennylane.ai\"> <img src=\"https://img.shields.io/discourse/https/discuss.pennylane.ai/posts.svg?logo=discourse&style=flat-square\" /> </a>...",
-    "description": "<p align=\"center\"> <a href=\"https://github.com/PennyLaneAI/pennylane/actions?query=workflow%3ATests\"> <img src=\"https://img.shields.io/github/actions/workflow/status/PennyLaneAI/PennyLane/tests.yml?branch=main&style=flat-square\" /> </a> <a href=\"https://codecov.io/gh/PennyLaneAI/pennylane\"> <img src=\"https://img.shields.io/codecov/c/github/PennyLaneAI/pennylane/main.svg?logo=codecov&style=flat-square\" /> </a> <a href=\"https://docs.pennylane.ai/en/latest\"> <img src=\"https://readthedocs.com/projects/xanaduai-pennylane/badge/?version=latest&style=flat-square\" /> </a> <a href=\"https://pypi.org/project/PennyLane\"> <img src=\"https://img.shields.io/pypi/v/PennyLane.svg?style=flat-square\" /> </a> <a href=\"https://discuss.pennylane.ai\"> <img src=\"https://img.shields.io/discourse/https/discuss.pennylane.ai/posts.svg?logo=discourse&style=flat-square\" /> </a> <a href=\"https://www.apache.org/licenses/LICENSE-2.0\"> <img src=\"https://img.shields.io/pypi/l/PennyLane.svg?logo=apache&style=flat-square\" /> </a> </p>",
-    "stars": 0,
+    "summary": "PennyLane is an open-source quantum software platform for quantum computing, quantum machine learning, and quantum chemistry.",
+    "description": "PennyLane is an open-source quantum software platform for quantum computing, quantum machine learning, and quantum chemistry. Create meaningful quantum algorithms, from inspiration to implementation.",
+    "stars": 3229,
+    "lastPushedAt": "2026-05-27T21:46:39Z",
     "featured": true,
     "flagship": true,
     "qtanglRelevant": true,
     "archived": false,
-    "imagePath": "/learn/flagship/xanaduai-pennylane.png"
+    "imagePath": "/learn/og/xanaduai-pennylane.png"
   },
   {
     "slug": "quandela-perceval",
@@ -1765,15 +2052,21 @@
       }
     ],
     "primaryLanguage": "Python",
+    "primaryLanguages": [
+      "Python",
+      "Jupyter",
+      "Shell"
+    ],
     "license": "MIT",
-    "summary": "Perceval <a href=\"https://perceval.quandela.net\" target=\"_blank\"> <img src=\"logo-perceval.png\" width=\"50\" height=\"50\"> </a>",
-    "description": "Perceval <a href=\"https://perceval.quandela.net\" target=\"_blank\"> <img src=\"logo-perceval.png\" width=\"50\" height=\"50\"> </a>",
-    "stars": 0,
+    "summary": "An open source framework for programming photonic quantum computers",
+    "description": "An open source framework for programming photonic quantum computers",
+    "stars": 202,
+    "lastPushedAt": "2026-05-25T15:40:44Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/quandela-perceval.svg"
   },
   {
     "slug": "nathanshammah-piqs",
@@ -1797,15 +2090,21 @@
       }
     ],
     "primaryLanguage": "Python",
-    "license": "BSD",
-    "summary": "Permutational Invariant Quantum Solver (PIQS) <img src=\"https://github.com/nathanshammah/piqs/blob/master/doc/piqs_logo.png\" width=\"80\" height=\"80\"/>",
-    "description": "Permutational Invariant Quantum Solver (PIQS) <img src=\"https://github.com/nathanshammah/piqs/blob/master/doc/piqs_logo.png\" width=\"80\" height=\"80\"/>",
-    "stars": 0,
+    "primaryLanguages": [
+      "Python",
+      "Jupyter",
+      "C++"
+    ],
+    "license": "BSD-3-Clause",
+    "summary": "Permutational Invariance Quantum Solver for Lindblad open quantum system dynamics",
+    "description": "Permutational Invariance Quantum Solver for Lindblad open quantum system dynamics",
+    "stars": 19,
+    "lastPushedAt": "2024-04-23T17:00:21Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/nathanshammah-piqs.svg"
   },
   {
     "slug": "pqclean-pqclean",
@@ -1828,16 +2127,22 @@
         "title": "Quantum computing software in 2026: the open-source map"
       }
     ],
-    "primaryLanguage": "C/C++",
-    "license": "Unknown",
-    "summary": "> [!WARNING] > **Deprecation Notice:** PQClean is no longer under active maintenance and we plan to archive it as read-only in July 2026.",
-    "description": "> [!WARNING] > **Deprecation Notice:** PQClean is no longer under active maintenance and we plan to archive it as read-only in July 2026. > For maintained implementations of standardized PQC, you may want to consider the PQ Code Package. > > For implementations of the following algorithms not yet supported by PQ Code Package, refer to: > * **Falcon/FN-DSA**: Thomas...",
-    "stars": 0,
+    "primaryLanguage": "C",
+    "primaryLanguages": [
+      "C/C++",
+      "C",
+      "Python"
+    ],
+    "license": null,
+    "summary": "Clean, portable, tested implementations of post-quantum cryptography",
+    "description": "Clean, portable, tested implementations of post-quantum cryptography",
+    "stars": 923,
+    "lastPushedAt": "2026-05-14T14:29:30Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/pqclean-pqclean.svg"
   },
   {
     "slug": "projectq-framework-projectq",
@@ -1861,15 +2166,21 @@
       }
     ],
     "primaryLanguage": "Python",
+    "primaryLanguages": [
+      "Python",
+      "C++",
+      "Jupyter"
+    ],
     "license": "Apache-2.0",
-    "summary": "ProjectQ - An open source software framework for quantum computing ==================================================================",
-    "description": "ProjectQ - An open source software framework for quantum computing ==================================================================",
-    "stars": 0,
+    "summary": "ProjectQ: An open source software framework for quantum computing",
+    "description": "ProjectQ: An open source software framework for quantum computing",
+    "stars": 975,
+    "lastPushedAt": "2026-05-25T18:29:24Z",
     "featured": false,
     "flagship": true,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": "/learn/flagship/projectq-framework-projectq.png"
+    "imagePath": "/learn/og/projectq-framework-projectq.png"
   },
   {
     "slug": "bbn-q-pyqgl2",
@@ -1889,15 +2200,21 @@
       }
     ],
     "primaryLanguage": "Python",
+    "primaryLanguages": [
+      "Python",
+      "Jupyter",
+      "Shell"
+    ],
     "license": "Apache-2.0",
-    "summary": "This is the QGL2 language compiler.",
-    "description": "This is the QGL2 language compiler. QGL2 is a python-like language for programming quantum computers. It is a \"low-level language\" in the sense that programs directly specify gates at the physical layer, but with many of the niceties of a high-level programming language provided by the python host language.",
-    "stars": 0,
+    "summary": "An imperative Quantum Gate Language (QGL) embedded in python.",
+    "description": "An imperative Quantum Gate Language (QGL) embedded in python.",
+    "stars": 9,
+    "lastPushedAt": "2021-12-26T21:40:03Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/bbn-q-pyqgl2.svg"
   },
   {
     "slug": "bbn-q-pyqlab",
@@ -1917,15 +2234,19 @@
       }
     ],
     "primaryLanguage": "Python",
+    "primaryLanguages": [
+      "Python"
+    ],
     "license": "Apache-2.0",
-    "summary": "This is a python package for managing instruments and control parameters for superconducting qubit systems.",
-    "description": "This is a python package for managing instruments and control parameters for superconducting qubit systems. It complements the Qlab repository by providing simple GUIs for creating the JSON settings structures used by Qlab.",
-    "stars": 0,
+    "summary": "A python library for instrument control and superconducting QIP experiments.",
+    "description": "A python library for instrument control and superconducting QIP experiments. ",
+    "stars": 25,
+    "lastPushedAt": "2017-06-06T17:09:54Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/bbn-q-pyqlab.svg"
   },
   {
     "slug": "rigetticomputing-pyquil",
@@ -1949,15 +2270,21 @@
       }
     ],
     "primaryLanguage": "Python",
+    "primaryLanguages": [
+      "Python",
+      "Quil",
+      "Jupyter"
+    ],
     "license": "Apache-2.0",
-    "summary": "PyQuil is a Python library for quantum programming using Quil, the quantum instruction language developed at Rigetti Computing.",
-    "description": "PyQuil is a Python library for quantum programming using Quil, the quantum instruction language developed at Rigetti Computing. PyQuil serves three main functions:",
-    "stars": 0,
+    "summary": "A Python library for quantum programming using Quil.",
+    "description": "A Python library for quantum programming using Quil.",
+    "stars": 1492,
+    "lastPushedAt": "2026-05-26T15:16:52Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/rigetticomputing-pyquil.svg"
   },
   {
     "slug": "bbn-q-pysimulator",
@@ -1981,15 +2308,21 @@
       }
     ],
     "primaryLanguage": "Python",
+    "primaryLanguages": [
+      "Python",
+      "C/C++",
+      "C++"
+    ],
     "license": "Apache-2.0",
-    "summary": "A python framework for qubit simulations and optimal control.",
-    "description": "A python framework for qubit simulations and optimal control. This code provides classes to assist in setting up Hamiltonians for multi-qubit superconducting qubit simulations. After setting up the system there is both a pure python and a C++ implementation of an open and closed system simulator and an optimal control module based on the GRAPE algorithm. The C++ backend relies...",
-    "stars": 0,
+    "summary": "Python with C++ Backend Simulator for Superconducting Circuits QIP",
+    "description": "Python with C++ Backend Simulator for Superconducting Circuits QIP",
+    "stars": 8,
+    "lastPushedAt": "2014-02-14T03:31:49Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/bbn-q-pysimulator.svg"
   },
   {
     "slug": "quantomatic-pyzx",
@@ -2012,16 +2345,22 @@
         "title": "How to start writing quantum code: an honest path"
       }
     ],
-    "primaryLanguage": "Python",
+    "primaryLanguage": "OpenQASM",
+    "primaryLanguages": [
+      "Python",
+      "OpenQASM",
+      "Jupyter"
+    ],
     "license": "Apache-2.0",
-    "summary": "PyZX (pronounce as *Pisics*) is a **Py**thon tool implementing the theory of **ZX**-calculus for the creation, visualisation, and automated rewriting of large-scale quantum circuits.",
-    "description": "PyZX (pronounce as *Pisics*) is a **Py**thon tool implementing the theory of **ZX**-calculus for the creation, visualisation, and automated rewriting of large-scale quantum circuits. Please watch this 2-minute video for a short introduction.",
-    "stars": 0,
+    "summary": "Python library for quantum circuit rewriting and optimisation using the ZX-calculus",
+    "description": "Python library for quantum circuit rewriting and optimisation using the ZX-calculus",
+    "stars": 524,
+    "lastPushedAt": "2026-05-25T13:36:17Z",
     "featured": false,
     "flagship": true,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": "/learn/flagship/quantomatic-pyzx.png"
+    "imagePath": "/learn/og/quantomatic-pyzx.png"
   },
   {
     "slug": "lanl-qa-prolog",
@@ -2045,15 +2384,19 @@
       }
     ],
     "primaryLanguage": "Go",
-    "license": "BSD",
-    "summary": "QA Prolog (\"Quantum Annealing Prolog\") compiles a subset of the Prolog programming language, enhanced with some native support for constraint-logic programming, into a 2-local Ising-model Hamiltonian function suitable for execution on a...",
-    "description": "QA Prolog (\"Quantum Annealing Prolog\") compiles a subset of the Prolog programming language, enhanced with some native support for constraint-logic programming, into a 2-local Ising-model Hamiltonian function suitable for execution on a D\u2011Wave quantum annealer. Technically, though, QA Prolog produces a *classical* Hamiltonian function so it can in principle target classical annealers as well.",
-    "stars": 0,
+    "primaryLanguages": [
+      "Go"
+    ],
+    "license": "BSD-3-Clause",
+    "summary": "Quantum Annealing Prolog",
+    "description": "Quantum Annealing Prolog",
+    "stars": 40,
+    "lastPushedAt": "2022-01-25T20:31:42Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/lanl-qa-prolog.svg"
   },
   {
     "slug": "qct-iqc-qacg",
@@ -2076,16 +2419,20 @@
         "title": "How to start writing quantum code: an honest path"
       }
     ],
-    "primaryLanguage": "LaTeX",
-    "license": "BSD",
-    "summary": "Currently it is a collection of Haskell modules that generate various circuits.",
-    "description": "Currently it is a collection of Haskell modules that generate various circuits. When finished it should provide a command line utility from which various circuits can be requested by providing a name and parameters",
-    "stars": 0,
+    "primaryLanguage": "Haskell",
+    "primaryLanguages": [
+      "LaTeX"
+    ],
+    "license": "BSD-3-Clause",
+    "summary": "Quantum Arithmetic Circuit Generator",
+    "description": "Quantum Arithmetic Circuit Generator",
+    "stars": 6,
+    "lastPushedAt": "2013-08-22T06:53:49Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/qct-iqc-qacg.svg"
   },
   {
     "slug": "pasqal-io-qadence",
@@ -2094,30 +2441,31 @@
     "name": "qadence",
     "repoUrl": "https://github.com/pasqal-io/qadence",
     "category": {
-      "slug": "quantum-chemistry",
-      "title": "Quantum chemistry",
-      "description": "Libraries that connect quantum computing workflows to chemistry, electronic structure, and molecular modeling."
+      "slug": "quantum-ml",
+      "title": "Quantum machine learning",
+      "description": "Libraries and experiments combining quantum circuit workflows with machine learning models or differentiable programming."
     },
     "topics": [
-      {
-        "slug": "quantum-chemistry-for-newcomers",
-        "title": "Quantum chemistry software for newcomers"
-      },
       {
         "slug": "quantum-software-map",
         "title": "Quantum computing software in 2026: the open-source map"
       }
     ],
     "primaryLanguage": "Python",
-    "license": "Custom / project-specific",
-    "summary": "> [!CAUTION] > Qadence is currently not actively maintained!",
-    "description": "> [!CAUTION] > Qadence is currently not actively maintained!",
-    "stars": 0,
+    "primaryLanguages": [
+      "Python",
+      "JavaScript"
+    ],
+    "license": "PASQAL OPEN-SOURCE SOFTWARE LICENSE (MIT-derived)",
+    "summary": "Digital-analog quantum programming interface",
+    "description": "Digital-analog quantum programming interface",
+    "stars": 88,
+    "lastPushedAt": "2025-12-08T14:23:38Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/pasqal-io-qadence.svg"
   },
   {
     "slug": "qbraid-qbraid",
@@ -2141,15 +2489,21 @@
       }
     ],
     "primaryLanguage": "Python",
+    "primaryLanguages": [
+      "Python",
+      "OpenQASM",
+      "Shell"
+    ],
     "license": "Apache-2.0",
-    "summary": "<p align=\"center\"> <a href=\"https://github.com/qBraid/qBraid/actions/workflows/main.yml\"> <img src=\"https://github.com/qBraid/qBraid/actions/workflows/main.yml/badge.svg?branch=main\" alt=\"CI\"/> </a> <a href=\"https://codecov.io/gh/qBraid/qBraid\"> <img src=\"https://codecov.io/gh/qBraid/qBraid/branch/main/graph/badge.svg?token=1UTM0XZB7A\" alt=\"codecov\"/> </a> <a href='https://sdk.qbraid.com/qBraid/'> <img src='https://img.shields.io/github/actions/workflow/status/qBraid/qBraid/gh-pages.yml?label=docs' alt='GitHub Pages'/> </a> <a href=\"https://pypi.org/project/qbraid/\"> <img src=\"https://img.shields.io/pypi/v/qbraid.svg?color=blue\" alt=\"PyPI version\"/> </a> <a href=\"https://pepy.tech/project/qbraid\"> <img src=\"https://static.pepy.tech/badge/qbraid\"...",
-    "description": "<p align=\"center\"> <a href=\"https://github.com/qBraid/qBraid/actions/workflows/main.yml\"> <img src=\"https://github.com/qBraid/qBraid/actions/workflows/main.yml/badge.svg?branch=main\" alt=\"CI\"/> </a> <a href=\"https://codecov.io/gh/qBraid/qBraid\"> <img src=\"https://codecov.io/gh/qBraid/qBraid/branch/main/graph/badge.svg?token=1UTM0XZB7A\" alt=\"codecov\"/> </a> <a href='https://sdk.qbraid.com/qBraid/'> <img src='https://img.shields.io/github/actions/workflow/status/qBraid/qBraid/gh-pages.yml?label=docs' alt='GitHub Pages'/> </a> <a href=\"https://pypi.org/project/qbraid/\"> <img src=\"https://img.shields.io/pypi/v/qbraid.svg?color=blue\" alt=\"PyPI version\"/> </a> <a href=\"https://pepy.tech/project/qbraid\"> <img src=\"https://static.pepy.tech/badge/qbraid\" alt=\"Downloads\"/> </a> <a href=\"http://www.apache.org/licenses/LICENSE-2.0\"> <img src=\"https://img.shields.io/github/license/qBraid/qbraid.svg\" alt=\"License\"/> </a> <a href=\"https://doi.org/10.5281/zenodo.12627596\"> <img src=\"https://zenodo.org/badge/DOI/10.5281/zenodo.12627596.svg\" alt=\"DOI\"> </a> </p>",
-    "stars": 0,
+    "summary": "A platform-agnostic quantum runtime framework",
+    "description": "A platform-agnostic quantum runtime framework",
+    "stars": 109,
+    "lastPushedAt": "2026-05-27T15:52:23Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/qbraid-qbraid.svg"
   },
   {
     "slug": "dwavesystems-qbsolv",
@@ -2172,16 +2526,22 @@
         "title": "Quantum computing software in 2026: the open-source map"
       }
     ],
-    "primaryLanguage": "Shell",
+    "primaryLanguage": "q",
+    "primaryLanguages": [
+      "Shell",
+      "Python",
+      "C/C++"
+    ],
     "license": "Apache-2.0",
-    "summary": "**NOTICE**: This repository is deprecated as of the end of 2021.",
-    "description": "**NOTICE**: This repository is deprecated as of the end of 2021. Support will be discontinued after March 2022. Please update your code to use Ocean's dwave-hybrid <https://docs.ocean.dwavesys.com/en/stable/docs_hybrid/sdk_index.html>_ or Leap's quantum-classical hybrid solvers <https://docs.dwavesys.com/docs/latest/doc_leap_hybrid.html>_ instead.",
-    "stars": 0,
+    "summary": "Qbsolv,a decomposing solver, finds a minimum value of a large quadratic unconstrained binary optimization (QUBO) problem by splitting it into pieces solved either via a D-Wave system or a classical tabu solver.",
+    "description": "Qbsolv,a decomposing solver, finds a minimum value of a large quadratic unconstrained binary optimization (QUBO) problem by splitting it into pieces solved either via a D-Wave system or a classical tabu solver.   (Note that qbsolv by default uses its internal classical solver.  Access to a D-Wave system must be arranged separately.)",
+    "stars": 920,
+    "lastPushedAt": "2022-04-14T22:50:38Z",
     "featured": false,
     "flagship": true,
     "qtanglRelevant": true,
     "archived": true,
-    "imagePath": "/learn/flagship/dwavesystems-qbsolv.png"
+    "imagePath": "/learn/og/dwavesystems-qbsolv.png"
   },
   {
     "slug": "qcgpu-qcgpu-rust",
@@ -2205,15 +2565,20 @@
       }
     ],
     "primaryLanguage": "Python",
+    "primaryLanguages": [
+      "Python",
+      "Jupyter"
+    ],
     "license": "MIT",
-    "summary": "Open Source, High Performance & Hardware Accelerated, Quantum Computer Simulator.",
-    "description": "Open Source, High Performance & Hardware Accelerated, Quantum Computer Simulator. Read the research paper.",
-    "stars": 0,
+    "summary": "High Performance Tools for Quantum Computing",
+    "description": "High Performance Tools for Quantum Computing",
+    "stars": 449,
+    "lastPushedAt": "2023-07-06T21:24:36Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/qcgpu-qcgpu-rust.svg"
   },
   {
     "slug": "grey-area-qcircuits",
@@ -2237,15 +2602,21 @@
       }
     ],
     "primaryLanguage": "Python",
+    "primaryLanguages": [
+      "Python",
+      "LaTeX",
+      "Shell"
+    ],
     "license": "MIT",
-    "summary": "QCircuits is a Python package for the simulation and study of quantum computers based on the quantum circuit model <https://en.wikipedia.org/wiki/Quantum_circuit>_.",
-    "description": "QCircuits is a Python package for the simulation and study of quantum computers based on the quantum circuit model <https://en.wikipedia.org/wiki/Quantum_circuit>_. It has been designed to have a simple, lightweight interface and to be easy to use, particularly for those new to quantum computing.",
-    "stars": 0,
+    "summary": "A Python package for simulating small-scale quantum computers.",
+    "description": "A Python package for simulating small-scale quantum computers.",
+    "stars": 59,
+    "lastPushedAt": "2022-07-08T02:24:26Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/grey-area-qcircuits.svg"
   },
   {
     "slug": "aviggiano-qcl",
@@ -2269,15 +2640,21 @@
       }
     ],
     "primaryLanguage": "C++",
-    "license": "GPL",
-    "summary": "QCL is one of the first implemented quantum programming languages",
-    "description": "QCL is one of the first implemented quantum programming languages",
-    "stars": 0,
+    "primaryLanguages": [
+      "C++",
+      "C/C++",
+      "Shell"
+    ],
+    "license": "GPL-2.0",
+    "summary": "Quantum Computation Language port from http://tph.tuwien.ac.at/~oemer/qcl.html",
+    "description": "Quantum Computation Language port from http://tph.tuwien.ac.at/~oemer/qcl.html",
+    "stars": 43,
+    "lastPushedAt": "2018-01-13T18:48:31Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/aviggiano-qcl.svg"
   },
   {
     "slug": "qct-iqc-qcviewer",
@@ -2296,16 +2673,22 @@
         "title": "Quantum computing software in 2026: the open-source map"
       }
     ],
-    "primaryLanguage": "C/C++",
+    "primaryLanguage": "C++",
+    "primaryLanguages": [
+      "C/C++",
+      "C++",
+      "LaTeX"
+    ],
     "license": "LGPL",
-    "summary": "Go into the build directory and choose the folder corresponding to the build type you want.",
-    "description": "Go into the build directory and choose the folder corresponding to the build type you want. Enter the folder and run./build.",
-    "stars": 0,
+    "summary": "A visual quantum circuit design and simulation tool.",
+    "description": "A visual quantum circuit design and simulation tool.",
+    "stars": 7,
+    "lastPushedAt": "2015-09-18T18:32:29Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/qct-iqc-qcviewer.svg"
   },
   {
     "slug": "jpzwolak-qflow-lite",
@@ -2324,16 +2707,21 @@
         "title": "Quantum computing software in 2026: the open-source map"
       }
     ],
-    "primaryLanguage": "Python",
-    "license": "Unknown",
-    "summary": "This document is intended as a User Guide for anyone interested in training a machine learning (ML) model using the quantum dot dataset available on data.nist.gov.",
-    "description": "This document is intended as a User Guide for anyone interested in training a machine learning (ML) model using the quantum dot dataset available on data.nist.gov. For more details about the project, pease refer to the Project description document.",
-    "stars": 0,
+    "primaryLanguage": "Jupyter Notebook",
+    "primaryLanguages": [
+      "Python",
+      "Jupyter"
+    ],
+    "license": null,
+    "summary": "Machine learning code for quantum dots",
+    "description": "Machine learning code for quantum dots",
+    "stars": 40,
+    "lastPushedAt": "2022-02-22T16:14:56Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/jpzwolak-qflow-lite.svg"
   },
   {
     "slug": "bbn-q-qgl",
@@ -2353,15 +2741,21 @@
       }
     ],
     "primaryLanguage": "Python",
+    "primaryLanguages": [
+      "Python",
+      "Jupyter",
+      "Shell"
+    ],
     "license": "Apache-2.0",
-    "summary": "Quantum Gate Language (QGL) is a domain specific language embedded in python for specifying pulse sequences.",
-    "description": "Quantum Gate Language (QGL) is a domain specific language embedded in python for specifying pulse sequences.",
-    "stars": 0,
+    "summary": "Quantum Gate Language (QGL) is a domain specific language embedded in python for specifying quantum gate sequences.",
+    "description": "Quantum Gate Language (QGL) is a domain specific language embedded in python for specifying quantum gate sequences.",
+    "stars": 33,
+    "lastPushedAt": "2026-05-21T18:35:58Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/bbn-q-qgl.svg"
   },
   {
     "slug": "bbn-q-qgl-jl",
@@ -2369,34 +2763,6 @@
     "owner": "BBN-Q",
     "name": "QGL.jl",
     "repoUrl": "https://github.com/BBN-Q/QGL.jl",
-    "category": {
-      "slug": "benchmarks-analysis",
-      "title": "Benchmarks and analysis",
-      "description": "Benchmark suites, performance studies, and analysis tooling for comparing quantum software and hardware workflows."
-    },
-    "topics": [
-      {
-        "slug": "quantum-software-map",
-        "title": "Quantum computing software in 2026: the open-source map"
-      }
-    ],
-    "primaryLanguage": "Julia",
-    "license": "Apache-2.0",
-    "summary": "The package is not yet registered with METADATA.jl and so must be cloned with",
-    "description": "The package is not yet registered with METADATA.jl and so must be cloned with",
-    "stars": 0,
-    "featured": false,
-    "flagship": false,
-    "qtanglRelevant": false,
-    "archived": false,
-    "imagePath": null
-  },
-  {
-    "slug": "rogercolbeck-qi",
-    "title": "QI",
-    "owner": "rogercolbeck",
-    "name": "QI",
-    "repoUrl": "https://github.com/rogercolbeck/QI",
     "category": {
       "slug": "compilers-languages",
       "title": "Compilers and languages",
@@ -2412,16 +2778,56 @@
         "title": "How to start writing quantum code: an honest path"
       }
     ],
-    "primaryLanguage": "Mixed",
+    "primaryLanguage": "Julia",
+    "primaryLanguages": [
+      "Julia"
+    ],
     "license": "Apache-2.0",
-    "summary": "This is a Mathematica package containing commands for implementing functionalities commonly needed in quantum information processing.",
-    "description": "This is a Mathematica package containing commands for implementing functionalities commonly needed in quantum information processing. These are useful for doing theoretical computations on quantum information protocols. For instance, one could easily use it to work through the teleportation protocol with a perfect Bell state, and then to see what happens to the fidelity of the output state when a...",
-    "stars": 0,
+    "summary": "A performance orientated QGL compiler.",
+    "description": "A performance orientated QGL compiler.",
+    "stars": 13,
+    "lastPushedAt": "2023-12-19T14:44:37Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/bbn-q-qgl-jl.svg"
+  },
+  {
+    "slug": "rogercolbeck-qi",
+    "title": "QI",
+    "owner": "rogercolbeck",
+    "name": "QI",
+    "repoUrl": "https://github.com/rogercolbeck/QI",
+    "category": {
+      "slug": "general-purpose-sdks",
+      "title": "General-purpose SDKs",
+      "description": "Broad frameworks for building, simulating, and experimenting with quantum circuits across multiple domains."
+    },
+    "topics": [
+      {
+        "slug": "quantum-software-map",
+        "title": "Quantum computing software in 2026: the open-source map"
+      },
+      {
+        "slug": "start-writing-quantum-code",
+        "title": "How to start writing quantum code: an honest path"
+      }
+    ],
+    "primaryLanguage": "Mathematica",
+    "primaryLanguages": [
+      "Mathematica"
+    ],
+    "license": "Apache-2.0",
+    "summary": "Quantum information mathematica package",
+    "description": "Quantum information mathematica package",
+    "stars": 48,
+    "lastPushedAt": "2025-09-25T10:23:47Z",
+    "featured": false,
+    "flagship": false,
+    "qtanglRelevant": false,
+    "archived": false,
+    "imagePath": "/learn/monogram/rogercolbeck-qi.svg"
   },
   {
     "slug": "quantum-tii-qibo",
@@ -2445,15 +2851,21 @@
       }
     ],
     "primaryLanguage": "Python",
+    "primaryLanguages": [
+      "Python",
+      "Jupyter",
+      "Shell"
+    ],
     "license": "Apache-2.0",
-    "summary": "Qibo is an open-source full stack API for quantum simulation and quantum hardware control.",
-    "description": "Qibo is an open-source full stack API for quantum simulation and quantum hardware control.",
-    "stars": 0,
+    "summary": "A full-stack framework for quantum computing.",
+    "description": "A full-stack framework for quantum computing.",
+    "stars": 357,
+    "lastPushedAt": "2026-05-26T09:03:27Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/quantum-tii-qibo.svg"
   },
   {
     "slug": "wintershammer-qimp",
@@ -2473,15 +2885,19 @@
       }
     ],
     "primaryLanguage": "Python",
-    "license": "Unknown",
-    "summary": "QImp QImp is the experimental implementation of an interpreter for the quantum programming language Qumin.",
-    "description": "QImp QImp is the experimental implementation of an interpreter for the quantum programming language Qumin. For more info, check out the (still under-construction) tutorial over at my github page!",
-    "stars": 0,
+    "primaryLanguages": [
+      "Python"
+    ],
+    "license": null,
+    "summary": "The Qumin Interpreter and Matrix libraries Project",
+    "description": "The Qumin Interpreter and Matrix libraries Project",
+    "stars": 6,
+    "lastPushedAt": "2017-05-28T18:55:56Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/wintershammer-qimp.svg"
   },
   {
     "slug": "qiskit-qiskit",
@@ -2505,15 +2921,21 @@
       }
     ],
     "primaryLanguage": "Python",
+    "primaryLanguages": [
+      "Python",
+      "Rust",
+      "OpenQASM"
+    ],
     "license": "Apache-2.0",
-    "summary": "**Qiskit** is an open-source SDK for working with quantum computers at the level of extended quantum circuits, operators, and primitives.",
-    "description": "**Qiskit** is an open-source SDK for working with quantum computers at the level of extended quantum circuits, operators, and primitives.",
-    "stars": 0,
+    "summary": "Qiskit is an open-source SDK for working with quantum computers at the level of extended quantum circuits, operators, and primitives.",
+    "description": "Qiskit is an open-source SDK for working with quantum computers at the level of extended quantum circuits, operators, and primitives.",
+    "stars": 7412,
+    "lastPushedAt": "2026-05-27T17:14:40Z",
     "featured": true,
     "flagship": true,
     "qtanglRelevant": true,
     "archived": false,
-    "imagePath": "/learn/flagship/qiskit-qiskit.png"
+    "imagePath": "/learn/og/qiskit-qiskit.png"
   },
   {
     "slug": "qiskit-qiskit-aer",
@@ -2536,16 +2958,22 @@
         "title": "Quantum computing software in 2026: the open-source map"
       }
     ],
-    "primaryLanguage": "Python",
+    "primaryLanguage": "C++",
+    "primaryLanguages": [
+      "Python",
+      "C++",
+      "Jupyter"
+    ],
     "license": "Apache-2.0",
-    "summary": "Aer - high performance quantum circuit simulation for Qiskit",
-    "description": "Aer - high performance quantum circuit simulation for Qiskit",
-    "stars": 0,
+    "summary": "Aer is a high performance simulator for quantum circuits that includes noise models",
+    "description": "Aer is a high performance simulator for quantum circuits that includes noise models",
+    "stars": 665,
+    "lastPushedAt": "2026-05-25T16:18:45Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/qiskit-qiskit-aer.svg"
   },
   {
     "slug": "qiskit-qiskit-finance",
@@ -2569,15 +2997,21 @@
       }
     ],
     "primaryLanguage": "Python",
+    "primaryLanguages": [
+      "Python",
+      "Jupyter",
+      "Shell"
+    ],
     "license": "Apache-2.0",
-    "summary": "**Qiskit Finance** is an open-source framework that contains uncertainty components for stock/securities problems, applications, such as portfolio optimization, and data providers to source real or random data to finance experiments.",
-    "description": "**Qiskit Finance** is an open-source framework that contains uncertainty components for stock/securities problems, applications, such as portfolio optimization, and data providers to source real or random data to finance experiments.",
-    "stars": 0,
+    "summary": "Quantum Finance",
+    "description": "Quantum Finance",
+    "stars": 319,
+    "lastPushedAt": "2025-12-12T19:08:07Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/qiskit-qiskit-finance.svg"
   },
   {
     "slug": "qiskit-qiskit-js",
@@ -2601,15 +3035,20 @@
       }
     ],
     "primaryLanguage": "JavaScript",
+    "primaryLanguages": [
+      "JavaScript",
+      "OpenQASM"
+    ],
     "license": "Apache-2.0",
-    "summary": ":atom_symbol: Quantum Information Science Kit for JavaScript, I was born as a clone of my big brother.",
-    "description": ":atom_symbol: Quantum Information Science Kit for JavaScript, I was born as a clone of my big brother.",
-    "stars": 0,
+    "summary": ":atom_symbol: Qiskit (Quantum Information Science Kit) for JavaScript",
+    "description": ":atom_symbol: Qiskit (Quantum Information Science Kit) for JavaScript",
+    "stars": 116,
+    "lastPushedAt": "2019-09-08T16:19:40Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
-    "archived": false,
-    "imagePath": null
+    "archived": true,
+    "imagePath": "/learn/monogram/qiskit-qiskit-js.svg"
   },
   {
     "slug": "qiskit-qiskit-machine-learning",
@@ -2629,15 +3068,21 @@
       }
     ],
     "primaryLanguage": "Python",
+    "primaryLanguages": [
+      "Python",
+      "Jupyter",
+      "Shell"
+    ],
     "license": "Apache-2.0",
-    "summary": "Qiskit Machine Learning introduces fundamental computational building blocks, such as Quantum Kernels and Quantum Neural Networks, used in various applications including classification and regression.",
-    "description": "Qiskit Machine Learning introduces fundamental computational building blocks, such as Quantum Kernels and Quantum Neural Networks, used in various applications including classification and regression.",
-    "stars": 0,
+    "summary": "An open-source library built on Qiskit for quantum machine learning tasks at scale on quantum hardware and classical simulators",
+    "description": "An open-source library built on Qiskit for quantum machine learning tasks at scale on quantum hardware and classical simulators",
+    "stars": 1055,
+    "lastPushedAt": "2026-05-07T07:23:34Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/qiskit-qiskit-machine-learning.svg"
   },
   {
     "slug": "qiskit-qiskit-nature",
@@ -2661,15 +3106,21 @@
       }
     ],
     "primaryLanguage": "Python",
+    "primaryLanguages": [
+      "Python",
+      "Jupyter",
+      "Shell"
+    ],
     "license": "Apache-2.0",
-    "summary": "**Qiskit Nature** is an open-source framework which supports solving quantum mechanical natural science problems using quantum computing algorithms.",
-    "description": "**Qiskit Nature** is an open-source framework which supports solving quantum mechanical natural science problems using quantum computing algorithms. This includes finding ground and excited states of electronic and vibrational structure problems, measuring the dipole moments of molecular systems, solving the Ising and Fermi-Hubbard models on lattices, and much more.",
-    "stars": 0,
+    "summary": "Qiskit Nature is an open-source, quantum computing, framework for solving quantum mechanical natural science problems.",
+    "description": "Qiskit Nature is an open-source, quantum computing, framework for solving quantum mechanical natural science problems.",
+    "stars": 385,
+    "lastPushedAt": "2026-05-26T08:54:41Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/qiskit-qiskit-nature.svg"
   },
   {
     "slug": "qiskit-qiskit-optimization",
@@ -2693,15 +3144,21 @@
       }
     ],
     "primaryLanguage": "Python",
+    "primaryLanguages": [
+      "Python",
+      "Jupyter",
+      "Shell"
+    ],
     "license": "Apache-2.0",
-    "summary": "> [!WARNING] > **Qiskit Optimization is no longer officially supported by IBM**.",
-    "description": "> [!WARNING] > **Qiskit Optimization is no longer officially supported by IBM**. > While you may continue to use or extend it under the Apache 2.0 license, please note that it is provided as-is and without official support. For a fully supported solution and extended mapping features, migrate to the qiskit-addon-opt-mapper library.",
-    "stars": 0,
+    "summary": "Quantum Optimization",
+    "description": "Quantum Optimization",
+    "stars": 281,
+    "lastPushedAt": "2026-04-01T05:54:16Z",
     "featured": false,
     "flagship": true,
     "qtanglRelevant": true,
     "archived": false,
-    "imagePath": "/learn/flagship/qiskit-qiskit-optimization.png"
+    "imagePath": "/learn/og/qiskit-qiskit-optimization.png"
   },
   {
     "slug": "qiskit-qiskit-terra",
@@ -2725,15 +3182,21 @@
       }
     ],
     "primaryLanguage": "Python",
+    "primaryLanguages": [
+      "Python",
+      "Rust",
+      "OpenQASM"
+    ],
     "license": "Apache-2.0",
-    "summary": "**Qiskit** is an open-source SDK for working with quantum computers at the level of extended quantum circuits, operators, and primitives.",
-    "description": "**Qiskit** is an open-source SDK for working with quantum computers at the level of extended quantum circuits, operators, and primitives.",
-    "stars": 0,
+    "summary": "Qiskit is an open-source SDK for working with quantum computers at the level of extended quantum circuits, operators, and primitives.",
+    "description": "Qiskit is an open-source SDK for working with quantum computers at the level of extended quantum circuits, operators, and primitives.",
+    "stars": 7412,
+    "lastPushedAt": "2026-05-27T17:14:40Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/qiskit-qiskit-terra.svg"
   },
   {
     "slug": "qiskit-qiskit-tutorial",
@@ -2756,16 +3219,21 @@
         "title": "Quantum computing software in 2026: the open-source map"
       }
     ],
-    "primaryLanguage": "Jupyter",
+    "primaryLanguage": "Jupyter Notebook",
+    "primaryLanguages": [
+      "Jupyter",
+      "Python"
+    ],
     "license": "Apache-2.0",
-    "summary": "> :warning: **This repository is archived**: The content in this repository was moved to other locations.",
-    "description": "> :warning: **This repository is archived**: The content in this repository was moved to other locations. If you have issues or PR, please submit them to their new location.",
-    "stars": 0,
+    "summary": "A collection of Jupyter notebooks showing how to use the Qiskit SDK",
+    "description": "A collection of Jupyter notebooks showing how to use the Qiskit SDK",
+    "stars": 2522,
+    "lastPushedAt": "2023-08-21T20:29:53Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
-    "archived": false,
-    "imagePath": null
+    "archived": true,
+    "imagePath": "/learn/monogram/qiskit-qiskit-tutorial.svg"
   },
   {
     "slug": "bbn-q-qlab",
@@ -2784,16 +3252,22 @@
         "title": "Quantum computing software in 2026: the open-source map"
       }
     ],
-    "primaryLanguage": "Python",
+    "primaryLanguage": "MATLAB",
+    "primaryLanguages": [
+      "Python",
+      "C",
+      "C/C++"
+    ],
     "license": "Apache-2.0",
-    "summary": "To get started, simply download and unzip the latest release.",
-    "description": "To get started, simply download and unzip the latest release. Or, if you want the tip of the development repository, clone a local copy with",
-    "stars": 0,
+    "summary": "Measurement and control software for superconducting qubits.",
+    "description": "Measurement and control software for superconducting qubits.",
+    "stars": 38,
+    "lastPushedAt": "2021-07-09T18:33:37Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/bbn-q-qlab.svg"
   },
   {
     "slug": "bbn-q-qlab-jl",
@@ -2813,15 +3287,20 @@
       }
     ],
     "primaryLanguage": "Julia",
+    "primaryLanguages": [
+      "Julia",
+      "Jupyter"
+    ],
     "license": "Apache-2.0",
-    "summary": "Data manipulation and analysis tools tailored for quantum computing experiments in conjunction with Auspex.",
-    "description": "Data manipulation and analysis tools tailored for quantum computing experiments in conjunction with Auspex. Currently working with Julia v1.0.",
-    "stars": 0,
+    "summary": "Generic lab tools in Julia",
+    "description": "Generic lab tools in Julia",
+    "stars": 15,
+    "lastPushedAt": "2026-04-20T19:41:18Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/bbn-q-qlab-jl.svg"
   },
   {
     "slug": "lanl-qmasm",
@@ -2845,15 +3324,20 @@
       }
     ],
     "primaryLanguage": "Python",
-    "license": "BSD",
-    "summary": "QMASM fills a gap in the software ecosystem for D-Wave's adiabatic quantum computers by shielding the programmer from having to know system-specific hardware details while still enabling programs to be expressed at...",
-    "description": "QMASM fills a gap in the software ecosystem for D-Wave's adiabatic quantum computers by shielding the programmer from having to know system-specific hardware details while still enabling programs to be expressed at a fairly low level of abstraction. It is therefore analogous to a conventional macro assembler and can be used in much the same way: as a target either...",
-    "stars": 0,
+    "primaryLanguages": [
+      "Python",
+      "Go"
+    ],
+    "license": "BSD-3-Clause",
+    "summary": "Quantum macro assembler for D-Wave systems",
+    "description": "Quantum macro assembler for D-Wave systems",
+    "stars": 341,
+    "lastPushedAt": "2021-02-28T01:25:34Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/lanl-qmasm.svg"
   },
   {
     "slug": "dillanchang-qocs",
@@ -2876,16 +3360,20 @@
         "title": "Quantum computing software in 2026: the open-source map"
       }
     ],
-    "primaryLanguage": "Mixed",
-    "license": "Unknown",
+    "primaryLanguage": "OCaml",
+    "primaryLanguages": [
+      "OCaml"
+    ],
+    "license": null,
     "summary": "``` =============================================================================== =================[ QOCS - Quantum OCaml Circuit Simulator ]==================== ===============================================================================",
     "description": "``` =============================================================================== =================[ QOCS - Quantum OCaml Circuit Simulator ]==================== ===============================================================================",
-    "stars": 0,
+    "stars": 11,
+    "lastPushedAt": "2017-07-27T01:20:16Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/dillanchang-qocs.svg"
   },
   {
     "slug": "qosf-qosf-org",
@@ -2908,16 +3396,22 @@
         "title": "How to start writing quantum code: an honest path"
       }
     ],
-    "primaryLanguage": "Shell",
-    "license": "Creative Commons",
-    "summary": "This is a repository hosting the www.qosf.org site, the universal source of information about open source software for quantum computing.",
-    "description": "This is a repository hosting the www.qosf.org site, the universal source of information about open source software for quantum computing.",
-    "stars": 0,
+    "primaryLanguage": "SCSS",
+    "primaryLanguages": [
+      "JavaScript",
+      "Shell",
+      "Python"
+    ],
+    "license": "CC0-1.0",
+    "summary": "Web portal of Quantum Open Source Foundation",
+    "description": "Web portal of Quantum Open Source Foundation",
+    "stars": 145,
+    "lastPushedAt": "2026-05-14T18:39:33Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/qosf-qosf-org.svg"
   },
   {
     "slug": "softwareqinc-qpp",
@@ -2941,15 +3435,21 @@
       }
     ],
     "primaryLanguage": "C++",
+    "primaryLanguages": [
+      "C++",
+      "OpenQASM",
+      "Python"
+    ],
     "license": "MIT",
-    "summary": "**Quantum++** is a modern C++ general purpose quantum computing library, composed solely of template header files.",
-    "description": "**Quantum++** is a modern C++ general purpose quantum computing library, composed solely of template header files. **Quantum++** is written in standard C++17 and has very low external dependencies, using only the Eigen linear algebra header-only template library and, if available, the OpenMP multiprocessing library.",
-    "stars": 0,
+    "summary": "Modern C++ quantum computing library",
+    "description": "Modern C++ quantum computing library",
+    "stars": 661,
+    "lastPushedAt": "2026-05-14T11:57:14Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/softwareqinc-qpp.svg"
   },
   {
     "slug": "vm6502q-qrack",
@@ -2973,15 +3473,20 @@
       }
     ],
     "primaryLanguage": "C++",
-    "license": "Custom / project-specific",
-    "summary": "The open source vm6502q/qrack library and its associated plugins and projects under the vm6502q organization header comprise a framework for full-stack quantum computing development, via high performance and fundamentally optimized simulation.",
-    "description": "The open source vm6502q/qrack library and its associated plugins and projects under the vm6502q organization header comprise a framework for full-stack quantum computing development, via high performance and fundamentally optimized simulation. The intent of \"Qrack\" is to provide maximum performance for the simulation of an ideal, virtually error-free quantum computer, across the broadest possible set of hardware and operating systems.",
-    "stars": 0,
+    "primaryLanguages": [
+      "C++",
+      "Python"
+    ],
+    "license": "LGPL-3.0",
+    "summary": "Comprehensive, GPU accelerated framework for developing universal virtual quantum processors",
+    "description": "Comprehensive, GPU accelerated framework for developing universal virtual quantum processors",
+    "stars": 224,
+    "lastPushedAt": "2026-05-27T19:43:20Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/vm6502q-qrack.svg"
   },
   {
     "slug": "eclipse-qrisp-qrisp",
@@ -2990,30 +3495,36 @@
     "name": "Qrisp",
     "repoUrl": "https://github.com/eclipse-qrisp/Qrisp",
     "category": {
-      "slug": "general-purpose-sdks",
-      "title": "General-purpose SDKs",
-      "description": "Broad frameworks for building, simulating, and experimenting with quantum circuits across multiple domains."
+      "slug": "quantum-chemistry",
+      "title": "Quantum chemistry",
+      "description": "Libraries that connect quantum computing workflows to chemistry, electronic structure, and molecular modeling."
     },
     "topics": [
       {
-        "slug": "quantum-software-map",
-        "title": "Quantum computing software in 2026: the open-source map"
+        "slug": "quantum-chemistry-for-newcomers",
+        "title": "Quantum chemistry software for newcomers"
       },
       {
-        "slug": "start-writing-quantum-code",
-        "title": "How to start writing quantum code: an honest path"
+        "slug": "quantum-software-map",
+        "title": "Quantum computing software in 2026: the open-source map"
       }
     ],
     "primaryLanguage": "Python",
-    "license": "GPL",
-    "summary": "Qrisp is a high-level quantum programming framework that allows for intuitive development of quantum algorithms.",
-    "description": "Qrisp is a high-level quantum programming framework that allows for intuitive development of quantum algorithms. It provides a rich set of tools and abstractions to make quantum computing more accessible to developers and researchers. By automating many steps one usually encounters when programming a quantum computer, introducing quantum types, and many more features Qrisp makes quantum programming more user-friendly yet...",
-    "stars": 0,
+    "primaryLanguages": [
+      "Python",
+      "Jupyter",
+      "JavaScript"
+    ],
+    "license": "EPL-2.0",
+    "summary": "Qrisp - The next generation of quantum algorithm development",
+    "description": "Qrisp - The next generation of quantum algorithm development",
+    "stars": 267,
+    "lastPushedAt": "2026-05-27T21:26:22Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/eclipse-qrisp-qrisp.svg"
   },
   {
     "slug": "theqrl-qrl",
@@ -3037,15 +3548,21 @@
       }
     ],
     "primaryLanguage": "Python",
+    "primaryLanguages": [
+      "Python",
+      "Shell",
+      "Jupyter"
+    ],
     "license": "MIT",
-    "summary": "> Python-based blockchain ledger utilizing hash-based one-time merkle tree signature scheme (XMSS) instead of ECDSA.",
-    "description": "> Python-based blockchain ledger utilizing hash-based one-time merkle tree signature scheme (XMSS) instead of ECDSA. Proof-of-work block selection via the cryptonight algorithm. Future transition to POS with signed iterative hash chain reveal scheme which is both probabilistic and random (https://github.com/theQRL/pos). > > Hash-based signatures means larger transactions (3kb per tx, binary), longer keypair generation times and the need to record...",
-    "stars": 0,
+    "summary": "Quantum Resistant Ledger",
+    "description": "Quantum Resistant Ledger ",
+    "stars": 463,
+    "lastPushedAt": "2026-03-07T20:17:32Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/theqrl-qrl.svg"
   },
   {
     "slug": "dabacon-qsel",
@@ -3069,15 +3586,19 @@
       }
     ],
     "primaryLanguage": "Python",
+    "primaryLanguages": [
+      "Python"
+    ],
     "license": "Apache-2.0",
-    "summary": "What makes quantum computers more powerful than classical computers?",
-    "description": "What makes quantum computers more powerful than classical computers? Ask any expert, or watch any public lecture on the subject and the answer is clear. **Entanglement** and **Superposition** are what give quantum computers their power over classical computers. If these two ideas are at the heart of the power of quantum computing, it therefore makes sense that any programing language...",
-    "stars": 0,
+    "summary": "Quantum programming language putting entanglement and superposition front and center",
+    "description": "Quantum programming language putting entanglement and superposition front and center",
+    "stars": 42,
+    "lastPushedAt": "2023-02-26T20:44:17Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/dabacon-qsel.svg"
   },
   {
     "slug": "haykkh-qsim",
@@ -3086,9 +3607,9 @@
     "name": "qSim",
     "repoUrl": "https://github.com/haykkh/qSim",
     "category": {
-      "slug": "games-learning",
-      "title": "Games and learning",
-      "description": "Interactive projects, puzzles, and educational resources for learning quantum computing concepts."
+      "slug": "general-purpose-sdks",
+      "title": "General-purpose SDKs",
+      "description": "Broad frameworks for building, simulating, and experimenting with quantum circuits across multiple domains."
     },
     "topics": [
       {
@@ -3101,15 +3622,20 @@
       }
     ],
     "primaryLanguage": "C++",
+    "primaryLanguages": [
+      "C++",
+      "C/C++"
+    ],
     "license": "MIT",
-    "summary": "I'm building this to learn **C++** and **Quantum Information Theory** simultaneously, so don't be surprised if they're both wrong.",
-    "description": "I'm building this to learn **C++** and **Quantum Information Theory** simultaneously, so don't be surprised if they're both wrong. Instead, feel free to create a new issue or a new pull request so you can rub in exactly what I did wrong in a concise, well commented manner.",
-    "stars": 0,
+    "summary": "Quantum computer simulator library",
+    "description": "Quantum computer simulator library",
+    "stars": 10,
+    "lastPushedAt": "2022-08-15T20:22:55Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/haykkh-qsim.svg"
   },
   {
     "slug": "bbn-q-qsimulator-jl",
@@ -3129,15 +3655,21 @@
       }
     ],
     "primaryLanguage": "Julia",
+    "primaryLanguages": [
+      "Julia",
+      "Jupyter",
+      "Shell"
+    ],
     "license": "Apache-2.0",
-    "summary": "Package for simulating time dynamics of quantum systems with a focus on superconducting qubits.",
-    "description": "Package for simulating time dynamics of quantum systems with a focus on superconducting qubits.",
-    "stars": 0,
+    "summary": "Unitary and Lindbladian evolution in Julia",
+    "description": "Unitary and Lindbladian evolution in Julia",
+    "stars": 28,
+    "lastPushedAt": "2022-05-19T08:56:42Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/bbn-q-qsimulator-jl.svg"
   },
   {
     "slug": "jacobmarks-qtop",
@@ -3161,15 +3693,19 @@
       }
     ],
     "primaryLanguage": "Python",
-    "license": "LGPL",
-    "summary": "QTop *** NOTE: This software is not being actively maintained.",
-    "description": "QTop *** NOTE: This software is not being actively maintained. Use at your own risk.",
-    "stars": 0,
+    "primaryLanguages": [
+      "Python"
+    ],
+    "license": "GPL-3.0",
+    "summary": "Topological Quantum Computing Simulator",
+    "description": "Topological Quantum Computing Simulator",
+    "stars": 38,
+    "lastPushedAt": "2020-02-15T01:37:58Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/jacobmarks-qtop.svg"
   },
   {
     "slug": "0tt3r-quac",
@@ -3193,15 +3729,21 @@
       }
     ],
     "primaryLanguage": "C",
+    "primaryLanguages": [
+      "C",
+      "C/C++",
+      "LaTeX"
+    ],
     "license": "MIT",
-    "summary": "QuaC (Quantum in C) is a parallel time dependent open quantum systems solver, written by Matthew Otten (mjotten@wisc.edu).",
-    "description": "QuaC (Quantum in C) is a parallel time dependent open quantum systems solver, written by Matthew Otten (mjotten@wisc.edu). QuaC utilizes PETSc (www.mcs.anl.gov/petsc) for parallelization and linear algebra and features are still regularly being added.",
-    "stars": 0,
+    "summary": "Time Dependent Open Quantum Systems Solver written by Matthew Otten (mjotten@wisc.edu)",
+    "description": "Time Dependent Open Quantum Systems Solver written by Matthew Otten (mjotten@wisc.edu)",
+    "stars": 30,
+    "lastPushedAt": "2024-07-04T13:05:23Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/0tt3r-quac.svg"
   },
   {
     "slug": "quantumlib-qualtran",
@@ -3221,15 +3763,21 @@
       }
     ],
     "primaryLanguage": "Python",
+    "primaryLanguages": [
+      "Python",
+      "Jupyter",
+      "Shell"
+    ],
     "license": "Apache-2.0",
-    "summary": "<div align=\"center\"> <img alt=\"Qualtran logo\" width=\"340px\" src=\"https://raw.githubusercontent.com/quantumlib/Qualtran/refs/heads/main/docs/_static/qualtran-logo-mode-sensitive.svg\"> <br>",
-    "description": "<div align=\"center\"> <img alt=\"Qualtran logo\" width=\"340px\" src=\"https://raw.githubusercontent.com/quantumlib/Qualtran/refs/heads/main/docs/_static/qualtran-logo-mode-sensitive.svg\"> <br>",
-    "stars": 0,
+    "summary": "Q\u1d1c\u1d00\u029f\u1d1b\u0280\u1d00\u0274 is a Python library for expressing and analyzing Fault Tolerant Quantum algorithms.",
+    "description": "Q\u1d1c\u1d00\u029f\u1d1b\u0280\u1d00\u0274 is a Python library for expressing and analyzing Fault Tolerant Quantum algorithms.",
+    "stars": 349,
+    "lastPushedAt": "2026-05-22T21:22:16Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/quantumlib-qualtran.svg"
   },
   {
     "slug": "desireevl-quantum-catsweeper",
@@ -3253,15 +3801,19 @@
       }
     ],
     "primaryLanguage": "Python",
+    "primaryLanguages": [
+      "Python"
+    ],
     "license": "MIT",
-    "summary": "This is a super simple game loosely based on Minesweeper Flags and runs on the IBM Quantum computer or simulator.",
-    "description": "This is a super simple game loosely based on Minesweeper Flags and runs on the IBM Quantum computer or simulator.",
-    "stars": 0,
+    "summary": "Quantum game of catsweeper flags",
+    "description": "Quantum game of catsweeper flags",
+    "stars": 22,
+    "lastPushedAt": "2022-07-16T01:29:01Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/desireevl-quantum-catsweeper.svg"
   },
   {
     "slug": "perak-quantum-circuit",
@@ -3285,15 +3837,20 @@
       }
     ],
     "primaryLanguage": "JavaScript",
+    "primaryLanguages": [
+      "JavaScript",
+      "Jupyter"
+    ],
     "license": "MIT",
-    "summary": "quantum-circuit is open source quantum circuit simulator implemented in javascript.",
-    "description": "quantum-circuit is open source quantum circuit simulator implemented in javascript. Smoothly runs 20+ qubit simulations in browser or at server (node.js). You can use it in your javascript program to run quantum simulations.",
-    "stars": 0,
+    "summary": "Quantum Circuit Simulator implemented in JavaScript",
+    "description": "Quantum Circuit Simulator implemented in JavaScript",
+    "stars": 272,
+    "lastPushedAt": "2026-02-09T22:19:57Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/perak-quantum-circuit.svg"
   },
   {
     "slug": "artiste-qb-net-quantum-fog",
@@ -3312,16 +3869,22 @@
         "title": "Quantum computing software in 2026: the open-source map"
       }
     ],
-    "primaryLanguage": "Python",
-    "license": "BSD",
-    "summary": "Quantum Fog at GitHub What is Quantum Fog?",
-    "description": "Quantum Fog at GitHub What is Quantum Fog?",
-    "stars": 0,
+    "primaryLanguage": "Jupyter Notebook",
+    "primaryLanguages": [
+      "Python",
+      "C/C++",
+      "C++"
+    ],
+    "license": "BSD-3-Clause",
+    "summary": "Python tools for analyzing both classical and quantum Bayesian Networks",
+    "description": "Python tools for analyzing both classical and quantum Bayesian Networks",
+    "stars": 80,
+    "lastPushedAt": "2023-02-13T21:37:16Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/artiste-qb-net-quantum-fog.svg"
   },
   {
     "slug": "stared-quantum-game",
@@ -3345,15 +3908,20 @@
       }
     ],
     "primaryLanguage": "JavaScript",
+    "primaryLanguages": [
+      "JavaScript",
+      "Shell"
+    ],
     "license": "MIT",
-    "summary": "**A note: this repository is an old Quanutm Game (2014-2016), no longer maintained.",
-    "description": "**A note: this repository is an old Quanutm Game (2014-2016), no longer maintained. The new one (2019-) is at quantumgame.io.**",
-    "stars": 0,
+    "summary": "Quantum Game (old version) - a puzzle game with real quantum mechanics in a browser",
+    "description": "Quantum Game (old version) - a puzzle game with real quantum mechanics in a browser",
+    "stars": 359,
+    "lastPushedAt": "2025-10-29T16:42:47Z",
     "featured": false,
     "flagship": true,
     "qtanglRelevant": false,
     "archived": true,
-    "imagePath": "/learn/flagship/stared-quantum-game.png"
+    "imagePath": "/learn/og/stared-quantum-game.png"
   },
   {
     "slug": "javafxpert-quantum-toy-piano",
@@ -3376,16 +3944,18 @@
         "title": "How to start writing quantum code: an honest path"
       }
     ],
-    "primaryLanguage": "Mixed",
-    "license": "Unknown",
+    "primaryLanguage": null,
+    "primaryLanguages": [],
+    "license": null,
     "summary": "quantum-toy-piano is an open-source quantum project.",
     "description": "",
     "stars": 0,
+    "lastPushedAt": null,
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/javafxpert-quantum-toy-piano.svg"
   },
   {
     "slug": "javafxpert-quantum-toy-piano-ibmq",
@@ -3408,16 +3978,18 @@
         "title": "How to start writing quantum code: an honest path"
       }
     ],
-    "primaryLanguage": "Mixed",
-    "license": "Unknown",
+    "primaryLanguage": null,
+    "primaryLanguages": [],
+    "license": null,
     "summary": "quantum-toy-piano-ibmq is an open-source quantum project.",
     "description": "",
     "stars": 0,
+    "lastPushedAt": null,
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/javafxpert-quantum-toy-piano-ibmq.svg"
   },
   {
     "slug": "quantumutils-quantum-utils-mathematica",
@@ -3440,16 +4012,20 @@
         "title": "Quantum computing software in 2026: the open-source map"
       }
     ],
-    "primaryLanguage": "Python",
-    "license": "BSD",
+    "primaryLanguage": "Mathematica",
+    "primaryLanguages": [
+      "Python"
+    ],
+    "license": "BSD-3-Clause",
     "summary": "QuantumUtils for Mathematica is a software library for quantum information scientists.",
-    "description": "QuantumUtils for Mathematica is a software library for quantum information scientists. Features include:",
-    "stars": 0,
+    "description": "QuantumUtils for Mathematica is a software library for quantum information scientists.",
+    "stars": 78,
+    "lastPushedAt": "2018-05-30T15:57:25Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/quantumutils-quantum-utils-mathematica.svg"
   },
   {
     "slug": "artiste-qb-net-quantum-edward",
@@ -3469,15 +4045,19 @@
       }
     ],
     "primaryLanguage": "Python",
+    "primaryLanguages": [
+      "Python"
+    ],
     "license": "MIT",
-    "summary": "You can install Quantum Edward from the Python package manager pip using: If you are useing JupyterNotebook, use: and restart the kernel.",
-    "description": "You can install Quantum Edward from the Python package manager pip using: If you are useing JupyterNotebook, use: and restart the kernel.",
-    "stars": 0,
+    "summary": "Python tools for supervised learning by Quantum Neural Networks",
+    "description": "Python tools for supervised learning by Quantum Neural Networks",
+    "stars": 51,
+    "lastPushedAt": "2018-11-07T10:05:28Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/artiste-qb-net-quantum-edward.svg"
   },
   {
     "slug": "mstechly-quantum-tsp-tutorials",
@@ -3500,16 +4080,21 @@
         "title": "How to start writing quantum code: an honest path"
       }
     ],
-    "primaryLanguage": "Python",
+    "primaryLanguage": "Jupyter Notebook",
+    "primaryLanguages": [
+      "Python",
+      "Jupyter"
+    ],
     "license": "Apache-2.0",
-    "summary": "This repository contains code with tutorials on how to approach optimization problems using quantum computing.",
-    "description": "This repository contains code with tutorials on how to approach optimization problems using quantum computing. I used Travelling Salesman Problem for this tutorials, though the idea is, that after finishing it, you should be able to implement any similar optimization problem.",
-    "stars": 0,
+    "summary": "This repository contains code with tutorials of how to approach optimization problems using quantum computing.",
+    "description": "This repository contains code with tutorials of how to approach optimization problems using quantum computing.",
+    "stars": 107,
+    "lastPushedAt": "2023-06-25T22:17:11Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/mstechly-quantum-tsp-tutorials.svg"
   },
   {
     "slug": "corbett-quantumcomputing",
@@ -3533,15 +4118,19 @@
       }
     ],
     "primaryLanguage": "Python",
-    "license": "LGPL",
-    "summary": "Quintuple This is an implementation of IBM's Quantum Experience in simulation; a 5-qubit quantum computer with a limited set of gates \"the world\u2019s first quantum computing platform delivered via the IBM Cloud\".",
-    "description": "Quintuple This is an implementation of IBM's Quantum Experience in simulation; a 5-qubit quantum computer with a limited set of gates \"the world\u2019s first quantum computing platform delivered via the IBM Cloud\". Their implementation is available at http://www.research.ibm.com/quantum/.",
-    "stars": 0,
+    "primaryLanguages": [
+      "Python"
+    ],
+    "license": "GPL-3.0",
+    "summary": "This is an implementation of IBM's Quantum Experience in simulation; a 5-qubit quantum computer with a limited set of gates.",
+    "description": "This is an implementation of IBM's Quantum Experience in simulation; a 5-qubit quantum computer with a limited set of gates. Please cite me if you end up using this academically.",
+    "stars": 627,
+    "lastPushedAt": "2022-12-29T04:35:18Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/corbett-quantumcomputing.svg"
   },
   {
     "slug": "rqc-qapp-quantumcomputingbot",
@@ -3565,15 +4154,19 @@
       }
     ],
     "primaryLanguage": "Python",
+    "primaryLanguages": [
+      "Python"
+    ],
     "license": "Apache-2.0",
-    "summary": "Monitoring the load of IBM Q processors from IBM Quantum Experience (data for 24 hours).",
-    "description": "Monitoring the load of IBM Q processors from IBM Quantum Experience (data for 24 hours).",
-    "stars": 0,
+    "summary": "\ud83d\udd2e Monitoring the load of IBM Q processors",
+    "description": "\ud83d\udd2e Monitoring the load of IBM Q processors",
+    "stars": 22,
+    "lastPushedAt": "2018-11-30T20:02:04Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/rqc-qapp-quantumcomputingbot.svg"
   },
   {
     "slug": "rigetti-quantumflow",
@@ -3582,9 +4175,9 @@
     "name": "quantumflow",
     "repoUrl": "https://github.com/rigetti/quantumflow",
     "category": {
-      "slug": "compilers-languages",
-      "title": "Compilers and languages",
-      "description": "Compilers, intermediate representations, domain-specific languages, and transpilation tools for quantum programs."
+      "slug": "general-purpose-sdks",
+      "title": "General-purpose SDKs",
+      "description": "Broad frameworks for building, simulating, and experimenting with quantum circuits across multiple domains."
     },
     "topics": [
       {
@@ -3597,15 +4190,21 @@
       }
     ],
     "primaryLanguage": "Python",
+    "primaryLanguages": [
+      "Python",
+      "Quil",
+      "Jupyter"
+    ],
     "license": "Apache-2.0",
-    "summary": ">Notice: This is research code that will not necessarily be maintained to >support further releases of Forest and other Rigetti Software.",
-    "description": ">Notice: This is research code that will not necessarily be maintained to >support further releases of Forest and other Rigetti Software. We welcome >bug reports and PRs but make no guarantee about fixes or responses.",
-    "stars": 0,
+    "summary": "QuantumFlow: A Quantum Algorithms Development Toolkit",
+    "description": "QuantumFlow: A Quantum Algorithms Development Toolkit",
+    "stars": 98,
+    "lastPushedAt": "2019-06-03T03:20:31Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/rigetti-quantumflow.svg"
   },
   {
     "slug": "ziofil-quantumgraphs",
@@ -3625,15 +4224,19 @@
       }
     ],
     "primaryLanguage": "Python",
-    "license": "LGPL",
-    "summary": "Introduction This package is for growing random graphs and trees by using continuous quantum walks:",
-    "description": "Introduction This package is for growing random graphs and trees by using continuous quantum walks:",
-    "stars": 0,
+    "primaryLanguages": [
+      "Python"
+    ],
+    "license": "GPL-3.0",
+    "summary": "A python package for growing random graphs using quantum random walks",
+    "description": "A python package for growing random graphs using quantum random walks",
+    "stars": 20,
+    "lastPushedAt": "2020-08-03T15:28:13Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/ziofil-quantumgraphs.svg"
   },
   {
     "slug": "bbn-q-quantuminfo-jl",
@@ -3653,15 +4256,19 @@
       }
     ],
     "primaryLanguage": "Julia",
+    "primaryLanguages": [
+      "Julia"
+    ],
     "license": "Custom / project-specific",
-    "summary": "This Julia package contains functions that are convenient for common calculation in quantum information processing.",
-    "description": "This Julia package contains functions that are convenient for common calculation in quantum information processing.",
-    "stars": 0,
+    "summary": "Julia library for quantum information related calculations.",
+    "description": "Julia library for quantum information related calculations.",
+    "stars": 18,
+    "lastPushedAt": "2022-02-21T06:59:56Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/bbn-q-quantuminfo-jl.svg"
   },
   {
     "slug": "microsoft-quantumkatas",
@@ -3684,16 +4291,22 @@
         "title": "How to start writing quantum code: an honest path"
       }
     ],
-    "primaryLanguage": "Jupyter",
+    "primaryLanguage": "Jupyter Notebook",
+    "primaryLanguages": [
+      "Jupyter",
+      "PowerShell",
+      "C#"
+    ],
     "license": "MIT",
-    "summary": ">**We are modernizing the quantum katas experience.",
-    "description": ">**We are modernizing the quantum katas experience. Please visit https://quantum.microsoft.com/experience/quantum-katas to try the new online Azure Quantum katas experience, with integrated assistance from Copilot in Azure Quantum.**",
-    "stars": 0,
+    "summary": "Tutorials and programming exercises for learning Q# and quantum computing",
+    "description": "Tutorials and programming exercises for learning Q# and quantum computing",
+    "stars": 4862,
+    "lastPushedAt": "2024-08-21T18:51:07Z",
     "featured": true,
     "flagship": true,
     "qtanglRelevant": false,
-    "archived": false,
-    "imagePath": "/learn/flagship/microsoft-quantumkatas.png"
+    "archived": true,
+    "imagePath": "/learn/og/microsoft-quantumkatas.png"
   },
   {
     "slug": "mrdimosthenis-quantumpuzzlegenerator",
@@ -3717,15 +4330,21 @@
       }
     ],
     "primaryLanguage": "F#",
-    "license": "Unknown",
-    "summary": "This is the source code of the **Quantum Puzzle Generator** mobile application.",
-    "description": "This is the source code of the **Quantum Puzzle Generator** mobile application.",
-    "stars": 0,
+    "primaryLanguages": [
+      "F#",
+      "JavaScript",
+      "C#"
+    ],
+    "license": null,
+    "summary": "Puzzle game for Android and iOS, written in F#",
+    "description": "Puzzle game for Android and iOS, written in F#",
+    "stars": 8,
+    "lastPushedAt": "2024-08-11T05:52:51Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/mrdimosthenis-quantumpuzzlegenerator.svg"
   },
   {
     "slug": "bbn-q-quantumtomography-jl",
@@ -3745,15 +4364,19 @@
       }
     ],
     "primaryLanguage": "Julia",
+    "primaryLanguages": [
+      "Julia"
+    ],
     "license": "Apache-2.0",
-    "summary": "This is a package that provides basic routines to perform quantum tomography of finite dimensional systems.",
-    "description": "This is a package that provides basic routines to perform quantum tomography of finite dimensional systems.",
-    "stars": 0,
+    "summary": "Julia package to perform quantum state and process tomography",
+    "description": "Julia package to perform quantum state and process tomography",
+    "stars": 34,
+    "lastPushedAt": "2026-04-16T20:19:50Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/bbn-q-quantumtomography-jl.svg"
   },
   {
     "slug": "artiste-qb-net-qubiter",
@@ -3762,9 +4385,9 @@
     "name": "qubiter",
     "repoUrl": "https://github.com/artiste-qb-net/qubiter",
     "category": {
-      "slug": "general-purpose-sdks",
-      "title": "General-purpose SDKs",
-      "description": "Broad frameworks for building, simulating, and experimenting with quantum circuits across multiple domains."
+      "slug": "compilers-languages",
+      "title": "Compilers and languages",
+      "description": "Compilers, intermediate representations, domain-specific languages, and transpilation tools for quantum programs."
     },
     "topics": [
       {
@@ -3776,16 +4399,22 @@
         "title": "How to start writing quantum code: an honest path"
       }
     ],
-    "primaryLanguage": "Python",
-    "license": "BSD",
-    "summary": "The following Jupyter notebook is a good introduction to Qubiter's basic features.",
-    "description": "The following Jupyter notebook is a good introduction to Qubiter's basic features. Other notebooks in Qubiter's jupyter_notebook folder discuss more advanced features:",
-    "stars": 0,
+    "primaryLanguage": "HTML",
+    "primaryLanguages": [
+      "Python",
+      "Jupyter",
+      "C/C++"
+    ],
+    "license": "BSD-3-Clause",
+    "summary": "Python tools for reading, writing, compiling, simulating quantum computer circuits.",
+    "description": "Python tools for reading, writing, compiling, simulating quantum computer circuits. Includes numpy and tensorflow backends. \u201cQuantum Space, the final frontier. These are the voyages of the starship Qubiter. Its five-year mission: to explore strange new worlds, to seek out new life and new civilizations, to boldly go where no man has gone before.\u201d",
+    "stars": 121,
+    "lastPushedAt": "2023-12-25T20:23:29Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/artiste-qb-net-qubiter.svg"
   },
   {
     "slug": "jtiosue-qubovert",
@@ -3809,15 +4438,21 @@
       }
     ],
     "primaryLanguage": "Python",
+    "primaryLanguages": [
+      "Python",
+      "Jupyter",
+      "C"
+    ],
     "license": "Apache-2.0",
-    "summary": "The one-stop package for formulating, simulating, and solving problems in boolean and spin form.",
-    "description": "The one-stop package for formulating, simulating, and solving problems in boolean and spin form.",
-    "stars": 0,
+    "summary": "The one-stop package for formulating, simulating, and solving problems in boolean and spin form",
+    "description": "The one-stop package for formulating, simulating, and solving problems in boolean and spin form",
+    "stars": 41,
+    "lastPushedAt": "2026-04-13T17:00:39Z",
     "featured": false,
     "flagship": true,
     "qtanglRelevant": true,
     "archived": false,
-    "imagePath": "/learn/flagship/jtiosue-qubovert.png"
+    "imagePath": "/learn/og/jtiosue-qubovert.png"
   },
   {
     "slug": "aniabrown-quest",
@@ -3841,15 +4476,21 @@
       }
     ],
     "primaryLanguage": "C++",
-    "license": "Unknown",
-    "summary": "Because this file doubles as the doxygen mainpage, it must use absolute paths.",
-    "description": "Because this file doubles as the doxygen mainpage, it must use absolute paths.",
-    "stars": 0,
+    "primaryLanguages": [
+      "C++",
+      "C/C++",
+      "C"
+    ],
+    "license": "MIT",
+    "summary": "A multithreaded, distributed, GPU-accelerated simulator of quantum computers",
+    "description": "A multithreaded, distributed, GPU-accelerated simulator of quantum computers",
+    "stars": 473,
+    "lastPushedAt": "2026-05-27T21:42:54Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": true,
-    "imagePath": null
+    "imagePath": "/learn/monogram/aniabrown-quest.svg"
   },
   {
     "slug": "javafxpert-quil-syntax-highlighter",
@@ -3872,16 +4513,18 @@
         "title": "How to start writing quantum code: an honest path"
       }
     ],
-    "primaryLanguage": "Mixed",
-    "license": "Unknown",
+    "primaryLanguage": null,
+    "primaryLanguages": [],
+    "license": null,
     "summary": "quil-syntax-highlighter is an open-source quantum project.",
     "description": "",
     "stars": 0,
+    "lastPushedAt": null,
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/javafxpert-quil-syntax-highlighter.svg"
   },
   {
     "slug": "rigetti-quilc",
@@ -3904,16 +4547,22 @@
         "title": "How to start writing quantum code: an honest path"
       }
     ],
-    "primaryLanguage": "Quil",
+    "primaryLanguage": "Common Lisp",
+    "primaryLanguages": [
+      "Quil",
+      "C",
+      "LaTeX"
+    ],
     "license": "Apache-2.0",
-    "summary": "Quilc is an advanced optimizing compiler for the quantum instruction language Quil, licensed under the Apache 2.0 license.",
-    "description": "Quilc is an advanced optimizing compiler for the quantum instruction language Quil, licensed under the Apache 2.0 license.",
-    "stars": 0,
+    "summary": "The optimizing Quil compiler.",
+    "description": "The optimizing Quil compiler.",
+    "stars": 493,
+    "lastPushedAt": "2025-10-16T17:59:53Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/rigetti-quilc.svg"
   },
   {
     "slug": "bbn-q-quince",
@@ -3933,15 +4582,19 @@
       }
     ],
     "primaryLanguage": "Python",
+    "primaryLanguages": [
+      "Python"
+    ],
     "license": "Apache-2.0",
-    "summary": "This project is intended as an alternative means of defining the topology of an experiment, and will augment certain functionality of PyQLab's ExpSettingsGUI.",
-    "description": "This project is intended as an alternative means of defining the topology of an experiment, and will augment certain functionality of PyQLab's ExpSettingsGUI. Currently envisioned use cases:",
-    "stars": 0,
+    "summary": "Quince is a node-based GUI that allows for graphical configuration of qubit experiments in Auspex.",
+    "description": "Quince is a node-based GUI that allows for graphical configuration of qubit experiments in Auspex.",
+    "stars": 8,
+    "lastPushedAt": "2023-12-07T06:27:46Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/bbn-q-quince.svg"
   },
   {
     "slug": "thephoeron-quipper-language",
@@ -3964,16 +4617,21 @@
         "title": "How to start writing quantum code: an honest path"
       }
     ],
-    "primaryLanguage": "JavaScript",
-    "license": "Unknown",
-    "summary": "This file is part of Quipper.",
-    "description": "This file is part of Quipper. Copyright (C) 2011-2014. Please see the file COPYRIGHT for a list of authors, copyright holders, licensing, and other details. All rights reserved.",
-    "stars": 0,
+    "primaryLanguage": "Haskell",
+    "primaryLanguages": [
+      "JavaScript",
+      "Shell"
+    ],
+    "license": null,
+    "summary": "Quipper: embedded, scalable functional programming language for quantum computing (unofficial fork)",
+    "description": "Quipper: embedded, scalable functional programming language for quantum computing (unofficial fork)",
+    "stars": 94,
+    "lastPushedAt": "2015-08-31T15:27:44Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/thephoeron-quipper-language.svg"
   },
   {
     "slug": "strilanc-quirk",
@@ -3997,15 +4655,19 @@
       }
     ],
     "primaryLanguage": "JavaScript",
+    "primaryLanguages": [
+      "JavaScript"
+    ],
     "license": "Apache-2.0",
-    "summary": "Quirk is a toy quantum circuit simulator, intended to help people in learning about quantum computing.",
-    "description": "Quirk is a toy quantum circuit simulator, intended to help people in learning about quantum computing.",
-    "stars": 0,
+    "summary": "A drag-and-drop quantum circuit simulator that runs in your browser.",
+    "description": "A drag-and-drop quantum circuit simulator that runs in your browser. A toy for exploring and understanding small quantum circuits.",
+    "stars": 1080,
+    "lastPushedAt": "2024-07-16T13:15:51Z",
     "featured": true,
     "flagship": true,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": "/learn/flagship/strilanc-quirk.png"
+    "imagePath": "/learn/og/strilanc-quirk.png"
   },
   {
     "slug": "tqsd-qunetsim",
@@ -4025,15 +4687,21 @@
       }
     ],
     "primaryLanguage": "Python",
+    "primaryLanguages": [
+      "Python",
+      "JavaScript",
+      "Shell"
+    ],
     "license": "MIT",
-    "summary": "QuNetSim is a quantum-enabled network simulator that adds common quantum networking tasks like teleportation, superdense coding, sharing EPR pairs, etc.",
-    "description": "QuNetSim is a quantum-enabled network simulator that adds common quantum networking tasks like teleportation, superdense coding, sharing EPR pairs, etc. With QuNetSim, one can design and test robust quantum network protocols under various network conditions.",
-    "stars": 0,
+    "summary": "A quantum network simulation framework.",
+    "description": "A quantum network simulation framework.",
+    "stars": 144,
+    "lastPushedAt": "2024-04-02T21:30:07Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/tqsd-qunetsim.svg"
   },
   {
     "slug": "qutech-qupulse",
@@ -4053,15 +4721,20 @@
       }
     ],
     "primaryLanguage": "Python",
-    "license": "Unknown",
-    "summary": "qupulse: A Quantum compUting PULse parametrization and SEquencing framework",
-    "description": "qupulse: A Quantum compUting PULse parametrization and SEquencing framework",
-    "stars": 0,
+    "primaryLanguages": [
+      "Python",
+      "Jupyter"
+    ],
+    "license": "LGPL-3.0-or-later",
+    "summary": "Quantum Computing Toolkit for Qubit Control",
+    "description": "Quantum Computing Toolkit for Qubit Control",
+    "stars": 59,
+    "lastPushedAt": "2026-01-28T13:52:48Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/qutech-qupulse.svg"
   },
   {
     "slug": "ken-nakanishi-qupy",
@@ -4085,15 +4758,19 @@
       }
     ],
     "primaryLanguage": "Python",
+    "primaryLanguages": [
+      "Python"
+    ],
     "license": "MIT",
-    "summary": "QuPy is a quantum circuit simulator for both CPU and GPU.",
-    "description": "QuPy is a quantum circuit simulator for both CPU and GPU.",
-    "stars": 0,
+    "summary": "QuPy: Quantum circuit simulator for both CPU and GPU",
+    "description": "QuPy: Quantum circuit simulator for both CPU and GPU",
+    "stars": 45,
+    "lastPushedAt": "2019-05-21T05:53:22Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/ken-nakanishi-qupy.svg"
   },
   {
     "slug": "adamisntdead-qusimpy",
@@ -4117,15 +4794,19 @@
       }
     ],
     "primaryLanguage": "Python",
-    "license": "Unknown",
-    "summary": "Qusim.py is a toy multi-qubit quantum computer simulator, written in 150 lines of python",
-    "description": "Qusim.py is a toy multi-qubit quantum computer simulator, written in 150 lines of python",
-    "stars": 0,
+    "primaryLanguages": [
+      "Python"
+    ],
+    "license": "AGPL-3.0",
+    "summary": "A Multi-Qubit Ideal Quantum Computer Simulator",
+    "description": "A Multi-Qubit Ideal Quantum Computer Simulator",
+    "stars": 724,
+    "lastPushedAt": "2021-06-04T17:57:44Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/adamisntdead-qusimpy.svg"
   },
   {
     "slug": "weinbe58-quspin",
@@ -4149,15 +4830,21 @@
       }
     ],
     "primaryLanguage": "Python",
-    "license": "Unknown",
-    "summary": "QuSpin is an open-source Python package for Exact Diagonalization and quantum dynamics of arbitrary boson, fermion and spin many-body systems, supporting the use of various (user-defined) symmetries in one and higher dimensional...",
-    "description": "QuSpin is an open-source Python package for Exact Diagonalization and quantum dynamics of arbitrary boson, fermion and spin many-body systems, supporting the use of various (user-defined) symmetries in one and higher dimensional lattice systems and (imaginary) time evolution following a user-specified driving protocol.",
-    "stars": 0,
+    "primaryLanguages": [
+      "Python",
+      "C/C++",
+      "JavaScript"
+    ],
+    "license": "BSD-3-Clause",
+    "summary": "A python wrapper for doing ED calculations on many-body systems",
+    "description": "A python wrapper for doing ED calculations on many-body systems",
+    "stars": 30,
+    "lastPushedAt": "2022-12-22T04:33:15Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/weinbe58-quspin.svg"
   },
   {
     "slug": "rigetti-qvm",
@@ -4180,16 +4867,22 @@
         "title": "How to start writing quantum code: an honest path"
       }
     ],
-    "primaryLanguage": "Quil",
+    "primaryLanguage": "Common Lisp",
+    "primaryLanguages": [
+      "Quil",
+      "Python",
+      "Shell"
+    ],
     "license": "Apache-2.0",
-    "summary": "This is the official Quil-Lang *Quantum Virtual Machine* (QVM), a flexible and efficient simulator for Quil.",
-    "description": "This is the official Quil-Lang *Quantum Virtual Machine* (QVM), a flexible and efficient simulator for Quil.",
-    "stars": 0,
+    "summary": "The high-performance and featureful Quil simulator.",
+    "description": "The high-performance and featureful Quil simulator.",
+    "stars": 454,
+    "lastPushedAt": "2025-10-16T18:00:53Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/rigetti-qvm.svg"
   },
   {
     "slug": "jpaykin-qwire",
@@ -4212,16 +4905,20 @@
         "title": "How to start writing quantum code: an honest path"
       }
     ],
-    "primaryLanguage": "Mixed",
+    "primaryLanguage": "Coq",
+    "primaryLanguages": [
+      "Coq"
+    ],
     "license": "MIT",
-    "summary": "This is a Coq implementation of the QWIRE quantum programming language, described in the following papers by Jennifer Paykin, Robert Rand, Dong-Ho Lee and Steve Zdancewic: [QWIRE: a core language for quantum...",
-    "description": "This is a Coq implementation of the QWIRE quantum programming language, described in the following papers by Jennifer Paykin, Robert Rand, Dong-Ho Lee and Steve Zdancewic: [QWIRE: a core language for quantum circuits][1]. [QWIRE Practice: Formal Verification of Quantum Circuits in Coq][2] [ReQWIRE: Reasoning about Reversible Quantum Circuits][3] [Phantom Types for Quantum Programs][4]",
-    "stars": 0,
+    "summary": "A quantum circuit language and formal verification tool",
+    "description": "A quantum circuit language and formal verification tool",
+    "stars": 109,
+    "lastPushedAt": "2025-05-11T22:26:36Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/jpaykin-qwire.svg"
   },
   {
     "slug": "bbn-q-randomquantum-jl",
@@ -4245,15 +4942,19 @@
       }
     ],
     "primaryLanguage": "Julia",
+    "primaryLanguages": [
+      "Julia"
+    ],
     "license": "Custom / project-specific",
-    "summary": "This Julia package provides functions to sample from various random matrix ensebles associated with quantum information applications.",
-    "description": "This Julia package provides functions to sample from various random matrix ensebles associated with quantum information applications.",
-    "stars": 0,
+    "summary": "Julia package for generating random quantum states and processes according to a number of natural distributions.",
+    "description": "Julia package for generating random quantum states and processes according to a number of natural distributions.",
+    "stars": 13,
+    "lastPushedAt": "2022-12-16T18:07:31Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/bbn-q-randomquantum-jl.svg"
   },
   {
     "slug": "rigetticomputing-reference-qvm",
@@ -4277,15 +4978,19 @@
       }
     ],
     "primaryLanguage": "Python",
+    "primaryLanguages": [
+      "Python"
+    ],
     "license": "Apache-2.0",
-    "summary": "The referenceqvm is the reference implementation of the QVM outlined in the arXiv:1608:03355 by Robert Smith, Spike Curtis, and Will Zeng.",
-    "description": "The referenceqvm is the reference implementation of the QVM outlined in the arXiv:1608:03355 by Robert Smith, Spike Curtis, and Will Zeng. It is a research package that supports rapid prototyping and development of quantum programs using pyQuil.",
-    "stars": 0,
+    "summary": "A reference implementation for a quantum virtual machine in Python",
+    "description": "A reference implementation for a quantum virtual machine in Python",
+    "stars": 46,
+    "lastPushedAt": "2019-02-07T21:13:05Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
-    "archived": false,
-    "imagePath": null
+    "archived": true,
+    "imagePath": "/learn/monogram/rigetticomputing-reference-qvm.svg"
   },
   {
     "slug": "epiqc-scaffcc",
@@ -4309,15 +5014,21 @@
       }
     ],
     "primaryLanguage": "C++",
-    "license": "BSD",
-    "summary": "***Important Note:*** starting with version 4.0, the argument orders of CNOT and Toffoli have been changed and standardized to CNOT(control, target) and Toffoli(control1, control2, target) respectively.",
-    "description": "***Important Note:*** starting with version 4.0, the argument orders of CNOT and Toffoli have been changed and standardized to CNOT(control, target) and Toffoli(control1, control2, target) respectively. Previously, the target argument was first. All of the benchmarks (in Algorithms/) now conform to the new ordering. Also starting with version 4.0, rotation decomposition and Toffoli decomposition are disabled by default. They can...",
-    "stars": 0,
+    "primaryLanguages": [
+      "C++",
+      "C/C++",
+      "C"
+    ],
+    "license": "BSD-2-Clause",
+    "summary": "Compilation, analysis and optimization framework for the Scaffold quantum programming language.",
+    "description": "Compilation, analysis and optimization framework for the Scaffold quantum programming language.",
+    "stars": 201,
+    "lastPushedAt": "2021-09-28T15:30:02Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/epiqc-scaffcc.svg"
   },
   {
     "slug": "sequencing-dev-sequencing",
@@ -4337,15 +5048,20 @@
       }
     ],
     "primaryLanguage": "Python",
-    "license": "BSD",
-    "summary": "`sequencing is a Python package for simulating realistic quantum control sequences using QuTiP.",
-    "description": "`sequencing is a Python package for simulating realistic quantum control sequences using QuTiP. Built for researchers and quantum engineers, sequencing` provides an intuitive framework for constructing models of quantum systems composed of many modes and generating complex time-dependent control Hamiltonians for master equation simulations.",
-    "stars": 0,
+    "primaryLanguages": [
+      "Python",
+      "Jupyter"
+    ],
+    "license": "BSD-3-Clause",
+    "summary": "Simulate realistic quantum control sequences using QuTiP",
+    "description": "Simulate realistic quantum control sequences using QuTiP",
+    "stars": 15,
+    "lastPushedAt": "2022-09-09T17:25:30Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/sequencing-dev-sequencing.svg"
   },
   {
     "slug": "stephaniewehner-simulaqron",
@@ -4365,15 +5081,20 @@
       }
     ],
     "primaryLanguage": "Python",
-    "license": "BSD",
-    "summary": "The purpose of this simulator of quantum network nodes is to allow you to develop new applications for a future quantum internet, while we do not yet have real quantum network nodes...",
-    "description": "The purpose of this simulator of quantum network nodes is to allow you to develop new applications for a future quantum internet, while we do not yet have real quantum network nodes available for testing.",
-    "stars": 0,
+    "primaryLanguages": [
+      "Python",
+      "Shell"
+    ],
+    "license": "BSD-3-Clause",
+    "summary": "Quantum Network Simulator for Application Programming",
+    "description": "Quantum Network Simulator for Application Programming",
+    "stars": 131,
+    "lastPushedAt": "2026-05-15T15:34:22Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/stephaniewehner-simulaqron.svg"
   },
   {
     "slug": "jeffwass-squankum",
@@ -4397,15 +5118,19 @@
       }
     ],
     "primaryLanguage": "Java",
-    "license": "LGPL",
-    "summary": "Welcome to Squankum -------- Currently Squankum lets you :",
-    "description": "Welcome to Squankum -------- Currently Squankum lets you :",
-    "stars": 0,
+    "primaryLanguages": [
+      "Java"
+    ],
+    "license": "GPL-3.0",
+    "summary": "Simulation of Quantum Computation",
+    "description": "Simulation of Quantum Computation",
+    "stars": 10,
+    "lastPushedAt": "2012-05-05T18:05:18Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/jeffwass-squankum.svg"
   },
   {
     "slug": "softwareqinc-staq",
@@ -4428,16 +5153,22 @@
         "title": "How to start writing quantum code: an honest path"
       }
     ],
-    "primaryLanguage": "C++",
+    "primaryLanguage": "OpenQASM",
+    "primaryLanguages": [
+      "C++",
+      "OpenQASM",
+      "C/C++"
+    ],
     "license": "MIT",
-    "summary": "**staq** is a modern C++ library for the synthesis, transformation, optimization and compilation of quantum circuits.",
-    "description": "**staq** is a modern C++ library for the synthesis, transformation, optimization and compilation of quantum circuits. **staq** is written in standard C++17 and has very low external dependencies. It is usable either through the provided binary tools, or as a header-only library that can be included to provide direct support for parsing & manipulating circuits written in the OpenQASM 2.0...",
-    "stars": 0,
+    "summary": "Full-stack quantum processing toolkit",
+    "description": "Full-stack quantum processing toolkit",
+    "stars": 181,
+    "lastPushedAt": "2026-02-22T00:20:39Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/softwareqinc-staq.svg"
   },
   {
     "slug": "quantumlib-stim",
@@ -4461,15 +5192,21 @@
       }
     ],
     "primaryLanguage": "C++",
+    "primaryLanguages": [
+      "C++",
+      "Python",
+      "C/C++"
+    ],
     "license": "Apache-2.0",
-    "summary": "High-performance simulation of quantum stabilizer circuits for quantum error correction.",
-    "description": "High-performance simulation of quantum stabilizer circuits for quantum error correction.",
-    "stars": 0,
+    "summary": "A fast stabilizer circuit library.",
+    "description": "A fast stabilizer circuit library.",
+    "stars": 736,
+    "lastPushedAt": "2026-05-22T05:58:19Z",
     "featured": true,
     "flagship": true,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": "/learn/flagship/quantumlib-stim.png"
+    "imagePath": "/learn/og/quantumlib-stim.png"
   },
   {
     "slug": "xanaduai-strawberryfields",
@@ -4489,15 +5226,20 @@
       }
     ],
     "primaryLanguage": "Python",
+    "primaryLanguages": [
+      "Python",
+      "LaTeX"
+    ],
     "license": "Apache-2.0",
-    "summary": "<p align=\"center\"> <a href=\"https://github.com/XanaduAI/strawberryfields/actions?query=workflow%3ATests\"> <img src=\"https://img.shields.io/github/workflow/status/XanaduAI/strawberryfields/Tests/master?logo=github&style=flat-square\" /> </a> <a href=\"https://www.codefactor.io/repository/github/xanaduai/strawberryfields\"> <img src=\"https://img.shields.io/codefactor/grade/github/XanaduAI/strawberryfields/master?style=flat-square\" /> </a> <a href=\"https://codecov.io/gh/XanaduAI/strawberryfields\"> <img src=\"https://img.shields.io/codecov/c/github/xanaduai/strawberryfields/master.svg?style=popout-square\" /> </a> <a href=\"https://strawberryfields.readthedocs.io\"> <img src=\"https://img.shields.io/readthedocs/strawberryfields.svg?style=popout-square\" /> </a> <a href=\"https://pypi.org/project/StrawberryFields\"> <img src=\"https://img.shields.io/pypi/v/StrawberryFields.svg?style=popout-square\" /> </a>...",
-    "description": "<p align=\"center\"> <a href=\"https://github.com/XanaduAI/strawberryfields/actions?query=workflow%3ATests\"> <img src=\"https://img.shields.io/github/workflow/status/XanaduAI/strawberryfields/Tests/master?logo=github&style=flat-square\" /> </a> <a href=\"https://www.codefactor.io/repository/github/xanaduai/strawberryfields\"> <img src=\"https://img.shields.io/codefactor/grade/github/XanaduAI/strawberryfields/master?style=flat-square\" /> </a> <a href=\"https://codecov.io/gh/XanaduAI/strawberryfields\"> <img src=\"https://img.shields.io/codecov/c/github/xanaduai/strawberryfields/master.svg?style=popout-square\" /> </a> <a href=\"https://strawberryfields.readthedocs.io\"> <img src=\"https://img.shields.io/readthedocs/strawberryfields.svg?style=popout-square\" /> </a> <a href=\"https://pypi.org/project/StrawberryFields\"> <img src=\"https://img.shields.io/pypi/v/StrawberryFields.svg?style=popout-square\" /> </a> <a href=\"https://pypi.org/project/StrawberryFields\"> <img src=\"https://img.shields.io/pypi/pyversions/StrawberryFields.svg?style=popout-square\" /> </a> </p>",
-    "stars": 0,
+    "summary": "Strawberry Fields is a full-stack Python library for designing, simulating, and optimizing continuous variable (CV) quantum optical circuits.",
+    "description": "Strawberry Fields is a full-stack Python library for designing, simulating, and optimizing continuous variable (CV) quantum optical circuits.",
+    "stars": 850,
+    "lastPushedAt": "2026-01-16T19:47:58Z",
     "featured": false,
     "flagship": true,
     "qtanglRelevant": false,
-    "archived": false,
-    "imagePath": "/learn/flagship/xanaduai-strawberryfields.png"
+    "archived": true,
+    "imagePath": "/learn/og/xanaduai-strawberryfields.png"
   },
   {
     "slug": "subwayharearmy-sudoq",
@@ -4520,16 +5262,20 @@
         "title": "How to start writing quantum code: an honest path"
       }
     ],
-    "primaryLanguage": "Jupyter",
-    "license": "LGPL",
-    "summary": "SudoQ A Sudoku solver that leverages D-Wave's Quantum Computer.",
-    "description": "SudoQ A Sudoku solver that leverages D-Wave's Quantum Computer. Meant to be a first project, a tutorial of sorts for Quantum Annealing using D-Wave architecture. Addresses QUBO set-up and solving.",
-    "stars": 0,
+    "primaryLanguage": "Jupyter Notebook",
+    "primaryLanguages": [
+      "Jupyter"
+    ],
+    "license": "GPL-3.0",
+    "summary": "A Sudoku solver that leverages a quantum computer.",
+    "description": "A Sudoku solver that leverages a quantum computer.",
+    "stars": 6,
+    "lastPushedAt": "2019-10-07T16:57:48Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/subwayharearmy-sudoq.svg"
   },
   {
     "slug": "indisoluble-swiftquantumcomputing",
@@ -4538,26 +5284,36 @@
     "name": "SwiftQuantumComputing",
     "repoUrl": "https://github.com/indisoluble/SwiftQuantumComputing",
     "category": {
-      "slug": "pulse-control",
-      "title": "Pulse and control",
-      "description": "Tooling for low-level pulse scheduling, experiment orchestration, and laboratory control around quantum hardware."
+      "slug": "general-purpose-sdks",
+      "title": "General-purpose SDKs",
+      "description": "Broad frameworks for building, simulating, and experimenting with quantum circuits across multiple domains."
     },
     "topics": [
       {
         "slug": "quantum-software-map",
         "title": "Quantum computing software in 2026: the open-source map"
+      },
+      {
+        "slug": "start-writing-quantum-code",
+        "title": "How to start writing quantum code: an honest path"
       }
     ],
     "primaryLanguage": "Swift",
+    "primaryLanguages": [
+      "Swift",
+      "JavaScript",
+      "C/C++"
+    ],
     "license": "Apache-2.0",
-    "summary": "Run this application to check the performance of this simulator in your computer.",
-    "description": "Run this application to check the performance of this simulator in your computer. Execute swift run sqc-measure-performance -h to see all available options.",
-    "stars": 0,
+    "summary": "Quantum circuit simulator in Swift",
+    "description": "Quantum circuit simulator in Swift",
+    "stars": 52,
+    "lastPushedAt": "2022-03-20T18:29:19Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/indisoluble-swiftquantumcomputing.svg"
   },
   {
     "slug": "goodchemistryco-tangelo",
@@ -4585,15 +5341,21 @@
       }
     ],
     "primaryLanguage": "Python",
+    "primaryLanguages": [
+      "Python",
+      "OpenQASM",
+      "Shell"
+    ],
     "license": "Apache-2.0",
-    "summary": "<p align=\"center\"> <a href=\"https://github.com/goodchemistryco/Tangelo/blob/main/LICENSE\"> <img src=\"https://img.shields.io/badge/License-Apache_2.0-green\" alt=\"license\"> </a> <img src=\"https://img.shields.io/badge/OS-Linux%20MacOS%20Windows-7373e3\" alt=\"systems\"> <a href=\"https://github.com/goodchemistryco/Tangelo/tree/develop\"> <img src=\"https://img.shields.io/badge/DevBranch-develop-yellow\" alt=\"dev_branch\"> </a> </p>",
-    "description": "<p align=\"center\"> <a href=\"https://github.com/goodchemistryco/Tangelo/blob/main/LICENSE\"> <img src=\"https://img.shields.io/badge/License-Apache_2.0-green\" alt=\"license\"> </a> <img src=\"https://img.shields.io/badge/OS-Linux%20MacOS%20Windows-7373e3\" alt=\"systems\"> <a href=\"https://github.com/goodchemistryco/Tangelo/tree/develop\"> <img src=\"https://img.shields.io/badge/DevBranch-develop-yellow\" alt=\"dev_branch\"> </a> </p>",
-    "stars": 0,
+    "summary": "A python package for exploring end-to-end chemistry workflows on quantum computers and simulators.",
+    "description": "A python package for exploring end-to-end chemistry workflows on quantum computers and simulators.",
+    "stars": 137,
+    "lastPushedAt": "2026-01-07T16:22:52Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": true,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/goodchemistryco-tangelo.svg"
   },
   {
     "slug": "aspuru-guzik-group-tequila",
@@ -4617,15 +5379,19 @@
       }
     ],
     "primaryLanguage": "Python",
+    "primaryLanguages": [
+      "Python"
+    ],
     "license": "MIT",
-    "summary": "Tequila is an abstraction framework for (variational) quantum algorithms.",
-    "description": "Tequila is an abstraction framework for (variational) quantum algorithms. It operates on abstract data structures allowing the formulation, combination, automatic differentiation and optimization of generalized objectives. Tequila can execute the underlying quantum expectation values on state of the art simulators as well as on real quantum devices.",
-    "stars": 0,
+    "summary": "A High-Level Abstraction Framework for Quantum Algorithms",
+    "description": "A High-Level Abstraction Framework for Quantum Algorithms",
+    "stars": 428,
+    "lastPushedAt": "2026-05-27T15:58:25Z",
     "featured": false,
     "flagship": true,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": "/learn/flagship/aspuru-guzik-group-tequila.png"
+    "imagePath": "/learn/og/aspuru-guzik-group-tequila.png"
   },
   {
     "slug": "xanaduai-thewalrus",
@@ -4645,15 +5411,20 @@
       }
     ],
     "primaryLanguage": "Python",
+    "primaryLanguages": [
+      "Python",
+      "Jupyter"
+    ],
     "license": "Apache-2.0",
-    "summary": "image:: https://img.shields.io/codecov/c/github/xanaduai/thewalrus/master.svg?style=flat :alt: Codecov coverage :target: https://codecov.io/gh/XanaduAI/thewalrus",
-    "description": ".. image:: https://img.shields.io/codecov/c/github/xanaduai/thewalrus/master.svg?style=flat :alt: Codecov coverage :target: https://codecov.io/gh/XanaduAI/thewalrus",
-    "stars": 0,
+    "summary": "A library for the calculation of hafnians, Hermite polynomials and Gaussian boson sampling.",
+    "description": "A library for the calculation of hafnians, Hermite polynomials and Gaussian boson sampling.",
+    "stars": 109,
+    "lastPushedAt": "2025-11-14T17:28:25Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/xanaduai-thewalrus.svg"
   },
   {
     "slug": "cqcl-tket",
@@ -4677,15 +5448,21 @@
       }
     ],
     "primaryLanguage": "C++",
+    "primaryLanguages": [
+      "C++",
+      "Python",
+      "OpenQASM"
+    ],
     "license": "Apache-2.0",
-    "summary": "TKET (pronounced \"ticket\") is a high-performance quantum compiler that can optimise circuits for a wide range of quantum computing architectures.",
-    "description": "TKET (pronounced \"ticket\") is a high-performance quantum compiler that can optimise circuits for a wide range of quantum computing architectures.",
-    "stars": 0,
+    "summary": "Source code for the TKET quantum compiler, Python bindings and utilities",
+    "description": "Source code for the TKET quantum compiler, Python bindings and utilities",
+    "stars": 308,
+    "lastPushedAt": "2026-05-27T12:11:11Z",
     "featured": true,
     "flagship": true,
     "qtanglRelevant": true,
     "archived": false,
-    "imagePath": "/learn/flagship/cqcl-tket.png"
+    "imagePath": "/learn/og/cqcl-tket.png"
   },
   {
     "slug": "ornl-qci-tnqvm",
@@ -4709,15 +5486,21 @@
       }
     ],
     "primaryLanguage": "C++",
-    "license": "Unknown",
-    "summary": "TNQVM Tensor Network XACC Accelerator These plugins for XACC provide an Accelerator implementation that leverages tensor network theory to simulate quantum circuits.",
-    "description": "TNQVM Tensor Network XACC Accelerator These plugins for XACC provide an Accelerator implementation that leverages tensor network theory to simulate quantum circuits.",
-    "stars": 0,
+    "primaryLanguages": [
+      "C++",
+      "C/C++",
+      "OpenQASM"
+    ],
+    "license": null,
+    "summary": "Tensor Network QPU Simulator for Eclipse XACC",
+    "description": "Tensor Network QPU Simulator for Eclipse XACC",
+    "stars": 44,
+    "lastPushedAt": "2025-03-05T20:50:25Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/ornl-qci-tnqvm.svg"
   },
   {
     "slug": "vprusso-toqito",
@@ -4741,15 +5524,21 @@
       }
     ],
     "primaryLanguage": "Python",
+    "primaryLanguages": [
+      "Python",
+      "LaTeX",
+      "JavaScript"
+    ],
     "license": "MIT",
-    "summary": "<p align=\"center\"> <picture> <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://raw.githubusercontent.com/vprusso/toqito/master/docs/content/figures/logo-dark.svg\" width=\"60%\"> <img src=\"https://raw.githubusercontent.com/vprusso/toqito/master/docs/content/figures/logo.svg\" width=\"60%\"> </picture> </p>",
-    "description": "<p align=\"center\"> <picture> <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://raw.githubusercontent.com/vprusso/toqito/master/docs/content/figures/logo-dark.svg\" width=\"60%\"> <img src=\"https://raw.githubusercontent.com/vprusso/toqito/master/docs/content/figures/logo.svg\" width=\"60%\"> </picture> </p>",
-    "stars": 0,
+    "summary": "|toqito> (Theory of Quantum Information Toolkit) is a Python library for research in quantum information theory.",
+    "description": "|toqito> (Theory of Quantum Information Toolkit) is a Python library for research in quantum information theory.",
+    "stars": 276,
+    "lastPushedAt": "2026-05-27T20:28:58Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/vprusso-toqito.svg"
   },
   {
     "slug": "q-compiler-universalqcompiler",
@@ -4772,16 +5561,21 @@
         "title": "How to start writing quantum code: an honest path"
       }
     ],
-    "primaryLanguage": "Python",
+    "primaryLanguage": "Mathematica",
+    "primaryLanguages": [
+      "Python",
+      "C"
+    ],
     "license": "Apache-2.0",
-    "summary": "UniversalQCompiler - An opensource software package for decomposing generic quantum computations",
-    "description": "UniversalQCompiler - An opensource software package for decomposing generic quantum computations",
-    "stars": 0,
+    "summary": "Synthesizing arbitrary quantum computations",
+    "description": "Synthesizing arbitrary quantum computations",
+    "stars": 71,
+    "lastPushedAt": "2025-09-25T10:34:21Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/q-compiler-universalqcompiler.svg"
   },
   {
     "slug": "mstechly-vqf",
@@ -4805,15 +5599,19 @@
       }
     ],
     "primaryLanguage": "Python",
+    "primaryLanguages": [
+      "Python"
+    ],
     "license": "Apache-2.0",
-    "summary": "This repository contains implementation of the algorithm presented in the article \"Variational Quantum Factoring\", by Eric R.",
-    "description": "This repository contains implementation of the algorithm presented in the article \"Variational Quantum Factoring\", by Eric R. Anschuetz, Jonathan P. Olson, Al\u00e1n Aspuru-Guzik, Yudong Cao. It's available on arxiv.",
-    "stars": 0,
+    "summary": "Implementation of Variational Quantum Factoring algorithm.",
+    "description": "Implementation of Variational Quantum Factoring algorithm.",
+    "stars": 55,
+    "lastPushedAt": "2026-04-13T17:09:12Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/mstechly-vqf.svg"
   },
   {
     "slug": "ornl-qci-xacc",
@@ -4837,15 +5635,21 @@
       }
     ],
     "primaryLanguage": "C++",
-    "license": "Unknown",
-    "summary": "Language and Hardware Independent Quantum Programming Framework XACC is an extensible compilation framework for hybrid quantum-classical computing architectures.",
-    "description": "Language and Hardware Independent Quantum Programming Framework XACC is an extensible compilation framework for hybrid quantum-classical computing architectures. It provides extensible language frontend and hardware backend compilation components glued together via a novel quantum intermediate representation. XACC currently supports quantum-classical programming and enables the execution of quantum kernels on IBM, Rigetti, and D-Wave QPUs, as well as a number of...",
-    "stars": 0,
+    "primaryLanguages": [
+      "C++",
+      "C/C++",
+      "Python"
+    ],
+    "license": "BSD-3-Clause",
+    "summary": "XACC - eXtreme-scale Accelerator programming framework",
+    "description": "XACC - eXtreme-scale Accelerator programming framework",
+    "stars": 3,
+    "lastPushedAt": "2025-01-17T17:45:48Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/ornl-qci-xacc.svg"
   },
   {
     "slug": "ornl-qci-xacc-vqe",
@@ -4869,15 +5673,21 @@
       }
     ],
     "primaryLanguage": "C++",
-    "license": "BSD",
-    "summary": "XACC Plugins and Programs for the Variational Quantum Eigensolver",
-    "description": "XACC Plugins and Programs for the Variational Quantum Eigensolver",
-    "stars": 0,
+    "primaryLanguages": [
+      "C++",
+      "Python",
+      "C/C++"
+    ],
+    "license": "BSD-3-Clause",
+    "summary": "DEPRECATED - Variational quantum eigensolver built on XACC",
+    "description": "DEPRECATED - Variational quantum eigensolver built on XACC",
+    "stars": 14,
+    "lastPushedAt": "2019-07-09T14:00:12Z",
     "featured": false,
     "flagship": false,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": null
+    "imagePath": "/learn/monogram/ornl-qci-xacc-vqe.svg"
   },
   {
     "slug": "quantumbfs-yao-jl",
@@ -4901,14 +5711,19 @@
       }
     ],
     "primaryLanguage": "Julia",
+    "primaryLanguages": [
+      "Julia",
+      "Shell"
+    ],
     "license": "Apache-2.0",
-    "summary": "<div align=\"center\"> <img src=\"https://yaoquantum.org/assets/logo.png\" alt=\"Yao Logo\" width=\"210\"></img> </div>",
-    "description": "<div align=\"center\"> <img src=\"https://yaoquantum.org/assets/logo.png\" alt=\"Yao Logo\" width=\"210\"></img> </div>",
-    "stars": 0,
+    "summary": "Extensible, Efficient Quantum Algorithm Design for Humans.",
+    "description": "Extensible, Efficient Quantum Algorithm Design for Humans.",
+    "stars": 1032,
+    "lastPushedAt": "2026-05-23T01:08:10Z",
     "featured": false,
     "flagship": true,
     "qtanglRelevant": false,
     "archived": false,
-    "imagePath": "/learn/flagship/quantumbfs-yao-jl.png"
+    "imagePath": "/learn/og/quantumbfs-yao-jl.png"
   }
 ]

@@ -3,17 +3,25 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
+import CodeBlock from "@/components/learn/CodeBlock";
+import LibraryReadme from "@/components/learn/LibraryReadme";
 import LibraryResourceCard from "@/components/learn/LibraryResourceCard";
+import ResourceChips from "@/components/learn/ResourceChips";
+import LearnNewsletterSignup from "@/components/learn/LearnNewsletterSignup";
+import SaveResourceButton from "@/components/learn/SaveResourceButton";
 import PageShell from "@/components/layout/PageShell";
 import Section from "@/components/layout/Section";
 import Card from "@/components/ui/Card";
 import Eyebrow from "@/components/ui/Eyebrow";
+import { libraryEditorialDrafts } from "@/lib/copy/library-editorial-drafts";
 import { libraryEditorial } from "@/lib/copy/library-editorial";
 import { buildPageMetadata } from "@/lib/seo";
 import {
-  getLibraryEntryOrNull,
+  formatRelativeDate,
   getLibraryEntriesBySlugs,
+  getLibraryEntryOrNull,
   getLibraryIndex,
+  getLibraryReadmeMarkdown,
 } from "@/lib/library";
 
 type ResourcePageProps = {
@@ -51,7 +59,7 @@ export async function generateMetadata({
     return {};
   }
 
-  const editorial = libraryEditorial[entry.slug];
+  const editorial = libraryEditorial[entry.slug] ?? libraryEditorialDrafts[entry.slug];
   const title = `${entry.title} | ${entry.category.title} library guide`;
   const description =
     editorial?.description || editorial?.summary || entry.description || entry.summary;
@@ -61,7 +69,7 @@ export async function generateMetadata({
     title,
     description,
     type: "article",
-    image: `/learn/library/${entry.slug}/opengraph-image`,
+    image: entry.imagePath ?? `/learn/library/${entry.slug}/opengraph-image`,
   });
 }
 
@@ -73,13 +81,42 @@ export default async function LibraryResourcePage({ params }: ResourcePageProps)
     notFound();
   }
 
-  const relatedEntries = await getLibraryEntriesBySlugs(entry.relatedSlugs);
+  const [relatedEntries, readmeMarkdown, backendEntries] = await Promise.all([
+    getLibraryEntriesBySlugs(entry.relatedSlugs),
+    getLibraryReadmeMarkdown(slug),
+    getLibraryEntriesBySlugs(entry.supportedBackendSlugs),
+  ]);
+
   const lastUpdated = formatDate(entry.lastPushedAt);
-  const editorial = libraryEditorial[entry.slug];
+  const relativeUpdated = formatRelativeDate(entry.lastPushedAt);
+  const editorial = libraryEditorial[entry.slug] ?? libraryEditorialDrafts[entry.slug];
   const summary = editorial?.summary ?? entry.summary;
   const whatItIs = editorial?.whatItIs ?? entry.whatItIs;
   const whoItsFor = editorial?.whoItsFor ?? entry.whoItsFor;
   const whatYouCanBuild = editorial?.whatYouCanBuild ?? entry.whatYouCanBuild;
+  const verifiedAt = editorial?.lastVerifiedAt;
+  const verifiedBy = editorial?.verifiedBy;
+
+  const chips = [
+    entry.primaryLanguage
+      ? {
+          label: entry.primaryLanguage,
+          title: entry.primaryLanguages.join(", "),
+        }
+      : null,
+    entry.license ? { label: entry.license } : null,
+    entry.packageMeta.version ? { label: `v${entry.packageMeta.version}` } : null,
+    entry.flagship ? { label: "Flagship", tone: "strong" as const } : null,
+    entry.qtanglRelevant ? { label: "Qtangl relevant", tone: "strong" as const } : null,
+    entry.archived ? { label: "Archive", tone: "muted" as const } : null,
+  ].filter(Boolean) as Parameters<typeof ResourceChips>[0]["chips"];
+
+  const externalLinkEntries = [
+    ...(entry.externalLinks.docs ?? []).map((url) => ({ label: "Docs", url })),
+    ...(entry.externalLinks.paper ?? []).map((url) => ({ label: "Paper", url })),
+    ...(entry.externalLinks.community ?? []).map((url) => ({ label: "Community", url })),
+    ...(entry.externalLinks.pypi ?? []).map((url) => ({ label: "PyPI", url })),
+  ];
 
   const structuredData = {
     "@context": "https://schema.org",
@@ -90,8 +127,8 @@ export default async function LibraryResourcePage({ params }: ResourcePageProps)
         codeRepository: entry.repoUrl,
         url: entry.repoUrl,
         description: summary,
-        programmingLanguage: entry.primaryLanguage,
-        license: entry.license,
+        programmingLanguage: entry.primaryLanguage ?? undefined,
+        license: entry.license ?? undefined,
         author: {
           "@type": "Organization",
           name: entry.owner,
@@ -100,18 +137,8 @@ export default async function LibraryResourcePage({ params }: ResourcePageProps)
       {
         "@type": "BreadcrumbList",
         itemListElement: [
-          {
-            "@type": "ListItem",
-            position: 1,
-            name: "Learn",
-            item: "/learn",
-          },
-          {
-            "@type": "ListItem",
-            position: 2,
-            name: "Library",
-            item: "/learn/library",
-          },
+          { "@type": "ListItem", position: 1, name: "Learn", item: "/learn" },
+          { "@type": "ListItem", position: 2, name: "Library", item: "/learn/library" },
           {
             "@type": "ListItem",
             position: 3,
@@ -132,10 +159,7 @@ export default async function LibraryResourcePage({ params }: ResourcePageProps)
   return (
     <PageShell>
       <Section gap="tight" className="pt-8 sm:pt-10">
-        <nav
-          aria-label="Breadcrumb"
-          className="text-sm text-[var(--color-gray-400)]"
-        >
+        <nav aria-label="Breadcrumb" className="text-sm text-[var(--color-gray-400)]">
           <div className="flex flex-wrap items-center gap-2">
             <Link href="/learn" className="hover:text-white">
               Learn
@@ -161,34 +185,19 @@ export default async function LibraryResourcePage({ params }: ResourcePageProps)
             <Eyebrow>{entry.category.title}</Eyebrow>
             <h1 className="heading-display gradient-text mt-4">{entry.title}</h1>
             <p className="mt-4 text-sm uppercase tracking-[0.24em] text-[var(--color-gray-400)]">
-              Maintained by {entry.owner}
+              Maintained by{" "}
+              {entry.ownerUrl ? (
+                <a href={entry.ownerUrl} target="_blank" rel="noreferrer" className="hover:text-white">
+                  {entry.owner}
+                </a>
+              ) : (
+                entry.owner
+              )}
             </p>
-            <p className="mt-6 text-lg leading-8 text-[var(--color-gray-300)]">
-              {summary}
-            </p>
+            <p className="mt-6 text-lg leading-8 text-[var(--color-gray-300)]">{summary}</p>
 
-            <div className="mt-6 flex flex-wrap gap-2">
-              <span className="rounded-full border border-[var(--border)] px-3 py-1 text-xs text-[var(--color-gray-300)]">
-                {entry.primaryLanguage}
-              </span>
-              <span className="rounded-full border border-[var(--border)] px-3 py-1 text-xs text-[var(--color-gray-300)]">
-                {entry.license}
-              </span>
-              {entry.flagship ? (
-                <span className="rounded-full border border-[var(--border-strong)] bg-white/[0.06] px-3 py-1 text-xs text-white">
-                  Flagship
-                </span>
-              ) : null}
-              {entry.qtanglRelevant ? (
-                <span className="rounded-full border border-[var(--border-strong)] bg-white/[0.06] px-3 py-1 text-xs text-white">
-                  Qtangl relevant
-                </span>
-              ) : null}
-              {entry.archived ? (
-                <span className="rounded-full border border-[var(--border)] px-3 py-1 text-xs text-[var(--color-gray-400)]">
-                  Archive
-                </span>
-              ) : null}
+            <div className="mt-6">
+              <ResourceChips chips={chips} />
             </div>
 
             <div className="mt-8 flex flex-wrap gap-3">
@@ -210,6 +219,13 @@ export default async function LibraryResourcePage({ params }: ResourcePageProps)
                   Open project site
                 </a>
               ) : null}
+              <SaveResourceButton slug={entry.slug} title={entry.title} />
+              <Link
+                href={`/learn/compare?ids=${entry.slug}`}
+                className="inline-flex rounded-full border border-[var(--border)] px-5 py-3 text-sm font-medium text-[var(--color-gray-300)] transition hover:border-[var(--border-strong)] hover:text-white"
+              >
+                Compare
+              </Link>
             </div>
           </div>
 
@@ -222,7 +238,7 @@ export default async function LibraryResourcePage({ params }: ResourcePageProps)
                   fill
                   priority
                   sizes="(min-width: 1280px) 36vw, 100vw"
-                  className="object-cover grayscale"
+                  className="object-cover"
                 />
               </div>
             ) : null}
@@ -234,15 +250,26 @@ export default async function LibraryResourcePage({ params }: ResourcePageProps)
               </div>
               <div className="rounded-[var(--radius-xl)] border border-[var(--border)] bg-black/40 p-4">
                 <p className="text-label">Stars</p>
-                <p className="mt-3 text-base text-white">{formatNumber(entry.stars)}</p>
-              </div>
-              <div className="rounded-[var(--radius-xl)] border border-[var(--border)] bg-black/40 p-4">
-                <p className="text-label">Topics</p>
-                <p className="mt-3 text-base text-white">{entry.topics.length}</p>
+                <p className="mt-3 text-base text-white">
+                  {entry.stars > 0 ? formatNumber(entry.stars) : "—"}
+                </p>
               </div>
               <div className="rounded-[var(--radius-xl)] border border-[var(--border)] bg-black/40 p-4">
                 <p className="text-label">Last pushed</p>
-                <p className="mt-3 text-base text-white">{lastUpdated ?? "Unavailable"}</p>
+                <p className="mt-3 text-base text-white">
+                  {lastUpdated ?? "Unavailable"}
+                  {relativeUpdated ? (
+                    <span className="block text-xs text-[var(--color-gray-400)]">
+                      {relativeUpdated}
+                    </span>
+                  ) : null}
+                </p>
+              </div>
+              <div className="rounded-[var(--radius-xl)] border border-[var(--border)] bg-black/40 p-4">
+                <p className="text-label">Open issues</p>
+                <p className="mt-3 text-base text-white">
+                  {entry.openIssuesCount ?? "—"}
+                </p>
               </div>
             </div>
 
@@ -266,6 +293,22 @@ export default async function LibraryResourcePage({ params }: ResourcePageProps)
         </div>
       </Section>
 
+      {entry.quickstart ? (
+        <Section gap="tight">
+          <div className="content-reading">
+            <Eyebrow>Quickstart</Eyebrow>
+            <h2 className="heading-section mt-4">Get running in a few lines.</h2>
+          </div>
+          <div className="mt-8">
+            <CodeBlock
+              source={entry.quickstart.source}
+              language={entry.quickstart.language}
+              title="Quickstart"
+            />
+          </div>
+        </Section>
+      ) : null}
+
       <Section gap="tight">
         <div className="grid gap-6 xl:grid-cols-[1.05fr_0.95fr]">
           <Card tone="strong" size="lg" className="rounded-[var(--radius-feature)]">
@@ -275,13 +318,16 @@ export default async function LibraryResourcePage({ params }: ResourcePageProps)
                 <p key={paragraph}>{paragraph}</p>
               ))}
             </div>
+            {verifiedAt ? (
+              <p className="mt-6 text-xs text-[var(--color-gray-500)]">
+                Last verified by {verifiedBy ?? "Qtangl"} on {formatDate(verifiedAt)}
+              </p>
+            ) : null}
           </Card>
 
           <Card tone="feature" size="lg" className="rounded-[var(--radius-feature)]">
             <Eyebrow>Who it&apos;s for</Eyebrow>
-            <p className="mt-5 text-sm leading-8 text-[var(--color-gray-300)]">
-              {whoItsFor}
-            </p>
+            <p className="mt-5 text-sm leading-8 text-[var(--color-gray-300)]">{whoItsFor}</p>
 
             <h2 className="mt-8 text-xl font-semibold text-white">
               What you can build or learn
@@ -295,6 +341,133 @@ export default async function LibraryResourcePage({ params }: ResourcePageProps)
         </div>
       </Section>
 
+      {entry.codeSamples.length ? (
+        <Section gap="tight">
+          <div className="content-reading">
+            <Eyebrow>Code samples</Eyebrow>
+            <h2 className="heading-section mt-4">Examples from the repository.</h2>
+          </div>
+          <div className="mt-8 space-y-6">
+            {entry.codeSamples.map((sample) => (
+              <CodeBlock
+                key={sample.path}
+                source={sample.source}
+                language={sample.language}
+                title={`${sample.title} (${sample.path})`}
+              />
+            ))}
+          </div>
+        </Section>
+      ) : null}
+
+      {backendEntries.length ? (
+        <Section gap="tight">
+          <Card tone="feature" size="lg" className="rounded-[var(--radius-feature)]">
+            <Eyebrow>Plays well with</Eyebrow>
+            <div className="mt-5 flex flex-wrap gap-2">
+              {backendEntries.map((backend) => (
+                <Link
+                  key={backend.slug}
+                  href={`/learn/library/${backend.slug}`}
+                  className="rounded-full border border-[var(--border)] px-3 py-1 text-xs text-[var(--color-gray-300)] transition hover:border-[var(--border-strong)] hover:text-white"
+                >
+                  {backend.title}
+                </Link>
+              ))}
+            </div>
+          </Card>
+        </Section>
+      ) : null}
+
+      {entry.citationBibtex || entry.license ? (
+        <Section gap="tight">
+          <div className="grid gap-6 xl:grid-cols-2">
+            {entry.citationBibtex ? (
+              <Card tone="strong" size="lg" className="rounded-[var(--radius-feature)]">
+                <Eyebrow>Citation</Eyebrow>
+                <CodeBlock source={entry.citationBibtex} language="bibtex" title="BibTeX" />
+              </Card>
+            ) : null}
+            {entry.license ? (
+              <Card tone="feature" size="lg" className="rounded-[var(--radius-feature)]">
+                <Eyebrow>License</Eyebrow>
+                <p className="mt-5 text-2xl font-semibold text-white">{entry.license}</p>
+                <p className="mt-4 text-sm leading-7 text-[var(--color-gray-300)]">
+                  SPDX identifier detected from the repository metadata or license files.
+                </p>
+              </Card>
+            ) : null}
+          </div>
+        </Section>
+      ) : null}
+
+      {readmeMarkdown ? (
+        <Section gap="tight">
+          <div className="content-reading">
+            <Eyebrow>Repository README</Eyebrow>
+            <h2 className="heading-section mt-4">Full project documentation.</h2>
+          </div>
+          <div className="mt-8">
+            <LibraryReadme
+              markdown={readmeMarkdown}
+              owner={entry.owner}
+              name={entry.name}
+              branch={entry.defaultBranch}
+            />
+          </div>
+        </Section>
+      ) : null}
+
+      <Section gap="tight">
+        <Card tone="strong" size="lg" className="rounded-[var(--radius-feature)]">
+          <Eyebrow>Activity</Eyebrow>
+          <div className="mt-6 grid gap-4 sm:grid-cols-3">
+            <div>
+              <p className="text-label">Latest release</p>
+              <p className="mt-2 text-white">{entry.latestRelease ?? "—"}</p>
+            </div>
+            <div>
+              <p className="text-label">Watchers</p>
+              <p className="mt-2 text-white">{entry.subscribersCount ?? "—"}</p>
+            </div>
+            <div>
+              <p className="text-label">Python support</p>
+              <p className="mt-2 text-white">{entry.packageMeta.requiresPython ?? "—"}</p>
+            </div>
+          </div>
+          {entry.packageMeta.dependencies?.length ? (
+            <div className="mt-6">
+              <p className="text-label">Key dependencies</p>
+              <p className="mt-2 text-sm text-[var(--color-gray-300)]">
+                {entry.packageMeta.dependencies.join(", ")}
+              </p>
+            </div>
+          ) : null}
+        </Card>
+      </Section>
+
+      {externalLinkEntries.length ? (
+        <Section gap="tight">
+          <Card tone="feature" size="lg" className="rounded-[var(--radius-feature)]">
+            <Eyebrow>External links</Eyebrow>
+            <ul className="mt-5 space-y-3 text-sm">
+              {externalLinkEntries.map((link) => (
+                <li key={link.url}>
+                  <a
+                    href={link.url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-[var(--color-gray-300)] underline-offset-4 hover:text-white hover:underline"
+                  >
+                    {link.label}: {link.url}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </Card>
+        </Section>
+      ) : null}
+
       {editorial?.qtanglRelevance ? (
         <Section gap="tight">
           <Card tone="feature" size="lg" className="rounded-[var(--radius-feature)]">
@@ -307,25 +480,18 @@ export default async function LibraryResourcePage({ params }: ResourcePageProps)
       ) : null}
 
       <Section gap="tight">
-        <Card tone="strong" size="lg" className="rounded-[var(--radius-feature)]">
-          <Eyebrow>README excerpt</Eyebrow>
-          <details className="mt-5">
-            <summary className="cursor-pointer text-sm font-medium text-white">
-              Expand the source excerpt
-            </summary>
-            <p className="mt-4 text-sm leading-8 text-[var(--color-gray-300)]">
-              {entry.readmeExcerpt || "No README excerpt was available for this resource."}
-            </p>
-            {entry.readmePath ? (
-              <p className="mt-4 text-sm text-[var(--color-gray-400)]">
-                Source: <span className="font-mono">{entry.readmePath}</span>
-              </p>
-            ) : null}
-          </details>
+        <Card tone="strong" size="lg" className="learn-print-hide rounded-[var(--radius-feature)]">
+          <Eyebrow>Learn digest</Eyebrow>
+          <p className="mt-4 text-sm text-[var(--color-gray-300)]">
+            Get monthly updates when library entries change.
+          </p>
+          <div className="mt-4">
+            <LearnNewsletterSignup />
+          </div>
         </Card>
       </Section>
 
-      <Section gap="tight" className="pb-0">
+      <Section gap="tight" className="pb-0 learn-print-area">
         <div className="content-reading">
           <Eyebrow>Related resources</Eyebrow>
           <h2 className="heading-section mt-4">Keep exploring nearby tools.</h2>

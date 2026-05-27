@@ -17,11 +17,15 @@
     }
   ],
   "primaryLanguage": "Python",
-  "license": "BSD",
-  "summary": "The purpose of this simulator of quantum network nodes is to allow you to develop new applications for a future quantum internet, while we do not yet have real quantum network nodes...",
-  "description": "The purpose of this simulator of quantum network nodes is to allow you to develop new applications for a future quantum internet, while we do not yet have real quantum network nodes available for testing.",
+  "primaryLanguages": [
+    "Python",
+    "Shell"
+  ],
+  "license": "BSD-3-Clause",
+  "summary": "Quantum Network Simulator for Application Programming",
+  "description": "Quantum Network Simulator for Application Programming",
   "whatItIs": [
-    "SimulaQron is an open-source project in the networking category. It is maintained by StephanieWehner and primarily looks like a Python codebase. The purpose of this simulator of quantum network nodes is to allow you to develop new applications for a future quantum internet, while we do not yet have real quantum network nodes...",
+    "SimulaQron is an open-source project in the networking category. It is maintained by StephanieWehner and primarily looks like a Python codebase. Quantum Network Simulator for Application Programming",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches networking workflows in practice. The repository README emphasizes: The purpose of this simulator of quantum network nodes is to allow you to develop new applications for a future quantum internet, while we do not yet have real quantum network nodes available for testing. Since version 4.0, SimulaQron is compatible with NetQASM. See its documentation for how..."
   ],
   "whoItsFor": "Researchers and students exploring distributed quantum systems, communication protocols, and quantum internet concepts.",
@@ -32,21 +36,72 @@
   ],
   "readmeExcerpt": "The purpose of this simulator of quantum network nodes is to allow you to develop new applications for a future quantum internet, while we do not yet have real quantum network nodes available for testing. Since version 4.0, SimulaQron is compatible with NetQASM. See its documentation for how to use SimulaQron as a backend for running NetQASM applications.",
   "readmePath": "reference\\StephanieWehner__SimulaQron\\README.md",
+  "readmeMarkdownPath": "readmes/stephaniewehner-simulaqron.md",
   "clonePath": "reference\\StephanieWehner__SimulaQron",
-  "stars": 0,
-  "lastPushedAt": null,
+  "stars": 131,
+  "lastPushedAt": "2026-05-15T15:34:22Z",
+  "defaultBranch": "master",
   "githubTopics": [],
+  "quickstart": null,
+  "codeSamples": [
+    {
+      "title": "Pingpongalice",
+      "language": "python",
+      "source": "\"\"\"\nPing-Pong \u2014 Alice (client).\nAlice connects to Bob and they exchange PING / PONG messages for NUM_ROUNDS\nrounds.  Both sides know NUM_ROUNDS, so no BYE is needed \u2014 the connection\nsimply closes after the last round.\nThis is a purely classical example \u2014 no quantum operations.\nIt demonstrates the event-based state-machine pattern used throughout\nSimulaQron examples.\nAlice's state diagram\n---------------------\n          \u250c\u2500 (connect) \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n          \u2502                                                   \u2502\n          \u25bc                                                   \u2502\n        IDLE \u2500\u2500[send \"PING\"]\u2500\u2500\u25ba PLAYING                   (start)\n                                    \u2502\n                               recv \"PONG\"\n                                    \u2502\n                                    \u25bc\n                                  IDLE  (next round)\n                          ... after NUM_ROUNDS ...\n                                    \u2502\n                               recv \"PONG\" (last)\n                                    \u25bc\n                                  DONE\nTransition table:\n    State    \u2502 Event        \u2502 Action       \u2502 Next state\n    \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n    IDLE     \u2502 (entry)      \u2502 send \"PING\"  \u2502 PLAYING\n    PLAYING  \u2502 recv \"PONG\"  \u2502 \u2014            \u2502 IDLE\n    PLAYING  \u2502 recv \"PONG\"  \u2502 (last round) \u2502 DONE\n    IDLE \u2192 PLAYING is an *entry action*: Alice sends PING immediately on\n    entering IDLE, before waiting for the next message.\n\"\"\"\nfrom asyncio import StreamReader, StreamWriter\nfrom pathlib import Path\nfrom simulaqron.general.host_config import SocketsConfig\nfrom simulaqron.sdk.protocol import SimulaQronClassicalClient\nfrom simulaqron.settings import network_config, simulaqron_settings\nfrom simulaqron.settings.network_config import NodeConfigType\nNUM_ROUNDS = 5",
+      "path": "examples/event-based/pingPong/pingpongAlice.py"
+    },
+    {
+      "title": "Pingpongbob",
+      "language": "python",
+      "source": "\"\"\"\nPing-Pong \u2014 Bob (server).\nBob listens for Alice's PINGs and replies with PONGs.\nBoth sides know NUM_ROUNDS, so no BYE is needed \u2014 Bob stops after\nsending the last PONG and the connection closes naturally.\nThis is a purely classical example \u2014 no quantum operations.\nIt demonstrates the event-based state-machine pattern used throughout\nSimulaQron examples.\nBob's state diagram\n-------------------\n          \u250c\u2500 (connect) \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n          \u2502                                                   \u2502\n          \u25bc                                                   \u2502\n        IDLE \u2500\u2500[recv \"PING\"]\u2500\u2500\u25ba PLAYING                   (start)\n                                    \u2502\n                               send \"PONG\"\n                                    \u2502\n                                    \u25bc\n                                  IDLE  (next round)\n                          ... after NUM_ROUNDS ...\n                                    \u2502\n                               recv \"PING\" (last)\n                                    \u25bc\n                                  DONE\nTransition table:\n    State    \u2502 Event        \u2502 Action       \u2502 Next state\n    \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n    IDLE     \u2502 recv \"PING\"  \u2502 \u2014            \u2502 PLAYING\n    PLAYING  \u2502 (entry)      \u2502 send \"PONG\"  \u2502 IDLE\n    PLAYING  \u2502 (entry)      \u2502 (last round) \u2502 DONE\n    PLAYING \u2192 IDLE/DONE is an *entry action*: Bob sends PONG immediately\n    on entering PLAYING, before waiting for the next message.\n\"\"\"\nfrom asyncio import StreamReader, StreamWriter\nfrom pathlib import Path\nfrom simulaqron.general.host_config import SocketsConfig\nfrom simulaqron.sdk.protocol import SimulaQronClassicalServer\nfrom simulaqron.settings import network_config, simulaqron_settings\nfrom simulaqron.settings.network_config import NodeConfigType\nNUM_ROUNDS = 5",
+      "path": "examples/event-based/pingPong/pingpongBob.py"
+    },
+    {
+      "title": "Politealice",
+      "language": "python",
+      "source": "\"\"\"\nPolite Ping-Pong \u2014 Alice (client).\nExtends plain ping pong with a greeting phase: Bob sends \"HI\" on connect,\nAlice replies with \"HI\", then the game proceeds exactly as in ping pong.\nAlice's state diagram\n---------------------\n    (connect)\n        \u2502\n        \u25bc\n  WAITING_HI \u2500\u2500[recv \"HI\"]\u2500\u2500\u25ba IDLE            \u2190 greeting phase\n                  send \"HI\"     \u2502\n                                \u2502 (entry action: send \"PING\")\n                                \u25bc\n                            PLAYING\n                                \u2502\n                           recv \"PONG\"\n                          \u250c\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n                    rounds left?             done?\n                          \u2502                   \u2502\n                          \u25bc                   \u25bc\n                        IDLE                DONE\nTransition table:\n    State       \u2502 Event        \u2502 Action       \u2502 Next state\n    \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n    WAITING_HI  \u2502 recv \"HI\"   \u2502 send \"HI\"    \u2502 IDLE\n    IDLE        \u2502 (entry)      \u2502 send \"PING\"  \u2502 PLAYING\n    PLAYING     \u2502 recv \"PONG\"  \u2502 \u2014            \u2502 IDLE or DONE\n\"\"\"\nfrom asyncio import StreamReader, StreamWriter\nfrom pathlib import Path\nfrom simulaqron.general.host_config import SocketsConfig\nfrom simulaqron.sdk.protocol import SimulaQronClassicalClient\nfrom simulaqron.settings import network_config, simulaqron_settings\nfrom simulaqron.settings.network_config import NodeConfigType\nNUM_ROUNDS = 5\n# \u2500\u2500 States \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\nSTATE_WAITING_HI = \"WAITING_HI\"\nSTATE_IDLE       = \"IDLE\"      # noqa: E221\nSTATE_PLAYING    = \"PLAYING\"   # noqa: E221\nSTATE_DONE       = \"DONE\"      # noqa: E221",
+      "path": "examples/event-based/politePingPong/politeAlice.py"
+    }
+  ],
+  "packageMeta": {
+    "name": "simulaqron",
+    "requiresPython": ">=3.10,<3.13",
+    "dependencies": [
+      "dataclasses-serialization",
+      "numpy",
+      "dill",
+      "scipy",
+      "twisted",
+      "networkx",
+      "click",
+      "daemons",
+      "netqasm",
+      "multiprocess",
+      "StrEnum",
+      "psutil"
+    ]
+  },
+  "citationBibtex": null,
+  "supportedBackendSlugs": [
+    "projectq-framework-projectq"
+  ],
+  "externalLinks": {},
+  "openIssuesCount": 13,
+  "subscribersCount": 16,
+  "latestRelease": null,
+  "ownerType": "Organization",
+  "ownerUrl": "https://github.com/SoftwareQuTech",
   "featured": false,
   "flagship": false,
   "qtanglRelevant": false,
   "archived": false,
-  "imagePath": null,
+  "imagePath": "/learn/monogram/stephaniewehner-simulaqron.svg",
   "relatedSlugs": [
-    "tqsd-qunetsim",
-    "aws-amazon-braket-sdk-python",
-    "cqcl-tket",
-    "dwavesystems-dwave-ocean-sdk",
-    "entropicalabs-openqaoa",
-    "microsoft-quantumkatas"
+    "microsoft-quantumkatas",
+    "qiskit-qiskit",
+    "quantumlib-cirq",
+    "xanaduai-pennylane",
+    "open-quantum-safe-liboqs",
+    "tqsd-qunetsim"
   ]
 }

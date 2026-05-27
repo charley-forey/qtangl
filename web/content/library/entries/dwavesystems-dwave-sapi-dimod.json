@@ -21,12 +21,15 @@
     }
   ],
   "primaryLanguage": "Python",
+  "primaryLanguages": [
+    "Python"
+  ],
   "license": "Apache-2.0",
-  "summary": "sample_qubo and sample_ising work only for problems that fit directly onto the solver's structure",
-  "description": "sample_qubo and sample_ising work only for problems that fit directly onto the solver's structure",
+  "summary": "dimod wrapper for D-Wave's SAPI Client Library",
+  "description": "dimod wrapper for D-Wave's SAPI Client Library",
   "whatItIs": [
-    "dwave_sapi_dimod is an open-source project in the optimization and qubo category. It is maintained by dwavesystems and primarily looks like a Python codebase. sample_qubo and sample_ising work only for problems that fit directly onto the solver's structure",
-    "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches optimization and qubo workflows in practice. The repository README emphasizes: sample_qubo and sample_ising work only for problems that fit directly onto the solver's structure For solving arbitrary problems, you need to apply the EmbeddingComposite layer."
+    "dwave_sapi_dimod is an open-source project in the optimization and qubo category. It is maintained by dwavesystems and primarily looks like a Python codebase. dimod wrapper for D-Wave's SAPI Client Library",
+    "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches optimization and qubo workflows in practice. The repository README emphasizes: sample_qubo and sample_ising work only for problems that fit directly onto the solver's structure For solving arbitrary problems, you need to apply the EmbeddingComposite layer. The repository also appears to be archival or no longer actively maintained, which matters when evaluating it for current production use."
   ],
   "whoItsFor": "Teams exploring routing, scheduling, allocation, and other combinatorial problems that can be modeled as optimization workloads.",
   "whatYouCanBuild": [
@@ -36,15 +39,30 @@
   ],
   "readmeExcerpt": "sample_qubo and sample_ising work only for problems that fit directly onto the solver's structure For solving arbitrary problems, you need to apply the EmbeddingComposite layer.",
   "readmePath": "reference\\dwavesystems__dwave_sapi_dimod\\README.md",
+  "readmeMarkdownPath": "readmes/dwavesystems-dwave-sapi-dimod.md",
   "clonePath": "reference\\dwavesystems__dwave_sapi_dimod",
-  "stars": 0,
-  "lastPushedAt": null,
+  "stars": 9,
+  "lastPushedAt": "2018-02-21T20:44:27Z",
+  "defaultBranch": "master",
   "githubTopics": [],
+  "quickstart": null,
+  "codeSamples": [],
+  "packageMeta": {},
+  "citationBibtex": null,
+  "supportedBackendSlugs": [
+    "dwavesystems-dimod"
+  ],
+  "externalLinks": {},
+  "openIssuesCount": 0,
+  "subscribersCount": 3,
+  "latestRelease": null,
+  "ownerType": "Organization",
+  "ownerUrl": "https://github.com/dwavesystems",
   "featured": false,
   "flagship": false,
   "qtanglRelevant": false,
-  "archived": false,
-  "imagePath": null,
+  "archived": true,
+  "imagePath": "/learn/monogram/dwavesystems-dwave-sapi-dimod.svg",
   "relatedSlugs": [
     "entropicalabs-openqaoa",
     "cda-tum-mqt-qmap",

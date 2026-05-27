@@ -4,7 +4,7 @@
   "name": "dwave-ocean-sdk",
   "title": "dwave-ocean-sdk",
   "repoUrl": "https://github.com/dwavesystems/dwave-ocean-sdk",
-  "homepageUrl": null,
+  "homepageUrl": "https://docs.dwavequantum.com/",
   "category": {
     "slug": "annealing-ising",
     "title": "Annealing and Ising",
@@ -21,11 +21,16 @@
     }
   ],
   "primaryLanguage": "Python",
+  "primaryLanguages": [
+    "Python",
+    "JavaScript",
+    "Jupyter"
+  ],
   "license": "Apache-2.0",
-  "summary": "Ocean SDK <https://docs.dwavequantum.com/en/latest/ocean/>_ is D-Wave's <https://www.dwavequantum.com/>_ suite of tools for solving hard problems with quantum computers.",
-  "description": "Ocean SDK <https://docs.dwavequantum.com/en/latest/ocean/>_ is D-Wave's <https://www.dwavequantum.com/>_ suite of tools for solving hard problems with quantum computers.",
+  "summary": "Installer for D-Wave's Ocean tools",
+  "description": "Installer for D-Wave's Ocean tools",
   "whatItIs": [
-    "dwave-ocean-sdk is an open-source project in the annealing and ising category. It is maintained by dwavesystems and primarily looks like a Python codebase. Ocean SDK <https://docs.dwavequantum.com/en/latest/ocean/>_ is D-Wave's <https://www.dwavequantum.com/>_ suite of tools for solving hard problems with quantum computers.",
+    "dwave-ocean-sdk is an open-source project in the annealing and ising category. It is maintained by dwavesystems and primarily looks like a Python codebase. Installer for D-Wave's Ocean tools",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches annealing and ising workflows in practice. The repository README emphasizes: Ocean SDK <https://docs.dwavequantum.com/en/latest/ocean/>_ is D-Wave's <https://www.dwavequantum.com/>_ suite of tools for solving hard problems with quantum computers. For more information, see the Ocean documentation's installation <https://docs.dwavequantum.com/en/latest/ocean/install.html>_ page."
   ],
   "whoItsFor": "Developers interested in Ising-model formulations, annealing workflows, and D-Wave-style solver ecosystems.",
@@ -36,15 +41,43 @@
   ],
   "readmeExcerpt": "Ocean SDK <https://docs.dwavequantum.com/en/latest/ocean/>_ is D-Wave's <https://www.dwavequantum.com/>_ suite of tools for solving hard problems with quantum computers. For more information, see the Ocean documentation's installation <https://docs.dwavequantum.com/en/latest/ocean/install.html>_ page.",
   "readmePath": "reference\\dwavesystems__dwave-ocean-sdk\\README.rst",
+  "readmeMarkdownPath": "readmes/dwavesystems-dwave-ocean-sdk.md",
   "clonePath": "reference\\dwavesystems__dwave-ocean-sdk",
-  "stars": 0,
-  "lastPushedAt": null,
-  "githubTopics": [],
+  "stars": 524,
+  "lastPushedAt": "2026-05-27T13:35:08Z",
+  "defaultBranch": "master",
+  "githubTopics": [
+    "quantum-computing"
+  ],
+  "quickstart": null,
+  "codeSamples": [],
+  "packageMeta": {},
+  "citationBibtex": null,
+  "supportedBackendSlugs": [
+    "dwavesystems-dwave-ocean-sdk",
+    "dwavesystems-dimod"
+  ],
+  "externalLinks": {
+    "docs": [
+      "https://readthedocs.com/projects/d-wave-systems-dwave-ocean-sdk/badge",
+      "https://docs.ocean.dwavesys.com",
+      "https://docs.dwavequantum.com/en/latest/ocean/",
+      "https://docs.dwavequantum.com/en/latest/ocean/install.html"
+    ],
+    "pypi": [
+      "https://pypi.org/project/dwave-ocean-sdk/"
+    ]
+  },
+  "openIssuesCount": 30,
+  "subscribersCount": 37,
+  "latestRelease": null,
+  "ownerType": "Organization",
+  "ownerUrl": "https://github.com/dwavesystems",
   "featured": true,
   "flagship": true,
   "qtanglRelevant": true,
   "archived": false,
-  "imagePath": "/learn/flagship/dwavesystems-dwave-ocean-sdk.png",
+  "imagePath": "/learn/og/dwavesystems-dwave-ocean-sdk.png",
   "relatedSlugs": [
     "dwavesystems-dimod",
     "dwavesystems-qbsolv",

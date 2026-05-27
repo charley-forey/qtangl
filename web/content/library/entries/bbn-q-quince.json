@@ -17,11 +17,14 @@
     }
   ],
   "primaryLanguage": "Python",
+  "primaryLanguages": [
+    "Python"
+  ],
   "license": "Apache-2.0",
-  "summary": "This project is intended as an alternative means of defining the topology of an experiment, and will augment certain functionality of PyQLab's ExpSettingsGUI.",
-  "description": "This project is intended as an alternative means of defining the topology of an experiment, and will augment certain functionality of PyQLab's ExpSettingsGUI. Currently envisioned use cases:",
+  "summary": "Quince is a node-based GUI that allows for graphical configuration of qubit experiments in Auspex.",
+  "description": "Quince is a node-based GUI that allows for graphical configuration of qubit experiments in Auspex.",
   "whatItIs": [
-    "Quince is an open-source project in the visualization and tomography category. It is maintained by BBN-Q and primarily looks like a Python codebase. This project is intended as an alternative means of defining the topology of an experiment, and will augment certain functionality of PyQLab's ExpSettingsGUI.",
+    "Quince is an open-source project in the visualization and tomography category. It is maintained by BBN-Q and primarily looks like a Python codebase. Quince is a node-based GUI that allows for graphical configuration of qubit experiments in Auspex.",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches visualization and tomography workflows in practice. The repository README emphasizes: This project is intended as an alternative means of defining the topology of an experiment, and will augment certain functionality of PyQLab's ExpSettingsGUI. Currently envisioned use cases: Graphically construct measurement filter pipelines. Graphically establish logical qubits with physical measurement apparatus."
   ],
   "whoItsFor": "People who learn best by seeing state structure, measurement results, or circuit behavior laid out visually.",
@@ -32,21 +35,43 @@
   ],
   "readmeExcerpt": "This project is intended as an alternative means of defining the topology of an experiment, and will augment certain functionality of PyQLab's ExpSettingsGUI. Currently envisioned use cases: Graphically construct measurement filter pipelines. Graphically establish logical qubits with physical measurement apparatus.",
   "readmePath": "reference\\BBN-Q__Quince\\README.md",
+  "readmeMarkdownPath": "readmes/bbn-q-quince.md",
   "clonePath": "reference\\BBN-Q__Quince",
-  "stars": 0,
-  "lastPushedAt": null,
-  "githubTopics": [],
+  "stars": 8,
+  "lastPushedAt": "2023-12-07T06:27:46Z",
+  "defaultBranch": "master",
+  "githubTopics": [
+    "instrument-control",
+    "python-3"
+  ],
+  "quickstart": null,
+  "codeSamples": [],
+  "packageMeta": {},
+  "citationBibtex": null,
+  "supportedBackendSlugs": [],
+  "externalLinks": {
+    "docs": [
+      "https://readthedocs.org/projects/quince/badge/?version=latest",
+      "http://quince.readthedocs.io/en/latest/?badge=latest",
+      "http://quince.readthedocs.io/en/latest/"
+    ]
+  },
+  "openIssuesCount": 5,
+  "subscribersCount": 7,
+  "latestRelease": null,
+  "ownerType": "Organization",
+  "ownerUrl": "https://github.com/BBN-Q",
   "featured": false,
   "flagship": false,
   "qtanglRelevant": false,
   "archived": false,
-  "imagePath": null,
+  "imagePath": "/learn/monogram/bbn-q-quince.svg",
   "relatedSlugs": [
+    "microsoft-quantumkatas",
+    "qiskit-qiskit",
+    "quantumlib-cirq",
+    "xanaduai-pennylane",
     "artiste-qb-net-quantum-fog",
-    "bbn-q-quantuminfo-jl",
-    "bbn-q-quantumtomography-jl",
-    "qct-iqc-qcviewer",
-    "ziofil-quantumgraphs",
-    "aws-amazon-braket-sdk-python"
+    "bbn-q-quantuminfo-jl"
   ]
 }

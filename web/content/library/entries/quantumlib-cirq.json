@@ -4,7 +4,7 @@
   "name": "Cirq",
   "title": "Cirq",
   "repoUrl": "https://github.com/quantumlib/Cirq",
-  "homepageUrl": null,
+  "homepageUrl": "https://quantumai.google/cirq",
   "category": {
     "slug": "general-purpose-sdks",
     "title": "General-purpose SDKs",
@@ -21,11 +21,16 @@
     }
   ],
   "primaryLanguage": "Python",
+  "primaryLanguages": [
+    "Python",
+    "Jupyter",
+    "TypeScript"
+  ],
   "license": "Apache-2.0",
-  "summary": "Python package for writing, manipulating, and running quantum circuits on quantum computers and simulators.",
-  "description": "Python package for writing, manipulating, and running quantum circuits on quantum computers and simulators.",
+  "summary": "Python framework for creating, editing, and running Noisy Intermediate-Scale Quantum (NISQ) circuits.",
+  "description": "Python framework for creating, editing, and running Noisy Intermediate-Scale Quantum (NISQ) circuits.",
   "whatItIs": [
-    "Cirq is an open-source project in the general-purpose sdks category. It is maintained by quantumlib and primarily looks like a Python codebase. Python package for writing, manipulating, and running quantum circuits on quantum computers and simulators.",
+    "Cirq is an open-source project in the general-purpose sdks category. It is maintained by quantumlib and primarily looks like a Python codebase. Python framework for creating, editing, and running Noisy Intermediate-Scale Quantum (NISQ) circuits.",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches general-purpose sdks workflows in practice. The repository README emphasizes: Python package for writing, manipulating, and running quantum circuits on quantum computers and simulators. Features &ndash; Installation &ndash; Quick Start &ndash; Documentation &ndash; Integrations &ndash; Community &ndash; Citing Cirq &ndash; Contact"
   ],
   "whoItsFor": "Developers who want a broad entry point for building circuits, experimenting with algorithms, and integrating quantum workflows into larger applications.",
@@ -36,21 +41,93 @@
   ],
   "readmeExcerpt": "Python package for writing, manipulating, and running quantum circuits on quantum computers and simulators. Features &ndash; Installation &ndash; Quick Start &ndash; Documentation &ndash; Integrations &ndash; Community &ndash; Citing Cirq &ndash; Contact",
   "readmePath": "reference\\quantumlib__Cirq\\README.md",
+  "readmeMarkdownPath": "readmes/quantumlib-cirq.md",
   "clonePath": "reference\\quantumlib__Cirq",
-  "stars": 0,
-  "lastPushedAt": null,
-  "githubTopics": [],
+  "stars": 4971,
+  "lastPushedAt": "2026-05-27T20:52:07Z",
+  "defaultBranch": "main",
+  "githubTopics": [
+    "algorithms",
+    "api",
+    "cirq",
+    "google",
+    "google-quantum",
+    "nisq",
+    "python",
+    "quantum",
+    "quantum-algorithms",
+    "quantum-circuit",
+    "quantum-circuit-simulator",
+    "quantum-computer-simulator",
+    "quantum-computing",
+    "quantum-development-kit",
+    "quantum-information",
+    "quantum-programming",
+    "quantum-programming-language",
+    "quantum-simulation",
+    "sdk",
+    "simulation"
+  ],
+  "quickstart": {
+    "language": "python",
+    "source": "import cirq\n\n# Pick a qubit.\nqubit = cirq.GridQubit(0, 0)\n\n# Create a circuit.\ncircuit = cirq.Circuit(\n    cirq.X(qubit)**0.5,  # Square root of NOT.\n    cirq.measure(qubit, key='m')  # Measurement.\n)\nprint(\"Circuit:\")\nprint(circuit)\n\n# Simulate the circuit several times.\nsimulator = cirq.Simulator()\nresult = simulator.run(circuit, repetitions=20)\nprint(\"Results:\")\nprint(result)"
+  },
+  "codeSamples": [
+    {
+      "title": "Quantum Utility Sim 4A",
+      "language": "python",
+      "source": "# Copyright 2023 The Cirq Developers\n#\n# Licensed under the Apache License, Version 2.0 (the \"License\");\n# you may not use this file except in compliance with the License.\n# You may obtain a copy of the License at\n#\n#     https://www.apache.org/licenses/LICENSE-2.0\n#\n# Unless required by applicable law or agreed to in writing, software\n# distributed under the License is distributed on an \"AS IS\" BASIS,\n# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n# See the License for the specific language governing permissions and\n# limitations under the License.",
+      "path": "examples/advanced/quantum_utility_sim_4a.ipynb"
+    },
+    {
+      "title": "Quantum Utility Sim 4B",
+      "language": "python",
+      "source": "# Copyright 2023 The Cirq Developers\n#\n# Licensed under the Apache License, Version 2.0 (the \"License\");\n# you may not use this file except in compliance with the License.\n# You may obtain a copy of the License at\n#\n#     https://www.apache.org/licenses/LICENSE-2.0\n#\n# Unless required by applicable law or agreed to in writing, software\n# distributed under the License is distributed on an \"AS IS\" BASIS,\n# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n# See the License for the specific language governing permissions and\n# limitations under the License.",
+      "path": "examples/advanced/quantum_utility_sim_4b.ipynb"
+    },
+    {
+      "title": "Quantum Volume",
+      "language": "python",
+      "source": "try:\n    import cirq\nexcept ImportError:\n    print(\"installing cirq...\")\n    !pip install --quiet cirq\n    print(\"installed cirq.\")",
+      "path": "examples/advanced/quantum_volume.ipynb"
+    }
+  ],
+  "packageMeta": {},
+  "citationBibtex": "@software{cirq,\n  title = {Cirq},\n  author = {Unknown},\n  year = {2025},\n}\n",
+  "supportedBackendSlugs": [
+    "quantumlib-cirq",
+    "qiskit-qiskit"
+  ],
+  "externalLinks": {
+    "docs": [
+      "https://quantumai.google/cirq/start/install",
+      "https://quantumai.google/cirq",
+      "https://quantumai.google/cirq/start/basics",
+      "https://quantumai.google/cirq/build"
+    ],
+    "paper": [
+      "https://arxiv.org/abs/1801.00862"
+    ],
+    "pypi": [
+      "https://pypi.org/project/cirq"
+    ]
+  },
+  "openIssuesCount": 118,
+  "subscribersCount": 191,
+  "latestRelease": null,
+  "ownerType": "Organization",
+  "ownerUrl": "https://github.com/quantumlib",
   "featured": true,
   "flagship": true,
   "qtanglRelevant": false,
   "archived": false,
-  "imagePath": "/learn/flagship/quantumlib-cirq.png",
+  "imagePath": "/learn/og/quantumlib-cirq.png",
   "relatedSlugs": [
     "qiskit-qiskit",
     "xanaduai-pennylane",
-    "projectq-framework-projectq",
+    "qiskit-qiskit-terra",
     "quantumbfs-yao-jl",
-    "arlineq-arline-benchmarks",
-    "arlineq-arline-quantum"
+    "microsoft-quantumkatas",
+    "projectq-framework-projectq"
   ]
 }

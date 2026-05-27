@@ -4,7 +4,7 @@
   "name": "qbsolv",
   "title": "qbsolv",
   "repoUrl": "https://github.com/dwavesystems/qbsolv",
-  "homepageUrl": null,
+  "homepageUrl": "https://docs.ocean.dwavesys.com/projects/qbsolv",
   "category": {
     "slug": "annealing-ising",
     "title": "Annealing and Ising",
@@ -20,12 +20,17 @@
       "title": "Quantum computing software in 2026: the open-source map"
     }
   ],
-  "primaryLanguage": "Shell",
+  "primaryLanguage": "q",
+  "primaryLanguages": [
+    "Shell",
+    "Python",
+    "C/C++"
+  ],
   "license": "Apache-2.0",
-  "summary": "**NOTICE**: This repository is deprecated as of the end of 2021.",
-  "description": "**NOTICE**: This repository is deprecated as of the end of 2021. Support will be discontinued after March 2022. Please update your code to use Ocean's dwave-hybrid <https://docs.ocean.dwavesys.com/en/stable/docs_hybrid/sdk_index.html>_ or Leap's quantum-classical hybrid solvers <https://docs.dwavesys.com/docs/latest/doc_leap_hybrid.html>_ instead.",
+  "summary": "Qbsolv,a decomposing solver, finds a minimum value of a large quadratic unconstrained binary optimization (QUBO) problem by splitting it into pieces solved either via a D-Wave system or a classical tabu solver.",
+  "description": "Qbsolv,a decomposing solver, finds a minimum value of a large quadratic unconstrained binary optimization (QUBO) problem by splitting it into pieces solved either via a D-Wave system or a classical tabu solver.   (Note that qbsolv by default uses its internal classical solver.  Access to a D-Wave system must be arranged separately.)",
   "whatItIs": [
-    "qbsolv is an open-source project in the annealing and ising category. It is maintained by dwavesystems and primarily looks like a Shell codebase. **NOTICE**: This repository is deprecated as of the end of 2021.",
+    "qbsolv is an open-source project in the annealing and ising category. It is maintained by dwavesystems and primarily looks like a q codebase. Qbsolv,a decomposing solver, finds a minimum value of a large quadratic unconstrained binary optimization (QUBO) problem by splitting it into pieces solved either via a D-Wave system or a classical tabu solver.",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches annealing and ising workflows in practice. The repository README emphasizes: **NOTICE**: This repository is deprecated as of the end of 2021. Support will be discontinued after March 2022. Please update your code to use Ocean's dwave-hybrid <https://docs.ocean.dwavesys.com/en/stable/docs_hybrid/sdk_index.html>_ or Leap's quantum-classical hybrid solvers <https://docs.dwavesys.com/docs/latest/doc_leap_hybrid.html>_ instead. A decomposing solver that finds a minimum value of a large quadratic unconstrained binary... The repository also appears to be archival or no longer actively maintained, which matters when evaluating it for current production use."
   ],
   "whoItsFor": "Developers interested in Ising-model formulations, annealing workflows, and D-Wave-style solver ecosystems.",
@@ -36,15 +41,57 @@
   ],
   "readmeExcerpt": "**NOTICE**: This repository is deprecated as of the end of 2021. Support will be discontinued after March 2022. Please update your code to use Ocean's dwave-hybrid <https://docs.ocean.dwavesys.com/en/stable/docs_hybrid/sdk_index.html>_ or Leap's quantum-classical hybrid solvers <https://docs.dwavesys.com/docs/latest/doc_leap_hybrid.html>_ instead. A decomposing solver that finds a minimum value of a large quadratic unconstrained binary optimization (QUBO) problem by splitting it into pieces. The pieces are solved using a classical solver running the tabu algorithm. qbsolv also enables configuring a D-Wave system as the solver.",
   "readmePath": "reference\\dwavesystems__qbsolv\\README.rst",
+  "readmeMarkdownPath": "readmes/dwavesystems-qbsolv.md",
   "clonePath": "reference\\dwavesystems__qbsolv",
-  "stars": 0,
-  "lastPushedAt": null,
+  "stars": 920,
+  "lastPushedAt": "2022-04-14T22:50:38Z",
+  "defaultBranch": "master",
   "githubTopics": [],
+  "quickstart": null,
+  "codeSamples": [
+    {
+      "title": "Adj2Qubo",
+      "language": "python",
+      "source": "\"\"\"\nCopyright 2016 D-Wave Systems,Inc.\nLicensed under the Apache License, Version 2.0 (the \"License\");\nyou may not use this file except in compliance with the License.\nYou may obtain a copy of the License at\nhttp://www.apache.org/licenses/LICENSE-2.0\nUnless required by applicable law or agreed to in writing, software\ndistributed under the License is distributed on an \"AS IS\" BASIS,\nWITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\nSee the License for the specific language governing permissions and\nlimitations under the License.\n\"\"\"\nimport csv\nimport argparse\nimport os\ndef ad2_qubo(qubo_out, adj_in):\n    # First let's load the adjacency from the file. We store the adjacency\n    # information in a dictionary where the keys are the states and the\n    # values are sets such that if state0 and state1 are adjacent,\n    # (state0 in state_adj[state1]) == True\n    # We also want to map each state to an integer index, we store this mapping\n    # in state_to_index\n    state_adj = {}\n    state_to_index = {}\n    index_to_state = {}\n    idx = 0\n    with open(adj_in, \"r\") as adj:\n        for line in adj:\n            if line[0] == 'c' or line[0] == '#':\n                # skip the comment lines\n                continue\n            # in each line, there is a comma separated list of states. The\n            # first state is the node, the remaining are the nodes adjacent\n            # the list is bi-directional (e.g. AK,HI and HI,AK are both lines)\n            states = line.strip('\\n').split(',')\n            state_adj[states[0]] = set(states[1:])\n            # each state has an integer label, so we record the mapping in both\n            # directions\n            state_to_index[states[0]] = idx\n            index_to_state[idx] = states[0]",
+      "path": "examples/mapColoringUSStates/adj2qubo.py"
+    },
+    {
+      "title": "Color States",
+      "language": "python",
+      "source": "# color_map.py\n#  Copyright 2016 D-Wave Systems,Inc.\n#\n#  Licensed under the Apache License, Version 2.0 (the \"License\");\n#  you may not use this file except in compliance with the License.\n#  You may obtain a copy of the License at\n#\n#  http://www.apache.org/licenses/LICENSE-2.0\n#\n#  Unless required by applicable law or agreed to in writing, software\n#  distributed under the License is distributed on an \"AS IS\" BASIS,\n#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n#  See the License for the specific language governing permissions and\n#  limitations under the License.\ndef color_map(qsolv_out, svg_out, svg_in):\n    import csv\n    # Map colors\n    colors = [\"f0f0f0\", \"#4daf4a\", \"#377eb8\", \"#e41a1c\", \"#feb24c\"]\n    #           white      green     blue      red     yellow\n    # colors = [\"#f0f0f0\",\"#238b45\",\"#2171b5\",\"#cb181d\",\"#ffeda0\"]\n    #           white      green     blue      red     yellow\n    # colors = [\"#f0f0f0\",\"#238b45\",\"#2171b5\",\"#cb181d\",\"#8856a7\"]\n    #           white      green     blue      red     purple\n    # colors = [\"#f0f0f0\",\"#d7191c\",\"#fdae61\",\"#abd9e9\",\"#2c7bb6\"]\n    qbsolv = open(qsolv_out, \"r\")\n    lines = qbsolv.read()\n    lines = lines.split('\\n')\n    qbits = lines[0].split()\n    nqbits = int(qbits[0])\n    count = [0] * 5\n    print \"number of states \", (nqbits + 1) / 4\n    County_colors = [0] * (nqbits / 4)\n    for i in range(0, nqbits, 4):\n        bits = lines[1]\n        ivar = i / 4\n        color_class = [ndx for b, ndx in zip(bits[i:i + 4], range(1, 5)) if b == \"1\"][0]\n        count[color_class] += 1\n        County_colors[ivar] = color_class\n    print \"W  G  B  R  Y\"\n    print ''.join([str(it) + \" \" for it in count])",
+      "path": "examples/mapColoringUSStates/color_states.py"
+    },
+    {
+      "title": "Usefixedembeddingcomposite",
+      "language": "python",
+      "source": "import random\nimport itertools\nimport networkx as nx\nfrom dwave_qbsolv import QBSolv\nfrom dwave.system.samplers import DWaveSampler\nfrom dwave.system.composites import FixedEmbeddingComposite\nimport minorminer\n# define (sub)problem size\nsolver_limit = 3\nqubo_size = 4\n# find embedding of subproblem-sized complete graph to the QPU\nG = nx.complete_graph(solver_limit)\nsystem = DWaveSampler()\nembedding = minorminer.find_embedding(G.edges, system.edgelist)\n# solve a random problem\nQ = {t: random.uniform(-1, 1) for t in itertools.product(range(qubo_size), repeat=2)}\nresponse = QBSolv().sample_qubo(Q, solver=FixedEmbeddingComposite(system, embedding), solver_limit=solver_limit)\nprint(\"Q=\" + str(Q))\nprint(\"samples=\" + str(list(response.samples())))\nprint(\"energies=\" + str(list(response.data_vectors['energy'])))",
+      "path": "examples/useFixedEmbeddingComposite.py"
+    }
+  ],
+  "packageMeta": {},
+  "citationBibtex": null,
+  "supportedBackendSlugs": [
+    "dwavesystems-dwave-ocean-sdk",
+    "dwavesystems-dimod"
+  ],
+  "externalLinks": {
+    "docs": [
+      "https://readthedocs.com/projects/d-wave-systems-qbsolv/badge/?version=latest",
+      "https://docs.ocean.dwavesys.com/projects/qbsolv/en/latest/?badge=latest",
+      "https://docs.ocean.dwavesys.com/en/stable/docs_hybrid/sdk_index.html",
+      "https://docs.dwavesys.com/docs/latest/doc_leap_hybrid.html"
+    ]
+  },
+  "openIssuesCount": 32,
+  "subscribersCount": 6,
+  "latestRelease": null,
+  "ownerType": "Organization",
+  "ownerUrl": "https://github.com/dwavesystems",
   "featured": false,
   "flagship": true,
   "qtanglRelevant": true,
   "archived": true,
-  "imagePath": "/learn/flagship/dwavesystems-qbsolv.png",
+  "imagePath": "/learn/og/dwavesystems-qbsolv.png",
   "relatedSlugs": [
     "dwavesystems-dwave-ocean-sdk",
     "dwavesystems-dimod",

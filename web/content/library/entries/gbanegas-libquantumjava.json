@@ -21,6 +21,10 @@
     }
   ],
   "primaryLanguage": "Java",
+  "primaryLanguages": [
+    "Java",
+    "JavaScript"
+  ],
   "license": "Apache-2.0",
   "summary": "This is a crude translation from th C implementation of libquantum to a Java version.",
   "description": "This is a crude translation from th C implementation of libquantum to a Java version.",
@@ -36,21 +40,34 @@
   ],
   "readmeExcerpt": "This is a crude translation from th C implementation of libquantum to a Java version. The main idea is to be able to work with CNOT / Toffoli and other gates that are not necessary to use superposition. LibQuantumJava supports up to 2048 qubits, the \"C implementation\" covers only 128 qubits.",
   "readmePath": "reference\\gbanegas__libQuantumJava\\README.md",
+  "readmeMarkdownPath": "readmes/gbanegas-libquantumjava.md",
   "clonePath": "reference\\gbanegas__libQuantumJava",
-  "stars": 0,
-  "lastPushedAt": null,
+  "stars": 8,
+  "lastPushedAt": "2018-08-07T08:34:20Z",
+  "defaultBranch": "master",
   "githubTopics": [],
+  "quickstart": null,
+  "codeSamples": [],
+  "packageMeta": {},
+  "citationBibtex": null,
+  "supportedBackendSlugs": [],
+  "externalLinks": {},
+  "openIssuesCount": 0,
+  "subscribersCount": 2,
+  "latestRelease": null,
+  "ownerType": "User",
+  "ownerUrl": "https://github.com/gbanegas",
   "featured": false,
   "flagship": false,
   "qtanglRelevant": false,
   "archived": false,
-  "imagePath": null,
+  "imagePath": "/learn/monogram/gbanegas-libquantumjava.svg",
   "relatedSlugs": [
     "qiskit-qiskit",
     "quantumlib-cirq",
     "xanaduai-pennylane",
-    "projectq-framework-projectq",
+    "qiskit-qiskit-terra",
     "quantumbfs-yao-jl",
-    "arlineq-arline-benchmarks"
+    "microsoft-quantumkatas"
   ]
 }

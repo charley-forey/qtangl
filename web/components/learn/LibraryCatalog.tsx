@@ -1,9 +1,11 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 
 import Card from "@/components/ui/Card";
 import type { LibraryCategorySummary, LibraryIndexEntry } from "@/lib/library";
+import { trackEvent } from "@/lib/analytics";
 
 import LibraryResourceCard from "./LibraryResourceCard";
 
@@ -12,20 +14,63 @@ type LibraryCatalogProps = {
   categories: LibraryCategorySummary[];
 };
 
-type FocusFilter = "all" | "flagship" | "qtangl";
+type FocusFilter = "all" | "flagship" | "qtangl" | "saved";
+
+const SAVED_KEY = "qtangl-learn-saved";
+
+function readSavedSlugs(): string[] {
+  if (typeof window === "undefined") {
+    return [];
+  }
+  try {
+    const raw = window.localStorage.getItem(SAVED_KEY);
+    return raw ? (JSON.parse(raw) as string[]) : [];
+  } catch {
+    return [];
+  }
+}
 
 export default function LibraryCatalog({
   entries,
   categories,
 }: LibraryCatalogProps) {
-  const [query, setQuery] = useState("");
-  const [category, setCategory] = useState("all");
-  const [language, setLanguage] = useState("all");
-  const [focus, setFocus] = useState<FocusFilter>("all");
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const [savedSlugs, setSavedSlugs] = useState<string[]>([]);
+
+  const query = searchParams.get("q") ?? "";
+  const category = searchParams.get("cat") ?? "all";
+  const language = searchParams.get("lang") ?? "all";
+  const focus = (searchParams.get("focus") ?? "all") as FocusFilter;
+  const cluster = searchParams.get("cluster") ?? "all";
+
+  useEffect(() => {
+    setSavedSlugs(readSavedSlugs());
+  }, []);
 
   const languages = useMemo(() => {
-    return Array.from(new Set(entries.map((entry) => entry.primaryLanguage))).sort();
+    return Array.from(
+      new Set(entries.map((entry) => entry.primaryLanguage).filter(Boolean) as string[])
+    ).sort();
   }, [entries]);
+
+  const categoryBySlug = useMemo(
+    () => new Map(categories.map((item) => [item.slug, item])),
+    [categories]
+  );
+
+  function updateParams(updates: Record<string, string | null>) {
+    const params = new URLSearchParams(searchParams.toString());
+    for (const [key, value] of Object.entries(updates)) {
+      if (!value || value === "all") {
+        params.delete(key);
+      } else {
+        params.set(key, value);
+      }
+    }
+    const next = params.toString();
+    router.replace(next ? `/learn/library?${next}` : "/learn/library", { scroll: false });
+  }
 
   const filteredEntries = useMemo(() => {
     const normalizedQuery = query.trim().toLowerCase();
@@ -34,6 +79,12 @@ export default function LibraryCatalog({
       if (category !== "all" && entry.category.slug !== category) {
         return false;
       }
+      if (cluster !== "all") {
+        const categoryMeta = categoryBySlug.get(entry.category.slug);
+        if (categoryMeta?.cluster !== cluster) {
+          return false;
+        }
+      }
       if (language !== "all" && entry.primaryLanguage !== language) {
         return false;
       }
@@ -41,6 +92,9 @@ export default function LibraryCatalog({
         return false;
       }
       if (focus === "qtangl" && !entry.qtanglRelevant) {
+        return false;
+      }
+      if (focus === "saved" && !savedSlugs.includes(entry.slug)) {
         return false;
       }
       if (!normalizedQuery) {
@@ -59,7 +113,7 @@ export default function LibraryCatalog({
 
       return haystack.includes(normalizedQuery);
     });
-  }, [category, entries, focus, language, query]);
+  }, [category, categoryBySlug, cluster, entries, focus, language, query, savedSlugs]);
 
   return (
     <div className="space-y-8">
@@ -72,7 +126,10 @@ export default function LibraryCatalog({
             <input
               type="search"
               value={query}
-              onChange={(event) => setQuery(event.target.value)}
+              onChange={(event) => {
+                updateParams({ q: event.target.value || null });
+                trackEvent("learn_catalog_search", { query: event.target.value });
+              }}
               placeholder="Search Qiskit, simulators, optimization..."
               className="w-full rounded-2xl border border-[var(--border)] bg-black/50 px-4 py-3 text-sm text-white outline-none transition focus:border-[var(--border-strong)]"
             />
@@ -84,7 +141,7 @@ export default function LibraryCatalog({
             </span>
             <select
               value={category}
-              onChange={(event) => setCategory(event.target.value)}
+              onChange={(event) => updateParams({ cat: event.target.value })}
               className="w-full rounded-2xl border border-[var(--border)] bg-black/50 px-4 py-3 text-sm text-white outline-none transition focus:border-[var(--border-strong)]"
             >
               <option value="all">All categories</option>
@@ -102,7 +159,7 @@ export default function LibraryCatalog({
             </span>
             <select
               value={language}
-              onChange={(event) => setLanguage(event.target.value)}
+              onChange={(event) => updateParams({ lang: event.target.value })}
               className="w-full rounded-2xl border border-[var(--border)] bg-black/50 px-4 py-3 text-sm text-white outline-none transition focus:border-[var(--border-strong)]"
             >
               <option value="all">All languages</option>
@@ -118,11 +175,12 @@ export default function LibraryCatalog({
             <span className="text-xs uppercase tracking-[0.24em] text-[var(--color-gray-400)]">
               Focus
             </span>
-            <div className="flex h-[50px] items-center gap-2">
+            <div className="flex h-[50px] flex-wrap items-center gap-2">
               {[
                 { value: "all", label: "All" },
                 { value: "flagship", label: "Flagship" },
                 { value: "qtangl", label: "Qtangl" },
+                { value: "saved", label: "Saved" },
               ].map((item) => {
                 const active = focus === item.value;
 
@@ -130,7 +188,7 @@ export default function LibraryCatalog({
                   <button
                     key={item.value}
                     type="button"
-                    onClick={() => setFocus(item.value as FocusFilter)}
+                    onClick={() => updateParams({ focus: item.value })}
                     className={[
                       "rounded-full border px-3 py-2 text-xs transition",
                       active
@@ -150,6 +208,12 @@ export default function LibraryCatalog({
           <span>{filteredEntries.length} resources shown</span>
           <span className="text-[var(--color-gray-500)]">/</span>
           <span>{entries.length} total indexed</span>
+          {cluster !== "all" ? (
+            <>
+              <span className="text-[var(--color-gray-500)]">/</span>
+              <span>cluster: {cluster}</span>
+            </>
+          ) : null}
         </div>
       </Card>
 

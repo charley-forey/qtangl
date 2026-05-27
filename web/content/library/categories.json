@@ -3,42 +3,44 @@
     "slug": "general-purpose-sdks",
     "title": "General-purpose SDKs",
     "description": "Broad frameworks for building, simulating, and experimenting with quantum circuits across multiple domains.",
+    "cluster": "build",
     "topicSlugs": [
       "quantum-software-map",
       "start-writing-quantum-code"
     ],
     "heroImagePath": "/learn/categories/general-purpose-sdks.png",
-    "resourceCount": 31,
+    "resourceCount": 32,
     "resourceSlugs": [
       "bbn-q-adapt",
       "arlineq-arline-benchmarks",
       "arlineq-arline-quantum",
       "kelzheng-bloqit",
-      "pennylaneai-catalyst",
       "quantumlib-cirq",
       "bbn-q-cliffords-jl",
       "dwavesystems-dwavebinarycsp",
+      "qchackers-jquil",
       "mapmeld-jsquil",
       "gbanegas-libquantumjava",
       "cda-tum-mqt-qudits",
-      "qosf-os-quantum-software",
       "xanaduai-pennylane",
       "projectq-framework-projectq",
       "qcgpu-qcgpu-rust",
       "grey-area-qcircuits",
+      "rogercolbeck-qi",
       "quantum-tii-qibo",
       "qiskit-qiskit",
       "qiskit-qiskit-finance",
       "qiskit-qiskit-terra",
       "qosf-qosf-org",
-      "eclipse-qrisp-qrisp",
+      "haykkh-qsim",
       "javafxpert-quantum-toy-piano",
       "javafxpert-quantum-toy-piano-ibmq",
       "corbett-quantumcomputing",
       "rqc-qapp-quantumcomputingbot",
-      "artiste-qb-net-qubiter",
+      "rigetti-quantumflow",
       "ken-nakanishi-qupy",
       "bbn-q-randomquantum-jl",
+      "indisoluble-swiftquantumcomputing",
       "vprusso-toqito",
       "quantumbfs-yao-jl"
     ],
@@ -52,17 +54,19 @@
     "slug": "simulators",
     "title": "Simulators",
     "description": "Projects focused on state-vector, stabilizer, tensor-network, or hardware-inspired quantum simulation.",
+    "cluster": "simulate",
     "topicSlugs": [
       "quantum-software-map",
       "quantum-simulators-guide"
     ],
     "heroImagePath": "/learn/categories/simulators.png",
-    "resourceCount": 15,
+    "resourceCount": 16,
     "resourceSlugs": [
       "thephoeron-black-stone",
       "iic-jku-ddsim",
       "intel-intel-qs",
       "cda-tum-mqt-ddsim",
+      "qosf-os-quantum-software",
       "bbn-q-pysimulator",
       "qiskit-qiskit-aer",
       "qiskit-qiskit-tutorial",
@@ -81,6 +85,7 @@
     "slug": "quantum-chemistry",
     "title": "Quantum chemistry",
     "description": "Libraries that connect quantum computing workflows to chemistry, electronic structure, and molecular modeling.",
+    "cluster": "optimize",
     "topicSlugs": [
       "quantum-software-map",
       "quantum-chemistry-for-newcomers"
@@ -91,8 +96,8 @@
       "projectq-framework-fermilib",
       "cda-tum-mqt-dasqa",
       "quantumlib-openfermion",
-      "pasqal-io-qadence",
       "qiskit-qiskit-nature",
+      "eclipse-qrisp-qrisp",
       "weinbe58-quspin",
       "aspuru-guzik-group-tequila",
       "ornl-qci-xacc-vqe"
@@ -105,6 +110,7 @@
     "slug": "optimization-qubo",
     "title": "Optimization and QUBO",
     "description": "Libraries for expressing and solving combinatorial optimization problems with QUBO, QAOA, or related formulations.",
+    "cluster": "optimize",
     "topicSlugs": [
       "quantum-software-map",
       "quantum-optimization-compared"
@@ -131,6 +137,7 @@
     "slug": "annealing-ising",
     "title": "Annealing and Ising",
     "description": "D-Wave and Ising-model tools for quantum annealing, embeddings, and heuristic search workflows.",
+    "cluster": "optimize",
     "topicSlugs": [
       "quantum-software-map",
       "quantum-optimization-compared"
@@ -162,12 +169,14 @@
     "slug": "quantum-ml",
     "title": "Quantum machine learning",
     "description": "Libraries and experiments combining quantum circuit workflows with machine learning models or differentiable programming.",
+    "cluster": "optimize",
     "topicSlugs": [
       "quantum-software-map"
     ],
     "heroImagePath": "/learn/categories/quantum-ml.png",
-    "resourceCount": 3,
+    "resourceCount": 4,
     "resourceSlugs": [
+      "pasqal-io-qadence",
       "jpzwolak-qflow-lite",
       "qiskit-qiskit-machine-learning",
       "artiste-qb-net-quantum-edward"
@@ -178,6 +187,7 @@
     "slug": "photonics",
     "title": "Photonics",
     "description": "Frameworks for photonic quantum computing, boson sampling, and optical circuit representations.",
+    "cluster": "optimize",
     "topicSlugs": [
       "quantum-software-map"
     ],
@@ -195,11 +205,12 @@
     "slug": "pulse-control",
     "title": "Pulse and control",
     "description": "Tooling for low-level pulse scheduling, experiment orchestration, and laboratory control around quantum hardware.",
+    "cluster": "build",
     "topicSlugs": [
       "quantum-software-map"
     ],
     "heroImagePath": "/learn/categories/pulse-control.png",
-    "resourceCount": 10,
+    "resourceCount": 9,
     "resourceSlugs": [
       "m-labs-artiq",
       "bbn-q-pyqgl2",
@@ -209,8 +220,7 @@
       "bbn-q-qlab",
       "bbn-q-qlab-jl",
       "qutech-qupulse",
-      "sequencing-dev-sequencing",
-      "indisoluble-swiftquantumcomputing"
+      "sequencing-dev-sequencing"
     ],
     "featuredSlugs": []
   },
@@ -218,6 +228,7 @@
     "slug": "compilers-languages",
     "title": "Compilers and languages",
     "description": "Compilers, intermediate representations, domain-specific languages, and transpilation tools for quantum programs.",
+    "cluster": "build",
     "topicSlugs": [
       "quantum-software-map",
       "start-writing-quantum-code"
@@ -226,20 +237,20 @@
     "resourceCount": 25,
     "resourceSlugs": [
       "avalon-lang-avaloni",
+      "pennylaneai-catalyst",
       "nvidia-cuda-quantum",
-      "qchackers-jquil",
       "qiskit-openqasm",
       "qe-lab-openql",
       "rigetticomputing-pyquil",
       "quantomatic-pyzx",
       "qct-iqc-qacg",
       "aviggiano-qcl",
-      "rogercolbeck-qi",
+      "bbn-q-qgl-jl",
       "qiskit-qiskit-js",
       "lanl-qmasm",
       "dabacon-qsel",
       "perak-quantum-circuit",
-      "rigetti-quantumflow",
+      "artiste-qb-net-qubiter",
       "javafxpert-quil-syntax-highlighter",
       "rigetti-quilc",
       "thephoeron-quipper-language",
@@ -259,6 +270,7 @@
     "slug": "error-correction-mitigation",
     "title": "Error correction and mitigation",
     "description": "Projects that help analyze, mitigate, or correct quantum errors and noisy computation.",
+    "cluster": "secure",
     "topicSlugs": [
       "quantum-software-map",
       "quantum-simulators-guide"
@@ -279,6 +291,7 @@
     "slug": "networking",
     "title": "Networking",
     "description": "Simulators and frameworks for quantum networking, distributed entanglement, and communication systems.",
+    "cluster": "secure",
     "topicSlugs": [
       "quantum-software-map"
     ],
@@ -294,6 +307,7 @@
     "slug": "post-quantum-crypto",
     "title": "Post-quantum cryptography",
     "description": "Libraries and standards implementations for quantum-safe cryptography and related security tooling.",
+    "cluster": "secure",
     "topicSlugs": [
       "quantum-software-map",
       "post-quantum-crypto-libraries"
@@ -315,17 +329,17 @@
     "slug": "games-learning",
     "title": "Games and learning",
     "description": "Interactive projects, puzzles, and educational resources for learning quantum computing concepts.",
+    "cluster": "learn",
     "topicSlugs": [
       "quantum-software-map",
       "start-writing-quantum-code"
     ],
     "heroImagePath": "/learn/categories/games-learning.png",
-    "resourceCount": 12,
+    "resourceCount": 11,
     "resourceSlugs": [
       "decodoku-a-game-to-benchmark-quantum-computers",
       "decodoku-battleships-with-complementary-measurements",
       "entanglion-entanglion",
-      "haykkh-qsim",
       "desireevl-quantum-catsweeper",
       "stared-quantum-game",
       "mstechly-quantum-tsp-tutorials",
@@ -344,6 +358,7 @@
     "slug": "visualization-tomography",
     "title": "Visualization and tomography",
     "description": "Tools for visualizing circuits, reasoning about states, and reconstructing quantum systems from measurements.",
+    "cluster": "simulate",
     "topicSlugs": [
       "quantum-software-map"
     ],
@@ -363,14 +378,14 @@
     "slug": "benchmarks-analysis",
     "title": "Benchmarks and analysis",
     "description": "Benchmark suites, performance studies, and analysis tooling for comparing quantum software and hardware workflows.",
+    "cluster": "simulate",
     "topicSlugs": [
       "quantum-software-map"
     ],
     "heroImagePath": "/learn/categories/benchmarks-analysis.png",
-    "resourceCount": 4,
+    "resourceCount": 3,
     "resourceSlugs": [
       "cda-tum-mqt-bench",
-      "bbn-q-qgl-jl",
       "bbn-q-qsimulator-jl",
       "quantumlib-qualtran"
     ],
@@ -380,6 +395,7 @@
     "slug": "cloud-interop",
     "title": "Cloud and interoperability",
     "description": "Projects that connect quantum workflows across providers, cloud runtimes, and software ecosystems.",
+    "cluster": "build",
     "topicSlugs": [
       "quantum-software-map",
       "quantum-optimization-compared"

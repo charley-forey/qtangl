@@ -4,7 +4,7 @@
   "name": "UniversalQCompiler",
   "title": "UniversalQCompiler",
   "repoUrl": "https://github.com/Q-Compiler/UniversalQCompiler",
-  "homepageUrl": null,
+  "homepageUrl": "http://www-users.york.ac.uk/~rc973/UniversalQCompiler.html",
   "category": {
     "slug": "compilers-languages",
     "title": "Compilers and languages",
@@ -20,12 +20,16 @@
       "title": "How to start writing quantum code: an honest path"
     }
   ],
-  "primaryLanguage": "Python",
+  "primaryLanguage": "Mathematica",
+  "primaryLanguages": [
+    "Python",
+    "C"
+  ],
   "license": "Apache-2.0",
-  "summary": "UniversalQCompiler - An opensource software package for decomposing generic quantum computations",
-  "description": "UniversalQCompiler - An opensource software package for decomposing generic quantum computations",
+  "summary": "Synthesizing arbitrary quantum computations",
+  "description": "Synthesizing arbitrary quantum computations",
   "whatItIs": [
-    "UniversalQCompiler is an open-source project in the compilers and languages category. It is maintained by Q-Compiler and primarily looks like a Python codebase. UniversalQCompiler - An opensource software package for decomposing generic quantum computations",
+    "UniversalQCompiler is an open-source project in the compilers and languages category. It is maintained by Q-Compiler and primarily looks like a Mathematica codebase. Synthesizing arbitrary quantum computations",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches compilers and languages workflows in practice. The repository README emphasizes: UniversalQCompiler - An opensource software package for decomposing generic quantum computations UniversalQCompiler provides a Mathematica package that allows to decompose generic quantum computations into sequences of C-NOT gates and arbitrary single-qubit rotations. In particular, the package allows for the following:"
   ],
   "whoItsFor": "Developers who want to understand the representations and compilers that sit between high-level code and runnable circuits.",
@@ -36,21 +40,58 @@
   ],
   "readmeExcerpt": "UniversalQCompiler - An opensource software package for decomposing generic quantum computations UniversalQCompiler provides a Mathematica package that allows to decompose generic quantum computations into sequences of C-NOT gates and arbitrary single-qubit rotations. In particular, the package allows for the following:",
   "readmePath": "reference\\Q-Compiler__UniversalQCompiler\\README.md",
+  "readmeMarkdownPath": "readmes/q-compiler-universalqcompiler.md",
   "clonePath": "reference\\Q-Compiler__UniversalQCompiler",
-  "stars": 0,
-  "lastPushedAt": null,
-  "githubTopics": [],
+  "stars": 71,
+  "lastPushedAt": "2025-09-25T10:34:21Z",
+  "defaultBranch": "master",
+  "githubTopics": [
+    "channel-decomposition",
+    "circuit-simplification",
+    "compilers",
+    "isometry-decomposition",
+    "mathematica",
+    "povm-decomposition",
+    "quantum-circuits",
+    "quantum-compiler",
+    "quantum-computer",
+    "quantum-computing",
+    "trapped-ions",
+    "unitary-decomposition",
+    "unitary-synthesis"
+  ],
+  "quickstart": null,
+  "codeSamples": [],
+  "packageMeta": {},
+  "citationBibtex": null,
+  "supportedBackendSlugs": [
+    "projectq-framework-projectq"
+  ],
+  "externalLinks": {
+    "docs": [
+      "https://docs.google.com/forms/d/e/1FAIpQLSc_QmF_qFwp25f8fsrVWiMKGkKbtPZeSNbOWLFU357tLpKNVw/viewform"
+    ],
+    "paper": [
+      "https://arxiv.org/abs/1707.03429",
+      "https://arxiv.org/pdf/1904.01072.pdf"
+    ]
+  },
+  "openIssuesCount": 1,
+  "subscribersCount": 5,
+  "latestRelease": null,
+  "ownerType": "User",
+  "ownerUrl": "https://github.com/Q-Compiler",
   "featured": false,
   "flagship": false,
   "qtanglRelevant": false,
   "archived": false,
-  "imagePath": null,
+  "imagePath": "/learn/monogram/q-compiler-universalqcompiler.svg",
   "relatedSlugs": [
     "cqcl-tket",
     "nvidia-cuda-quantum",
-    "quantomatic-pyzx",
-    "avalon-lang-avaloni",
-    "aviggiano-qcl",
-    "dabacon-qsel"
+    "microsoft-quantumkatas",
+    "qiskit-openqasm",
+    "qiskit-qiskit",
+    "quantomatic-pyzx"
   ]
 }

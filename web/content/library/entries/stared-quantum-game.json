@@ -4,7 +4,7 @@
   "name": "quantum-game",
   "title": "quantum-game",
   "repoUrl": "https://github.com/stared/quantum-game",
-  "homepageUrl": null,
+  "homepageUrl": "http://v2016.quantumgame.io/",
   "category": {
     "slug": "games-learning",
     "title": "Games and learning",
@@ -21,11 +21,15 @@
     }
   ],
   "primaryLanguage": "JavaScript",
+  "primaryLanguages": [
+    "JavaScript",
+    "Shell"
+  ],
   "license": "MIT",
-  "summary": "**A note: this repository is an old Quanutm Game (2014-2016), no longer maintained.",
-  "description": "**A note: this repository is an old Quanutm Game (2014-2016), no longer maintained. The new one (2019-) is at quantumgame.io.**",
+  "summary": "Quantum Game (old version) - a puzzle game with real quantum mechanics in a browser",
+  "description": "Quantum Game (old version) - a puzzle game with real quantum mechanics in a browser",
   "whatItIs": [
-    "quantum-game is an open-source project in the games and learning category. It is maintained by stared and primarily looks like a JavaScript codebase. **A note: this repository is an old Quanutm Game (2014-2016), no longer maintained.",
+    "quantum-game is an open-source project in the games and learning category. It is maintained by stared and primarily looks like a JavaScript codebase. Quantum Game (old version) - a puzzle game with real quantum mechanics in a browser",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches games and learning workflows in practice. The repository README emphasizes: **A note: this repository is an old Quanutm Game (2014-2016), no longer maintained. The new one (2019-) is at quantumgame.io.** Quantum Game - play with photons, superposition and entanglement. In your browser! With true quantum mechanics underneath! The repository also appears to be archival or no longer actively maintained, which matters when evaluating it for current production use."
   ],
   "whoItsFor": "Beginners, educators, and curious developers who want a more approachable path into quantum concepts.",
@@ -36,21 +40,44 @@
   ],
   "readmeExcerpt": "**A note: this repository is an old Quanutm Game (2014-2016), no longer maintained. The new one (2019-) is at quantumgame.io.** Quantum Game - play with photons, superposition and entanglement. In your browser! With true quantum mechanics underneath!",
   "readmePath": "reference\\stared__quantum-game\\README.md",
+  "readmeMarkdownPath": "readmes/stared-quantum-game.md",
   "clonePath": "reference\\stared__quantum-game",
-  "stars": 0,
-  "lastPushedAt": null,
-  "githubTopics": [],
+  "stars": 359,
+  "lastPushedAt": "2025-10-29T16:42:47Z",
+  "defaultBranch": "master",
+  "githubTopics": [
+    "game",
+    "javascript",
+    "physics",
+    "puzzle",
+    "quantum-game",
+    "quantum-mechanics"
+  ],
+  "quickstart": null,
+  "codeSamples": [],
+  "packageMeta": {
+    "name": null,
+    "version": null
+  },
+  "citationBibtex": null,
+  "supportedBackendSlugs": [],
+  "externalLinks": {},
+  "openIssuesCount": 20,
+  "subscribersCount": 10,
+  "latestRelease": null,
+  "ownerType": "User",
+  "ownerUrl": "https://github.com/stared",
   "featured": false,
   "flagship": true,
   "qtanglRelevant": false,
   "archived": true,
-  "imagePath": "/learn/flagship/stared-quantum-game.png",
+  "imagePath": "/learn/og/stared-quantum-game.png",
   "relatedSlugs": [
     "microsoft-quantumkatas",
     "strilanc-quirk",
-    "decodoku-a-game-to-benchmark-quantum-computers",
-    "decodoku-battleships-with-complementary-measurements",
-    "desireevl-quantum-catsweeper",
-    "entanglion-entanglion"
+    "qiskit-qiskit",
+    "quantumlib-cirq",
+    "xanaduai-pennylane",
+    "decodoku-a-game-to-benchmark-quantum-computers"
   ]
 }

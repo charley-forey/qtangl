@@ -4,7 +4,7 @@
   "name": "strawberryfields",
   "title": "strawberryfields",
   "repoUrl": "https://github.com/xanaduai/strawberryfields",
-  "homepageUrl": null,
+  "homepageUrl": "https://xanadu.ai",
   "category": {
     "slug": "photonics",
     "title": "Photonics",
@@ -17,12 +17,16 @@
     }
   ],
   "primaryLanguage": "Python",
+  "primaryLanguages": [
+    "Python",
+    "LaTeX"
+  ],
   "license": "Apache-2.0",
-  "summary": "<p align=\"center\"> <a href=\"https://github.com/XanaduAI/strawberryfields/actions?query=workflow%3ATests\"> <img src=\"https://img.shields.io/github/workflow/status/XanaduAI/strawberryfields/Tests/master?logo=github&style=flat-square\" /> </a> <a href=\"https://www.codefactor.io/repository/github/xanaduai/strawberryfields\"> <img src=\"https://img.shields.io/codefactor/grade/github/XanaduAI/strawberryfields/master?style=flat-square\" /> </a> <a href=\"https://codecov.io/gh/XanaduAI/strawberryfields\"> <img src=\"https://img.shields.io/codecov/c/github/xanaduai/strawberryfields/master.svg?style=popout-square\" /> </a> <a href=\"https://strawberryfields.readthedocs.io\"> <img src=\"https://img.shields.io/readthedocs/strawberryfields.svg?style=popout-square\" /> </a> <a href=\"https://pypi.org/project/StrawberryFields\"> <img src=\"https://img.shields.io/pypi/v/StrawberryFields.svg?style=popout-square\" /> </a>...",
-  "description": "<p align=\"center\"> <a href=\"https://github.com/XanaduAI/strawberryfields/actions?query=workflow%3ATests\"> <img src=\"https://img.shields.io/github/workflow/status/XanaduAI/strawberryfields/Tests/master?logo=github&style=flat-square\" /> </a> <a href=\"https://www.codefactor.io/repository/github/xanaduai/strawberryfields\"> <img src=\"https://img.shields.io/codefactor/grade/github/XanaduAI/strawberryfields/master?style=flat-square\" /> </a> <a href=\"https://codecov.io/gh/XanaduAI/strawberryfields\"> <img src=\"https://img.shields.io/codecov/c/github/xanaduai/strawberryfields/master.svg?style=popout-square\" /> </a> <a href=\"https://strawberryfields.readthedocs.io\"> <img src=\"https://img.shields.io/readthedocs/strawberryfields.svg?style=popout-square\" /> </a> <a href=\"https://pypi.org/project/StrawberryFields\"> <img src=\"https://img.shields.io/pypi/v/StrawberryFields.svg?style=popout-square\" /> </a> <a href=\"https://pypi.org/project/StrawberryFields\"> <img src=\"https://img.shields.io/pypi/pyversions/StrawberryFields.svg?style=popout-square\" /> </a> </p>",
+  "summary": "Strawberry Fields is a full-stack Python library for designing, simulating, and optimizing continuous variable (CV) quantum optical circuits.",
+  "description": "Strawberry Fields is a full-stack Python library for designing, simulating, and optimizing continuous variable (CV) quantum optical circuits.",
   "whatItIs": [
-    "strawberryfields is an open-source project in the photonics category. It is maintained by xanaduai and primarily looks like a Python codebase. <p align=\"center\"> <a href=\"https://github.com/XanaduAI/strawberryfields/actions?query=workflow%3ATests\"> <img src=\"https://img.shields.io/github/workflow/status/XanaduAI/strawberryfields/Tests/master?logo=github&style=flat-square\" /> </a> <a href=\"https://www.codefactor.io/repository/github/xanaduai/strawberryfields\"> <img src=\"https://img.shields.io/codefactor/grade/github/XanaduAI/strawberryfields/master?style=flat-square\" /> </a> <a href=\"https://codecov.io/gh/XanaduAI/strawberryfields\"> <img src=\"https://img.shields.io/codecov/c/github/xanaduai/strawberryfields/master.svg?style=popout-square\" /> </a> <a href=\"https://strawberryfields.readthedocs.io\"> <img src=\"https://img.shields.io/readthedocs/strawberryfields.svg?style=popout-square\" /> </a> <a href=\"https://pypi.org/project/StrawberryFields\"> <img src=\"https://img.shields.io/pypi/v/StrawberryFields.svg?style=popout-square\" /> </a>...",
-    "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches photonics workflows in practice. The repository README emphasizes: <p align=\"center\"> <a href=\"https://github.com/XanaduAI/strawberryfields/actions?query=workflow%3ATests\"> <img src=\"https://img.shields.io/github/workflow/status/XanaduAI/strawberryfields/Tests/master?logo=github&style=flat-square\" /> </a> <a href=\"https://www.codefactor.io/repository/github/xanaduai/strawberryfields\"> <img src=\"https://img.shields.io/codefactor/grade/github/XanaduAI/strawberryfields/master?style=flat-square\" /> </a> <a href=\"https://codecov.io/gh/XanaduAI/strawberryfields\"> <img src=\"https://img.shields.io/codecov/c/github/xanaduai/strawberryfields/master.svg?style=popout-square\" /> </a> <a href=\"https://strawberryfields.readthedocs.io\"> <img src=\"https://img.shields.io/readthedocs/strawberryfields.svg?style=popout-square\" /> </a> <a href=\"https://pypi.org/project/StrawberryFields\"> <img src=\"https://img.shields.io/pypi/v/StrawberryFields.svg?style=popout-square\" /> </a> <a href=\"https://pypi.org/project/StrawberryFields\"> <img src=\"https://img.shields.io/pypi/pyversions/StrawberryFields.svg?style=popout-square\" /> </a> </p> <p align=\"center\"> Strawberry Fields is a full-stack Python library..."
+    "strawberryfields is an open-source project in the photonics category. It is maintained by xanaduai and primarily looks like a Python codebase. Strawberry Fields is a full-stack Python library for designing, simulating, and optimizing continuous variable (CV) quantum optical circuits.",
+    "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches photonics workflows in practice. The repository README emphasizes: <p align=\"center\"> <a href=\"https://github.com/XanaduAI/strawberryfields/actions?query=workflow%3ATests\"> <img src=\"https://img.shields.io/github/workflow/status/XanaduAI/strawberryfields/Tests/master?logo=github&style=flat-square\" /> </a> <a href=\"https://www.codefactor.io/repository/github/xanaduai/strawberryfields\"> <img src=\"https://img.shields.io/codefactor/grade/github/XanaduAI/strawberryfields/master?style=flat-square\" /> </a> <a href=\"https://codecov.io/gh/XanaduAI/strawberryfields\"> <img src=\"https://img.shields.io/codecov/c/github/xanaduai/strawberryfields/master.svg?style=popout-square\" /> </a> <a href=\"https://strawberryfields.readthedocs.io\"> <img src=\"https://img.shields.io/readthedocs/strawberryfields.svg?style=popout-square\" /> </a> <a href=\"https://pypi.org/project/StrawberryFields\"> <img src=\"https://img.shields.io/pypi/v/StrawberryFields.svg?style=popout-square\" /> </a> <a href=\"https://pypi.org/project/StrawberryFields\"> <img src=\"https://img.shields.io/pypi/pyversions/StrawberryFields.svg?style=popout-square\" /> </a> </p> <p align=\"center\"> Strawberry Fields is a full-stack Python library... The repository also appears to be archival or no longer actively maintained, which matters when evaluating it for current production use."
   ],
   "whoItsFor": "People exploring optical and photonic models of quantum computing, especially outside the usual gate-model framing.",
   "whatYouCanBuild": [
@@ -32,21 +36,69 @@
   ],
   "readmeExcerpt": "<p align=\"center\"> <a href=\"https://github.com/XanaduAI/strawberryfields/actions?query=workflow%3ATests\"> <img src=\"https://img.shields.io/github/workflow/status/XanaduAI/strawberryfields/Tests/master?logo=github&style=flat-square\" /> </a> <a href=\"https://www.codefactor.io/repository/github/xanaduai/strawberryfields\"> <img src=\"https://img.shields.io/codefactor/grade/github/XanaduAI/strawberryfields/master?style=flat-square\" /> </a> <a href=\"https://codecov.io/gh/XanaduAI/strawberryfields\"> <img src=\"https://img.shields.io/codecov/c/github/xanaduai/strawberryfields/master.svg?style=popout-square\" /> </a> <a href=\"https://strawberryfields.readthedocs.io\"> <img src=\"https://img.shields.io/readthedocs/strawberryfields.svg?style=popout-square\" /> </a> <a href=\"https://pypi.org/project/StrawberryFields\"> <img src=\"https://img.shields.io/pypi/v/StrawberryFields.svg?style=popout-square\" /> </a> <a href=\"https://pypi.org/project/StrawberryFields\"> <img src=\"https://img.shields.io/pypi/pyversions/StrawberryFields.svg?style=popout-square\" /> </a> </p> <p align=\"center\"> Strawberry Fields is a full-stack Python library for designing, simulating, and optimizing continuous-variable quantum optical circuits. </p>",
   "readmePath": "reference\\xanaduai__strawberryfields\\README.md",
+  "readmeMarkdownPath": "readmes/xanaduai-strawberryfields.md",
   "clonePath": "reference\\xanaduai__strawberryfields",
-  "stars": 0,
-  "lastPushedAt": null,
-  "githubTopics": [],
+  "stars": 850,
+  "lastPushedAt": "2026-01-16T19:47:58Z",
+  "defaultBranch": "master",
+  "githubTopics": [
+    "machine-learning",
+    "quantum",
+    "quantum-algorithms",
+    "quantum-computing",
+    "quantum-optics",
+    "quantum-programming-language",
+    "tensorflow"
+  ],
+  "quickstart": null,
+  "codeSamples": [
+    {
+      "title": "Boson Sampling",
+      "language": "python",
+      "source": "#!/usr/bin/env python3\nimport strawberryfields as sf\nfrom strawberryfields.ops import *\n# initialize engine and program objects\neng = sf.Engine(backend=\"fock\", backend_options={\"cutoff_dim\": 7})\nboson_sampling = sf.Program(4)\nwith boson_sampling.context as q:\n    # prepare the input fock states\n    Fock(1) | q[0]\n    Fock(1) | q[1]\n    Vac     | q[2]\n    Fock(1) | q[3]\n    # rotation gates\n    Rgate(0.5719) | q[0]\n    Rgate(-1.9782) | q[1]\n    Rgate(2.0603) | q[2]\n    Rgate(0.0644) | q[3]\n    # beamsplitter array\n    BSgate(0.7804, 0.8578)  | (q[0], q[1])\n    BSgate(0.06406, 0.5165) | (q[2], q[3])\n    BSgate(0.473, 0.1176)   | (q[1], q[2])\n    BSgate(0.563, 0.1517)   | (q[0], q[1])\n    BSgate(0.1323, 0.9946)  | (q[2], q[3])\n    BSgate(0.311, 0.3231)   | (q[1], q[2])\n    BSgate(0.4348, 0.0798)  | (q[0], q[1])\n    BSgate(0.4368, 0.6157)  | (q[2], q[3])\n    # end circuit\n# run the engine\nresults = eng.run(boson_sampling)\n# extract the joint Fock probabilities\nprobs = results.state.all_fock_probs()\n# print the joint Fock state probabilities\nprint(probs[1, 1, 0, 1])\nprint(probs[2, 0, 0, 1])",
+      "path": "examples/boson_sampling.py"
+    },
+    {
+      "title": "Bosonic Tutorial Sampling",
+      "language": "python",
+      "source": "# Licensed under the Apache License, Version 2.0 (the \"License\");\n# you may not use this file except in compliance with the License.\n# You may obtain a copy of the License at\n#     http://www.apache.org/licenses/LICENSE-2.0\n# Unless required by applicable law or agreed to in writing, software\n# distributed under the License is distributed on an \"AS IS\" BASIS,\n# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n# See the License for the specific language governing permissions and\n# limitations under the License.\n\"\"\"A comparison of the asymptotic homodyne distributions and sampled values,\nfor GKP and cat states.\"\"\"\nimport strawberryfields as sf\nimport numpy as np\nimport matplotlib.pyplot as plt\n# Create cat state\nprog_cat = sf.Program(1)\nwith prog_cat.context as q:\n    sf.ops.Catstate(alpha=2) | q\neng = sf.Engine(\"bosonic\")\ncat = eng.run(prog_cat).state\n# Calculate the asymptotic quadrature distributions\nscale = np.sqrt(sf.hbar)\nquad = np.linspace(-6, 6, 1000) * scale\ncat_prob_x = cat.marginal(0, quad)\ncat_prob_p = cat.marginal(0, quad, phi=np.pi / 2)\n# Run the program again, collecting x samples this time\nprog_cat_x = sf.Program(1)\nwith prog_cat_x.context as q:\n    sf.ops.Catstate(alpha=2) | q\n    sf.ops.MeasureX | q\neng = sf.Engine(\"bosonic\")\ncat_samples_x = eng.run(prog_cat_x, shots=2000).samples[:, 0]\n# Run the program again, collecting p samples this time\nprog_cat_p = sf.Program(1)\nwith prog_cat_p.context as q:\n    sf.ops.Catstate(alpha=2) | q\n    sf.ops.MeasureP | q\neng = sf.Engine(\"bosonic\")\ncat_samples_p = eng.run(prog_cat_p, shots=2000).samples[:, 0]\n# Plot the results",
+      "path": "examples/bosonic_tutorial_sampling.py"
+    },
+    {
+      "title": "Custom Operation",
+      "language": "python",
+      "source": "#!/usr/bin/env python3\n# Licensed under the Apache License, Version 2.0 (the \"License\");\n# you may not use this file except in compliance with the License.\n# You may obtain a copy of the License at\n#     http://www.apache.org/licenses/LICENSE-2.0\n# Unless required by applicable law or agreed to in writing, software\n# distributed under the License is distributed on an \"AS IS\" BASIS,\n# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n# See the License for the specific language governing permissions and\n# limitations under the License.\nimport strawberryfields as sf\nfrom strawberryfields.ops import *\nfrom strawberryfields.utils import operation\n@operation(4)\ndef prepare_squeezing(q):\n    \"\"\"This operation prepares modes 0 and 1\n    as squeezed states with r = -1.\n    Args:\n        q (register): the qumode register.\n    \"\"\"\n    S = Sgate(-1)\n    S | q[0]\n    S | q[1]\n@operation(3)\ndef circuit_op(v1, v2, q):\n    \"\"\"Some gates that are groups into a custom operation.\n    Args:\n        v1 (float): parameter for CZgate\n        v2 (float): parameter for the cubic phase gate\n        q (register): the qumode register\n    \"\"\"\n    CZgate(v1) | (q[0], q[1])\n    Vgate(v2) | q[1]\n# initialize engine and program objects\neng = sf.Engine(backend=\"fock\", backend_options={\"cutoff_dim\": 5})\ncircuit = sf.Program(4)\nwith circuit.context as q:\n    # The following operation takes no arguments\n    prepare_squeezing() | q\n    # another operation with 2 parameters that operates on three registers: 0, 1",
+      "path": "examples/custom_operation.py"
+    }
+  ],
+  "packageMeta": {},
+  "citationBibtex": null,
+  "supportedBackendSlugs": [],
+  "externalLinks": {
+    "docs": [
+      "https://strawberryfields.readthedocs.io",
+      "https://strawberryfields.readthedocs.io/en/stable/introduction/introduction.html"
+    ],
+    "pypi": [
+      "https://pypi.org/project/StrawberryFields"
+    ]
+  },
+  "openIssuesCount": 43,
+  "subscribersCount": 34,
+  "latestRelease": null,
+  "ownerType": "Organization",
+  "ownerUrl": "https://github.com/XanaduAI",
   "featured": false,
   "flagship": true,
   "qtanglRelevant": false,
-  "archived": false,
-  "imagePath": "/learn/flagship/xanaduai-strawberryfields.png",
+  "archived": true,
+  "imagePath": "/learn/og/xanaduai-strawberryfields.png",
   "relatedSlugs": [
-    "quandela-perceval",
-    "xanaduai-blackbird",
-    "xanaduai-thewalrus",
-    "aws-amazon-braket-sdk-python",
-    "cqcl-tket",
-    "dwavesystems-dwave-ocean-sdk"
+    "microsoft-quantumkatas",
+    "qiskit-qiskit",
+    "quantumlib-cirq",
+    "xanaduai-pennylane",
+    "open-quantum-safe-liboqs",
+    "quandela-perceval"
   ]
 }

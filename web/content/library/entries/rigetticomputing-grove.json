@@ -4,7 +4,7 @@
   "name": "grove",
   "title": "grove",
   "repoUrl": "https://github.com/rigetticomputing/grove",
-  "homepageUrl": null,
+  "homepageUrl": "http://rigetti.com/forest",
   "category": {
     "slug": "optimization-qubo",
     "title": "Optimization and QUBO",
@@ -21,11 +21,16 @@
     }
   ],
   "primaryLanguage": "Python",
+  "primaryLanguages": [
+    "Python",
+    "Jupyter",
+    "JavaScript"
+  ],
   "license": "Apache-2.0",
-  "summary": "A collection of quantum algorithms built using the Rigetti Forest platform.",
-  "description": "A collection of quantum algorithms built using the Rigetti Forest platform. Grove is licensed under the Apache 2.0 license.",
+  "summary": "Quantum algorithms built using pyQuil.",
+  "description": "Quantum algorithms built using pyQuil.",
   "whatItIs": [
-    "grove is an open-source project in the optimization and qubo category. It is maintained by rigetticomputing and primarily looks like a Python codebase. A collection of quantum algorithms built using the Rigetti Forest platform.",
+    "grove is an open-source project in the optimization and qubo category. It is maintained by rigetticomputing and primarily looks like a Python codebase. Quantum algorithms built using pyQuil.",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches optimization and qubo workflows in practice. The repository README emphasizes: A collection of quantum algorithms built using the Rigetti Forest platform. Grove is licensed under the Apache 2.0 license. The Variational-Quantum-Eigensolver (VQE) The Quantum Approximate Optimization Algorithm (QAOA) The Quantum Fourier Transform (QFT) Phase Estimation Algorithm"
   ],
   "whoItsFor": "Teams exploring routing, scheduling, allocation, and other combinatorial problems that can be modeled as optimization workloads.",
@@ -36,15 +41,63 @@
   ],
   "readmeExcerpt": "A collection of quantum algorithms built using the Rigetti Forest platform. Grove is licensed under the Apache 2.0 license. The Variational-Quantum-Eigensolver (VQE) The Quantum Approximate Optimization Algorithm (QAOA) The Quantum Fourier Transform (QFT) Phase Estimation Algorithm",
   "readmePath": "reference\\rigetticomputing__grove\\README.md",
+  "readmeMarkdownPath": "readmes/rigetticomputing-grove.md",
   "clonePath": "reference\\rigetticomputing__grove",
-  "stars": 0,
-  "lastPushedAt": null,
-  "githubTopics": [],
+  "stars": 384,
+  "lastPushedAt": "2021-12-02T19:36:56Z",
+  "defaultBranch": "master",
+  "githubTopics": [
+    "forest",
+    "quantum",
+    "quantum-algorithms",
+    "quantum-computing",
+    "rigetti-forest"
+  ],
+  "quickstart": null,
+  "codeSamples": [
+    {
+      "title": "Deutschjosza",
+      "language": "python",
+      "source": "from itertools import product\n\nfrom mock import patch\n\nfrom grove.deutsch_jozsa.deutsch_jozsa import DeutschJosza",
+      "path": "examples/DeutschJosza.ipynb"
+    },
+    {
+      "title": "Groversalgorithm",
+      "language": "python",
+      "source": "from itertools import product\n\nfrom mock import patch\n\nfrom grove.amplification.grover import Grover",
+      "path": "examples/GroversAlgorithm.ipynb"
+    },
+    {
+      "title": "Isingsolver",
+      "language": "python",
+      "source": "from mock import patch, Mock\nfrom pyquil.api import WavefunctionSimulator\n\nfrom grove.ising.ising_qaoa import ising",
+      "path": "examples/IsingSolver.ipynb"
+    }
+  ],
+  "packageMeta": {},
+  "citationBibtex": null,
+  "supportedBackendSlugs": [],
+  "externalLinks": {
+    "docs": [
+      "https://readthedocs.org/projects/grove-docs/badge/",
+      "http://grove-docs.readthedocs.io/en/latest/",
+      "http://grove-docs.readthedocs.io/en/latest/vqe.html",
+      "http://grove-docs.readthedocs.io/en/latest/qaoa.html"
+    ],
+    "paper": [
+      "https://arxiv.org/abs/1608.03355"
+    ]
+  },
+  "openIssuesCount": 50,
+  "subscribersCount": 32,
+  "latestRelease": null,
+  "ownerType": "Organization",
+  "ownerUrl": "https://github.com/rigetti",
   "featured": false,
   "flagship": false,
   "qtanglRelevant": false,
   "archived": false,
-  "imagePath": null,
+  "imagePath": "/learn/monogram/rigetticomputing-grove.svg",
   "relatedSlugs": [
     "entropicalabs-openqaoa",
     "cda-tum-mqt-qmap",

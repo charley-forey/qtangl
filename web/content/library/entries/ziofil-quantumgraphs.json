@@ -17,11 +17,14 @@
     }
   ],
   "primaryLanguage": "Python",
-  "license": "LGPL",
-  "summary": "Introduction This package is for growing random graphs and trees by using continuous quantum walks:",
-  "description": "Introduction This package is for growing random graphs and trees by using continuous quantum walks:",
+  "primaryLanguages": [
+    "Python"
+  ],
+  "license": "GPL-3.0",
+  "summary": "A python package for growing random graphs using quantum random walks",
+  "description": "A python package for growing random graphs using quantum random walks",
   "whatItIs": [
-    "QuantumGraphs is an open-source project in the visualization and tomography category. It is maintained by ziofil and primarily looks like a Python codebase. Introduction This package is for growing random graphs and trees by using continuous quantum walks:",
+    "QuantumGraphs is an open-source project in the visualization and tomography category. It is maintained by ziofil and primarily looks like a Python codebase. A python package for growing random graphs using quantum random walks",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches visualization and tomography workflows in practice. The repository README emphasizes: Introduction This package is for growing random graphs and trees by using continuous quantum walks: One or more quantum walkers evolve on a graph, and at random times their wave function collapses on its nodes. A new node is attached to all the nodes where a walker collapsed."
   ],
   "whoItsFor": "People who learn best by seeing state structure, measurement results, or circuit behavior laid out visually.",
@@ -32,21 +35,34 @@
   ],
   "readmeExcerpt": "Introduction This package is for growing random graphs and trees by using continuous quantum walks: One or more quantum walkers evolve on a graph, and at random times their wave function collapses on its nodes. A new node is attached to all the nodes where a walker collapsed.",
   "readmePath": "reference\\ziofil__QuantumGraphs\\README.md",
+  "readmeMarkdownPath": "readmes/ziofil-quantumgraphs.md",
   "clonePath": "reference\\ziofil__QuantumGraphs",
-  "stars": 0,
-  "lastPushedAt": null,
+  "stars": 20,
+  "lastPushedAt": "2020-08-03T15:28:13Z",
+  "defaultBranch": "master",
   "githubTopics": [],
+  "quickstart": null,
+  "codeSamples": [],
+  "packageMeta": {},
+  "citationBibtex": null,
+  "supportedBackendSlugs": [],
+  "externalLinks": {},
+  "openIssuesCount": 0,
+  "subscribersCount": 1,
+  "latestRelease": null,
+  "ownerType": "User",
+  "ownerUrl": "https://github.com/ziofil",
   "featured": false,
   "flagship": false,
   "qtanglRelevant": false,
   "archived": false,
-  "imagePath": null,
+  "imagePath": "/learn/monogram/ziofil-quantumgraphs.svg",
   "relatedSlugs": [
+    "microsoft-quantumkatas",
+    "qiskit-qiskit",
+    "quantumlib-cirq",
+    "xanaduai-pennylane",
     "artiste-qb-net-quantum-fog",
-    "bbn-q-quantuminfo-jl",
-    "bbn-q-quantumtomography-jl",
-    "bbn-q-quince",
-    "qct-iqc-qcviewer",
-    "aws-amazon-braket-sdk-python"
+    "bbn-q-quantuminfo-jl"
   ]
 }

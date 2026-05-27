@@ -4,7 +4,7 @@
   "name": "openssh-portable",
   "title": "openssh-portable",
   "repoUrl": "https://github.com/open-quantum-safe/openssh-portable",
-  "homepageUrl": null,
+  "homepageUrl": "https://openquantumsafe.org/",
   "category": {
     "slug": "post-quantum-crypto",
     "title": "Post-quantum cryptography",
@@ -21,11 +21,16 @@
     }
   ],
   "primaryLanguage": "C",
-  "license": "Unknown",
-  "summary": "Please read https://www.openssh.com/report.html for bug reporting instructions and note that we do not use Github for bug reporting.",
-  "description": "Please read https://www.openssh.com/report.html for bug reporting instructions and note that we do not use Github for bug reporting.",
+  "primaryLanguages": [
+    "C",
+    "Shell",
+    "C/C++"
+  ],
+  "license": "BSD-3-Clause",
+  "summary": "Fork of OpenSSH that includes prototype quantum-resistant key exchange and authentication in SSH based on liboqs.",
+  "description": "Fork of OpenSSH that includes prototype quantum-resistant key exchange and authentication in SSH based on liboqs.",
   "whatItIs": [
-    "openssh-portable is an open-source project in the post-quantum cryptography category. It is maintained by open-quantum-safe and primarily looks like a C codebase. Please read https://www.openssh.com/report.html for bug reporting instructions and note that we do not use Github for bug reporting.",
+    "openssh-portable is an open-source project in the post-quantum cryptography category. It is maintained by open-quantum-safe and primarily looks like a C codebase. Fork of OpenSSH that includes prototype quantum-resistant key exchange and authentication in SSH based on liboqs.",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches post-quantum cryptography workflows in practice. The repository README emphasizes: Please read https://www.openssh.com/report.html for bug reporting instructions and note that we do not use Github for bug reporting. This is the port of OpenBSD's excellent OpenSSH[0] to Linux and other Unices."
   ],
   "whoItsFor": "Security-minded developers and teams looking for practical quantum-safe cryptography resources they can evaluate today.",
@@ -36,21 +41,38 @@
   ],
   "readmeExcerpt": "Please read https://www.openssh.com/report.html for bug reporting instructions and note that we do not use Github for bug reporting. This is the port of OpenBSD's excellent OpenSSH[0] to Linux and other Unices.",
   "readmePath": "reference\\open-quantum-safe__openssh-portable\\README",
+  "readmeMarkdownPath": "readmes/open-quantum-safe-openssh-portable.md",
   "clonePath": "reference\\open-quantum-safe__openssh-portable",
-  "stars": 0,
-  "lastPushedAt": null,
-  "githubTopics": [],
+  "stars": 232,
+  "lastPushedAt": "2026-03-16T19:33:37Z",
+  "defaultBranch": "OQS-v10",
+  "githubTopics": [
+    "cryptography",
+    "post-quantum",
+    "ssh"
+  ],
+  "quickstart": null,
+  "codeSamples": [],
+  "packageMeta": {},
+  "citationBibtex": null,
+  "supportedBackendSlugs": [],
+  "externalLinks": {},
+  "openIssuesCount": 8,
+  "subscribersCount": 13,
+  "latestRelease": null,
+  "ownerType": "Organization",
+  "ownerUrl": "https://github.com/open-quantum-safe",
   "featured": false,
   "flagship": false,
   "qtanglRelevant": false,
   "archived": false,
-  "imagePath": null,
+  "imagePath": "/learn/monogram/open-quantum-safe-openssh-portable.svg",
   "relatedSlugs": [
     "open-quantum-safe-liboqs",
     "open-quantum-safe-openssl",
     "pqclean-pqclean",
     "theqrl-qrl",
-    "aws-amazon-braket-sdk-python",
-    "cqcl-tket"
+    "microsoft-quantumkatas",
+    "qiskit-qiskit"
   ]
 }

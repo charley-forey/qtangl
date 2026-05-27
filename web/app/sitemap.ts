@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 
 import { blogPosts } from "@/lib/copy/marketing";
+import { libraryRecipes } from "@/lib/copy/library-recipes";
 import { libraryTopicTeasers } from "@/lib/copy/library-topics";
 import { siteMetadata } from "@/lib/copy/product";
 import { getAllDocsHrefs } from "@/lib/docs/nav";
@@ -27,9 +28,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...blogPosts.map((post) => post.href),
     "/learn",
     "/learn/library",
+    "/learn/compare",
+    "/learn/map",
+    "/learn/whats-new",
+    "/learn/saved",
+    "/learn/submit",
+    "/learn/feed.xml",
     ...libraryCategories.map((category) => `/learn/category/${category.slug}`),
     ...libraryEntries.map((entry) => `/learn/library/${entry.slug}`),
     ...libraryTopicTeasers.map((topic) => `/learn/topics/${topic.slug}`),
+    ...libraryRecipes.map((recipe) => `/learn/recipes/${recipe.slug}`),
   ];
 
   return routes.map((route) => ({

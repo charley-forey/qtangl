@@ -4,7 +4,7 @@
   "name": "pyquil",
   "title": "pyquil",
   "repoUrl": "https://github.com/rigetticomputing/pyquil",
-  "homepageUrl": null,
+  "homepageUrl": "http://docs.rigetti.com",
   "category": {
     "slug": "compilers-languages",
     "title": "Compilers and languages",
@@ -21,11 +21,16 @@
     }
   ],
   "primaryLanguage": "Python",
+  "primaryLanguages": [
+    "Python",
+    "Quil",
+    "Jupyter"
+  ],
   "license": "Apache-2.0",
-  "summary": "PyQuil is a Python library for quantum programming using Quil, the quantum instruction language developed at Rigetti Computing.",
-  "description": "PyQuil is a Python library for quantum programming using Quil, the quantum instruction language developed at Rigetti Computing. PyQuil serves three main functions:",
+  "summary": "A Python library for quantum programming using Quil.",
+  "description": "A Python library for quantum programming using Quil.",
   "whatItIs": [
-    "pyquil is an open-source project in the compilers and languages category. It is maintained by rigetticomputing and primarily looks like a Python codebase. PyQuil is a Python library for quantum programming using Quil, the quantum instruction language developed at Rigetti Computing.",
+    "pyquil is an open-source project in the compilers and languages category. It is maintained by rigetticomputing and primarily looks like a Python codebase. A Python library for quantum programming using Quil.",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches compilers and languages workflows in practice. The repository README emphasizes: PyQuil is a Python library for quantum programming using Quil, the quantum instruction language developed at Rigetti Computing. PyQuil serves three main functions: Easily generating Quil programs from quantum gates and classical operations Compiling and simulating Quil programs using the Quil Compiler (quilc) and the Quantum Virtual Machine..."
   ],
   "whoItsFor": "Developers who want to understand the representations and compilers that sit between high-level code and runnable circuits.",
@@ -36,21 +41,58 @@
   ],
   "readmeExcerpt": "PyQuil is a Python library for quantum programming using Quil, the quantum instruction language developed at Rigetti Computing. PyQuil serves three main functions: Easily generating Quil programs from quantum gates and classical operations Compiling and simulating Quil programs using the Quil Compiler (quilc) and the Quantum Virtual Machine (QVM) Executing Quil programs on real quantum processors (QPUs) using [Quantum Cloud Services][qcs-paper] (QCS)",
   "readmePath": "reference\\rigetticomputing__pyquil\\README.md",
+  "readmeMarkdownPath": "readmes/rigetticomputing-pyquil.md",
   "clonePath": "reference\\rigetticomputing__pyquil",
-  "stars": 0,
-  "lastPushedAt": null,
-  "githubTopics": [],
+  "stars": 1492,
+  "lastPushedAt": "2026-05-26T15:16:52Z",
+  "defaultBranch": "master",
+  "githubTopics": [
+    "forest",
+    "quantum-computing",
+    "quantum-programming",
+    "quil"
+  ],
+  "quickstart": {
+    "language": "python",
+    "source": "from pyquil import get_qc, Program\nfrom pyquil.gates import CNOT, H, MEASURE\n \nqvm = get_qc('2q-qvm')\n \np = Program()\np += H(0)\np += CNOT(0, 1)\nro = p.declare('ro', 'BIT', 2)\np += MEASURE(0, ro[0])\np += MEASURE(1, ro[1])\np.wrap_in_numshots_loop(10)\n\nqvm.run(p).get_register_map()['ro'].tolist()"
+  },
+  "codeSamples": [],
+  "packageMeta": {},
+  "citationBibtex": null,
+  "supportedBackendSlugs": [],
+  "externalLinks": {
+    "docs": [
+      "http://pyquil.readthedocs.io/en/latest/",
+      "https://readthedocs.org/projects/pyquil/badge/?version=latest",
+      "http://pyquil.readthedocs.io/en/latest/?badge=latest"
+    ],
+    "paper": [
+      "https://arxiv.org/abs/1608.03355",
+      "https://arxiv.org/abs/2001.04449"
+    ],
+    "community": [
+      "https://join.slack.com/t/rigetti-forest/shared_invite/enQtNTUyNTE1ODg3MzE2LWQwNzBlMjZlMmNlN2M5MzQyZDlmOGViODQ5ODI0NWMwNmYzODY4YTc2ZjdjOTNmNzhiYTk2YjVhNTE2NTRkODY"
+    ],
+    "pypi": [
+      "https://pypi.org/project/pyquil/"
+    ]
+  },
+  "openIssuesCount": 240,
+  "subscribersCount": 78,
+  "latestRelease": null,
+  "ownerType": "Organization",
+  "ownerUrl": "https://github.com/rigetti",
   "featured": false,
   "flagship": false,
   "qtanglRelevant": false,
   "archived": false,
-  "imagePath": null,
+  "imagePath": "/learn/monogram/rigetticomputing-pyquil.svg",
   "relatedSlugs": [
     "cqcl-tket",
     "nvidia-cuda-quantum",
-    "quantomatic-pyzx",
-    "avalon-lang-avaloni",
-    "aviggiano-qcl",
-    "dabacon-qsel"
+    "microsoft-quantumkatas",
+    "qiskit-openqasm",
+    "qiskit-qiskit",
+    "quantomatic-pyzx"
   ]
 }

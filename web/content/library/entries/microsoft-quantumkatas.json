@@ -20,13 +20,18 @@
       "title": "How to start writing quantum code: an honest path"
     }
   ],
-  "primaryLanguage": "Jupyter",
+  "primaryLanguage": "Jupyter Notebook",
+  "primaryLanguages": [
+    "Jupyter",
+    "PowerShell",
+    "C#"
+  ],
   "license": "MIT",
-  "summary": ">**We are modernizing the quantum katas experience.",
-  "description": ">**We are modernizing the quantum katas experience. Please visit https://quantum.microsoft.com/experience/quantum-katas to try the new online Azure Quantum katas experience, with integrated assistance from Copilot in Azure Quantum.**",
+  "summary": "Tutorials and programming exercises for learning Q# and quantum computing",
+  "description": "Tutorials and programming exercises for learning Q# and quantum computing",
   "whatItIs": [
-    "QuantumKatas is an open-source project in the games and learning category. It is maintained by Microsoft and primarily looks like a Jupyter codebase. >**We are modernizing the quantum katas experience.",
-    "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches games and learning workflows in practice. The repository README emphasizes: >**We are modernizing the quantum katas experience. Please visit https://quantum.microsoft.com/experience/quantum-katas to try the new online Azure Quantum katas experience, with integrated assistance from Copilot in Azure Quantum.** For the Modern QDK repository, please visit Microsoft/qsharp."
+    "QuantumKatas is an open-source project in the games and learning category. It is maintained by Microsoft and primarily looks like a Jupyter Notebook codebase. Tutorials and programming exercises for learning Q# and quantum computing",
+    "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches games and learning workflows in practice. The repository README emphasizes: >**We are modernizing the quantum katas experience. Please visit https://quantum.microsoft.com/experience/quantum-katas to try the new online Azure Quantum katas experience, with integrated assistance from Copilot in Azure Quantum.** For the Modern QDK repository, please visit Microsoft/qsharp. The repository also appears to be archival or no longer actively maintained, which matters when evaluating it for current production use."
   ],
   "whoItsFor": "Beginners, educators, and curious developers who want a more approachable path into quantum concepts.",
   "whatYouCanBuild": [
@@ -36,21 +41,68 @@
   ],
   "readmeExcerpt": ">**We are modernizing the quantum katas experience. Please visit https://quantum.microsoft.com/experience/quantum-katas to try the new online Azure Quantum katas experience, with integrated assistance from Copilot in Azure Quantum.** For the Modern QDK repository, please visit Microsoft/qsharp.",
   "readmePath": "reference\\Microsoft__QuantumKatas\\README.md",
+  "readmeMarkdownPath": "readmes/microsoft-quantumkatas.md",
   "clonePath": "reference\\Microsoft__QuantumKatas",
-  "stars": 0,
-  "lastPushedAt": null,
-  "githubTopics": [],
+  "stars": 4862,
+  "lastPushedAt": "2024-08-21T18:51:07Z",
+  "defaultBranch": "main",
+  "githubTopics": [
+    "coding-kata",
+    "hacktoberfest",
+    "qsharp",
+    "quantum-computing",
+    "quantum-programming",
+    "tutorial-exercises",
+    "tutorials"
+  ],
+  "quickstart": null,
+  "codeSamples": [
+    {
+      "title": "Complexarithmetic",
+      "language": "python",
+      "source": "# Run this cell using Ctrl+Enter (\u2318+Enter on Mac).\nfrom testing import exercise\nfrom typing import Tuple\n\nimport math\n\nComplex = Tuple[float, float]\nPolar = Tuple[float, float]",
+      "path": "tutorials/ComplexArithmetic/ComplexArithmetic.ipynb"
+    },
+    {
+      "title": "Testing",
+      "language": "python",
+      "source": "# Licensed under the MIT License.\nimport math as m\nimport random as r\nfrom pytest import approx\ntests = {}\n# Exercise decorator, specifying that this function needs to be tested\ndef exercise(fun):\n    tests[fun.__name__](fun)\n    return fun\n# Test decorator, specifying that this is a test for an exercise\ndef test(fun):\n    tests[fun.__name__[:-5]] = fun\n    return fun\n# ------------------------------------------------------\n# Generates a random complex number in Cartesian form\ndef prep_random_cartesian():\n    real = (r.random() - 0.5) * r.randint(0, 100)\n    imag = (r.random() - 0.5) * r.randint(0, 100)\n    return (real, imag)\n# Generates a random complex number in polar form\ndef prep_random_polar():\n    rad = r.random() * r.randint(0, 100)\n    theta = (r.random() - 0.5) * m.pi\n    return (rad, theta)\n# ------------------------------------------------------\n# Assert that checks if the result is a tuple of length 2\ndef assert_tuple(result):\n    if result == None: return \"Your function must return a value!\"\n    if not type(result) is tuple: return \"Your function must return a tuple, returned \" + type(result).__name__ + \".\"\n    if result[0] == ... or result[1] == ...: return \"You should not return an ellipsis (...) as part of your answer.\"\n    if len(result) != 2:\n        return \"Your function must return a tuple of length 2, but returned tuple is of length \" + str(len(result))\n# Assert that verifies the output is a valid complex tuple, and checks that it matches expected output\ndef assert_cartesian(expected, actual, message):\n    if actual != approx(expected): return message\n# Assert that verifies the output is a valid polar tuple, and checks that it matches expected output\ndef assert_polar(expected, actual, message):\n    (ar, atheta) = actual\n    if ar == 0:\n        if ar != approx(expected[0]): return message",
+      "path": "tutorials/ComplexArithmetic/testing.py"
+    },
+    {
+      "title": "Workbook Complexarithmetic",
+      "language": "python",
+      "source": "# Run this cell using Ctrl+Enter (\u2318+Enter on Mac).\nfrom testing import exercise\nfrom typing import Tuple\n\nimport math\n\nComplex = Tuple[float, float]\nPolar = Tuple[float, float]",
+      "path": "tutorials/ComplexArithmetic/Workbook_ComplexArithmetic.ipynb"
+    }
+  ],
+  "packageMeta": {},
+  "citationBibtex": null,
+  "supportedBackendSlugs": [],
+  "externalLinks": {
+    "docs": [
+      "https://aka.ms/AQ/Documentation](https://aka.ms/AQ/Documentation",
+      "https://docs.microsoft.com/visualstudio/test/getting-started-with-unit-testing",
+      "https://docs.microsoft.com/azure/quantum",
+      "https://docs.microsoft.com/azure/quantum/install-command-line-qdk"
+    ]
+  },
+  "openIssuesCount": 22,
+  "subscribersCount": 10,
+  "latestRelease": null,
+  "ownerType": "Organization",
+  "ownerUrl": "https://github.com/microsoft",
   "featured": true,
   "flagship": true,
   "qtanglRelevant": false,
-  "archived": false,
-  "imagePath": "/learn/flagship/microsoft-quantumkatas.png",
+  "archived": true,
+  "imagePath": "/learn/og/microsoft-quantumkatas.png",
   "relatedSlugs": [
     "strilanc-quirk",
+    "qiskit-qiskit",
+    "quantumlib-cirq",
     "stared-quantum-game",
-    "decodoku-a-game-to-benchmark-quantum-computers",
-    "decodoku-battleships-with-complementary-measurements",
-    "desireevl-quantum-catsweeper",
-    "entanglion-entanglion"
+    "xanaduai-pennylane",
+    "decodoku-a-game-to-benchmark-quantum-computers"
   ]
 }

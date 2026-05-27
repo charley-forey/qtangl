@@ -4,7 +4,7 @@
   "name": "Yao.jl",
   "title": "Yao.jl",
   "repoUrl": "https://github.com/QuantumBFS/Yao.jl",
-  "homepageUrl": null,
+  "homepageUrl": "https://yaoquantum.org",
   "category": {
     "slug": "general-purpose-sdks",
     "title": "General-purpose SDKs",
@@ -21,11 +21,15 @@
     }
   ],
   "primaryLanguage": "Julia",
+  "primaryLanguages": [
+    "Julia",
+    "Shell"
+  ],
   "license": "Apache-2.0",
-  "summary": "<div align=\"center\"> <img src=\"https://yaoquantum.org/assets/logo.png\" alt=\"Yao Logo\" width=\"210\"></img> </div>",
-  "description": "<div align=\"center\"> <img src=\"https://yaoquantum.org/assets/logo.png\" alt=\"Yao Logo\" width=\"210\"></img> </div>",
+  "summary": "Extensible, Efficient Quantum Algorithm Design for Humans.",
+  "description": "Extensible, Efficient Quantum Algorithm Design for Humans.",
   "whatItIs": [
-    "Yao.jl is an open-source project in the general-purpose sdks category. It is maintained by QuantumBFS and primarily looks like a Julia codebase. <div align=\"center\"> <img src=\"https://yaoquantum.org/assets/logo.png\" alt=\"Yao Logo\" width=\"210\"></img> </div>",
+    "Yao.jl is an open-source project in the general-purpose sdks category. It is maintained by QuantumBFS and primarily looks like a Julia codebase. Extensible, Efficient Quantum Algorithm Design for Humans.",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches general-purpose sdks workflows in practice. The repository README emphasizes: <div align=\"center\"> <img src=\"https://yaoquantum.org/assets/logo.png\" alt=\"Yao Logo\" width=\"210\"></img> </div> **Yao** Extensible, Efficient Quantum Algorithm Design for Humans."
   ],
   "whoItsFor": "Developers who want a broad entry point for building circuits, experimenting with algorithms, and integrating quantum workflows into larger applications.",
@@ -36,21 +40,48 @@
   ],
   "readmeExcerpt": "<div align=\"center\"> <img src=\"https://yaoquantum.org/assets/logo.png\" alt=\"Yao Logo\" width=\"210\"></img> </div> **Yao** Extensible, Efficient Quantum Algorithm Design for Humans.",
   "readmePath": "reference\\QuantumBFS__Yao.jl\\README.md",
+  "readmeMarkdownPath": "readmes/quantumbfs-yao-jl.md",
   "clonePath": "reference\\QuantumBFS__Yao.jl",
-  "stars": 0,
-  "lastPushedAt": null,
-  "githubTopics": [],
+  "stars": 1032,
+  "lastPushedAt": "2026-05-23T01:08:10Z",
+  "defaultBranch": "master",
+  "githubTopics": [
+    "machine-learning",
+    "quantum-algorithms",
+    "quantum-circuit",
+    "quantum-computing",
+    "quantum-information",
+    "unitaryhack",
+    "yao"
+  ],
+  "quickstart": null,
+  "codeSamples": [],
+  "packageMeta": {},
+  "citationBibtex": "@software{yaojlextensibleefficient,\n  title = {Yao.jl: Extensible, Efficient Framework for Quantum Algorithm Design},\n  author = {Unknown},\n  year = {2020},\n  doi = {10.22331/q-2020-10-11-341},\n}\n",
+  "supportedBackendSlugs": [],
+  "externalLinks": {
+    "docs": [
+      "http://docs.yaoquantum.org/dev/man/blocks.html",
+      "https://docs.julialang.org/en/v1/manual/getting-started/",
+      "https://docs.google.com/spreadsheets/d/1b6hUvo5H3_ez42zibUji42iwMrq_nNpgPg7lqLBlWUw/edit?usp=sharing"
+    ]
+  },
+  "openIssuesCount": 39,
+  "subscribersCount": 25,
+  "latestRelease": null,
+  "ownerType": "Organization",
+  "ownerUrl": "https://github.com/QuantumBFS",
   "featured": false,
   "flagship": true,
   "qtanglRelevant": false,
   "archived": false,
-  "imagePath": "/learn/flagship/quantumbfs-yao-jl.png",
+  "imagePath": "/learn/og/quantumbfs-yao-jl.png",
   "relatedSlugs": [
     "qiskit-qiskit",
     "quantumlib-cirq",
     "xanaduai-pennylane",
-    "projectq-framework-projectq",
-    "arlineq-arline-benchmarks",
-    "arlineq-arline-quantum"
+    "qiskit-qiskit-terra",
+    "microsoft-quantumkatas",
+    "projectq-framework-projectq"
   ]
 }

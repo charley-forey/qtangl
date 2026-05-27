@@ -20,12 +20,17 @@
       "title": "Quantum computing software in 2026: the open-source map"
     }
   ],
-  "primaryLanguage": "C/C++",
-  "license": "Unknown",
-  "summary": "> [!WARNING] > **Deprecation Notice:** PQClean is no longer under active maintenance and we plan to archive it as read-only in July 2026.",
-  "description": "> [!WARNING] > **Deprecation Notice:** PQClean is no longer under active maintenance and we plan to archive it as read-only in July 2026. > For maintained implementations of standardized PQC, you may want to consider the PQ Code Package. > > For implementations of the following algorithms not yet supported by PQ Code Package, refer to: > * **Falcon/FN-DSA**: Thomas...",
+  "primaryLanguage": "C",
+  "primaryLanguages": [
+    "C/C++",
+    "C",
+    "Python"
+  ],
+  "license": null,
+  "summary": "Clean, portable, tested implementations of post-quantum cryptography",
+  "description": "Clean, portable, tested implementations of post-quantum cryptography",
   "whatItIs": [
-    "PQClean is an open-source project in the post-quantum cryptography category. It is maintained by PQClean and primarily looks like a C/C++ codebase. > [!WARNING] > **Deprecation Notice:** PQClean is no longer under active maintenance and we plan to archive it as read-only in July 2026.",
+    "PQClean is an open-source project in the post-quantum cryptography category. It is maintained by PQClean and primarily looks like a C codebase. Clean, portable, tested implementations of post-quantum cryptography",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches post-quantum cryptography workflows in practice. The repository README emphasizes: > [!WARNING] > **Deprecation Notice:** PQClean is no longer under active maintenance and we plan to archive it as read-only in July 2026. > For maintained implementations of standardized PQC, you may want to consider the PQ Code Package. > > For implementations of the following algorithms not..."
   ],
   "whoItsFor": "Security-minded developers and teams looking for practical quantum-safe cryptography resources they can evaluate today.",
@@ -36,21 +41,42 @@
   ],
   "readmeExcerpt": "> [!WARNING] > **Deprecation Notice:** PQClean is no longer under active maintenance and we plan to archive it as read-only in July 2026. > For maintained implementations of standardized PQC, you may want to consider the PQ Code Package. > > For implementations of the following algorithms not yet supported by PQ Code Package, refer to: > * **Falcon/FN-DSA**: Thomas Pornin's implementations > * **HQC**: https://gitlab.com/pqc-hqc/hqc/ > * **Classic McEliece**: libmceliece _See the build status for each component here_",
   "readmePath": "reference\\PQClean__PQClean\\README.md",
+  "readmeMarkdownPath": "readmes/pqclean-pqclean.md",
   "clonePath": "reference\\PQClean__PQClean",
-  "stars": 0,
-  "lastPushedAt": null,
-  "githubTopics": [],
+  "stars": 923,
+  "lastPushedAt": "2026-05-14T14:29:30Z",
+  "defaultBranch": "master",
+  "githubTopics": [
+    "c",
+    "cryptography",
+    "implementations",
+    "post-quantum",
+    "post-quantum-cryptography",
+    "pqc",
+    "pqcrypto"
+  ],
+  "quickstart": null,
+  "codeSamples": [],
+  "packageMeta": {},
+  "citationBibtex": null,
+  "supportedBackendSlugs": [],
+  "externalLinks": {},
+  "openIssuesCount": 43,
+  "subscribersCount": 17,
+  "latestRelease": null,
+  "ownerType": "Organization",
+  "ownerUrl": "https://github.com/PQClean",
   "featured": false,
   "flagship": false,
   "qtanglRelevant": false,
   "archived": false,
-  "imagePath": null,
+  "imagePath": "/learn/monogram/pqclean-pqclean.svg",
   "relatedSlugs": [
     "open-quantum-safe-liboqs",
     "open-quantum-safe-openssh-portable",
     "open-quantum-safe-openssl",
     "theqrl-qrl",
-    "aws-amazon-braket-sdk-python",
-    "cqcl-tket"
+    "microsoft-quantumkatas",
+    "qiskit-qiskit"
   ]
 }

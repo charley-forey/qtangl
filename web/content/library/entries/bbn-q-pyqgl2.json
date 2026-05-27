@@ -17,11 +17,16 @@
     }
   ],
   "primaryLanguage": "Python",
+  "primaryLanguages": [
+    "Python",
+    "Jupyter",
+    "Shell"
+  ],
   "license": "Apache-2.0",
-  "summary": "This is the QGL2 language compiler.",
-  "description": "This is the QGL2 language compiler. QGL2 is a python-like language for programming quantum computers. It is a \"low-level language\" in the sense that programs directly specify gates at the physical layer, but with many of the niceties of a high-level programming language provided by the python host language.",
+  "summary": "An imperative Quantum Gate Language (QGL) embedded in python.",
+  "description": "An imperative Quantum Gate Language (QGL) embedded in python.",
   "whatItIs": [
-    "pyqgl2 is an open-source project in the pulse and control category. It is maintained by BBN-Q and primarily looks like a Python codebase. This is the QGL2 language compiler.",
+    "pyqgl2 is an open-source project in the pulse and control category. It is maintained by BBN-Q and primarily looks like a Python codebase. An imperative Quantum Gate Language (QGL) embedded in python.",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches pulse and control workflows in practice. The repository README emphasizes: This is the QGL2 language compiler. QGL2 is a python-like language for programming quantum computers. It is a \"low-level language\" in the sense that programs directly specify gates at the physical layer, but with many of the niceties of a high-level programming language provided by the python host..."
   ],
   "whoItsFor": "Hardware-adjacent developers and researchers working closer to experiments, pulse schedules, or lab orchestration.",
@@ -32,21 +37,42 @@
   ],
   "readmeExcerpt": "This is the QGL2 language compiler. QGL2 is a python-like language for programming quantum computers. It is a \"low-level language\" in the sense that programs directly specify gates at the physical layer, but with many of the niceties of a high-level programming language provided by the python host language. Documentation on the QGL2 compiler and language, including current known limitations, is in doc.",
   "readmePath": "reference\\BBN-Q__pyqgl2\\README.md",
+  "readmeMarkdownPath": "readmes/bbn-q-pyqgl2.md",
   "clonePath": "reference\\BBN-Q__pyqgl2",
-  "stars": 0,
-  "lastPushedAt": null,
-  "githubTopics": [],
+  "stars": 9,
+  "lastPushedAt": "2021-12-26T21:40:03Z",
+  "defaultBranch": "master",
+  "githubTopics": [
+    "compilers",
+    "programming-language",
+    "quantum-computing"
+  ],
+  "quickstart": null,
+  "codeSamples": [],
+  "packageMeta": {},
+  "citationBibtex": null,
+  "supportedBackendSlugs": [],
+  "externalLinks": {
+    "docs": [
+      "https://auspex.readthedocs.io/en/latest/"
+    ]
+  },
+  "openIssuesCount": 40,
+  "subscribersCount": 7,
+  "latestRelease": null,
+  "ownerType": "Organization",
+  "ownerUrl": "https://github.com/BBN-Q",
   "featured": false,
   "flagship": false,
   "qtanglRelevant": false,
   "archived": false,
-  "imagePath": null,
+  "imagePath": "/learn/monogram/bbn-q-pyqgl2.svg",
   "relatedSlugs": [
     "m-labs-artiq",
-    "bbn-q-pyqlab",
-    "bbn-q-qgl",
-    "bbn-q-qlab",
-    "bbn-q-qlab-jl",
-    "indisoluble-swiftquantumcomputing"
+    "microsoft-quantumkatas",
+    "qiskit-qiskit",
+    "quantumlib-cirq",
+    "xanaduai-pennylane",
+    "bbn-q-pyqlab"
   ]
 }

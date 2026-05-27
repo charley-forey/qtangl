@@ -4,7 +4,7 @@
   "name": "mqt-ddsim",
   "title": "mqt-ddsim",
   "repoUrl": "https://github.com/cda-tum/mqt-ddsim",
-  "homepageUrl": null,
+  "homepageUrl": "https://mqt.readthedocs.io/projects/ddsim",
   "category": {
     "slug": "simulators",
     "title": "Simulators",
@@ -20,12 +20,17 @@
       "title": "Quantum computing software in 2026: the open-source map"
     }
   ],
-  "primaryLanguage": "Python",
+  "primaryLanguage": "C++",
+  "primaryLanguages": [
+    "Python",
+    "C++",
+    "Shell"
+  ],
   "license": "MIT",
-  "summary": "<p align=\"center\"> <a href=\"https://mqt.readthedocs.io\"> <picture> <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://raw.githubusercontent.com/munich-quantum-toolkit/.github/refs/heads/main/docs/_static/mqt-banner-dark.svg\" width=\"90%\"> <img src=\"https://raw.githubusercontent.com/munich-quantum-toolkit/.github/refs/heads/main/docs/_static/mqt-banner-light.svg\" width=\"90%\" alt=\"MQT Banner\"> </picture> </a> </p>",
-  "description": "<p align=\"center\"> <a href=\"https://mqt.readthedocs.io\"> <picture> <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://raw.githubusercontent.com/munich-quantum-toolkit/.github/refs/heads/main/docs/_static/mqt-banner-dark.svg\" width=\"90%\"> <img src=\"https://raw.githubusercontent.com/munich-quantum-toolkit/.github/refs/heads/main/docs/_static/mqt-banner-light.svg\" width=\"90%\" alt=\"MQT Banner\"> </picture> </a> </p>",
+  "summary": "MQT DDSIM - A quantum circuit simulator based on decision diagrams written in C++",
+  "description": "MQT DDSIM - A quantum circuit simulator based on decision diagrams written in C++",
   "whatItIs": [
-    "mqt-ddsim is an open-source project in the simulators category. It is maintained by cda-tum and primarily looks like a Python codebase. <p align=\"center\"> <a href=\"https://mqt.readthedocs.io\"> <picture> <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://raw.githubusercontent.com/munich-quantum-toolkit/.github/refs/heads/main/docs/_static/mqt-banner-dark.svg\" width=\"90%\"> <img src=\"https://raw.githubusercontent.com/munich-quantum-toolkit/.github/refs/heads/main/docs/_static/mqt-banner-light.svg\" width=\"90%\" alt=\"MQT Banner\"> </picture> </a> </p>",
+    "mqt-ddsim is an open-source project in the simulators category. It is maintained by cda-tum and primarily looks like a C++ codebase. MQT DDSIM - A quantum circuit simulator based on decision diagrams written in C++",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches simulators workflows in practice. The repository README emphasizes: <p align=\"center\"> <a href=\"https://mqt.readthedocs.io\"> <picture> <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://raw.githubusercontent.com/munich-quantum-toolkit/.github/refs/heads/main/docs/_static/mqt-banner-dark.svg\" width=\"90%\"> <img src=\"https://raw.githubusercontent.com/munich-quantum-toolkit/.github/refs/heads/main/docs/_static/mqt-banner-light.svg\" width=\"90%\" alt=\"MQT Banner\"> </picture> </a> </p> MQT DDSIM - A quantum circuit simulator based on decision diagrams written in C++"
   ],
   "whoItsFor": "Developers and researchers who need to test ideas locally before running on hardware or who want to compare simulation strategies.",
@@ -36,21 +41,63 @@
   ],
   "readmeExcerpt": "<p align=\"center\"> <a href=\"https://mqt.readthedocs.io\"> <picture> <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://raw.githubusercontent.com/munich-quantum-toolkit/.github/refs/heads/main/docs/_static/mqt-banner-dark.svg\" width=\"90%\"> <img src=\"https://raw.githubusercontent.com/munich-quantum-toolkit/.github/refs/heads/main/docs/_static/mqt-banner-light.svg\" width=\"90%\" alt=\"MQT Banner\"> </picture> </a> </p> MQT DDSIM - A quantum circuit simulator based on decision diagrams written in C++",
   "readmePath": "reference\\cda-tum__mqt-ddsim\\README.md",
+  "readmeMarkdownPath": "readmes/cda-tum-mqt-ddsim.md",
   "clonePath": "reference\\cda-tum__mqt-ddsim",
-  "stars": 0,
-  "lastPushedAt": null,
-  "githubTopics": [],
+  "stars": 160,
+  "lastPushedAt": "2026-05-26T00:42:17Z",
+  "defaultBranch": "main",
+  "githubTopics": [
+    "decision-diagrams",
+    "jku",
+    "mqt",
+    "python",
+    "quantum",
+    "quantum-circuit-simulator",
+    "quantum-circuits",
+    "quantum-computing",
+    "tum"
+  ],
+  "quickstart": null,
+  "codeSamples": [],
+  "packageMeta": {
+    "name": "mqt.ddsim",
+    "version": "build-system.requires",
+    "requiresPython": ">=3.10",
+    "dependencies": [
+      "mqt"
+    ]
+  },
+  "citationBibtex": null,
+  "supportedBackendSlugs": [
+    "qiskit-qiskit"
+  ],
+  "externalLinks": {
+    "docs": [
+      "https://mqt.readthedocs.io/projects/ddsim",
+      "https://mqt.readthedocs.io",
+      "https://img.shields.io/badge/documentation-blue?style=for-the-badge&logo=read%20the%20docs",
+      "https://mqt.readthedocs.io/projects/ddsim/en/latest/simulators/CircuitSimulator.html"
+    ],
+    "pypi": [
+      "https://pypi.org/project/mqt.ddsim/"
+    ]
+  },
+  "openIssuesCount": 8,
+  "subscribersCount": 6,
+  "latestRelease": null,
+  "ownerType": "Organization",
+  "ownerUrl": "https://github.com/munich-quantum-toolkit",
   "featured": false,
   "flagship": false,
   "qtanglRelevant": false,
   "archived": false,
-  "imagePath": null,
+  "imagePath": "/learn/monogram/cda-tum-mqt-ddsim.svg",
   "relatedSlugs": [
+    "qiskit-qiskit-tutorial",
+    "qosf-os-quantum-software",
     "0tt3r-quac",
     "adamisntdead-qusimpy",
     "aniabrown-quest",
-    "bbn-q-pysimulator",
-    "dillanchang-qocs",
-    "iic-jku-ddsim"
+    "bbn-q-pysimulator"
   ]
 }

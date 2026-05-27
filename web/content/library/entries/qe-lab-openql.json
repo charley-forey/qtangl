@@ -4,7 +4,7 @@
   "name": "OpenQL",
   "title": "OpenQL",
   "repoUrl": "https://github.com/QE-Lab/OpenQL",
-  "homepageUrl": null,
+  "homepageUrl": "https://openql.readthedocs.io",
   "category": {
     "slug": "compilers-languages",
     "title": "Compilers and languages",
@@ -20,12 +20,17 @@
       "title": "How to start writing quantum code: an honest path"
     }
   ],
-  "primaryLanguage": "C/C++",
+  "primaryLanguage": "C++",
+  "primaryLanguages": [
+    "C/C++",
+    "C++",
+    "OpenQASM"
+  ],
   "license": "Apache-2.0",
-  "summary": "OpenQL is a framework for high-level quantum programming in C++/Python.",
-  "description": "OpenQL is a framework for high-level quantum programming in C++/Python. The framework provides a compiler for compiling and optimizing quantum code. The compiler produces the intermediate quantum assembly language and the compiled micro-code for various target platforms. While the microcode is platform-specific, the quantum assembly code (in cQASM format) is hardware-agnostic and can be simulated on the QX simulator.",
+  "summary": "OpenQL: A Portable Quantum Programming Framework for Quantum Accelerators.",
+  "description": "OpenQL: A Portable Quantum Programming Framework for Quantum Accelerators. https://dl.acm.org/doi/10.1145/3474222",
   "whatItIs": [
-    "OpenQL is an open-source project in the compilers and languages category. It is maintained by QE-Lab and primarily looks like a C/C++ codebase. OpenQL is a framework for high-level quantum programming in C++/Python.",
+    "OpenQL is an open-source project in the compilers and languages category. It is maintained by QE-Lab and primarily looks like a C++ codebase. OpenQL: A Portable Quantum Programming Framework for Quantum Accelerators.",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches compilers and languages workflows in practice. The repository README emphasizes: OpenQL is a framework for high-level quantum programming in C++/Python. The framework provides a compiler for compiling and optimizing quantum code. The compiler produces the intermediate quantum assembly language and the compiled micro-code for various target platforms. While the microcode is platform-specific, the quantum assembly code (in cQASM..."
   ],
   "whoItsFor": "Developers who want to understand the representations and compilers that sit between high-level code and runnable circuits.",
@@ -36,21 +41,44 @@
   ],
   "readmeExcerpt": "OpenQL is a framework for high-level quantum programming in C++/Python. The framework provides a compiler for compiling and optimizing quantum code. The compiler produces the intermediate quantum assembly language and the compiled micro-code for various target platforms. While the microcode is platform-specific, the quantum assembly code (in cQASM format) is hardware-agnostic and can be simulated on the QX simulator. OpenQL's source code is released under the Apache 2.0 license.",
   "readmePath": "reference\\QE-Lab__OpenQL\\README.md",
+  "readmeMarkdownPath": "readmes/qe-lab-openql.md",
   "clonePath": "reference\\QE-Lab__OpenQL",
-  "stars": 0,
-  "lastPushedAt": null,
+  "stars": 109,
+  "lastPushedAt": "2024-09-03T22:11:46Z",
+  "defaultBranch": "develop",
   "githubTopics": [],
+  "quickstart": null,
+  "codeSamples": [],
+  "packageMeta": {},
+  "citationBibtex": null,
+  "supportedBackendSlugs": [],
+  "externalLinks": {
+    "docs": [
+      "https://readthedocs.org/projects/openql/badge/?version=latest",
+      "https://openql.readthedocs.io/en/latest/?badge=latest",
+      "https://libqasm.readthedocs.io/",
+      "https://openql.readthedocs.io"
+    ],
+    "pypi": [
+      "https://pypi.org/project/qutechopenql/"
+    ]
+  },
+  "openIssuesCount": 51,
+  "subscribersCount": 19,
+  "latestRelease": null,
+  "ownerType": "Organization",
+  "ownerUrl": "https://github.com/QuTech-Delft",
   "featured": false,
   "flagship": false,
   "qtanglRelevant": false,
   "archived": false,
-  "imagePath": null,
+  "imagePath": "/learn/monogram/qe-lab-openql.svg",
   "relatedSlugs": [
     "cqcl-tket",
     "nvidia-cuda-quantum",
-    "quantomatic-pyzx",
-    "avalon-lang-avaloni",
-    "aviggiano-qcl",
-    "dabacon-qsel"
+    "microsoft-quantumkatas",
+    "qiskit-openqasm",
+    "qiskit-qiskit",
+    "quantomatic-pyzx"
   ]
 }

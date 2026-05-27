@@ -21,11 +21,16 @@
     }
   ],
   "primaryLanguage": "C++",
-  "license": "BSD",
-  "summary": "***Important Note:*** starting with version 4.0, the argument orders of CNOT and Toffoli have been changed and standardized to CNOT(control, target) and Toffoli(control1, control2, target) respectively.",
-  "description": "***Important Note:*** starting with version 4.0, the argument orders of CNOT and Toffoli have been changed and standardized to CNOT(control, target) and Toffoli(control1, control2, target) respectively. Previously, the target argument was first. All of the benchmarks (in Algorithms/) now conform to the new ordering. Also starting with version 4.0, rotation decomposition and Toffoli decomposition are disabled by default. They can...",
+  "primaryLanguages": [
+    "C++",
+    "C/C++",
+    "C"
+  ],
+  "license": "BSD-2-Clause",
+  "summary": "Compilation, analysis and optimization framework for the Scaffold quantum programming language.",
+  "description": "Compilation, analysis and optimization framework for the Scaffold quantum programming language.",
   "whatItIs": [
-    "ScaffCC is an open-source project in the compilers and languages category. It is maintained by epiqc and primarily looks like a C++ codebase. ***Important Note:*** starting with version 4.0, the argument orders of CNOT and Toffoli have been changed and standardized to CNOT(control, target) and Toffoli(control1, control2, target) respectively.",
+    "ScaffCC is an open-source project in the compilers and languages category. It is maintained by epiqc and primarily looks like a C++ codebase. Compilation, analysis and optimization framework for the Scaffold quantum programming language.",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches compilers and languages workflows in practice. The repository README emphasizes: ***Important Note:*** starting with version 4.0, the argument orders of CNOT and Toffoli have been changed and standardized to CNOT(control, target) and Toffoli(control1, control2, target) respectively. Previously, the target argument was first. All of the benchmarks (in Algorithms/) now conform to the new ordering. Also starting with version..."
   ],
   "whoItsFor": "Developers who want to understand the representations and compilers that sit between high-level code and runnable circuits.",
@@ -36,21 +41,40 @@
   ],
   "readmeExcerpt": "***Important Note:*** starting with version 4.0, the argument orders of CNOT and Toffoli have been changed and standardized to CNOT(control, target) and Toffoli(control1, control2, target) respectively. Previously, the target argument was first. All of the benchmarks (in Algorithms/) now conform to the new ordering. Also starting with version 4.0, rotation decomposition and Toffoli decomposition are disabled by default. They can be enabled with the -R and -T flags. What Is ScaffCC? ================ ScaffCC is a compiler and scheduler for the Scaffold programing language. It is written using the LLVM open-source infrastructure. It is for the purpose of writing and analyzing code for quantum computing applications.",
   "readmePath": "reference\\epiqc__ScaffCC\\README.md",
+  "readmeMarkdownPath": "readmes/epiqc-scaffcc.md",
   "clonePath": "reference\\epiqc__ScaffCC",
-  "stars": 0,
-  "lastPushedAt": null,
-  "githubTopics": [],
+  "stars": 201,
+  "lastPushedAt": "2021-09-28T15:30:02Z",
+  "defaultBranch": "master",
+  "githubTopics": [
+    "quantum-algorithms",
+    "quantum-computing",
+    "quantum-programming-language"
+  ],
+  "quickstart": null,
+  "codeSamples": [],
+  "packageMeta": {},
+  "citationBibtex": null,
+  "supportedBackendSlugs": [
+    "qiskit-qiskit"
+  ],
+  "externalLinks": {},
+  "openIssuesCount": 8,
+  "subscribersCount": 19,
+  "latestRelease": null,
+  "ownerType": "Organization",
+  "ownerUrl": "https://github.com/epiqc",
   "featured": false,
   "flagship": false,
   "qtanglRelevant": false,
   "archived": false,
-  "imagePath": null,
+  "imagePath": "/learn/monogram/epiqc-scaffcc.svg",
   "relatedSlugs": [
     "cqcl-tket",
     "nvidia-cuda-quantum",
-    "quantomatic-pyzx",
-    "avalon-lang-avaloni",
-    "aviggiano-qcl",
-    "dabacon-qsel"
+    "microsoft-quantumkatas",
+    "qiskit-openqasm",
+    "qiskit-qiskit",
+    "quantomatic-pyzx"
   ]
 }

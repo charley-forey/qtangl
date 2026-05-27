@@ -20,12 +20,17 @@
       "title": "How to start writing quantum code: an honest path"
     }
   ],
-  "primaryLanguage": "Quil",
+  "primaryLanguage": "Common Lisp",
+  "primaryLanguages": [
+    "Quil",
+    "Python",
+    "Shell"
+  ],
   "license": "Apache-2.0",
-  "summary": "This is the official Quil-Lang *Quantum Virtual Machine* (QVM), a flexible and efficient simulator for Quil.",
-  "description": "This is the official Quil-Lang *Quantum Virtual Machine* (QVM), a flexible and efficient simulator for Quil.",
+  "summary": "The high-performance and featureful Quil simulator.",
+  "description": "The high-performance and featureful Quil simulator.",
   "whatItIs": [
-    "qvm is an open-source project in the compilers and languages category. It is maintained by rigetti and primarily looks like a Quil codebase. This is the official Quil-Lang *Quantum Virtual Machine* (QVM), a flexible and efficient simulator for Quil.",
+    "qvm is an open-source project in the compilers and languages category. It is maintained by rigetti and primarily looks like a Common Lisp codebase. The high-performance and featureful Quil simulator.",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches compilers and languages workflows in practice. The repository README emphasizes: This is the official Quil-Lang *Quantum Virtual Machine* (QVM), a flexible and efficient simulator for Quil. This directory contains two projects. The first, qvm, is a classical implementation of the Quantum Abstract Machine (QAM), called a \"Quantum Virtual Machine\" (QVM). The second, qvm-app, is the application interface to..."
   ],
   "whoItsFor": "Developers who want to understand the representations and compilers that sit between high-level code and runnable circuits.",
@@ -36,21 +41,48 @@
   ],
   "readmeExcerpt": "This is the official Quil-Lang *Quantum Virtual Machine* (QVM), a flexible and efficient simulator for Quil. This directory contains two projects. The first, qvm, is a classical implementation of the Quantum Abstract Machine (QAM), called a \"Quantum Virtual Machine\" (QVM). The second, qvm-app, is the application interface to interacting with the QVM, either directly through the qvm binary or via its server interface.",
   "readmePath": "reference\\rigetti__qvm\\README.md",
+  "readmeMarkdownPath": "readmes/rigetti-qvm.md",
   "clonePath": "reference\\rigetti__qvm",
-  "stars": 0,
-  "lastPushedAt": null,
-  "githubTopics": [],
+  "stars": 454,
+  "lastPushedAt": "2025-10-16T18:00:53Z",
+  "defaultBranch": "master",
+  "githubTopics": [
+    "common-lisp",
+    "forest",
+    "quantum-computing",
+    "quantum-virtual-machine",
+    "quil",
+    "simulator"
+  ],
+  "quickstart": null,
+  "codeSamples": [],
+  "packageMeta": {},
+  "citationBibtex": null,
+  "supportedBackendSlugs": [],
+  "externalLinks": {
+    "docs": [
+      "https://docs.gitlab.com/ee/ci/variables/predefined_variables.html"
+    ],
+    "paper": [
+      "https://arxiv.org/pdf/1608.03355.pdf"
+    ]
+  },
+  "openIssuesCount": 87,
+  "subscribersCount": 22,
+  "latestRelease": null,
+  "ownerType": "Organization",
+  "ownerUrl": "https://github.com/quil-lang",
   "featured": false,
   "flagship": false,
   "qtanglRelevant": false,
   "archived": false,
-  "imagePath": null,
+  "imagePath": "/learn/monogram/rigetti-qvm.svg",
   "relatedSlugs": [
     "cqcl-tket",
     "nvidia-cuda-quantum",
-    "quantomatic-pyzx",
-    "avalon-lang-avaloni",
-    "aviggiano-qcl",
-    "dabacon-qsel"
+    "microsoft-quantumkatas",
+    "qiskit-openqasm",
+    "qiskit-qiskit",
+    "quantomatic-pyzx"
   ]
 }

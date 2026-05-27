@@ -20,12 +20,15 @@
       "title": "How to start writing quantum code: an honest path"
     }
   ],
-  "primaryLanguage": "Jupyter",
-  "license": "Unknown",
+  "primaryLanguage": "Jupyter Notebook",
+  "primaryLanguages": [
+    "Jupyter"
+  ],
+  "license": null,
   "summary": "Battleships with complementary measurements A game for a quantum computer.",
   "description": "Battleships with complementary measurements A game for a quantum computer. More info here.",
   "whatItIs": [
-    "Battleships_with_complementary_measurements is an open-source project in the games and learning category. It is maintained by decodoku and primarily looks like a Jupyter codebase. Battleships with complementary measurements A game for a quantum computer.",
+    "Battleships_with_complementary_measurements is an open-source project in the games and learning category. It is maintained by decodoku and primarily looks like a Jupyter Notebook codebase. Battleships with complementary measurements A game for a quantum computer.",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches games and learning workflows in practice. The repository README emphasizes: Battleships with complementary measurements A game for a quantum computer. More info here."
   ],
   "whoItsFor": "Beginners, educators, and curious developers who want a more approachable path into quantum concepts.",
@@ -36,21 +39,34 @@
   ],
   "readmeExcerpt": "Battleships with complementary measurements A game for a quantum computer. More info here.",
   "readmePath": "reference\\decodoku__Battleships_with_complementary_measurements\\README.md",
+  "readmeMarkdownPath": "readmes/decodoku-battleships-with-complementary-measurements.md",
   "clonePath": "reference\\decodoku__Battleships_with_complementary_measurements",
-  "stars": 0,
-  "lastPushedAt": null,
+  "stars": 10,
+  "lastPushedAt": "2018-02-02T22:15:06Z",
+  "defaultBranch": "master",
   "githubTopics": [],
+  "quickstart": null,
+  "codeSamples": [],
+  "packageMeta": {},
+  "citationBibtex": null,
+  "supportedBackendSlugs": [],
+  "externalLinks": {},
+  "openIssuesCount": 0,
+  "subscribersCount": 1,
+  "latestRelease": null,
+  "ownerType": "User",
+  "ownerUrl": "https://github.com/quantumjim",
   "featured": false,
   "flagship": false,
   "qtanglRelevant": false,
   "archived": false,
-  "imagePath": null,
+  "imagePath": "/learn/monogram/decodoku-battleships-with-complementary-measurements.svg",
   "relatedSlugs": [
     "microsoft-quantumkatas",
     "strilanc-quirk",
+    "qiskit-qiskit",
+    "quantumlib-cirq",
     "stared-quantum-game",
-    "decodoku-a-game-to-benchmark-quantum-computers",
-    "desireevl-quantum-catsweeper",
-    "entanglion-entanglion"
+    "xanaduai-pennylane"
   ]
 }

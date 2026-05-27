@@ -20,12 +20,15 @@
       "title": "Quantum computing software in 2026: the open-source map"
     }
   ],
-  "primaryLanguage": "Mixed",
-  "license": "Unknown",
+  "primaryLanguage": "OCaml",
+  "primaryLanguages": [
+    "OCaml"
+  ],
+  "license": null,
   "summary": "``` =============================================================================== =================[ QOCS - Quantum OCaml Circuit Simulator ]==================== ===============================================================================",
   "description": "``` =============================================================================== =================[ QOCS - Quantum OCaml Circuit Simulator ]==================== ===============================================================================",
   "whatItIs": [
-    "QOCS is an open-source project in the simulators category. It is maintained by dillanchang and primarily looks like a Mixed codebase. ``` =============================================================================== =================[ QOCS - Quantum OCaml Circuit Simulator ]==================== ===============================================================================",
+    "QOCS is an open-source project in the simulators category. It is maintained by dillanchang and primarily looks like a OCaml codebase. ``` =============================================================================== =================[ QOCS - Quantum OCaml Circuit Simulator ]==================== ===============================================================================",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches simulators workflows in practice. The repository README emphasizes: ``` =============================================================================== =================[ QOCS - Quantum OCaml Circuit Simulator ]==================== =============================================================================== ---[ RUNNING ]--- To run QOC, simply unzip the source files, and type \"make\" in the terminal. To clean the compiled files, simply run \"make clean\" in the terminal."
   ],
   "whoItsFor": "Developers and researchers who need to test ideas locally before running on hardware or who want to compare simulation strategies.",
@@ -36,21 +39,34 @@
   ],
   "readmeExcerpt": "``` =============================================================================== =================[ QOCS - Quantum OCaml Circuit Simulator ]==================== =============================================================================== ---[ RUNNING ]--- To run QOC, simply unzip the source files, and type \"make\" in the terminal. To clean the compiled files, simply run \"make clean\" in the terminal.",
   "readmePath": "reference\\dillanchang__QOCS\\README.md",
+  "readmeMarkdownPath": "readmes/dillanchang-qocs.md",
   "clonePath": "reference\\dillanchang__QOCS",
-  "stars": 0,
-  "lastPushedAt": null,
+  "stars": 11,
+  "lastPushedAt": "2017-07-27T01:20:16Z",
+  "defaultBranch": "master",
   "githubTopics": [],
+  "quickstart": null,
+  "codeSamples": [],
+  "packageMeta": {},
+  "citationBibtex": null,
+  "supportedBackendSlugs": [],
+  "externalLinks": {},
+  "openIssuesCount": 0,
+  "subscribersCount": 2,
+  "latestRelease": null,
+  "ownerType": "User",
+  "ownerUrl": "https://github.com/dillanchang",
   "featured": false,
   "flagship": false,
   "qtanglRelevant": false,
   "archived": false,
-  "imagePath": null,
+  "imagePath": "/learn/monogram/dillanchang-qocs.svg",
   "relatedSlugs": [
+    "qiskit-qiskit-tutorial",
+    "qosf-os-quantum-software",
     "0tt3r-quac",
     "adamisntdead-qusimpy",
     "aniabrown-quest",
-    "bbn-q-pysimulator",
-    "cda-tum-mqt-ddsim",
-    "iic-jku-ddsim"
+    "bbn-q-pysimulator"
   ]
 }

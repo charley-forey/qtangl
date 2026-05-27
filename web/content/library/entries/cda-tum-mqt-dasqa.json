@@ -21,11 +21,16 @@
     }
   ],
   "primaryLanguage": "Python",
+  "primaryLanguages": [
+    "Python",
+    "Jupyter",
+    "OpenQASM"
+  ],
   "license": "MIT",
-  "summary": "<p align=\"center\"> <a href=\"https://mqt.readthedocs.io\"> <picture> <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://raw.githubusercontent.com/cda-tum/mqt/main/docs/_static/mqt_light.png\" width=\"60%\"> <img src=\"https://raw.githubusercontent.com/cda-tum/mqt/main/docs/_static/mqt_dark.png\" width=\"60%\" alt=\"MQT Logo\"> </picture> </a> </p>",
-  "description": "<p align=\"center\"> <a href=\"https://mqt.readthedocs.io\"> <picture> <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://raw.githubusercontent.com/cda-tum/mqt/main/docs/_static/mqt_light.png\" width=\"60%\"> <img src=\"https://raw.githubusercontent.com/cda-tum/mqt/main/docs/_static/mqt_dark.png\" width=\"60%\" alt=\"MQT Logo\"> </picture> </a> </p>",
+  "summary": "MQT DASQA - Designer for Superconducting Quantum Architectures",
+  "description": "MQT DASQA - Designer for Superconducting Quantum Architectures",
   "whatItIs": [
-    "mqt-dasqa is an open-source project in the quantum chemistry category. It is maintained by cda-tum and primarily looks like a Python codebase. <p align=\"center\"> <a href=\"https://mqt.readthedocs.io\"> <picture> <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://raw.githubusercontent.com/cda-tum/mqt/main/docs/_static/mqt_light.png\" width=\"60%\"> <img src=\"https://raw.githubusercontent.com/cda-tum/mqt/main/docs/_static/mqt_dark.png\" width=\"60%\" alt=\"MQT Logo\"> </picture> </a> </p>",
+    "mqt-dasqa is an open-source project in the quantum chemistry category. It is maintained by cda-tum and primarily looks like a Python codebase. MQT DASQA - Designer for Superconducting Quantum Architectures",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches quantum chemistry workflows in practice. The repository README emphasizes: <p align=\"center\"> <a href=\"https://mqt.readthedocs.io\"> <picture> <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://raw.githubusercontent.com/cda-tum/mqt/main/docs/_static/mqt_light.png\" width=\"60%\"> <img src=\"https://raw.githubusercontent.com/cda-tum/mqt/main/docs/_static/mqt_dark.png\" width=\"60%\" alt=\"MQT Logo\"> </picture> </a> </p> MQT DASQA - Designer for Alternative Superconducting Quantum Architectures"
   ],
   "whoItsFor": "Researchers, students, and developers exploring how quantum software is used for chemistry and electronic-structure problems.",
@@ -36,20 +41,45 @@
   ],
   "readmeExcerpt": "<p align=\"center\"> <a href=\"https://mqt.readthedocs.io\"> <picture> <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://raw.githubusercontent.com/cda-tum/mqt/main/docs/_static/mqt_light.png\" width=\"60%\"> <img src=\"https://raw.githubusercontent.com/cda-tum/mqt/main/docs/_static/mqt_dark.png\" width=\"60%\" alt=\"MQT Logo\"> </picture> </a> </p> MQT DASQA - Designer for Alternative Superconducting Quantum Architectures",
   "readmePath": "reference\\cda-tum__mqt-dasqa\\README.md",
+  "readmeMarkdownPath": "readmes/cda-tum-mqt-dasqa.md",
   "clonePath": "reference\\cda-tum__mqt-dasqa",
-  "stars": 0,
-  "lastPushedAt": null,
+  "stars": 21,
+  "lastPushedAt": "2025-03-14T20:46:17Z",
+  "defaultBranch": "main",
   "githubTopics": [],
+  "quickstart": null,
+  "codeSamples": [],
+  "packageMeta": {},
+  "citationBibtex": null,
+  "supportedBackendSlugs": [
+    "qiskit-qiskit"
+  ],
+  "externalLinks": {
+    "docs": [
+      "https://mqt.readthedocs.io",
+      "https://qiskit.org/documentation/metal/",
+      "https://qiskit.org/documentation/metal/installation.html",
+      "https://qiskit.org/documentation/metal/installation.html#option-2-a-pre-existing-environment"
+    ],
+    "paper": [
+      "https://arxiv.org/abs/1911.12879"
+    ]
+  },
+  "openIssuesCount": 0,
+  "subscribersCount": 6,
+  "latestRelease": null,
+  "ownerType": "Organization",
+  "ownerUrl": "https://github.com/cda-tum",
   "featured": false,
   "flagship": false,
   "qtanglRelevant": false,
   "archived": false,
-  "imagePath": null,
+  "imagePath": "/learn/monogram/cda-tum-mqt-dasqa.svg",
   "relatedSlugs": [
     "quantumlib-openfermion",
     "aspuru-guzik-group-tequila",
+    "eclipse-qrisp-qrisp",
     "ornl-qci-xacc-vqe",
-    "pasqal-io-qadence",
     "projectq-framework-fermilib",
     "qiskit-qiskit-nature"
   ]

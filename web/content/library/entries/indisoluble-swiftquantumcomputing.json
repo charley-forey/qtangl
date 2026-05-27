@@ -6,47 +6,90 @@
   "repoUrl": "https://github.com/indisoluble/SwiftQuantumComputing",
   "homepageUrl": null,
   "category": {
-    "slug": "pulse-control",
-    "title": "Pulse and control",
-    "description": "Tooling for low-level pulse scheduling, experiment orchestration, and laboratory control around quantum hardware."
+    "slug": "general-purpose-sdks",
+    "title": "General-purpose SDKs",
+    "description": "Broad frameworks for building, simulating, and experimenting with quantum circuits across multiple domains."
   },
   "topics": [
     {
       "slug": "quantum-software-map",
       "title": "Quantum computing software in 2026: the open-source map"
+    },
+    {
+      "slug": "start-writing-quantum-code",
+      "title": "How to start writing quantum code: an honest path"
     }
   ],
   "primaryLanguage": "Swift",
-  "license": "Apache-2.0",
-  "summary": "Run this application to check the performance of this simulator in your computer.",
-  "description": "Run this application to check the performance of this simulator in your computer. Execute swift run sqc-measure-performance -h to see all available options.",
-  "whatItIs": [
-    "SwiftQuantumComputing is an open-source project in the pulse and control category. It is maintained by indisoluble and primarily looks like a Swift codebase. Run this application to check the performance of this simulator in your computer.",
-    "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches pulse and control workflows in practice. The repository README emphasizes: Run this application to check the performance of this simulator in your computer. Execute swift run sqc-measure-performance -h to see all available options. Use a genetic algorithm to automatically generate a quantum circuit - Check example in Genetic.playground. Two-level decomposition: Decompose any gate into an equivalent sequence of..."
+  "primaryLanguages": [
+    "Swift",
+    "JavaScript",
+    "C/C++"
   ],
-  "whoItsFor": "Hardware-adjacent developers and researchers working closer to experiments, pulse schedules, or lab orchestration.",
+  "license": "Apache-2.0",
+  "summary": "Quantum circuit simulator in Swift",
+  "description": "Quantum circuit simulator in Swift",
+  "whatItIs": [
+    "SwiftQuantumComputing is an open-source project in the general-purpose sdks category. It is maintained by indisoluble and primarily looks like a Swift codebase. Quantum circuit simulator in Swift",
+    "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches general-purpose sdks workflows in practice. The repository README emphasizes: Run this application to check the performance of this simulator in your computer. Execute swift run sqc-measure-performance -h to see all available options. Use a genetic algorithm to automatically generate a quantum circuit - Check example in Genetic.playground. Two-level decomposition: Decompose any gate into an equivalent sequence of..."
+  ],
+  "whoItsFor": "Developers who want a broad entry point for building circuits, experimenting with algorithms, and integrating quantum workflows into larger applications.",
   "whatYouCanBuild": [
-    "See how low-level control stacks differ from higher-level SDKs.",
-    "Understand where pulse sequencing and experiment orchestration fit in the stack.",
-    "Learn which projects matter when hardware control is part of the workflow."
+    "Prototype end-to-end circuit workflows without committing to a niche backend too early.",
+    "Learn how the project represents circuits, gates, jobs, and results.",
+    "Compare how a major ecosystem frames practical quantum development."
   ],
   "readmeExcerpt": "Run this application to check the performance of this simulator in your computer. Execute swift run sqc-measure-performance -h to see all available options. Use a genetic algorithm to automatically generate a quantum circuit - Check example in Genetic.playground. Two-level decomposition: Decompose any gate into an equivalent sequence of not gates and fully controlled phase shifts, z-rotations, y-rotations & not gates - Check example in TwoLevelDecomposition.playground.",
   "readmePath": "reference\\indisoluble__SwiftQuantumComputing\\README.md",
+  "readmeMarkdownPath": "readmes/indisoluble-swiftquantumcomputing.md",
   "clonePath": "reference\\indisoluble__SwiftQuantumComputing",
-  "stars": 0,
-  "lastPushedAt": null,
-  "githubTopics": [],
+  "stars": 52,
+  "lastPushedAt": "2022-03-20T18:29:19Z",
+  "defaultBranch": "master",
+  "githubTopics": [
+    "accelerate-framework",
+    "bernstein-vazirani-algorithm",
+    "continued-fractions",
+    "deutsch-algorithm",
+    "deutsch-jozsa-algorithm",
+    "euclidean-algorithm",
+    "gaussian-elimination",
+    "genetic-algorithm",
+    "grover-algorithm",
+    "quantum-circuit-simulator",
+    "quantum-computing",
+    "shor-algorithm",
+    "simon-algorithm",
+    "swift"
+  ],
+  "quickstart": null,
+  "codeSamples": [],
+  "packageMeta": {},
+  "citationBibtex": null,
+  "supportedBackendSlugs": [],
+  "externalLinks": {
+    "paper": [
+      "https://arxiv.org/abs/1210.7366",
+      "https://arxiv.org/abs/1601.07195",
+      "https://arxiv.org/abs/quant-ph/0010034"
+    ]
+  },
+  "openIssuesCount": 0,
+  "subscribersCount": 4,
+  "latestRelease": null,
+  "ownerType": "User",
+  "ownerUrl": "https://github.com/indisoluble",
   "featured": false,
   "flagship": false,
   "qtanglRelevant": false,
   "archived": false,
-  "imagePath": null,
+  "imagePath": "/learn/monogram/indisoluble-swiftquantumcomputing.svg",
   "relatedSlugs": [
-    "m-labs-artiq",
-    "bbn-q-pyqgl2",
-    "bbn-q-pyqlab",
-    "bbn-q-qgl",
-    "bbn-q-qlab",
-    "bbn-q-qlab-jl"
+    "qiskit-qiskit",
+    "quantumlib-cirq",
+    "xanaduai-pennylane",
+    "qiskit-qiskit-terra",
+    "quantumbfs-yao-jl",
+    "microsoft-quantumkatas"
   ]
 }

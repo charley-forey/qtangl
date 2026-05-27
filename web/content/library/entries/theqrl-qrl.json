@@ -4,7 +4,7 @@
   "name": "QRL",
   "title": "QRL",
   "repoUrl": "https://github.com/theQRL/QRL",
-  "homepageUrl": null,
+  "homepageUrl": "https://theqrl.org/",
   "category": {
     "slug": "post-quantum-crypto",
     "title": "Post-quantum cryptography",
@@ -21,11 +21,16 @@
     }
   ],
   "primaryLanguage": "Python",
+  "primaryLanguages": [
+    "Python",
+    "Shell",
+    "Jupyter"
+  ],
   "license": "MIT",
-  "summary": "> Python-based blockchain ledger utilizing hash-based one-time merkle tree signature scheme (XMSS) instead of ECDSA.",
-  "description": "> Python-based blockchain ledger utilizing hash-based one-time merkle tree signature scheme (XMSS) instead of ECDSA. Proof-of-work block selection via the cryptonight algorithm. Future transition to POS with signed iterative hash chain reveal scheme which is both probabilistic and random (https://github.com/theQRL/pos). > > Hash-based signatures means larger transactions (3kb per tx, binary), longer keypair generation times and the need to record...",
+  "summary": "Quantum Resistant Ledger",
+  "description": "Quantum Resistant Ledger ",
   "whatItIs": [
-    "QRL is an open-source project in the post-quantum cryptography category. It is maintained by theQRL and primarily looks like a Python codebase. > Python-based blockchain ledger utilizing hash-based one-time merkle tree signature scheme (XMSS) instead of ECDSA.",
+    "QRL is an open-source project in the post-quantum cryptography category. It is maintained by theQRL and primarily looks like a Python codebase. Quantum Resistant Ledger",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches post-quantum cryptography workflows in practice. The repository README emphasizes: > Python-based blockchain ledger utilizing hash-based one-time merkle tree signature scheme (XMSS) instead of ECDSA. Proof-of-work block selection via the cryptonight algorithm. Future transition to POS with signed iterative hash chain reveal scheme which is both probabilistic and random (https://github.com/theQRL/pos). > > Hash-based signatures means larger transactions (3kb..."
   ],
   "whoItsFor": "Security-minded developers and teams looking for practical quantum-safe cryptography resources they can evaluate today.",
@@ -36,21 +41,48 @@
   ],
   "readmeExcerpt": "> Python-based blockchain ledger utilizing hash-based one-time merkle tree signature scheme (XMSS) instead of ECDSA. Proof-of-work block selection via the cryptonight algorithm. Future transition to POS with signed iterative hash chain reveal scheme which is both probabilistic and random (https://github.com/theQRL/pos). > > Hash-based signatures means larger transactions (3kb per tx, binary), longer keypair generation times and the need to record 'state' of transactions as each keypair can only be used once safely. Merkle tree usage enables a single address to be used for signing numerous transactions (up to 2^13 computationally easily enough). Currently XMSS/W-OTS+ are natively supported with extensible support for further cryptographic schemes inbuilt. For instructions on how to...",
   "readmePath": "reference\\theQRL__QRL\\README.md",
+  "readmeMarkdownPath": "readmes/theqrl-qrl.md",
   "clonePath": "reference\\theQRL__QRL",
-  "stars": 0,
-  "lastPushedAt": null,
-  "githubTopics": [],
+  "stars": 463,
+  "lastPushedAt": "2026-03-07T20:17:32Z",
+  "defaultBranch": "master",
+  "githubTopics": [
+    "blockchain",
+    "merkle-signature-schemes",
+    "merkle-tree",
+    "qrl",
+    "xmss"
+  ],
+  "quickstart": null,
+  "codeSamples": [],
+  "packageMeta": {},
+  "citationBibtex": null,
+  "supportedBackendSlugs": [],
+  "externalLinks": {
+    "docs": [
+      "https://docs.theqrl.org/",
+      "https://docs.theqrl.org/node/QRLnode/"
+    ],
+    "community": [
+      "https://discord.gg/RcR9WzX"
+    ]
+  },
+  "openIssuesCount": 50,
+  "subscribersCount": 55,
+  "latestRelease": null,
+  "ownerType": "Organization",
+  "ownerUrl": "https://github.com/theQRL",
   "featured": false,
   "flagship": false,
   "qtanglRelevant": false,
   "archived": false,
-  "imagePath": null,
+  "imagePath": "/learn/monogram/theqrl-qrl.svg",
   "relatedSlugs": [
     "open-quantum-safe-liboqs",
     "open-quantum-safe-openssh-portable",
     "open-quantum-safe-openssl",
     "pqclean-pqclean",
-    "aws-amazon-braket-sdk-python",
-    "cqcl-tket"
+    "microsoft-quantumkatas",
+    "qiskit-qiskit"
   ]
 }

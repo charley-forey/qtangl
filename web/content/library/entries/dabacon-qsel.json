@@ -21,11 +21,14 @@
     }
   ],
   "primaryLanguage": "Python",
+  "primaryLanguages": [
+    "Python"
+  ],
   "license": "Apache-2.0",
-  "summary": "What makes quantum computers more powerful than classical computers?",
-  "description": "What makes quantum computers more powerful than classical computers? Ask any expert, or watch any public lecture on the subject and the answer is clear. **Entanglement** and **Superposition** are what give quantum computers their power over classical computers. If these two ideas are at the heart of the power of quantum computing, it therefore makes sense that any programing language...",
+  "summary": "Quantum programming language putting entanglement and superposition front and center",
+  "description": "Quantum programming language putting entanglement and superposition front and center",
   "whatItIs": [
-    "qsel is an open-source project in the compilers and languages category. It is maintained by dabacon and primarily looks like a Python codebase. What makes quantum computers more powerful than classical computers?",
+    "qsel is an open-source project in the compilers and languages category. It is maintained by dabacon and primarily looks like a Python codebase. Quantum programming language putting entanglement and superposition front and center",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches compilers and languages workflows in practice. The repository README emphasizes: What makes quantum computers more powerful than classical computers? Ask any expert, or watch any public lecture on the subject and the answer is clear. **Entanglement** and **Superposition** are what give quantum computers their power over classical computers. If these two ideas are at the heart of the..."
   ],
   "whoItsFor": "Developers who want to understand the representations and compilers that sit between high-level code and runnable circuits.",
@@ -36,21 +39,44 @@
   ],
   "readmeExcerpt": "What makes quantum computers more powerful than classical computers? Ask any expert, or watch any public lecture on the subject and the answer is clear. **Entanglement** and **Superposition** are what give quantum computers their power over classical computers. If these two ideas are at the heart of the power of quantum computing, it therefore makes sense that any programing language for quantum computing should make these two ideas front and center. This is where **Quantum Super Entangled Language** (qsel) comes in. It is a quantum programming language made entirely from superposition and entanglement. The qsel compiler is written in python because who needs strong typing when you are writing research...",
   "readmePath": "reference\\dabacon__qsel\\README.md",
+  "readmeMarkdownPath": "readmes/dabacon-qsel.md",
   "clonePath": "reference\\dabacon__qsel",
-  "stars": 0,
-  "lastPushedAt": null,
-  "githubTopics": [],
+  "stars": 42,
+  "lastPushedAt": "2023-02-26T20:44:17Z",
+  "defaultBranch": "master",
+  "githubTopics": [
+    "a",
+    "esoteric-programming-language",
+    "programming-language",
+    "quantum-computing",
+    "qubits",
+    "superposition"
+  ],
+  "quickstart": {
+    "language": "text",
+    "source": "Measured 1 on qubit 0.\nMeasured 0 on qubit 1."
+  },
+  "codeSamples": [],
+  "packageMeta": {},
+  "citationBibtex": null,
+  "supportedBackendSlugs": [],
+  "externalLinks": {},
+  "openIssuesCount": 0,
+  "subscribersCount": 3,
+  "latestRelease": null,
+  "ownerType": "User",
+  "ownerUrl": "https://github.com/dabacon",
   "featured": false,
   "flagship": false,
   "qtanglRelevant": false,
   "archived": false,
-  "imagePath": null,
+  "imagePath": "/learn/monogram/dabacon-qsel.svg",
   "relatedSlugs": [
     "cqcl-tket",
     "nvidia-cuda-quantum",
-    "quantomatic-pyzx",
-    "avalon-lang-avaloni",
-    "aviggiano-qcl",
-    "epiqc-scaffcc"
+    "microsoft-quantumkatas",
+    "qiskit-openqasm",
+    "qiskit-qiskit",
+    "quantomatic-pyzx"
   ]
 }

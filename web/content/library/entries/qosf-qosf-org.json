@@ -4,7 +4,7 @@
   "name": "qosf.org",
   "title": "qosf.org",
   "repoUrl": "https://github.com/qosf/qosf.org",
-  "homepageUrl": null,
+  "homepageUrl": "https://qosf.org/",
   "category": {
     "slug": "general-purpose-sdks",
     "title": "General-purpose SDKs",
@@ -20,12 +20,17 @@
       "title": "How to start writing quantum code: an honest path"
     }
   ],
-  "primaryLanguage": "Shell",
-  "license": "Creative Commons",
-  "summary": "This is a repository hosting the www.qosf.org site, the universal source of information about open source software for quantum computing.",
-  "description": "This is a repository hosting the www.qosf.org site, the universal source of information about open source software for quantum computing.",
+  "primaryLanguage": "SCSS",
+  "primaryLanguages": [
+    "JavaScript",
+    "Shell",
+    "Python"
+  ],
+  "license": "CC0-1.0",
+  "summary": "Web portal of Quantum Open Source Foundation",
+  "description": "Web portal of Quantum Open Source Foundation",
   "whatItIs": [
-    "qosf.org is an open-source project in the general-purpose sdks category. It is maintained by qosf and primarily looks like a Shell codebase. This is a repository hosting the www.qosf.org site, the universal source of information about open source software for quantum computing.",
+    "qosf.org is an open-source project in the general-purpose sdks category. It is maintained by qosf and primarily looks like a SCSS codebase. Web portal of Quantum Open Source Foundation",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches general-purpose sdks workflows in practice. The repository README emphasizes: This is a repository hosting the www.qosf.org site, the universal source of information about open source software for quantum computing."
   ],
   "whoItsFor": "Developers who want a broad entry point for building circuits, experimenting with algorithms, and integrating quantum workflows into larger applications.",
@@ -36,21 +41,40 @@
   ],
   "readmeExcerpt": "This is a repository hosting the www.qosf.org site, the universal source of information about open source software for quantum computing.",
   "readmePath": "reference\\qosf__qosf.org\\README.md",
+  "readmeMarkdownPath": "readmes/qosf-qosf-org.md",
   "clonePath": "reference\\qosf__qosf.org",
-  "stars": 0,
-  "lastPushedAt": null,
-  "githubTopics": [],
+  "stars": 145,
+  "lastPushedAt": "2026-05-14T18:39:33Z",
+  "defaultBranch": "master",
+  "githubTopics": [
+    "community",
+    "open-source",
+    "quantum-computing",
+    "quantum-software",
+    "website"
+  ],
+  "quickstart": null,
+  "codeSamples": [],
+  "packageMeta": {},
+  "citationBibtex": null,
+  "supportedBackendSlugs": [],
+  "externalLinks": {},
+  "openIssuesCount": 26,
+  "subscribersCount": 17,
+  "latestRelease": null,
+  "ownerType": "Organization",
+  "ownerUrl": "https://github.com/qosf",
   "featured": false,
   "flagship": false,
   "qtanglRelevant": false,
   "archived": false,
-  "imagePath": null,
+  "imagePath": "/learn/monogram/qosf-qosf-org.svg",
   "relatedSlugs": [
     "qiskit-qiskit",
     "quantumlib-cirq",
     "xanaduai-pennylane",
-    "projectq-framework-projectq",
+    "qiskit-qiskit-terra",
     "quantumbfs-yao-jl",
-    "arlineq-arline-benchmarks"
+    "microsoft-quantumkatas"
   ]
 }

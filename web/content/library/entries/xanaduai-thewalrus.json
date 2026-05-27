@@ -4,7 +4,7 @@
   "name": "thewalrus",
   "title": "thewalrus",
   "repoUrl": "https://github.com/xanaduAI/thewalrus",
-  "homepageUrl": null,
+  "homepageUrl": "https://the-walrus.readthedocs.io",
   "category": {
     "slug": "photonics",
     "title": "Photonics",
@@ -17,11 +17,15 @@
     }
   ],
   "primaryLanguage": "Python",
+  "primaryLanguages": [
+    "Python",
+    "Jupyter"
+  ],
   "license": "Apache-2.0",
-  "summary": "image:: https://img.shields.io/codecov/c/github/xanaduai/thewalrus/master.svg?style=flat :alt: Codecov coverage :target: https://codecov.io/gh/XanaduAI/thewalrus",
-  "description": ".. image:: https://img.shields.io/codecov/c/github/xanaduai/thewalrus/master.svg?style=flat :alt: Codecov coverage :target: https://codecov.io/gh/XanaduAI/thewalrus",
+  "summary": "A library for the calculation of hafnians, Hermite polynomials and Gaussian boson sampling.",
+  "description": "A library for the calculation of hafnians, Hermite polynomials and Gaussian boson sampling.",
   "whatItIs": [
-    "thewalrus is an open-source project in the photonics category. It is maintained by xanaduAI and primarily looks like a Python codebase. image:: https://img.shields.io/codecov/c/github/xanaduai/thewalrus/master.svg?style=flat :alt: Codecov coverage :target: https://codecov.io/gh/XanaduAI/thewalrus",
+    "thewalrus is an open-source project in the photonics category. It is maintained by xanaduAI and primarily looks like a Python codebase. A library for the calculation of hafnians, Hermite polynomials and Gaussian boson sampling.",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches photonics workflows in practice. The repository README emphasizes: .. image:: https://img.shields.io/codecov/c/github/xanaduai/thewalrus/master.svg?style=flat :alt: Codecov coverage :target: https://codecov.io/gh/XanaduAI/thewalrus .. image:: https://img.shields.io/codefactor/grade/github/XanaduAI/thewalrus/master?style=flat :alt: CodeFactor Grade :target: https://www.codefactor.io/repository/github/xanaduai/thewalrus"
   ],
   "whoItsFor": "People exploring optical and photonic models of quantum computing, especially outside the usual gate-model framing.",
@@ -32,21 +36,70 @@
   ],
   "readmeExcerpt": ".. image:: https://img.shields.io/codecov/c/github/xanaduai/thewalrus/master.svg?style=flat :alt: Codecov coverage :target: https://codecov.io/gh/XanaduAI/thewalrus .. image:: https://img.shields.io/codefactor/grade/github/XanaduAI/thewalrus/master?style=flat :alt: CodeFactor Grade :target: https://www.codefactor.io/repository/github/xanaduai/thewalrus",
   "readmePath": "reference\\xanaduAI__thewalrus\\README.rst",
+  "readmeMarkdownPath": "readmes/xanaduai-thewalrus.md",
   "clonePath": "reference\\xanaduAI__thewalrus",
-  "stars": 0,
-  "lastPushedAt": null,
-  "githubTopics": [],
+  "stars": 109,
+  "lastPushedAt": "2025-11-14T17:28:25Z",
+  "defaultBranch": "master",
+  "githubTopics": [
+    "algorithm",
+    "combinatorics",
+    "graphs",
+    "matrix",
+    "optimization",
+    "physics",
+    "quantum",
+    "quantum-computing"
+  ],
+  "quickstart": null,
+  "codeSamples": [
+    {
+      "title": "Timing Complex",
+      "language": "python",
+      "source": "# Licensed under the Apache License, Version 2.0 (the \"License\");\n# you may not use this file except in compliance with the License.\n# You may obtain a copy of the License at\n#     http://www.apache.org/licenses/LICENSE-2.0\n# Unless required by applicable law or agreed to in writing, software\n# distributed under the License is distributed on an \"AS IS\" BASIS,\n# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n# See the License for the specific language governing permissions and\n# limitations under the License.\n\"\"\"This module performs benchmarking on the Python interface lhaf\"\"\"\nimport time\nimport numpy as np\nfrom thewalrus import haf_complex\nheader = [\"Size\", \"Time(complex128)\", \"Result(complex128)\"]\nprint(\"{: >5} {: >15} {: >25} \".format(*header))\nfor n in range(2, 23):\n    mat2 = np.ones([2 * n, 2 * n], dtype=np.complex128)\n    init2 = time.clock()\n    x2 = np.real(haf_complex(mat2))\n    end2 = time.clock()\n    row = [2 * n, end2 - init2, x2]\n    print(\"{: >5} {: >15} {: >25}\".format(*row))",
+      "path": "examples/timing_complex.py"
+    },
+    {
+      "title": "Timing Int Vs Real",
+      "language": "python",
+      "source": "#!/usr/bin/env python3\nimport time\nfrom math import factorial\nimport numpy as np\nfrom scipy import diagonal, randn\nfrom scipy.linalg import qr\nimport matplotlib.pyplot as plt\nfrom thewalrus.libwalrus import haf_int, haf_real, haf_complex\na0 = 100.0\nanm1 = 2.0\nn = 20\nr = (anm1 / a0) ** (1.0 / (n - 1))\nnreps = [(int)(a0 * (r ** ((i)))) for i in range(n)]\ntimes = np.empty([n, 5])\nfor ind, reps in enumerate(nreps):\n    size = 2 * (ind + 1)\n    print(\"\\nTesting matrix size {}, with {} reps...\".format(size, reps))\n    start = time.time()\n    for i in range(reps):\n        matrix = np.random.randint(low=-1, high=2, size=[size, size])\n        A = np.complex128(np.clip(matrix + matrix.T, -1, 1))\n        res = haf_complex(A)\n    end = time.time()\n    print(\"Mean time taken (complex): \", (end - start) / reps)\n    # print('\\t Haf result: ', res)\n    times[ind, 0] = (end - start) / reps\n    start = time.time()\n    for i in range(reps):\n        matrix = np.random.randint(low=-1, high=2, size=[size, size])\n        A = np.complex128(np.clip(matrix + matrix.T, -1, 1))\n        res = haf_complex(A, recursive=True)\n    end = time.time()\n    print(\"Mean time taken (complex, recursive): \", (end - start) / reps)\n    # print('\\t Haf result: ', res)\n    times[ind, 1] = (end - start) / reps\n    start = time.time()\n    for i in range(reps):\n        matrix = np.random.randint(low=-1, high=2, size=[size, size])\n        A = np.float64(np.clip(matrix + matrix.T, -1, 1))\n        res = haf_real(A)",
+      "path": "examples/timing_int_vs_real.py"
+    },
+    {
+      "title": "Timing Real",
+      "language": "python",
+      "source": "# Licensed under the Apache License, Version 2.0 (the \"License\");\n# you may not use this file except in compliance with the License.\n# You may obtain a copy of the License at\n#     http://www.apache.org/licenses/LICENSE-2.0\n# Unless required by applicable law or agreed to in writing, software\n# distributed under the License is distributed on an \"AS IS\" BASIS,\n# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n# See the License for the specific language governing permissions and\n# limitations under the License.\n\"\"\"This module performs benchmarking on the Python interface rlhaf\"\"\"\nimport time\nimport numpy as np\nfrom thewalrus import haf_real\nheader = [\"Size\", \"Time(complex128)\", \"Result(complex128)\"]\nprint(\"{: >5} {: >15} {: >25} \".format(*header))\nfor n in range(2, 23):\n    mat2 = np.ones([2 * n, 2 * n], dtype=np.float64)\n    init2 = time.clock()\n    x2 = np.real(haf_real(mat2))\n    end2 = time.clock()\n    row = [2 * n, end2 - init2, x2]\n    print(\"{: >5} {: >15} {: >25}\".format(*row))",
+      "path": "examples/timing_real.py"
+    }
+  ],
+  "packageMeta": {},
+  "citationBibtex": null,
+  "supportedBackendSlugs": [],
+  "externalLinks": {
+    "docs": [
+      "https://the-walrus.readthedocs.io",
+      "https://docs.dask.org/"
+    ],
+    "pypi": [
+      "https://pypi.org/project/thewalrus"
+    ]
+  },
+  "openIssuesCount": 26,
+  "subscribersCount": 8,
+  "latestRelease": null,
+  "ownerType": "Organization",
+  "ownerUrl": "https://github.com/XanaduAI",
   "featured": false,
   "flagship": false,
   "qtanglRelevant": false,
   "archived": false,
-  "imagePath": null,
+  "imagePath": "/learn/monogram/xanaduai-thewalrus.svg",
   "relatedSlugs": [
+    "microsoft-quantumkatas",
+    "qiskit-qiskit",
+    "quantumlib-cirq",
+    "xanaduai-pennylane",
     "xanaduai-strawberryfields",
-    "quandela-perceval",
-    "xanaduai-blackbird",
-    "aws-amazon-braket-sdk-python",
-    "cqcl-tket",
-    "dwavesystems-dwave-ocean-sdk"
+    "open-quantum-safe-liboqs"
   ]
 }

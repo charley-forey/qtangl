@@ -20,12 +20,15 @@
       "title": "How to start writing quantum code: an honest path"
     }
   ],
-  "primaryLanguage": "Mixed",
+  "primaryLanguage": "Coq",
+  "primaryLanguages": [
+    "Coq"
+  ],
   "license": "MIT",
-  "summary": "This is a Coq implementation of the QWIRE quantum programming language, described in the following papers by Jennifer Paykin, Robert Rand, Dong-Ho Lee and Steve Zdancewic: [QWIRE: a core language for quantum...",
-  "description": "This is a Coq implementation of the QWIRE quantum programming language, described in the following papers by Jennifer Paykin, Robert Rand, Dong-Ho Lee and Steve Zdancewic: [QWIRE: a core language for quantum circuits][1]. [QWIRE Practice: Formal Verification of Quantum Circuits in Coq][2] [ReQWIRE: Reasoning about Reversible Quantum Circuits][3] [Phantom Types for Quantum Programs][4]",
+  "summary": "A quantum circuit language and formal verification tool",
+  "description": "A quantum circuit language and formal verification tool",
   "whatItIs": [
-    "QWIRE is an open-source project in the compilers and languages category. It is maintained by jpaykin and primarily looks like a Mixed codebase. This is a Coq implementation of the QWIRE quantum programming language, described in the following papers by Jennifer Paykin, Robert Rand, Dong-Ho Lee and Steve Zdancewic: [QWIRE: a core language for quantum...",
+    "QWIRE is an open-source project in the compilers and languages category. It is maintained by jpaykin and primarily looks like a Coq codebase. A quantum circuit language and formal verification tool",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches compilers and languages workflows in practice. The repository README emphasizes: This is a Coq implementation of the QWIRE quantum programming language, described in the following papers by Jennifer Paykin, Robert Rand, Dong-Ho Lee and Steve Zdancewic: [QWIRE: a core language for quantum circuits][1]. [QWIRE Practice: Formal Verification of Quantum Circuits in Coq][2] [ReQWIRE: Reasoning about Reversible Quantum Circuits][3]..."
   ],
   "whoItsFor": "Developers who want to understand the representations and compilers that sit between high-level code and runnable circuits.",
@@ -36,21 +39,39 @@
   ],
   "readmeExcerpt": "This is a Coq implementation of the QWIRE quantum programming language, described in the following papers by Jennifer Paykin, Robert Rand, Dong-Ho Lee and Steve Zdancewic: [QWIRE: a core language for quantum circuits][1]. [QWIRE Practice: Formal Verification of Quantum Circuits in Coq][2] [ReQWIRE: Reasoning about Reversible Quantum Circuits][3] [Phantom Types for Quantum Programs][4] Rennela and Staton's [Classical Control, Quantum Circuits and Linear Logic in Enriched Category Theory][5] provides a categorical semantics for QWIRE.",
   "readmePath": "reference\\jpaykin__QWIRE\\README.md",
+  "readmeMarkdownPath": "readmes/jpaykin-qwire.md",
   "clonePath": "reference\\jpaykin__QWIRE",
-  "stars": 0,
-  "lastPushedAt": null,
+  "stars": 109,
+  "lastPushedAt": "2025-05-11T22:26:36Z",
+  "defaultBranch": "master",
   "githubTopics": [],
+  "quickstart": null,
+  "codeSamples": [],
+  "packageMeta": {},
+  "citationBibtex": null,
+  "supportedBackendSlugs": [],
+  "externalLinks": {
+    "paper": [
+      "https://arxiv.org/pdf/1711.05159.pdf",
+      "https://arxiv.org/abs/1707.03429"
+    ]
+  },
+  "openIssuesCount": 1,
+  "subscribersCount": 19,
+  "latestRelease": null,
+  "ownerType": "Organization",
+  "ownerUrl": "https://github.com/inQWIRE",
   "featured": false,
   "flagship": false,
   "qtanglRelevant": false,
   "archived": false,
-  "imagePath": null,
+  "imagePath": "/learn/monogram/jpaykin-qwire.svg",
   "relatedSlugs": [
     "cqcl-tket",
     "nvidia-cuda-quantum",
-    "quantomatic-pyzx",
-    "avalon-lang-avaloni",
-    "aviggiano-qcl",
-    "dabacon-qsel"
+    "microsoft-quantumkatas",
+    "qiskit-openqasm",
+    "qiskit-qiskit",
+    "quantomatic-pyzx"
   ]
 }

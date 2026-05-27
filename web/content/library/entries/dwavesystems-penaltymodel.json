@@ -4,7 +4,7 @@
   "name": "penaltymodel",
   "title": "penaltymodel",
   "repoUrl": "https://github.com/dwavesystems/penaltymodel",
-  "homepageUrl": null,
+  "homepageUrl": "https://docs.ocean.dwavesys.com/projects/penaltymodel/en/latest",
   "category": {
     "slug": "optimization-qubo",
     "title": "Optimization and QUBO",
@@ -21,11 +21,15 @@
     }
   ],
   "primaryLanguage": "Python",
+  "primaryLanguages": [
+    "Python",
+    "JavaScript"
+  ],
   "license": "Apache-2.0",
-  "summary": "For solving problems with constraints, we recommend using the hybrid solvers in the Leap :tm: service.",
-  "description": ":warning: *penaltymodel* is deprecated. For solving problems with constraints, we recommend using the hybrid solvers in the Leap :tm: service. You can find documentation for the hybrid solvers at https://docs.dwavequantum.com.",
+  "summary": "Utilities and interfaces for using penalty models.",
+  "description": "Utilities and interfaces for using penalty models.",
   "whatItIs": [
-    "penaltymodel is an open-source project in the optimization and qubo category. It is maintained by dwavesystems and primarily looks like a Python codebase. For solving problems with constraints, we recommend using the hybrid solvers in the Leap :tm: service.",
+    "penaltymodel is an open-source project in the optimization and qubo category. It is maintained by dwavesystems and primarily looks like a Python codebase. Utilities and interfaces for using penalty models.",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches optimization and qubo workflows in practice. The repository README emphasizes: :warning: *penaltymodel* is deprecated. For solving problems with constraints, we recommend using the hybrid solvers in the Leap :tm: service. You can find documentation for the hybrid solvers at https://docs.dwavequantum.com. One approach to solve a constraint satisfaction problem (CSP <https://en.wikipedia.org/wiki/Constraint_satisfaction_problem>_) using an Ising model <https://en.wikipedia.org/wiki/Ising_model>_ or a QUBO... The repository also appears to be archival or no longer actively maintained, which matters when evaluating it for current production use."
   ],
   "whoItsFor": "Teams exploring routing, scheduling, allocation, and other combinatorial problems that can be modeled as optimization workloads.",
@@ -36,15 +40,37 @@
   ],
   "readmeExcerpt": ":warning: *penaltymodel* is deprecated. For solving problems with constraints, we recommend using the hybrid solvers in the Leap :tm: service. You can find documentation for the hybrid solvers at https://docs.dwavequantum.com. One approach to solve a constraint satisfaction problem (CSP <https://en.wikipedia.org/wiki/Constraint_satisfaction_problem>_) using an Ising model <https://en.wikipedia.org/wiki/Ising_model>_ or a QUBO <https://en.wikipedia.org/wiki/Quadratic_unconstrained_binary_optimization>_, is to map each individual constraint in the CSP to a 'small' Ising model or QUBO. This mapping is called a *penalty model*.",
   "readmePath": "reference\\dwavesystems__penaltymodel\\README.rst",
+  "readmeMarkdownPath": "readmes/dwavesystems-penaltymodel.md",
   "clonePath": "reference\\dwavesystems__penaltymodel",
-  "stars": 0,
-  "lastPushedAt": null,
+  "stars": 19,
+  "lastPushedAt": "2025-08-26T16:26:42Z",
+  "defaultBranch": "master",
   "githubTopics": [],
+  "quickstart": null,
+  "codeSamples": [],
+  "packageMeta": {},
+  "citationBibtex": null,
+  "supportedBackendSlugs": [
+    "dwavesystems-dimod"
+  ],
+  "externalLinks": {
+    "docs": [
+      "https://docs.dwavequantum.com",
+      "https://docs.dwavequantum.com/en/latest/concepts/penalty.html",
+      "https://docs.dwavequantum.com/en/latest/ocean/contribute.html",
+      "https://docs.openstack.org/reno/"
+    ]
+  },
+  "openIssuesCount": 6,
+  "subscribersCount": 7,
+  "latestRelease": null,
+  "ownerType": "Organization",
+  "ownerUrl": "https://github.com/dwavesystems",
   "featured": false,
   "flagship": false,
   "qtanglRelevant": false,
   "archived": true,
-  "imagePath": null,
+  "imagePath": "/learn/monogram/dwavesystems-penaltymodel.svg",
   "relatedSlugs": [
     "entropicalabs-openqaoa",
     "cda-tum-mqt-qmap",

@@ -21,11 +21,14 @@
     }
   ],
   "primaryLanguage": "Python",
-  "license": "Unknown",
-  "summary": "Qusim.py is a toy multi-qubit quantum computer simulator, written in 150 lines of python",
-  "description": "Qusim.py is a toy multi-qubit quantum computer simulator, written in 150 lines of python",
+  "primaryLanguages": [
+    "Python"
+  ],
+  "license": "AGPL-3.0",
+  "summary": "A Multi-Qubit Ideal Quantum Computer Simulator",
+  "description": "A Multi-Qubit Ideal Quantum Computer Simulator",
   "whatItIs": [
-    "QuSimPy is an open-source project in the simulators category. It is maintained by adamisntdead and primarily looks like a Python codebase. Qusim.py is a toy multi-qubit quantum computer simulator, written in 150 lines of python",
+    "QuSimPy is an open-source project in the simulators category. It is maintained by adamisntdead and primarily looks like a Python codebase. A Multi-Qubit Ideal Quantum Computer Simulator",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches simulators workflows in practice. The repository README emphasizes: Qusim.py is a toy multi-qubit quantum computer simulator, written in 150 lines of python This code makes it easy for you to see how a quantum computer computes by following the linear algebra!"
   ],
   "whoItsFor": "Developers and researchers who need to test ideas locally before running on hardware or who want to compare simulation strategies.",
@@ -36,21 +39,40 @@
   ],
   "readmeExcerpt": "Qusim.py is a toy multi-qubit quantum computer simulator, written in 150 lines of python This code makes it easy for you to see how a quantum computer computes by following the linear algebra!",
   "readmePath": "reference\\adamisntdead__QuSimPy\\README.md",
+  "readmeMarkdownPath": "readmes/adamisntdead-qusimpy.md",
   "clonePath": "reference\\adamisntdead__QuSimPy",
-  "stars": 0,
-  "lastPushedAt": null,
-  "githubTopics": [],
+  "stars": 724,
+  "lastPushedAt": "2021-06-04T17:57:44Z",
+  "defaultBranch": "master",
+  "githubTopics": [
+    "quantum-computing",
+    "quantum-simulator"
+  ],
+  "quickstart": {
+    "language": "python",
+    "source": "from QuSim import QuantumRegister\n\n#############################################\n#                 Introduction              #\n#############################################\n# Here Will Be A Few Example of Different\n# Quantum States / Algorithms, So You Can\n# Get A Feel For How The Module Works, and  \n# Some Algorithmic Ideas\n\n\n#############################################\n#            Quantum Measurement            #\n#############################################\n# This experiment will prepare 2 states, of a\n# Single qubit, and of 5 qubits, and will just\n# Measure them\n\nOneQubit = QuantumRegister(1)  # New Quantum Register of 1 Qubit\nprint('One Qubit: ' + OneQubit.measure())  # Should Print 'One Qubit: 0'\n\nFiveQubits = QuantumRegister(5)  # New Quantum Register of 5 Qubits\n# Should Print 'Five Qubits: 00000'\nprint('Five Qubits: ' + FiveQubits.measure())\n\n#############################################\n#                 Swap 2 Qubits             #\n#############################################\n# Here, We Will Apply a Pauli-X Gate / NOT Gate\n# To the first qubit, and then after the algorithm,\n# it will be swapped to the second qubit.\n\nSwap = QuantumRegister(2)  # New Quantum Register of 2 qubits\nSwap.applyGate('X', 1)  # Apply The NOT Gate. If Measured Now, it should be 10\n\n# Start the swap algorithm\nSwap.applyGate('CNOT', 1, 2)\nSwap.applyGate('H', 1)\nSwap.applyGate('H', 2)\nSwap.applyGate('CNOT', 1, 2)\nSwap.applyGate('H', 1)\nSwap.applyGate('H', 2)\nSwap.applyGate('CNOT', 1, 2)\n# End the swap algorithm\n\nprint('SWAP: |' + Swap.measure() + '>')  # Measure the State, Should be 01\n\n#############################################\n#               Fair Coin Flip              #\n#############################################\n# Shown in this 'Experiment', is a so called 'Fair Coin Flip',\n# Where a state will be prepared, that has an equal chance of\n# Flipping to Each Possible State. to do this, the Hadamard\n# Gate will be used.\n\n# New Quantum Register of 1 Qubit (As a coin has only 2 states)\nFairCoinFlip = QuantumRegister(1)\n# If measured at this point, it should be |0>\n\n# Apply the hadamard gate, now theres an even chance of measuring 0 or 1\nFairCoinFlip.applyGate('H', 1)\n\n# Now, the state will be measured, flipping the state to\n# either 0 or 1. If its 0, we will say \"Heads\", or if its\n# 1, we will say \"Tails\"\nFairCoinFlipAnswer = FairCoinFlip.measure()  # Now its flipped, so we can test\nif FairCoinFlipAnswer == '0':\n    print('FairCoinFlip: Heads')\nelif FairCoinFlipAnswer == '1':\n    print('FairCoinFlip: Tails')\n\n#############################################\n#             CNOT Gate                     #\n#############################################\n# In this experiment, 4 states will be prepared, {00, 01, 10, 11}\n# And then the same CNOT Gate will be run on them,\n# To Show The Effects of the CNOT. The Target Qubit will be 2, and the control 1\n\n# New Quantum Register of 2 Qubits, done 4 times.\n# If any are measured at this time, the result will be 00\nZeroZero = QuantumRegister(2)\nZeroOne = QuantumRegister(2)\nOneZero = QuantumRegister(2)\nOneOne = QuantumRegister(2)\n\n# Now prepare Each Into The State Based On Their Name\n# ZeroZero Will be left, as thats the first state anyway\nZeroOne.applyGate('X', 2)\nOneZero.applyGate('X', 1)\nOneOne.applyGate('X', 1)\nOneOne.applyGate('X', 2)\n\n# Now, a CNOT Will Be Applied To Each.\nZeroZero.applyGate('CNOT', 1, 2)\nZeroOne.applyGate('CNOT', 1, 2)\nOneZero.applyGate('CNOT', 1, 2)\nOneOne.applyGate('CNOT', 1, 2)\n\n# Print the results.\nprint('CNOT on 00: |' + ZeroZero.measure() + '>')\nprint('CNOT on 01: |' + ZeroOne.measure() + '>')\nprint('CNOT on 10: |' + OneZero.measure() + '>')\nprint('CNOT on 11: |' + OneOne.measure() + '>')"
+  },
+  "codeSamples": [],
+  "packageMeta": {},
+  "citationBibtex": null,
+  "supportedBackendSlugs": [],
+  "externalLinks": {},
+  "openIssuesCount": 2,
+  "subscribersCount": 29,
+  "latestRelease": null,
+  "ownerType": "User",
+  "ownerUrl": "https://github.com/adamisntdead",
   "featured": false,
   "flagship": false,
   "qtanglRelevant": false,
   "archived": false,
-  "imagePath": null,
+  "imagePath": "/learn/monogram/adamisntdead-qusimpy.svg",
   "relatedSlugs": [
+    "qiskit-qiskit-tutorial",
+    "qosf-os-quantum-software",
     "0tt3r-quac",
     "aniabrown-quest",
     "bbn-q-pysimulator",
-    "cda-tum-mqt-ddsim",
-    "dillanchang-qocs",
-    "iic-jku-ddsim"
+    "cda-tum-mqt-ddsim"
   ]
 }

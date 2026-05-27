@@ -20,13 +20,17 @@
       "title": "Quantum computing software in 2026: the open-source map"
     }
   ],
-  "primaryLanguage": "Jupyter",
+  "primaryLanguage": "Jupyter Notebook",
+  "primaryLanguages": [
+    "Jupyter",
+    "Python"
+  ],
   "license": "Apache-2.0",
-  "summary": "> :warning: **This repository is archived**: The content in this repository was moved to other locations.",
-  "description": "> :warning: **This repository is archived**: The content in this repository was moved to other locations. If you have issues or PR, please submit them to their new location.",
+  "summary": "A collection of Jupyter notebooks showing how to use the Qiskit SDK",
+  "description": "A collection of Jupyter notebooks showing how to use the Qiskit SDK",
   "whatItIs": [
-    "qiskit-tutorial is an open-source project in the simulators category. It is maintained by QISKit and primarily looks like a Jupyter codebase. > :warning: **This repository is archived**: The content in this repository was moved to other locations.",
-    "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches simulators workflows in practice. The repository README emphasizes: > :warning: **This repository is archived**: The content in this repository was moved to other locations. If you have issues or PR, please submit them to their new location. algorithms folder -> qiskit-algorithms (GitHub) circuits folder -> Qiskit (GitHub) circuits_advanced folder -> Qiskit (GitHub) opflow folder -> Qiskit..."
+    "qiskit-tutorial is an open-source project in the simulators category. It is maintained by QISKit and primarily looks like a Jupyter Notebook codebase. A collection of Jupyter notebooks showing how to use the Qiskit SDK",
+    "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches simulators workflows in practice. The repository README emphasizes: > :warning: **This repository is archived**: The content in this repository was moved to other locations. If you have issues or PR, please submit them to their new location. algorithms folder -> qiskit-algorithms (GitHub) circuits folder -> Qiskit (GitHub) circuits_advanced folder -> Qiskit (GitHub) opflow folder -> Qiskit... The repository also appears to be archival or no longer actively maintained, which matters when evaluating it for current production use."
   ],
   "whoItsFor": "Developers and researchers who need to test ideas locally before running on hardware or who want to compare simulation strategies.",
   "whatYouCanBuild": [
@@ -36,21 +40,62 @@
   ],
   "readmeExcerpt": "> :warning: **This repository is archived**: The content in this repository was moved to other locations. If you have issues or PR, please submit them to their new location. algorithms folder -> qiskit-algorithms (GitHub) circuits folder -> Qiskit (GitHub) circuits_advanced folder -> Qiskit (GitHub) opflow folder -> Qiskit (GitHub) simulators folder -> qiskit-aer (GitHub) textbook folder -> removed in favor of https://www.qiskit.org/learn",
   "readmePath": "reference\\QISKit__qiskit-tutorial\\README.md",
+  "readmeMarkdownPath": "readmes/qiskit-qiskit-tutorial.md",
   "clonePath": "reference\\QISKit__qiskit-tutorial",
-  "stars": 0,
-  "lastPushedAt": null,
-  "githubTopics": [],
+  "stars": 2522,
+  "lastPushedAt": "2023-08-21T20:29:53Z",
+  "defaultBranch": "master",
+  "githubTopics": [
+    "qiskit",
+    "quantum-computing",
+    "quantum-programming-language",
+    "tutorial"
+  ],
+  "quickstart": null,
+  "codeSamples": [
+    {
+      "title": "01 Algorithms Introduction",
+      "language": "python",
+      "source": "from qiskit.algorithms.optimizers import SLSQP\nfrom qiskit.circuit.library import TwoLocal\n\nnum_qubits = 2\nansatz = TwoLocal(num_qubits, 'ry', 'cz')\noptimizer = SLSQP(maxiter=1000)",
+      "path": "tutorials/algorithms/01_algorithms_introduction.ipynb"
+    },
+    {
+      "title": "02 Vqe Advanced Options",
+      "language": "python",
+      "source": "from qiskit.quantum_info import SparsePauliOp\n\nH2_op = SparsePauliOp.from_list(\n    [\n        (\"II\", -1.052373245772859),\n        (\"IZ\", 0.39793742484318045),\n        (\"ZI\", -0.39793742484318045),\n        (\"ZZ\", -0.01128010425623538),\n        (\"XX\", 0.18093119978423156),\n    ]\n)",
+      "path": "tutorials/algorithms/02_vqe_advanced_options.ipynb"
+    },
+    {
+      "title": "03 Vqe Simulation With Noise",
+      "language": "python",
+      "source": "from qiskit.quantum_info import SparsePauliOp\n\nH2_op = SparsePauliOp.from_list(\n    [\n        (\"II\", -1.052373245772859),\n        (\"IZ\", 0.39793742484318045),\n        (\"ZI\", -0.39793742484318045),\n        (\"ZZ\", -0.01128010425623538),\n        (\"XX\", 0.18093119978423156),\n    ]\n)\n\nprint(f\"Number of qubits: {H2_op.num_qubits}\")",
+      "path": "tutorials/algorithms/03_vqe_simulation_with_noise.ipynb"
+    }
+  ],
+  "packageMeta": {},
+  "citationBibtex": null,
+  "supportedBackendSlugs": [],
+  "externalLinks": {
+    "docs": [
+      "https://qiskit.org/documentation/tutorials.html"
+    ]
+  },
+  "openIssuesCount": 0,
+  "subscribersCount": 9,
+  "latestRelease": null,
+  "ownerType": "Organization",
+  "ownerUrl": "https://github.com/Qiskit",
   "featured": false,
   "flagship": false,
   "qtanglRelevant": false,
-  "archived": false,
-  "imagePath": null,
+  "archived": true,
+  "imagePath": "/learn/monogram/qiskit-qiskit-tutorial.svg",
   "relatedSlugs": [
+    "qosf-os-quantum-software",
     "0tt3r-quac",
     "adamisntdead-qusimpy",
     "aniabrown-quest",
     "bbn-q-pysimulator",
-    "cda-tum-mqt-ddsim",
-    "dillanchang-qocs"
+    "cda-tum-mqt-ddsim"
   ]
 }

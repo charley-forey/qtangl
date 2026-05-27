@@ -4,7 +4,7 @@
   "name": "cuda-quantum",
   "title": "cuda-quantum",
   "repoUrl": "https://github.com/NVIDIA/cuda-quantum",
-  "homepageUrl": null,
+  "homepageUrl": "https://nvidia.github.io/cuda-quantum/",
   "category": {
     "slug": "compilers-languages",
     "title": "Compilers and languages",
@@ -21,11 +21,16 @@
     }
   ],
   "primaryLanguage": "C++",
+  "primaryLanguages": [
+    "C++",
+    "Python",
+    "C/C++"
+  ],
   "license": "Apache-2.0",
-  "summary": "The CUDA-Q Platform for hybrid quantum-classical computers enables integration and programming of quantum processing units (QPUs), GPUs, and CPUs in one system.",
-  "description": "The CUDA-Q Platform for hybrid quantum-classical computers enables integration and programming of quantum processing units (QPUs), GPUs, and CPUs in one system. This repository contains the source code for all C++ and Python tools provided by the CUDA-Q toolkit, including the nvq++ compiler, the CUDA-Q runtime, as well as a selection of integrated CPU and GPU backends for rapid application...",
+  "summary": "C++ and Python support for the CUDA Quantum programming model for heterogeneous quantum-classical workflows",
+  "description": "C++ and Python support for the CUDA Quantum programming model for heterogeneous quantum-classical workflows",
   "whatItIs": [
-    "cuda-quantum is an open-source project in the compilers and languages category. It is maintained by NVIDIA and primarily looks like a C++ codebase. The CUDA-Q Platform for hybrid quantum-classical computers enables integration and programming of quantum processing units (QPUs), GPUs, and CPUs in one system.",
+    "cuda-quantum is an open-source project in the compilers and languages category. It is maintained by NVIDIA and primarily looks like a C++ codebase. C++ and Python support for the CUDA Quantum programming model for heterogeneous quantum-classical workflows",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches compilers and languages workflows in practice. The repository README emphasizes: The CUDA-Q Platform for hybrid quantum-classical computers enables integration and programming of quantum processing units (QPUs), GPUs, and CPUs in one system. This repository contains the source code for all C++ and Python tools provided by the CUDA-Q toolkit, including the nvq++ compiler, the CUDA-Q runtime, as well..."
   ],
   "whoItsFor": "Developers who want to understand the representations and compilers that sit between high-level code and runnable circuits.",
@@ -36,21 +41,51 @@
   ],
   "readmeExcerpt": "The CUDA-Q Platform for hybrid quantum-classical computers enables integration and programming of quantum processing units (QPUs), GPUs, and CPUs in one system. This repository contains the source code for all C++ and Python tools provided by the CUDA-Q toolkit, including the nvq++ compiler, the CUDA-Q runtime, as well as a selection of integrated CPU and GPU backends for rapid application development and testing. To learn more about how to work with CUDA-Q, please take a look at the [CUDA-Q Documentation][cuda_quantum_docs]. The page also contains [installation instructions][official_install] for officially released packages.",
   "readmePath": "reference\\NVIDIA__cuda-quantum\\README.md",
+  "readmeMarkdownPath": "readmes/nvidia-cuda-quantum.md",
   "clonePath": "reference\\NVIDIA__cuda-quantum",
-  "stars": 0,
-  "lastPushedAt": null,
-  "githubTopics": [],
+  "stars": 1048,
+  "lastPushedAt": "2026-05-27T21:30:02Z",
+  "defaultBranch": "main",
+  "githubTopics": [
+    "cpp",
+    "hacktoberfest",
+    "python",
+    "quantum",
+    "quantum-algorithms",
+    "quantum-computing",
+    "quantum-machine-learning",
+    "quantum-programming-language",
+    "unitaryhack"
+  ],
+  "quickstart": null,
+  "codeSamples": [],
+  "packageMeta": {},
+  "citationBibtex": "@software{cudaq,\n  title = {CUDA-Q},\n  author = {Unknown},\n  year = {n.d.},\n}\n",
+  "supportedBackendSlugs": [
+    "quantumlib-openfermion",
+    "qiskit-qiskit"
+  ],
+  "externalLinks": {
+    "docs": [
+      "https://github.com/NVIDIA/cuda-quantum/actions/workflows/documentation.yml/badge.svg?branch=main"
+    ]
+  },
+  "openIssuesCount": 489,
+  "subscribersCount": 20,
+  "latestRelease": null,
+  "ownerType": "Organization",
+  "ownerUrl": "https://github.com/NVIDIA",
   "featured": false,
   "flagship": true,
   "qtanglRelevant": false,
   "archived": false,
-  "imagePath": "/learn/flagship/nvidia-cuda-quantum.png",
+  "imagePath": "/learn/og/nvidia-cuda-quantum.png",
   "relatedSlugs": [
     "cqcl-tket",
+    "microsoft-quantumkatas",
+    "qiskit-openqasm",
+    "qiskit-qiskit",
     "quantomatic-pyzx",
-    "avalon-lang-avaloni",
-    "aviggiano-qcl",
-    "dabacon-qsel",
-    "epiqc-scaffcc"
+    "quantumlib-cirq"
   ]
 }

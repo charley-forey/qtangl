@@ -4,7 +4,7 @@
   "name": "QuantumComputingBot",
   "title": "QuantumComputingBot",
   "repoUrl": "https://github.com/RQC-QApp/QuantumComputingBot",
-  "homepageUrl": null,
+  "homepageUrl": "http://www.rqc.ru/",
   "category": {
     "slug": "general-purpose-sdks",
     "title": "General-purpose SDKs",
@@ -21,11 +21,14 @@
     }
   ],
   "primaryLanguage": "Python",
+  "primaryLanguages": [
+    "Python"
+  ],
   "license": "Apache-2.0",
-  "summary": "Monitoring the load of IBM Q processors from IBM Quantum Experience (data for 24 hours).",
-  "description": "Monitoring the load of IBM Q processors from IBM Quantum Experience (data for 24 hours).",
+  "summary": "\ud83d\udd2e Monitoring the load of IBM Q processors",
+  "description": "\ud83d\udd2e Monitoring the load of IBM Q processors",
   "whatItIs": [
-    "QuantumComputingBot is an open-source project in the general-purpose sdks category. It is maintained by RQC-QApp and primarily looks like a Python codebase. Monitoring the load of IBM Q processors from IBM Quantum Experience (data for 24 hours).",
+    "QuantumComputingBot is an open-source project in the general-purpose sdks category. It is maintained by RQC-QApp and primarily looks like a Python codebase. \ud83d\udd2e Monitoring the load of IBM Q processors",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches general-purpose sdks workflows in practice. The repository README emphasizes: Monitoring the load of IBM Q processors from IBM Quantum Experience (data for 24 hours). Calibration for IBM QX 4 Pending jobs for IBM QX 5 :------------- :------------- <img src=\"img/errors_demo.png\" width=\"200px\"> <img src=\"img/jobs_demo.png\" width=\"400px\">"
   ],
   "whoItsFor": "Developers who want a broad entry point for building circuits, experimenting with algorithms, and integrating quantum workflows into larger applications.",
@@ -36,21 +39,47 @@
   ],
   "readmeExcerpt": "Monitoring the load of IBM Q processors from IBM Quantum Experience (data for 24 hours). Calibration for IBM QX 4 Pending jobs for IBM QX 5 :------------- :------------- <img src=\"img/errors_demo.png\" width=\"200px\"> <img src=\"img/jobs_demo.png\" width=\"400px\">",
   "readmePath": "reference\\RQC-QApp__QuantumComputingBot\\README.md",
+  "readmeMarkdownPath": "readmes/rqc-qapp-quantumcomputingbot.md",
   "clonePath": "reference\\RQC-QApp__QuantumComputingBot",
-  "stars": 0,
-  "lastPushedAt": null,
-  "githubTopics": [],
+  "stars": 22,
+  "lastPushedAt": "2018-11-30T20:02:04Z",
+  "defaultBranch": "master",
+  "githubTopics": [
+    "bot",
+    "ibm",
+    "quantum",
+    "quantum-computing",
+    "rqc",
+    "russian-quantum-center",
+    "slack",
+    "telegram"
+  ],
+  "quickstart": null,
+  "codeSamples": [],
+  "packageMeta": {},
+  "citationBibtex": null,
+  "supportedBackendSlugs": [],
+  "externalLinks": {
+    "community": [
+      "https://slack.com"
+    ]
+  },
+  "openIssuesCount": 1,
+  "subscribersCount": 2,
+  "latestRelease": null,
+  "ownerType": "Organization",
+  "ownerUrl": "https://github.com/RQC-QApp",
   "featured": false,
   "flagship": false,
   "qtanglRelevant": false,
   "archived": false,
-  "imagePath": null,
+  "imagePath": "/learn/monogram/rqc-qapp-quantumcomputingbot.svg",
   "relatedSlugs": [
     "qiskit-qiskit",
     "quantumlib-cirq",
     "xanaduai-pennylane",
-    "projectq-framework-projectq",
+    "qiskit-qiskit-terra",
     "quantumbfs-yao-jl",
-    "arlineq-arline-benchmarks"
+    "microsoft-quantumkatas"
   ]
 }

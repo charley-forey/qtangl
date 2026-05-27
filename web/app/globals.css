@@ -156,12 +156,26 @@ a:not([class]) {
   .docs-toc-col,
   .docs-edit-link,
   .docs-pager,
-  .docs-breadcrumbs {
+  .docs-breadcrumbs,
+  nav[aria-label="Breadcrumb"],
+  button,
+  .learn-print-hide {
     display: none !important;
   }
 
-  .docs-layout .docs-main {
+  .docs-layout .docs-main,
+  .learn-print-area {
     max-width: 100%;
+  }
+
+  body {
+    background: white !important;
+    color: black !important;
+  }
+
+  .learn-print-area table,
+  .learn-print-area pre {
+    break-inside: avoid;
   }
 }
 

@@ -4,7 +4,7 @@
   "name": "mqt-qmap",
   "title": "mqt-qmap",
   "repoUrl": "https://github.com/cda-tum/mqt-qmap",
-  "homepageUrl": null,
+  "homepageUrl": "https://mqt.readthedocs.io/projects/qmap",
   "category": {
     "slug": "optimization-qubo",
     "title": "Optimization and QUBO",
@@ -20,12 +20,17 @@
       "title": "Quantum computing software in 2026: the open-source map"
     }
   ],
-  "primaryLanguage": "OpenQASM",
+  "primaryLanguage": "C++",
+  "primaryLanguages": [
+    "OpenQASM",
+    "C++",
+    "Python"
+  ],
   "license": "MIT",
-  "summary": "<p align=\"center\"> <a href=\"https://mqt.readthedocs.io\"> <picture> <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://raw.githubusercontent.com/munich-quantum-toolkit/.github/refs/heads/main/docs/_static/mqt-banner-dark.svg\" width=\"90%\"> <img src=\"https://raw.githubusercontent.com/munich-quantum-toolkit/.github/refs/heads/main/docs/_static/mqt-banner-light.svg\" width=\"90%\" alt=\"MQT Banner\"> </picture> </a> </p>",
-  "description": "<p align=\"center\"> <a href=\"https://mqt.readthedocs.io\"> <picture> <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://raw.githubusercontent.com/munich-quantum-toolkit/.github/refs/heads/main/docs/_static/mqt-banner-dark.svg\" width=\"90%\"> <img src=\"https://raw.githubusercontent.com/munich-quantum-toolkit/.github/refs/heads/main/docs/_static/mqt-banner-light.svg\" width=\"90%\" alt=\"MQT Banner\"> </picture> </a> </p>",
+  "summary": "MQT QMAP - A tool for Quantum Circuit Mapping written in C++",
+  "description": "MQT QMAP - A tool for Quantum Circuit Mapping written in C++",
   "whatItIs": [
-    "mqt-qmap is an open-source project in the optimization and qubo category. It is maintained by cda-tum and primarily looks like a OpenQASM codebase. <p align=\"center\"> <a href=\"https://mqt.readthedocs.io\"> <picture> <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://raw.githubusercontent.com/munich-quantum-toolkit/.github/refs/heads/main/docs/_static/mqt-banner-dark.svg\" width=\"90%\"> <img src=\"https://raw.githubusercontent.com/munich-quantum-toolkit/.github/refs/heads/main/docs/_static/mqt-banner-light.svg\" width=\"90%\" alt=\"MQT Banner\"> </picture> </a> </p>",
+    "mqt-qmap is an open-source project in the optimization and qubo category. It is maintained by cda-tum and primarily looks like a C++ codebase. MQT QMAP - A tool for Quantum Circuit Mapping written in C++",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches optimization and qubo workflows in practice. The repository README emphasizes: <p align=\"center\"> <a href=\"https://mqt.readthedocs.io\"> <picture> <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://raw.githubusercontent.com/munich-quantum-toolkit/.github/refs/heads/main/docs/_static/mqt-banner-dark.svg\" width=\"90%\"> <img src=\"https://raw.githubusercontent.com/munich-quantum-toolkit/.github/refs/heads/main/docs/_static/mqt-banner-light.svg\" width=\"90%\" alt=\"MQT Banner\"> </picture> </a> </p> MQT QMAP - A tool for Quantum Circuit Compilation"
   ],
   "whoItsFor": "Teams exploring routing, scheduling, allocation, and other combinatorial problems that can be modeled as optimization workloads.",
@@ -36,15 +41,60 @@
   ],
   "readmeExcerpt": "<p align=\"center\"> <a href=\"https://mqt.readthedocs.io\"> <picture> <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://raw.githubusercontent.com/munich-quantum-toolkit/.github/refs/heads/main/docs/_static/mqt-banner-dark.svg\" width=\"90%\"> <img src=\"https://raw.githubusercontent.com/munich-quantum-toolkit/.github/refs/heads/main/docs/_static/mqt-banner-light.svg\" width=\"90%\" alt=\"MQT Banner\"> </picture> </a> </p> MQT QMAP - A tool for Quantum Circuit Compilation",
   "readmePath": "reference\\cda-tum__mqt-qmap\\README.md",
+  "readmeMarkdownPath": "readmes/cda-tum-mqt-qmap.md",
   "clonePath": "reference\\cda-tum__mqt-qmap",
-  "stars": 0,
-  "lastPushedAt": null,
-  "githubTopics": [],
+  "stars": 138,
+  "lastPushedAt": "2026-05-25T01:55:50Z",
+  "defaultBranch": "main",
+  "githubTopics": [
+    "compilation",
+    "mapping-tools",
+    "quantum",
+    "quantum-circuits",
+    "quantum-computing"
+  ],
+  "quickstart": null,
+  "codeSamples": [],
+  "packageMeta": {
+    "name": "mqt.qmap",
+    "version": "build-system.requires",
+    "requiresPython": ">=3.10, != 3.14.1",
+    "dependencies": [
+      "mqt",
+      "qiskit"
+    ]
+  },
+  "citationBibtex": null,
+  "supportedBackendSlugs": [
+    "qiskit-qiskit"
+  ],
+  "externalLinks": {
+    "docs": [
+      "https://mqt.readthedocs.io/projects/qmap",
+      "https://mqt.readthedocs.io",
+      "https://img.shields.io/badge/documentation-blue?style=for-the-badge&logo=read%20the%20docs",
+      "https://mqt.readthedocs.io/projects/qmap/en/latest/mapping.html"
+    ],
+    "paper": [
+      "https://arxiv.org/pdf/2210.09321.pdf",
+      "https://arxiv.org/pdf/2208.11713.pdf",
+      "https://arxiv.org/pdf/2305.01674.pdf",
+      "https://arxiv.org/pdf/2309.08656.pdf"
+    ],
+    "pypi": [
+      "https://pypi.org/project/mqt.qmap/"
+    ]
+  },
+  "openIssuesCount": 17,
+  "subscribersCount": 6,
+  "latestRelease": null,
+  "ownerType": "Organization",
+  "ownerUrl": "https://github.com/munich-quantum-toolkit",
   "featured": false,
   "flagship": true,
   "qtanglRelevant": true,
   "archived": false,
-  "imagePath": "/learn/flagship/cda-tum-mqt-qmap.png",
+  "imagePath": "/learn/og/cda-tum-mqt-qmap.png",
   "relatedSlugs": [
     "entropicalabs-openqaoa",
     "jtiosue-qubovert",

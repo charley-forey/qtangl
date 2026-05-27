@@ -16,12 +16,16 @@
       "title": "Quantum computing software in 2026: the open-source map"
     }
   ],
-  "primaryLanguage": "Python",
-  "license": "Unknown",
-  "summary": "This document is intended as a User Guide for anyone interested in training a machine learning (ML) model using the quantum dot dataset available on data.nist.gov.",
-  "description": "This document is intended as a User Guide for anyone interested in training a machine learning (ML) model using the quantum dot dataset available on data.nist.gov. For more details about the project, pease refer to the Project description document.",
+  "primaryLanguage": "Jupyter Notebook",
+  "primaryLanguages": [
+    "Python",
+    "Jupyter"
+  ],
+  "license": null,
+  "summary": "Machine learning code for quantum dots",
+  "description": "Machine learning code for quantum dots",
   "whatItIs": [
-    "QFlow-lite is an open-source project in the quantum machine learning category. It is maintained by jpzwolak and primarily looks like a Python codebase. This document is intended as a User Guide for anyone interested in training a machine learning (ML) model using the quantum dot dataset available on data.nist.gov.",
+    "QFlow-lite is an open-source project in the quantum machine learning category. It is maintained by jpzwolak and primarily looks like a Jupyter Notebook codebase. Machine learning code for quantum dots",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches quantum machine learning workflows in practice. The repository README emphasizes: This document is intended as a User Guide for anyone interested in training a machine learning (ML) model using the quantum dot dataset available on data.nist.gov. For more details about the project, pease refer to the Project description document. I. Relevant references Details about the original dataset, as..."
   ],
   "whoItsFor": "Researchers and practitioners experimenting with quantum machine learning, variational models, and differentiable circuit stacks.",
@@ -32,21 +36,39 @@
   ],
   "readmeExcerpt": "This document is intended as a User Guide for anyone interested in training a machine learning (ML) model using the quantum dot dataset available on data.nist.gov. For more details about the project, pease refer to the Project description document. I. Relevant references Details about the original dataset, as used in QFlow-lite, can be found in J.P. Zwolak *et al.*, QFlow lite dataset: A machinelearning approach to the charge states in quantum dot experiments. *PLoS ONE* **13**(10): e0205844 (2018).",
   "readmePath": "reference\\jpzwolak__QFlow-lite\\readme.md",
+  "readmeMarkdownPath": "readmes/jpzwolak-qflow-lite.md",
   "clonePath": "reference\\jpzwolak__QFlow-lite",
-  "stars": 0,
-  "lastPushedAt": null,
+  "stars": 40,
+  "lastPushedAt": "2022-02-22T16:14:56Z",
+  "defaultBranch": "master",
   "githubTopics": [],
+  "quickstart": null,
+  "codeSamples": [],
+  "packageMeta": {},
+  "citationBibtex": null,
+  "supportedBackendSlugs": [],
+  "externalLinks": {
+    "paper": [
+      "https://arxiv.org/abs/2108.00043",
+      "https://arxiv.org/abs/2010.00500"
+    ]
+  },
+  "openIssuesCount": 2,
+  "subscribersCount": 5,
+  "latestRelease": null,
+  "ownerType": "User",
+  "ownerUrl": "https://github.com/jpzwolak",
   "featured": false,
   "flagship": false,
   "qtanglRelevant": false,
   "archived": false,
-  "imagePath": null,
+  "imagePath": "/learn/monogram/jpzwolak-qflow-lite.svg",
   "relatedSlugs": [
-    "artiste-qb-net-quantum-edward",
+    "microsoft-quantumkatas",
+    "qiskit-qiskit",
     "qiskit-qiskit-machine-learning",
-    "aws-amazon-braket-sdk-python",
-    "cqcl-tket",
-    "dwavesystems-dwave-ocean-sdk",
-    "entropicalabs-openqaoa"
+    "quantumlib-cirq",
+    "xanaduai-pennylane",
+    "artiste-qb-net-quantum-edward"
   ]
 }

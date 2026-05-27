@@ -20,12 +20,17 @@
       "title": "How to start writing quantum code: an honest path"
     }
   ],
-  "primaryLanguage": "Quil",
+  "primaryLanguage": "Common Lisp",
+  "primaryLanguages": [
+    "Quil",
+    "C",
+    "LaTeX"
+  ],
   "license": "Apache-2.0",
-  "summary": "Quilc is an advanced optimizing compiler for the quantum instruction language Quil, licensed under the Apache 2.0 license.",
-  "description": "Quilc is an advanced optimizing compiler for the quantum instruction language Quil, licensed under the Apache 2.0 license.",
+  "summary": "The optimizing Quil compiler.",
+  "description": "The optimizing Quil compiler.",
   "whatItIs": [
-    "quilc is an open-source project in the compilers and languages category. It is maintained by rigetti and primarily looks like a Quil codebase. Quilc is an advanced optimizing compiler for the quantum instruction language Quil, licensed under the Apache 2.0 license.",
+    "quilc is an open-source project in the compilers and languages category. It is maintained by rigetti and primarily looks like a Common Lisp codebase. The optimizing Quil compiler.",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches compilers and languages workflows in practice. The repository README emphasizes: Quilc is an advanced optimizing compiler for the quantum instruction language Quil, licensed under the Apache 2.0 license. Quilc comprises two projects. The first, cl-quil, does the heavy lifting of parsing, compiling, and optimizing Quil code. The second, quilc, presents an external interface for using cl-quil, either using..."
   ],
   "whoItsFor": "Developers who want to understand the representations and compilers that sit between high-level code and runnable circuits.",
@@ -36,21 +41,40 @@
   ],
   "readmeExcerpt": "Quilc is an advanced optimizing compiler for the quantum instruction language Quil, licensed under the Apache 2.0 license. Quilc comprises two projects. The first, cl-quil, does the heavy lifting of parsing, compiling, and optimizing Quil code. The second, quilc, presents an external interface for using cl-quil, either using the binary quilc application directly, or alternatively by communicating with an RPCQ server.",
   "readmePath": "reference\\rigetti__quilc\\README.md",
+  "readmeMarkdownPath": "readmes/rigetti-quilc.md",
   "clonePath": "reference\\rigetti__quilc",
-  "stars": 0,
-  "lastPushedAt": null,
-  "githubTopics": [],
+  "stars": 493,
+  "lastPushedAt": "2025-10-16T17:59:53Z",
+  "defaultBranch": "master",
+  "githubTopics": [
+    "common-lisp",
+    "compiler",
+    "forest",
+    "quantum-computing",
+    "quil"
+  ],
+  "quickstart": null,
+  "codeSamples": [],
+  "packageMeta": {},
+  "citationBibtex": null,
+  "supportedBackendSlugs": [],
+  "externalLinks": {},
+  "openIssuesCount": 218,
+  "subscribersCount": 23,
+  "latestRelease": null,
+  "ownerType": "Organization",
+  "ownerUrl": "https://github.com/quil-lang",
   "featured": false,
   "flagship": false,
   "qtanglRelevant": false,
   "archived": false,
-  "imagePath": null,
+  "imagePath": "/learn/monogram/rigetti-quilc.svg",
   "relatedSlugs": [
     "cqcl-tket",
     "nvidia-cuda-quantum",
-    "quantomatic-pyzx",
-    "avalon-lang-avaloni",
-    "aviggiano-qcl",
-    "dabacon-qsel"
+    "microsoft-quantumkatas",
+    "qiskit-openqasm",
+    "qiskit-qiskit",
+    "quantomatic-pyzx"
   ]
 }

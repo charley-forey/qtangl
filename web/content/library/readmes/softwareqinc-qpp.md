@@ -1,0 +1,98 @@
+# Quantum++
+
+## Version 7.0.3 - 25 March 2026
+
+[![GitHub actions](https://github.com/softwareqinc/qpp/actions/workflows/cmake.yml/badge.svg)](https://github.com/softwareQinc/qpp/actions)
+
+---
+
+## About
+
+**Quantum++** is a modern C++ general purpose quantum computing library,
+composed solely of template header files. **Quantum++** is written in standard
+C++17 and has very low external dependencies, using only the
+[Eigen](https://libeigen.gitlab.io) linear algebra header-only template
+library and, if available, the [OpenMP](https://www.openmp.org/)
+multiprocessing library.
+
+**Quantum++** is not restricted to qubit systems or specific quantum
+information processing tasks, being capable of simulating arbitrary quantum
+processes. The main design factors taken in consideration were the ease of use,
+high portability, and high performance. The library's simulation capabilities
+are only restricted by the amount of available physical memory.
+
+Explore the [examples](https://github.com/softwareQinc/qpp/tree/main/examples)
+for a comprehensive look at **Quantum++** in action. You can also
+find community-contributed examples in
+[antoine-bussy's GitHub repository](https://github.com/antoine-bussy/qpp-examples).
+
+To report any bugs or ask for additional features/enhancements, please
+[submit an issue](https://github.com/softwareQinc/qpp/issues) with an
+appropriate label.
+
+If you are interested in contributing to this project, feel free to contact us.
+Alternatively, fork the repository, create a custom branch, add your
+contribution, then finally create a pull request. If we accept the pull
+request, we will merge your custom branch with the latest main/development
+branch. The latter will eventually be merged into a future release version. To
+contribute, it is preferable to have a solid knowledge of modern C++
+(preferably C++17 or later), including templates and the standard library, a
+basic knowledge of quantum computing and linear algebra, and working experience
+with [Eigen](https://libeigen.gitlab.io).
+
+For more information on [Eigen](https://libeigen.gitlab.io), please refer to
+the [official documentation](https://libeigen.gitlab.io/eigen/docs-nightly/). A
+concise
+[ASCII quick reference with MATLAB comparisons](https://libeigen.gitlab.io/eigen/docs-nightly/AsciiQuickReference.txt)
+is also available.
+
+Copyright (c) 2017 - 2026 softwareQ Inc. All rights reserved.
+
+---
+
+## License
+
+[Quantum++](https://github.com/softwareQinc/qpp) is distributed under the
+[MIT License](LICENSE.txt).
+
+---
+
+## Installation instructions and further documentation
+
+Please see the <a href="INSTALL.md">installation guide</a> and the
+comprehensive [Wiki](https://github.com/softwareQinc/qpp/wiki) for further
+documentation and detailed examples.
+
+To generate the full official API documentation in both LaTeX and HTML formats
+run [`doxygen`](https://www.doxygen.nl) on the [`Doxyfile`](Doxyfile) file. The
+tool `dot` from the [`Graphviz`](https://www.graphviz.org) package must be
+installed (`sudo apt-get install graphviz` on Ubuntu/Debian Linux,
+or `brew install graphviz` on macOS). Running `doxygen` will generate the
+documentation directory `doc` containing both the HTML and LaTeX documentation.
+
+The HTML documentation file will be accessible by opening `doc/html/index.html`
+with the browser of your choice. To generate a PDF file of the documentation,
+run
+
+```shell
+latexmk -pdf refman.tex
+```
+
+from the `doc/latex` directory or compile the file `doc/latex/refman.tex` with
+your LaTeX compiler. This will create the `doc/latex/refman.pdf` documentation
+file. Consult your favourite LaTeX manual for how to compile/build LaTeX files
+under your specific operating system.
+
+---
+
+## Python 3 wrapper
+
+[**pyqpp**](pyqpp) is a Python 3 wrapper for **Quantum++**. **pyqpp** requires
+the same dependencies as **Quantum++**, and can be installed using `pip`
+
+```shell
+pip install git+https://github.com/softwareQinc/qpp
+```
+
+For more details, please see the <a href="pyqpp/README.md"><b>pyqpp</b>
+documentation</a>.

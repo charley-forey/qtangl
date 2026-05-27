@@ -20,12 +20,17 @@
       "title": "How to start writing quantum code: an honest path"
     }
   ],
-  "primaryLanguage": "Jupyter",
+  "primaryLanguage": "Jupyter Notebook",
+  "primaryLanguages": [
+    "Jupyter",
+    "Python",
+    "LaTeX"
+  ],
   "license": "Apache-2.0",
-  "summary": "Quantum Awesomeness A Game to Benchmark Quantum Computers",
-  "description": "Quantum Awesomeness A Game to Benchmark Quantum Computers",
+  "summary": "Simple puzzles implemented on quantum devices",
+  "description": "Simple puzzles implemented on quantum devices",
   "whatItIs": [
-    "A_Game_to_Benchmark_Quantum_Computers is an open-source project in the games and learning category. It is maintained by decodoku and primarily looks like a Jupyter codebase. Quantum Awesomeness A Game to Benchmark Quantum Computers",
+    "A_Game_to_Benchmark_Quantum_Computers is an open-source project in the games and learning category. It is maintained by decodoku and primarily looks like a Jupyter Notebook codebase. Simple puzzles implemented on quantum devices",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches games and learning workflows in practice. The repository README emphasizes: Quantum Awesomeness A Game to Benchmark Quantum Computers This game is designed to run on any and all prototype devices capable of universal quantum computation. The better the device, the better the game will run. This therefore allows a simple and accessible way to assess and compare these..."
   ],
   "whoItsFor": "Beginners, educators, and curious developers who want a more approachable path into quantum concepts.",
@@ -36,21 +41,42 @@
   ],
   "readmeExcerpt": "Quantum Awesomeness A Game to Benchmark Quantum Computers This game is designed to run on any and all prototype devices capable of universal quantum computation. The better the device, the better the game will run. This therefore allows a simple and accessible way to assess and compare these prototypes.",
   "readmePath": "reference\\decodoku__A_Game_to_Benchmark_Quantum_Computers\\README.md",
+  "readmeMarkdownPath": "readmes/decodoku-a-game-to-benchmark-quantum-computers.md",
   "clonePath": "reference\\decodoku__A_Game_to_Benchmark_Quantum_Computers",
-  "stars": 0,
-  "lastPushedAt": null,
+  "stars": 49,
+  "lastPushedAt": "2024-08-16T07:42:06Z",
+  "defaultBranch": "master",
   "githubTopics": [],
+  "quickstart": null,
+  "codeSamples": [],
+  "packageMeta": {},
+  "citationBibtex": null,
+  "supportedBackendSlugs": [
+    "qiskit-qiskit",
+    "projectq-framework-projectq",
+    "quantumlib-cirq"
+  ],
+  "externalLinks": {
+    "paper": [
+      "https://arxiv.org/abs/1806.02736"
+    ]
+  },
+  "openIssuesCount": 0,
+  "subscribersCount": 3,
+  "latestRelease": null,
+  "ownerType": "Organization",
+  "ownerUrl": "https://github.com/decodoku",
   "featured": false,
   "flagship": false,
   "qtanglRelevant": false,
   "archived": false,
-  "imagePath": null,
+  "imagePath": "/learn/monogram/decodoku-a-game-to-benchmark-quantum-computers.svg",
   "relatedSlugs": [
     "microsoft-quantumkatas",
     "strilanc-quirk",
+    "qiskit-qiskit",
+    "quantumlib-cirq",
     "stared-quantum-game",
-    "decodoku-battleships-with-complementary-measurements",
-    "desireevl-quantum-catsweeper",
-    "entanglion-entanglion"
+    "xanaduai-pennylane"
   ]
 }

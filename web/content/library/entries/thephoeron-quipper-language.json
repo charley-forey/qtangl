@@ -20,12 +20,16 @@
       "title": "How to start writing quantum code: an honest path"
     }
   ],
-  "primaryLanguage": "JavaScript",
-  "license": "Unknown",
-  "summary": "This file is part of Quipper.",
-  "description": "This file is part of Quipper. Copyright (C) 2011-2014. Please see the file COPYRIGHT for a list of authors, copyright holders, licensing, and other details. All rights reserved.",
+  "primaryLanguage": "Haskell",
+  "primaryLanguages": [
+    "JavaScript",
+    "Shell"
+  ],
+  "license": null,
+  "summary": "Quipper: embedded, scalable functional programming language for quantum computing (unofficial fork)",
+  "description": "Quipper: embedded, scalable functional programming language for quantum computing (unofficial fork)",
   "whatItIs": [
-    "quipper-language is an open-source project in the compilers and languages category. It is maintained by thephoeron and primarily looks like a JavaScript codebase. This file is part of Quipper.",
+    "quipper-language is an open-source project in the compilers and languages category. It is maintained by thephoeron and primarily looks like a Haskell codebase. Quipper: embedded, scalable functional programming language for quantum computing (unofficial fork)",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches compilers and languages workflows in practice. The repository README emphasizes: This file is part of Quipper. Copyright (C) 2011-2014. Please see the file COPYRIGHT for a list of authors, copyright holders, licensing, and other details. All rights reserved. For installing on Linux, Mac OS X, and other Unix-like systems: please first see the instructions in INSTALLING, then continue..."
   ],
   "whoItsFor": "Developers who want to understand the representations and compilers that sit between high-level code and runnable circuits.",
@@ -36,21 +40,40 @@
   ],
   "readmeExcerpt": "This file is part of Quipper. Copyright (C) 2011-2014. Please see the file COPYRIGHT for a list of authors, copyright holders, licensing, and other details. All rights reserved. For installing on Linux, Mac OS X, and other Unix-like systems: please first see the instructions in INSTALLING, then continue to read below.",
   "readmePath": "reference\\thephoeron__quipper-language\\README",
+  "readmeMarkdownPath": "readmes/thephoeron-quipper-language.md",
   "clonePath": "reference\\thephoeron__quipper-language",
-  "stars": 0,
-  "lastPushedAt": null,
-  "githubTopics": [],
+  "stars": 94,
+  "lastPushedAt": "2015-08-31T15:27:44Z",
+  "defaultBranch": "master",
+  "githubTopics": [
+    "haskell",
+    "quantum-computing",
+    "quipper",
+    "quipper-language",
+    "unofficial-fork"
+  ],
+  "quickstart": null,
+  "codeSamples": [],
+  "packageMeta": {},
+  "citationBibtex": null,
+  "supportedBackendSlugs": [],
+  "externalLinks": {},
+  "openIssuesCount": 3,
+  "subscribersCount": 5,
+  "latestRelease": null,
+  "ownerType": "User",
+  "ownerUrl": "https://github.com/thephoeron",
   "featured": false,
   "flagship": false,
   "qtanglRelevant": false,
   "archived": false,
-  "imagePath": null,
+  "imagePath": "/learn/monogram/thephoeron-quipper-language.svg",
   "relatedSlugs": [
     "cqcl-tket",
     "nvidia-cuda-quantum",
-    "quantomatic-pyzx",
-    "avalon-lang-avaloni",
-    "aviggiano-qcl",
-    "dabacon-qsel"
+    "microsoft-quantumkatas",
+    "qiskit-openqasm",
+    "qiskit-qiskit",
+    "quantomatic-pyzx"
   ]
 }

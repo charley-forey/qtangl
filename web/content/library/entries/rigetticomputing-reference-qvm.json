@@ -21,12 +21,15 @@
     }
   ],
   "primaryLanguage": "Python",
+  "primaryLanguages": [
+    "Python"
+  ],
   "license": "Apache-2.0",
-  "summary": "The referenceqvm is the reference implementation of the QVM outlined in the arXiv:1608:03355 by Robert Smith, Spike Curtis, and Will Zeng.",
-  "description": "The referenceqvm is the reference implementation of the QVM outlined in the arXiv:1608:03355 by Robert Smith, Spike Curtis, and Will Zeng. It is a research package that supports rapid prototyping and development of quantum programs using pyQuil.",
+  "summary": "A reference implementation for a quantum virtual machine in Python",
+  "description": "A reference implementation for a quantum virtual machine in Python",
   "whatItIs": [
-    "reference-qvm is an open-source project in the compilers and languages category. It is maintained by rigetticomputing and primarily looks like a Python codebase. The referenceqvm is the reference implementation of the QVM outlined in the arXiv:1608:03355 by Robert Smith, Spike Curtis, and Will Zeng.",
-    "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches compilers and languages workflows in practice. The repository README emphasizes: The referenceqvm is the reference implementation of the QVM outlined in the arXiv:1608:03355 by Robert Smith, Spike Curtis, and Will Zeng. It is a research package that supports rapid prototyping and development of quantum programs using pyQuil. Currently, this QVM supports a subset of functionality in the Quil..."
+    "reference-qvm is an open-source project in the compilers and languages category. It is maintained by rigetticomputing and primarily looks like a Python codebase. A reference implementation for a quantum virtual machine in Python",
+    "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches compilers and languages workflows in practice. The repository README emphasizes: The referenceqvm is the reference implementation of the QVM outlined in the arXiv:1608:03355 by Robert Smith, Spike Curtis, and Will Zeng. It is a research package that supports rapid prototyping and development of quantum programs using pyQuil. Currently, this QVM supports a subset of functionality in the Quil... The repository also appears to be archival or no longer actively maintained, which matters when evaluating it for current production use."
   ],
   "whoItsFor": "Developers who want to understand the representations and compilers that sit between high-level code and runnable circuits.",
   "whatYouCanBuild": [
@@ -36,21 +39,42 @@
   ],
   "readmeExcerpt": "The referenceqvm is the reference implementation of the QVM outlined in the arXiv:1608:03355 by Robert Smith, Spike Curtis, and Will Zeng. It is a research package that supports rapid prototyping and development of quantum programs using pyQuil. Currently, this QVM supports a subset of functionality in the Quil specifications, excepting certain functions (DEFCIRCUIT, WAIT, NOP).",
   "readmePath": "reference\\rigetticomputing__reference-qvm\\README.md",
+  "readmeMarkdownPath": "readmes/rigetticomputing-reference-qvm.md",
   "clonePath": "reference\\rigetticomputing__reference-qvm",
-  "stars": 0,
-  "lastPushedAt": null,
-  "githubTopics": [],
+  "stars": 46,
+  "lastPushedAt": "2019-02-07T21:13:05Z",
+  "defaultBranch": "master",
+  "githubTopics": [
+    "forest",
+    "quantum-simulation",
+    "quil",
+    "wavefunction"
+  ],
+  "quickstart": {
+    "language": "python",
+    "source": ">>> import pyquil.quil as pq\n>>> import referenceqvm.api as api\n>>> from pyquil.gates import *\n>>> qvm = api.QVMConnection()\n>>> p = pq.Program(H(0), CNOT(0,1))\n<pyquil.pyquil.Program object at 0x101ebfb50>\n>>> qvm.wavefunction(p)[0]\n[(0.7071067811865475+0j), 0j, 0j, (0.7071067811865475+0j)]"
+  },
+  "codeSamples": [],
+  "packageMeta": {},
+  "citationBibtex": null,
+  "supportedBackendSlugs": [],
+  "externalLinks": {},
+  "openIssuesCount": 2,
+  "subscribersCount": 0,
+  "latestRelease": null,
+  "ownerType": "Organization",
+  "ownerUrl": "https://github.com/rigetti",
   "featured": false,
   "flagship": false,
   "qtanglRelevant": false,
-  "archived": false,
-  "imagePath": null,
+  "archived": true,
+  "imagePath": "/learn/monogram/rigetticomputing-reference-qvm.svg",
   "relatedSlugs": [
     "cqcl-tket",
     "nvidia-cuda-quantum",
-    "quantomatic-pyzx",
-    "avalon-lang-avaloni",
-    "aviggiano-qcl",
-    "dabacon-qsel"
+    "microsoft-quantumkatas",
+    "qiskit-openqasm",
+    "qiskit-qiskit",
+    "quantomatic-pyzx"
   ]
 }

@@ -21,11 +21,16 @@
     }
   ],
   "primaryLanguage": "Python",
-  "license": "Unknown",
-  "summary": "**2 players**: a *Sender* and a *Blocker* **1 computer** to pass between you",
-  "description": "**2 players**: a *Sender* and a *Blocker* **1 computer** to pass between you",
+  "primaryLanguages": [
+    "Python",
+    "C/C++",
+    "C#"
+  ],
+  "license": null,
+  "summary": "A tiny qubit duel",
+  "description": "A tiny qubit duel",
   "whatItIs": [
-    "bloqit is an open-source project in the general-purpose sdks category. It is maintained by kelzheng and primarily looks like a Python codebase. **2 players**: a *Sender* and a *Blocker* **1 computer** to pass between you",
+    "bloqit is an open-source project in the general-purpose sdks category. It is maintained by kelzheng and primarily looks like a Python codebase. A tiny qubit duel",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches general-purpose sdks workflows in practice. The repository README emphasizes: **2 players**: a *Sender* and a *Blocker* **1 computer** to pass between you In bloqit, the: **Sender** player tries make as many qubits equal **1** when we measure **Blocker** player tries to make as many qubits equal **0** when we measure <br>"
   ],
   "whoItsFor": "Developers who want a broad entry point for building circuits, experimenting with algorithms, and integrating quantum workflows into larger applications.",
@@ -36,21 +41,34 @@
   ],
   "readmeExcerpt": "**2 players**: a *Sender* and a *Blocker* **1 computer** to pass between you In bloqit, the: **Sender** player tries make as many qubits equal **1** when we measure **Blocker** player tries to make as many qubits equal **0** when we measure <br>",
   "readmePath": "reference\\kelzheng__bloqit\\README.md",
+  "readmeMarkdownPath": "readmes/kelzheng-bloqit.md",
   "clonePath": "reference\\kelzheng__bloqit",
-  "stars": 0,
-  "lastPushedAt": null,
+  "stars": 8,
+  "lastPushedAt": "2020-02-01T12:50:15Z",
+  "defaultBranch": "master",
   "githubTopics": [],
+  "quickstart": null,
+  "codeSamples": [],
+  "packageMeta": {},
+  "citationBibtex": null,
+  "supportedBackendSlugs": [],
+  "externalLinks": {},
+  "openIssuesCount": 1,
+  "subscribersCount": 2,
+  "latestRelease": null,
+  "ownerType": "User",
+  "ownerUrl": "https://github.com/kelzheng",
   "featured": false,
   "flagship": false,
   "qtanglRelevant": false,
   "archived": false,
-  "imagePath": null,
+  "imagePath": "/learn/monogram/kelzheng-bloqit.svg",
   "relatedSlugs": [
     "qiskit-qiskit",
     "quantumlib-cirq",
     "xanaduai-pennylane",
-    "projectq-framework-projectq",
+    "qiskit-qiskit-terra",
     "quantumbfs-yao-jl",
-    "arlineq-arline-benchmarks"
+    "microsoft-quantumkatas"
   ]
 }

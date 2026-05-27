@@ -4,7 +4,7 @@
   "name": "qibo",
   "title": "qibo",
   "repoUrl": "https://github.com/Quantum-TII/qibo",
-  "homepageUrl": null,
+  "homepageUrl": "https://qibo.science",
   "category": {
     "slug": "general-purpose-sdks",
     "title": "General-purpose SDKs",
@@ -21,11 +21,16 @@
     }
   ],
   "primaryLanguage": "Python",
+  "primaryLanguages": [
+    "Python",
+    "Jupyter",
+    "Shell"
+  ],
   "license": "Apache-2.0",
-  "summary": "Qibo is an open-source full stack API for quantum simulation and quantum hardware control.",
-  "description": "Qibo is an open-source full stack API for quantum simulation and quantum hardware control.",
+  "summary": "A full-stack framework for quantum computing.",
+  "description": "A full-stack framework for quantum computing.",
   "whatItIs": [
-    "qibo is an open-source project in the general-purpose sdks category. It is maintained by Quantum-TII and primarily looks like a Python codebase. Qibo is an open-source full stack API for quantum simulation and quantum hardware control.",
+    "qibo is an open-source project in the general-purpose sdks category. It is maintained by Quantum-TII and primarily looks like a Python codebase. A full-stack framework for quantum computing.",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches general-purpose sdks workflows in practice. The repository README emphasizes: Qibo is an open-source full stack API for quantum simulation and quantum hardware control. Some of the key features of Qibo are: Definition of a standard language for the construction and execution of quantum circuits with device agnostic approach to simulation and quantum hardware control based on plug..."
   ],
   "whoItsFor": "Developers who want a broad entry point for building circuits, experimenting with algorithms, and integrating quantum workflows into larger applications.",
@@ -36,21 +41,74 @@
   ],
   "readmeExcerpt": "Qibo is an open-source full stack API for quantum simulation and quantum hardware control. Some of the key features of Qibo are: Definition of a standard language for the construction and execution of quantum circuits with device agnostic approach to simulation and quantum hardware control based on plug and play backend drivers. A continuously growing code-base of quantum algorithms applications presented with examples and tutorials. Efficient simulation backends with GPU, multi-GPU and CPU with multi-threading support. Simple mechanism for the implementation of new simulation and hardware backend drivers.",
   "readmePath": "reference\\Quantum-TII__qibo\\README.md",
+  "readmeMarkdownPath": "readmes/quantum-tii-qibo.md",
   "clonePath": "reference\\Quantum-TII__qibo",
-  "stars": 0,
-  "lastPushedAt": null,
-  "githubTopics": [],
+  "stars": 357,
+  "lastPushedAt": "2026-05-26T09:03:27Z",
+  "defaultBranch": "master",
+  "githubTopics": [
+    "gpu",
+    "quantum",
+    "quantum-algorithms",
+    "quantum-annealing",
+    "quantum-circuit",
+    "quantum-computing"
+  ],
+  "quickstart": {
+    "language": "python",
+    "source": "from qibo.models import QFT\n\n# Create a QFT circuit with 15 qubits\ncircuit = QFT(15)\n\n# Simulate final state wavefunction default initial state is |00>\nfinal_state = circuit()"
+  },
+  "codeSamples": [
+    {
+      "title": "Canonizator",
+      "language": "python",
+      "source": "import numpy as np\nfrom scipy.optimize import minimize\nfrom qibo import Circuit, gates\ndef ansatz(p=0):\n    \"\"\"Ansatz for driving a random state into its up-tp-phases canonical form.\n    Args:\n      p (float): probability of occuring a single-qubit depolarizing error\n    Returns:\n      Qibo circuit implementing the variational ansatz.\n    \"\"\"\n    circuit = Circuit(3, density_matrix=p > 0)\n    for qubit in range(3):\n        circuit.add(gates.RZ(qubit, theta=0))\n        circuit.add(gates.RY(qubit, theta=0))\n        circuit.add(gates.RZ(qubit, theta=0))\n        if p > 0:\n            circuit.add(\n                gates.PauliNoiseChannel(\n                    qubit, [(\"X\", p / 3), (\"Y\", p / 3), (\"Z\", p / 3)]\n                )\n            )\n    for qubit in range(3):\n        if p > 0:\n            circuit.add(gates.PauliNoiseChannel(qubit, [(\"X\", 10 * p)]))\n        circuit.add(gates.M(qubit))\n    return circuit\ndef cost_function(theta, state, circuit, shots: int = 1000):\n    \"\"\"Cost function encoding the difference between a state and its up-to-phases canonical form.\n    Args:\n        theta (ndarray): parameters of the unitary rotations.\n        state (ndarray): three-qubit random state.\n        circuit (:class:`qibo.models.Circuit`): variational circuit.\n        shots (int, optional): shots used for measuring every circuit. Defaults to :math:`1000`.\n    Returns:\n        float: Cost function\n    \"\"\"\n    circuit.set_parameters(theta)\n    measurements = circuit(state, nshots=shots).frequencies(binary=False)\n    return (measurements[1] + measurements[2] + measurements[3]) / shots\ndef canonize(state, circuit, shots: int = 1000):",
+      "path": "examples/3_tangle/canonizator.py"
+    },
+    {
+      "title": "Main",
+      "language": "python",
+      "source": "import argparse\nimport matplotlib.pyplot as plt\nimport numpy as np\nfrom canonizator import *\nparser = argparse.ArgumentParser()\nparser.add_argument(\"--N\", default=100, help=\"Number of random states.\", type=int)\nparser.add_argument(\n    \"--p\", default=0.001, help=\"Probability of occurring an error.\", type=float\n)\nparser.add_argument(\n    \"--shots\", default=1000, help=\"Shots used for measuring every circuit.\", type=float\n)\nparser.add_argument(\n    \"--post_selection\", default=True, help=\"Post selection technique\", type=bool\n)\nparser.add_argument(\"--no_plot\", action=\"store_true\", help=\"Avoid plots\")\ndef main(N, p, shots, post_selection, no_plot):\n    # Initialize exact and measured tangles\n    tangles = np.empty(N)\n    opt_tangles = np.empty(N)\n    circuit = ansatz(p)\n    for qubit in range(N):\n        \"\"\"\n        For every seed from 0 to N, the steps to follow are\n        1) A random state with three qubits is created from the seed\n        2) The tangle of the recently created random state is computed exactly\n        3) Transformation to the up-to-phases canonical form is performed by applying local operations\n                that drive some coefficients to zero\n        4) The tangle of the up-to-phases canonical form of the created state is measured from the outcomes of the state.\n                Post-selection can be applied at this stage\n        Results are stored into variables to paint the results\n        \"\"\"\n        if qubit % 10 == 0:\n            print(\"Initialized state with seed %s\" % qubit + \"/ %s\" % N)\n        state = create_random_state(qubit, p > 0)\n        tangles[qubit] = compute_random_tangle(qubit)\n        _, params = canonize(state, circuit, shots=np.int32(shots))\n        opt_tangles[qubit] = canonical_tangle(\n            state, params, circuit, post_selection=post_selection\n        )",
+      "path": "examples/3_tangle/main.py"
+    },
+    {
+      "title": "Main",
+      "language": "python",
+      "source": "#!/usr/bin/env python\nimport argparse\nimport numpy as np\nfrom qibo import Circuit, gates\nfrom qibo.hamiltonians import XXZ, X\nfrom qibo.models.variational import AAVQE\ndef main(nqubits, layers, maxsteps, T_max):\n    circuit = Circuit(nqubits)\n    for l in range(layers):\n        circuit.add(gates.RY(q, theta=0) for q in range(nqubits))\n        circuit.add(gates.CZ(q, q + 1) for q in range(0, nqubits - 1, 2))\n        circuit.add(gates.RY(q, theta=0) for q in range(nqubits))\n        circuit.add(gates.CZ(q, q + 1) for q in range(1, nqubits - 2, 2))\n        circuit.add(gates.CZ(0, nqubits - 1))\n    circuit.add(gates.RY(q, theta=0) for q in range(nqubits))\n    problem_hamiltonian = XXZ(nqubits)\n    easy_hamiltonian = X(nqubits)\n    s = lambda t: t\n    aavqe = AAVQE(\n        circuit, easy_hamiltonian, problem_hamiltonian, s, nsteps=maxsteps, t_max=T_max\n    )\n    initial_parameters = np.random.uniform(\n        0, 2 * np.pi * 0.1, 2 * nqubits * layers + nqubits\n    )\n    best, params = aavqe.minimize(initial_parameters)\n    print(\"Final parameters: \", params)\n    print(\"Final energy: \", best)\n    # We compute the difference from the exact value to check performance\n    eigenvalue = problem_hamiltonian.eigenvalues()\n    print(eigenvalue)\n    print(\"Difference from exact value: \", best - np.real(eigenvalue[0]))\n    print(\"Log difference: \", -np.log10(best - np.real(eigenvalue[0])))\nif __name__ == \"__main__\":\n    parser = argparse.ArgumentParser()\n    parser.add_argument(\"--nqubits\", default=6, type=int)\n    parser.add_argument(\"--layers\", default=5, type=int)\n    parser.add_argument(\"--maxsteps\", default=10, type=int)\n    parser.add_argument(\"--T_max\", default=5, type=int)\n    args = parser.parse_args()\n    main(**vars(args))",
+      "path": "examples/aavqe/main.py"
+    }
+  ],
+  "packageMeta": {},
+  "citationBibtex": null,
+  "supportedBackendSlugs": [
+    "quantumlib-cirq",
+    "qiskit-qiskit",
+    "quantumlib-stim"
+  ],
+  "externalLinks": {
+    "paper": [
+      "https://arxiv.org/abs/2009.01845"
+    ],
+    "community": [
+      "https://matrix.to/#/#qibo:matrix.org"
+    ]
+  },
+  "openIssuesCount": 103,
+  "subscribersCount": 32,
+  "latestRelease": null,
+  "ownerType": "Organization",
+  "ownerUrl": "https://github.com/qiboteam",
   "featured": false,
   "flagship": false,
   "qtanglRelevant": false,
   "archived": false,
-  "imagePath": null,
+  "imagePath": "/learn/monogram/quantum-tii-qibo.svg",
   "relatedSlugs": [
     "qiskit-qiskit",
     "quantumlib-cirq",
     "xanaduai-pennylane",
-    "projectq-framework-projectq",
+    "qiskit-qiskit-terra",
     "quantumbfs-yao-jl",
-    "arlineq-arline-benchmarks"
+    "microsoft-quantumkatas"
   ]
 }

@@ -101,7 +101,7 @@ export default async function LibraryCategoryPage({ params }: CategoryPageProps)
               {category.description}
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
-              {category.topicSlugs.map((topicSlug) => (
+              {category.topicSlugs.map((topicSlug: string) => (
                 <Link
                   key={topicSlug}
                   href={`/learn/topics/${topicSlug}`}

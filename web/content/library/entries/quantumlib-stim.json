@@ -21,11 +21,16 @@
     }
   ],
   "primaryLanguage": "C++",
+  "primaryLanguages": [
+    "C++",
+    "Python",
+    "C/C++"
+  ],
   "license": "Apache-2.0",
-  "summary": "High-performance simulation of quantum stabilizer circuits for quantum error correction.",
-  "description": "High-performance simulation of quantum stabilizer circuits for quantum error correction.",
+  "summary": "A fast stabilizer circuit library.",
+  "description": "A fast stabilizer circuit library.",
   "whatItIs": [
-    "Stim is an open-source project in the error correction and mitigation category. It is maintained by quantumlib and primarily looks like a C++ codebase. High-performance simulation of quantum stabilizer circuits for quantum error correction.",
+    "Stim is an open-source project in the error correction and mitigation category. It is maintained by quantumlib and primarily looks like a C++ codebase. A fast stabilizer circuit library.",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches error correction and mitigation workflows in practice. The repository README emphasizes: High-performance simulation of quantum stabilizer circuits for quantum error correction. \u25fc\ufe0e\ufe0e&nbsp;&nbsp;What is Stim?<br> \u25fc\ufe0e\ufe0e&nbsp;&nbsp;How do I use Stim?<br> \u25fc\ufe0e&nbsp;&nbsp;How does Stim work?<br> \u25fc\ufe0e&nbsp;&nbsp;How do I cite Stim?<br> \u25fc\ufe0e&nbsp;&nbsp;*Subproject*: Sinter decoding sampler<br> \u25fc\ufe0e&nbsp;&nbsp;*Subproject*: Crumble interactive editor<br>"
   ],
   "whoItsFor": "Researchers and advanced developers working on noise, reliability, and the realities of imperfect quantum hardware.",
@@ -36,21 +41,48 @@
   ],
   "readmeExcerpt": "High-performance simulation of quantum stabilizer circuits for quantum error correction. \u25fc\ufe0e\ufe0e&nbsp;&nbsp;What is Stim?<br> \u25fc\ufe0e\ufe0e&nbsp;&nbsp;How do I use Stim?<br> \u25fc\ufe0e&nbsp;&nbsp;How does Stim work?<br> \u25fc\ufe0e&nbsp;&nbsp;How do I cite Stim?<br> \u25fc\ufe0e&nbsp;&nbsp;*Subproject*: Sinter decoding sampler<br> \u25fc\ufe0e&nbsp;&nbsp;*Subproject*: Crumble interactive editor<br>",
   "readmePath": "reference\\quantumlib__Stim\\README.md",
+  "readmeMarkdownPath": "readmes/quantumlib-stim.md",
   "clonePath": "reference\\quantumlib__Stim",
-  "stars": 0,
-  "lastPushedAt": null,
-  "githubTopics": [],
+  "stars": 736,
+  "lastPushedAt": "2026-05-22T05:58:19Z",
+  "defaultBranch": "main",
+  "githubTopics": [
+    "quantum-computing",
+    "stabilizer-circuits"
+  ],
+  "quickstart": null,
+  "codeSamples": [],
+  "packageMeta": {
+    "name": "stim",
+    "version": "1.0.0"
+  },
+  "citationBibtex": "@software{stim,\n  title = {Stim},\n  author = {Unknown},\n  year = {2024},\n}\n",
+  "supportedBackendSlugs": [
+    "quantumlib-stim",
+    "qiskit-qiskit",
+    "quantumlib-cirq"
+  ],
+  "externalLinks": {
+    "docs": [
+      "https://quantumai.google"
+    ]
+  },
+  "openIssuesCount": 80,
+  "subscribersCount": 16,
+  "latestRelease": null,
+  "ownerType": "Organization",
+  "ownerUrl": "https://github.com/quantumlib",
   "featured": true,
   "flagship": true,
   "qtanglRelevant": false,
   "archived": false,
-  "imagePath": "/learn/flagship/quantumlib-stim.png",
+  "imagePath": "/learn/og/quantumlib-stim.png",
   "relatedSlugs": [
     "unitaryfund-mitiq",
     "jacobmarks-qtop",
     "msrudolph-paulipropagation-jl",
-    "0tt3r-quac",
-    "adamisntdead-qusimpy",
-    "aniabrown-quest"
+    "microsoft-quantumkatas",
+    "qiskit-qiskit",
+    "quantumlib-cirq"
   ]
 }

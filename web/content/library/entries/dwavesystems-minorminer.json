@@ -4,7 +4,7 @@
   "name": "minorminer",
   "title": "minorminer",
   "repoUrl": "https://github.com/dwavesystems/minorminer",
-  "homepageUrl": null,
+  "homepageUrl": "https://docs.ocean.dwavesys.com/en/stable/docs_minorminer/source/sdk_index.html",
   "category": {
     "slug": "annealing-ising",
     "title": "Annealing and Ising",
@@ -21,6 +21,11 @@
     }
   ],
   "primaryLanguage": "Python",
+  "primaryLanguages": [
+    "Python",
+    "C++",
+    "C"
+  ],
   "license": "Apache-2.0",
   "summary": "minorminer is a heuristic tool for minor embedding: given a minor and target graph, it tries to find a mapping that embeds the minor into the target.",
   "description": "minorminer is a heuristic tool for minor embedding: given a minor and target graph, it tries to find a mapping that embeds the minor into the target.",
@@ -36,15 +41,74 @@
   ],
   "readmeExcerpt": "minorminer is a heuristic tool for minor embedding: given a minor and target graph, it tries to find a mapping that embeds the minor into the target. The primary utility function, `find_embedding()`, is an implementation of the heuristic algorithm described in [1]. It accepts various optional parameters used to tune the algorithm's execution or constrain the given problem.",
   "readmePath": "reference\\dwavesystems__minorminer\\README.rst",
+  "readmeMarkdownPath": "readmes/dwavesystems-minorminer.md",
   "clonePath": "reference\\dwavesystems__minorminer",
-  "stars": 0,
-  "lastPushedAt": null,
+  "stars": 53,
+  "lastPushedAt": "2026-01-27T20:22:21Z",
+  "defaultBranch": "main",
   "githubTopics": [],
+  "quickstart": null,
+  "codeSamples": [
+    {
+      "title": "Algorithm Demo",
+      "language": "python",
+      "source": "\"\"\"\nThis file shows a visualization of the minorminer.find_embedding() algorithm.\nAt each step of the find_embedding() algorithm, a new chain is inserted for a node in the source graph, where chains\nare allowed to overlap. After all chains have inserted, the algorithm iteratively removes and reinserts chains,\nattempting to minimize the amount of overlap between them. Eventually all overlap will be removed, and the result is\na valid embedding.\nIn this example, a complete graph K_8 is embedded into a chimera_graph C_2.\n\"\"\"\nfrom minorminer import miner\nimport networkx as nx\nimport dwave_networkx as dnx\nimport matplotlib.pyplot as plt\n# Parameters of the demo\nwait_for_input = False                   # wait for user input to advance to the next step\nG = nx.complete_graph(8)                # source graph\nC = dnx.generators.chimera_graph(2)     # target graph\ndef show_current_embedding(emb):\n    # visualize overlaps.\n    plt.clf()\n    dnx.draw_chimera_embedding(C, emb=emb, overlapped_embedding=True, show_labels=True)\n    plt.show()\n    if wait_for_input:\n        plt.pause(0.001)\n        input()\n    else:\n        plt.pause(1)\ndef compute_bags(C, emb):\n    # Given an overlapped embedding, compute the set of source nodes embedded at every target node.\n    bags = {v: [] for v in C.nodes()}\n    for x, chain in emb.items():\n        for v in chain:\n            bags[v].append(x)\n    return bags\n# Run the algorithm.\nplt.ion()\nm = miner(G, C, random_seed=0)\nfound = False\nemb = {}\nprint(\"Embedding K_8 into Chimera C(2).\")\nfor iteration in range(3):",
+      "path": "examples/algorithm_demo.py"
+    },
+    {
+      "title": "Parallel Embeddings Demo",
+      "language": "python",
+      "source": "\"\"\"\nThis demo illustrates the process of checking graph embedding feasibility and performing raster embeddings\nacross various D-Wave graph topologies such as Chimera, Pegasus, and Zephyr.\nThe demo performs the following steps:\n1. **Embedding Feasibility Checks**:\n    - For each source topology, it generates a subgraph and checks whether it can be embedded into each target topology.\n    - It reports whether the embedding is feasible and, if so, the required sublattice size.\n2. **Raster Embedding Examples**:\n    - For each topology, it performs raster embeddings at the minimal scale.\n    - It visualizes the embeddings if visualization is enabled.\n    - It validates the embeddings and displays the results.\nThis example demonstrates how to assess and visualize graph embeddings using D-Wave's `dwave_networkx` library.\n\"\"\"\nimport dwave_networkx as dnx\nfrom minorminer.utils.parallel_embeddings import (\n    find_sublattice_embeddings,\n    embeddings_to_array,\n)\nfrom minorminer.utils.feasibility import (\n    lattice_size_lower_bound,\n)\ndef main():\n    print(\"Minimum Subgraph Embedding (graph rows) Examples\\n\")\n    # Parameters\n    visualize = True  # Enable or disable visualization\n    topologies = [\"chimera\", \"pegasus\", \"zephyr\"]  # Target graph topologies\n    smallest_tile = {\n        \"chimera\": 1,\n        \"pegasus\": 2,\n        \"zephyr\": 1,\n    }  # Minimum tile sizes for each topology\n    generators = {\n        \"chimera\": dnx.chimera_graph,\n        \"pegasus\": dnx.pegasus_graph,\n        \"zephyr\": dnx.zephyr_graph,\n    }\n    # Iterate over each source topology for embedding feasibility checks\n    for source_topology in topologies:\n        sublattice_size_S = smallest_tile[source_topology] + 1\n        S = generators[source_topology](sublattice_size_S)",
+      "path": "examples/parallel_embeddings_demo.py"
+    },
+    {
+      "title": "Suspend Chains",
+      "language": "python",
+      "source": "#\n#    Licensed under the Apache License, Version 2.0 (the \"License\");\n#    you may not use this file except in compliance with the License.\n#    You may obtain a copy of the License at\n#\n#        http://www.apache.org/licenses/LICENSE-2.0\n#\n#    Unless required by applicable law or agreed to in writing, software\n#    distributed under the License is distributed on an \"AS IS\" BASIS,\n#    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n#    See the License for the specific language governing permissions and\n#    limitations under the License.\nimport minorminer\nimport networkx as nx\nimport dwave_networkx as dnx\nimport matplotlib.pyplot as plt\nK3 = nx.Graph([('A', 'B'), ('B', 'C'), ('C', 'A')])\nplt.subplot(2, 2, 1)\nnx.draw(K3, with_labels=True)\nC = dnx.chimera_graph(1, 2, coordinates=False)\nplt.subplot(2, 2, 2)\ndnx.draw_chimera(C, with_labels=True)\n# Example with one blob for one node. Source node will use at least one.\nblob = [4, 5, 12, 13]\nsuspend_chains = {'A': [blob]}\nembedding = minorminer.find_embedding(K3, C, suspend_chains=suspend_chains)\nplt.subplot(2, 2, 3)\ndnx.draw_chimera_embedding(C, embedding, with_labels=True)\n# Example with one blob for one node, and two blobs for another.\n# Second source node is forced to use at least one in each blob.\nblob_A0 = [4, 5]\nblob_A1 = [12, 13]\nblob_C0 = [6, 7, 14, 15]\nsuspend_chains = {'A': [blob_A0, blob_A1], 'C': [blob_C0]}\nembedding = minorminer.find_embedding(K3, C, suspend_chains=suspend_chains)\nplt.subplot(2, 2, 4)\ndnx.draw_chimera_embedding(C, embedding, show_labels=True)",
+      "path": "examples/suspend_chains.py"
+    }
+  ],
+  "packageMeta": {
+    "name": "minorminer",
+    "requiresPython": ">= 3.10",
+    "dependencies": [
+      "dwave-networkx",
+      "fasteners",
+      "homebase",
+      "networkx",
+      "numpy",
+      "scipy"
+    ]
+  },
+  "citationBibtex": null,
+  "supportedBackendSlugs": [
+    "dwavesystems-dimod",
+    "dwavesystems-dwave-ocean-sdk"
+  ],
+  "externalLinks": {
+    "docs": [
+      "https://docs.dwavequantum.com/en/latest/ocean/contribute.html",
+      "https://docs.openstack.org/reno/",
+      "https://docs.openstack.org/reno/latest/user/usage.html"
+    ],
+    "paper": [
+      "https://arxiv.org/abs/1406.2741",
+      "https://arxiv.org/abs/1507.04774"
+    ],
+    "pypi": [
+      "https://pypi.org/project/minorminer"
+    ]
+  },
+  "openIssuesCount": 30,
+  "subscribersCount": 14,
+  "latestRelease": null,
+  "ownerType": "Organization",
+  "ownerUrl": "https://github.com/dwavesystems",
   "featured": false,
   "flagship": false,
   "qtanglRelevant": false,
   "archived": false,
-  "imagePath": null,
+  "imagePath": "/learn/monogram/dwavesystems-minorminer.svg",
   "relatedSlugs": [
     "dwavesystems-dwave-ocean-sdk",
     "dwavesystems-dimod",

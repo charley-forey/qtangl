@@ -4,7 +4,7 @@
   "name": "FermiLib",
   "title": "FermiLib",
   "repoUrl": "https://github.com/ProjectQ-Framework/FermiLib",
-  "homepageUrl": null,
+  "homepageUrl": "https://projectq.ch/",
   "category": {
     "slug": "quantum-chemistry",
     "title": "Quantum chemistry",
@@ -21,11 +21,15 @@
     }
   ],
   "primaryLanguage": "Python",
+  "primaryLanguages": [
+    "Python",
+    "Jupyter"
+  ],
   "license": "Apache-2.0",
-  "summary": "FermiLib - Open source software for analyzing quantum simulation algorithms ===========================================================================",
-  "description": "FermiLib - Open source software for analyzing quantum simulation algorithms ===========================================================================",
+  "summary": "FermiLib: Open source software for analyzing fermionic quantum simulation algorithms",
+  "description": "FermiLib: Open source software for analyzing fermionic quantum simulation algorithms",
   "whatItIs": [
-    "FermiLib is an open-source project in the quantum chemistry category. It is maintained by ProjectQ-Framework and primarily looks like a Python codebase. FermiLib - Open source software for analyzing quantum simulation algorithms ===========================================================================",
+    "FermiLib is an open-source project in the quantum chemistry category. It is maintained by ProjectQ-Framework and primarily looks like a Python codebase. FermiLib: Open source software for analyzing fermionic quantum simulation algorithms",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches quantum chemistry workflows in practice. The repository README emphasizes: FermiLib - Open source software for analyzing quantum simulation algorithms =========================================================================== FermiLib is an open source effort for compiling and analyzing quantum simulation algorithms."
   ],
   "whoItsFor": "Researchers, students, and developers exploring how quantum software is used for chemistry and electronic-structure problems.",
@@ -36,21 +40,59 @@
   ],
   "readmeExcerpt": "FermiLib - Open source software for analyzing quantum simulation algorithms =========================================================================== FermiLib is an open source effort for compiling and analyzing quantum simulation algorithms.",
   "readmePath": "reference\\ProjectQ-Framework__FermiLib\\README.rst",
+  "readmeMarkdownPath": "readmes/projectq-framework-fermilib.md",
   "clonePath": "reference\\ProjectQ-Framework__FermiLib",
-  "stars": 0,
-  "lastPushedAt": null,
+  "stars": 90,
+  "lastPushedAt": "2018-05-04T08:32:34Z",
+  "defaultBranch": "develop",
   "githubTopics": [],
+  "quickstart": null,
+  "codeSamples": [
+    {
+      "title": "Fermilib Demo",
+      "language": "python",
+      "source": "from fermilib.ops import FermionOperator\n\nmy_term = FermionOperator(((3, 1), (1, 0)))\nprint(my_term)\n\nmy_term = FermionOperator('3^ 1')\nprint(my_term)",
+      "path": "examples/fermilib_demo.ipynb"
+    },
+    {
+      "title": "Performance Benchmarks",
+      "language": "python",
+      "source": "#   Copyright 2017 ProjectQ-Framework (www.projectq.ch)\n#\n#   Licensed under the Apache License, Version 2.0 (the \"License\");\n#   you may not use this file except in compliance with the License.\n#   You may obtain a copy of the License at\n#\n#       http://www.apache.org/licenses/LICENSE-2.0\n#\n#   Unless required by applicable law or agreed to in writing, software\n#   distributed under the License is distributed on an \"AS IS\" BASIS,\n#   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n#   See the License for the specific language governing permissions and\n#   limitations under the License.\n\"\"\"This file contains tests of code performance to reveal bottlenecks.\"\"\"\nimport numpy\nimport time\nfrom fermilib.ops import FermionOperator, InteractionOperator, normal_ordered\nfrom fermilib.transforms import get_fermion_operator, jordan_wigner\nfrom fermilib.utils import jordan_wigner_sparse\ndef artificial_molecular_operator(n_qubits):\n    \"\"\"Make an artificial random InteractionOperator for testing purposes.\"\"\"\n    # Initialize.\n    constant = numpy.random.randn()\n    one_body_coefficients = numpy.zeros((n_qubits, n_qubits), float)\n    two_body_coefficients = numpy.zeros((n_qubits, n_qubits,\n                                         n_qubits, n_qubits), float)\n    # Randomly generate the one-body and two-body integrals.\n    for p in range(n_qubits):\n        for q in range(n_qubits):\n            # One-body terms.\n            if (p <= p) and (p % 2 == q % 2):\n                one_body_coefficients[p, q] = numpy.random.randn()\n                one_body_coefficients[q, p] = one_body_coefficients[p, q]\n            # Keep looping.\n            for r in range(n_qubits):\n                for s in range(n_qubits):\n                    # Skip zero terms.\n                    if (p == q) or (r == s):\n                        continue\n                    # Identify and skip one of the complex conjugates.",
+      "path": "examples/performance_benchmarks.py"
+    }
+  ],
+  "packageMeta": {},
+  "citationBibtex": null,
+  "supportedBackendSlugs": [
+    "projectq-framework-projectq"
+  ],
+  "externalLinks": {
+    "docs": [
+      "https://readthedocs.org/projects/fermilib/badge/?version=latest",
+      "http://fermilib.readthedocs.io/en/latest/?badge=latest",
+      "http://fermilib.readthedocs.io/en/latest/intro.html",
+      "http://fermilib.readthedocs.io/en/latest/examples.html"
+    ],
+    "paper": [
+      "https://arxiv.org/abs/1710.07629"
+    ]
+  },
+  "openIssuesCount": 4,
+  "subscribersCount": 23,
+  "latestRelease": null,
+  "ownerType": "Organization",
+  "ownerUrl": "https://github.com/ProjectQ-Framework",
   "featured": false,
   "flagship": false,
   "qtanglRelevant": false,
   "archived": false,
-  "imagePath": null,
+  "imagePath": "/learn/monogram/projectq-framework-fermilib.svg",
   "relatedSlugs": [
     "quantumlib-openfermion",
     "aspuru-guzik-group-tequila",
     "cda-tum-mqt-dasqa",
+    "eclipse-qrisp-qrisp",
     "ornl-qci-xacc-vqe",
-    "pasqal-io-qadence",
     "qiskit-qiskit-nature"
   ]
 }

@@ -4,7 +4,7 @@
   "name": "intel-qs",
   "title": "intel-qs",
   "repoUrl": "https://github.com/intel/intel-qs",
-  "homepageUrl": null,
+  "homepageUrl": "https://github.com/intel/intel-qs",
   "category": {
     "slug": "simulators",
     "title": "Simulators",
@@ -21,11 +21,16 @@
     }
   ],
   "primaryLanguage": "C++",
+  "primaryLanguages": [
+    "C++",
+    "C",
+    "Shell"
+  ],
   "license": "Apache-2.0",
-  "summary": "Intel Quantum Simulator (Intel-QS), also known as qHiPSTER (The Quantum High Performance Software Testing Environment), is a simulator of quantum circuits optimized to take maximum advantage of multi-core and multi-nodes architectures.",
-  "description": "Intel Quantum Simulator (Intel-QS), also known as qHiPSTER (The Quantum High Performance Software Testing Environment), is a simulator of quantum circuits optimized to take maximum advantage of multi-core and multi-nodes architectures. It is based on a complete representation of the qubit state, but avoids the explicit representation of gates and other quantum operations in terms of matrices. Intel-QS uses the...",
+  "summary": "High-performance simulator of quantum circuits",
+  "description": "High-performance simulator of quantum circuits",
   "whatItIs": [
-    "intel-qs is an open-source project in the simulators category. It is maintained by intel and primarily looks like a C++ codebase. Intel Quantum Simulator (Intel-QS), also known as qHiPSTER (The Quantum High Performance Software Testing Environment), is a simulator of quantum circuits optimized to take maximum advantage of multi-core and multi-nodes architectures.",
+    "intel-qs is an open-source project in the simulators category. It is maintained by intel and primarily looks like a C++ codebase. High-performance simulator of quantum circuits",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches simulators workflows in practice. The repository README emphasizes: Intel Quantum Simulator (Intel-QS), also known as qHiPSTER (The Quantum High Performance Software Testing Environment), is a simulator of quantum circuits optimized to take maximum advantage of multi-core and multi-nodes architectures. It is based on a complete representation of the qubit state, but avoids the explicit representation of..."
   ],
   "whoItsFor": "Developers and researchers who need to test ideas locally before running on hardware or who want to compare simulation strategies.",
@@ -36,21 +41,63 @@
   ],
   "readmeExcerpt": "Intel Quantum Simulator (Intel-QS), also known as qHiPSTER (The Quantum High Performance Software Testing Environment), is a simulator of quantum circuits optimized to take maximum advantage of multi-core and multi-nodes architectures. It is based on a complete representation of the qubit state, but avoids the explicit representation of gates and other quantum operations in terms of matrices. Intel-QS uses the MPI (message-passing-interface) protocol to handle communication between the distributed resources used to store and manipulate quantum states. Intel-QS team is aware of the importance of backward compatibility. We do our best to assure it.",
   "readmePath": "reference\\intel__intel-qs\\README.md",
+  "readmeMarkdownPath": "readmes/intel-intel-qs.md",
   "clonePath": "reference\\intel__intel-qs",
-  "stars": 0,
-  "lastPushedAt": null,
-  "githubTopics": [],
+  "stars": 261,
+  "lastPushedAt": "2026-05-26T15:15:42Z",
+  "defaultBranch": "master",
+  "githubTopics": [
+    "cloud-computing",
+    "high-performance-computing",
+    "intel-quantum-simulator",
+    "quantum-circuits",
+    "quantum-computing"
+  ],
+  "quickstart": null,
+  "codeSamples": [
+    {
+      "title": "Get Started With Iqs-Checkpoint",
+      "language": "python",
+      "source": "# Import the Python library with the C++ class and methods of Intel Quantum Simulator.\n# If the library is not contained in the same folder of this notebook, its path has to be added.\nimport sys\nsys.path.insert(0, '../build/lib')\nimport intelqs_py as simulator\n\n# import numPy\nimport numpy as np\n\n# Import graphical library for plots.\nimport matplotlib.pyplot as plt",
+      "path": "tutorials/.ipynb_checkpoints/get_started_with_IQS-checkpoint.ipynb"
+    },
+    {
+      "title": "Basic Use Presentation",
+      "language": "python",
+      "source": "# Import the Python library with the C++ class and methods of Intel Quantum Simulator.\n# If the library is not contained in the same folder of this notebook, its path has to be added.\nimport sys\nsys.path.insert(0, '../build/lib')\nimport intelqs_py as simulator\n\n# import numPy\nimport numpy as np",
+      "path": "tutorials/basic_use_presentation.ipynb"
+    },
+    {
+      "title": "Get Started With Iqs",
+      "language": "python",
+      "source": "# Import the Python library with the C++ class and methods of Intel Quantum Simulator.\n# If the library is not contained in the same folder of this notebook, its path has to be added.\nimport sys\nsys.path.insert(0, '../build/lib')\nimport intelqs_py as simulator\n\n# import numPy\nimport numpy as np\n\n# Import graphical library for plots.\nimport matplotlib.pyplot as plt",
+      "path": "tutorials/get_started_with_IQS.ipynb"
+    }
+  ],
+  "packageMeta": {},
+  "citationBibtex": "@software{intelquantumsimulator,\n  title = {Intel Quantum Simulator},\n  author = {Unknown},\n  year = {2017},\n}\n",
+  "supportedBackendSlugs": [],
+  "externalLinks": {
+    "paper": [
+      "https://arxiv.org/abs/1601.07195"
+    ]
+  },
+  "openIssuesCount": 15,
+  "subscribersCount": 15,
+  "latestRelease": null,
+  "ownerType": "Organization",
+  "ownerUrl": "https://github.com/intel",
   "featured": false,
   "flagship": false,
   "qtanglRelevant": false,
   "archived": false,
-  "imagePath": null,
+  "imagePath": "/learn/monogram/intel-intel-qs.svg",
   "relatedSlugs": [
+    "qiskit-qiskit-tutorial",
+    "qosf-os-quantum-software",
     "0tt3r-quac",
     "adamisntdead-qusimpy",
     "aniabrown-quest",
-    "bbn-q-pysimulator",
-    "cda-tum-mqt-ddsim",
-    "dillanchang-qocs"
+    "bbn-q-pysimulator"
   ]
 }

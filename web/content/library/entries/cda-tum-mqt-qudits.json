@@ -4,7 +4,7 @@
   "name": "mqt-qudits",
   "title": "mqt-qudits",
   "repoUrl": "https://github.com/cda-tum/mqt-qudits",
-  "homepageUrl": null,
+  "homepageUrl": "https://mqt.readthedocs.io/projects/qudits",
   "category": {
     "slug": "general-purpose-sdks",
     "title": "General-purpose SDKs",
@@ -21,11 +21,15 @@
     }
   ],
   "primaryLanguage": "Python",
+  "primaryLanguages": [
+    "Python",
+    "C++"
+  ],
   "license": "MIT",
-  "summary": "> [!NOTE] > This project is currently in low maintenance mode.",
-  "description": "> [!NOTE] > This project is currently in low maintenance mode. > We will still fix bugs and accept pull requests, but we will not actively develop new features.",
+  "summary": "A Framework For Mixed-Dimensional Qudit Quantum Computing",
+  "description": "A Framework For Mixed-Dimensional Qudit Quantum Computing",
   "whatItIs": [
-    "mqt-qudits is an open-source project in the general-purpose sdks category. It is maintained by cda-tum and primarily looks like a Python codebase. > [!NOTE] > This project is currently in low maintenance mode.",
+    "mqt-qudits is an open-source project in the general-purpose sdks category. It is maintained by cda-tum and primarily looks like a Python codebase. A Framework For Mixed-Dimensional Qudit Quantum Computing",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches general-purpose sdks workflows in practice. The repository README emphasizes: > [!NOTE] > This project is currently in low maintenance mode. > We will still fix bugs and accept pull requests, but we will not actively develop new features. MQT Qudits - A Framework For Mixed-Dimensional Qudit Quantum Computing"
   ],
   "whoItsFor": "Developers who want a broad entry point for building circuits, experimenting with algorithms, and integrating quantum workflows into larger applications.",
@@ -36,21 +40,66 @@
   ],
   "readmeExcerpt": "> [!NOTE] > This project is currently in low maintenance mode. > We will still fix bugs and accept pull requests, but we will not actively develop new features. MQT Qudits - A Framework For Mixed-Dimensional Qudit Quantum Computing",
   "readmePath": "reference\\cda-tum__mqt-qudits\\README.md",
+  "readmeMarkdownPath": "readmes/cda-tum-mqt-qudits.md",
   "clonePath": "reference\\cda-tum__mqt-qudits",
-  "stars": 0,
-  "lastPushedAt": null,
+  "stars": 35,
+  "lastPushedAt": "2026-05-26T02:28:43Z",
+  "defaultBranch": "main",
   "githubTopics": [],
+  "quickstart": null,
+  "codeSamples": [],
+  "packageMeta": {
+    "name": "mqt.qudits",
+    "version": "build-system.requires",
+    "requiresPython": ">=3.10, !=3.14.1",
+    "dependencies": [
+      "numpy",
+      "3",
+      "numpy",
+      "3",
+      "numpy",
+      "3",
+      "numpy",
+      "3",
+      "networkx",
+      "scipy",
+      "3",
+      "scipy"
+    ]
+  },
+  "citationBibtex": null,
+  "supportedBackendSlugs": [],
+  "externalLinks": {
+    "docs": [
+      "https://mqt.readthedocs.io/projects/qudits",
+      "https://mqt.readthedocs.io",
+      "https://img.shields.io/badge/documentation-blue?style=for-the-badge&logo=read%20the%20docs",
+      "https://mqt.readthedocs.io/projects/qudits/en/latest/tutorial.html"
+    ],
+    "paper": [
+      "https://arxiv.org/abs/2410.02854}",
+      "https://arxiv.org/pdf/2410.02854"
+    ],
+    "pypi": [
+      "https://pypi.org/project/mqt.qudits/"
+    ]
+  },
+  "openIssuesCount": 3,
+  "subscribersCount": 4,
+  "latestRelease": null,
+  "ownerType": "Organization",
+  "ownerUrl": "https://github.com/munich-quantum-toolkit",
   "featured": false,
   "flagship": false,
   "qtanglRelevant": false,
   "archived": false,
-  "imagePath": null,
+  "imagePath": "/learn/monogram/cda-tum-mqt-qudits.svg",
   "relatedSlugs": [
     "qiskit-qiskit",
     "quantumlib-cirq",
     "xanaduai-pennylane",
-    "projectq-framework-projectq",
+    "qiskit-qiskit-terra",
     "quantumbfs-yao-jl",
-    "arlineq-arline-benchmarks"
+    "microsoft-quantumkatas"
   ]
 }

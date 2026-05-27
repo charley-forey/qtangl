@@ -5,6 +5,8 @@ export type LibraryEditorialEntry = {
   whoItsFor?: string;
   whatYouCanBuild?: string[];
   qtanglRelevance?: string;
+  lastVerifiedAt?: string;
+  verifiedBy?: string;
 };
 
 export const libraryEditorial: Record<string, LibraryEditorialEntry> = {
@@ -47,6 +49,8 @@ export const libraryEditorial: Record<string, LibraryEditorialEntry> = {
       "Qtangl is not a quantum ML product, but PennyLane is still useful because it embodies a pragmatic hybrid mindset. It is a good reference for how classical optimization, bounded quantum experimentation, and developer-facing abstractions can coexist inside one readable workflow.",
   },
   "quantumlib-cirq": {
+    lastVerifiedAt: "2026-05-27",
+    verifiedBy: "Qtangl",
     summary:
       "Cirq is a major Python framework for circuit design, simulation, and research workflows, with a strong emphasis on circuit structure and hardware-aware experimentation.",
     description:

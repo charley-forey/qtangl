@@ -4,7 +4,7 @@
   "name": "dimod",
   "title": "dimod",
   "repoUrl": "https://github.com/dwavesystems/dimod",
-  "homepageUrl": null,
+  "homepageUrl": "https://docs.ocean.dwavesys.com/en/stable/docs_dimod/",
   "category": {
     "slug": "annealing-ising",
     "title": "Annealing and Ising",
@@ -21,11 +21,16 @@
     }
   ],
   "primaryLanguage": "Python",
+  "primaryLanguages": [
+    "Python",
+    "C++",
+    "C/C++"
+  ],
   "license": "Apache-2.0",
-  "summary": "dimod is a shared API for samplers.",
-  "description": "dimod is a shared API for samplers. It provides:",
+  "summary": "A shared API for QUBO/Ising samplers.",
+  "description": "A shared API for QUBO/Ising samplers.",
   "whatItIs": [
-    "dimod is an open-source project in the annealing and ising category. It is maintained by dwavesystems and primarily looks like a Python codebase. dimod is a shared API for samplers.",
+    "dimod is an open-source project in the annealing and ising category. It is maintained by dwavesystems and primarily looks like a Python codebase. A shared API for QUBO/Ising samplers.",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches annealing and ising workflows in practice. The repository README emphasizes: dimod is a shared API for samplers. It provides: Classes for quadratic models---such as the binary quadratic model (BQM) class that contains Ising and QUBO models used by samplers such as the D-Wave quantum computer---and higher-order (non-quadratic) models. Reference examples of samplers and composed samplers. Abstract base classes..."
   ],
   "whoItsFor": "Developers interested in Ising-model formulations, annealing workflows, and D-Wave-style solver ecosystems.",
@@ -36,15 +41,40 @@
   ],
   "readmeExcerpt": "dimod is a shared API for samplers. It provides: Classes for quadratic models---such as the binary quadratic model (BQM) class that contains Ising and QUBO models used by samplers such as the D-Wave quantum computer---and higher-order (non-quadratic) models. Reference examples of samplers and composed samplers. Abstract base classes <https://docs.python.org/3/library/abc.html>_ for constructing new samplers and composed samplers.",
   "readmePath": "reference\\dwavesystems__dimod\\README.rst",
+  "readmeMarkdownPath": "readmes/dwavesystems-dimod.md",
   "clonePath": "reference\\dwavesystems__dimod",
-  "stars": 0,
-  "lastPushedAt": null,
+  "stars": 142,
+  "lastPushedAt": "2026-05-14T17:24:57Z",
+  "defaultBranch": "main",
   "githubTopics": [],
+  "quickstart": null,
+  "codeSamples": [],
+  "packageMeta": {},
+  "citationBibtex": null,
+  "supportedBackendSlugs": [
+    "dwavesystems-dimod",
+    "dwavesystems-dwave-ocean-sdk"
+  ],
+  "externalLinks": {
+    "docs": [
+      "https://docs.python.org/3/library/abc.html",
+      "https://docs.dwavequantum.com/en/latest/concepts/index.html",
+      "https://docs.dwavequantum.com/en/latest/index.html"
+    ],
+    "pypi": [
+      "https://pypi.org/project/dimod"
+    ]
+  },
+  "openIssuesCount": 158,
+  "subscribersCount": 17,
+  "latestRelease": null,
+  "ownerType": "Organization",
+  "ownerUrl": "https://github.com/dwavesystems",
   "featured": false,
   "flagship": true,
   "qtanglRelevant": true,
   "archived": false,
-  "imagePath": "/learn/flagship/dwavesystems-dimod.png",
+  "imagePath": "/learn/og/dwavesystems-dimod.png",
   "relatedSlugs": [
     "dwavesystems-dwave-ocean-sdk",
     "dwavesystems-qbsolv",

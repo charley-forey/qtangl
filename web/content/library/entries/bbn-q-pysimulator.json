@@ -21,11 +21,16 @@
     }
   ],
   "primaryLanguage": "Python",
+  "primaryLanguages": [
+    "Python",
+    "C/C++",
+    "C++"
+  ],
   "license": "Apache-2.0",
-  "summary": "A python framework for qubit simulations and optimal control.",
-  "description": "A python framework for qubit simulations and optimal control. This code provides classes to assist in setting up Hamiltonians for multi-qubit superconducting qubit simulations. After setting up the system there is both a pure python and a C++ implementation of an open and closed system simulator and an optimal control module based on the GRAPE algorithm. The C++ backend relies...",
+  "summary": "Python with C++ Backend Simulator for Superconducting Circuits QIP",
+  "description": "Python with C++ Backend Simulator for Superconducting Circuits QIP",
   "whatItIs": [
-    "PySimulator is an open-source project in the simulators category. It is maintained by BBN-Q and primarily looks like a Python codebase. A python framework for qubit simulations and optimal control.",
+    "PySimulator is an open-source project in the simulators category. It is maintained by BBN-Q and primarily looks like a Python codebase. Python with C++ Backend Simulator for Superconducting Circuits QIP",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches simulators workflows in practice. The repository README emphasizes: A python framework for qubit simulations and optimal control. This code provides classes to assist in setting up Hamiltonians for multi-qubit superconducting qubit simulations. After setting up the system there is both a pure python and a C++ implementation of an open and closed system simulator and an..."
   ],
   "whoItsFor": "Developers and researchers who need to test ideas locally before running on hardware or who want to compare simulation strategies.",
@@ -36,21 +41,34 @@
   ],
   "readmeExcerpt": "A python framework for qubit simulations and optimal control. This code provides classes to assist in setting up Hamiltonians for multi-qubit superconducting qubit simulations. After setting up the system there is both a pure python and a C++ implementation of an open and closed system simulator and an optimal control module based on the GRAPE algorithm. The C++ backend relies on the Eigen library for matrix manipulations and eignsolvers. These are the latest versions I have worked with. Nearby versions should be just fine too.",
   "readmePath": "reference\\BBN-Q__PySimulator\\README.md",
+  "readmeMarkdownPath": "readmes/bbn-q-pysimulator.md",
   "clonePath": "reference\\BBN-Q__PySimulator",
-  "stars": 0,
-  "lastPushedAt": null,
+  "stars": 8,
+  "lastPushedAt": "2014-02-14T03:31:49Z",
+  "defaultBranch": "master",
   "githubTopics": [],
+  "quickstart": null,
+  "codeSamples": [],
+  "packageMeta": {},
+  "citationBibtex": null,
+  "supportedBackendSlugs": [],
+  "externalLinks": {},
+  "openIssuesCount": 0,
+  "subscribersCount": 13,
+  "latestRelease": null,
+  "ownerType": "Organization",
+  "ownerUrl": "https://github.com/BBN-Q",
   "featured": false,
   "flagship": false,
   "qtanglRelevant": false,
   "archived": false,
-  "imagePath": null,
+  "imagePath": "/learn/monogram/bbn-q-pysimulator.svg",
   "relatedSlugs": [
+    "qiskit-qiskit-tutorial",
+    "qosf-os-quantum-software",
     "0tt3r-quac",
     "adamisntdead-qusimpy",
     "aniabrown-quest",
-    "cda-tum-mqt-ddsim",
-    "dillanchang-qocs",
-    "iic-jku-ddsim"
+    "cda-tum-mqt-ddsim"
   ]
 }

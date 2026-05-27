@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 
 import LibraryCatalog from "@/components/learn/LibraryCatalog";
 import PageHero from "@/components/layout/PageHero";
@@ -29,6 +30,7 @@ export default async function LibraryIndexPage() {
         description="Filter the full index by category, language, or Qtangl relevance, then open any entry for a clearer explanation of what it is and why people use it."
         actions={[
           { href: "/learn", label: "Back to Learn", variant: "secondary" },
+          { href: "/learn/compare", label: "Compare tools", variant: "secondary" },
         ]}
         contentClassName="max-w-4xl"
       />
@@ -62,7 +64,23 @@ export default async function LibraryIndexPage() {
       </Section>
 
       <Section gap="tight" className="pb-0">
-        <LibraryCatalog entries={entries} categories={categories} />
+        <div className="mb-6 flex flex-wrap gap-3">
+          <a
+            href="/learn/data.json"
+            className="rounded-full border border-[var(--border)] px-4 py-2 text-xs text-[var(--color-gray-300)] hover:text-white"
+          >
+            Download JSON
+          </a>
+          <a
+            href="/learn/export.csv"
+            className="rounded-full border border-[var(--border)] px-4 py-2 text-xs text-[var(--color-gray-300)] hover:text-white"
+          >
+            Download CSV
+          </a>
+        </div>
+        <Suspense fallback={<p className="text-sm text-[var(--color-gray-400)]">Loading catalog…</p>}>
+          <LibraryCatalog entries={entries} categories={categories} />
+        </Suspense>
       </Section>
     </PageShell>
   );

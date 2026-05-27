@@ -21,11 +21,14 @@
     }
   ],
   "primaryLanguage": "Python",
+  "primaryLanguages": [
+    "Python"
+  ],
   "license": "MIT",
-  "summary": "This is a super simple game loosely based on Minesweeper Flags and runs on the IBM Quantum computer or simulator.",
-  "description": "This is a super simple game loosely based on Minesweeper Flags and runs on the IBM Quantum computer or simulator.",
+  "summary": "Quantum game of catsweeper flags",
+  "description": "Quantum game of catsweeper flags",
   "whatItIs": [
-    "quantum-catsweeper is an open-source project in the games and learning category. It is maintained by desireevl and primarily looks like a Python codebase. This is a super simple game loosely based on Minesweeper Flags and runs on the IBM Quantum computer or simulator.",
+    "quantum-catsweeper is an open-source project in the games and learning category. It is maintained by desireevl and primarily looks like a Python codebase. Quantum game of catsweeper flags",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches games and learning workflows in practice. The repository README emphasizes: This is a super simple game loosely based on Minesweeper Flags and runs on the IBM Quantum computer or simulator. Rules of the game: Don't explode the cat (bombs) The tile numbers indicate the number of times you need to click on the same colour to reveal the..."
   ],
   "whoItsFor": "Beginners, educators, and curious developers who want a more approachable path into quantum concepts.",
@@ -36,21 +39,36 @@
   ],
   "readmeExcerpt": "This is a super simple game loosely based on Minesweeper Flags and runs on the IBM Quantum computer or simulator. Rules of the game: Don't explode the cat (bombs) The tile numbers indicate the number of times you need to click on the same colour to reveal the whole group If a tile has an ! at the end that means quantum probability was not in your favour and that tile click does not count To win the game, find the golden kitty (who moves based on whether you reveal a ! or normal tile)",
   "readmePath": "reference\\desireevl__quantum-catsweeper\\README.md",
+  "readmeMarkdownPath": "readmes/desireevl-quantum-catsweeper.md",
   "clonePath": "reference\\desireevl__quantum-catsweeper",
-  "stars": 0,
-  "lastPushedAt": null,
+  "stars": 22,
+  "lastPushedAt": "2022-07-16T01:29:01Z",
+  "defaultBranch": "master",
   "githubTopics": [],
+  "quickstart": null,
+  "codeSamples": [],
+  "packageMeta": {},
+  "citationBibtex": null,
+  "supportedBackendSlugs": [
+    "qiskit-qiskit"
+  ],
+  "externalLinks": {},
+  "openIssuesCount": 1,
+  "subscribersCount": 2,
+  "latestRelease": null,
+  "ownerType": "User",
+  "ownerUrl": "https://github.com/desireevl",
   "featured": false,
   "flagship": false,
   "qtanglRelevant": false,
   "archived": false,
-  "imagePath": null,
+  "imagePath": "/learn/monogram/desireevl-quantum-catsweeper.svg",
   "relatedSlugs": [
     "microsoft-quantumkatas",
     "strilanc-quirk",
+    "qiskit-qiskit",
+    "quantumlib-cirq",
     "stared-quantum-game",
-    "decodoku-a-game-to-benchmark-quantum-computers",
-    "decodoku-battleships-with-complementary-measurements",
-    "entanglion-entanglion"
+    "xanaduai-pennylane"
   ]
 }

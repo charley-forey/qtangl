@@ -4,7 +4,7 @@
   "name": "dwave-cloud-client",
   "title": "dwave-cloud-client",
   "repoUrl": "https://github.com/dwavesystems/dwave-cloud-client",
-  "homepageUrl": null,
+  "homepageUrl": "https://docs.dwavequantum.com/en/latest/ocean/api_ref_cloud/",
   "category": {
     "slug": "annealing-ising",
     "title": "Annealing and Ising",
@@ -21,11 +21,15 @@
     }
   ],
   "primaryLanguage": "Python",
+  "primaryLanguages": [
+    "Python",
+    "JavaScript"
+  ],
   "license": "Apache-2.0",
-  "summary": "image:: https://badge.fury.io/py/dwave-cloud-client.svg :target: https://badge.fury.io/py/dwave-cloud-client :alt: Latest version on PyPI",
-  "description": ".. image:: https://badge.fury.io/py/dwave-cloud-client.svg :target: https://badge.fury.io/py/dwave-cloud-client :alt: Latest version on PyPI",
+  "summary": "A minimal implementation of the REST interface used to communicate with D-Wave Solver API (SAPI) servers.",
+  "description": "A minimal implementation of the REST interface used to communicate with D-Wave Solver API (SAPI) servers.",
   "whatItIs": [
-    "dwave-cloud-client is an open-source project in the annealing and ising category. It is maintained by dwavesystems and primarily looks like a Python codebase. image:: https://badge.fury.io/py/dwave-cloud-client.svg :target: https://badge.fury.io/py/dwave-cloud-client :alt: Latest version on PyPI",
+    "dwave-cloud-client is an open-source project in the annealing and ising category. It is maintained by dwavesystems and primarily looks like a Python codebase. A minimal implementation of the REST interface used to communicate with D-Wave Solver API (SAPI) servers.",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches annealing and ising workflows in practice. The repository README emphasizes: .. image:: https://badge.fury.io/py/dwave-cloud-client.svg :target: https://badge.fury.io/py/dwave-cloud-client :alt: Latest version on PyPI .. image:: https://circleci.com/gh/dwavesystems/dwave-cloud-client.svg?style=shield :target: https://circleci.com/gh/dwavesystems/dwave-cloud-client :alt: Linux/MacOS/Windows build status"
   ],
   "whoItsFor": "Developers interested in Ising-model formulations, annealing workflows, and D-Wave-style solver ecosystems.",
@@ -36,15 +40,39 @@
   ],
   "readmeExcerpt": ".. image:: https://badge.fury.io/py/dwave-cloud-client.svg :target: https://badge.fury.io/py/dwave-cloud-client :alt: Latest version on PyPI .. image:: https://circleci.com/gh/dwavesystems/dwave-cloud-client.svg?style=shield :target: https://circleci.com/gh/dwavesystems/dwave-cloud-client :alt: Linux/MacOS/Windows build status",
   "readmePath": "reference\\dwavesystems__dwave-cloud-client\\README.rst",
+  "readmeMarkdownPath": "readmes/dwavesystems-dwave-cloud-client.md",
   "clonePath": "reference\\dwavesystems__dwave-cloud-client",
-  "stars": 0,
-  "lastPushedAt": null,
-  "githubTopics": [],
+  "stars": 62,
+  "lastPushedAt": "2026-05-26T21:20:55Z",
+  "defaultBranch": "master",
+  "githubTopics": [
+    "quantum-computing"
+  ],
+  "quickstart": null,
+  "codeSamples": [],
+  "packageMeta": {},
+  "citationBibtex": null,
+  "supportedBackendSlugs": [
+    "dwavesystems-dimod",
+    "dwavesystems-dwave-ocean-sdk"
+  ],
+  "externalLinks": {
+    "docs": [
+      "https://docs.dwavequantum.com/en/latest/ocean/contribute.html",
+      "https://docs.openstack.org/reno/",
+      "https://docs.openstack.org/reno/latest/user/usage.html"
+    ]
+  },
+  "openIssuesCount": 76,
+  "subscribersCount": 11,
+  "latestRelease": null,
+  "ownerType": "Organization",
+  "ownerUrl": "https://github.com/dwavesystems",
   "featured": false,
   "flagship": false,
   "qtanglRelevant": false,
   "archived": false,
-  "imagePath": null,
+  "imagePath": "/learn/monogram/dwavesystems-dwave-cloud-client.svg",
   "relatedSlugs": [
     "dwavesystems-dwave-ocean-sdk",
     "dwavesystems-dimod",

@@ -17,11 +17,14 @@
     }
   ],
   "primaryLanguage": "Python",
+  "primaryLanguages": [
+    "Python"
+  ],
   "license": "MIT",
-  "summary": "You can install Quantum Edward from the Python package manager pip using: If you are useing JupyterNotebook, use: and restart the kernel.",
-  "description": "You can install Quantum Edward from the Python package manager pip using: If you are useing JupyterNotebook, use: and restart the kernel.",
+  "summary": "Python tools for supervised learning by Quantum Neural Networks",
+  "description": "Python tools for supervised learning by Quantum Neural Networks",
   "whatItIs": [
-    "Quantum_Edward is an open-source project in the quantum machine learning category. It is maintained by artiste-qb-net and primarily looks like a Python codebase. You can install Quantum Edward from the Python package manager pip using: If you are useing JupyterNotebook, use: and restart the kernel.",
+    "Quantum_Edward is an open-source project in the quantum machine learning category. It is maintained by artiste-qb-net and primarily looks like a Python codebase. Python tools for supervised learning by Quantum Neural Networks",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches quantum machine learning workflows in practice. The repository README emphasizes: You can install Quantum Edward from the Python package manager pip using: If you are useing JupyterNotebook, use: and restart the kernel. Quantum Edward at this point is just a small library of Python tools for doing classical supervised learning on Quantum Neural Networks (QNNs)."
   ],
   "whoItsFor": "Researchers and practitioners experimenting with quantum machine learning, variational models, and differentiable circuit stacks.",
@@ -32,21 +35,38 @@
   ],
   "readmeExcerpt": "You can install Quantum Edward from the Python package manager pip using: If you are useing JupyterNotebook, use: and restart the kernel. Quantum Edward at this point is just a small library of Python tools for doing classical supervised learning on Quantum Neural Networks (QNNs).",
   "readmePath": "reference\\artiste-qb-net__Quantum_Edward\\README.md",
+  "readmeMarkdownPath": "readmes/artiste-qb-net-quantum-edward.md",
   "clonePath": "reference\\artiste-qb-net__Quantum_Edward",
-  "stars": 0,
-  "lastPushedAt": null,
+  "stars": 51,
+  "lastPushedAt": "2018-11-07T10:05:28Z",
+  "defaultBranch": "master",
   "githubTopics": [],
+  "quickstart": null,
+  "codeSamples": [],
+  "packageMeta": {},
+  "citationBibtex": null,
+  "supportedBackendSlugs": [],
+  "externalLinks": {
+    "paper": [
+      "https://arxiv.org/abs/1401.0118"
+    ]
+  },
+  "openIssuesCount": 11,
+  "subscribersCount": 8,
+  "latestRelease": null,
+  "ownerType": "Organization",
+  "ownerUrl": "https://github.com/artiste-qb-net",
   "featured": false,
   "flagship": false,
   "qtanglRelevant": false,
   "archived": false,
-  "imagePath": null,
+  "imagePath": "/learn/monogram/artiste-qb-net-quantum-edward.svg",
   "relatedSlugs": [
-    "jpzwolak-qflow-lite",
+    "microsoft-quantumkatas",
+    "qiskit-qiskit",
     "qiskit-qiskit-machine-learning",
-    "aws-amazon-braket-sdk-python",
-    "cqcl-tket",
-    "dwavesystems-dwave-ocean-sdk",
-    "entropicalabs-openqaoa"
+    "quantumlib-cirq",
+    "xanaduai-pennylane",
+    "jpzwolak-qflow-lite"
   ]
 }

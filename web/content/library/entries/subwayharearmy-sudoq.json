@@ -4,7 +4,7 @@
   "name": "SudoQ",
   "title": "SudoQ",
   "repoUrl": "https://github.com/subwayHareArmy/SudoQ",
-  "homepageUrl": null,
+  "homepageUrl": "https://subwayharearmy.github.io/2019/03/23/sudoq-quantum-sudoku-solver/",
   "category": {
     "slug": "games-learning",
     "title": "Games and learning",
@@ -20,12 +20,15 @@
       "title": "How to start writing quantum code: an honest path"
     }
   ],
-  "primaryLanguage": "Jupyter",
-  "license": "LGPL",
-  "summary": "SudoQ A Sudoku solver that leverages D-Wave's Quantum Computer.",
-  "description": "SudoQ A Sudoku solver that leverages D-Wave's Quantum Computer. Meant to be a first project, a tutorial of sorts for Quantum Annealing using D-Wave architecture. Addresses QUBO set-up and solving.",
+  "primaryLanguage": "Jupyter Notebook",
+  "primaryLanguages": [
+    "Jupyter"
+  ],
+  "license": "GPL-3.0",
+  "summary": "A Sudoku solver that leverages a quantum computer.",
+  "description": "A Sudoku solver that leverages a quantum computer.",
   "whatItIs": [
-    "SudoQ is an open-source project in the games and learning category. It is maintained by subwayHareArmy and primarily looks like a Jupyter codebase. SudoQ A Sudoku solver that leverages D-Wave's Quantum Computer.",
+    "SudoQ is an open-source project in the games and learning category. It is maintained by subwayHareArmy and primarily looks like a Jupyter Notebook codebase. A Sudoku solver that leverages a quantum computer.",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches games and learning workflows in practice. The repository README emphasizes: SudoQ A Sudoku solver that leverages D-Wave's Quantum Computer. Meant to be a first project, a tutorial of sorts for Quantum Annealing using D-Wave architecture. Addresses QUBO set-up and solving. Includes code and a presentation explaining it. Presented them at PyData and Persistent Systems, in Pune on 27th..."
   ],
   "whoItsFor": "Beginners, educators, and curious developers who want a more approachable path into quantum concepts.",
@@ -36,21 +39,34 @@
   ],
   "readmeExcerpt": "SudoQ A Sudoku solver that leverages D-Wave's Quantum Computer. Meant to be a first project, a tutorial of sorts for Quantum Annealing using D-Wave architecture. Addresses QUBO set-up and solving. Includes code and a presentation explaining it. Presented them at PyData and Persistent Systems, in Pune on 27th July 2019.",
   "readmePath": "reference\\subwayHareArmy__SudoQ\\README.md",
+  "readmeMarkdownPath": "readmes/subwayharearmy-sudoq.md",
   "clonePath": "reference\\subwayHareArmy__SudoQ",
-  "stars": 0,
-  "lastPushedAt": null,
+  "stars": 6,
+  "lastPushedAt": "2019-10-07T16:57:48Z",
+  "defaultBranch": "master",
   "githubTopics": [],
+  "quickstart": null,
+  "codeSamples": [],
+  "packageMeta": {},
+  "citationBibtex": null,
+  "supportedBackendSlugs": [],
+  "externalLinks": {},
+  "openIssuesCount": 0,
+  "subscribersCount": 0,
+  "latestRelease": null,
+  "ownerType": "User",
+  "ownerUrl": "https://github.com/subwayHareArmy",
   "featured": false,
   "flagship": false,
   "qtanglRelevant": false,
   "archived": false,
-  "imagePath": null,
+  "imagePath": "/learn/monogram/subwayharearmy-sudoq.svg",
   "relatedSlugs": [
     "microsoft-quantumkatas",
     "strilanc-quirk",
+    "qiskit-qiskit",
+    "quantumlib-cirq",
     "stared-quantum-game",
-    "decodoku-a-game-to-benchmark-quantum-computers",
-    "decodoku-battleships-with-complementary-measurements",
-    "desireevl-quantum-catsweeper"
+    "xanaduai-pennylane"
   ]
 }

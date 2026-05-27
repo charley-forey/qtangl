@@ -4,7 +4,7 @@
   "name": "qiskit",
   "title": "qiskit",
   "repoUrl": "https://github.com/QISKit/qiskit",
-  "homepageUrl": null,
+  "homepageUrl": "https://www.ibm.com/quantum/qiskit",
   "category": {
     "slug": "general-purpose-sdks",
     "title": "General-purpose SDKs",
@@ -21,11 +21,16 @@
     }
   ],
   "primaryLanguage": "Python",
+  "primaryLanguages": [
+    "Python",
+    "Rust",
+    "OpenQASM"
+  ],
   "license": "Apache-2.0",
-  "summary": "**Qiskit** is an open-source SDK for working with quantum computers at the level of extended quantum circuits, operators, and primitives.",
-  "description": "**Qiskit** is an open-source SDK for working with quantum computers at the level of extended quantum circuits, operators, and primitives.",
+  "summary": "Qiskit is an open-source SDK for working with quantum computers at the level of extended quantum circuits, operators, and primitives.",
+  "description": "Qiskit is an open-source SDK for working with quantum computers at the level of extended quantum circuits, operators, and primitives.",
   "whatItIs": [
-    "qiskit is an open-source project in the general-purpose sdks category. It is maintained by QISKit and primarily looks like a Python codebase. **Qiskit** is an open-source SDK for working with quantum computers at the level of extended quantum circuits, operators, and primitives.",
+    "qiskit is an open-source project in the general-purpose sdks category. It is maintained by QISKit and primarily looks like a Python codebase. Qiskit is an open-source SDK for working with quantum computers at the level of extended quantum circuits, operators, and primitives.",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches general-purpose sdks workflows in practice. The repository README emphasizes: **Qiskit** is an open-source SDK for working with quantum computers at the level of extended quantum circuits, operators, and primitives. This library is the core component of Qiskit, which contains the building blocks for creating and working with quantum circuits, quantum operators, and primitive functions (Sampler and Estimator)..."
   ],
   "whoItsFor": "Developers who want a broad entry point for building circuits, experimenting with algorithms, and integrating quantum workflows into larger applications.",
@@ -36,21 +41,56 @@
   ],
   "readmeExcerpt": "**Qiskit** is an open-source SDK for working with quantum computers at the level of extended quantum circuits, operators, and primitives. This library is the core component of Qiskit, which contains the building blocks for creating and working with quantum circuits, quantum operators, and primitive functions (Sampler and Estimator). It also contains a transpiler that supports optimizing quantum circuits, and a quantum information toolbox for creating advanced operators.",
   "readmePath": "reference\\QISKit__qiskit\\README.md",
+  "readmeMarkdownPath": "readmes/qiskit-qiskit.md",
   "clonePath": "reference\\QISKit__qiskit",
-  "stars": 0,
-  "lastPushedAt": null,
-  "githubTopics": [],
+  "stars": 7412,
+  "lastPushedAt": "2026-05-27T17:14:40Z",
+  "defaultBranch": "main",
+  "githubTopics": [
+    "c",
+    "python",
+    "qiskit",
+    "quantum",
+    "quantum-circuit",
+    "quantum-computing",
+    "quantum-programming-language",
+    "rust",
+    "sdk"
+  ],
+  "quickstart": {
+    "language": "python",
+    "source": "import numpy as np\nfrom qiskit import QuantumCircuit\n\n# 1. A quantum circuit for preparing the quantum state |000> + i |111> / \u221a2\nqc = QuantumCircuit(3)\nqc.h(0)             # generate superposition\nqc.p(np.pi / 2, 0)  # add quantum phase\nqc.cx(0, 1)         # 0th-qubit-Controlled-NOT gate on 1st qubit\nqc.cx(0, 2)         # 0th-qubit-Controlled-NOT gate on 2nd qubit"
+  },
+  "codeSamples": [],
+  "packageMeta": {
+    "name": "qiskit",
+    "requiresPython": ">=3.10"
+  },
+  "citationBibtex": null,
+  "supportedBackendSlugs": [
+    "qiskit-qiskit"
+  ],
+  "externalLinks": {
+    "pypi": [
+      "https://pypi.org/project/qiskit/"
+    ]
+  },
+  "openIssuesCount": 1155,
+  "subscribersCount": 227,
+  "latestRelease": null,
+  "ownerType": "Organization",
+  "ownerUrl": "https://github.com/Qiskit",
   "featured": true,
   "flagship": true,
   "qtanglRelevant": true,
   "archived": false,
-  "imagePath": "/learn/flagship/qiskit-qiskit.png",
+  "imagePath": "/learn/og/qiskit-qiskit.png",
   "relatedSlugs": [
     "quantumlib-cirq",
     "xanaduai-pennylane",
-    "projectq-framework-projectq",
+    "qiskit-qiskit-terra",
     "quantumbfs-yao-jl",
-    "arlineq-arline-benchmarks",
-    "arlineq-arline-quantum"
+    "microsoft-quantumkatas",
+    "projectq-framework-projectq"
   ]
 }

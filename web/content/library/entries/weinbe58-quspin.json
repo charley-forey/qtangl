@@ -4,7 +4,7 @@
   "name": "QuSpin",
   "title": "QuSpin",
   "repoUrl": "https://github.com/weinbe58/QuSpin",
-  "homepageUrl": null,
+  "homepageUrl": "http://quspin.github.io/QuSpin/",
   "category": {
     "slug": "quantum-chemistry",
     "title": "Quantum chemistry",
@@ -21,11 +21,16 @@
     }
   ],
   "primaryLanguage": "Python",
-  "license": "Unknown",
-  "summary": "QuSpin is an open-source Python package for Exact Diagonalization and quantum dynamics of arbitrary boson, fermion and spin many-body systems, supporting the use of various (user-defined) symmetries in one and higher dimensional...",
-  "description": "QuSpin is an open-source Python package for Exact Diagonalization and quantum dynamics of arbitrary boson, fermion and spin many-body systems, supporting the use of various (user-defined) symmetries in one and higher dimensional lattice systems and (imaginary) time evolution following a user-specified driving protocol.",
+  "primaryLanguages": [
+    "Python",
+    "C/C++",
+    "JavaScript"
+  ],
+  "license": "BSD-3-Clause",
+  "summary": "A python wrapper for doing ED calculations on many-body systems",
+  "description": "A python wrapper for doing ED calculations on many-body systems",
   "whatItIs": [
-    "QuSpin is an open-source project in the quantum chemistry category. It is maintained by weinbe58 and primarily looks like a Python codebase. QuSpin is an open-source Python package for Exact Diagonalization and quantum dynamics of arbitrary boson, fermion and spin many-body systems, supporting the use of various (user-defined) symmetries in one and higher dimensional...",
+    "QuSpin is an open-source project in the quantum chemistry category. It is maintained by weinbe58 and primarily looks like a Python codebase. A python wrapper for doing ED calculations on many-body systems",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches quantum chemistry workflows in practice. The repository README emphasizes: QuSpin is an open-source Python package for Exact Diagonalization and quantum dynamics of arbitrary boson, fermion and spin many-body systems, supporting the use of various (user-defined) symmetries in one and higher dimensional lattice systems and (imaginary) time evolution following a user-specified driving protocol. The complete ***Documentation*** for QuSpin..."
   ],
   "whoItsFor": "Researchers, students, and developers exploring how quantum software is used for chemistry and electronic-structure problems.",
@@ -36,21 +41,60 @@
   ],
   "readmeExcerpt": "QuSpin is an open-source Python package for Exact Diagonalization and quantum dynamics of arbitrary boson, fermion and spin many-body systems, supporting the use of various (user-defined) symmetries in one and higher dimensional lattice systems and (imaginary) time evolution following a user-specified driving protocol. The complete ***Documentation*** for QuSpin (including a number of recent tutorials) can be found at",
   "readmePath": "reference\\weinbe58__QuSpin\\README.md",
+  "readmeMarkdownPath": "readmes/weinbe58-quspin.md",
   "clonePath": "reference\\weinbe58__QuSpin",
-  "stars": 0,
-  "lastPushedAt": null,
+  "stars": 30,
+  "lastPushedAt": "2022-12-22T04:33:15Z",
+  "defaultBranch": "master",
   "githubTopics": [],
+  "quickstart": null,
+  "codeSamples": [
+    {
+      "title": "Bhm",
+      "language": "python",
+      "source": "##### define model parameters #####\nL=6 # system size\nJ=1.0 # hopping\nU=np.sqrt(2.0) # interaction\nmu=2.71 # chemical potential",
+      "path": "examples/notebooks/BHM.ipynb"
+    },
+    {
+      "title": "Bhm",
+      "language": "python",
+      "source": "from __future__ import print_function, division\nimport sys,os\n# line 4 and line 5 below are for development purposes and can be removed\nqspin_path = os.path.join(os.getcwd(),\"../../\")\nsys.path.insert(0,qspin_path)\n#\nfrom quspin.operators import hamiltonian # Hamiltonians and operators\nfrom quspin.basis import boson_basis_1d # Hilbert space boson basis\nimport numpy as np # generic math functions\n#\n##### define model parameters #####\nL=6 # system size\nJ=1.0 # hopping\nU=np.sqrt(2.0) # interaction\nmu=0.0 # chemical potential\n#\n##### construct Bose-Hubbard Hamiltonian #####\n# define boson basis with 3 states per site L bosons in the lattice\n#basis = boson_basis_1d(L,Nb=L) # full boson basis\n#basis = boson_basis_1d(L,Nb=L,sps=3) # particle-conserving basis, 3 states per site\n#basis = boson_basis_1d(L,Nb=L,sps=3,kblock=0) # ... and zero momentum sector\n#basis = boson_basis_1d(L,Nb=L,sps=3,kblock=1) # ... and first non-zero momentum\nbasis = boson_basis_1d(L,Nb=L,sps=3,kblock=0,pblock=1) # ... + zero momentum and positive parity\nprint(basis)\n# define site-coupling lists\nhop=[[-J,i,(i+1)%L] for i in range(L)] #PBC\ninteract=[[0.5*U,i,i] for i in range(L)] # U/2 \\sum_j n_j n_j\npot=[[-mu-0.5*U,i] for i in range(L)] # -(\\mu + U/2) \\sum_j j_n\n# define static and dynamic lists\nstatic=[['+-',hop],['-+',hop],['n',pot],['nn',interact]]\ndynamic=[]\n# build Hamiltonian\nH=hamiltonian(static,dynamic,basis=basis,dtype=np.float64)\n# calculate eigensystem\nE,V=H.eigh()\nE_GS,V_GS=H.eigsh(k=2,which='SA',maxiter=1E10) # only GS\nprint(\"eigenenergies:\", E)\nprint(\"GS energy is %0.3f\" %(E_GS[0]))\n# calculate entanglement entropy per site of GS\nsubsystem=[i for i in range(L//2)] # sites contained in subsystem",
+      "path": "examples/notebooks/BHM.py"
+    },
+    {
+      "title": "Fhm",
+      "language": "python",
+      "source": "from quspin.operators import hamiltonian # Hamiltonians and operators\nfrom quspin.basis import spinless_fermion_basis_1d, tensor_basis # Hilbert space fermion and tensor bases\nimport numpy as np # generic math functions\n##### define model parameters #####\nL=4 # system size\nJ=1.0 # hopping\nU=np.sqrt(2.0) # interaction\nmu=0.0 # chemical potential",
+      "path": "examples/notebooks/FHM.ipynb"
+    }
+  ],
+  "packageMeta": {},
+  "citationBibtex": null,
+  "supportedBackendSlugs": [],
+  "externalLinks": {
+    "docs": [
+      "http://docs.scipy.org/doc/scipy/reference/sparse.html",
+      "http://docs.scipy.org/doc/numpy/reference/index.html",
+      "https://gmpy2.readthedocs.io/en/latest/",
+      "https://numexpr.readthedocs.io/en/latest/user_guide.html"
+    ]
+  },
+  "openIssuesCount": 0,
+  "subscribersCount": 0,
+  "latestRelease": null,
+  "ownerType": "User",
+  "ownerUrl": "https://github.com/weinbe58",
   "featured": false,
   "flagship": false,
   "qtanglRelevant": false,
   "archived": false,
-  "imagePath": null,
+  "imagePath": "/learn/monogram/weinbe58-quspin.svg",
   "relatedSlugs": [
     "quantumlib-openfermion",
     "aspuru-guzik-group-tequila",
     "cda-tum-mqt-dasqa",
+    "eclipse-qrisp-qrisp",
     "ornl-qci-xacc-vqe",
-    "pasqal-io-qadence",
     "projectq-framework-fermilib"
   ]
 }

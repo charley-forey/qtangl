@@ -4,7 +4,7 @@
   "name": "ProjectQ",
   "title": "ProjectQ",
   "repoUrl": "https://github.com/ProjectQ-Framework/ProjectQ",
-  "homepageUrl": null,
+  "homepageUrl": "https://projectq.ch",
   "category": {
     "slug": "general-purpose-sdks",
     "title": "General-purpose SDKs",
@@ -21,11 +21,16 @@
     }
   ],
   "primaryLanguage": "Python",
+  "primaryLanguages": [
+    "Python",
+    "C++",
+    "Jupyter"
+  ],
   "license": "Apache-2.0",
-  "summary": "ProjectQ - An open source software framework for quantum computing ==================================================================",
-  "description": "ProjectQ - An open source software framework for quantum computing ==================================================================",
+  "summary": "ProjectQ: An open source software framework for quantum computing",
+  "description": "ProjectQ: An open source software framework for quantum computing",
   "whatItIs": [
-    "ProjectQ is an open-source project in the general-purpose sdks category. It is maintained by ProjectQ-Framework and primarily looks like a Python codebase. ProjectQ - An open source software framework for quantum computing ==================================================================",
+    "ProjectQ is an open-source project in the general-purpose sdks category. It is maintained by ProjectQ-Framework and primarily looks like a Python codebase. ProjectQ: An open source software framework for quantum computing",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches general-purpose sdks workflows in practice. The repository README emphasizes: ProjectQ - An open source software framework for quantum computing ================================================================== .. image:: https://img.shields.io/pypi/pyversions/projectq?label=Python :alt: PyPI - Python Version"
   ],
   "whoItsFor": "Developers who want a broad entry point for building circuits, experimenting with algorithms, and integrating quantum workflows into larger applications.",
@@ -36,21 +41,80 @@
   ],
   "readmeExcerpt": "ProjectQ - An open source software framework for quantum computing ================================================================== .. image:: https://img.shields.io/pypi/pyversions/projectq?label=Python :alt: PyPI - Python Version",
   "readmePath": "reference\\ProjectQ-Framework__ProjectQ\\README.rst",
+  "readmeMarkdownPath": "readmes/projectq-framework-projectq.md",
   "clonePath": "reference\\ProjectQ-Framework__ProjectQ",
-  "stars": 0,
-  "lastPushedAt": null,
-  "githubTopics": [],
+  "stars": 975,
+  "lastPushedAt": "2026-05-25T18:29:24Z",
+  "defaultBranch": "develop",
+  "githubTopics": [
+    "quantum-computing",
+    "quantum-programming-language"
+  ],
+  "quickstart": null,
+  "codeSamples": [
+    {
+      "title": "Aqt",
+      "language": "python",
+      "source": "# pylint: skip-file\n\"\"\"Example of running a quantum circuit using the AQT APIs.\"\"\"\nimport getpass\nimport matplotlib.pyplot as plt\nimport projectq.setups.aqt\nfrom projectq import MainEngine\nfrom projectq.backends import AQTBackend\nfrom projectq.libs.hist import histogram\nfrom projectq.ops import All, Entangle, Measure\ndef run_entangle(eng, num_qubits=3):\n    \"\"\"\n    Run an entangling operation on the provided compiler engine.\n    Args:\n        eng (MainEngine): Main compiler engine to use.\n        num_qubits (int): Number of qubits to entangle.\n    Returns:\n        measurement (list<int>): List of measurement outcomes.\n    \"\"\"\n    # allocate the quantum register to entangle\n    qureg = eng.allocate_qureg(num_qubits)\n    # entangle the qureg\n    Entangle | qureg\n    # measure; should be all-0 or all-1\n    All(Measure) | qureg\n    # run the circuit\n    eng.flush()\n    # access the probabilities via the back-end:\n    # results = eng.backend.get_probabilities(qureg)\n    # for state in results:\n    #     print(f\"Measured {state} with p = {results[state]}.\")\n    # or plot them directly:\n    histogram(eng.backend, qureg)\n    plt.show()\n    # return one (random) measurement outcome.\n    return [int(q) for q in qureg]\nif __name__ == \"__main__\":\n    # devices available to subscription:\n    # aqt_simulator (11 qubits)\n    # aqt_simulator_noise (11 qubits)\n    # aqt_device (4 qubits)",
+      "path": "examples/aqt.py"
+    },
+    {
+      "title": "Awsbraket",
+      "language": "python",
+      "source": "creds = {\n    'AWS_ACCESS_KEY_ID': 'aws_access_key_id',\n    'AWS_SECRET_KEY': 'aws_secret_key',\n    } # replace with your Access key and Secret key\n\ns3_folder = ['S3Bucket', 'S3Directory'] # replace with your S3 bucket and directory\n\ndevice = 'SV1' # replace by the device you want to use",
+      "path": "examples/awsbraket.ipynb"
+    },
+    {
+      "title": "Azure-Quantum",
+      "language": "python",
+      "source": "import matplotlib.pyplot as plt\n\nfrom projectq import MainEngine\nfrom projectq.ops import H, CX, All, Measure\nfrom projectq.cengines import BasicMapperEngine\nfrom projectq.backends import AzureQuantumBackend\nfrom projectq.libs.hist import histogram",
+      "path": "examples/azure-quantum.ipynb"
+    }
+  ],
+  "packageMeta": {
+    "name": "projectq",
+    "version": "6.0",
+    "requiresPython": ">= 3.8",
+    "dependencies": [
+      "matplotlib",
+      "networkx",
+      "numpy",
+      "requests",
+      "scipy"
+    ]
+  },
+  "citationBibtex": null,
+  "supportedBackendSlugs": [
+    "projectq-framework-projectq"
+  ],
+  "externalLinks": {
+    "docs": [
+      "https://readthedocs.org/projects/projectq/badge/?version=latest",
+      "http://projectq.readthedocs.io/en/latest/?badge=latest",
+      "http://projectq.readthedocs.io/en/latest/examples.html#shor-s-algorithm-for-factoring",
+      "http://projectq.readthedocs.io/en/latest/tutorials.html"
+    ],
+    "paper": [
+      "https://arxiv.org/abs/1612.08091",
+      "http://arxiv.org/abs/1604.01401"
+    ]
+  },
+  "openIssuesCount": 41,
+  "subscribersCount": 61,
+  "latestRelease": null,
+  "ownerType": "Organization",
+  "ownerUrl": "https://github.com/ProjectQ-Framework",
   "featured": false,
   "flagship": true,
   "qtanglRelevant": false,
   "archived": false,
-  "imagePath": "/learn/flagship/projectq-framework-projectq.png",
+  "imagePath": "/learn/og/projectq-framework-projectq.png",
   "relatedSlugs": [
     "qiskit-qiskit",
     "quantumlib-cirq",
     "xanaduai-pennylane",
+    "qiskit-qiskit-terra",
     "quantumbfs-yao-jl",
-    "arlineq-arline-benchmarks",
-    "arlineq-arline-quantum"
+    "microsoft-quantumkatas"
   ]
 }

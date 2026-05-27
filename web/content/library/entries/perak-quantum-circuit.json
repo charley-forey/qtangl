@@ -21,11 +21,15 @@
     }
   ],
   "primaryLanguage": "JavaScript",
+  "primaryLanguages": [
+    "JavaScript",
+    "Jupyter"
+  ],
   "license": "MIT",
-  "summary": "quantum-circuit is open source quantum circuit simulator implemented in javascript.",
-  "description": "quantum-circuit is open source quantum circuit simulator implemented in javascript. Smoothly runs 20+ qubit simulations in browser or at server (node.js). You can use it in your javascript program to run quantum simulations.",
+  "summary": "Quantum Circuit Simulator implemented in JavaScript",
+  "description": "Quantum Circuit Simulator implemented in JavaScript",
   "whatItIs": [
-    "quantum-circuit is an open-source project in the compilers and languages category. It is maintained by perak and primarily looks like a JavaScript codebase. quantum-circuit is open source quantum circuit simulator implemented in javascript.",
+    "quantum-circuit is an open-source project in the compilers and languages category. It is maintained by perak and primarily looks like a JavaScript codebase. Quantum Circuit Simulator implemented in JavaScript",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches compilers and languages workflows in practice. The repository README emphasizes: quantum-circuit is open source quantum circuit simulator implemented in javascript. Smoothly runs 20+ qubit simulations in browser or at server (node.js). You can use it in your javascript program to run quantum simulations. Circuit can be imported from OpenQASM, Quil and IONQ. You can export circuits to OpenQASM..."
   ],
   "whoItsFor": "Developers who want to understand the representations and compilers that sit between high-level code and runnable circuits.",
@@ -36,21 +40,76 @@
   ],
   "readmeExcerpt": "quantum-circuit is open source quantum circuit simulator implemented in javascript. Smoothly runs 20+ qubit simulations in browser or at server (node.js). You can use it in your javascript program to run quantum simulations. Circuit can be imported from OpenQASM, Quil and IONQ. You can export circuits to OpenQASM, pyQuil, Quil, Qiskit, Cirq, TensorFlow Quantum, QSharp, and CudaQ, so it can be used for conversion between quantum programming languages. Circuit drawing can be exported to SVG vector image.",
   "readmePath": "reference\\perak__quantum-circuit\\README.md",
+  "readmeMarkdownPath": "readmes/perak-quantum-circuit.md",
   "clonePath": "reference\\perak__quantum-circuit",
-  "stars": 0,
-  "lastPushedAt": null,
-  "githubTopics": [],
+  "stars": 272,
+  "lastPushedAt": "2026-02-09T22:19:57Z",
+  "defaultBranch": "master",
+  "githubTopics": [
+    "cirq",
+    "emulator",
+    "pyquil",
+    "qasm",
+    "qiskit",
+    "quantum",
+    "quantum-circuit",
+    "quantum-computing",
+    "qubit",
+    "qubits",
+    "quil",
+    "simulator"
+  ],
+  "quickstart": {
+    "language": "javascript",
+    "source": "circuit.importQASM(\"OPENQASM 2.0;\\nimport \\\"qelib1.inc\\\";\\nqreg q[2];\\nh q[0];\\ncx q[0],q[1];\\n\", function(errors) {\n    console.log(errors);\n});"
+  },
+  "codeSamples": [
+    {
+      "title": "Bell",
+      "language": "python",
+      "source": "// import quantum-circuit npm module\nconst QuantumCircuit = require(\"quantum-circuit\");\n\n// create instance of QuantumCircuit object\nlet circ = new QuantumCircuit();",
+      "path": "example/jupyter/bell.ipynb"
+    },
+    {
+      "title": "Qsharp-Export-Test",
+      "language": "python",
+      "source": "operation ExportedQsharpCode() : Result {\n        using(q_reg = Qubit[3]) {\n                X(q_reg[0]);\n                X(q_reg[1]);\n                X(q_reg[2]);\n                CCNOT(q_reg[0], q_reg[1], q_reg[2]);\n                let r = M(q_reg[2]);\n                ResetAll(q_reg);\n                return r;\n        }\n    }",
+      "path": "example/jupyter/qsharp-export-test.ipynb"
+    }
+  ],
+  "packageMeta": {
+    "name": "quantum-circuit",
+    "version": "0.9.247"
+  },
+  "citationBibtex": null,
+  "supportedBackendSlugs": [],
+  "externalLinks": {
+    "docs": [
+      "https://docs.ionq.com/",
+      "http://docs.rigetti.com/en/latest/index.html",
+      "https://qiskit.org/documentation/",
+      "https://docs.microsoft.com/en-us/quantum/language/index?view=qsharp-preview"
+    ],
+    "paper": [
+      "https://arxiv.org/abs/1608.03355"
+    ]
+  },
+  "openIssuesCount": 13,
+  "subscribersCount": 12,
+  "latestRelease": null,
+  "ownerType": "Organization",
+  "ownerUrl": "https://github.com/quantastica",
   "featured": false,
   "flagship": false,
   "qtanglRelevant": false,
   "archived": false,
-  "imagePath": null,
+  "imagePath": "/learn/monogram/perak-quantum-circuit.svg",
   "relatedSlugs": [
     "cqcl-tket",
     "nvidia-cuda-quantum",
-    "quantomatic-pyzx",
-    "avalon-lang-avaloni",
-    "aviggiano-qcl",
-    "dabacon-qsel"
+    "microsoft-quantumkatas",
+    "qiskit-openqasm",
+    "qiskit-qiskit",
+    "quantomatic-pyzx"
   ]
 }

@@ -4,7 +4,7 @@
   "name": "toqito",
   "title": "toqito",
   "repoUrl": "https://github.com/vprusso/toqito",
-  "homepageUrl": null,
+  "homepageUrl": "https://vprusso.github.io/toqito/",
   "category": {
     "slug": "general-purpose-sdks",
     "title": "General-purpose SDKs",
@@ -21,11 +21,16 @@
     }
   ],
   "primaryLanguage": "Python",
+  "primaryLanguages": [
+    "Python",
+    "LaTeX",
+    "JavaScript"
+  ],
   "license": "MIT",
-  "summary": "<p align=\"center\"> <picture> <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://raw.githubusercontent.com/vprusso/toqito/master/docs/content/figures/logo-dark.svg\" width=\"60%\"> <img src=\"https://raw.githubusercontent.com/vprusso/toqito/master/docs/content/figures/logo.svg\" width=\"60%\"> </picture> </p>",
-  "description": "<p align=\"center\"> <picture> <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://raw.githubusercontent.com/vprusso/toqito/master/docs/content/figures/logo-dark.svg\" width=\"60%\"> <img src=\"https://raw.githubusercontent.com/vprusso/toqito/master/docs/content/figures/logo.svg\" width=\"60%\"> </picture> </p>",
+  "summary": "|toqito> (Theory of Quantum Information Toolkit) is a Python library for research in quantum information theory.",
+  "description": "|toqito> (Theory of Quantum Information Toolkit) is a Python library for research in quantum information theory.",
   "whatItIs": [
-    "toqito is an open-source project in the general-purpose sdks category. It is maintained by vprusso and primarily looks like a Python codebase. <p align=\"center\"> <picture> <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://raw.githubusercontent.com/vprusso/toqito/master/docs/content/figures/logo-dark.svg\" width=\"60%\"> <img src=\"https://raw.githubusercontent.com/vprusso/toqito/master/docs/content/figures/logo.svg\" width=\"60%\"> </picture> </p>",
+    "toqito is an open-source project in the general-purpose sdks category. It is maintained by vprusso and primarily looks like a Python codebase. |toqito> (Theory of Quantum Information Toolkit) is a Python library for research in quantum information theory.",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches general-purpose sdks workflows in practice. The repository README emphasizes: <p align=\"center\"> <picture> <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://raw.githubusercontent.com/vprusso/toqito/master/docs/content/figures/logo-dark.svg\" width=\"60%\"> <img src=\"https://raw.githubusercontent.com/vprusso/toqito/master/docs/content/figures/logo.svg\" width=\"60%\"> </picture> </p> The toqito\u27e9 package is an open-source Python library for studying various objects in quantum information, namely, states, channels, and measurements."
   ],
   "whoItsFor": "Developers who want a broad entry point for building circuits, experimenting with algorithms, and integrating quantum workflows into larger applications.",
@@ -36,21 +41,85 @@
   ],
   "readmeExcerpt": "<p align=\"center\"> <picture> <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://raw.githubusercontent.com/vprusso/toqito/master/docs/content/figures/logo-dark.svg\" width=\"60%\"> <img src=\"https://raw.githubusercontent.com/vprusso/toqito/master/docs/content/figures/logo.svg\" width=\"60%\"> </picture> </p> The toqito\u27e9 package is an open-source Python library for studying various objects in quantum information, namely, states, channels, and measurements.",
   "readmePath": "reference\\vprusso__toqito\\README.md",
+  "readmeMarkdownPath": "readmes/vprusso-toqito.md",
   "clonePath": "reference\\vprusso__toqito",
-  "stars": 0,
-  "lastPushedAt": null,
-  "githubTopics": [],
+  "stars": 276,
+  "lastPushedAt": "2026-05-27T20:28:58Z",
+  "defaultBranch": "master",
+  "githubTopics": [
+    "convex-optimization",
+    "linear",
+    "linear-algebra",
+    "matrix-analysis",
+    "nonlocal-game",
+    "physics",
+    "python",
+    "python-3",
+    "python3",
+    "quantum",
+    "quantum-computing",
+    "quantum-information",
+    "quantum-information-science",
+    "quantum-information-theory",
+    "quantum-physics",
+    "quantum-programming",
+    "quantum-programming-language",
+    "research",
+    "semidefinite-programming",
+    "unitaryhack"
+  ],
+  "quickstart": {
+    "language": "python",
+    "source": "# Calculate the classical and quantum value of the CHSH game.\nimport numpy as np\nfrom toqito.nonlocal_games.xor_game import XORGame\n\n# The probability matrix.\nprob_mat = np.array([[1/4, 1/4], [1/4, 1/4]])\n\n# The predicate matrix.\npred_mat = np.array([[0, 0], [0, 1]])\n\n# Define CHSH game from matrices.\nchsh = XORGame(prob_mat, pred_mat)\n\nchsh.classical_value()\n# 0.75\nchsh.quantum_value()\n# 0.8535533"
+  },
+  "codeSamples": [],
+  "packageMeta": {
+    "name": "toqito",
+    "version": "1.1.7",
+    "requiresPython": ">=3.11,<4",
+    "dependencies": [
+      "cvxpy",
+      "more-itertools",
+      "numpy",
+      "scipy",
+      "scs",
+      "picos",
+      "networkx",
+      "matplotlib"
+    ]
+  },
+  "citationBibtex": null,
+  "supportedBackendSlugs": [],
+  "externalLinks": {
+    "docs": [
+      "https://img.shields.io/badge/documentation-blue?style=for-the-badge&logo=material%20for%20mkdocs"
+    ],
+    "paper": [
+      "https://arxiv.org/abs/2604.12808",
+      "https://arxiv.org/abs/2603.05452",
+      "https://arxiv.org/abs/2510.20789",
+      "https://arxiv.org/abs/2311.17047"
+    ],
+    "pypi": [
+      "https://pypi.org/project/toqito/"
+    ]
+  },
+  "openIssuesCount": 9,
+  "subscribersCount": 10,
+  "latestRelease": null,
+  "ownerType": "User",
+  "ownerUrl": "https://github.com/vprusso",
   "featured": false,
   "flagship": false,
   "qtanglRelevant": false,
   "archived": false,
-  "imagePath": null,
+  "imagePath": "/learn/monogram/vprusso-toqito.svg",
   "relatedSlugs": [
     "qiskit-qiskit",
     "quantumlib-cirq",
     "xanaduai-pennylane",
-    "projectq-framework-projectq",
+    "qiskit-qiskit-terra",
     "quantumbfs-yao-jl",
-    "arlineq-arline-benchmarks"
+    "microsoft-quantumkatas"
   ]
 }

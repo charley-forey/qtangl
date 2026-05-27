@@ -6,12 +6,15 @@ from __future__ import annotations
 import json
 import os
 import re
+import time
 import urllib.error
 import urllib.request
 from collections import Counter, defaultdict
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
+
+from library_enrichment import enrich_entry
 
 
 WORKSPACE_ROOT = Path(__file__).resolve().parent.parent
@@ -20,7 +23,25 @@ MANIFEST_PATH = REFERENCE_DIR / "manifest.json"
 TAXONOMY_PATH = Path(__file__).resolve().parent / "library_taxonomy.json"
 OUTPUT_DIR = WORKSPACE_ROOT / "web" / "content" / "library"
 ENTRIES_DIR = OUTPUT_DIR / "entries"
+README_DIR = OUTPUT_DIR / "readmes"
+PUBLIC_LEARN_DIR = WORKSPACE_ROOT / "web" / "public" / "learn"
+OG_IMAGE_DIR = PUBLIC_LEARN_DIR / "og"
+MONOGRAM_DIR = PUBLIC_LEARN_DIR / "monogram"
 GITHUB_CACHE_DIR = Path(__file__).resolve().parent / ".cache" / "github"
+
+CATEGORY_CLUSTERS = {
+    "build": ["general-purpose-sdks", "compilers-languages", "cloud-interop", "pulse-control"],
+    "simulate": ["simulators", "visualization-tomography", "benchmarks-analysis"],
+    "optimize": [
+        "optimization-qubo",
+        "annealing-ising",
+        "quantum-chemistry",
+        "quantum-ml",
+        "photonics",
+    ],
+    "secure": ["post-quantum-crypto", "error-correction-mitigation", "networking"],
+    "learn": ["games-learning"],
+}
 
 IGNORE_DIRS = {
     ".git",
@@ -370,26 +391,65 @@ def fetch_github_repo(owner: str, name: str) -> dict[str, Any]:
         return read_json(cache_path)
 
     token = os.environ.get("GITHUB_TOKEN")
-    if not token:
-        return {}
+    headers = {
+        "Accept": "application/vnd.github+json",
+        "User-Agent": "qtangl-library-builder/1.0",
+    }
+    if token:
+        headers["Authorization"] = f"Bearer {token}"
 
     request = urllib.request.Request(
         f"https://api.github.com/repos/{owner}/{name}",
-        headers={
-            "Accept": "application/vnd.github+json",
-            "Authorization": f"Bearer {token}",
-            "User-Agent": "qtangl-library-builder/1.0",
-        },
+        headers=headers,
     )
     try:
         with urllib.request.urlopen(request, timeout=30) as response:
             payload = json.loads(response.read().decode("utf-8"))
+    except urllib.error.HTTPError as error:
+        if error.code == 403 and not token:
+            return {}
+        return {}
     except (urllib.error.URLError, json.JSONDecodeError):
         return {}
 
     cache_path.parent.mkdir(parents=True, exist_ok=True)
     cache_path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
+    if not token:
+        time.sleep(0.7)
     return payload
+
+
+def ensure_monogram(slug: str, owner: str, title: str) -> str:
+    MONOGRAM_DIR.mkdir(parents=True, exist_ok=True)
+    path = MONOGRAM_DIR / f"{slug}.svg"
+    if path.exists():
+        return f"/learn/monogram/{slug}.svg"
+    initial = (title or owner)[:1].upper()
+    svg = f"""<svg xmlns="http://www.w3.org/2000/svg" width="640" height="480" viewBox="0 0 640 480">
+  <rect width="640" height="480" fill="#0a0a0a"/>
+  <circle cx="320" cy="220" r="120" fill="#1a1a1a" stroke="#333" stroke-width="2"/>
+  <text x="320" y="250" text-anchor="middle" font-family="system-ui,sans-serif" font-size="96" fill="#e5e5e5">{initial}</text>
+  <text x="320" y="400" text-anchor="middle" font-family="system-ui,sans-serif" font-size="22" fill="#888">{owner}</text>
+</svg>"""
+    path.write_text(svg, encoding="utf-8")
+    return f"/learn/monogram/{slug}.svg"
+
+
+def ensure_og_image(slug: str, owner: str, name: str, is_flagship: bool) -> str | None:
+    OG_IMAGE_DIR.mkdir(parents=True, exist_ok=True)
+    target = OG_IMAGE_DIR / f"{slug}.png"
+    if target.exists() and target.stat().st_size > 500:
+        return f"/learn/og/{slug}.png"
+    if not is_flagship:
+        return None
+    url = f"https://opengraph.githubassets.com/1/{owner}/{name}"
+    request = urllib.request.Request(url, headers={"User-Agent": "qtangl-library-builder/1.0"})
+    try:
+        with urllib.request.urlopen(request, timeout=30) as response:
+            target.write_bytes(response.read())
+        return f"/learn/og/{slug}.png"
+    except urllib.error.URLError:
+        return None
 
 
 def classify_category(
@@ -494,6 +554,7 @@ def compute_related(entries: list[dict[str, Any]], target: dict[str, Any]) -> li
 def build_entry(
     repo: dict[str, str],
     taxonomy: dict[str, Any],
+    known_slugs: set[str],
 ) -> dict[str, Any]:
     owner = repo["owner"]
     name = repo["name"]
@@ -508,12 +569,30 @@ def build_entry(
     paragraphs = split_paragraphs(readme_text)
     readme_excerpt = truncate_words(" ".join(paragraphs[:2]), 110)
     github_data = fetch_github_repo(owner, name)
-    primary_language = github_data.get("language") or detect_primary_language(repo_dir)
-    license_name = (
-        github_data.get("license", {}) or {}
-    ).get("spdx_id") or detect_license(repo_dir)
-    if license_name == "NOASSERTION":
-        license_name = detect_license(repo_dir)
+    enriched = enrich_entry(
+        repo_dir=repo_dir,
+        readme_text=readme_text,
+        owner=owner,
+        name=name,
+        extension_map=EXTENSION_LANGUAGE_MAP,
+        known_slugs=known_slugs,
+        github_data=github_data,
+    )
+
+    primary_language = (
+        github_data.get("language")
+        or enriched.get("primaryLanguage")
+        or detect_primary_language(repo_dir)
+    )
+    if primary_language == "Mixed":
+        primary_language = enriched.get("primaryLanguage")
+    primary_languages = enriched.get("primaryLanguages") or (
+        [primary_language] if primary_language and primary_language != "Mixed" else []
+    )
+
+    license_name = enriched.get("license") or detect_license(repo_dir)
+    if license_name in {None, "Unknown", "NOASSERTION"}:
+        license_name = None
 
     description_candidates = [
         github_data.get("description") or "",
@@ -546,12 +625,16 @@ def build_entry(
         owner=owner,
         summary=summary,
         category=category,
-        primary_language=primary_language,
+        primary_language=primary_language or "multi-language",
         readme_excerpt=readme_excerpt,
         archived=archived,
     )
     template = CATEGORY_TEMPLATES[category["slug"]]
-    stars = github_data.get("stargazers_count") or 0
+    stars = enriched.get("stars") or github_data.get("stargazers_count") or 0
+    is_flagship = slug in set(taxonomy["flagshipResourceSlugs"])
+    og_path = ensure_og_image(slug, owner, name, is_flagship)
+    monogram_path = ensure_monogram(slug, owner, name)
+    image_path = og_path or (f"/learn/flagship/{slug}.png" if is_flagship else monogram_path)
 
     return {
         "slug": slug,
@@ -567,27 +650,38 @@ def build_entry(
         },
         "topics": topics,
         "primaryLanguage": primary_language,
+        "primaryLanguages": primary_languages,
         "license": license_name,
         "summary": summary,
         "description": truncate_words(description, 60),
         "whatItIs": what_it_is,
         "whoItsFor": template["audience"],
         "whatYouCanBuild": template["outcomes"],
-        "readmeExcerpt": readme_excerpt,
+        "readmeExcerpt": readme_excerpt or enriched.get("readmeMarkdown", "")[:500],
         "readmePath": str(readme_path.relative_to(WORKSPACE_ROOT)) if readme_path else None,
+        "readmeMarkdownPath": f"readmes/{slug}.md",
         "clonePath": str(repo_dir.relative_to(WORKSPACE_ROOT)) if repo_dir.exists() else None,
         "stars": stars,
-        "lastPushedAt": github_data.get("pushed_at"),
+        "lastPushedAt": enriched.get("lastPushedAt"),
+        "defaultBranch": enriched.get("defaultBranch", "main"),
         "githubTopics": github_data.get("topics", []),
+        "quickstart": enriched.get("quickstart"),
+        "codeSamples": enriched.get("codeSamples", []),
+        "packageMeta": enriched.get("packageMeta", {}),
+        "citationBibtex": enriched.get("citationBibtex"),
+        "supportedBackendSlugs": enriched.get("supportedBackendSlugs", []),
+        "externalLinks": enriched.get("externalLinks", {}),
+        "openIssuesCount": enriched.get("openIssuesCount"),
+        "subscribersCount": enriched.get("subscribersCount"),
+        "latestRelease": enriched.get("latestRelease"),
+        "ownerType": enriched.get("ownerType"),
+        "ownerUrl": enriched.get("ownerUrl"),
         "featured": slug in set(taxonomy["featuredResourceSlugs"]),
-        "flagship": slug in set(taxonomy["flagshipResourceSlugs"]),
+        "flagship": is_flagship,
         "qtanglRelevant": slug in set(taxonomy["qtanglRelevantSlugs"]),
         "archived": archived,
-        "imagePath": (
-            f"/learn/flagship/{slug}.png"
-            if slug in set(taxonomy["flagshipResourceSlugs"])
-            else None
-        ),
+        "imagePath": image_path,
+        "_readmeMarkdown": enriched.get("readmeMarkdown", ""),
     }
 
 
@@ -599,6 +693,12 @@ def build_categories_payload(
     for entry in entries:
         grouped[entry["category"]["slug"]].append(entry)
 
+    cluster_by_category = {
+        category_slug: cluster
+        for cluster, slugs in CATEGORY_CLUSTERS.items()
+        for category_slug in slugs
+    }
+
     payload: list[dict[str, Any]] = []
     for category in taxonomy["categories"]:
         members = sorted(grouped.get(category["slug"], []), key=lambda item: item["title"].lower())
@@ -607,6 +707,7 @@ def build_categories_payload(
                 "slug": category["slug"],
                 "title": category["title"],
                 "description": category["description"],
+                "cluster": cluster_by_category.get(category["slug"], "build"),
                 "topicSlugs": category.get("topicSlugs", []),
                 "heroImagePath": f"/learn/categories/{category['slug']}.png",
                 "resourceCount": len(members),
@@ -621,8 +722,9 @@ def main() -> int:
     taxonomy = load_taxonomy()
     manifest = read_json(MANIFEST_PATH)
     repos: list[dict[str, str]] = manifest["repos"]
+    known_slugs = {slugify(f"{repo['owner']}-{repo['name']}") for repo in repos}
 
-    entries = [build_entry(repo, taxonomy) for repo in repos]
+    entries = [build_entry(repo, taxonomy, known_slugs) for repo in repos]
     entries.sort(key=lambda item: item["title"].lower())
 
     for entry in entries:
@@ -638,10 +740,12 @@ def main() -> int:
             "category": entry["category"],
             "topics": entry["topics"],
             "primaryLanguage": entry["primaryLanguage"],
+            "primaryLanguages": entry.get("primaryLanguages", []),
             "license": entry["license"],
             "summary": entry["summary"],
             "description": entry["description"],
             "stars": entry["stars"],
+            "lastPushedAt": entry.get("lastPushedAt"),
             "featured": entry["featured"],
             "flagship": entry["flagship"],
             "qtanglRelevant": entry["qtanglRelevant"],
@@ -653,6 +757,7 @@ def main() -> int:
 
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     ENTRIES_DIR.mkdir(parents=True, exist_ok=True)
+    README_DIR.mkdir(parents=True, exist_ok=True)
 
     for existing_entry in ENTRIES_DIR.glob("*.json"):
         existing_entry.unlink()
@@ -672,12 +777,17 @@ def main() -> int:
     )
 
     for entry in entries:
+        readme_markdown = entry.pop("_readmeMarkdown", "")
+        if readme_markdown:
+            readme_file = README_DIR / f"{entry['slug']}.md"
+            readme_file.write_text(readme_markdown, encoding="utf-8")
         write_json(ENTRIES_DIR / f"{entry['slug']}.json", entry)
 
     print(f"Wrote {OUTPUT_DIR / 'index.json'}")
     print(f"Wrote {OUTPUT_DIR / 'categories.json'}")
     print(f"Wrote {OUTPUT_DIR / 'meta.json'}")
     print(f"Wrote {len(entries)} entry files to {ENTRIES_DIR}")
+    print(f"Wrote README markdown files to {README_DIR}")
     return 0
 
 

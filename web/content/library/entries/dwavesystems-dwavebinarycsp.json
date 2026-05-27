@@ -21,11 +21,15 @@
     }
   ],
   "primaryLanguage": "Python",
+  "primaryLanguages": [
+    "Python",
+    "JavaScript"
+  ],
   "license": "Apache-2.0",
-  "summary": "For solving problems with constraints, we recommend using the hybrid solvers in the Leap :tm: service.",
-  "description": ":warning: *dwavebinarycsp* is deprecated. For solving problems with constraints, we recommend using the hybrid solvers in the Leap :tm: service. You can find documentation for the hybrid solvers at https://docs.ocean.dwavesys.com.",
+  "summary": "Map constraint satisfaction problems with binary variables to binary quadratic models.",
+  "description": "Map constraint satisfaction problems with binary variables to binary quadratic models.",
   "whatItIs": [
-    "dwavebinarycsp is an open-source project in the general-purpose sdks category. It is maintained by dwavesystems and primarily looks like a Python codebase. For solving problems with constraints, we recommend using the hybrid solvers in the Leap :tm: service.",
+    "dwavebinarycsp is an open-source project in the general-purpose sdks category. It is maintained by dwavesystems and primarily looks like a Python codebase. Map constraint satisfaction problems with binary variables to binary quadratic models.",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches general-purpose sdks workflows in practice. The repository README emphasizes: :warning: *dwavebinarycsp* is deprecated. For solving problems with constraints, we recommend using the hybrid solvers in the Leap :tm: service. You can find documentation for the hybrid solvers at https://docs.ocean.dwavesys.com. Library to construct a binary quadratic model from a constraint satisfaction problem with small constraints over binary variables. The repository also appears to be archival or no longer actively maintained, which matters when evaluating it for current production use."
   ],
   "whoItsFor": "Developers who want a broad entry point for building circuits, experimenting with algorithms, and integrating quantum workflows into larger applications.",
@@ -36,21 +40,45 @@
   ],
   "readmeExcerpt": ":warning: *dwavebinarycsp* is deprecated. For solving problems with constraints, we recommend using the hybrid solvers in the Leap :tm: service. You can find documentation for the hybrid solvers at https://docs.ocean.dwavesys.com. Library to construct a binary quadratic model from a constraint satisfaction problem with small constraints over binary variables.",
   "readmePath": "reference\\dwavesystems__dwavebinarycsp\\README.rst",
+  "readmeMarkdownPath": "readmes/dwavesystems-dwavebinarycsp.md",
   "clonePath": "reference\\dwavesystems__dwavebinarycsp",
-  "stars": 0,
-  "lastPushedAt": null,
+  "stars": 21,
+  "lastPushedAt": "2025-03-18T12:51:17Z",
+  "defaultBranch": "master",
   "githubTopics": [],
+  "quickstart": null,
+  "codeSamples": [],
+  "packageMeta": {},
+  "citationBibtex": null,
+  "supportedBackendSlugs": [
+    "dwavesystems-dimod",
+    "dwavesystems-dwave-ocean-sdk"
+  ],
+  "externalLinks": {
+    "docs": [
+      "https://docs.ocean.dwavesys.com",
+      "https://docs.dwavequantum.com/en/latest/ocean/contribute.html"
+    ],
+    "pypi": [
+      "https://pypi.org/project/dwavebinarycsp"
+    ]
+  },
+  "openIssuesCount": 22,
+  "subscribersCount": 4,
+  "latestRelease": null,
+  "ownerType": "Organization",
+  "ownerUrl": "https://github.com/dwavesystems",
   "featured": false,
   "flagship": false,
   "qtanglRelevant": false,
   "archived": true,
-  "imagePath": null,
+  "imagePath": "/learn/monogram/dwavesystems-dwavebinarycsp.svg",
   "relatedSlugs": [
     "qiskit-qiskit",
     "quantumlib-cirq",
     "xanaduai-pennylane",
-    "projectq-framework-projectq",
+    "qiskit-qiskit-terra",
     "quantumbfs-yao-jl",
-    "arlineq-arline-benchmarks"
+    "microsoft-quantumkatas"
   ]
 }

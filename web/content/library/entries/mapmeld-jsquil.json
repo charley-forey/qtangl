@@ -21,11 +21,14 @@
     }
   ],
   "primaryLanguage": "JavaScript",
+  "primaryLanguages": [
+    "JavaScript"
+  ],
   "license": "Apache-2.0",
-  "summary": "JavaScript interface for writing Quil programs, based on Rigetti Computing's <a href='https://github.com/rigetticomputing/pyquil'>pyQuil package</a>.",
-  "description": "JavaScript interface for writing Quil programs, based on Rigetti Computing's <a href='https://github.com/rigetticomputing/pyquil'>pyQuil package</a>.",
+  "summary": "Quantum computer instructions for JavaScript developers",
+  "description": "Quantum computer instructions for JavaScript developers",
   "whatItIs": [
-    "jsquil is an open-source project in the general-purpose sdks category. It is maintained by mapmeld and primarily looks like a JavaScript codebase. JavaScript interface for writing Quil programs, based on Rigetti Computing's <a href='https://github.com/rigetticomputing/pyquil'>pyQuil package</a>.",
+    "jsquil is an open-source project in the general-purpose sdks category. It is maintained by mapmeld and primarily looks like a JavaScript codebase. Quantum computer instructions for JavaScript developers",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches general-purpose sdks workflows in practice. The repository README emphasizes: JavaScript interface for writing Quil programs, based on Rigetti Computing's <a href='https://github.com/rigetticomputing/pyquil'>pyQuil package</a>. Make a list of instructions to run on a hybrid computer with both qubits and classical registers, and then use the measure instruction to store a qubit value onto a classical register."
   ],
   "whoItsFor": "Developers who want a broad entry point for building circuits, experimenting with algorithms, and integrating quantum workflows into larger applications.",
@@ -36,21 +39,42 @@
   ],
   "readmeExcerpt": "JavaScript interface for writing Quil programs, based on Rigetti Computing's <a href='https://github.com/rigetticomputing/pyquil'>pyQuil package</a>. Make a list of instructions to run on a hybrid computer with both qubits and classical registers, and then use the measure instruction to store a qubit value onto a classical register.",
   "readmePath": "reference\\mapmeld__jsquil\\README.md",
+  "readmeMarkdownPath": "readmes/mapmeld-jsquil.md",
   "clonePath": "reference\\mapmeld__jsquil",
-  "stars": 0,
-  "lastPushedAt": null,
-  "githubTopics": [],
+  "stars": 51,
+  "lastPushedAt": "2020-06-24T23:24:11Z",
+  "defaultBranch": "master",
+  "githubTopics": [
+    "quantum-computing"
+  ],
+  "quickstart": {
+    "language": "javascript",
+    "source": "import { gates, inits, operations, Program, QVM, Connection } from 'jsquil'\n\n// request API credentials from http://rigetti.com/forest\nlet c = new Connection({\n  user_id: 'USER_ID',\n  api_key: 'API_KEY'\n});\n\n// connection for QVM Docker container (which I host)\nlet c2 = new Connection({\n  user_id: 'USER_ID',\n  api_key: 'API_KEY'\n}, 'http://165.227.62.245:5000');\n\nlet q = new QVM(c2);\n\nlet p = new Program();\n// put an X gate on the zeroth qubit\np.inst(gates.X(0));\n\n// store the zeroth qubit's value in the first classical register\np.measure(0, 1);\n\n// p now contains Quil instructions, which look like this:\n// p.code()\n// >  DECLARE ro BIT[2]\n// >  X 0\n// >  MEASURE 0 ro[1]\n\n// run the program twice, returning classical registers from each iteration\nq.run(p, 2, (err, returns) => {\n  // err = null\n  // returns = [[1], [1]]\n});"
+  },
+  "codeSamples": [],
+  "packageMeta": {
+    "name": "jsquil",
+    "version": "2.1.1"
+  },
+  "citationBibtex": null,
+  "supportedBackendSlugs": [],
+  "externalLinks": {},
+  "openIssuesCount": 0,
+  "subscribersCount": 1,
+  "latestRelease": null,
+  "ownerType": "User",
+  "ownerUrl": "https://github.com/mapmeld",
   "featured": false,
   "flagship": false,
   "qtanglRelevant": false,
   "archived": false,
-  "imagePath": null,
+  "imagePath": "/learn/monogram/mapmeld-jsquil.svg",
   "relatedSlugs": [
     "qiskit-qiskit",
     "quantumlib-cirq",
     "xanaduai-pennylane",
-    "projectq-framework-projectq",
+    "qiskit-qiskit-terra",
     "quantumbfs-yao-jl",
-    "arlineq-arline-benchmarks"
+    "microsoft-quantumkatas"
   ]
 }

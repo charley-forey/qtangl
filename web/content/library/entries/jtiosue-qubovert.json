@@ -4,7 +4,7 @@
   "name": "qubovert",
   "title": "qubovert",
   "repoUrl": "https://github.com/jtiosue/qubovert",
-  "homepageUrl": null,
+  "homepageUrl": "https://jtiosue.github.io/qubovert",
   "category": {
     "slug": "optimization-qubo",
     "title": "Optimization and QUBO",
@@ -21,11 +21,16 @@
     }
   ],
   "primaryLanguage": "Python",
+  "primaryLanguages": [
+    "Python",
+    "Jupyter",
+    "C"
+  ],
   "license": "Apache-2.0",
-  "summary": "The one-stop package for formulating, simulating, and solving problems in boolean and spin form.",
-  "description": "The one-stop package for formulating, simulating, and solving problems in boolean and spin form.",
+  "summary": "The one-stop package for formulating, simulating, and solving problems in boolean and spin form",
+  "description": "The one-stop package for formulating, simulating, and solving problems in boolean and spin form",
   "whatItIs": [
-    "qubovert is an open-source project in the optimization and qubo category. It is maintained by jtiosue and primarily looks like a Python codebase. The one-stop package for formulating, simulating, and solving problems in boolean and spin form.",
+    "qubovert is an open-source project in the optimization and qubo category. It is maintained by jtiosue and primarily looks like a Python codebase. The one-stop package for formulating, simulating, and solving problems in boolean and spin form",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches optimization and qubo workflows in practice. The repository README emphasizes: The one-stop package for formulating, simulating, and solving problems in boolean and spin form. .. image:: https://github.com/jtiosue/qubovert/workflows/build/badge.svg?branch=master :target: https://github.com/jtiosue/qubovert/actions?query=workflow%3Abuild+branch%3Amaster :alt: GitHub Actions CI.. image:: https://readthedocs.org/projects/qubovert/badge/?version=latest :target: https://qubovert.readthedocs.io/en/latest/ :alt: Documentation Status.. image:: https://codecov.io/gh/jtiosue/qubovert/branch/master/graph/badge.svg :target: https://codecov.io/gh/jtiosue/qubovert/branch/master :alt: Code Coverage.. image:: https://img.shields.io/lgtm/grade/python/g/jtiosue/qubovert.svg?logo=lgtm&logoWidth=18 :target: https://lgtm.com/projects/g/jtiosue/qubovert/context:python :alt: Code Quality"
   ],
   "whoItsFor": "Teams exploring routing, scheduling, allocation, and other combinatorial problems that can be modeled as optimization workloads.",
@@ -36,15 +41,40 @@
   ],
   "readmeExcerpt": "The one-stop package for formulating, simulating, and solving problems in boolean and spin form. .. image:: https://github.com/jtiosue/qubovert/workflows/build/badge.svg?branch=master :target: https://github.com/jtiosue/qubovert/actions?query=workflow%3Abuild+branch%3Amaster :alt: GitHub Actions CI.. image:: https://readthedocs.org/projects/qubovert/badge/?version=latest :target: https://qubovert.readthedocs.io/en/latest/ :alt: Documentation Status.. image:: https://codecov.io/gh/jtiosue/qubovert/branch/master/graph/badge.svg :target: https://codecov.io/gh/jtiosue/qubovert/branch/master :alt: Code Coverage.. image:: https://img.shields.io/lgtm/grade/python/g/jtiosue/qubovert.svg?logo=lgtm&logoWidth=18 :target: https://lgtm.com/projects/g/jtiosue/qubovert/context:python :alt: Code Quality",
   "readmePath": "reference\\jtiosue__qubovert\\README.rst",
+  "readmeMarkdownPath": "readmes/jtiosue-qubovert.md",
   "clonePath": "reference\\jtiosue__qubovert",
-  "stars": 0,
-  "lastPushedAt": null,
-  "githubTopics": [],
+  "stars": 41,
+  "lastPushedAt": "2026-04-13T17:00:39Z",
+  "defaultBranch": "master",
+  "githubTopics": [
+    "ising",
+    "optimization",
+    "quantum-computing",
+    "qubo"
+  ],
+  "quickstart": null,
+  "codeSamples": [],
+  "packageMeta": {},
+  "citationBibtex": null,
+  "supportedBackendSlugs": [],
+  "externalLinks": {
+    "docs": [
+      "https://readthedocs.org/projects/qubovert/badge/?version=latest",
+      "https://qubovert.readthedocs.io/en/latest/",
+      "https://readthedocs.org/projects/qubovert/badge/?version=dev",
+      "https://qubovert.readthedocs.io/en/dev/"
+    ]
+  },
+  "openIssuesCount": 3,
+  "subscribersCount": 2,
+  "latestRelease": null,
+  "ownerType": "User",
+  "ownerUrl": "https://github.com/jtiosue",
   "featured": false,
   "flagship": true,
   "qtanglRelevant": true,
   "archived": false,
-  "imagePath": "/learn/flagship/jtiosue-qubovert.png",
+  "imagePath": "/learn/og/jtiosue-qubovert.png",
   "relatedSlugs": [
     "entropicalabs-openqaoa",
     "cda-tum-mqt-qmap",

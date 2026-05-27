@@ -4,53 +4,123 @@
   "name": "qadence",
   "title": "qadence",
   "repoUrl": "https://github.com/pasqal-io/qadence",
-  "homepageUrl": null,
+  "homepageUrl": "https://pasqal-io.github.io/qadence/latest/",
   "category": {
-    "slug": "quantum-chemistry",
-    "title": "Quantum chemistry",
-    "description": "Libraries that connect quantum computing workflows to chemistry, electronic structure, and molecular modeling."
+    "slug": "quantum-ml",
+    "title": "Quantum machine learning",
+    "description": "Libraries and experiments combining quantum circuit workflows with machine learning models or differentiable programming."
   },
   "topics": [
-    {
-      "slug": "quantum-chemistry-for-newcomers",
-      "title": "Quantum chemistry software for newcomers"
-    },
     {
       "slug": "quantum-software-map",
       "title": "Quantum computing software in 2026: the open-source map"
     }
   ],
   "primaryLanguage": "Python",
-  "license": "Custom / project-specific",
-  "summary": "> [!CAUTION] > Qadence is currently not actively maintained!",
-  "description": "> [!CAUTION] > Qadence is currently not actively maintained!",
-  "whatItIs": [
-    "qadence is an open-source project in the quantum chemistry category. It is maintained by pasqal-io and primarily looks like a Python codebase. > [!CAUTION] > Qadence is currently not actively maintained!",
-    "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches quantum chemistry workflows in practice. The repository README emphasizes: > [!CAUTION] > Qadence is currently not actively maintained! <p align=\"center\"> <picture> <source media=\"(prefers-color-scheme: dark)\" srcset=\"./docs/extras/assets/logo/QADENCE_Logo-RGB.svg\" width=\"75%\"> <source media=\"(prefers-color-scheme: light)\" srcset=\"./docs/extras/assets/logo/QADENCE_Logo-light-RGB.svg\" width=\"75%\"> <img alt=\"Qadence logo\" src=\"./docs/assets/logo/QADENCE_Logo-RGB.svg\" width=\"75%\"> </picture> </p>"
+  "primaryLanguages": [
+    "Python",
+    "JavaScript"
   ],
-  "whoItsFor": "Researchers, students, and developers exploring how quantum software is used for chemistry and electronic-structure problems.",
+  "license": "PASQAL OPEN-SOURCE SOFTWARE LICENSE (MIT-derived)",
+  "summary": "Digital-analog quantum programming interface",
+  "description": "Digital-analog quantum programming interface",
+  "whatItIs": [
+    "qadence is an open-source project in the quantum machine learning category. It is maintained by pasqal-io and primarily looks like a Python codebase. Digital-analog quantum programming interface",
+    "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches quantum machine learning workflows in practice. The repository README emphasizes: > [!CAUTION] > Qadence is currently not actively maintained! <p align=\"center\"> <picture> <source media=\"(prefers-color-scheme: dark)\" srcset=\"./docs/extras/assets/logo/QADENCE_Logo-RGB.svg\" width=\"75%\"> <source media=\"(prefers-color-scheme: light)\" srcset=\"./docs/extras/assets/logo/QADENCE_Logo-light-RGB.svg\" width=\"75%\"> <img alt=\"Qadence logo\" src=\"./docs/assets/logo/QADENCE_Logo-RGB.svg\" width=\"75%\"> </picture> </p>"
+  ],
+  "whoItsFor": "Researchers and practitioners experimenting with quantum machine learning, variational models, and differentiable circuit stacks.",
   "whatYouCanBuild": [
-    "See how chemistry problems are mapped into quantum-friendly representations.",
-    "Understand the workflow around Hamiltonians, ansatze, and measurement loops.",
-    "Compare beginner-friendly entry points into chemistry-focused quantum tooling."
+    "Learn how the project connects model training ideas to quantum primitives.",
+    "Inspect the assumptions behind differentiable or ML-oriented workflows.",
+    "Compare how serious or experimental the ML story really is."
   ],
   "readmeExcerpt": "> [!CAUTION] > Qadence is currently not actively maintained! <p align=\"center\"> <picture> <source media=\"(prefers-color-scheme: dark)\" srcset=\"./docs/extras/assets/logo/QADENCE_Logo-RGB.svg\" width=\"75%\"> <source media=\"(prefers-color-scheme: light)\" srcset=\"./docs/extras/assets/logo/QADENCE_Logo-light-RGB.svg\" width=\"75%\"> <img alt=\"Qadence logo\" src=\"./docs/assets/logo/QADENCE_Logo-RGB.svg\" width=\"75%\"> </picture> </p>",
   "readmePath": "reference\\pasqal-io__qadence\\README.md",
+  "readmeMarkdownPath": "readmes/pasqal-io-qadence.md",
   "clonePath": "reference\\pasqal-io__qadence",
-  "stars": 0,
-  "lastPushedAt": null,
-  "githubTopics": [],
+  "stars": 88,
+  "lastPushedAt": "2025-12-08T14:23:38Z",
+  "defaultBranch": "main",
+  "githubTopics": [
+    "digital-analog-quantum-computing",
+    "jax",
+    "neutral-atom-devices",
+    "quantum-computing",
+    "quantum-machine-learning",
+    "torch",
+    "unitaryhack"
+  ],
+  "quickstart": null,
+  "codeSamples": [
+    {
+      "title": "Differentiable Backend",
+      "language": "python",
+      "source": "#!/bin/python\nfrom __future__ import annotations\nfrom pathlib import Path\nimport numpy as np\nimport sympy\nimport torch\nDEVICE = torch.device(\"cuda\") if torch.cuda.is_available() else torch.device(\"cpu\")\ntorch.set_default_device(DEVICE)\ntorch.manual_seed(42)\nfrom qadence import CNOT, RX, RY, Parameter, QuantumCircuit, chain, total_magnetization\nfrom qadence.backends.pyqtorch.backend import Backend as PyQTorchBackend\nfrom qadence.engines.torch.differentiable_backend import DifferentiableBackend\nfrom qadence.logger import get_script_logger\nlogger = get_script_logger(\"diff_backend\")\ndef circuit(n_qubits):\n    \"\"\"Helper function to make an example circuit.\"\"\"\n    x = Parameter(\"x\", trainable=False)\n    theta = Parameter(\"theta\")\n    fm = chain(RX(0, 3 * x), RY(1, sympy.exp(x)), RX(0, theta), RY(1, np.pi / 2))\n    ansatz = CNOT(0, 1)\n    block = chain(fm, ansatz)\n    circ = QuantumCircuit(n_qubits, block)\n    return circ\nif __name__ == \"__main__\":\n    torch.manual_seed(42)\n    n_qubits = 2\n    batch_size = 5\n    logger.info(f\"Running example {Path(__file__).name} with n_qubits = {n_qubits}\")\n    # Making circuit with AD\n    circ = circuit(n_qubits)\n    observable = total_magnetization(n_qubits=n_qubits)\n    quantum_backend = PyQTorchBackend()\n    diff_backend = DifferentiableBackend(quantum_backend, diff_mode=\"ad\")\n    diff_circ, diff_obs, embed, params = diff_backend.convert(circ, observable)\n    # Running for some inputs\n    values = {\"x\": torch.rand(batch_size, requires_grad=True)}\n    wf = diff_backend.run(diff_circ, embed(params, values))\n    expval = diff_backend.expectation(diff_circ, diff_obs, embed(params, values))\n    dexpval_x = torch.autograd.grad(\n        expval, values[\"x\"], torch.ones_like(expval), create_graph=True",
+      "path": "examples/backends/differentiable_backend.py"
+    },
+    {
+      "title": "Horqrux Analog",
+      "language": "python",
+      "source": "from __future__ import annotations\nfrom pathlib import Path\nimport jax\nimport jax.numpy as jnp\nimport matplotlib.pyplot as plt\nimport optax\nfrom jax import Array, jit, value_and_grad\nfrom numpy.typing import ArrayLike\nfrom qadence import (\n    AnalogInteraction,\n    AnalogRX,\n    AnalogRY,\n    AnalogRZ,\n    FeatureParameter,\n    Register,\n    VariationalParameter,\n    Z,\n    chain,\n    hamiltonian_factory,\n)\nfrom qadence.backends import backend_factory\nfrom qadence.circuit import QuantumCircuit\nfrom qadence.logger import get_script_logger\nfrom qadence.types import BackendName, DiffMode\nlogger = get_script_logger(\"horqrux_analog\")\nN_QUBITS = 4\nN_EPOCHS = 200\nBACKEND_NAME = BackendName.HORQRUX\nDIFF_MODE = DiffMode.AD\nlogger.info(f\"Running example {Path(__file__).name} with n_qubits = {N_QUBITS}\")\nbknd = backend_factory(BACKEND_NAME, DIFF_MODE)\nregister = Register.line(N_QUBITS, spacing=8.0)\n# The input feature phi for the circuit to learn f(x)\nphi = FeatureParameter(\"phi\")\n# Feature map with a few global analog rotations\nfm = chain(\n    AnalogRX(phi),\n    AnalogRY(2 * phi),\n    AnalogRZ(3 * phi),\n)",
+      "path": "examples/backends/low_level/horqrux_analog.py"
+    },
+    {
+      "title": "Horqrux Dqc",
+      "language": "python",
+      "source": "from __future__ import annotations\nfrom pathlib import Path\nimport jax\nimport jax.numpy as jnp\nimport matplotlib.pyplot as plt\nimport optax\nfrom jax import Array, grad, jit, value_and_grad, vmap\nfrom numpy.random import uniform\nfrom numpy.typing import ArrayLike\nfrom qadence.backends import backend_factory\nfrom qadence.blocks.utils import chain\nfrom qadence.circuit import QuantumCircuit\nfrom qadence.constructors import feature_map, hea, ising_hamiltonian\nfrom qadence.logger import get_script_logger\nfrom qadence.types import BackendName, BasisSet, DiffMode\nlogger = get_script_logger(\"Horqrux DQC\")\nN_QUBITS, DEPTH, LEARNING_RATE, N_POINTS = 4, 3, 0.01, 20\nlogger.info(f\"Running example {Path(__file__).name} with n_qubits = {N_QUBITS}\")\n# building the DQC model\nansatz = hea(n_qubits=N_QUBITS, depth=DEPTH)\n# the input data is encoded via a feature map\nfm = feature_map(n_qubits=N_QUBITS, param=\"x\", fm_type=BasisSet.CHEBYSHEV)\n# choosing a cost function\nobs = ising_hamiltonian(n_qubits=N_QUBITS)\n# building the circuit and the quantum model\ncirc = QuantumCircuit(N_QUBITS, chain(fm, ansatz))\nbknd = backend_factory(BackendName.HORQRUX, DiffMode.AD)\nconv_circ, conv_obs, embedding_fn, params = bknd.convert(circ, obs)\noptimizer = optax.adam(learning_rate=LEARNING_RATE)\nopt_state = optimizer.init(params)\ndef exp_fn(params: dict[str, Array], inputs: dict[str, Array]) -> ArrayLike:\n    return bknd.expectation(conv_circ, conv_obs, embedding_fn(params, inputs))\n# define a problem-specific MSE loss function\n# for the ODE df/dx=4x^3+x^2-2x-1/2\ndef loss_fn(params: dict[str, Array], x: Array) -> Array:\n    def loss(x: float) -> Array:\n        dfdx = grad(lambda x: exp_fn(params, {\"x\": x}))(x)\n        ode_loss = dfdx - (4 * x**3 + x**2 - 2 * x - 0.5)\n        boundary_loss = exp_fn(params, {\"x\": jnp.zeros_like(x)}) - jnp.ones_like(x)\n        return jnp.power(ode_loss, 2) + jnp.power(boundary_loss, 2)",
+      "path": "examples/backends/low_level/horqrux_dqc.py"
+    }
+  ],
+  "packageMeta": {
+    "name": "qadence",
+    "version": "1.11.5",
+    "requiresPython": ">=3.9",
+    "dependencies": [
+      "numpy",
+      "torch",
+      "openfermion",
+      "sympy",
+      "sympytorch",
+      "rich",
+      "tensorboard",
+      "deepdiff",
+      "jsonschema",
+      "nevergrad",
+      "scipy",
+      "pyqtorch"
+    ]
+  },
+  "citationBibtex": null,
+  "supportedBackendSlugs": [
+    "quantumlib-openfermion"
+  ],
+  "externalLinks": {
+    "docs": [
+      "https://github.com/pasqal-io/qadence/actions/workflows/build_docs.yml/badge.svg"
+    ],
+    "paper": [
+      "https://arxiv.org/abs/2401.09915"
+    ],
+    "pypi": [
+      "https://pypi.org/project/qadence/"
+    ]
+  },
+  "openIssuesCount": 21,
+  "subscribersCount": 11,
+  "latestRelease": null,
+  "ownerType": "Organization",
+  "ownerUrl": "https://github.com/pasqal-io",
   "featured": false,
   "flagship": false,
   "qtanglRelevant": false,
   "archived": false,
-  "imagePath": null,
+  "imagePath": "/learn/monogram/pasqal-io-qadence.svg",
   "relatedSlugs": [
-    "quantumlib-openfermion",
-    "aspuru-guzik-group-tequila",
-    "cda-tum-mqt-dasqa",
-    "ornl-qci-xacc-vqe",
-    "projectq-framework-fermilib",
-    "qiskit-qiskit-nature"
+    "microsoft-quantumkatas",
+    "qiskit-qiskit",
+    "qiskit-qiskit-machine-learning",
+    "quantumlib-cirq",
+    "xanaduai-pennylane",
+    "artiste-qb-net-quantum-edward"
   ]
 }

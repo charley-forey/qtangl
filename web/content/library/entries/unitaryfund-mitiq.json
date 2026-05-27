@@ -4,7 +4,7 @@
   "name": "mitiq",
   "title": "mitiq",
   "repoUrl": "https://github.com/unitaryfund/mitiq",
-  "homepageUrl": null,
+  "homepageUrl": "https://mitiq.readthedocs.io",
   "category": {
     "slug": "error-correction-mitigation",
     "title": "Error correction and mitigation",
@@ -21,11 +21,16 @@
     }
   ],
   "primaryLanguage": "Python",
-  "license": "LGPL",
-  "summary": "Mitiq [mitt \u2022 tick] is a Python toolkit for implementing error mitigation techniques on quantum computers.",
-  "description": "Mitiq [mitt \u2022 tick] is a Python toolkit for implementing error mitigation techniques on quantum computers.",
+  "primaryLanguages": [
+    "Python",
+    "Jupyter",
+    "OpenQASM"
+  ],
+  "license": "GPL-3.0",
+  "summary": "Mitiq is an open source toolkit for implementing error mitigation techniques on most current intermediate-scale quantum computers.",
+  "description": "Mitiq is an open source toolkit for implementing error mitigation techniques on most current intermediate-scale quantum computers.",
   "whatItIs": [
-    "mitiq is an open-source project in the error correction and mitigation category. It is maintained by unitaryfund and primarily looks like a Python codebase. Mitiq [mitt \u2022 tick] is a Python toolkit for implementing error mitigation techniques on quantum computers.",
+    "mitiq is an open-source project in the error correction and mitigation category. It is maintained by unitaryfund and primarily looks like a Python codebase. Mitiq is an open source toolkit for implementing error mitigation techniques on most current intermediate-scale quantum computers.",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches error correction and mitigation workflows in practice. The repository README emphasizes: Mitiq [mitt \u2022 tick] is a Python toolkit for implementing error mitigation techniques on quantum computers. Current quantum computers are noisy due to interactions with the environment, imperfect gate applications, state preparation and measurement errors, etc. Error mitigation seeks to reduce these effects at the software level by..."
   ],
   "whoItsFor": "Researchers and advanced developers working on noise, reliability, and the realities of imperfect quantum hardware.",
@@ -36,21 +41,74 @@
   ],
   "readmeExcerpt": "Mitiq [mitt \u2022 tick] is a Python toolkit for implementing error mitigation techniques on quantum computers. Current quantum computers are noisy due to interactions with the environment, imperfect gate applications, state preparation and measurement errors, etc. Error mitigation seeks to reduce these effects at the software level by compiling quantum programs in clever ways.",
   "readmePath": "reference\\unitaryfund__mitiq\\README.md",
+  "readmeMarkdownPath": "readmes/unitaryfund-mitiq.md",
   "clonePath": "reference\\unitaryfund__mitiq",
-  "stars": 0,
-  "lastPushedAt": null,
-  "githubTopics": [],
+  "stars": 432,
+  "lastPushedAt": "2026-05-27T16:28:57Z",
+  "defaultBranch": "main",
+  "githubTopics": [
+    "error-mitigation",
+    "quantum-computing",
+    "quantum-error-mitigation",
+    "quantum-programming"
+  ],
+  "quickstart": {
+    "language": "python",
+    "source": "import cirq\nfrom mitiq import zne, benchmarks\n\n\ndef execute(circuit, noise_level=0.005):\n    \"\"\"Returns Tr[\u03c1 |0\u27e9\u27e80|] where \u03c1 is the state prepared by the circuit\n    with depolarizing noise.\"\"\"\n    noisy_circuit = circuit.with_noise(cirq.depolarize(p=noise_level))\n    return (\n        cirq.DensityMatrixSimulator()\n        .simulate(noisy_circuit)\n        .final_density_matrix[0, 0]\n        .real\n    )\n\n\ncircuit = benchmarks.generate_rb_circuits(n_qubits=1, num_cliffords=50)[0]\n\ntrue_value = execute(circuit, noise_level=0.0)      # Ideal quantum computer\nnoisy_value = execute(circuit)                      # Noisy quantum computer\nzne_value = zne.execute_with_zne(circuit, execute)  # Noisy quantum computer + Mitiq\n\nprint(f\"Error w/o  Mitiq: {abs((true_value - noisy_value) / true_value):.3f}\")\nprint(f\"Error w Mitiq:    {abs((true_value - zne_value) / true_value):.3f}\")"
+  },
+  "codeSamples": [],
+  "packageMeta": {
+    "name": "mitiq",
+    "version": "py312",
+    "requiresPython": ">=3.11,<3.13",
+    "dependencies": [
+      "numpy",
+      "scipy",
+      "cirq-core",
+      "tabulate",
+      "matplotlib"
+    ]
+  },
+  "citationBibtex": null,
+  "supportedBackendSlugs": [
+    "quantumlib-cirq",
+    "qiskit-qiskit",
+    "aws-amazon-braket-sdk-python",
+    "xanaduai-pennylane"
+  ],
+  "externalLinks": {
+    "docs": [
+      "https://readthedocs.org/projects/mitiq/badge/?version=stable",
+      "https://mitiq.readthedocs.io/en/stable/",
+      "https://mitiq.readthedocs.io/en/stable/guide/guide.html",
+      "https://mitiq.readthedocs.io/en/stable/examples/examples.html"
+    ],
+    "paper": [
+      "https://arxiv.org/abs/2009.04417",
+      "https://arxiv.org/abs/1611.09301",
+      "https://arxiv.org/abs/1612.02058",
+      "https://arxiv.org/abs/1805.04492"
+    ],
+    "community": [
+      "https://img.shields.io/badge/dynamic/json?color=blue&label=Discord&query=approximate_presence_count&suffix=%20online.&url=https%3A%2F%2Fdiscord.com%2Fapi%2Finvites%2FJqVGmpkP96%3Fwith_counts%3Dtrue"
+    ]
+  },
+  "openIssuesCount": 95,
+  "subscribersCount": 13,
+  "latestRelease": null,
+  "ownerType": "Organization",
+  "ownerUrl": "https://github.com/unitaryfoundation",
   "featured": false,
   "flagship": true,
   "qtanglRelevant": false,
   "archived": false,
-  "imagePath": "/learn/flagship/unitaryfund-mitiq.png",
+  "imagePath": "/learn/og/unitaryfund-mitiq.png",
   "relatedSlugs": [
     "quantumlib-stim",
     "jacobmarks-qtop",
     "msrudolph-paulipropagation-jl",
-    "0tt3r-quac",
-    "adamisntdead-qusimpy",
-    "aniabrown-quest"
+    "microsoft-quantumkatas",
+    "qiskit-qiskit",
+    "quantumlib-cirq"
   ]
 }

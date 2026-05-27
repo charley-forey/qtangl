@@ -17,11 +17,14 @@
     }
   ],
   "primaryLanguage": "Python",
+  "primaryLanguages": [
+    "Python"
+  ],
   "license": "Apache-2.0",
-  "summary": "This is a python package for managing instruments and control parameters for superconducting qubit systems.",
-  "description": "This is a python package for managing instruments and control parameters for superconducting qubit systems. It complements the Qlab repository by providing simple GUIs for creating the JSON settings structures used by Qlab.",
+  "summary": "A python library for instrument control and superconducting QIP experiments.",
+  "description": "A python library for instrument control and superconducting QIP experiments. ",
   "whatItIs": [
-    "PyQLab is an open-source project in the pulse and control category. It is maintained by BBN-Q and primarily looks like a Python codebase. This is a python package for managing instruments and control parameters for superconducting qubit systems.",
+    "PyQLab is an open-source project in the pulse and control category. It is maintained by BBN-Q and primarily looks like a Python codebase. A python library for instrument control and superconducting QIP experiments.",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches pulse and control workflows in practice. The repository README emphasizes: This is a python package for managing instruments and control parameters for superconducting qubit systems. It complements the Qlab repository by providing simple GUIs for creating the JSON settings structures used by Qlab. The most straightforward way to get up and running is to use the Anaconda Python..."
   ],
   "whoItsFor": "Hardware-adjacent developers and researchers working closer to experiments, pulse schedules, or lab orchestration.",
@@ -32,21 +35,34 @@
   ],
   "readmeExcerpt": "This is a python package for managing instruments and control parameters for superconducting qubit systems. It complements the Qlab repository by providing simple GUIs for creating the JSON settings structures used by Qlab. The most straightforward way to get up and running is to use the Anaconda Python distribution. This includes nearly all the dependencies. The few remaining can be installed from the termminal or Anaconda Command Prompt on Windows. On Windows you may also need to ensure that either the already installed git is on the path or conda install git.",
   "readmePath": "reference\\BBN-Q__PyQLab\\README.md",
+  "readmeMarkdownPath": "readmes/bbn-q-pyqlab.md",
   "clonePath": "reference\\BBN-Q__PyQLab",
-  "stars": 0,
-  "lastPushedAt": null,
+  "stars": 25,
+  "lastPushedAt": "2017-06-06T17:09:54Z",
+  "defaultBranch": "develop",
   "githubTopics": [],
+  "quickstart": null,
+  "codeSamples": [],
+  "packageMeta": {},
+  "citationBibtex": null,
+  "supportedBackendSlugs": [],
+  "externalLinks": {},
+  "openIssuesCount": 6,
+  "subscribersCount": 23,
+  "latestRelease": null,
+  "ownerType": "Organization",
+  "ownerUrl": "https://github.com/BBN-Q",
   "featured": false,
   "flagship": false,
   "qtanglRelevant": false,
   "archived": false,
-  "imagePath": null,
+  "imagePath": "/learn/monogram/bbn-q-pyqlab.svg",
   "relatedSlugs": [
     "m-labs-artiq",
-    "bbn-q-pyqgl2",
-    "bbn-q-qgl",
-    "bbn-q-qlab",
-    "bbn-q-qlab-jl",
-    "indisoluble-swiftquantumcomputing"
+    "microsoft-quantumkatas",
+    "qiskit-qiskit",
+    "quantumlib-cirq",
+    "xanaduai-pennylane",
+    "bbn-q-pyqgl2"
   ]
 }

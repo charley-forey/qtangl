@@ -4,7 +4,7 @@
   "name": "arline_quantum",
   "title": "arline_quantum",
   "repoUrl": "https://github.com/ArlineQ/arline_quantum",
-  "homepageUrl": null,
+  "homepageUrl": "https://arlineq.wixsite.com/arline",
   "category": {
     "slug": "general-purpose-sdks",
     "title": "General-purpose SDKs",
@@ -21,11 +21,15 @@
     }
   ],
   "primaryLanguage": "Python",
-  "license": "GPL",
-  "summary": "**Arline Quantum** is an open-source library providing basic functionality for creating and manipulating quantum circuits.",
-  "description": "**Arline Quantum** is an open-source library providing basic functionality for creating and manipulating quantum circuits. It also contains a list of mock quantum hardware.",
+  "primaryLanguages": [
+    "Python",
+    "OpenQASM"
+  ],
+  "license": "AGPL-3.0",
+  "summary": "Arline Quantum is an open-source library providing basic functionality for creating and manipulating quantum circuits.",
+  "description": "Arline Quantum is an open-source library providing basic functionality for creating and manipulating quantum circuits. It also contains a list of mock quantum hardware",
   "whatItIs": [
-    "arline_quantum is an open-source project in the general-purpose sdks category. It is maintained by ArlineQ and primarily looks like a Python codebase. **Arline Quantum** is an open-source library providing basic functionality for creating and manipulating quantum circuits.",
+    "arline_quantum is an open-source project in the general-purpose sdks category. It is maintained by ArlineQ and primarily looks like a Python codebase. Arline Quantum is an open-source library providing basic functionality for creating and manipulating quantum circuits.",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches general-purpose sdks workflows in practice. The repository README emphasizes: **Arline Quantum** is an open-source library providing basic functionality for creating and manipulating quantum circuits. It also contains a list of mock quantum hardware. Alternatively, Arline Quantum can be installed locally in the editable mode. Clone Arline Quantum repository, cd to the source directory:"
   ],
   "whoItsFor": "Developers who want a broad entry point for building circuits, experimenting with algorithms, and integrating quantum workflows into larger applications.",
@@ -36,21 +40,47 @@
   ],
   "readmeExcerpt": "**Arline Quantum** is an open-source library providing basic functionality for creating and manipulating quantum circuits. It also contains a list of mock quantum hardware. Alternatively, Arline Quantum can be installed locally in the editable mode. Clone Arline Quantum repository, cd to the source directory:",
   "readmePath": "reference\\ArlineQ__arline_quantum\\README.md",
+  "readmeMarkdownPath": "readmes/arlineq-arline-quantum.md",
   "clonePath": "reference\\ArlineQ__arline_quantum",
-  "stars": 0,
-  "lastPushedAt": null,
-  "githubTopics": [],
+  "stars": 16,
+  "lastPushedAt": "2024-01-01T23:13:44Z",
+  "defaultBranch": "master",
+  "githubTopics": [
+    "python",
+    "quantum",
+    "quantum-computing",
+    "quantum-hardware"
+  ],
+  "quickstart": null,
+  "codeSamples": [],
+  "packageMeta": {},
+  "citationBibtex": null,
+  "supportedBackendSlugs": [
+    "qiskit-qiskit",
+    "quantumlib-cirq",
+    "quantomatic-pyzx"
+  ],
+  "externalLinks": {
+    "docs": [
+      "https://arline-quantum.readthedocs.io/en/latest/"
+    ]
+  },
+  "openIssuesCount": 0,
+  "subscribersCount": 3,
+  "latestRelease": null,
+  "ownerType": "Organization",
+  "ownerUrl": "https://github.com/ArlineQ",
   "featured": false,
   "flagship": false,
   "qtanglRelevant": false,
   "archived": false,
-  "imagePath": null,
+  "imagePath": "/learn/monogram/arlineq-arline-quantum.svg",
   "relatedSlugs": [
     "qiskit-qiskit",
     "quantumlib-cirq",
     "xanaduai-pennylane",
-    "projectq-framework-projectq",
+    "qiskit-qiskit-terra",
     "quantumbfs-yao-jl",
-    "arlineq-arline-benchmarks"
+    "microsoft-quantumkatas"
   ]
 }

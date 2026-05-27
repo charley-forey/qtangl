@@ -1,0 +1,19 @@
+#Build Instructions
+
+Go into the build directory and choose the folder corresponding to the
+build type you want.  Enter the folder and run ./build.
+
+#Build Dependencies
+
+- libpoppler-glib-dev
+- libgtkmm-2.4-dev
+- bison
+- flex
+- cmake
+- boost >= 1.52.0
+- libboost-dev
+- libboost-filesystem-dev
+- libboost-program-options-dev
+- libboost-system-dev
+- cairo >= 1.10.2
+- mpfr

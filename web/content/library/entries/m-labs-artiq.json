@@ -4,7 +4,7 @@
   "name": "artiq",
   "title": "artiq",
   "repoUrl": "https://github.com/m-labs/artiq",
-  "homepageUrl": null,
+  "homepageUrl": "https://m-labs.hk/artiq",
   "category": {
     "slug": "pulse-control",
     "title": "Pulse and control",
@@ -17,12 +17,17 @@
     }
   ],
   "primaryLanguage": "Python",
-  "license": "Custom / project-specific",
-  "summary": "Repository moved to https://git.m-labs.hk/M-Labs/artiq",
-  "description": "Repository moved to https://git.m-labs.hk/M-Labs/artiq",
+  "primaryLanguages": [
+    "Python",
+    "Rust",
+    "LaTeX"
+  ],
+  "license": "LGPL-3.0",
+  "summary": "A leading-edge control system for quantum information experiments",
+  "description": "A leading-edge control system for quantum information experiments",
   "whatItIs": [
-    "artiq is an open-source project in the pulse and control category. It is maintained by m-labs and primarily looks like a Python codebase. Repository moved to https://git.m-labs.hk/M-Labs/artiq",
-    "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches pulse and control workflows in practice."
+    "artiq is an open-source project in the pulse and control category. It is maintained by m-labs and primarily looks like a Python codebase. A leading-edge control system for quantum information experiments",
+    "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches pulse and control workflows in practice. The repository also appears to be archival or no longer actively maintained, which matters when evaluating it for current production use."
   ],
   "whoItsFor": "Hardware-adjacent developers and researchers working closer to experiments, pulse schedules, or lab orchestration.",
   "whatYouCanBuild": [
@@ -30,23 +35,44 @@
     "Understand where pulse sequencing and experiment orchestration fit in the stack.",
     "Learn which projects matter when hardware control is part of the workflow."
   ],
-  "readmeExcerpt": "",
+  "readmeExcerpt": "Repository moved to https://git.m-labs.hk/M-Labs/artiq",
   "readmePath": "reference\\m-labs__artiq\\README.rst",
+  "readmeMarkdownPath": "readmes/m-labs-artiq.md",
   "clonePath": "reference\\m-labs__artiq",
-  "stars": 0,
-  "lastPushedAt": null,
-  "githubTopics": [],
+  "stars": 515,
+  "lastPushedAt": "2026-01-18T10:40:16Z",
+  "defaultBranch": "master",
+  "githubTopics": [
+    "compiler",
+    "physics",
+    "python",
+    "qt",
+    "quantum-computing",
+    "rust",
+    "science"
+  ],
+  "quickstart": null,
+  "codeSamples": [],
+  "packageMeta": {},
+  "citationBibtex": null,
+  "supportedBackendSlugs": [],
+  "externalLinks": {},
+  "openIssuesCount": 213,
+  "subscribersCount": 35,
+  "latestRelease": null,
+  "ownerType": "Organization",
+  "ownerUrl": "https://github.com/m-labs",
   "featured": false,
   "flagship": true,
   "qtanglRelevant": false,
-  "archived": false,
-  "imagePath": "/learn/flagship/m-labs-artiq.png",
+  "archived": true,
+  "imagePath": "/learn/og/m-labs-artiq.png",
   "relatedSlugs": [
+    "microsoft-quantumkatas",
+    "qiskit-qiskit",
+    "quantumlib-cirq",
+    "xanaduai-pennylane",
     "bbn-q-pyqgl2",
-    "bbn-q-pyqlab",
-    "bbn-q-qgl",
-    "bbn-q-qlab",
-    "bbn-q-qlab-jl",
-    "indisoluble-swiftquantumcomputing"
+    "bbn-q-pyqlab"
   ]
 }

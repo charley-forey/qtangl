@@ -4,7 +4,7 @@
   "name": "Squankum",
   "title": "Squankum",
   "repoUrl": "https://github.com/jeffwass/Squankum",
-  "homepageUrl": null,
+  "homepageUrl": "http://jeffwass.github.com/Squankum/",
   "category": {
     "slug": "games-learning",
     "title": "Games and learning",
@@ -21,11 +21,14 @@
     }
   ],
   "primaryLanguage": "Java",
-  "license": "LGPL",
-  "summary": "Welcome to Squankum -------- Currently Squankum lets you :",
-  "description": "Welcome to Squankum -------- Currently Squankum lets you :",
+  "primaryLanguages": [
+    "Java"
+  ],
+  "license": "GPL-3.0",
+  "summary": "Simulation of Quantum Computation",
+  "description": "Simulation of Quantum Computation",
   "whatItIs": [
-    "Squankum is an open-source project in the games and learning category. It is maintained by jeffwass and primarily looks like a Java codebase. Welcome to Squankum -------- Currently Squankum lets you :",
+    "Squankum is an open-source project in the games and learning category. It is maintained by jeffwass and primarily looks like a Java codebase. Simulation of Quantum Computation",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches games and learning workflows in practice. The repository README emphasizes: Welcome to Squankum -------- Currently Squankum lets you : Visualize a single qubit Observe graphically the representation on a Bloch Sphere Observe the relationship between the Bloch angular representation and spinor notation Perform single-qubit operations Observe representation of two coupled qubits (not fully implemented)"
   ],
   "whoItsFor": "Beginners, educators, and curious developers who want a more approachable path into quantum concepts.",
@@ -36,21 +39,34 @@
   ],
   "readmeExcerpt": "Welcome to Squankum -------- Currently Squankum lets you : Visualize a single qubit Observe graphically the representation on a Bloch Sphere Observe the relationship between the Bloch angular representation and spinor notation Perform single-qubit operations Observe representation of two coupled qubits (not fully implemented)",
   "readmePath": "reference\\jeffwass__Squankum\\README.md",
+  "readmeMarkdownPath": "readmes/jeffwass-squankum.md",
   "clonePath": "reference\\jeffwass__Squankum",
-  "stars": 0,
-  "lastPushedAt": null,
+  "stars": 10,
+  "lastPushedAt": "2012-05-05T18:05:18Z",
+  "defaultBranch": "master",
   "githubTopics": [],
+  "quickstart": null,
+  "codeSamples": [],
+  "packageMeta": {},
+  "citationBibtex": null,
+  "supportedBackendSlugs": [],
+  "externalLinks": {},
+  "openIssuesCount": 0,
+  "subscribersCount": 1,
+  "latestRelease": null,
+  "ownerType": "User",
+  "ownerUrl": "https://github.com/jeffwass",
   "featured": false,
   "flagship": false,
   "qtanglRelevant": false,
   "archived": false,
-  "imagePath": null,
+  "imagePath": "/learn/monogram/jeffwass-squankum.svg",
   "relatedSlugs": [
     "microsoft-quantumkatas",
     "strilanc-quirk",
+    "qiskit-qiskit",
+    "quantumlib-cirq",
     "stared-quantum-game",
-    "decodoku-a-game-to-benchmark-quantum-computers",
-    "decodoku-battleships-with-complementary-measurements",
-    "desireevl-quantum-catsweeper"
+    "xanaduai-pennylane"
   ]
 }

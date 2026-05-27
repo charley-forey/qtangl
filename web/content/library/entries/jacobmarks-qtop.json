@@ -21,11 +21,14 @@
     }
   ],
   "primaryLanguage": "Python",
-  "license": "LGPL",
-  "summary": "QTop *** NOTE: This software is not being actively maintained.",
-  "description": "QTop *** NOTE: This software is not being actively maintained. Use at your own risk.",
+  "primaryLanguages": [
+    "Python"
+  ],
+  "license": "GPL-3.0",
+  "summary": "Topological Quantum Computing Simulator",
+  "description": "Topological Quantum Computing Simulator",
   "whatItIs": [
-    "QTop is an open-source project in the error correction and mitigation category. It is maintained by jacobmarks and primarily looks like a Python codebase. QTop *** NOTE: This software is not being actively maintained.",
+    "QTop is an open-source project in the error correction and mitigation category. It is maintained by jacobmarks and primarily looks like a Python codebase. Topological Quantum Computing Simulator",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches error correction and mitigation workflows in practice. The repository README emphasizes: QTop *** NOTE: This software is not being actively maintained. Use at your own risk. QTop is an open-source python module for simulation and visualization of topological quantum codes. QTop is object-oriented and easy to read, facilitating the addition and assessment of new topological computing architectures, as well..."
   ],
   "whoItsFor": "Researchers and advanced developers working on noise, reliability, and the realities of imperfect quantum hardware.",
@@ -36,21 +39,37 @@
   ],
   "readmeExcerpt": "QTop *** NOTE: This software is not being actively maintained. Use at your own risk. QTop is an open-source python module for simulation and visualization of topological quantum codes. QTop is object-oriented and easy to read, facilitating the addition and assessment of new topological computing architectures, as well as the development of novel decoders.",
   "readmePath": "reference\\jacobmarks__QTop\\README.md",
+  "readmeMarkdownPath": "readmes/jacobmarks-qtop.md",
   "clonePath": "reference\\jacobmarks__QTop",
-  "stars": 0,
-  "lastPushedAt": null,
+  "stars": 38,
+  "lastPushedAt": "2020-02-15T01:37:58Z",
+  "defaultBranch": "master",
   "githubTopics": [],
+  "quickstart": {
+    "language": "python",
+    "source": "import numpy as np\ndepths = np.linspace(5,55,6)\nprobabilities = np.logspace(-3,-0.5,10)\ntrials = 1000\nrun(sim, depths, probabilities, trials)"
+  },
+  "codeSamples": [],
+  "packageMeta": {},
+  "citationBibtex": null,
+  "supportedBackendSlugs": [],
+  "externalLinks": {},
+  "openIssuesCount": 2,
+  "subscribersCount": 8,
+  "latestRelease": null,
+  "ownerType": "User",
+  "ownerUrl": "https://github.com/jacobmarks",
   "featured": false,
   "flagship": false,
   "qtanglRelevant": false,
   "archived": false,
-  "imagePath": null,
+  "imagePath": "/learn/monogram/jacobmarks-qtop.svg",
   "relatedSlugs": [
     "quantumlib-stim",
     "unitaryfund-mitiq",
     "msrudolph-paulipropagation-jl",
-    "0tt3r-quac",
-    "adamisntdead-qusimpy",
-    "aniabrown-quest"
+    "microsoft-quantumkatas",
+    "qiskit-qiskit",
+    "quantumlib-cirq"
   ]
 }

@@ -21,11 +21,15 @@
     }
   ],
   "primaryLanguage": "Julia",
+  "primaryLanguages": [
+    "Julia",
+    "Jupyter"
+  ],
   "license": "Apache-2.0",
-  "summary": "PauliPropagation.jl PauliPropagation.jl is a Julia package for simulating Pauli propagation in quantum circuits and systems.",
-  "description": "PauliPropagation.jl PauliPropagation.jl is a Julia package for simulating Pauli propagation in quantum circuits and systems. It focuses on simulating the evolution of observables expressed in the Pauli basis under the action of unitary gates and non-unitary channels in a quantum circuit.",
+  "summary": "A Julia library for Pauli propagation simulation of quantum circuits and quantum systems.",
+  "description": "A Julia library for Pauli propagation simulation of quantum circuits and quantum systems.",
   "whatItIs": [
-    "PauliPropagation.jl is an open-source project in the error correction and mitigation category. It is maintained by MSRudolph and primarily looks like a Julia codebase. PauliPropagation.jl PauliPropagation.jl is a Julia package for simulating Pauli propagation in quantum circuits and systems.",
+    "PauliPropagation.jl is an open-source project in the error correction and mitigation category. It is maintained by MSRudolph and primarily looks like a Julia codebase. A Julia library for Pauli propagation simulation of quantum circuits and quantum systems.",
     "For readers mapping the ecosystem, this resource is useful because it shows how one team approaches error correction and mitigation workflows in practice. The repository README emphasizes: PauliPropagation.jl PauliPropagation.jl is a Julia package for simulating Pauli propagation in quantum circuits and systems. It focuses on simulating the evolution of observables expressed in the Pauli basis under the action of unitary gates and non-unitary channels in a quantum circuit. Unlike traditional simulators which simulate a circuit..."
   ],
   "whoItsFor": "Researchers and advanced developers working on noise, reliability, and the realities of imperfect quantum hardware.",
@@ -36,21 +40,66 @@
   ],
   "readmeExcerpt": "PauliPropagation.jl PauliPropagation.jl is a Julia package for simulating Pauli propagation in quantum circuits and systems. It focuses on simulating the evolution of observables expressed in the Pauli basis under the action of unitary gates and non-unitary channels in a quantum circuit. Unlike traditional simulators which simulate a circuit $\\mathcal{E}$ evolving the state $\\rho$ in the Schr\u00f6dinger picture, Pauli propagation often adopts the Heisenberg picture, evolving an observable $O$ under $\\mathcal{E}^\\dagger$. This can be particularly efficient when the observables remain sparse or structured under evolution, and is useful for estimating expectation values such as $\\text{Tr}\\left[\\rho \\mathcal{E}^{\\dagger}(O)\\right]$, studying operator dynamics, and computing correlation functions.",
   "readmePath": "reference\\MSRudolph__PauliPropagation.jl\\README.md",
+  "readmeMarkdownPath": "readmes/msrudolph-paulipropagation-jl.md",
   "clonePath": "reference\\MSRudolph__PauliPropagation.jl",
-  "stars": 0,
-  "lastPushedAt": null,
+  "stars": 138,
+  "lastPushedAt": "2026-04-17T09:28:07Z",
+  "defaultBranch": "main",
   "githubTopics": [],
+  "quickstart": {
+    "language": "julia",
+    "source": "using PauliPropagation\n\nnqubits = 32\n\nobservable = PauliString(nqubits, :Z, 16) # I...IZI...I"
+  },
+  "codeSamples": [
+    {
+      "title": "1-Basic-Example",
+      "language": "python",
+      "source": "# input_psum = PauliSum(nq)\n# add!(input_psum, :Z, 32)\n# add!(input_psum, [:X, :X], [1, 64])\n# add!(input_psum, [:X, :Y, :Z], [1, 4, 7], 1.3)",
+      "path": "examples/1-basic-example.ipynb"
+    },
+    {
+      "title": "2-Datatypes",
+      "language": "python",
+      "source": "add!(psum, :X, 2)  # this adds 1.0 * IXI\nadd!(psum, [:Y, :Z], [1, 3], 0.5)  # this adds 0.5 * YIZ\n\npsum  # the display order usually does not match the order in which you added the terms, but that is fine.",
+      "path": "examples/2-datatypes.ipynb"
+    },
+    {
+      "title": "3-Utility-Example",
+      "language": "python",
+      "source": "IBM_mitigated_vals = [1.01688859, 1.00387483, 0.95615886, 0.95966435, 0.83946763,\n    0.81185907, 0.54640995, 0.45518584, 0.19469377, 0.01301832,0.01016334]\nIBM_angles = [0.    , 0.1   , 0.2   , 0.3   , 0.4   , 0.5   , 0.6   , 0.7   , 0.8   , 1.    , 1.5707]\n\ntn_vals = [9.99999254e-01,  9.99593653e-01,  9.95720077e-01,  9.88301532e-01,\n        9.78553511e-01,  9.58023054e-01,  9.21986059e-01,  8.81726079e-01,\n        8.49816779e-01,  8.24900527e-01,  7.91257641e-01,  7.37435202e-01,\n        6.68573798e-01,  5.88096040e-01,  4.81874079e-01,  3.50316579e-01,\n        2.26709331e-01,  1.39724659e-01,  7.86639143e-02,  4.24124371e-02,\n        1.90595136e-02,  6.18879050e-03, -8.27168956e-04, -4.63372099e-03,\n       -7.05202121e-03, -7.68387421e-03, -6.33121142e-03, -4.32594440e-03,\n        6.52050191e-04,  1.72598340e-04,  5.64696020e-05, -7.70582375e-07]\ntn_angles = LinRange(0, \u03c0/2, length(tn_vals));\n\n\ngoogle_vals = [1, 0.9957248494988796,0.9785691808859784,0.9227771228638144,0.8549387301071374,\n    0.7790027681081058,0.6093954499261214,0.4257824480390532,0.2090085348069826,0.0116245678393245, -4.8872551798147e-09]\ngoogle_angles = [0.000, 0.100, 0.200, 0.300, 0.400,0.500,0.600,0.700,0.800,1.000,1.571];",
+      "path": "examples/3-utility-example.ipynb"
+    }
+  ],
+  "packageMeta": {},
+  "citationBibtex": null,
+  "supportedBackendSlugs": [],
+  "externalLinks": {
+    "paper": [
+      "https://arxiv.org/abs/2505.21606",
+      "https://arxiv.org/abs/2501.13101}",
+      "https://arxiv.org/abs/2306.05400",
+      "https://arxiv.org/abs/2308.09109"
+    ],
+    "community": [
+      "https://join.slack.com/t/julialang/shared_invite/zt-2zljxdwnl-kSXbwuwFHeERyxSD3iFJdQ"
+    ]
+  },
+  "openIssuesCount": 9,
+  "subscribersCount": 3,
+  "latestRelease": null,
+  "ownerType": "User",
+  "ownerUrl": "https://github.com/MSRudolph",
   "featured": false,
   "flagship": false,
   "qtanglRelevant": false,
   "archived": false,
-  "imagePath": null,
+  "imagePath": "/learn/monogram/msrudolph-paulipropagation-jl.svg",
   "relatedSlugs": [
     "quantumlib-stim",
     "unitaryfund-mitiq",
     "jacobmarks-qtop",
-    "0tt3r-quac",
-    "adamisntdead-qusimpy",
-    "aniabrown-quest"
+    "microsoft-quantumkatas",
+    "qiskit-qiskit",
+    "quantumlib-cirq"
   ]
 }
