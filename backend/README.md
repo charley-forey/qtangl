@@ -57,6 +57,7 @@ Required Railway environment variables:
 Hospital demo runtime notes:
 
 - The hospital demo endpoints live under `/hospital/*`.
+- Browser calls from `https://www.qtangl.com` require CORS; defaults allow qtangl.com, localhost, and `*.vercel.app`. Override with comma-separated `QTANGL_CORS_ORIGINS` if needed.
 - Railway production does **not** need IBM Quantum credentials for the default demo mode.
 - The production-safe mode is: live classical solve + cached QPU trace replay.
 - The hospital fixture data is bundled into `backend/app/hospital/fixtures`, so the Docker image can serve the demo without mounting repo-root files.
