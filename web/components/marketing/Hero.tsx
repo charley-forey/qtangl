@@ -18,7 +18,7 @@ export default function Hero() {
 
   return (
     <StateTransition distance={20} parallax parallaxOffset={18}>
-      <AnimatedBorderFrame className="min-h-[36rem] rounded-[var(--radius-feature)]">
+      <AnimatedBorderFrame className="min-h-[32rem] rounded-[var(--radius-feature)]">
         <GridBackground className="hero-grid-mask opacity-55" />
         <ProbabilityGrid className="opacity-45 [mask-image:radial-gradient(circle_at_70%_42%,black_18%,transparent_72%)]" />
         <Glow className="hero-orb left-[-5rem] top-[-5rem] h-44 w-44" />
@@ -28,17 +28,14 @@ export default function Hero() {
           <ParticleField className="opacity-90" density={16} />
         </div>
 
-        <div className="relative z-10 flex min-h-[36rem] flex-col justify-between">
+        <div className="relative z-10 flex min-h-[32rem] flex-col justify-between">
           <div className="max-w-3xl px-6 py-8 sm:px-8 sm:py-10 lg:px-10 lg:py-12">
             <Eyebrow className="text-white/88">{homeHero.eyebrow}</Eyebrow>
             <h1 className="heading-display heading-display--hero gradient-text mt-6 max-w-4xl">
               {homeHero.title}
             </h1>
             <p className="mt-6 max-w-2xl text-lg leading-8 text-[var(--color-gray-200)] sm:text-xl">
-              {homeHero.bridge}
-            </p>
-            <p className="mt-4 max-w-2xl text-base leading-8 text-[var(--color-gray-300)] sm:text-lg">
-              {homeHero.description}
+              {homeHero.subhead}
             </p>
 
             <div className="mt-8 flex flex-col gap-3 md:flex-row">

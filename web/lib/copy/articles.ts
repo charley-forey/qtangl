@@ -6,18 +6,15 @@ const { amplitude, collapse, interference, measurement, phase, superposition } =
 export const articleOutcomeStrip = [
   {
     label: superposition.label,
-    description:
-      "Qtangl keeps the feasible plan space visible long enough to compare the best options before one plan is selected.",
+    description: "Compare feasible plans before you collapse to one.",
   },
   {
     label: phase.label,
-    description:
-      "Qtangl checks feasibility first, then compares valid options against the operational objective in a readable hybrid workflow.",
+    description: "Feasibility first, then rank against the operational objective.",
   },
   {
     label: measurement.label,
-    description:
-      "The product returns a ranked plan, a short explanation, and the measurement behind the recommendation.",
+    description: "Ranked plan, short why, and the metric behind the call.",
   },
 ] as const;
 
@@ -25,13 +22,13 @@ export const blogIndexCopy = {
   eyebrow: "Blog",
   title: "Field notes from a quantum-aware planning stack.",
   description:
-    "The Qtangl blog focuses on practical optimization problems, hybrid systems thinking, and the business cases behind better planning tools.",
+    "Practical optimization, hybrid execution, and the business case for better plans.",
 } as const;
 
 export const blogClosingCta = {
-  title: "See the workflow on a real planning problem",
+  title: "Try it on a real planning problem",
   description:
-    "Open the interactive demo to send a sample scheduling, routing, or staffing problem and inspect the kind of ranked plan Qtangl returns before you integrate.",
+    "Send a sample schedule, route, or staffing job. Inspect the ranked plan before you integrate.",
   href: "/try",
   label: "Open /try",
 } as const;

@@ -3,179 +3,140 @@ import { quantumLexicon } from "@/lib/copy/voice";
 const {
   amplitude,
   coherence,
-  entanglement,
+  collapse,
   interference,
   measurement,
-  observables,
   phase,
   superposition,
 } = quantumLexicon;
 
-export const problemPoints = [
+export const quantumWorkflowPoints = [
   {
-    eyebrow: entanglement.label,
+    eyebrow: superposition.label,
+    title: "See feasible plans before you commit",
     description:
-      "Scheduling is still manual and fragmented across teams, tools, and spreadsheets when decisions cannot be made independently.",
+      "Schedules, routes, and shifts — every valid option, ranked.",
   },
   {
     eyebrow: interference.label,
+    title: "See where constraints collide",
     description:
-      "Routing decisions become inefficient when windows, capacity, and changing conditions push against each other in real time.",
+      "Windows, capacity, and dependencies fight the same timeline.",
   },
   {
-    eyebrow: phase.label,
+    eyebrow: collapse.label,
+    title: "Run the plan that wins",
     description:
-      "Most optimization software is difficult to integrate into existing operations systems because the workflow breaks across handoffs.",
-  },
-  {
-    eyebrow: superposition.label,
-    description:
-      "Generic AI tools can summarize data, but they do not reliably compare the many feasible plans inside a constraint-heavy combinatorial problem.",
-  },
-] as const;
-
-export const solutionPoints = [
-  {
-    eyebrow: observables.label,
-    description:
-      "Start with the fields your team already tracks: tasks, crews, windows, vehicles, shifts, and hard business rules.",
-  },
-  {
-    eyebrow: entanglement.label,
-    description:
-      "Qtangl turns that context into one planning job instead of making teams coordinate spreadsheets and tribal knowledge across disconnected decisions.",
-  },
-  {
-    eyebrow: amplitude.label,
-    description:
-      "The platform evaluates feasible options and returns the best plan with a plain-English summary of why it works.",
-  },
-  {
-    eyebrow: measurement.label,
-    description:
-      "Developers can integrate one API, while operations teams can review visuals and metrics before acting.",
+      "Hard rules respected. Best objective wins. Auditable why.",
   },
 ] as const;
 
 export const workflowSteps = [
   {
     eyebrow: "Phase 1",
-    title: "Prepare the planning state",
+    title: "Send the planning state",
     description:
-      "Send the tasks, crews, locations, windows, and business rules you already track.",
+      "Tasks, crews, windows, vehicles, shifts, and hard rules you already track.",
   },
   {
     eyebrow: "Phase 2",
-    title: "Search the feasible space",
+    title: "Search and rank",
     description:
-      "Qtangl prepares the problem, checks the hard constraints, and ranks the best valid options.",
+      "Qtangl checks hard constraints and ranks the strongest feasible options.",
   },
   {
     eyebrow: "Phase 3",
     title: "Collapse to one plan",
     description:
-      "Receive a ranked plan, a short summary, and the metrics your team already cares about.",
+      "Ranked plan, short summary, and the metrics that matter to your team.",
   },
 ] as const;
 
 export const platformHighlights = [
   {
     eyebrow: phase.label,
-    title: "API-first delivery",
+    title: "API-first",
     description:
-      "Integrate optimization into the systems teams already use for field operations, dispatching, or planning.",
+      "Drop optimization into dispatch, field ops, or planning systems you already run.",
   },
   {
     eyebrow: coherence.label,
-    title: "Constraint-aware outputs",
+    title: "Constraint-aware",
     description:
-      "Priorities, deadlines, dependencies, and capacity limits remain part of the optimization problem.",
+      "Deadlines, dependencies, and capacity stay inside the problem — not bolted on after.",
   },
   {
     eyebrow: measurement.label,
-    title: "Operational clarity",
+    title: "Operational output",
     description:
-      "Outputs are returned as practical schedules and plans rather than research artifacts.",
+      "Schedules and routes your team can run — not research artifacts.",
   },
 ] as const;
 
 export const useCases = [
   {
     eyebrow: "Construction",
-    title: "Construction scheduling optimization",
+    title: "Construction scheduling",
     image: "/qtangl-usecase-scheduling.svg",
     imageAlt:
       "Black and white scheduling illustration showing crews, task sequencing, and an interference pattern across constrained work windows.",
     description:
-      "Coordinate crews, equipment, and site dependencies without rebuilding the plan manually every time conditions change.",
-    problem:
-      "Project managers juggle trade sequencing, inspection windows, and resource conflicts across multiple jobs.",
+      "Resequence crews and inspections when one window moves — without rebuilding the whole job.",
     interference:
-      "Trade sequencing, inspection windows, and crew availability all interfere with the same timeline.",
+      "Trade sequencing, inspection windows, and crew availability collide on the same timeline.",
     outcome:
-      "Qtangl returns a feasible schedule that respects precedence, crew availability, and time windows.",
-    value:
-      "Reduce idle crews, cut delay risk, and improve schedule confidence before work starts.",
+      "Feasible schedule with precedence, crew windows, and zero hard violations.",
+    measurement: "Fewer idle crew hours · lower delay risk · higher schedule confidence",
   },
   {
     eyebrow: "Logistics",
-    title: "Logistics routing optimization",
+    title: "Logistics routing",
     image: "/qtangl-usecase-routing.svg",
     imageAlt:
       "Black and white routing illustration showing dispatching, route maps, and a dense interference pattern across delivery windows.",
     description:
-      "Balance delivery windows, fleet capacity, and route efficiency with a single routing workflow.",
-    problem:
-      "Dispatch teams must react quickly to traffic, customer windows, and capacity constraints.",
+      "Re-route when a driver drops or windows tighten — without guessing stop order.",
     interference:
-      "Customer windows, vehicle capacity, and route timing interfere with each stop order decision.",
+      "Customer windows, vehicle capacity, and stop timing fight every reorder decision.",
     outcome:
-      "Qtangl returns optimized route plans with stop order, assignment, and estimated cost.",
-    value:
-      "Lower miles traveled, improve on-time delivery, and increase fleet utilization.",
+      "Optimized stop order, assignments, and cost estimate your dispatchers can run.",
+    measurement: "Fewer miles · better on-time delivery · higher fleet utilization",
   },
   {
     eyebrow: "Operations",
-    title: "Workforce allocation optimization",
+    title: "Workforce allocation",
     image: "/qtangl-usecase-allocation.svg",
     imageAlt:
       "Black and white allocation illustration showing staffing grids, operational planning overlays, and coherence across shift assignments.",
     description:
-      "Match the right people and resources to the right jobs while respecting availability and skill constraints.",
-    problem:
-      "Schedulers often rely on tribal knowledge to assign labor across shifting demand and limited capacity.",
+      "Cover shifts with the right skills when demand spikes or someone calls out.",
     interference:
-      "Skill fit, fatigue rules, and coverage targets interfere with every staffing decision.",
+      "Skill fit, fatigue rules, and coverage targets collide on every assignment.",
     outcome:
-      "Qtangl ranks staffing plans that fit required skills, coverage targets, and utilization limits.",
-    value:
-      "Improve coverage quality, reduce overtime, and make staffing decisions faster.",
+      "Ranked staffing plans that hit skills, coverage, and utilization limits.",
+    measurement: "Better coverage · less overtime · faster staffing decisions",
   },
 ] as const;
 
 export const docsCards = [
   {
     title: "Data formats",
-    description:
-      "See the exact fields that shape the planning state before you touch the API.",
+    description: "Fields that shape the planning state before you call the API.",
     href: "/docs/data-formats",
   },
   {
     title: "Quickstart",
-    description:
-      "Submit your first optimization request and inspect the returned summary, measurements, and solution shape in minutes.",
+    description: "First request in minutes — summary, measurements, and solution shape.",
     href: "/docs/quickstart",
   },
   {
     title: "Core concepts",
-    description:
-      "Learn how Qtangl models scheduling, routing, allocation, and hybrid execution without hiding the quantum vocabulary.",
+    description: "Scheduling, routing, allocation, and hybrid execution — with honest method labels.",
     href: "/docs/concepts",
   },
   {
     title: "API guide",
-    description:
-      "Review authentication, rate limits, and the `/optimize` workflow with clear method honesty for pilot integration.",
+    description: "Auth, rate limits, and `/optimize` with classical-first method honesty.",
     href: "/docs/api",
   },
 ] as const;
@@ -190,9 +151,9 @@ export const blogPosts = [
       "Black and white healthcare workforce planning illustration showing staffing boards, coverage windows, and optimization overlays.",
     title: "Auditable nurse re-staffing: how hybrid optimization surfaces alternates that CP-SAT hides",
     excerpt:
-      "A concrete look at hospital re-staffing, why the classical path still leads, and where a hybrid micro-solve adds value.",
+      "Hospital call-out → classical solve → hybrid audit trace → buyer-facing scoreboard.",
     description:
-      "See how the hospital demo turns a nurse call-out into a live classical solve, a replayed hybrid audit trace, and a buyer-facing scoreboard.",
+      "See how the hospital demo turns a nurse call-out into a live solve and an ops-ready scoreboard.",
   },
   {
     slug: "quantum-optimization",
@@ -203,9 +164,9 @@ export const blogPosts = [
       "Black and white abstract technology illustration showing solver workflow panels, network geometry, and a layered hybrid stack.",
     title: "Why operations teams need a quantum lens on planning",
     excerpt:
-      "A brand-quantum introduction to superposition, QUBO, QAOA, and why hybrid workflows matter more than hype.",
+      "Superposition, QUBO, QAOA — and why hybrid beats hype.",
     description:
-      "Learn how Qtangl frames optimization problems and where quantum-assisted search fits inside an honest classical-first stack.",
+      "How Qtangl frames optimization and where quantum-assisted search fits in a classical-first stack.",
   },
   {
     slug: "scheduling-use-cases",
@@ -216,9 +177,9 @@ export const blogPosts = [
       "Black and white scheduling illustration showing crews, planning boards, and entangled task sequencing.",
     title: "Scheduling is still an interference problem hiding in plain sight",
     excerpt:
-      "Scheduling stays hard when teams, dependencies, and resource limits all collide at once.",
+      "Teams, dependencies, and capacity limits collide at once.",
     description:
-      "See how constraint-aware scheduling workflows improve project timelines and staffing quality when dependencies stay visible.",
+      "Constraint-aware scheduling when dependencies and crew windows stay visible.",
   },
   {
     slug: "routing-optimization",
@@ -229,8 +190,8 @@ export const blogPosts = [
       "Black and white routing illustration showing dispatching, route maps, and network overlays with amplitude concentrated on the best path.",
     title: "Routing breaks when real-world constraints are treated like noise",
     excerpt:
-      "The best route on paper often fails in production once windows, capacity, and changeovers appear.",
+      "The paper-perfect route fails once windows and capacity show up.",
     description:
-      "Explore a practical framework for building route plans that teams can actually execute when the real observables stay in view.",
+      "Route plans teams can execute when the real observables stay in view.",
   },
 ] as const;

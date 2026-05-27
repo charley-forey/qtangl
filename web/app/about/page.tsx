@@ -12,7 +12,7 @@ import { aboutContent } from "@/lib/copy/product";
 export const metadata: Metadata = {
   title: "About",
   description:
-    "Learn how Qtangl builds coherent planning systems for teams making decisions under hard constraints.",
+    "Qtangl builds coherent planning systems for teams deciding under hard constraints.",
 };
 
 export default function AboutPage() {

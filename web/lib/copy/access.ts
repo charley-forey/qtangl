@@ -4,35 +4,34 @@ const { entanglement, interference, measurement } = quantumLexicon;
 
 export const accessPanel = {
   eyebrow: "Entangle with us",
-  title: "Tell us which planning workflow needs to improve next.",
+  title: "Which planning workflow should improve next?",
   description:
-    "Share the schedule, route, or staffing workflow that is slowing your team down. Qtangl is focused on pilot teams with a clear planning bottleneck and a realistic path to deployment.",
-  formHint:
-    "Best fit for operations leaders, product teams, and technical partners preparing a pilot or API evaluation.",
+    "Tell us the schedule, route, or staffing bottleneck. We prioritize pilots with a clear constraint and a path to production.",
+  formHint: "Ops leaders, product teams, and partners evaluating the API.",
 } as const;
 
 export const accessPageCopy = {
   metadataDescription:
-    "Request pilot access to improve scheduling, routing, or staffing decisions with Qtangl's quantum-aware planning workflow.",
+    "Request pilot access for scheduling, routing, or staffing with Qtangl's quantum-aware planning API.",
   audienceEyebrow: entanglement.label,
   audienceItems: [
-    "Operations teams dealing with scheduling, routing, or staffing bottlenecks where many decisions are entangled.",
-    "Platform teams embedding optimization into internal or customer-facing tools.",
-    "Technical partners preparing for an API evaluation or pilot deployment.",
+    "Ops teams with entangled scheduling, routing, or staffing decisions.",
+    "Platform teams embedding optimization into internal or customer tools.",
+    "Partners running an API evaluation or pilot.",
   ],
   includeEyebrow: interference.label,
   includeDescription:
-    "Share the workflow you want to improve, the constraints that matter most, and the tools your team already relies on today.",
+    "Workflow, top constraints, and tools in the loop today.",
 } as const;
 
 export const accessFormCopy = {
   eyebrow: measurement.label,
   title: "Request pilot access",
   description:
-    "Tell us what you need to plan better, which systems are already in the loop, and which measurement proves the workflow is improving.",
+    "What you need to plan better, which systems are involved, and which metric proves it's working.",
   helpfulNotes: [
-    "Strong requests explain the planning problem, the systems involved, and the operational constraints that matter most.",
-    "We currently prioritize design partners, API evaluation teams, and operations-heavy organizations preparing for a pilot.",
+    "Strong requests name the problem, systems, and hard constraints.",
+    "We prioritize design partners, API evaluations, and ops-heavy pilots.",
   ],
   fields: {
     name: {
@@ -65,7 +64,7 @@ export const accessFormCopy = {
     message: {
       label: "Planning context",
       placeholder:
-        "Describe the workflow, the constraints that matter, and what a better result would look like.",
+        "Workflow, constraints that matter, and what a better result looks like.",
     },
   },
   submitLabel: "Request access",
@@ -74,17 +73,16 @@ export const accessFormCopy = {
 
 export const accessFormMessages = {
   initial:
-    "Priority access is open for teams evaluating a real scheduling, routing, or staffing workflow.",
+    "Priority access for teams evaluating a real scheduling, routing, or staffing workflow.",
   missingFields:
-    "Please add your name, work email, company, and workflow focus so we can review the request.",
-  invalidEmail:
-    "Enter a valid work email so we know where to follow up.",
+    "Add your name, work email, company, and workflow focus.",
+  invalidEmail: "Enter a valid work email so we can follow up.",
   deliveryFailed:
-    "We couldn't submit your request just yet. Please try again in a moment or email founders@qtangl.com.",
+    "Couldn't submit yet. Try again or email founders@qtangl.com.",
   success:
-    "Thanks. We received your request and will follow up when the next pilot review window opens.",
+    "Request received. We'll follow up at the next pilot review window.",
   capturedForReview:
-    "Thanks. Your request was captured for review. If your pilot timeline is immediate, email founders@qtangl.com so we can follow up directly.",
+    "Request captured. Urgent timeline? Email founders@qtangl.com directly.",
 } as const;
 
 export const accessCtas = {

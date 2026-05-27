@@ -31,11 +31,6 @@ export default function ProductPreview({
         </div>
         <h2 className="heading-section mt-4">{title}</h2>
         <p className="mt-4 text-base leading-8 text-[var(--color-gray-300)]">{description}</p>
-        <div className="mt-6 max-w-3xl space-y-3 text-sm leading-7 text-[var(--color-gray-300)]">
-          {homeProductPreview.details.map((detail) => (
-            <p key={detail}>{detail}</p>
-          ))}
-        </div>
       </Card>
       <AmplitudeBars items={homeAmplitudeBars.map((item) => ({ ...item }))} />
       <PlanVisualization

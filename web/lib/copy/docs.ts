@@ -10,25 +10,25 @@ const {
 export const conceptsPage = {
   title: "Core concepts",
   description:
-    "Qtangl keeps the model simple for developers while preserving the constraint-heavy nature of operational planning with an honest quantum-forward vocabulary.",
+    "Scheduling, routing, and allocation — with quantum vocabulary on the surface and honest hybrid execution underneath.",
   sections: [
     {
       eyebrow: superposition.label,
-      title: "Optimization problems",
+      title: "Three problem families",
       description:
-        "Qtangl focuses on three families of problems: scheduling, routing, and allocation. Each job combines entities, constraints, and objectives to produce a plan that can be executed in the real world.",
+        "Scheduling, routing, allocation. Entities, constraints, and objectives in — executable plan out.",
     },
     {
       eyebrow: amplitude.label,
-      title: "QUBO, lightly explained",
+      title: "QUBO, lightly",
       description:
-        "Many optimization workflows can be reformulated as a quadratic unconstrained binary optimization model. In practice, that means Qtangl can express hard planning decisions in a form that solver backends can evaluate systematically.",
+        "Hard planning decisions expressed as QUBO so solver backends can rank candidates systematically.",
     },
     {
       eyebrow: phase.label,
       title: "Hybrid execution",
       description:
-        "The platform uses classical preprocessing, bounded quantum-assisted search, and classical post-processing as one workflow. That hybrid approach matters more than any single backend because it keeps the system practical for enterprise optimization use cases.",
+        "Classical preprocess → bounded quantum search → classical postprocess. Practical beats theoretical.",
     },
   ],
   glossaryTitle: "Quantum terms in product language",
@@ -45,12 +45,12 @@ export const docsGuideCopy = {
   quickstart: {
     title: "Quickstart",
     description:
-      "This quickstart shows the smallest useful scheduling request: send the work, the constraints, and then inspect the returned summary, plan, and measurements.",
+      "Smallest useful scheduling request: work, constraints, then summary, plan, and measurements.",
     submit: {
       eyebrow: phase.label,
       title: "1. Submit a job",
       description:
-        "Start with a small scheduling payload. Include a problem type, the tasks that must happen, and the rules that cannot break in the final plan.",
+        "Small scheduling payload: problem type, tasks, and rules that cannot break.",
       notes: [
         "Base URL",
         "Pilot key",
@@ -60,14 +60,13 @@ export const docsGuideCopy = {
     inspect: {
       eyebrow: measurement.label,
       title: "2. Inspect the response",
-      description:
-        "Qtangl returns a short summary first, then the structured solution, then the measurements and solver details developers may need for deeper inspection.",
+      description: "Summary first, then solution, measurements, and solver details.",
     },
   },
   api: {
     title: "API guide",
     description:
-      "The MVP centers on one endpoint: `/optimize`. Developers submit a planning problem, Qtangl evaluates feasible options, and the service returns a summary, measurements, and structured result.",
+      "One endpoint: `/optimize`. Problem in, ranked plan and measurements out.",
     conciseEndpoint: {
       title: "Need the concise endpoint view?",
       description:
@@ -100,7 +99,7 @@ export const docsGuideCopy = {
     methodHonesty: {
       title: "Method honesty",
       description:
-        "The backend is classical-dominant today. A classical baseline runs on every job. `method: hybrid` means the workflow includes a bounded quantum research step. If QAOA fails or does not beat the classical result, Qtangl returns the classical plan.",
+        "Classical baseline every job. `method: hybrid` = bounded quantum research step. QAOA loses → classical plan.",
     },
     errors: {
       title: "Error handling",
@@ -109,7 +108,7 @@ export const docsGuideCopy = {
   dataFormats: {
     title: "Data formats",
     description:
-      "Start with the fields your team already knows. These guides show what to send for schedules, routes, and staffing jobs before you touch the live API.",
+      "Fields for schedules, routes, and staffing — before you hit the live API.",
     csvTitle: `${measurement.label} template columns`,
   },
 } as const;

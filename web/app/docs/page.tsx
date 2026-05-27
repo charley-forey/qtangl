@@ -10,7 +10,7 @@ import { docsIndex } from "@/lib/copy/product";
 export const metadata: Metadata = {
   title: "Docs",
   description:
-    "Measure the API: learn how to send planning inputs and read ranked outputs from Qtangl's quantum-aware workflow.",
+    "Send planning inputs. Read ranked plans, summaries, and measurements from Qtangl's quantum-aware API.",
 };
 
 export default function DocsPage() {

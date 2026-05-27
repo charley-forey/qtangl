@@ -11,7 +11,7 @@ export const methodBadgeCopy = {
   hybrid: {
     label: "method: hybrid",
     description:
-      "Hybrid indicates a bounded quantum research step may be present, but the system still falls back to the classical result when it performs better.",
+      "Bounded quantum research step may be present. Classical result wins when it performs better.",
   },
 } as const;
 
@@ -23,7 +23,7 @@ export const amplitudeBarsCopy = {
   eyebrow: amplitude.label,
   title: "Where the ranking concentrates",
   description:
-    "The best candidate plan accumulates amplitude because it clears hard constraints and improves the measured objective.",
+    "Amplitude concentrates on the plan that clears hard constraints and wins on objective.",
 } as const;
 
 export const collapseMeterCopy = {
@@ -34,15 +34,14 @@ export const collapseMeterCopy = {
 export const interferenceHeatmapCopy = {
   eyebrow: interference.label,
   title: "Constraint pressure across the planning state",
-  description:
-    "Higher intensity means more constraint pressure. The goal is not to remove complexity, but to make it legible.",
+  description: "Brighter cells = more constraint pressure. Legible, not hidden.",
 } as const;
 
 export const hybridStackDiagramCopy = {
   eyebrow: `${phase.label} diagram`,
   title: "How the hybrid workflow is weighted today",
   description:
-    "Qtangl is classical-first today. Quantum-assisted search is a bounded research band inside a broader operational workflow.",
+    "Classical-first today. Quantum-assisted search is a bounded band inside the operational workflow.",
   bands: [
     {
       label: "Classical preprocessing",

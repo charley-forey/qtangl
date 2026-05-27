@@ -43,7 +43,12 @@ export const quantumLexicon = {
 
 export const copyGuardrails = {
   brand:
-    "Headlines stay outcome-first. Eyebrows, captions, and visuals carry quantum vocabulary.",
+    "Headlines: outcome in ≤12 words. Eyebrows carry quantum terms. Body: proof or CTA, not lectures.",
   honesty:
-    "Whenever copy describes execution, surface the hybrid truth: classical baseline on every job, QAOA only on tiny research candidates, classical fallback when QAOA cannot beat it.",
+    "Classical baseline on every job. QAOA on bounded research candidates only. Classical wins when QAOA cannot beat it.",
+  limits: {
+    headlineWords: 12,
+    cardBodyWords: 22,
+    heroSubheadWords: 24,
+  },
 } as const;

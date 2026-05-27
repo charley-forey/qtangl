@@ -6,31 +6,28 @@ export const tryPageCopy = {
   eyebrow: `${collapse.label} a plan`,
   title: "See the workflow before you commit to the API.",
   description:
-    "Start with a familiar planning problem, review the ranked output, and decide whether the next step is a pilot integration. The demo keeps the inputs plain and the charts quantum-forward.",
+    "Pick a familiar scenario, review the ranked output, then open the API example when you're ready to integrate.",
   steps: [
     {
       eyebrow: "Step 1",
-      description:
-        "Start with the work, windows, crews, vehicles, or shifts your team already tracks.",
+      description: "Use the crews, windows, vehicles, or shifts you already track.",
     },
     {
       eyebrow: "Step 2",
-      description:
-        "Review a ranked plan, a short summary, and the measurement that explains why the result is better than manual ordering.",
+      description: "Review the ranked plan, summary, and the measurement behind the win.",
     },
     {
       eyebrow: "Step 3",
-      description:
-        "Expand the API example when you are ready to connect the same workflow to your own system.",
+      description: "Copy the API shape into your own system.",
     },
   ],
 } as const;
 
 export const tryPlannerCopy = {
   eyebrow: amplitude.label,
-  title: "Start with a familiar planning problem.",
+  title: "Pick a planning scenario.",
   description:
-    "This is a guided product demo, not a production connector. Edit the constraints, generate a plan, and see how amplitude concentrates on the strongest operational option.",
+    "Edit constraints, generate a plan, and watch amplitude concentrate on the strongest option.",
   tabLabel: "Planning scenarios",
   buttons: {
     generate: "Generate Plan",
@@ -44,9 +41,8 @@ export const tryPlannerCopy = {
     idleTitle: "Generate a preview plan",
     generatingTitle: "Building your preview...",
     idleDescription:
-      "Adjust the scenario inputs on the left, then select Generate Plan to reveal the ranked output.",
-    generatingDescription:
-      "Qtangl is simulating a short planning pass so the preview feels intentional.",
+      "Adjust inputs on the left, then Generate Plan.",
+    generatingDescription: "Running a short planning pass for the preview.",
   },
   status: {
     generating: "Generating preview plan.",
@@ -54,19 +50,16 @@ export const tryPlannerCopy = {
   },
   scenarios: {
     schedule: {
-      title: "Schedule under interference.",
-      description:
-        "A project manager needs to resequence work after a crew delay and still fit an inspection window.",
+      title: "Resequence after a crew delay.",
+      description: "Keep the inspection window without manual reshuffle.",
     },
     routing: {
-      title: "Route through tight windows.",
-      description:
-        "A dispatcher needs a simple route plan after a driver change and tight customer windows.",
+      title: "Re-route through tight windows.",
+      description: "Simple stop order after a driver change.",
     },
     allocation: {
-      title: "Staff a coherent shift grid.",
-      description:
-        "A workforce scheduler needs to cover a shift grid with the right skills and fewer overtime hours.",
+      title: "Staff a shift grid.",
+      description: "Right skills, coverage held, less overtime.",
     },
   },
 } as const;
