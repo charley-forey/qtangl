@@ -151,6 +151,20 @@ a:not([class]) {
   pointer-events: none;
 }
 
+@media print {
+  .docs-sidebar-col,
+  .docs-toc-col,
+  .docs-edit-link,
+  .docs-pager,
+  .docs-breadcrumbs {
+    display: none !important;
+  }
+
+  .docs-layout .docs-main {
+    max-width: 100%;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;

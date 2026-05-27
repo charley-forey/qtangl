@@ -1,0 +1,95 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://qtangl.com/contracts/optimize-request.schema.json",
+  "title": "Qtangl Optimize Request",
+  "type": "object",
+  "required": ["type"],
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["schedule", "routing", "allocation"]
+    },
+    "data": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "constraints": {
+      "type": "array",
+      "items": { "type": "string" },
+      "default": []
+    },
+    "tasks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "duration"],
+        "properties": {
+          "id": { "type": "string" },
+          "duration": { "type": "integer", "minimum": 1 },
+          "crew": { "type": "string" },
+          "title": { "type": "string" }
+        },
+        "additionalProperties": true
+      },
+      "default": []
+    },
+    "stops": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "serviceWindow": { "type": "string" }
+        },
+        "additionalProperties": true
+      },
+      "default": []
+    },
+    "vehicles": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "capacity": { "type": "integer" }
+        },
+        "additionalProperties": true
+      },
+      "default": []
+    },
+    "shifts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string" },
+          "requiredSkill": { "type": "string" }
+        },
+        "additionalProperties": true
+      },
+      "default": []
+    },
+    "staff": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" },
+          "skills": {
+            "type": "array",
+            "items": { "type": "string" },
+            "default": []
+          },
+          "maxHours": { "type": "integer" }
+        },
+        "additionalProperties": true
+      },
+      "default": []
+    }
+  },
+  "additionalProperties": true
+}

@@ -3,6 +3,7 @@ import type { MetadataRoute } from "next";
 import { blogPosts } from "@/lib/copy/marketing";
 import { libraryTopicTeasers } from "@/lib/copy/library-topics";
 import { siteMetadata } from "@/lib/copy/product";
+import { getAllDocsHrefs } from "@/lib/docs/nav";
 import { getLibraryCategories, getLibraryIndex } from "@/lib/library";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
@@ -20,12 +21,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/about",
     "/technology",
     "/access",
-    "/docs",
-    "/docs/data-formats",
-    "/docs/quickstart",
-    "/docs/concepts",
-    "/docs/api",
     "/api",
+    ...getAllDocsHrefs(),
     "/blog",
     ...blogPosts.map((post) => post.href),
     "/learn",

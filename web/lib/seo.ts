@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import { siteMetadata } from "@/lib/copy/product";
+import { getAllDocsHrefs } from "@/lib/docs/nav";
 
 export type OpenGraphType = "website" | "article";
 
@@ -277,6 +278,10 @@ export function buildHospitalDemoJsonLd(options: { description: string; videoUrl
   };
 }
 
+const docsLinks = getAllDocsHrefs()
+  .map((href) => `- ${siteMetadata.url}${href}`)
+  .join("\n");
+
 export const llmsTxtContent = `# Qtangl
 
 > Quantum Planning API: hold every option in superposition, rank the field, collapse to an executable plan.
@@ -287,12 +292,17 @@ Qtangl helps operations teams explore feasible schedules, routes, and staffing p
 
 - Home: ${siteMetadata.url}/
 - Technology: ${siteMetadata.url}/technology
-- API reference: ${siteMetadata.url}/api
-- Documentation: ${siteMetadata.url}/docs
+- API reference (concise): ${siteMetadata.url}/api
+- Documentation hub: ${siteMetadata.url}/docs
+- API sandbox: ${siteMetadata.url}/sandbox
 - Hospital re-staffing demo: ${siteMetadata.url}/demo/hospital
 - Request access: ${siteMetadata.url}/access
 - Blog: ${siteMetadata.url}/blog
 - Learn (quantum software library): ${siteMetadata.url}/learn
+
+## Documentation index
+
+${docsLinks}
 
 ## Contact
 
@@ -302,4 +312,5 @@ Qtangl helps operations teams explore feasible schedules, routes, and staffing p
 
 - Sitemap: ${siteMetadata.url}/sitemap.xml
 - Robots: ${siteMetadata.url}/robots.txt
+- Docs changelog RSS: ${siteMetadata.url}/docs/resources/changelog/rss.xml
 `;

@@ -1,90 +1,98 @@
 "use client";
 
-import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ReactNode } from "react";
+import { ReactNode, useState } from "react";
 
-import Card from "@/components/ui/Card";
+import DocsBreadcrumbs from "@/components/docs/DocsBreadcrumbs";
+import DocsPager from "@/components/docs/DocsPager";
+import DocsSearch from "@/components/docs/DocsSearch";
+import DocsSidebar from "@/components/docs/DocsSidebar";
+import DocsToc, { DocsTocMobile } from "@/components/docs/DocsToc";
+import Modal from "@/components/ui/Modal";
 import Eyebrow from "@/components/ui/Eyebrow";
-import { docsNav } from "@/lib/siteConfig";
+import { DocsProvider } from "@/lib/docs/context";
+import type { DocsSearchEntry } from "@/lib/docs/types";
 
 type DocsShellProps = {
   title: string;
   description: string;
   children: ReactNode;
+  pathname?: string;
+  searchIndex?: DocsSearchEntry[];
 };
 
 export default function DocsShell({
   title,
   description,
   children,
+  pathname: pathnameProp,
+  searchIndex = [],
 }: DocsShellProps) {
-  const pathname = usePathname();
+  const pathnameHook = usePathname();
+  const pathname = pathnameProp ?? pathnameHook;
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
 
   return (
-    <main className="flex-1">
-      <div className="mx-auto grid w-full max-w-[var(--container-wide)] gap-8 px-5 py-14 sm:px-6 sm:py-16 md:px-8 lg:grid-cols-[280px_minmax(0,1fr)] lg:gap-10 lg:px-10 lg:py-20 xl:px-12 xl:py-24">
-        <aside className="h-fit lg:sticky lg:top-24">
-          <div className="lg:hidden">
-            <Eyebrow>Docs</Eyebrow>
-            <nav className="mobile-scroll-nav mt-4">
-              {docsNav.map((item) => {
-                const active = pathname === item.href;
+    <DocsProvider pathname={pathname}>
+      <main className="docs-layout flex-1 print:block">
+        <div className="mx-auto grid w-full max-w-[var(--container-wide)] gap-8 px-5 py-10 sm:px-6 md:px-8 lg:grid-cols-[280px_minmax(0,1fr)] lg:gap-10 lg:px-10 lg:py-16 xl:grid-cols-[280px_minmax(0,1fr)_220px] xl:px-12">
+          <aside className="docs-sidebar-col print:hidden lg:sticky lg:top-24 lg:h-[calc(100vh-7rem)] lg:overflow-y-auto">
+            <div className="space-y-4 lg:hidden">
+              <button
+                type="button"
+                onClick={() => setMobileNavOpen(true)}
+                className="touch-target w-full rounded-xl border border-[var(--border)] px-4 py-3 text-sm text-white"
+              >
+                Docs menu
+              </button>
+              {searchIndex.length > 0 ? <DocsSearch index={searchIndex} /> : null}
+            </div>
+            <div className="hidden lg:block">
+              {searchIndex.length > 0 ? (
+                <div className="mb-6">
+                  <DocsSearch index={searchIndex} />
+                </div>
+              ) : null}
+              <DocsSidebar />
+            </div>
+          </aside>
 
-                return (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    className={[
-                      "touch-target inline-flex items-center whitespace-nowrap rounded-full border px-4 text-sm transition",
-                      active
-                        ? "border-[var(--border-strong)] bg-white/[0.08] text-white"
-                        : "border-[var(--border)] text-[var(--color-gray-300)] hover:border-[var(--border-strong)] hover:text-white",
-                    ].join(" ")}
-                  >
-                    {item.name}
-                  </Link>
-                );
-              })}
-            </nav>
-          </div>
+          <section className="docs-main min-w-0">
+            <DocsBreadcrumbs pathname={pathname} />
+            <Eyebrow className="mt-4">Developer portal</Eyebrow>
+            <h1 className="heading-display gradient-text mt-4 max-w-4xl">{title}</h1>
+            <p className="text-body-lg mt-5 max-w-3xl text-[var(--color-gray-300)]">
+              {description}
+            </p>
+            <DocsTocMobile />
+            <div className="docs-content mt-10 space-y-8">{children}</div>
+            <DocsPager pathname={pathname} />
+            <p className="docs-edit-link mt-8 text-xs text-[var(--color-gray-600)] print:hidden">
+              Found an issue?{" "}
+              <a
+                href="https://github.com/qtangl/qtangl/issues"
+                className="text-[var(--color-gray-400)] underline underline-offset-2 hover:text-white"
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                Report documentation feedback
+              </a>
+            </p>
+          </section>
 
-          <Card tone="strong" size="lg" className="hidden rounded-[var(--radius-feature)] lg:block">
-            <Eyebrow>Docs</Eyebrow>
-            <nav className="mt-5 space-y-2">
-              {docsNav.map((item) => {
-                const active = pathname === item.href;
+          <aside className="docs-toc-col print:hidden">
+            <div className="sticky top-24">
+              <DocsToc />
+            </div>
+          </aside>
+        </div>
+      </main>
 
-                return (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    className={[
-                      "block rounded-xl border px-3 py-3 text-sm transition",
-                      active
-                        ? "border-[var(--border-strong)] bg-white/[0.06] text-white"
-                        : "border-transparent text-[var(--color-gray-300)] hover:border-[var(--border)] hover:bg-white/[0.04] hover:text-white",
-                    ].join(" ")}
-                  >
-                    {item.name}
-                  </Link>
-                );
-              })}
-            </nav>
-          </Card>
-        </aside>
-
-        <section className="min-w-0">
-          <Eyebrow>Developer portal</Eyebrow>
-          <h1 className="heading-display gradient-text mt-4 max-w-4xl">
-            {title}
-          </h1>
-          <p className="text-body-lg mt-5 max-w-3xl text-[var(--color-gray-300)]">
-            {description}
-          </p>
-          <div className="mt-10 space-y-8">{children}</div>
-        </section>
-      </div>
-    </main>
+      <Modal open={mobileNavOpen} onClose={() => setMobileNavOpen(false)} title="Documentation">
+        <div className="max-h-[70vh] overflow-y-auto">
+          <DocsSidebar onNavigate={() => setMobileNavOpen(false)} />
+        </div>
+      </Modal>
+    </DocsProvider>
   );
 }

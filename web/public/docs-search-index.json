@@ -1,0 +1,226 @@
+[
+  {
+    "href": "/docs",
+    "title": "Overview",
+    "section": "Getting Started",
+    "description": "Qtangl planning API overview and documentation map.",
+    "headings": []
+  },
+  {
+    "href": "/docs/quickstart",
+    "title": "Quickstart",
+    "section": "Getting Started",
+    "description": "Send your first schedule optimization request in minutes.",
+    "headings": []
+  },
+  {
+    "href": "/docs/authentication",
+    "title": "Authentication",
+    "section": "Getting Started",
+    "description": "API keys, bearer tokens, and header schemes.",
+    "headings": []
+  },
+  {
+    "href": "/docs/sdks",
+    "title": "SDKs & integrations",
+    "section": "Getting Started",
+    "description": "HTTP client recipes and upcoming official SDKs.",
+    "headings": []
+  },
+  {
+    "href": "/docs/concepts",
+    "title": "Concepts",
+    "section": "Guides",
+    "description": "Scheduling, routing, allocation, and hybrid execution.",
+    "headings": []
+  },
+  {
+    "href": "/docs/data-formats",
+    "title": "Data formats",
+    "section": "Guides",
+    "description": "Fields for schedules, routes, and staffing payloads.",
+    "headings": []
+  },
+  {
+    "href": "/docs/guides/schedule",
+    "title": "Schedule guide",
+    "section": "Guides",
+    "description": "",
+    "headings": []
+  },
+  {
+    "href": "/docs/guides/routing",
+    "title": "Routing guide",
+    "section": "Guides",
+    "description": "",
+    "headings": []
+  },
+  {
+    "href": "/docs/guides/allocation",
+    "title": "Allocation guide",
+    "section": "Guides",
+    "description": "",
+    "headings": []
+  },
+  {
+    "href": "/docs/guides/hospital-demo",
+    "title": "Hospital demo guide",
+    "section": "Guides",
+    "description": "",
+    "headings": []
+  },
+  {
+    "href": "/docs/api",
+    "title": "API guide",
+    "section": "API Reference",
+    "description": "API guide for POST /optimize and related endpoints.",
+    "headings": []
+  },
+  {
+    "href": "/docs/reference/optimize",
+    "title": "POST /optimize",
+    "section": "API Reference",
+    "description": "",
+    "headings": []
+  },
+  {
+    "href": "/docs/reference/health",
+    "title": "GET /health",
+    "section": "API Reference",
+    "description": "",
+    "headings": []
+  },
+  {
+    "href": "/docs/reference/hospital/roster",
+    "title": "GET /hospital/roster",
+    "section": "API Reference",
+    "description": "",
+    "headings": []
+  },
+  {
+    "href": "/docs/reference/hospital/scenarios",
+    "title": "GET /hospital/scenarios",
+    "section": "API Reference",
+    "description": "",
+    "headings": []
+  },
+  {
+    "href": "/docs/reference/hospital/callout",
+    "title": "GET /hospital/callout",
+    "section": "API Reference",
+    "description": "",
+    "headings": []
+  },
+  {
+    "href": "/docs/reference/hospital/qpu-trace",
+    "title": "GET /hospital/qpu-trace",
+    "section": "API Reference",
+    "description": "",
+    "headings": []
+  },
+  {
+    "href": "/docs/reference/hospital/upload-roster",
+    "title": "POST /hospital/upload-roster",
+    "section": "API Reference",
+    "description": "",
+    "headings": []
+  },
+  {
+    "href": "/docs/reference/hospital/callout-solve",
+    "title": "POST /hospital/callout/solve",
+    "section": "API Reference",
+    "description": "",
+    "headings": []
+  },
+  {
+    "href": "/docs/errors",
+    "title": "Errors & status codes",
+    "section": "API Reference",
+    "description": "HTTP status codes and error handling.",
+    "headings": []
+  },
+  {
+    "href": "/docs/reference/schemas",
+    "title": "JSON schemas",
+    "section": "API Reference",
+    "description": "",
+    "headings": []
+  },
+  {
+    "href": "/docs/operations/rate-limits",
+    "title": "Rate limits",
+    "section": "Operations",
+    "description": "",
+    "headings": []
+  },
+  {
+    "href": "/docs/operations/environments",
+    "title": "Environments",
+    "section": "Operations",
+    "description": "",
+    "headings": []
+  },
+  {
+    "href": "/docs/operations/observability",
+    "title": "Observability",
+    "section": "Operations",
+    "description": "",
+    "headings": []
+  },
+  {
+    "href": "/docs/operations/security",
+    "title": "Security",
+    "section": "Operations",
+    "description": "",
+    "headings": []
+  },
+  {
+    "href": "/docs/operations/data-retention",
+    "title": "Data retention",
+    "section": "Operations",
+    "description": "",
+    "headings": []
+  },
+  {
+    "href": "/docs/operations/cors",
+    "title": "CORS",
+    "section": "Operations",
+    "description": "",
+    "headings": []
+  },
+  {
+    "href": "/docs/resources/glossary",
+    "title": "Glossary",
+    "section": "Resources",
+    "description": "",
+    "headings": []
+  },
+  {
+    "href": "/docs/resources/faq",
+    "title": "FAQ",
+    "section": "Resources",
+    "description": "",
+    "headings": []
+  },
+  {
+    "href": "/docs/resources/changelog",
+    "title": "Changelog",
+    "section": "Resources",
+    "description": "",
+    "headings": []
+  },
+  {
+    "href": "/docs/resources/roadmap",
+    "title": "Roadmap",
+    "section": "Resources",
+    "description": "",
+    "headings": []
+  },
+  {
+    "href": "/docs/resources/support",
+    "title": "Support",
+    "section": "Resources",
+    "description": "",
+    "headings": []
+  }
+]
