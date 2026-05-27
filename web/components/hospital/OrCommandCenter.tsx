@@ -12,7 +12,12 @@ import type {
   HospitalSolveResponse,
   Scenario,
 } from "@/lib/hospital";
-import { solveHospitalCallout } from "@/lib/hospital";
+import {
+  getHospitalRoster,
+  getHospitalScenarios,
+  solveHospitalCallout,
+} from "@/lib/hospital";
+import { FALLBACK_SCENARIOS } from "@/lib/hospital-fallback";
 
 import AuditDrawer from "./AuditDrawer";
 import CallOutEvent from "./CallOutEvent";
@@ -28,17 +33,28 @@ import VideoEmbed from "./VideoEmbed";
 type OrCommandCenterProps = {
   initialRoster: HospitalRosterNurse[];
   initialScenarios: Scenario[];
+  backendConnected: boolean;
+  backendMessage: string | null;
+  apiBaseUrl: string;
 };
 
 export default function OrCommandCenter({
   initialRoster,
   initialScenarios,
+  backendConnected: initialBackendConnected,
+  backendMessage: initialBackendMessage,
+  apiBaseUrl,
 }: OrCommandCenterProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
 
+  const [scenarios, setScenarios] = useState(initialScenarios);
+  const [roster, setRoster] = useState(initialRoster);
+  const [backendConnected, setBackendConnected] = useState(initialBackendConnected);
+  const [backendMessage, setBackendMessage] = useState(initialBackendMessage);
+
   const [activeScenarioId, setActiveScenarioId] = useState(
-    searchParams.get("case") ?? initialScenarios[0]?.id ?? "callout-cath-acls"
+    searchParams.get("case") ?? scenarios[0]?.id ?? FALLBACK_SCENARIOS[0].id
   );
   const [seed] = useState(Number(searchParams.get("seed") ?? "1234"));
   const [useFixture, setUseFixture] = useState(searchParams.get("useFixture") !== "false");
@@ -53,13 +69,51 @@ export default function OrCommandCenter({
 
   const activeScenario = useMemo(
     () =>
-      initialScenarios.find((scenario) => scenario.id === activeScenarioId) ?? initialScenarios[0],
-    [activeScenarioId, initialScenarios]
+      scenarios.find((scenario) => scenario.id === activeScenarioId) ??
+      FALLBACK_SCENARIOS[0],
+    [activeScenarioId, scenarios]
   );
 
   useEffect(() => {
     trackEvent("demo_viewed", { demo: "hospital" });
   }, []);
+
+  useEffect(() => {
+    if (backendConnected) {
+      return;
+    }
+
+    let cancelled = false;
+
+    async function connectBackend() {
+      try {
+        const [rosterResponse, scenariosResponse] = await Promise.all([
+          getHospitalRoster(),
+          getHospitalScenarios(),
+        ]);
+        if (cancelled) {
+          return;
+        }
+        setRoster(rosterResponse.roster);
+        setScenarios(scenariosResponse.scenarios);
+        setBackendConnected(true);
+        setBackendMessage(null);
+      } catch (error) {
+        if (cancelled) {
+          return;
+        }
+        setBackendMessage(
+          error instanceof Error ? error.message : "Unable to reach the Qtangl hospital API."
+        );
+      }
+    }
+
+    void connectBackend();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [backendConnected]);
 
   function syncUrl(next: {
     caseId?: string;
@@ -135,8 +189,31 @@ export default function OrCommandCenter({
     <div className="space-y-6">
       <VideoEmbed src="/demos/hospital/walkthrough.mp4" />
 
+      {!backendConnected ? (
+        <Card tone="strong" className="rounded-[var(--radius-xl)] border-amber-300/30">
+          <p className="text-label text-amber-100">Backend not connected</p>
+          <p className="mt-3 text-sm leading-7 text-[var(--color-gray-200)]">
+            The page loaded, but the hospital API is not available yet. This usually means the Railway
+            backend has not deployed the latest code from <code>main</code>, or the API key does not
+            match.
+          </p>
+          <p className="mt-2 text-xs leading-6 text-[var(--color-gray-400)]">
+            API base URL: <code className="text-white">{apiBaseUrl}</code>
+          </p>
+          {backendMessage ? (
+            <p className="mt-2 text-xs leading-6 text-[var(--color-gray-400)]">
+              Detail: {backendMessage}
+            </p>
+          ) : null}
+          <p className="mt-3 text-sm leading-7 text-[var(--color-gray-300)]">
+            After Railway redeploys with the hospital routes, reload this page. Scenario copy below is
+            offline until then. &quot;Fire the call-out&quot; will fail until the backend is live.
+          </p>
+        </Card>
+      ) : null}
+
       <ScenarioPicker
-        scenarios={initialScenarios}
+        scenarios={scenarios}
         activeScenarioId={activeScenarioId}
         onChange={(scenarioId) => {
           setActiveScenarioId(scenarioId);
@@ -188,7 +265,7 @@ export default function OrCommandCenter({
 
       <div className="grid gap-6 xl:grid-cols-[1.2fr_0.8fr]">
         <RosterHeatmap
-          roster={initialRoster}
+          roster={roster}
           highlightedNurseIds={highlightedNurseIds}
           calloutNurseId={activeScenario.callout.nurse_id}
         />

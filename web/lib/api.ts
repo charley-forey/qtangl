@@ -1,6 +1,19 @@
-export const qtanglApiBaseUrl =
-  process.env.NEXT_PUBLIC_QTANGL_API_BASE_URL ??
+const DEFAULT_QTANGL_API_BASE_URL =
   "https://sparkling-vibrancy-production-1a7a.up.railway.app";
+
+/** Ensures fetch gets an absolute URL (Vercel env is often pasted without https://). */
+export function normalizeQtanglApiBaseUrl(raw?: string): string {
+  const trimmed = (raw ?? DEFAULT_QTANGL_API_BASE_URL).trim();
+  if (!trimmed) {
+    return DEFAULT_QTANGL_API_BASE_URL;
+  }
+  const withScheme = /^https?:\/\//i.test(trimmed) ? trimmed : `https://${trimmed}`;
+  return withScheme.replace(/\/+$/, "");
+}
+
+export const qtanglApiBaseUrl = normalizeQtanglApiBaseUrl(
+  process.env.NEXT_PUBLIC_QTANGL_API_BASE_URL
+);
 
 export const qtanglSandboxApiKey =
   process.env.NEXT_PUBLIC_QTANGL_SANDBOX_API_KEY ?? "<pilot-api-key>";
