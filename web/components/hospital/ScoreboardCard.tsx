@@ -1,5 +1,12 @@
-import Card from "@/components/ui/Card";
 import type { Scoreboard } from "@/lib/hospital";
+
+import {
+  HospitalChip,
+  HospitalEmptyState,
+  HospitalMetric,
+  HospitalSection,
+  HospitalSectionHeader,
+} from "./ui";
 
 type ScoreboardCardProps = {
   scoreboard: Scoreboard | null;
@@ -9,87 +16,68 @@ function formatSolveTime(value: number) {
   if (value > 60) {
     return `${Math.round(value / 60)} min`;
   }
-  return `${value.toFixed(2)} s`;
+  return `${value.toFixed(1)}s`;
 }
 
 export default function ScoreboardCard({ scoreboard }: ScoreboardCardProps) {
   if (!scoreboard) {
     return (
-      <Card tone="strong" className="rounded-[var(--radius-xl)]">
-        <p className="text-label">Honest scoreboard</p>
-        <p className="mt-4 text-sm leading-7 text-[var(--color-gray-300)]">
-          Fire the call-out to compare manual, classical, and hybrid outcomes side by side.
-        </p>
-      </Card>
+      <HospitalSection>
+        <HospitalSectionHeader
+          label="Scoreboard"
+          title="Outcome comparison"
+          description="Run a solve to compare manual, classical, and hybrid paths."
+        />
+        <div className="mt-6">
+          <HospitalEmptyState
+            title="No results yet"
+            description='Click "Run solve" to generate the executive scoreboard.'
+          />
+        </div>
+      </HospitalSection>
     );
   }
 
-  const columns = [
-    scoreboard.manual,
-    scoreboard.classical,
-    scoreboard.hybrid,
-  ];
+  const columns = [scoreboard.manual, scoreboard.classical, scoreboard.hybrid];
 
   return (
-    <Card tone="feature" className="rounded-[var(--radius-feature)]">
-      <p className="text-label">Honest scoreboard</p>
-      <h3 className="mt-3 text-2xl font-semibold text-white">We do not pretend the hybrid pass is faster</h3>
-      <p className="mt-4 text-sm leading-7 text-[var(--color-gray-300)]">
-        Classical CP-SAT often wins on a single composite score when it searches the full roster.
-        The hybrid pass is slower, but it explores the repair-window micro-problem and can surface
-        cross-trained floats with better fairness—or a lower score when the classical pass was
-        limited to the ward board.
-      </p>
-      {scoreboard.hybrid.hybrid_beats_classical_objective ? (
-        <p className="mt-3 text-sm font-medium text-emerald-200">
-          Hybrid beat classical on composite objective in this scenario.
-        </p>
-      ) : null}
-      {scoreboard.hybrid.hybrid_beats_classical_fairness &&
-      !scoreboard.hybrid.hybrid_beats_classical_objective ? (
-        <p className="mt-3 text-sm font-medium text-emerald-200">
-          Hybrid recommends a fairer feasible swap than the ward-board classical pick.
-        </p>
-      ) : null}
+    <HospitalSection tone="feature">
+      <HospitalSectionHeader
+        label="Scoreboard"
+        title="Honest comparison"
+        description="We show slower hybrid time and tied objectives when appropriate—the value is auditable alternates, not hype."
+      />
+      <div className="mt-4 flex flex-wrap gap-2">
+        {scoreboard.hybrid.hybrid_beats_classical_objective ? (
+          <HospitalChip tone="success">Hybrid wins on objective</HospitalChip>
+        ) : null}
+        {scoreboard.hybrid.hybrid_beats_classical_fairness &&
+        !scoreboard.hybrid.hybrid_beats_classical_objective ? (
+          <HospitalChip tone="success">Hybrid wins on fairness</HospitalChip>
+        ) : null}
+        <HospitalChip tone="neutral">
+          {scoreboard.hybrid.distinct_plans} distinct hybrid plans
+        </HospitalChip>
+      </div>
       <div className="mt-6 grid gap-4 lg:grid-cols-3">
         {columns.map((column) => (
           <div
             key={column.label}
-            className="rounded-[var(--radius-xl)] border border-[var(--border)] bg-black/35 p-5"
+            className="rounded-[var(--radius-xl)] border border-[var(--border)] bg-black/30 p-5"
           >
-            <p className="text-sm font-medium text-white">{column.label}</p>
-            <dl className="mt-4 space-y-3 text-sm">
-              <div className="flex items-center justify-between gap-3">
-                <dt className="text-[var(--color-gray-400)]">Solve wall time</dt>
-                <dd className="text-white">{formatSolveTime(column.solve_wall_time_seconds)}</dd>
-              </div>
-              <div className="flex items-center justify-between gap-3">
-                <dt className="text-[var(--color-gray-400)]">Objective</dt>
-                <dd className="text-white">{column.objective.toFixed(4)}</dd>
-              </div>
+            <p className="text-sm font-semibold text-white">{column.label}</p>
+            <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
+              <HospitalMetric label="Wall time" value={formatSolveTime(column.solve_wall_time_seconds)} />
+              <HospitalMetric label="Objective" value={column.objective.toFixed(2)} />
               {column.fairness_delta != null ? (
-                <div className="flex items-center justify-between gap-3">
-                  <dt className="text-[var(--color-gray-400)]">Fairness delta</dt>
-                  <dd className="text-white">{column.fairness_delta.toFixed(3)}</dd>
-                </div>
+                <HospitalMetric label="Fairness Δ" value={column.fairness_delta.toFixed(3)} />
               ) : null}
-              <div className="flex items-center justify-between gap-3">
-                <dt className="text-[var(--color-gray-400)]">Distinct feasible plans</dt>
-                <dd className="text-white">{column.distinct_plans}</dd>
-              </div>
-              <div className="flex items-center justify-between gap-3">
-                <dt className="text-[var(--color-gray-400)]">Audit pack</dt>
-                <dd className="text-white">{column.audit_pack_available ? "Yes" : "No"}</dd>
-              </div>
-            </dl>
-            <p className="mt-4 text-sm leading-7 text-[var(--color-gray-300)]">{column.summary}</p>
+              <HospitalMetric label="Plans surfaced" value={String(column.distinct_plans)} />
+            </div>
+            <p className="mt-4 text-sm leading-5 text-[var(--color-gray-400)]">{column.summary}</p>
           </div>
         ))}
       </div>
-      <p className="mt-6 text-sm leading-7 text-[var(--color-gray-300)]">
-        Pitch line: “We will not pretend quantum is faster. We will show you three provably-feasible
-        swaps your CP-SAT solver would have picked one of and discarded the rest.”
-      </p>
-    </Card>
+    </HospitalSection>
   );
 }

@@ -1,6 +1,6 @@
-import Card from "@/components/ui/Card";
 import type { HospitalCandidate, Scoreboard } from "@/lib/hospital";
 
+import { HospitalEmptyState, HospitalSection, HospitalSectionHeader } from "./ui";
 import SwapCard from "./SwapCard";
 
 type CandidatePlansProps = {
@@ -16,43 +16,46 @@ export default function CandidatePlans({
   scoreboard,
   onOpenAudit,
 }: CandidatePlansProps) {
+  const hasResults = classicalCandidate || hybridCandidates.length > 0;
+  const hybridRecommended = Boolean(
+    scoreboard?.hybrid.hybrid_beats_classical_objective ||
+      scoreboard?.hybrid.hybrid_beats_classical_fairness
+  );
+
   return (
-    <div className="space-y-6">
-      <Card tone="strong" className="rounded-[var(--radius-xl)]">
-        <p className="text-label">Candidate plans</p>
-        <h3 className="mt-3 text-xl font-semibold text-white">
-          Compare the deterministic classical pick with the hybrid alternates
-        </h3>
-        <p className="mt-3 text-sm leading-7 text-[var(--color-gray-300)]">
-          The classical pass picks one plan (often from the ward board only). Hybrid sampling
-          surfaces multiple feasible alternates—sometimes with better fairness or a lower composite
-          score when cross-trained floats enter the repair window.
-        </p>
-      </Card>
-      <div className="grid gap-4 xl:grid-cols-4">
-        {classicalCandidate ? (
-          <SwapCard
-            candidate={classicalCandidate}
-            title="Classical pick"
-            onOpenAudit={onOpenAudit}
+    <HospitalSection>
+      <HospitalSectionHeader
+        label="Staffing plans"
+        title="Classical pick vs hybrid alternates"
+        description="Each card is feasible, rule-checked, and opens a full audit pack for compliance."
+      />
+      {!hasResults ? (
+        <div className="mt-6">
+          <HospitalEmptyState
+            title="Plans appear after solve"
+            description="You will see one classical assignment and up to three hybrid alternates."
           />
-        ) : null}
-        {hybridCandidates.map((candidate, index) => (
-          <SwapCard
-            key={candidate.id}
-            candidate={candidate}
-            title={`Hybrid alternate ${index + 1}`}
-            recommended={
-              index === 0 &&
-              Boolean(
-                scoreboard?.hybrid.hybrid_beats_classical_objective ||
-                  scoreboard?.hybrid.hybrid_beats_classical_fairness
-              )
-            }
-            onOpenAudit={onOpenAudit}
-          />
-        ))}
-      </div>
-    </div>
+        </div>
+      ) : (
+        <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+          {classicalCandidate ? (
+            <SwapCard
+              candidate={classicalCandidate}
+              title="Classical"
+              onOpenAudit={onOpenAudit}
+            />
+          ) : null}
+          {hybridCandidates.map((candidate, index) => (
+            <SwapCard
+              key={candidate.id}
+              candidate={candidate}
+              title={`Hybrid ${index + 1}`}
+              recommended={index === 0 && hybridRecommended}
+              onOpenAudit={onOpenAudit}
+            />
+          ))}
+        </div>
+      )}
+    </HospitalSection>
   );
 }

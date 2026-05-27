@@ -4,7 +4,6 @@ import { useEffect, useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
 import Button from "@/components/ui/Button";
-import Card from "@/components/ui/Card";
 import { trackEvent } from "@/lib/analytics";
 import type {
   AuditPack,
@@ -31,6 +30,7 @@ import ScoreboardCard from "./ScoreboardCard";
 import SolveInsightBanner from "./SolveInsightBanner";
 import SolveLog from "./SolveLog";
 import VideoEmbed from "./VideoEmbed";
+import { HospitalChip, HospitalSection } from "./ui";
 
 type OrCommandCenterProps = {
   initialRoster: HospitalRosterNurse[];
@@ -68,6 +68,7 @@ export default function OrCommandCenter({
   const [error, setError] = useState<string | null>(null);
   const [auditOpen, setAuditOpen] = useState(false);
   const [activeAuditCandidateId, setActiveAuditCandidateId] = useState<string | null>(null);
+  const [toast, setToast] = useState<string | null>(null);
 
   const activeScenario = useMemo(
     () =>
@@ -79,6 +80,14 @@ export default function OrCommandCenter({
   useEffect(() => {
     trackEvent("demo_viewed", { demo: "hospital" });
   }, []);
+
+  useEffect(() => {
+    if (!toast) {
+      return;
+    }
+    const timer = window.setTimeout(() => setToast(null), 2800);
+    return () => window.clearTimeout(timer);
+  }, [toast]);
 
   useEffect(() => {
     if (backendConnected && roster.length > 0 && scenarios.length > 0) {
@@ -115,7 +124,7 @@ export default function OrCommandCenter({
     return () => {
       cancelled = true;
     };
-  }, [backendConnected]);
+  }, [backendConnected, roster.length, scenarios.length]);
 
   function syncUrl(next: {
     caseId?: string;
@@ -148,10 +157,12 @@ export default function OrCommandCenter({
         rosterSessionId: rosterSessionId ?? undefined,
       });
       setSolveResponse(response);
-      setActiveAuditCandidateId(response.hybridCandidates[0]?.id ?? response.classicalCandidate.id);
+      setActiveAuditCandidateId(
+        response.hybridCandidates[0]?.id ?? response.classicalCandidate.id
+      );
       syncUrl({});
     } catch (solveError) {
-      setError(solveError instanceof Error ? solveError.message : "Call-out solve failed.");
+      setError(solveError instanceof Error ? solveError.message : "Solve failed.");
     } finally {
       setIsSolving(false);
     }
@@ -173,6 +184,7 @@ export default function OrCommandCenter({
     }
     const url = `${window.location.origin}/demo/hospital?${params.toString()}`;
     await navigator.clipboard.writeText(url);
+    setToast("Share link copied to clipboard");
     trackEvent("share_link_copied", { scenarioId: activeScenarioId });
   }
 
@@ -188,33 +200,27 @@ export default function OrCommandCenter({
   }, [activeScenario.callout.nurse_id, solveResponse]);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8 pb-16">
       <VideoEmbed src="/demos/hospital/walkthrough.mp4" />
-
       <DemoGuideStrip />
 
       {!backendConnected ? (
-        <Card tone="strong" className="rounded-[var(--radius-xl)] border-amber-300/30">
-          <p className="text-label text-amber-100">Backend not connected</p>
-          <p className="mt-3 text-sm leading-7 text-[var(--color-gray-200)]">
-            The page loaded, but the hospital API is not available yet. This usually means the Railway
-            backend has not deployed the latest code from <code>main</code>, or the API key does not
-            match.
-          </p>
-          <p className="mt-2 text-xs leading-6 text-[var(--color-gray-400)]">
-            API base URL: <code className="text-white">{apiBaseUrl}</code>
+        <HospitalSection className="border-amber-400/25">
+          <HospitalChip tone="alert">API offline</HospitalChip>
+          <p className="mt-4 text-sm leading-6 text-[var(--color-gray-300)]">
+            Live solve requires the hospital API. Scenario copy is available offline; results
+            will populate once the backend is reachable.
           </p>
           {backendMessage ? (
-            <p className="mt-2 text-xs leading-6 text-[var(--color-gray-400)]">
-              Detail: {backendMessage}
-            </p>
+            <p className="mt-2 text-xs text-[var(--color-gray-500)]">{backendMessage}</p>
           ) : null}
-          <p className="mt-3 text-sm leading-7 text-[var(--color-gray-300)]">
-            After Railway redeploys with the hospital routes, reload this page. Scenario copy below is
-            offline until then. &quot;Fire the call-out&quot; will fail until the backend is live.
-          </p>
-        </Card>
-      ) : null}
+          <p className="mt-2 font-mono text-xs text-[var(--color-gray-600)]">{apiBaseUrl}</p>
+        </HospitalSection>
+      ) : (
+        <div className="flex justify-end">
+          <HospitalChip tone="success">Live API connected</HospitalChip>
+        </div>
+      )}
 
       <ScenarioPicker
         scenarios={scenarios}
@@ -227,47 +233,57 @@ export default function OrCommandCenter({
         }}
       />
 
-      <Card tone="feature" className="rounded-[var(--radius-feature)]">
-        <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-          <div>
-            <p className="text-label">Regional Medical Center, 420 beds</p>
-            <h2 className="mt-3 text-2xl font-semibold text-white">OR command center</h2>
-            <p className="mt-3 text-sm leading-7 text-[var(--color-gray-300)]">
-              It is Tue 04:11. Marcus has 49 minutes to cover the open shift without breaking acuity,
-              rest, or seniority rules.
-            </p>
+      <div className="hospital-command-bar">
+        <HospitalSection tone="feature">
+          <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
+            <div className="min-w-0">
+              <p className="text-label">Command center</p>
+              <h2 className="mt-2 text-xl font-semibold text-white sm:text-2xl">
+                Regional Medical Center
+              </h2>
+              <p className="mt-1 text-sm text-[var(--color-gray-400)]">
+                420 beds · {activeScenario.callout.urgency_minutes} min decision window
+              </p>
+            </div>
+            <div className="flex flex-wrap items-center gap-3">
+              <label className="inline-flex cursor-pointer items-center gap-2 rounded-full border border-[var(--border)] px-4 py-2.5 text-sm text-[var(--color-gray-300)]">
+                <input
+                  type="checkbox"
+                  className="accent-white"
+                  checked={useFixture}
+                  onChange={(event) => {
+                    setUseFixture(event.target.checked);
+                    syncUrl({ useFixtureValue: event.target.checked });
+                  }}
+                />
+                Cached QPU trace
+              </label>
+              <Button type="button" variant="secondary" size="sm" onClick={handleShare}>
+                Share
+              </Button>
+              <Button
+                type="button"
+                onClick={handleSolve}
+                disabled={isSolving || !backendConnected}
+                aria-busy={isSolving}
+              >
+                {isSolving ? "Running…" : "Run solve"}
+              </Button>
+            </div>
           </div>
-          <div className="flex flex-wrap gap-3">
-            <label className="inline-flex items-center gap-2 rounded-full border border-[var(--border)] px-4 py-2 text-sm text-[var(--color-gray-300)]">
-              <input
-                type="checkbox"
-                checked={useFixture}
-                onChange={(event) => {
-                  setUseFixture(event.target.checked);
-                  syncUrl({ useFixtureValue: event.target.checked });
-                }}
-              />
-              Replay cached QPU trace
-            </label>
-            <Button type="button" variant="secondary" onClick={handleShare}>
-              Copy share link
-            </Button>
-            <Button type="button" onClick={handleSolve} disabled={isSolving}>
-              {isSolving ? "Solving..." : "Fire the call-out"}
-            </Button>
-          </div>
-        </div>
-      </Card>
+        </HospitalSection>
+      </div>
 
       <CallOutEvent scenario={activeScenario} callout={activeScenario.callout} />
 
       {error ? (
-        <Card tone="strong" className="rounded-[var(--radius-xl)] border-red-300/30">
-          <p className="text-sm leading-7 text-red-100">{error}</p>
-        </Card>
+        <HospitalSection className="border-red-400/30">
+          <HospitalChip tone="alert">Error</HospitalChip>
+          <p className="mt-3 text-sm leading-6 text-red-100">{error}</p>
+        </HospitalSection>
       ) : null}
 
-      <div className="grid gap-6 xl:grid-cols-[1.2fr_0.8fr]">
+      <div className="grid gap-6 xl:grid-cols-[1.15fr_0.85fr] xl:items-stretch">
         <RosterHeatmap
           roster={roster}
           highlightedNurseIds={highlightedNurseIds}
@@ -287,7 +303,7 @@ export default function OrCommandCenter({
 
       <ScoreboardCard scoreboard={solveResponse?.scoreboard ?? null} />
 
-      <div className="grid gap-6 xl:grid-cols-[1fr_1fr]">
+      <div className="grid gap-6 lg:grid-cols-2">
         <RoiCalculator />
         <RosterUploader
           onUploaded={(sessionId) => {
@@ -303,6 +319,8 @@ export default function OrCommandCenter({
         open={auditOpen}
         onClose={() => setAuditOpen(false)}
       />
+
+      {toast ? <div className="hospital-toast" role="status">{toast}</div> : null}
     </div>
   );
 }

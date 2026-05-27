@@ -13,9 +13,9 @@ import { getHospitalRoster, getHospitalScenarios } from "@/lib/hospital";
 import type { HospitalRosterNurse, Scenario } from "@/lib/hospital";
 
 export const metadata: Metadata = {
-  title: "Hospital re-staffing demo",
+  title: "Hospital re-staffing demo | Qtangl",
   description:
-    "See the 04:11 cath-lab call-out solved with a live CP-SAT pass, a replayed hybrid micro-solve, and an audit-ready scoreboard.",
+    "Executive demo: auditable nurse call-out coverage with classical optimization, hybrid alternates, and compliance-ready audit packs.",
 };
 
 type PrefetchResult = {
@@ -56,12 +56,12 @@ export default async function HospitalDemoPage() {
   return (
     <PageShell>
       <PageHero
-        eyebrow="Headline demo"
-        title="Hospital re-staffing at 04:11"
-        description="A nurse calls out 49 minutes before the day shift. The command center has to preserve acuity, union rules, fatigue limits, and cost discipline without defaulting to agency."
+        eyebrow="Workforce optimization"
+        title="Auditable hospital re-staffing"
+        description="When a critical nurse calls out, leaders need a defensible swap in minutes—not another agency invoice. See classical optimization, hybrid alternates, and compliance-ready audit trails on a live 420-bed scenario."
         actions={[
-          { href: "/demo/hospital/methodology", label: "Read methodology", variant: "secondary" },
-          { href: "/access?source=demo-hospital", label: "Request pilot access" },
+          { href: "/demo/hospital/methodology", label: "Methodology", variant: "secondary" },
+          { href: "/access?source=demo-hospital", label: "Request executive briefing" },
         ]}
       />
       <Section gap="tight" className="pb-0">

@@ -1,39 +1,53 @@
-import Card from "@/components/ui/Card";
+import {
+  HospitalSection,
+  HospitalSectionHeader,
+} from "./ui";
 
 const STEPS = [
   {
-    title: "Pick a scenario",
-    detail: "Start with Sarah K.'s cath-lab call-out or try the ICU cascade and OR late add.",
+    title: "Select event",
+    detail: "Cath lab, ICU cascade, or OR add-on.",
   },
   {
-    title: "Fire the call-out",
-    detail: "Run the live CP-SAT pass plus the cached hybrid micro-solve replay.",
+    title: "Run solve",
+    detail: "Live CP-SAT plus hybrid micro-solve.",
   },
   {
-    title: "Compare three plans",
-    detail: "Manual Excel, classical-only, and hybrid-diverse swaps sit side by side.",
+    title: "Compare plans",
+    detail: "Manual, classical, and three hybrid alternates.",
   },
   {
-    title: "Open the audit pack",
-    detail: "QUBO snapshot, binding constraints, cost deltas, and QPU trace for compliance.",
+    title: "Export audit",
+    detail: "QUBO, constraints, and QPU trace per plan.",
   },
 ] as const;
 
 export default function DemoGuideStrip() {
   return (
-    <Card tone="strong" className="rounded-[var(--radius-xl)]">
-      <p className="text-label">How to use this demo</p>
-      <ol className="mt-4 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+    <HospitalSection>
+      <HospitalSectionHeader
+        label="Workflow"
+        title="Four steps for your leadership review"
+        description="Designed for CNO, COO, and workforce leaders—under two minutes to a defensible swap decision."
+      />
+      <ol className="mt-6 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
         {STEPS.map((step, index) => (
-          <li key={step.title} className="min-w-0 rounded-[var(--radius-lg)] border border-[var(--border)] bg-black/30 p-4">
-            <p className="text-xs font-medium uppercase tracking-[0.18em] text-[var(--color-gray-500)]">
-              Step {index + 1}
-            </p>
-            <p className="mt-2 font-medium text-white">{step.title}</p>
-            <p className="mt-2 text-sm leading-6 text-[var(--color-gray-400)]">{step.detail}</p>
+          <li
+            key={step.title}
+            className="flex gap-3 rounded-[var(--radius-lg)] border border-[var(--border)] bg-black/25 p-4"
+          >
+            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-[var(--border-strong)] bg-white/[0.06] text-sm font-semibold text-white">
+              {index + 1}
+            </span>
+            <div className="min-w-0">
+              <p className="font-medium text-white">{step.title}</p>
+              <p className="mt-1 text-sm leading-5 text-[var(--color-gray-400)]">
+                {step.detail}
+              </p>
+            </div>
           </li>
         ))}
       </ol>
-    </Card>
+    </HospitalSection>
   );
 }

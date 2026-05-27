@@ -1,7 +1,8 @@
 import Button from "@/components/ui/Button";
-import Card from "@/components/ui/Card";
 import MethodBadge from "@/components/visualization/quantum/MethodBadge";
 import type { HospitalCandidate } from "@/lib/hospital";
+
+import { HospitalChip } from "./ui";
 
 type SwapCardProps = {
   candidate: HospitalCandidate;
@@ -17,56 +18,77 @@ export default function SwapCard({
   onOpenAudit,
 }: SwapCardProps) {
   return (
-    <Card
-      tone="strong"
+    <article
       className={[
-        "rounded-[var(--radius-xl)]",
-        recommended ? "border-emerald-300/40 ring-1 ring-emerald-300/20" : "",
+        "flex h-full flex-col rounded-[var(--radius-xl)] border bg-black/30 p-5",
+        recommended
+          ? "border-emerald-400/35 ring-1 ring-emerald-400/15"
+          : "border-[var(--border)]",
       ].join(" ")}
     >
       <div className="flex items-start justify-between gap-3">
-        <div>
+        <div className="min-w-0">
           <p className="text-label">{title}</p>
-          <h4 className="mt-2 text-lg font-semibold text-white">{candidate.nurse_name}</h4>
-          {recommended ? (
-            <p className="mt-1 text-xs font-medium text-emerald-200">Hybrid recommended</p>
-          ) : null}
+          <h4 className="mt-2 truncate text-lg font-semibold text-white">
+            {candidate.nurse_name}
+          </h4>
+          <p className="mt-1 text-xs text-[var(--color-gray-500)]">
+            {candidate.home_ward} → {candidate.target_ward}
+          </p>
         </div>
         <MethodBadge method={candidate.source === "classical" ? "classical" : "hybrid"} />
       </div>
-      <p className="mt-3 text-sm leading-7 text-[var(--color-gray-300)]">{candidate.summary}</p>
-      <dl className="mt-5 grid gap-3 text-sm md:grid-cols-2">
+
+      {recommended ? (
+        <div className="mt-3">
+          <HospitalChip tone="success">Recommended</HospitalChip>
+        </div>
+      ) : null}
+
+      <p className="mt-3 line-clamp-2 text-sm leading-5 text-[var(--color-gray-400)]">
+        {candidate.summary}
+      </p>
+
+      <dl className="mt-4 grid grid-cols-2 gap-x-3 gap-y-2 text-sm">
         <div>
           <dt className="text-[var(--color-gray-500)]">Objective</dt>
-          <dd className="mt-1 text-white">{candidate.score.objective.toFixed(4)}</dd>
-        </div>
-        <div>
-          <dt className="text-[var(--color-gray-500)]">Quantum weight</dt>
-          <dd className="mt-1 text-white">
-            {candidate.quantum_weight ? `${candidate.quantum_weight.toFixed(1)}%` : "n/a"}
+          <dd className="font-medium tabular-nums text-white">
+            {candidate.score.objective.toFixed(2)}
           </dd>
         </div>
         <div>
-          <dt className="text-[var(--color-gray-500)]">Fatigue score</dt>
-          <dd className="mt-1 text-white">{candidate.score.fatigue_score.toFixed(1)}</dd>
+          <dt className="text-[var(--color-gray-500)]">Quantum</dt>
+          <dd className="font-medium tabular-nums text-white">
+            {candidate.quantum_weight != null ? `${candidate.quantum_weight.toFixed(0)}%` : "—"}
+          </dd>
         </div>
         <div>
-          <dt className="text-[var(--color-gray-500)]">Fairness delta</dt>
-          <dd className="mt-1 text-white">{candidate.score.fairness_delta.toFixed(3)}</dd>
+          <dt className="text-[var(--color-gray-500)]">Fatigue</dt>
+          <dd className="font-medium tabular-nums text-white">
+            {candidate.score.fatigue_score.toFixed(1)}
+          </dd>
+        </div>
+        <div>
+          <dt className="text-[var(--color-gray-500)]">Fairness Δ</dt>
+          <dd className="font-medium tabular-nums text-white">
+            {candidate.score.fairness_delta.toFixed(3)}
+          </dd>
         </div>
       </dl>
-      <ul className="mt-5 space-y-2 text-sm leading-7 text-[var(--color-gray-300)]">
-        {candidate.explanation.slice(0, 3).map((line) => (
-          <li key={line}>{line}</li>
-        ))}
-      </ul>
+
       {onOpenAudit ? (
-        <div className="mt-5">
-          <Button type="button" variant="secondary" onClick={() => onOpenAudit(candidate.id)}>
-            Open audit pack
+        <div className="mt-auto pt-5">
+          <Button
+            type="button"
+            variant="secondary"
+            size="sm"
+            className="w-full"
+            onClick={() => onOpenAudit(candidate.id)}
+          >
+            View audit pack
           </Button>
         </div>
       ) : null}
-    </Card>
+    </article>
   );
 }

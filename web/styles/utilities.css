@@ -438,6 +438,193 @@
   }
 }
 
+/* Hospital demo — enterprise command-center surfaces */
+.hospital-section {
+  border-radius: var(--radius-xl);
+}
+
+.hospital-metric {
+  min-width: 0;
+  border: 1px solid var(--border);
+  background: rgba(0, 0, 0, 0.35);
+  padding: 1rem 1.125rem;
+  border-radius: var(--radius-lg);
+}
+
+.hospital-metric-label {
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-gray-500);
+}
+
+.hospital-metric-value {
+  margin-top: 0.5rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: white;
+  line-height: 1.2;
+}
+
+.hospital-chip {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 9999px;
+  border: 1px solid var(--border);
+  padding: 0.25rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.hospital-chip-neutral {
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--color-gray-300);
+}
+
+.hospital-chip-success {
+  border-color: rgba(52, 211, 153, 0.35);
+  background: rgba(16, 185, 129, 0.12);
+  color: rgb(167, 243, 208);
+}
+
+.hospital-chip-alert {
+  border-color: rgba(252, 165, 165, 0.35);
+  background: rgba(239, 68, 68, 0.1);
+  color: rgb(254, 202, 202);
+}
+
+.hospital-input {
+  font-variant-numeric: tabular-nums;
+}
+
+.hospital-command-bar {
+  position: sticky;
+  top: 0.75rem;
+  z-index: 40;
+}
+
+.hospital-scenario-card {
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  background: rgba(0, 0, 0, 0.35);
+  padding: 1rem 1.125rem;
+  text-align: left;
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.hospital-scenario-card:hover {
+  border-color: var(--border-strong);
+}
+
+.hospital-scenario-card[data-active="true"] {
+  border-color: var(--border-strong);
+  background: rgba(255, 255, 255, 0.07);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.06);
+}
+
+.hospital-drawer-root {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.hospital-drawer-backdrop {
+  position: absolute;
+  inset: 0;
+  border: none;
+  background: rgba(0, 0, 0, 0.72);
+  backdrop-filter: blur(4px);
+  cursor: pointer;
+}
+
+.hospital-drawer-panel {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  height: 100%;
+  width: 100%;
+  max-width: 42rem;
+  flex-direction: column;
+  border-left: 1px solid var(--border);
+  background: #040507;
+  box-shadow: -24px 0 80px rgba(0, 0, 0, 0.55);
+  animation: hospital-drawer-in 0.28s ease-out;
+}
+
+.hospital-drawer-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  border-bottom: 1px solid var(--border);
+  padding: 1.25rem 1.5rem;
+}
+
+.hospital-drawer-body {
+  flex: 1;
+  overflow: auto;
+  padding: 1.25rem 1.5rem 1.5rem;
+}
+
+.hospital-audit-block {
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  background: rgba(0, 0, 0, 0.35);
+  padding: 1rem 1.125rem;
+}
+
+.hospital-toast {
+  position: fixed;
+  bottom: 1.5rem;
+  left: 50%;
+  z-index: 80;
+  translate: -50% 0;
+  border-radius: 9999px;
+  border: 1px solid var(--border-strong);
+  background: rgba(10, 10, 12, 0.95);
+  padding: 0.625rem 1.25rem;
+  font-size: 0.875rem;
+  color: white;
+  box-shadow: var(--shadow-elevated);
+  animation: hospital-toast-in 0.25s ease-out;
+}
+
+@keyframes hospital-drawer-in {
+  from {
+    opacity: 0;
+    transform: translateX(1.5rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes hospital-toast-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 0.5rem);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hospital-drawer-panel,
+  .hospital-toast {
+    animation: none !important;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   :where(.surface-panel-feature)::before,
   .gradient-text,
