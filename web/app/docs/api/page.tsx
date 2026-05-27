@@ -42,7 +42,7 @@ export default function DocsApiPage() {
           </Link>
         </Card>
 
-        <div className="grid min-w-0 gap-4 xl:grid-cols-2 xl:gap-6">
+        <div className="grid min-w-0 grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-6">
           <CodeBlock title="Request schema" code={apiReferenceRequest} />
           <CodeBlock title="Response schema" code={apiReferenceResponse} />
         </div>

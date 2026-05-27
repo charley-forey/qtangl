@@ -16,7 +16,7 @@ export default function ApiPreviewSection() {
         </p>
       </div>
 
-      <div className="mt-6 grid min-w-0 gap-4">
+      <div className="mt-6 grid min-w-0 grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-6">
         <CodeBlock title="Request" code={apiPreviewRequest} />
         <CodeBlock title="Response" code={apiPreviewResponse} />
       </div>

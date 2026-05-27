@@ -36,7 +36,7 @@ export default function ApiPage() {
         contentClassName="max-w-3xl"
       />
       <Section gap="tight">
-        <div className="grid min-w-0 gap-4 xl:grid-cols-2 xl:gap-6">
+        <div className="grid min-w-0 grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-6">
           <CodeBlock title="Request" code={apiReferenceRequest} />
           <CodeBlock title="Response" code={apiReferenceResponse} />
         </div>

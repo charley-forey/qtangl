@@ -1,52 +1,37 @@
 import { quantumLexicon } from "@/lib/copy/voice";
 
-const { amplitude, collapse } = quantumLexicon;
+const { amplitude } = quantumLexicon;
 
-export const tryPageCopy = {
-  eyebrow: `${collapse.label} a plan`,
-  title: "See the workflow before you commit to the API.",
+export const sandboxPageCopy = {
+  eyebrow: "API sandbox",
+  title: "Three planning shapes. One request.",
   description:
-    "Pick a familiar scenario, review the ranked output, then open the API example when you're ready to integrate.",
-  steps: [
-    {
-      eyebrow: "Step 1",
-      description: "Use the crews, windows, vehicles, or shifts you already track.",
-    },
-    {
-      eyebrow: "Step 2",
-      description: "Review the ranked plan, summary, and the measurement behind the win.",
-    },
-    {
-      eyebrow: "Step 3",
-      description: "Copy the API shape into your own system.",
-    },
-  ],
+    "Edit constraints, send a real /optimize call, get back the same JSON your app will see.",
+  intro:
+    "Sandbox the API: send a real /optimize request, see a real ranked plan. Falls back to a static response if the pilot endpoint is offline.",
+  liveLabel: "Live response",
+  fallbackLabel: "Live API unavailable — showing sandbox response",
+  previewLabel: "Sample response — press Send to /optimize to call the live API",
+  docsLink: { label: "Read API docs", href: "/docs/api" },
 } as const;
 
 export const tryPlannerCopy = {
   eyebrow: amplitude.label,
-  title: "Pick a planning scenario.",
+  title: "Pick a planning shape.",
   description:
-    "Edit constraints, generate a plan, and watch amplitude concentrate on the strongest option.",
+    "Choose a scenario, review the request shape, then call the live pilot endpoint.",
   tabLabel: "Planning scenarios",
   buttons: {
-    generate: "Generate Plan",
-    generating: "Generating...",
+    generate: "Send to /optimize",
+    generating: "Calling /optimize…",
     showApi: "See API request",
-    hideApi: "Hide API example",
+    hideApi: "Hide API request",
   },
-  preview: {
-    idleEyebrow: "Plan preview",
-    generatingEyebrow: "Generating",
-    idleTitle: "Generate a preview plan",
-    generatingTitle: "Building your preview...",
-    idleDescription:
-      "Adjust inputs on the left, then Generate Plan.",
-    generatingDescription: "Running a short planning pass for the preview.",
-  },
+  requestBlockTitle: "Request that will be sent",
   status: {
-    generating: "Generating preview plan.",
-    hidden: "Plan preview hidden until you generate.",
+    generating: "Calling the live API…",
+    liveReady: "Live response received.",
+    fallbackReady: "Showing sandbox response (live API unavailable).",
   },
   scenarios: {
     schedule: {

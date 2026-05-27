@@ -1,6 +1,6 @@
 export { footerNav, nav } from "@/lib/copy/nav";
 
-export const navCta = { name: "Try the planner", href: "/try" } as const;
+export const navCta = { name: "Open demos", href: "/demo" } as const;
 
 export const docsNav = [
   { name: "Overview", href: "/docs" },

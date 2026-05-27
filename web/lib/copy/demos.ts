@@ -14,7 +14,11 @@ export const demosPageCopy = {
   eyebrow: "Demos",
   title: "See Qtangl on real planning problems.",
   description:
-    "Each demo is a full workflow: constraints in, ranked plan out, measurements your team can defend.",
+    "Full workflows for buyers. API sandbox for developers. Same ranked-plan output, different depth.",
+  tabs: {
+    catalog: "Demos",
+    sandbox: "API sandbox",
+  },
 } as const;
 
 export const demoCatalog: readonly DemoCatalogEntry[] = [

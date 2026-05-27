@@ -1,19 +1,18 @@
 "use client";
 
-import { KeyboardEvent, useEffect, useMemo, useRef, useState } from "react";
+import { KeyboardEvent, useMemo, useState } from "react";
 
 import CodeBlock from "@/components/docs/CodeBlock";
+import SandboxResponse from "@/components/marketing/SandboxResponse";
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
 import Eyebrow from "@/components/ui/Eyebrow";
-import PlanVisualization from "@/components/visualization/PlanVisualization";
-import CollapseMeter from "@/components/visualization/quantum/CollapseMeter";
+import { fetchQtanglJson } from "@/lib/api";
 import { tryScenarios } from "@/lib/demo-data";
+import type { OptimizeResponse, SandboxLiveStatus } from "@/lib/optimize";
 import { tryPlannerCopy } from "@/lib/copy/try";
 
 type ScenarioId = (typeof tryScenarios)[number]["id"];
-
-const GENERATION_DELAY_MS = 650;
 
 function buildInitialValues() {
   return Object.fromEntries(
@@ -30,13 +29,19 @@ function getFieldId(scenarioId: ScenarioId, fieldLabel: string) {
   return `${scenarioId}-${fieldLabel.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`;
 }
 
+function toOptimizeResponse(value: Record<string, unknown>): OptimizeResponse {
+  return value as OptimizeResponse;
+}
+
 export default function TryPlanner() {
   const [activeScenarioId, setActiveScenarioId] = useState<ScenarioId>("schedule");
   const [valuesByScenario, setValuesByScenario] = useState(buildInitialValues);
-  const [hasGenerated, setHasGenerated] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
   const [showApi, setShowApi] = useState(false);
-  const generationTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [liveStatus, setLiveStatus] = useState<SandboxLiveStatus>("preview");
+  const [liveResponse, setLiveResponse] = useState<OptimizeResponse | null>(null);
+  const [liveError, setLiveError] = useState<string | null>(null);
+  const [hasCalledLive, setHasCalledLive] = useState(false);
 
   const activeScenario = useMemo(
     () => tryScenarios.find((scenario) => scenario.id === activeScenarioId) ?? tryScenarios[0],
@@ -44,26 +49,23 @@ export default function TryPlanner() {
   );
   const activeScenarioCopy = tryPlannerCopy.scenarios[activeScenario.id];
 
-  useEffect(() => {
-    return () => {
-      if (generationTimeoutRef.current) {
-        clearTimeout(generationTimeoutRef.current);
-      }
-    };
-  }, []);
+  const displayResponse = useMemo(
+    () =>
+      liveResponse ??
+      toOptimizeResponse(activeScenario.apiResponse as Record<string, unknown>),
+    [liveResponse, activeScenario.apiResponse]
+  );
 
-  function resetGeneratedPlan() {
-    if (generationTimeoutRef.current) {
-      clearTimeout(generationTimeoutRef.current);
-      generationTimeoutRef.current = null;
-    }
-
+  function resetToPreview() {
     setIsGenerating(false);
-    setHasGenerated(false);
+    setLiveStatus("preview");
+    setLiveResponse(null);
+    setLiveError(null);
+    setHasCalledLive(false);
   }
 
   function handleChange(fieldLabel: string, nextValue: string) {
-    resetGeneratedPlan();
+    resetToPreview();
     setValuesByScenario((current) => ({
       ...current,
       [activeScenarioId]: {
@@ -74,7 +76,7 @@ export default function TryPlanner() {
   }
 
   function handleScenarioChange(nextScenarioId: ScenarioId) {
-    resetGeneratedPlan();
+    resetToPreview();
     setActiveScenarioId(nextScenarioId);
   }
 
@@ -113,22 +115,37 @@ export default function TryPlanner() {
     });
   }
 
-  function handleGenerate() {
-    resetGeneratedPlan();
+  async function handleGenerate() {
     setIsGenerating(true);
-    generationTimeoutRef.current = setTimeout(() => {
-      setHasGenerated(true);
+    setLiveError(null);
+
+    try {
+      const response = await fetchQtanglJson<OptimizeResponse>("/optimize", {
+        method: "POST",
+        body: JSON.stringify(activeScenario.apiRequest),
+      });
+      setLiveResponse(response);
+      setLiveStatus("live");
+    } catch (error) {
+      setLiveResponse(
+        toOptimizeResponse(activeScenario.apiResponse as Record<string, unknown>)
+      );
+      setLiveStatus("fallback");
+      setLiveError(error instanceof Error ? error.message : "Live API unavailable");
+    } finally {
       setIsGenerating(false);
-      generationTimeoutRef.current = null;
-    }, GENERATION_DELAY_MS);
+      setHasCalledLive(true);
+    }
   }
 
   const scenarioPanelId = `${activeScenario.id}-scenario-panel`;
   const generationStatus = isGenerating
     ? tryPlannerCopy.status.generating
-    : hasGenerated
-      ? `${activeScenario.label} preview ready.`
-      : tryPlannerCopy.status.hidden;
+    : hasCalledLive && liveStatus === "live"
+      ? tryPlannerCopy.status.liveReady
+      : hasCalledLive && liveStatus === "fallback"
+        ? tryPlannerCopy.status.fallbackReady
+        : null;
 
   return (
     <div className="grid min-w-0 gap-8 xl:grid-cols-[0.82fr_1.18fr]">
@@ -223,45 +240,25 @@ export default function TryPlanner() {
             {showApi ? tryPlannerCopy.buttons.hideApi : tryPlannerCopy.buttons.showApi}
           </Button>
         </div>
-        <p className="mt-3 text-sm text-[var(--color-gray-400)]" aria-live="polite">
-          {generationStatus}
-        </p>
+        {generationStatus ? (
+          <p className="mt-3 text-sm text-[var(--color-gray-400)]" aria-live="polite">
+            {generationStatus}
+          </p>
+        ) : null}
       </Card>
 
-      <div className="min-w-0 space-y-6" aria-busy={isGenerating}>
-        {hasGenerated ? (
-          <div className="space-y-6">
-            <CollapseMeter candidatesEvaluated={6} />
-            <PlanVisualization
-              plan={activeScenario.plan}
-              method={(activeScenario.apiResponse.method as string | undefined) ?? "classical"}
-            />
-          </div>
-        ) : (
-          <Card tone="strong" size="lg" className="rounded-[var(--radius-feature)]">
-            <Eyebrow>
-              {isGenerating
-                ? tryPlannerCopy.preview.generatingEyebrow
-                : tryPlannerCopy.preview.idleEyebrow}
-            </Eyebrow>
-            <h3 className="heading-section mt-4 !text-2xl">
-              {isGenerating
-                ? tryPlannerCopy.preview.generatingTitle
-                : tryPlannerCopy.preview.idleTitle}
-            </h3>
-            <p className="mt-4 text-sm leading-7 text-[var(--color-gray-300)]">
-              {isGenerating
-                ? tryPlannerCopy.preview.generatingDescription
-                : tryPlannerCopy.preview.idleDescription}
-            </p>
-          </Card>
-        )}
+      <div className="min-w-0" aria-busy={isGenerating}>
+        <SandboxResponse
+          response={displayResponse}
+          status={liveStatus}
+          error={liveError}
+          isLoading={isGenerating}
+        />
       </div>
 
       {showApi ? (
-        <div className="grid min-w-0 gap-4 xl:col-span-2">
-          <CodeBlock title="Example request" code={activeScenario.apiRequest} />
-          <CodeBlock title="Example response" code={activeScenario.apiResponse} />
+        <div className="min-w-0 xl:col-span-2">
+          <CodeBlock title={tryPlannerCopy.requestBlockTitle} code={activeScenario.apiRequest} />
         </div>
       ) : null}
     </div>
