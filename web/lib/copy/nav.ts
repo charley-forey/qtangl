@@ -1,9 +1,9 @@
 export const nav = [
   { name: "Home", href: "/" },
   { name: "Demo", href: "/demo" },
-  { name: "Learn", href: "/learn" },
   { name: "Technology", href: "/technology" },
   { name: "Docs", href: "/docs" },
+  { name: "Learn", href: "/learn" },
   { name: "Access", href: "/access" },
 ] as const;
 
@@ -15,9 +15,10 @@ export const footerNav = [
 ] as const;
 
 export const navbarCopy = {
-  subtitle: "Quantum-aware planning API",
-  primaryCtaLabel: "Collapse a plan",
-  mobileMenuLabel: "Menu",
+  subtitle: "Quantum Planning API",
+  subtitleHref: "/docs/api",
+  primaryCtaLabel: "Find Quantum",
+  mobileMenuLabel: "Open menu",
   mobileTitle: "Qtangl navigation",
 } as const;
 

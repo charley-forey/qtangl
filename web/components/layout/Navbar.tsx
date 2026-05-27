@@ -9,6 +9,26 @@ import Modal from "@/components/ui/Modal";
 import { footerCopy, footerNav, nav, navbarCopy } from "@/lib/copy/nav";
 import { navCta } from "@/lib/siteConfig";
 
+function MenuIcon() {
+  return (
+    <svg
+      aria-hidden="true"
+      className="h-5 w-5"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      strokeWidth={2}
+    >
+      <path strokeLinecap="round" d="M4 7h16M4 12h16M4 17h16" />
+    </svg>
+  );
+}
+
+const navLinkClass =
+  "font-medium transition hover:text-white";
+const primaryCtaBaseClass =
+  "touch-target items-center rounded-full bg-white px-5 py-2.5 text-sm font-semibold text-black shadow-[0_0_0_1px_rgba(255,255,255,0.12),0_14px_34px_rgba(255,255,255,0.08)] transition hover:-translate-y-0.5 hover:bg-neutral-100 hover:shadow-[0_0_0_1px_rgba(255,255,255,0.2),0_24px_50px_rgba(255,255,255,0.12)]";
+
 function isActive(pathname: string, href: string) {
   if (href === "/") {
     return pathname === "/";
@@ -75,9 +95,12 @@ export default function Navbar() {
             />
             <div className="min-w-0">
               <div className="brand-wordmark">Qtangl</div>
-              <div className="mt-1 text-xs text-[var(--color-gray-400)]">
+              <Link
+                href={navbarCopy.subtitleHref}
+                className="mt-1 inline-block text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-[var(--color-gray-300)] transition hover:text-white"
+              >
                 {navbarCopy.subtitle}
-              </div>
+              </Link>
             </div>
           </Link>
 
@@ -89,11 +112,10 @@ export default function Navbar() {
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={
-                    active
-                      ? "text-white"
-                      : "text-[var(--color-gray-300)] transition hover:text-white"
-                  }
+                  className={[
+                    navLinkClass,
+                    active ? "text-white" : "text-[var(--color-gray-300)]",
+                  ].join(" ")}
                   aria-current={active ? "page" : undefined}
                 >
                   <span
@@ -112,20 +134,18 @@ export default function Navbar() {
           </nav>
 
           <div className="flex items-center gap-3">
-            <Link
-              href={navCta.href}
-              className="touch-target hidden items-center rounded-full border border-[var(--border)] bg-white/[0.02] px-4 py-2 text-sm text-white transition hover:-translate-y-0.5 hover:border-[var(--border-strong)] hover:bg-white/[0.05] hover:shadow-[0_18px_45px_rgba(255,255,255,0.08)] md:inline-flex"
-            >
+            <Link href={navCta.href} className={`${primaryCtaBaseClass} hidden md:inline-flex`}>
               {navbarCopy.primaryCtaLabel}
             </Link>
             <button
               type="button"
-              className="touch-target inline-flex items-center rounded-full border border-[var(--border)] bg-white/[0.02] px-4 py-2 text-sm text-white transition hover:border-[var(--border-strong)] hover:bg-white/[0.04] md:hidden"
+              className="touch-target inline-flex h-11 w-11 items-center justify-center rounded-full border border-[var(--border)] bg-white/[0.02] text-white transition hover:border-[var(--border-strong)] hover:bg-white/[0.06] md:hidden"
               onClick={() => setOpen(true)}
               aria-controls="mobile-navigation"
               aria-expanded={open}
+              aria-label={navbarCopy.mobileMenuLabel}
             >
-              {navbarCopy.mobileMenuLabel}
+              <MenuIcon />
             </button>
           </div>
         </div>
@@ -159,7 +179,7 @@ export default function Navbar() {
           <Link
             href={navCta.href}
             onClick={() => setOpen(false)}
-            className="touch-target inline-flex w-full items-center justify-center rounded-full border border-[var(--border)] px-4 py-3 text-sm text-white transition hover:border-[var(--border-strong)] hover:bg-white/[0.04]"
+            className={`${primaryCtaBaseClass} inline-flex w-full justify-center`}
           >
             {navbarCopy.primaryCtaLabel}
           </Link>

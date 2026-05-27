@@ -10,10 +10,11 @@ const {
 } = quantumLexicon;
 
 export const homeHero = {
-  eyebrow: "Quantum-aware planning API",
-  title: "Send your constraints. Get a plan your team can run.",
-  subhead: "Rank every feasible plan. Run the one that wins.",
-  primaryCta: { label: "Open demos", href: "/demo" },
+  eyebrow: "Quantum Planning API",
+  title: "Every possibility ranked. One future your team runs.",
+  subhead:
+    "Send your constraints. Explore every feasible path in superposition — then collapse to the plan worth building next.",
+  primaryCta: { label: "Find Quantum", href: "/demo" },
   secondaryCta: { label: "Request access", href: "/access" },
   visualLabels: [superposition.label, interference.label, collapse.label],
 } as const;
@@ -33,7 +34,7 @@ export const homeHeadlineDemo = {
 
 export const homepageNarrative = {
   workflowEyebrow: `${superposition.label} → ${collapse.label}`,
-  workflowTitle: "Rank every feasible plan. Run the one that wins.",
+  workflowTitle: "From every option open to the path forward.",
   domainEyebrow: observables.label,
   domainTitle: "Scheduling, routing, and staffing under real constraints.",
   apiEyebrow: measurement.label,

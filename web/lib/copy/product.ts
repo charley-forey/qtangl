@@ -4,13 +4,13 @@ const { coherence, interference, measurement, phase } = quantumLexicon;
 
 export const siteMetadata = {
   name: "Qtangl",
-  title: "Qtangl | Quantum-Aware Planning API",
+  title: "Qtangl | Quantum Planning API",
   description:
-    "Rank feasible schedules, routes, and staffing plans — then collapse to one your team can run.",
+    "Explore every feasible schedule, route, and staffing plan — rank them all, then collapse to the future your team runs.",
   url: "https://qtangl.com",
-  tagline: "Send your constraints. Get a plan your team can run.",
+  tagline: "Every possibility ranked. One future your team runs.",
   oneLiner:
-    "Quantum-aware planning API: rank alternates, expose constraint pressure, return an executable plan.",
+    "Quantum Planning API: hold every option in superposition, rank the field, collapse to an executable plan.",
   contactEmail: "founders@qtangl.com",
 } as const;
 
