@@ -24,18 +24,18 @@
     "summary": "Manual balancing forces two agency nurses because the scheduler cannot see the best float chain fast enough."
   },
   "preferredCandidates": [
-    "nurse-priya-n",
-    "nurse-018",
-    "nurse-035"
+    "nurse-052",
+    "nurse-035",
+    "nurse-044"
   ],
   "counts": [
     {
       "bitstring": "001",
-      "weight": 21
+      "weight": 22
     },
     {
       "bitstring": "010",
-      "weight": 32
+      "weight": 31
     },
     {
       "bitstring": "100",

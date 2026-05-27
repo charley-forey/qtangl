@@ -51,7 +51,7 @@ Recommended host for `backend/`: Railway.
 Required Railway environment variables:
 
 - `QTANGL_API_KEY`
-- `QTANGL_RATE_LIMIT_PER_MINUTE` (optional)
+- `QTANGL_RATE_LIMIT_PER_MINUTE` (optional, default `120` for the public demo)
 - `QTANGL_ENABLE_QAOA=false` (recommended for Railway production)
 
 Hospital demo runtime notes:

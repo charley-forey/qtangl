@@ -19,6 +19,26 @@ class HospitalClassicalSolverTest(unittest.TestCase):
         self.assertEqual(result.selected_candidate.target_ward, "Cath Lab 2")
         self.assertLess(result.wall_time_seconds, 2.0)
 
+    def test_icu_scenario_prefers_internal_ccrn_coverage(self) -> None:
+        dataset = load_dataset()
+        scenario = load_scenario("callout-icu-mass")
+
+        result = solve_callout_classically(dataset, scenario)
+
+        self.assertGreaterEqual(len(result.eligible_candidates), 3)
+        self.assertEqual(result.selected_candidate.source, "classical")
+        self.assertNotEqual(result.selected_candidate.nurse_id, "agency-backfill")
+
+    def test_or_scenario_prefers_internal_scrub_coverage(self) -> None:
+        dataset = load_dataset()
+        scenario = load_scenario("callout-or-late-add")
+
+        result = solve_callout_classically(dataset, scenario)
+
+        self.assertGreaterEqual(len(result.eligible_candidates), 3)
+        self.assertEqual(result.selected_candidate.source, "classical")
+        self.assertNotEqual(result.selected_candidate.nurse_id, "agency-backfill")
+
 
 if __name__ == "__main__":
     unittest.main()

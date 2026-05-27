@@ -8,7 +8,7 @@ from threading import Lock
 from fastapi import Header, HTTPException, status
 
 _WINDOW_SECONDS = 60
-_DEFAULT_RATE_LIMIT = 10
+_DEFAULT_RATE_LIMIT = 120
 _requests_by_token: dict[str, deque[float]] = defaultdict(deque)
 _rate_lock = Lock()
 
@@ -70,7 +70,10 @@ def _enforce_rate_limit(token: str) -> None:
         if len(window) >= rate_limit:
             raise HTTPException(
                 status_code=status.HTTP_429_TOO_MANY_REQUESTS,
-                detail="Rate limit reached. The pilot API allows 10 requests per minute per key.",
+                detail=(
+                    f"Rate limit reached. The pilot API allows {rate_limit} requests "
+                    "per minute per key."
+                ),
             )
 
         window.append(now)

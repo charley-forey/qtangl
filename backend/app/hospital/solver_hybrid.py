@@ -110,23 +110,26 @@ def _select_micro_candidates(
     candidates_by_id = {
         candidate.nurse_id: candidate for candidate in classical_result.eligible_candidates
     }
+    if not candidates_by_id:
+        return []
+
     ordered_ids: list[str] = []
 
     for candidate_id in scenario.preferred_candidates:
         if candidate_id in candidates_by_id and candidate_id not in ordered_ids:
             ordered_ids.append(candidate_id)
 
-    if classical_result.selected_candidate.nurse_id in candidates_by_id:
-        selected_id = classical_result.selected_candidate.nurse_id
-        if selected_id not in ordered_ids:
-            ordered_ids.append(selected_id)
+    ranked = sorted(
+        classical_result.eligible_candidates,
+        key=lambda candidate: (candidate.score.objective, candidate.score.fatigue_score),
+    )
+    for candidate in ranked:
+        if candidate.nurse_id not in ordered_ids:
+            ordered_ids.append(candidate.nurse_id)
 
     for nurse_id in repair_window.nurse_ids:
         if nurse_id in candidates_by_id and nurse_id not in ordered_ids:
             ordered_ids.append(nurse_id)
-
-    if not ordered_ids:
-        ordered_ids = [candidate.nurse_id for candidate in classical_result.eligible_candidates[:3]]
 
     return [candidates_by_id[candidate_id] for candidate_id in ordered_ids[:3]]
 

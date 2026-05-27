@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import asdict
-from datetime import datetime
+from datetime import datetime, timedelta
 from statistics import mean
 
 from app.hospital.models import CallOutEvent, CandidateScore, Nurse, ScenarioDefinition
@@ -22,6 +22,24 @@ def hours_between(end_value: str, start_value: str) -> float:
     return (parse_dt(start_value) - parse_dt(end_value)).total_seconds() / 3600
 
 
+def effective_last_shift_end(nurse: Nurse, callout: CallOutEvent) -> str:
+    """Last completed shift before the call-out (roster lastShiftEnd is often horizon-future)."""
+    callout_start = parse_dt(callout.start)
+    prior_ends = [
+        parse_dt(assignment.end)
+        for assignment in nurse.assignments
+        if parse_dt(assignment.end) <= callout_start
+    ]
+    if prior_ends:
+        return max(prior_ends).strftime(TIME_FORMAT)
+
+    recorded_end = parse_dt(nurse.last_shift_end)
+    if recorded_end <= callout_start:
+        return nurse.last_shift_end
+
+    return (callout_start - timedelta(hours=12)).strftime(TIME_FORMAT)
+
+
 def hours_of_overlap(start_a: str, end_a: str, start_b: str, end_b: str) -> float:
     start = max(parse_dt(start_a), parse_dt(start_b))
     end = min(parse_dt(end_a), parse_dt(end_b))
@@ -35,7 +53,7 @@ def nurse_is_eligible(nurse: Nurse, callout: CallOutEvent) -> tuple[bool, list[s
         reasons.append("missing required certification")
     if callout.ward not in set([nurse.home_ward, *nurse.cross_trained_wards]):
         reasons.append("not cross-trained for target ward")
-    if hours_between(nurse.last_shift_end, callout.start) < 10:
+    if hours_between(effective_last_shift_end(nurse, callout), callout.start) < 10:
         reasons.append("rest window below 10 hours")
     for assignment in nurse.assignments:
         if hours_of_overlap(assignment.start, assignment.end, callout.start, callout.end) > 0:
@@ -59,7 +77,7 @@ def score_candidate(
     overtime_cost = overtime_hours * nurse.base_hourly_rate * cost_ladder["voluntaryOvertime"]
     agency_cost = 0.0
 
-    rest_gap_hours = hours_between(nurse.last_shift_end, callout.start)
+    rest_gap_hours = hours_between(effective_last_shift_end(nurse, callout), callout.start)
     fatigue_score = max(0.0, 12.0 - rest_gap_hours)
     fairness_delta = abs(projected_hours - roster_average_hours) / max(roster_average_hours, 1.0)
 

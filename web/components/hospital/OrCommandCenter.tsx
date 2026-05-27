@@ -81,7 +81,7 @@ export default function OrCommandCenter({
   }, []);
 
   useEffect(() => {
-    if (backendConnected) {
+    if (backendConnected && roster.length > 0 && scenarios.length > 0) {
       return;
     }
 

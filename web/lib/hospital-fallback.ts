@@ -56,7 +56,7 @@ export const FALLBACK_SCENARIOS: Scenario[] = [
       summary:
         "Manual balancing forces two agency nurses because the scheduler cannot see the best float chain fast enough.",
     },
-    preferred_candidates: ["nurse-priya-n", "nurse-018", "nurse-035"],
+    preferred_candidates: ["nurse-052", "nurse-035", "nurse-044"],
     counts: [
       { bitstring: "001", weight: 21 },
       { bitstring: "010", weight: 32 },
@@ -86,7 +86,7 @@ export const FALLBACK_SCENARIOS: Scenario[] = [
       agency_cost: 3900,
       summary: "The manual plan pulls the nearest scrub-certified traveler, increasing cost and hand-off risk.",
     },
-    preferred_candidates: ["nurse-042", "nurse-051", "nurse-078"],
+    preferred_candidates: ["nurse-082", "nurse-087", "nurse-083"],
     counts: [
       { bitstring: "001", weight: 24 },
       { bitstring: "010", weight: 34 },
