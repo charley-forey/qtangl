@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
 import Button from "@/components/ui/Button";
@@ -69,6 +69,8 @@ export default function OrCommandCenter({
   const [auditOpen, setAuditOpen] = useState(false);
   const [activeAuditCandidateId, setActiveAuditCandidateId] = useState<string | null>(null);
   const [toast, setToast] = useState<string | null>(null);
+  const [highlightResults, setHighlightResults] = useState(false);
+  const resultsRef = useRef<HTMLDivElement>(null);
 
   const activeScenario = useMemo(
     () =>
@@ -160,7 +162,16 @@ export default function OrCommandCenter({
       setActiveAuditCandidateId(
         response.hybridCandidates[0]?.id ?? response.classicalCandidate.id
       );
+      const planCount = 1 + response.hybridCandidates.length;
+      setToast(
+        `Solve complete — ${planCount} staffing plan${planCount === 1 ? "" : "s"} ready below`
+      );
+      setHighlightResults(true);
+      window.setTimeout(() => setHighlightResults(false), 1400);
       syncUrl({});
+      requestAnimationFrame(() => {
+        resultsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
     } catch (solveError) {
       setError(solveError instanceof Error ? solveError.message : "Solve failed.");
     } finally {
@@ -261,13 +272,17 @@ export default function OrCommandCenter({
               <Button type="button" variant="secondary" size="sm" onClick={handleShare}>
                 Share
               </Button>
+              {isSolving ? <HospitalChip tone="neutral">Solving…</HospitalChip> : null}
+              {!isSolving && solveResponse ? (
+                <HospitalChip tone="success">Results ready</HospitalChip>
+              ) : null}
               <Button
                 type="button"
                 onClick={handleSolve}
                 disabled={isSolving || !backendConnected}
                 aria-busy={isSolving}
               >
-                {isSolving ? "Running…" : "Run solve"}
+                {isSolving ? "Running…" : solveResponse ? "Re-run solve" : "Run solve"}
               </Button>
             </div>
           </div>
@@ -292,16 +307,24 @@ export default function OrCommandCenter({
         <SolveLog items={solveResponse?.timeline ?? []} isSolving={isSolving} />
       </div>
 
-      {solveResponse ? <SolveInsightBanner response={solveResponse} /> : null}
+      <div
+        ref={resultsRef}
+        className={[
+          "scroll-mt-28 space-y-8",
+          highlightResults ? "hospital-results-highlight rounded-[var(--radius-xl)]" : "",
+        ].join(" ")}
+      >
+        {solveResponse ? <SolveInsightBanner response={solveResponse} /> : null}
 
-      <CandidatePlans
-        classicalCandidate={solveResponse?.classicalCandidate ?? null}
-        hybridCandidates={solveResponse?.hybridCandidates ?? []}
-        scoreboard={solveResponse?.scoreboard ?? null}
-        onOpenAudit={handleOpenAudit}
-      />
+        <CandidatePlans
+          classicalCandidate={solveResponse?.classicalCandidate ?? null}
+          hybridCandidates={solveResponse?.hybridCandidates ?? []}
+          scoreboard={solveResponse?.scoreboard ?? null}
+          onOpenAudit={handleOpenAudit}
+        />
 
-      <ScoreboardCard scoreboard={solveResponse?.scoreboard ?? null} />
+        <ScoreboardCard scoreboard={solveResponse?.scoreboard ?? null} />
+      </div>
 
       <div className="grid gap-6 lg:grid-cols-2">
         <RoiCalculator />

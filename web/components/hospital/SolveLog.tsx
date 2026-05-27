@@ -13,22 +13,49 @@ const statusLabel: Record<TimelineEvent["status"], string> = {
   skipped: "Skipped",
 };
 
+const SOLVE_STEPS = [
+  "CP-SAT global pass",
+  "Repair window detection",
+  "Hybrid micro-solve",
+];
+
 export default function SolveLog({ items, isSolving }: SolveLogProps) {
   return (
     <HospitalSection className="flex h-full flex-col">
       <HospitalSectionHeader
         label="Engine log"
         title="Solve pipeline"
-        description="Classical global pass, repair window, then hybrid micro-solve."
+        description={
+          isSolving
+            ? "Running on the backend…"
+            : items.length
+              ? "Completed — see staffing plans below."
+              : "Classical global pass, repair window, then hybrid micro-solve."
+        }
       />
       <div className="mt-5 flex-1 space-y-2">
-        {items.length ? (
+        {isSolving ? (
+          SOLVE_STEPS.map((step, index) => (
+            <div
+              key={step}
+              className="hospital-solve-pulse flex gap-3 rounded-[var(--radius-lg)] border border-[var(--border-strong)] bg-white/[0.04] px-4 py-3"
+            >
+              <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-[var(--border)] text-xs font-medium text-[var(--color-gray-400)]">
+                {index + 1}
+              </span>
+              <div className="min-w-0 flex-1">
+                <p className="text-sm font-medium text-white">{step}</p>
+                <p className="mt-1 text-xs text-[var(--color-gray-500)]">In progress…</p>
+              </div>
+            </div>
+          ))
+        ) : items.length ? (
           items.map((item, index) => (
             <div
               key={item.key}
               className="flex gap-3 rounded-[var(--radius-lg)] border border-[var(--border)] bg-black/25 px-4 py-3"
             >
-              <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-white/[0.08] text-xs font-medium text-white">
+              <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-emerald-500/20 text-xs font-medium text-emerald-100">
                 {index + 1}
               </span>
               <div className="min-w-0 flex-1">
@@ -46,12 +73,8 @@ export default function SolveLog({ items, isSolving }: SolveLogProps) {
           ))
         ) : (
           <HospitalEmptyState
-            title={isSolving ? "Running solve…" : "Awaiting call-out"}
-            description={
-              isSolving
-                ? "CP-SAT and hybrid passes are executing on the backend."
-                : 'Select a scenario and click "Run solve" to populate this log.'
-            }
+            title="Awaiting call-out"
+            description='Select a scenario and click "Run solve" to populate this log.'
           />
         )}
       </div>
