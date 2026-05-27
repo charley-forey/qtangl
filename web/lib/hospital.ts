@@ -39,6 +39,10 @@ export type ScoreboardColumn = {
   distinct_plans: number;
   audit_pack_available: boolean;
   summary: string;
+  fairness_delta?: number | null;
+  agency_cost?: number | null;
+  hybrid_beats_classical_objective?: boolean;
+  hybrid_beats_classical_fairness?: boolean;
 };
 
 export type Scoreboard = {

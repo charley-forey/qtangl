@@ -281,6 +281,7 @@ export default function OrCommandCenter({
       <CandidatePlans
         classicalCandidate={solveResponse?.classicalCandidate ?? null}
         hybridCandidates={solveResponse?.hybridCandidates ?? []}
+        scoreboard={solveResponse?.scoreboard ?? null}
         onOpenAudit={handleOpenAudit}
       />
 

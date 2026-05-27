@@ -153,6 +153,7 @@ def _build_scenario(payload: dict[str, Any]) -> ScenarioDefinition:
             ScenarioCount(bitstring=item["bitstring"], weight=int(item["weight"]))
             for item in payload.get("counts", [])
         ],
+        classical_search_scope=payload.get("classicalSearchScope", "global"),
     )
 
 

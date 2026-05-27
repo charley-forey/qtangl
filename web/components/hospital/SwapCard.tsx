@@ -6,16 +6,31 @@ import type { HospitalCandidate } from "@/lib/hospital";
 type SwapCardProps = {
   candidate: HospitalCandidate;
   title: string;
+  recommended?: boolean;
   onOpenAudit?: (candidateId: string) => void;
 };
 
-export default function SwapCard({ candidate, title, onOpenAudit }: SwapCardProps) {
+export default function SwapCard({
+  candidate,
+  title,
+  recommended = false,
+  onOpenAudit,
+}: SwapCardProps) {
   return (
-    <Card tone="strong" className="rounded-[var(--radius-xl)]">
+    <Card
+      tone="strong"
+      className={[
+        "rounded-[var(--radius-xl)]",
+        recommended ? "border-emerald-300/40 ring-1 ring-emerald-300/20" : "",
+      ].join(" ")}
+    >
       <div className="flex items-start justify-between gap-3">
         <div>
           <p className="text-label">{title}</p>
           <h4 className="mt-2 text-lg font-semibold text-white">{candidate.nurse_name}</h4>
+          {recommended ? (
+            <p className="mt-1 text-xs font-medium text-emerald-200">Hybrid recommended</p>
+          ) : null}
         </div>
         <MethodBadge method={candidate.source === "classical" ? "classical" : "hybrid"} />
       </div>

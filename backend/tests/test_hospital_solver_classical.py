@@ -29,6 +29,18 @@ class HospitalClassicalSolverTest(unittest.TestCase):
         self.assertEqual(result.selected_candidate.source, "classical")
         self.assertNotEqual(result.selected_candidate.nurse_id, "agency-backfill")
 
+    def test_cath_local_scope_limits_search_to_home_ward(self) -> None:
+        dataset = load_dataset()
+        scenario = load_scenario("callout-cath-acls")
+
+        self.assertEqual(scenario.classical_search_scope, "local")
+        result = solve_callout_classically(dataset, scenario)
+
+        self.assertEqual(result.selected_candidate.home_ward, "Cath Lab 2")
+        self.assertTrue(
+            all(candidate.home_ward == "Cath Lab 2" for candidate in result.eligible_candidates)
+        )
+
     def test_or_scenario_prefers_internal_scrub_coverage(self) -> None:
         dataset = load_dataset()
         scenario = load_scenario("callout-or-late-add")

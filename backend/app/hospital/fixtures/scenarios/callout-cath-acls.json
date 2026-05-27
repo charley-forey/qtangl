@@ -28,18 +28,19 @@
     "nurse-devin-r",
     "nurse-olivia-t"
   ],
+  "classicalSearchScope": "local",
   "counts": [
     {
-      "bitstring": "001",
-      "weight": 27
+      "bitstring": "100",
+      "weight": 22
     },
     {
       "bitstring": "010",
-      "weight": 33
+      "weight": 31
     },
     {
-      "bitstring": "100",
-      "weight": 40
+      "bitstring": "001",
+      "weight": 47
     }
   ]
 }

@@ -87,13 +87,56 @@ def run_hospital_solve(
         for candidate in hybrid_result.candidates
     ]
 
-    hybrid_objective = (
-        hybrid_result.candidates[0].score.objective
+    hybrid_best = (
+        min(hybrid_result.candidates, key=lambda candidate: candidate.score.objective)
         if hybrid_result.candidates
-        else classical_result.objective_value
+        else None
     )
-    if use_fixture:
-        hybrid_objective = classical_result.objective_value
+    hybrid_fairness_best = (
+        min(hybrid_result.candidates, key=lambda candidate: candidate.score.fairness_delta)
+        if hybrid_result.candidates
+        else None
+    )
+    hybrid_objective = (
+        hybrid_best.score.objective if hybrid_best else classical_result.objective_value
+    )
+    beats_objective = bool(
+        hybrid_best
+        and hybrid_best.score.objective < classical_result.objective_value - 1e-4
+    )
+    beats_fairness = bool(
+        hybrid_fairness_best
+        and hybrid_fairness_best.score.fairness_delta
+        < classical_result.selected_candidate.score.fairness_delta - 0.01
+    )
+
+    classical_summary = classical_result.selected_candidate.summary
+    if scenario.classical_search_scope == "local":
+        classical_summary = (
+            f"{classical_summary} "
+            "This pass only searched nurses already on the {ward} board.".format(
+                ward=scenario.callout.ward
+            )
+        )
+
+    hybrid_summary = (
+        "Hybrid sampling surfaced multiple feasible alternates from the micro-window."
+        if hybrid_result.candidates
+        else "Hybrid path fell back to the classical result."
+    )
+    if beats_objective and hybrid_best:
+        hybrid_summary = (
+            f"Hybrid repair beat the ward-board CP-SAT pick with a lower composite score "
+            f"({hybrid_best.nurse_name}, {hybrid_objective:.2f} vs "
+            f"{classical_result.objective_value:.2f})."
+        )
+    elif beats_fairness and hybrid_fairness_best:
+        hybrid_summary = (
+            f"Hybrid sampling recommends {hybrid_fairness_best.nurse_name} for a fairer float "
+            f"chain (fairness delta {hybrid_fairness_best.score.fairness_delta:.3f} vs "
+            f"{classical_result.selected_candidate.score.fairness_delta:.3f}) while staying feasible."
+        )
+
     scoreboard = Scoreboard(
         manual=ScoreboardColumn(
             label="Manual",
@@ -104,12 +147,18 @@ def run_hospital_solve(
             summary=scenario.manual_baseline.summary,
         ),
         classical=ScoreboardColumn(
-            label="Classical (CP-SAT)",
+            label=(
+                "Classical (ward board)"
+                if scenario.classical_search_scope == "local"
+                else "Classical (CP-SAT)"
+            ),
             solve_wall_time_seconds=classical_result.wall_time_seconds,
             objective=classical_result.objective_value,
             distinct_plans=1,
             audit_pack_available=True,
-            summary=classical_result.selected_candidate.summary,
+            summary=classical_summary,
+            fairness_delta=classical_result.selected_candidate.score.fairness_delta,
+            agency_cost=classical_result.selected_candidate.score.agency_cost,
         ),
         hybrid=ScoreboardColumn(
             label="Hybrid (CP-SAT + QAOA repair)",
@@ -117,11 +166,11 @@ def run_hospital_solve(
             objective=hybrid_objective,
             distinct_plans=max(1, len(hybrid_result.candidates)),
             audit_pack_available=True,
-            summary=(
-                "Hybrid sampling surfaced multiple feasible alternates from the micro-window."
-                if hybrid_result.candidates
-                else "Hybrid path fell back to the classical result."
-            ),
+            summary=hybrid_summary,
+            fairness_delta=hybrid_fairness_best.score.fairness_delta if hybrid_fairness_best else None,
+            agency_cost=hybrid_best.score.agency_cost if hybrid_best else None,
+            hybrid_beats_classical_objective=beats_objective,
+            hybrid_beats_classical_fairness=beats_fairness,
         ),
     )
 

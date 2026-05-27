@@ -1,17 +1,19 @@
 import Card from "@/components/ui/Card";
-import type { HospitalCandidate } from "@/lib/hospital";
+import type { HospitalCandidate, Scoreboard } from "@/lib/hospital";
 
 import SwapCard from "./SwapCard";
 
 type CandidatePlansProps = {
   classicalCandidate: HospitalCandidate | null;
   hybridCandidates: HospitalCandidate[];
+  scoreboard: Scoreboard | null;
   onOpenAudit: (candidateId: string) => void;
 };
 
 export default function CandidatePlans({
   classicalCandidate,
   hybridCandidates,
+  scoreboard,
   onOpenAudit,
 }: CandidatePlansProps) {
   return (
@@ -22,8 +24,9 @@ export default function CandidatePlans({
           Compare the deterministic classical pick with the hybrid alternates
         </h3>
         <p className="mt-3 text-sm leading-7 text-[var(--color-gray-300)]">
-          The live CP-SAT run still picks one best plan. The hybrid path is valuable because it
-          surfaces multiple feasible alternates with different fairness and fatigue trade-offs.
+          The classical pass picks one plan (often from the ward board only). Hybrid sampling
+          surfaces multiple feasible alternates—sometimes with better fairness or a lower composite
+          score when cross-trained floats enter the repair window.
         </p>
       </Card>
       <div className="grid gap-4 xl:grid-cols-4">
@@ -39,6 +42,13 @@ export default function CandidatePlans({
             key={candidate.id}
             candidate={candidate}
             title={`Hybrid alternate ${index + 1}`}
+            recommended={
+              index === 0 &&
+              Boolean(
+                scoreboard?.hybrid.hybrid_beats_classical_objective ||
+                  scoreboard?.hybrid.hybrid_beats_classical_fairness
+              )
+            }
             onOpenAudit={onOpenAudit}
           />
         ))}

@@ -46,6 +46,8 @@ def solve_callout_classically(
     for nurse in roster:
         if nurse.id == callout.nurse_id:
             continue
+        if scenario.classical_search_scope == "local" and nurse.home_ward != callout.ward:
+            continue
         eligible, reasons = nurse_is_eligible(nurse, callout)
         if not eligible:
             ineligible_reasons[nurse.id] = reasons
@@ -73,7 +75,12 @@ def solve_callout_classically(
                 score=score,
                 source="classical",
                 explanation=candidate_explanation(nurse, callout, score),
-                summary=f"{nurse.name} covers {callout.ward} without breaking the 10-hour rest rule.",
+                summary=(
+                    f"{nurse.name} covers {callout.ward} from the {nurse.home_ward} board "
+                    "without breaking the 10-hour rest rule."
+                    if scenario.classical_search_scope == "local"
+                    else f"{nurse.name} covers {callout.ward} without breaking the 10-hour rest rule."
+                ),
                 distinctness=0.0,
                 seniority_preserved=_seniority_preserved(nurse, scenario),
                 requires_backfill=nurse.home_ward != callout.ward,

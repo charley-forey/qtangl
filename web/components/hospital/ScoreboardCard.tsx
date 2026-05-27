@@ -35,9 +35,22 @@ export default function ScoreboardCard({ scoreboard }: ScoreboardCardProps) {
       <p className="text-label">Honest scoreboard</p>
       <h3 className="mt-3 text-2xl font-semibold text-white">We do not pretend the hybrid pass is faster</h3>
       <p className="mt-4 text-sm leading-7 text-[var(--color-gray-300)]">
-        We show the slower hybrid pass because it surfaces feasible alternates your classical solver
-        would have discarded, along with the audit trail explaining why each swap stayed within the rules.
+        Classical CP-SAT often wins on a single composite score when it searches the full roster.
+        The hybrid pass is slower, but it explores the repair-window micro-problem and can surface
+        cross-trained floats with better fairness—or a lower score when the classical pass was
+        limited to the ward board.
       </p>
+      {scoreboard.hybrid.hybrid_beats_classical_objective ? (
+        <p className="mt-3 text-sm font-medium text-emerald-200">
+          Hybrid beat classical on composite objective in this scenario.
+        </p>
+      ) : null}
+      {scoreboard.hybrid.hybrid_beats_classical_fairness &&
+      !scoreboard.hybrid.hybrid_beats_classical_objective ? (
+        <p className="mt-3 text-sm font-medium text-emerald-200">
+          Hybrid recommends a fairer feasible swap than the ward-board classical pick.
+        </p>
+      ) : null}
       <div className="mt-6 grid gap-4 lg:grid-cols-3">
         {columns.map((column) => (
           <div
@@ -54,6 +67,12 @@ export default function ScoreboardCard({ scoreboard }: ScoreboardCardProps) {
                 <dt className="text-[var(--color-gray-400)]">Objective</dt>
                 <dd className="text-white">{column.objective.toFixed(4)}</dd>
               </div>
+              {column.fairness_delta != null ? (
+                <div className="flex items-center justify-between gap-3">
+                  <dt className="text-[var(--color-gray-400)]">Fairness delta</dt>
+                  <dd className="text-white">{column.fairness_delta.toFixed(3)}</dd>
+                </div>
+              ) : null}
               <div className="flex items-center justify-between gap-3">
                 <dt className="text-[var(--color-gray-400)]">Distinct feasible plans</dt>
                 <dd className="text-white">{column.distinct_plans}</dd>

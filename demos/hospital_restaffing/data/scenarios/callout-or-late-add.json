@@ -28,6 +28,7 @@
     "nurse-087",
     "nurse-083"
   ],
+  "classicalSearchScope": "local",
   "counts": [
     {
       "bitstring": "001",

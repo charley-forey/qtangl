@@ -95,6 +95,9 @@ class ScenarioCount:
     weight: int
 
 
+ClassicalSearchScope = Literal["global", "local"]
+
+
 @dataclass(slots=True)
 class ScenarioDefinition:
     id: str
@@ -104,6 +107,7 @@ class ScenarioDefinition:
     manual_baseline: ManualBaseline
     preferred_candidates: list[str]
     counts: list[ScenarioCount]
+    classical_search_scope: ClassicalSearchScope = "global"
 
 
 @dataclass(slots=True)
@@ -171,6 +175,10 @@ class ScoreboardColumn:
     distinct_plans: int
     audit_pack_available: bool
     summary: str
+    fairness_delta: float | None = None
+    agency_cost: float | None = None
+    hybrid_beats_classical_objective: bool = False
+    hybrid_beats_classical_fairness: bool = False
 
 
 @dataclass(slots=True)

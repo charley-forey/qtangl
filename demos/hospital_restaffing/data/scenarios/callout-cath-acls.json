@@ -11,10 +11,7 @@
     "start": "2026-05-26T06:30:00",
     "end": "2026-05-26T18:30:00",
     "urgencyMinutes": 49,
-    "requiredCertifications": [
-      "ACLS",
-      "PALS"
-    ],
+    "requiredCertifications": ["ACLS", "PALS"],
     "channel": "phone",
     "reason": "Sick call"
   },
@@ -23,23 +20,11 @@
     "agencyCost": 4800,
     "summary": "Charge nurse defaults to the safest agency backfill to preserve acuity coverage."
   },
-  "preferredCandidates": [
-    "nurse-priya-n",
-    "nurse-devin-r",
-    "nurse-olivia-t"
-  ],
+  "preferredCandidates": ["nurse-priya-n", "nurse-devin-r", "nurse-olivia-t"],
+  "classicalSearchScope": "local",
   "counts": [
-    {
-      "bitstring": "001",
-      "weight": 27
-    },
-    {
-      "bitstring": "010",
-      "weight": 33
-    },
-    {
-      "bitstring": "100",
-      "weight": 40
-    }
+    { "bitstring": "100", "weight": 22 },
+    { "bitstring": "010", "weight": 31 },
+    { "bitstring": "001", "weight": 47 }
   ]
 }
