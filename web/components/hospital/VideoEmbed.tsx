@@ -12,6 +12,7 @@ type VideoEmbedProps = {
 
 export default function VideoEmbed({ src }: VideoEmbedProps) {
   const [expanded, setExpanded] = useState(false);
+  const [videoError, setVideoError] = useState(false);
   const milestonesRef = useRef(new Set<number>());
 
   return (
@@ -40,10 +41,20 @@ export default function VideoEmbed({ src }: VideoEmbedProps) {
 
       {expanded ? (
         <div className="mt-6 overflow-hidden rounded-[var(--radius-xl)] border border-[var(--border)] bg-black">
+          {videoError ? (
+            <div className="flex aspect-video flex-col items-center justify-center gap-3 px-6 text-center">
+              <p className="text-sm font-medium text-white">Walkthrough video coming soon</p>
+              <p className="max-w-md text-sm leading-7 text-[var(--color-gray-400)]">
+                Use the steps below to run the live demo: pick a scenario, fire the call-out, compare
+                plans, and open the audit drawer.
+              </p>
+            </div>
+          ) : (
           <video
             controls
             preload="metadata"
             className="aspect-video w-full"
+            onError={() => setVideoError(true)}
             onTimeUpdate={(event) => {
               const target = event.currentTarget;
               if (!target.duration) {
@@ -67,6 +78,7 @@ export default function VideoEmbed({ src }: VideoEmbedProps) {
             <source src={src} type="video/mp4" />
             Your browser does not support embedded video playback.
           </video>
+          )}
         </div>
       ) : null}
     </Card>

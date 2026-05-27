@@ -4,7 +4,11 @@ import { useMemo, useState } from "react";
 
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
-import { estimateHospitalRoi } from "@/lib/hospital-roi";
+import {
+  estimateHospitalRoi,
+  formatCurrency,
+  formatSavingsRange,
+} from "@/lib/hospital-roi";
 import { trackEvent } from "@/lib/analytics";
 
 export default function RoiCalculator() {
@@ -52,6 +56,9 @@ export default function RoiCalculator() {
         </label>
         <label className="grid gap-2 text-sm text-[var(--color-gray-300)]">
           Quarterly agency spend
+          <span className="text-xs text-[var(--color-gray-500)]">
+            Current: {formatCurrency(quarterlyAgencySpend, true)}
+          </span>
           <input
             type="number"
             className="rounded-xl border border-[var(--border)] bg-black px-4 py-3 text-white"
@@ -88,20 +95,30 @@ export default function RoiCalculator() {
         </label>
       </div>
 
-      <div className="mt-6 grid gap-4 md:grid-cols-3">
-        <div className="rounded-[var(--radius-lg)] border border-[var(--border)] bg-black/35 p-4">
+      <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="min-w-0 rounded-[var(--radius-lg)] border border-[var(--border)] bg-black/35 p-4">
           <p className="text-xs uppercase tracking-[0.18em] text-[var(--color-gray-500)]">Annual savings</p>
-          <p className="mt-2 text-2xl font-semibold text-white">
-            ${estimate.annualSavingsLow.toLocaleString()}-${estimate.annualSavingsHigh.toLocaleString()}
+          <p
+            className="mt-2 text-lg font-semibold leading-snug text-white tabular-nums sm:text-xl"
+            title={formatSavingsRange(estimate.annualSavingsLow, estimate.annualSavingsHigh)}
+          >
+            {formatSavingsRange(estimate.annualSavingsLow, estimate.annualSavingsHigh, true)}
+          </p>
+          <p className="mt-1 truncate text-xs text-[var(--color-gray-500)]">
+            {formatSavingsRange(estimate.annualSavingsLow, estimate.annualSavingsHigh)}
           </p>
         </div>
-        <div className="rounded-[var(--radius-lg)] border border-[var(--border)] bg-black/35 p-4">
+        <div className="min-w-0 rounded-[var(--radius-lg)] border border-[var(--border)] bg-black/35 p-4">
           <p className="text-xs uppercase tracking-[0.18em] text-[var(--color-gray-500)]">Hours recovered / month</p>
-          <p className="mt-2 text-2xl font-semibold text-white">{estimate.monthlyHoursRecovered}</p>
+          <p className="mt-2 text-lg font-semibold tabular-nums text-white sm:text-xl">
+            {estimate.monthlyHoursRecovered.toLocaleString()}
+          </p>
         </div>
-        <div className="rounded-[var(--radius-lg)] border border-[var(--border)] bg-black/35 p-4">
+        <div className="min-w-0 rounded-[var(--radius-lg)] border border-[var(--border)] bg-black/35 p-4 sm:col-span-2 lg:col-span-1">
           <p className="text-xs uppercase tracking-[0.18em] text-[var(--color-gray-500)]">Estimated payback</p>
-          <p className="mt-2 text-2xl font-semibold text-white">{estimate.estimatedPaybackWeeks} weeks</p>
+          <p className="mt-2 text-lg font-semibold text-white sm:text-xl">
+            {estimate.estimatedPaybackWeeks} weeks
+          </p>
         </div>
       </div>
 

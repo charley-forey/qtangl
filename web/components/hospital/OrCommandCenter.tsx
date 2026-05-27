@@ -21,12 +21,14 @@ import { FALLBACK_SCENARIOS } from "@/lib/hospital-fallback";
 
 import AuditDrawer from "./AuditDrawer";
 import CallOutEvent from "./CallOutEvent";
+import DemoGuideStrip from "./DemoGuideStrip";
 import CandidatePlans from "./CandidatePlans";
 import RoiCalculator from "./RoiCalculator";
 import RosterHeatmap from "./RosterHeatmap";
 import RosterUploader from "./RosterUploader";
 import ScenarioPicker from "./ScenarioPicker";
 import ScoreboardCard from "./ScoreboardCard";
+import SolveInsightBanner from "./SolveInsightBanner";
 import SolveLog from "./SolveLog";
 import VideoEmbed from "./VideoEmbed";
 
@@ -189,6 +191,8 @@ export default function OrCommandCenter({
     <div className="space-y-6">
       <VideoEmbed src="/demos/hospital/walkthrough.mp4" />
 
+      <DemoGuideStrip />
+
       {!backendConnected ? (
         <Card tone="strong" className="rounded-[var(--radius-xl)] border-amber-300/30">
           <p className="text-label text-amber-100">Backend not connected</p>
@@ -271,6 +275,8 @@ export default function OrCommandCenter({
         />
         <SolveLog items={solveResponse?.timeline ?? []} isSolving={isSolving} />
       </div>
+
+      {solveResponse ? <SolveInsightBanner response={solveResponse} /> : null}
 
       <CandidatePlans
         classicalCandidate={solveResponse?.classicalCandidate ?? null}

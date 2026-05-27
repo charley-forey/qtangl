@@ -48,8 +48,26 @@ export default function RosterHeatmap({
         Every row is a nurse, every column is a day in the planning horizon. The red row is the
         call-out; highlighted rows are the repair-window candidates.
       </p>
-      <div className="mt-6 overflow-auto">
-        <div className="min-w-[44rem] space-y-2">
+      {roster.length > 0 ? (
+        <p className="mt-2 text-xs text-[var(--color-gray-500)]">
+          {roster.length} nurses — scroll inside the panel to explore the full roster.
+        </p>
+      ) : null}
+      <div className="mt-4 max-h-[min(26rem,52vh)] overflow-auto rounded-xl border border-[var(--border)] bg-black/25 p-3 [scrollbar-gutter:stable]">
+        <div className="min-w-[44rem] space-y-1.5">
+          <div className="sticky top-0 z-10 grid grid-cols-[13rem_repeat(14,minmax(0,1fr))] gap-2 bg-[var(--color-surface-strong)] pb-2">
+            <div className="px-3 py-1 text-xs font-medium uppercase tracking-wide text-[var(--color-gray-500)]">
+              Nurse
+            </div>
+            {Array.from({ length: MAX_COLUMNS }, (_, index) => (
+              <div
+                key={`day-${index}`}
+                className="py-1 text-center text-xs font-medium text-[var(--color-gray-500)]"
+              >
+                D{index + 1}
+              </div>
+            ))}
+          </div>
           {roster.map((nurse) => {
             const days = assignmentCountByDay(nurse);
             const isCallout = nurse.id === calloutNurseId;
@@ -72,7 +90,7 @@ export default function RosterHeatmap({
                 {days.map((value, index) => (
                   <div
                     key={`${nurse.id}-${index}`}
-                    className={`h-10 rounded-lg ${cellClass(value, isCallout)}`}
+                    className={`h-8 rounded-md ${cellClass(value, isCallout)}`}
                     title={`Day ${index + 1}: ${value} assigned shift${value === 1 ? "" : "s"}`}
                   />
                 ))}
