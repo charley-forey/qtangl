@@ -7,7 +7,7 @@ export const accessPanel = {
   title: "Which planning workflow should improve next?",
   description:
     "Tell us the schedule, route, or staffing bottleneck. We prioritize pilots with a clear constraint and a path to production.",
-  formHint: "Ops leaders, product teams, and partners evaluating the API.",
+  docsLink: { label: "Read docs", href: "/docs" },
 } as const;
 
 export const accessPageCopy = {

@@ -8,7 +8,7 @@ import Card from "@/components/ui/Card";
 type FeatureCardProps = {
   eyebrow?: string;
   title: string;
-  description: string;
+  description?: string;
   href?: string;
   children?: ReactNode;
   ctaLabel?: string;
@@ -64,9 +64,9 @@ export default function FeatureCard({
             title
           )}
         </h3>
-        <p className="mt-3 text-sm leading-7 text-[var(--color-gray-300)]">
-          {description}
-        </p>
+        {description ? (
+          <p className="mt-3 text-sm leading-7 text-[var(--color-gray-300)]">{description}</p>
+        ) : null}
         {children ? (
           <div className="mt-5 space-y-3 text-sm leading-7 text-[var(--color-gray-300)]">
             {children}

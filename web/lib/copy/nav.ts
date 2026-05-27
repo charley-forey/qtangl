@@ -1,7 +1,7 @@
 export const nav = [
   { name: "Home", href: "/" },
   { name: "Try", href: "/try" },
-  { name: "Demo", href: "/demo/hospital" },
+  { name: "Demo", href: "/demo" },
   { name: "Learn", href: "/learn" },
   { name: "Technology", href: "/technology" },
   { name: "Docs", href: "/docs" },

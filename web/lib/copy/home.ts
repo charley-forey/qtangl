@@ -4,7 +4,6 @@ const {
   amplitude,
   collapse,
   interference,
-  measurement,
   observables,
   superposition,
 } = quantumLexicon;
@@ -12,17 +11,9 @@ const {
 export const homeHero = {
   eyebrow: "Quantum-aware planning API",
   title: "Send your constraints. Get a plan your team can run.",
-  subhead:
-    "Many feasible plans exist at once. Qtangl ranks them, then collapses to one your team can execute.",
-  primaryCta: { label: "Open hospital demo", href: "/demo/hospital" },
-  secondaryCta: { label: "View docs", href: "/docs" },
-  signal:
-    "Ranked plan · plain summary · overtime, miles, coverage — classical baseline on every job.",
-  valueProps: [
-    `${superposition.label} — see alternates`,
-    `${interference.label} — see constraint pressure`,
-    `${collapse.label} — run the winner`,
-  ],
+  subhead: "Rank every feasible plan. Run the one that wins.",
+  primaryCta: { label: "Open demos", href: "/demo" },
+  secondaryCta: { label: "Request access", href: "/access" },
   visualLabels: [superposition.label, interference.label, collapse.label],
 } as const;
 
@@ -31,8 +22,12 @@ export const homeHeadlineDemo = {
   title: "Hospital re-staffing in 4:11",
   description:
     "Nurse call-out → live CP-SAT solve → hybrid audit trace → scoreboard your ops team can defend.",
+  stats: [
+    { label: "Hard violations", value: "0" },
+    { label: "Overtime saved", value: "6 hrs" },
+    { label: "Runtime", value: "4:11" },
+  ],
   primaryCta: { label: "Open hospital demo", href: "/demo/hospital" },
-  secondaryCta: { label: "Read methodology", href: "/demo/hospital/methodology" },
 } as const;
 
 export const homepageNarrative = {
@@ -40,10 +35,6 @@ export const homepageNarrative = {
   workflowTitle: "Rank every feasible plan. Run the one that wins.",
   domainEyebrow: observables.label,
   domainTitle: "Scheduling, routing, and staffing under real constraints.",
-  interfaceEyebrow: measurement.label,
-  interfaceTitle: "Demo first. API when you're ready.",
-  interfaceDescription:
-    "Send JSON. Get the same ranked plan, summary, and metrics your ops team already tracks.",
 } as const;
 
 export const homeProductPreview = {
