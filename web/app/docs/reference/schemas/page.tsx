@@ -9,6 +9,8 @@ import { MAIN_CONTENT_ID } from "@/components/layout/PageShell";
 import {
   optimizeRequestJsonSchema,
   optimizeResponseJsonSchema,
+  pqcScanRequestJsonSchema,
+  pqcScanResponseJsonSchema,
 } from "@/lib/docs/schemas";
 import { docsSearchIndex } from "@/lib/docs/search-index-export";
 import { buildPageMetadata } from "@/lib/seo";
@@ -43,6 +45,14 @@ export default function SchemasPage() {
             schema={optimizeResponseJsonSchema}
             title="optimize-response.schema.json"
           />
+        </DocsSection>
+        <DocsSection>
+          <DocsHeading id="pqc-scan-request">PQC scan request</DocsHeading>
+          <DocsSchemaViewer schema={pqcScanRequestJsonSchema} title="pqc-scan-request.schema.json" />
+        </DocsSection>
+        <DocsSection>
+          <DocsHeading id="pqc-scan-response">PQC scan response</DocsHeading>
+          <DocsSchemaViewer schema={pqcScanResponseJsonSchema} title="pqc-scan-response.schema.json" />
         </DocsSection>
       </DocsShell>
     </div>

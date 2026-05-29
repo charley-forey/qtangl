@@ -1,0 +1,6 @@
+{
+  "dataShelfLifeYears": 10,
+  "migrationTimeYears": 5,
+  "yearsToQDay": 12,
+  "notes": "Mosca inequality X + Y > Z. Adjust sliders in the demo to stress-test HNDL exposure."
+}

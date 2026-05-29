@@ -28,6 +28,11 @@ export const roadmapBands: RoadmapBand[] = [
         status: "pilot",
       },
       {
+        title: "Q-Day readiness scanner",
+        description: "Pilot /pqc/* cryptographic inventory, Mosca risk, CBOM exports, PQ handshake proof.",
+        status: "pilot",
+      },
+      {
         title: "Developer docs platform",
         description: "Search, schemas, per-endpoint reference, and operations guides.",
         status: "ga",

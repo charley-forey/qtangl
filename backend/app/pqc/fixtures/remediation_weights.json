@@ -1,0 +1,21 @@
+{
+  "effortDays": {
+    "tls": 45,
+    "jwks": 30,
+    "ssh": 21,
+    "email": 60,
+    "code_signing": 90,
+    "document_signing": 75,
+    "discovery": 30,
+    "default": 30
+  },
+  "kindWeights": {
+    "tls": 1.0,
+    "jwks": 1.1,
+    "ssh": 0.9,
+    "email": 0.8,
+    "code_signing": 1.4,
+    "discovery": 0.7,
+    "error": 0.5
+  }
+}

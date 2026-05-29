@@ -1,0 +1,28 @@
+{
+  "id": "bank-tls-inventory",
+  "title": "Regional bank TLS inventory",
+  "summary": "Board mandate to inventory RSA/ECDSA exposure across customer-facing TLS before 2030 NIST deadlines.",
+  "target": {
+    "domain": "api.regionalbank.example",
+    "ports": [443, 8443],
+    "persona": "CISO, regional bank",
+    "organization": "Regional Bank Holdings",
+    "mandate": "NSM-10 / NIST IR 8547 PQC migration program"
+  },
+  "manualBaseline": {
+    "inventoryWeeks": 8,
+    "assetsFound": 42,
+    "quantumVulnerable": 38,
+    "readinessScore": 18,
+    "summary": "Spreadsheet inventory from Q1 is already stale; shadow APIs were missed."
+  },
+  "fixtureAssetIds": [
+    "tls-api-bank",
+    "tls-auth-bank",
+    "jwks-oidc",
+    "ssh-bastion",
+    "email-mx",
+    "code-sign-legacy",
+    "discovery-ct-api"
+  ]
+}

@@ -1,0 +1,164 @@
+[
+  {
+    "id": "tls-api-bank",
+    "kind": "tls",
+    "host": "api.regionalbank.example",
+    "port": 443,
+    "label": "API gateway TLS",
+    "algorithm": "RSA",
+    "keySize": 2048,
+    "validityDays": 180,
+    "sanDomains": ["api.regionalbank.example", "www.regionalbank.example"],
+    "negotiatedCipher": "TLS_AES_256_GCM_SHA384",
+    "negotiatedGroup": "x25519",
+    "tlsVersion": "TLSv1.3",
+    "vulnerability": {
+      "algorithm": "RSA-2048",
+      "keySize": 2048,
+      "shorLogicalQubits": 4098,
+      "classicalSecurityBits": 2048,
+      "status": "at-risk",
+      "hndlExposed": true,
+      "pqcReplacement": "ML-KEM-768 + ML-DSA-65 (hybrid TLS 1.3)",
+      "severity": "high",
+      "summary": "RSA-2048 key exchange/signing is harvest-now-decrypt-later exposed."
+    }
+  },
+  {
+    "id": "tls-auth-bank",
+    "kind": "tls",
+    "host": "auth.regionalbank.example",
+    "port": 443,
+    "label": "Customer auth TLS",
+    "algorithm": "ECDSA",
+    "keySize": 256,
+    "validityDays": 90,
+    "sanDomains": ["auth.regionalbank.example"],
+    "negotiatedCipher": "TLS_AES_128_GCM_SHA256",
+    "negotiatedGroup": "secp256r1",
+    "tlsVersion": "TLSv1.3",
+    "vulnerability": {
+      "algorithm": "ECDSA-P256",
+      "keySize": 256,
+      "shorLogicalQubits": 2330,
+      "status": "at-risk",
+      "hndlExposed": true,
+      "pqcReplacement": "ML-DSA-65 (FIPS 204)",
+      "severity": "high",
+      "summary": "P-256 certificate is quantum-vulnerable under Shor."
+    }
+  },
+  {
+    "id": "jwks-oidc",
+    "kind": "jwks",
+    "host": "auth.regionalbank.example",
+    "port": 443,
+    "label": "OIDC JWKS RS256",
+    "algorithm": "RS256",
+    "keySize": 2048,
+    "sanDomains": [],
+    "vulnerability": {
+      "algorithm": "RSA-2048",
+      "keySize": 2048,
+      "shorLogicalQubits": 4098,
+      "status": "at-risk",
+      "hndlExposed": true,
+      "pqcReplacement": "ML-DSA-65 for JWT signing",
+      "severity": "high",
+      "summary": "JWT signing keys must migrate before long-lived tokens expire."
+    }
+  },
+  {
+    "id": "ssh-bastion",
+    "kind": "ssh",
+    "host": "bastion.regionalbank.example",
+    "port": 22,
+    "label": "Ops bastion SSH host key",
+    "algorithm": "ssh-rsa",
+    "keySize": 3072,
+    "vulnerability": {
+      "algorithm": "RSA-3072",
+      "keySize": 3072,
+      "shorLogicalQubits": 6146,
+      "status": "at-risk",
+      "hndlExposed": true,
+      "pqcReplacement": "ssh-ed25519 or hybrid PQ SSH when available",
+      "severity": "medium",
+      "summary": "SSH RSA host key should be rotated to PQ-safe algorithms."
+    }
+  },
+  {
+    "id": "email-mx",
+    "kind": "email",
+    "host": "mx.regionalbank.example",
+    "port": 25,
+    "label": "Inbound SMTP STARTTLS",
+    "algorithm": "RSA",
+    "keySize": 2048,
+    "vulnerability": {
+      "algorithm": "RSA-2048",
+      "keySize": 2048,
+      "status": "at-risk",
+      "hndlExposed": true,
+      "pqcReplacement": "TLS 1.3 with ML-KEM hybrid + MTA-STS",
+      "severity": "medium",
+      "summary": "Email transport encryption is vulnerable to store-now-decrypt-later."
+    }
+  },
+  {
+    "id": "code-sign-legacy",
+    "kind": "code_signing",
+    "host": "artifacts.regionalbank.example",
+    "port": null,
+    "label": "Release artifact code signing",
+    "algorithm": "RSA",
+    "keySize": 4096,
+    "vulnerability": {
+      "algorithm": "RSA-4096",
+      "keySize": 4096,
+      "shorLogicalQubits": 8194,
+      "status": "at-risk",
+      "hndlExposed": true,
+      "pqcReplacement": "LMS/XMSS (SP 800-208) or SLH-DSA (FIPS 205)",
+      "severity": "critical",
+      "summary": "Long-lived code signing keys are highest-priority migration."
+    }
+  },
+  {
+    "id": "discovery-ct-api",
+    "kind": "discovery",
+    "host": "*.regionalbank.example",
+    "port": null,
+    "label": "CT-discovered subdomain",
+    "algorithm": "ECDSA",
+    "keySize": 256,
+    "vulnerability": {
+      "algorithm": "ECDSA-P256",
+      "keySize": 256,
+      "status": "at-risk",
+      "hndlExposed": true,
+      "pqcReplacement": "ML-DSA-65",
+      "severity": "medium",
+      "summary": "Shadow IT subdomain surfaced via certificate transparency."
+    }
+  },
+  {
+    "id": "tls-pq-demo",
+    "kind": "tls",
+    "host": "test.openquantumsafe.org",
+    "port": 4433,
+    "label": "OQS hybrid TLS endpoint",
+    "algorithm": "ML-KEM-768",
+    "keySize": null,
+    "negotiatedGroup": "X25519MLKEM768",
+    "tlsVersion": "TLSv1.3",
+    "vulnerability": {
+      "algorithm": "ML-KEM-768",
+      "status": "safe",
+      "hndlExposed": false,
+      "pqcReplacement": "Already post-quantum (ML-KEM, FIPS 203)",
+      "severity": "low",
+      "summary": "Hybrid PQ TLS reference endpoint for migration validation."
+    }
+  }
+]

@@ -1,0 +1,13 @@
+{
+  "fips-203": "Available now (2024)",
+  "fips-204": "Available now (2024)",
+  "fips-205": "Available now (2024)",
+  "sp-800-208": "2025-ongoing",
+  "cnsa-2.0": "2030-2033",
+  "nsm-10": "2035",
+  "nist-ir-8547": "2030",
+  "pci-dss-4": "2025-ongoing",
+  "cmmc": "2026-2030",
+  "immediate": "Immediate",
+  "default": "2030-12-31"
+}

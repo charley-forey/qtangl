@@ -355,6 +355,42 @@ export function buildEvFleetDemoJsonLd(options: { description: string; videoUrl?
   };
 }
 
+export function buildPqcDemoJsonLd(options: { description: string; videoUrl?: string }) {
+  const url = absoluteUrl("/demo/pqc");
+  const graph: Record<string, unknown>[] = [
+    {
+      "@type": "WebPage",
+      name: "Q-Day readiness scanner",
+      description: options.description,
+      url,
+      isPartOf: {
+        "@id": `${siteMetadata.url}/#website`,
+      },
+    },
+  ];
+
+  if (options.videoUrl) {
+    graph.push({
+      "@type": "VideoObject",
+      name: "Q-Day readiness scanner walkthrough",
+      description: options.description,
+      contentUrl: options.videoUrl,
+      embedUrl: options.videoUrl,
+      uploadDate: "2026-01-01",
+      publisher: {
+        "@type": "Organization",
+        name: siteMetadata.name,
+        url: siteMetadata.url,
+      },
+    });
+  }
+
+  return {
+    "@context": "https://schema.org",
+    "@graph": graph,
+  };
+}
+
 export function buildAirlineDemoJsonLd(options: { description: string; videoUrl?: string }) {
   const url = absoluteUrl("/demo/airline");
   const graph: Record<string, unknown>[] = [

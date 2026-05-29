@@ -34,6 +34,41 @@ for (const entry of [...lexiconEntries, ...deepEntries]) {
   merged.set(entry.id, entry);
 }
 
+const pqcEntries: GlossaryEntry[] = [
+  {
+    id: "q-day",
+    quantum: "Q-Day",
+    quantumMeaning: "The day cryptographically relevant quantum computers break widely deployed public-key crypto.",
+    engineering: "Q-Day",
+    engineeringMeaning: "Planning horizon for PQC migration programs and board-level readiness reporting.",
+  },
+  {
+    id: "hndl",
+    quantum: "HNDL",
+    quantumMeaning: "Harvest now, decrypt later — adversaries store ciphertext today to break with future quantum computers.",
+    engineering: "HNDL",
+    engineeringMeaning: "Risk framing tied to Mosca inequality X + Y > Z for data shelf-life vs migration time.",
+  },
+  {
+    id: "ml-kem",
+    quantum: "ML-KEM",
+    quantumMeaning: "NIST FIPS 203 module-lattice key encapsulation mechanism (formerly Kyber).",
+    engineering: "ML-KEM",
+    engineeringMeaning: "Preferred PQ key exchange for hybrid TLS 1.3 deployments.",
+  },
+  {
+    id: "cbom",
+    quantum: "CBOM",
+    quantumMeaning: "Cryptography Bill of Materials — inventory of algorithms and keys in a system.",
+    engineering: "CBOM",
+    engineeringMeaning: "CycloneDX export format for procurement and compliance evidence.",
+  },
+];
+
+for (const entry of pqcEntries) {
+  merged.set(entry.id, entry);
+}
+
 export const glossary: GlossaryEntry[] = Array.from(merged.values()).sort((a, b) =>
   a.quantum.localeCompare(b.quantum),
 );

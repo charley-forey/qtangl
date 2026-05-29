@@ -1,0 +1,12 @@
+{
+  "algorithms": [
+    { "id": "rsa-2048", "shorLogicalQubits": 4098, "status": "at-risk", "pqcReplacement": "ML-KEM-768 + ML-DSA-65" },
+    { "id": "rsa-3072", "shorLogicalQubits": 6146, "status": "at-risk", "pqcReplacement": "ML-KEM-768 + ML-DSA-87" },
+    { "id": "rsa-4096", "shorLogicalQubits": 8194, "status": "at-risk", "pqcReplacement": "ML-KEM-1024 + ML-DSA-87" },
+    { "id": "ecdsa-p256", "shorLogicalQubits": 2330, "status": "at-risk", "pqcReplacement": "ML-DSA-65" },
+    { "id": "ml-kem-768", "status": "safe", "pqcReplacement": "FIPS 203" },
+    { "id": "ml-dsa-65", "status": "safe", "pqcReplacement": "FIPS 204" },
+    { "id": "sha-1", "status": "broken", "pqcReplacement": "SHA-256" }
+  ],
+  "note": "Reference catalog for classification engine; estimates are order-of-magnitude."
+}

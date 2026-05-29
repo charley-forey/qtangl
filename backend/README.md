@@ -54,6 +54,14 @@ Required Railway environment variables:
 - `QTANGL_RATE_LIMIT_PER_MINUTE` (optional, default `120` for the public demo)
 - `QTANGL_ENABLE_QAOA=false` (recommended for Railway production)
 
+PQC Q-Day scanner runtime notes:
+
+- Endpoints live under `/pqc/*` (inventory, scenarios, scan, handshake proof, report export).
+- Fixture mode (`useFixture: true`) is production-safe and synchronous.
+- Live scanning requires `QTANGL_PQC_ENABLE_LIVE_SCAN=true`, SSRF guards, and user authorization in the UI.
+- Optional env: `QTANGL_PQC_DATA_DIR`, `QTANGL_PQC_SCAN_ALLOWLIST`, `QTANGL_PQC_ENABLE_OQS`, `QTANGL_OQS_DEMO_SERVER` (default `test.openquantumsafe.org`), `QTANGL_PQC_SCAN_TIMEOUT`, `QTANGL_PQC_MAX_ENDPOINTS`.
+- Bundled fixtures: `backend/app/pqc/fixtures` (mirrored from `demos/pqc_migration/data`).
+
 Hospital demo runtime notes:
 
 - The hospital demo endpoints live under `/hospital/*`.

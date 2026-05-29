@@ -10,6 +10,7 @@ from app.api.airline import router as airline_router
 from app.api.ev_fleet import router as ev_fleet_router
 from app.api.hospital import router as hospital_router
 from app.api.optimize import router as optimize_router
+from app.api.pqc import router as pqc_router
 
 DEFAULT_CORS_ORIGINS = (
     "https://www.qtangl.com",
@@ -45,6 +46,7 @@ app.include_router(optimize_router)
 app.include_router(hospital_router)
 app.include_router(airline_router)
 app.include_router(ev_fleet_router)
+app.include_router(pqc_router)
 
 
 @app.get("/health", tags=["health"])

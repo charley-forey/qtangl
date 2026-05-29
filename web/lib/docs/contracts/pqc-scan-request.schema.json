@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://qtangl.com/contracts/pqc-scan-request.schema.json",
+  "title": "Qtangl PQC Scan Request",
+  "type": "object",
+  "properties": {
+    "scenarioId": { "type": "string", "default": "bank-tls-inventory" },
+    "useFixture": { "type": "boolean", "default": true },
+    "target": { "type": ["string", "null"] },
+    "seed": { "type": "integer", "default": 1234 },
+    "bundleSessionId": { "type": ["string", "null"] },
+    "depth": { "type": ["string", "null"], "default": "standard" }
+  },
+  "additionalProperties": false
+}

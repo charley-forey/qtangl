@@ -68,6 +68,17 @@ export const demoCatalog: readonly DemoCatalogEntry[] = [
     variant: "workflow",
   },
   {
+    slug: "pqc",
+    sector: "Security / Cryptography",
+    title: "Q-Day readiness scanner",
+    oneLiner:
+      "Inventory quantum-vulnerable crypto, Mosca HNDL risk, hybrid ML-KEM handshake proof, and CBOM migration reports.",
+    runtime: "3:20",
+    status: "live",
+    href: "/demo/pqc",
+    variant: "workflow",
+  },
+  {
     slug: "ev-fleet",
     sector: "Logistics / Last-mile",
     title: "EV depot charging + routing",

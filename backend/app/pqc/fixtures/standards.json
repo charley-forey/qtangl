@@ -1,0 +1,70 @@
+{
+  "frameworks": [
+    {
+      "id": "fips-203",
+      "name": "FIPS 203 (ML-KEM)",
+      "summary": "Module-Lattice-Based Key-Encapsulation Mechanism standard",
+      "deadline": "Available 2024"
+    },
+    {
+      "id": "fips-204",
+      "name": "FIPS 204 (ML-DSA)",
+      "summary": "Module-Lattice-Based Digital Signature Algorithm standard",
+      "deadline": "Available 2024"
+    },
+    {
+      "id": "fips-205",
+      "name": "FIPS 205 (SLH-DSA)",
+      "summary": "Stateless Hash-Based Digital Signature Algorithm standard",
+      "deadline": "Available 2024"
+    },
+    {
+      "id": "sp-800-208",
+      "name": "NIST SP 800-208",
+      "summary": "Recommendation for stateful hash-based signature schemes",
+      "deadline": "2025-ongoing"
+    },
+    {
+      "id": "cnsa-2.0",
+      "name": "CNSA 2.0",
+      "summary": "Commercial National Security Algorithm Suite 2.0",
+      "deadline": "2030-2033"
+    },
+    {
+      "id": "nsm-10",
+      "name": "NSM-10",
+      "summary": "National Security Memorandum on post-quantum cryptography",
+      "deadline": "2035"
+    },
+    {
+      "id": "nist-ir-8547",
+      "name": "NIST IR 8547",
+      "summary": "Transitioning to post-quantum cryptography standards",
+      "deadline": "2030"
+    },
+    {
+      "id": "pci-dss-4",
+      "name": "PCI-DSS 4.0",
+      "summary": "Cryptographic agility and key management requirements",
+      "deadline": "2025-ongoing"
+    },
+    {
+      "id": "cmmc",
+      "name": "CMMC / FedRAMP",
+      "summary": "Federal contractor cryptographic inventory expectations",
+      "deadline": "2026-2030"
+    }
+  ],
+  "mappings": {
+    "rsa": ["nist-ir-8547", "cnsa-2.0", "nsm-10", "pci-dss-4"],
+    "ecdsa": ["fips-204", "nist-ir-8547", "cnsa-2.0"],
+    "ecdh": ["fips-203", "nist-ir-8547", "cnsa-2.0"],
+    "tls": ["nist-ir-8547", "pci-dss-4", "cmmc"],
+    "jwks": ["fips-204", "pci-dss-4"],
+    "ssh": ["nist-ir-8547", "cmmc"],
+    "email": ["pci-dss-4", "nist-ir-8547"],
+    "code_signing": ["sp-800-208", "fips-205"],
+    "document_signing": ["sp-800-208", "fips-205"],
+    "discovery": ["nist-ir-8547", "pci-dss-4"]
+  }
+}

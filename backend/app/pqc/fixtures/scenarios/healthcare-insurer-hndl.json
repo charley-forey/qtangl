@@ -1,0 +1,26 @@
+{
+  "id": "healthcare-insurer-hndl",
+  "title": "Healthcare insurer HNDL exposure",
+  "summary": "Legal and security teams stress-test harvest-now-decrypt-later risk on long-retained PHI transport encryption.",
+  "target": {
+    "domain": "member.healthshield.example",
+    "ports": [443, 25, 993],
+    "persona": "CISO, healthcare insurer",
+    "organization": "HealthShield Mutual",
+    "mandate": "HIPAA + board Q-Day readiness"
+  },
+  "manualBaseline": {
+    "inventoryWeeks": 10,
+    "assetsFound": 55,
+    "quantumVulnerable": 51,
+    "readinessScore": 15,
+    "summary": "Third-party email and legacy signing keys not in last inventory cycle."
+  },
+  "fixtureAssetIds": [
+    "tls-auth-bank",
+    "email-mx",
+    "jwks-oidc",
+    "code-sign-legacy",
+    "discovery-ct-api"
+  ]
+}

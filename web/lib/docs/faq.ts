@@ -30,6 +30,24 @@ export const faqCategories: FaqCategory[] = [
     ],
   },
   {
+    id: "pqc",
+    title: "Q-Day / PQC scanner",
+    items: [
+      {
+        id: "pqc-live-scan",
+        question: "Does live scanning attack my infrastructure?",
+        answer:
+          "Live mode only connects to hosts you authorize, blocks private/metadata IPs, and is gated by QTANGL_PQC_ENABLE_LIVE_SCAN. Use fixture mode for recordings.",
+      },
+      {
+        id: "pqc-cbom",
+        question: "What is a CBOM export?",
+        answer:
+          "A CycloneDX Cryptography Bill of Materials JSON file listing discovered algorithms and remediation metadata for procurement and compliance workflows.",
+      },
+    ],
+  },
+  {
     id: "auth",
     title: "Auth & keys",
     items: [

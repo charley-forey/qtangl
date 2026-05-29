@@ -14,5 +14,8 @@ export function endpointDocsHref(endpointId: string): string {
   if (endpointId.startsWith("ev-fleet-")) {
     return `/docs/reference/ev-fleet/${endpointId.replace("ev-fleet-", "")}`;
   }
+  if (endpointId.startsWith("pqc-")) {
+    return `/docs/reference/pqc/${endpointId.replace("pqc-", "")}`;
+  }
   return `/docs/reference/${endpointId}`;
 }

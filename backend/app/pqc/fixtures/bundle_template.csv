@@ -1,0 +1,5 @@
+host,port,kind,label
+api.example.com,443,tls,API gateway
+auth.example.com,443,jwks,OIDC issuer
+bastion.example.com,22,ssh,Ops bastion
+mx.example.com,25,email,Inbound SMTP

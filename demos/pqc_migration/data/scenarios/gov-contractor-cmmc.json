@@ -1,0 +1,25 @@
+{
+  "id": "gov-contractor-cmmc",
+  "title": "Gov contractor CMMC readiness",
+  "summary": "FedRAMP/CMMC assessor requires cryptographic inventory with remediation backlog before contract renewal.",
+  "target": {
+    "domain": "portal.defense-prime.example",
+    "ports": [443, 22],
+    "persona": "Compliance lead, defense contractor",
+    "organization": "Defense Prime Integrator",
+    "mandate": "CMMC Level 2 / CNSA 2.0 alignment"
+  },
+  "manualBaseline": {
+    "inventoryWeeks": 6,
+    "assetsFound": 28,
+    "quantumVulnerable": 24,
+    "readinessScore": 22,
+    "summary": "Manual SSP spreadsheet; no JWKS or SSH host key coverage."
+  },
+  "fixtureAssetIds": [
+    "tls-api-bank",
+    "jwks-oidc",
+    "ssh-bastion",
+    "code-sign-legacy"
+  ]
+}

@@ -10,3 +10,5 @@ ortools
 faker
 python-multipart
 qiskit-ibm-runtime
+cryptography
+reportlab

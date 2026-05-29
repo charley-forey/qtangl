@@ -1,0 +1,3 @@
+host,port,kind,label
+api.example.com,443,tls,API gateway
+auth.example.com,443,jwks,OIDC issuer

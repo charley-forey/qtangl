@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://qtangl.com/contracts/pqc-scan-response.schema.json",
+  "title": "Qtangl PQC Scan Response",
+  "type": "object",
+  "required": ["status"],
+  "properties": {
+    "status": { "type": "string", "enum": ["success", "running", "error"] },
+    "scanId": { "type": "string" },
+    "scenario": { "type": "object" },
+    "assets": { "type": "array" },
+    "remediationBacklog": { "type": "array" },
+    "scoreboard": { "type": "object" },
+    "handshakeProof": { "type": "object" },
+    "report": { "type": "object" },
+    "mosca": { "type": "object" },
+    "timeline": { "type": "array" },
+    "details": { "type": "object" }
+  },
+  "additionalProperties": true
+}

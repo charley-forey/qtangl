@@ -47,6 +47,11 @@ export const docsSections: DocsNavSection[] = [
         href: "/docs/guides/ev-fleet-demo",
         status: "pilot",
       },
+      {
+        name: "PQC scanner demo guide",
+        href: "/docs/guides/pqc-demo",
+        status: "pilot",
+      },
     ],
   },
   {
@@ -114,6 +119,56 @@ export const docsSections: DocsNavSection[] = [
       {
         name: "POST /airline/recover/solve",
         href: "/docs/reference/airline/recover-solve",
+        status: "pilot",
+      },
+      {
+        name: "GET /pqc/inventory",
+        href: "/docs/reference/pqc/inventory",
+        status: "pilot",
+      },
+      {
+        name: "GET /pqc/scenarios",
+        href: "/docs/reference/pqc/scenarios",
+        status: "pilot",
+      },
+      {
+        name: "GET /pqc/target",
+        href: "/docs/reference/pqc/target",
+        status: "pilot",
+      },
+      {
+        name: "GET /pqc/handshake-trace",
+        href: "/docs/reference/pqc/handshake-trace",
+        status: "pilot",
+      },
+      {
+        name: "GET /pqc/standards",
+        href: "/docs/reference/pqc/standards",
+        status: "pilot",
+      },
+      {
+        name: "POST /pqc/upload-bundle",
+        href: "/docs/reference/pqc/upload-bundle",
+        status: "pilot",
+      },
+      {
+        name: "POST /pqc/scan",
+        href: "/docs/reference/pqc/scan",
+        status: "pilot",
+      },
+      {
+        name: "GET /pqc/scan/{scanId}",
+        href: "/docs/reference/pqc/scan-status",
+        status: "pilot",
+      },
+      {
+        name: "POST /pqc/handshake/prove",
+        href: "/docs/reference/pqc/handshake-prove",
+        status: "pilot",
+      },
+      {
+        name: "GET /pqc/report/{scanId}",
+        href: "/docs/reference/pqc/report",
         status: "pilot",
       },
       {

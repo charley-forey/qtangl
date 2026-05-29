@@ -8,6 +8,17 @@ export type ChangelogEntry = {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: "0.2.0-pilot",
+    date: "2026-05-28",
+    title: "Q-Day readiness scanner",
+    tags: ["pilot"],
+    items: [
+      "PQC migration endpoints under /pqc/* with fixture and live scan modes.",
+      "Mosca HNDL risk scoring, CycloneDX CBOM export, and ML-KEM handshake proof.",
+      "Interactive /demo/pqc command center and API reference docs.",
+    ],
+  },
+  {
     version: "0.1.0",
     date: "2026-05-27",
     title: "Enterprise docs surface",
