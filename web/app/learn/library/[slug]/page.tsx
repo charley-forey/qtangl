@@ -403,16 +403,21 @@ export default async function LibraryResourcePage({ params }: ResourcePageProps)
 
       {readmeMarkdown ? (
         <Section gap="tight">
-          <div className="content-reading">
+          <div className="content-reading min-w-0">
             <Eyebrow>Repository README</Eyebrow>
-            <h2 className="heading-section mt-4">Full project documentation.</h2>
+            <h2 className="heading-section mt-4">Preview from the project README.</h2>
+            <p className="mt-4 text-sm leading-7 text-[var(--color-gray-300)]">
+              Rendered as Markdown inside a scrollable preview. Long READMEs stay contained;
+              expand or open on GitHub for the full document.
+            </p>
           </div>
-          <div className="mt-8">
+          <div className="mt-8 min-w-0">
             <LibraryReadme
               markdown={readmeMarkdown}
               owner={entry.owner}
               name={entry.name}
               branch={entry.defaultBranch}
+              repoUrl={entry.repoUrl}
             />
           </div>
         </Section>

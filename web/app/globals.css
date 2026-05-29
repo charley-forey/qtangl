@@ -204,3 +204,193 @@ a:not([class]) {
     opacity: 0.22;
   }
 }
+
+/* Learn library README preview (react-markdown; no typography plugin) */
+.learn-readme-panel {
+  max-width: 100%;
+}
+
+.learn-readme-scroll {
+  -webkit-overflow-scrolling: touch;
+}
+
+.learn-readme {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  font-size: 0.9375rem;
+  line-height: 1.75;
+  color: var(--color-gray-300);
+}
+
+.learn-readme > :first-child {
+  margin-top: 0;
+}
+
+.learn-readme-h1,
+.learn-readme-h2,
+.learn-readme-h3,
+.learn-readme-h4 {
+  color: var(--foreground);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.35;
+  margin: 1.75rem 0 0.75rem;
+}
+
+.learn-readme-h1 {
+  font-size: 1.5rem;
+}
+
+.learn-readme-h2 {
+  font-size: 1.25rem;
+  padding-bottom: 0.35rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.learn-readme-h3 {
+  font-size: 1.0625rem;
+}
+
+.learn-readme-h4 {
+  font-size: 1rem;
+}
+
+.learn-readme-p {
+  margin: 0.85rem 0 0;
+}
+
+.learn-readme-ul,
+.learn-readme-ol {
+  margin: 0.85rem 0 0;
+  padding-left: 1.35rem;
+}
+
+.learn-readme-li {
+  margin-top: 0.35rem;
+}
+
+.learn-readme-li > .learn-readme-ul,
+.learn-readme-li > .learn-readme-ol {
+  margin-top: 0.35rem;
+}
+
+.learn-readme-blockquote {
+  margin: 1rem 0 0;
+  padding: 0.75rem 1rem;
+  border-left: 3px solid var(--border-strong);
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--color-gray-400);
+}
+
+.learn-readme-hr {
+  margin: 1.5rem 0 0;
+  border: 0;
+  border-top: 1px solid var(--border);
+}
+
+.learn-readme-link {
+  color: var(--foreground);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.learn-readme-link:hover {
+  color: #fff;
+}
+
+.learn-readme-code-inline {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 0.85em;
+  padding: 0.12rem 0.35rem;
+  border-radius: 0.35rem;
+  border: 1px solid var(--border);
+  background: rgba(0, 0, 0, 0.45);
+  color: var(--color-gray-200);
+  overflow-wrap: anywhere;
+}
+
+.learn-readme-pre {
+  margin: 1rem 0 0;
+  max-width: 100%;
+  overflow-x: auto;
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  background: rgba(0, 0, 0, 0.65);
+  padding: 1rem;
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 0.8125rem;
+  line-height: 1.6;
+  color: var(--color-gray-200);
+  -webkit-overflow-scrolling: touch;
+}
+
+.learn-readme-pre code {
+  background: transparent;
+  border: 0;
+  padding: 0;
+  white-space: pre;
+  word-break: normal;
+}
+
+.learn-readme-table-wrap {
+  margin: 1rem 0 0;
+  max-width: 100%;
+  overflow-x: auto;
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  -webkit-overflow-scrolling: touch;
+}
+
+.learn-readme-table {
+  width: 100%;
+  min-width: 28rem;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+
+.learn-readme-table th,
+.learn-readme-table td {
+  padding: 0.65rem 0.85rem;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+  vertical-align: top;
+}
+
+.learn-readme-table th {
+  color: var(--foreground);
+  background: rgba(255, 255, 255, 0.04);
+  font-weight: 600;
+}
+
+.learn-readme-table tr:last-child td {
+  border-bottom: 0;
+}
+
+.learn-readme-img {
+  margin: 1rem auto 0;
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+}
+
+@media (max-width: 639px) {
+  .learn-readme {
+    padding: 0;
+    font-size: 0.875rem;
+  }
+
+  .learn-readme-pre {
+    padding: 0.75rem;
+    font-size: 0.75rem;
+  }
+
+  .learn-readme-h1 {
+    font-size: 1.25rem;
+  }
+
+  .learn-readme-h2 {
+    font-size: 1.125rem;
+  }
+}
