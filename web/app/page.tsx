@@ -90,13 +90,25 @@ export default function Home() {
         <div className="mt-10 grid gap-6 md:grid-cols-3">
           {useCases.map((useCase, index) => (
             <StateTransition key={useCase.title} delay={0.04 * index}>
-              <FeatureCard eyebrow={useCase.eyebrow} title={useCase.title}>
+              <FeatureCard
+                eyebrow={useCase.eyebrow}
+                title={useCase.title}
+                href={useCase.demoHref}
+                ctaLabel={useCase.demoHref ? "Open demo →" : "Demo coming soon"}
+              >
                 <p className="text-sm leading-7 text-[var(--color-gray-300)]">{useCase.outcome}</p>
                 <p className="text-label mt-4 text-white">{useCase.measurement}</p>
               </FeatureCard>
             </StateTransition>
           ))}
         </div>
+        <StateTransition>
+          <div className="mt-8">
+            <Button href="/demo" variant="ghost" size="sm" className="px-0">
+              See all live demos →
+            </Button>
+          </div>
+        </StateTransition>
       </Section>
 
       <Section gap="tight">

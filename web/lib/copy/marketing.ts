@@ -87,6 +87,8 @@ export const useCases = [
     outcome:
       "Feasible schedule with precedence, crew windows, and zero hard violations.",
     measurement: "Fewer idle crew hours · lower delay risk · higher schedule confidence",
+    demoHref: undefined,
+    demoStatus: "coming-soon",
   },
   {
     eyebrow: "Logistics",
@@ -101,6 +103,8 @@ export const useCases = [
     outcome:
       "Optimized stop order, assignments, and cost estimate your dispatchers can run.",
     measurement: "Fewer miles · better on-time delivery · higher fleet utilization",
+    demoHref: "/demo/ev-fleet",
+    demoStatus: "live",
   },
   {
     eyebrow: "Operations",
@@ -115,6 +119,8 @@ export const useCases = [
     outcome:
       "Ranked staffing plans that hit skills, coverage, and utilization limits.",
     measurement: "Better coverage · less overtime · faster staffing decisions",
+    demoHref: "/demo/hospital",
+    demoStatus: "live",
   },
 ] as const;
 

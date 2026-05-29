@@ -73,7 +73,13 @@ export default function FeatureCard({
           </div>
         ) : null}
         {ctaLabel ? (
-          <p className="mt-6 text-sm font-medium text-white">{ctaLabel}</p>
+          <p
+            className={`mt-6 text-sm font-medium ${
+              href ? "text-white" : "text-[var(--color-gray-500)]"
+            }`}
+          >
+            {ctaLabel}
+          </p>
         ) : null}
       </div>
     </Card>
