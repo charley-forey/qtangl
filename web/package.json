@@ -8,6 +8,7 @@
     "learn:stale": "node ../scripts/learn-stale-check.mjs",
     "generate:docs-index": "node scripts/build_docs_index.mjs",
     "test:e2e": "playwright test",
+    "test:access": "node --experimental-strip-types --test tests/access-validation.test.mjs",
     "prebuild": "npm run generate:library && npm run generate:docs-index",
     "dev": "next dev",
     "build": "next build",

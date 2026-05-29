@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 
+import { accessPageCopy } from "@/lib/copy/access";
 import { siteMetadata } from "@/lib/copy/product";
 import { getAllDocsHrefs } from "@/lib/docs/nav";
 
@@ -208,6 +209,46 @@ export function buildBlogPostingJsonLd(options: {
             position: 3,
             name: options.headline,
             item: url,
+          },
+        ],
+      },
+    ],
+  };
+}
+
+export function buildContactPageJsonLd() {
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "ContactPage",
+        name: "Request pilot access",
+        description: accessPageCopy.metadataDescription,
+        url: absoluteUrl("/access"),
+        isPartOf: {
+          "@id": `${siteMetadata.url}/#website`,
+        },
+        about: {
+          "@type": "Organization",
+          name: siteMetadata.name,
+          url: siteMetadata.url,
+          email: siteMetadata.contactEmail,
+        },
+      },
+      {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          {
+            "@type": "ListItem",
+            position: 1,
+            name: "Home",
+            item: siteMetadata.url,
+          },
+          {
+            "@type": "ListItem",
+            position: 2,
+            name: "Access",
+            item: absoluteUrl("/access"),
           },
         ],
       },

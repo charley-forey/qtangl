@@ -11,7 +11,7 @@ export const siteMetadata = {
   tagline: "Every possibility ranked. One future your team runs.",
   oneLiner:
     "Quantum Planning API: hold every option in superposition, rank the field, collapse to an executable plan.",
-  contactEmail: "founders@qtangl.com",
+  contactEmail: "charley@qtangl.com",
 } as const;
 
 export const aboutContent = {

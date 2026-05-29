@@ -13,6 +13,9 @@ export default defineConfig({
     command: "npm run start",
     url: "http://127.0.0.1:3000",
     reuseExistingServer: !process.env.CI,
+    env: {
+      QTANGL_ACCESS_ALLOW_CONSOLE_FALLBACK: "true",
+    },
   },
   projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }],
 });

@@ -1,13 +1,15 @@
 import type { Metadata } from "next";
 
 import AccessRequestForm from "@/components/marketing/AccessRequestForm";
+import AccessTimeline from "@/components/marketing/AccessTimeline";
 import PageHero from "@/components/layout/PageHero";
 import PageShell from "@/components/layout/PageShell";
 import Section from "@/components/layout/Section";
+import JsonLd from "@/components/seo/JsonLd";
 import Card from "@/components/ui/Card";
 import Eyebrow from "@/components/ui/Eyebrow";
 import { accessPageCopy, accessPanel } from "@/lib/copy/access";
-import { buildPageMetadata } from "@/lib/seo";
+import { buildContactPageJsonLd, buildPageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildPageMetadata({
   path: "/access",
@@ -26,6 +28,7 @@ export default async function AccessPage({ searchParams }: AccessPageProps) {
 
   return (
     <PageShell>
+      <JsonLd data={buildContactPageJsonLd()} />
       <PageHero
         eyebrow={accessPanel.eyebrow}
         title={accessPanel.title}
@@ -33,7 +36,7 @@ export default async function AccessPage({ searchParams }: AccessPageProps) {
       />
       <Section gap="tight" className="pb-0">
         <div className="grid gap-6 xl:grid-cols-[0.78fr_1.22fr]">
-          <div className="space-y-6">
+          <div className="order-2 space-y-6 xl:order-1">
             <Card tone="strong" className="rounded-[var(--radius-xl)]">
               <Eyebrow>{accessPageCopy.audienceEyebrow}</Eyebrow>
               {source ? (
@@ -46,15 +49,15 @@ export default async function AccessPage({ searchParams }: AccessPageProps) {
                   <li key={item}>{item}</li>
                 ))}
               </ul>
-            </Card>
-            <Card tone="strong" className="rounded-[var(--radius-xl)]">
-              <Eyebrow>{accessPageCopy.includeEyebrow}</Eyebrow>
-              <p className="mt-4 text-sm leading-7 text-[var(--color-gray-300)]">
-                {accessPageCopy.includeDescription}
+              <p className="mt-5 text-sm leading-7 text-[var(--color-gray-400)]">
+                {accessPageCopy.trustNote}
               </p>
             </Card>
+            <AccessTimeline />
           </div>
-          <AccessRequestForm source={source} defaultInterest={interest} />
+          <div className="order-1 xl:order-2">
+            <AccessRequestForm source={source} defaultInterest={interest} />
+          </div>
         </div>
       </Section>
     </PageShell>
