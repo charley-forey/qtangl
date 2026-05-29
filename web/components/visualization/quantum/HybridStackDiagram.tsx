@@ -7,10 +7,12 @@ import { hybridStackDiagramCopy } from "@/lib/copy/visualization";
 
 type HybridStackDiagramProps = {
   className?: string;
+  variant?: "panel" | "embedded";
 };
 
 export default function HybridStackDiagram({
   className = "",
+  variant = "panel",
 }: HybridStackDiagramProps) {
   const [activeIndex, setActiveIndex] = useState(0);
   const active = hybridStackDiagramCopy.bands[activeIndex];
@@ -21,6 +23,7 @@ export default function HybridStackDiagram({
       title={hybridStackDiagramCopy.title}
       description={hybridStackDiagramCopy.description}
       className={className}
+      variant={variant}
     >
       <div
         className="flex h-3 overflow-hidden rounded-full border border-[var(--border)]"

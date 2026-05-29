@@ -621,15 +621,25 @@
   box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.06);
 }
 
-.hospital-drawer-root {
+/* Shared slide-over drawer (hospital + airline audit packs) */
+.demo-drawer-root,
+.hospital-drawer-root,
+.airline-drawer-root {
   position: fixed;
   inset: 0;
-  z-index: 70;
+  z-index: 100;
   display: flex;
   justify-content: flex-end;
+  padding:
+    max(0.75rem, env(safe-area-inset-top, 0px))
+    max(0.75rem, env(safe-area-inset-right, 0px))
+    max(0.75rem, env(safe-area-inset-bottom, 0px))
+    0;
 }
 
-.hospital-drawer-backdrop {
+.demo-drawer-backdrop,
+.hospital-drawer-backdrop,
+.airline-drawer-backdrop {
   position: absolute;
   inset: 0;
   border: none;
@@ -638,22 +648,28 @@
   cursor: pointer;
 }
 
-.hospital-drawer-panel {
+.demo-drawer-panel,
+.hospital-drawer-panel,
+.airline-drawer-panel {
   position: relative;
   z-index: 1;
   display: flex;
-  height: 100%;
-  width: 100%;
-  max-width: 42rem;
+  width: min(100%, 42rem);
+  max-height: 100%;
   flex-direction: column;
+  overflow: hidden;
   border-left: 1px solid var(--border);
+  border-radius: var(--radius-xl) 0 0 var(--radius-xl);
   background: #040507;
   box-shadow: -24px 0 80px rgba(0, 0, 0, 0.55);
-  animation: hospital-drawer-in 0.28s ease-out;
+  animation: demo-drawer-in 0.28s ease-out;
 }
 
-.hospital-drawer-header {
+.demo-drawer-header,
+.hospital-drawer-header,
+.airline-drawer-header {
   display: flex;
+  flex-shrink: 0;
   align-items: flex-start;
   justify-content: space-between;
   gap: 1rem;
@@ -661,10 +677,30 @@
   padding: 1.25rem 1.5rem;
 }
 
-.hospital-drawer-body {
-  flex: 1;
-  overflow: auto;
+.demo-drawer-body,
+.hospital-drawer-body,
+.airline-drawer-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
   padding: 1.25rem 1.5rem 1.5rem;
+}
+
+.demo-drawer-sticky-tabs {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  margin: -1.25rem -1.5rem 1.25rem;
+  border-bottom: 1px solid var(--border);
+  background: #040507;
+  padding: 1.25rem 1.5rem 1rem;
+}
+
+.demo-drawer-content {
+  min-width: 0;
 }
 
 .hospital-audit-block {
@@ -717,6 +753,17 @@
   animation: hospital-toast-in 0.25s ease-out;
 }
 
+@keyframes demo-drawer-in {
+  from {
+    opacity: 0;
+    transform: translateX(1.5rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
 @keyframes hospital-drawer-in {
   from {
     opacity: 0;
@@ -740,6 +787,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .demo-drawer-panel,
   .hospital-drawer-panel,
   .hospital-toast,
   .hospital-solve-pulse,
@@ -837,52 +885,6 @@
   box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.06);
 }
 
-.airline-drawer-root {
-  position: fixed;
-  inset: 0;
-  z-index: 70;
-  display: flex;
-  justify-content: flex-end;
-}
-
-.airline-drawer-backdrop {
-  position: absolute;
-  inset: 0;
-  border: none;
-  background: rgba(0, 0, 0, 0.72);
-  backdrop-filter: blur(4px);
-  cursor: pointer;
-}
-
-.airline-drawer-panel {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  height: 100%;
-  width: 100%;
-  max-width: 42rem;
-  flex-direction: column;
-  border-left: 1px solid var(--border);
-  background: #040507;
-  box-shadow: -24px 0 80px rgba(0, 0, 0, 0.55);
-  animation: airline-drawer-in 0.28s ease-out;
-}
-
-.airline-drawer-header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 1rem;
-  border-bottom: 1px solid var(--border);
-  padding: 1.25rem 1.5rem;
-}
-
-.airline-drawer-body {
-  flex: 1;
-  overflow: auto;
-  padding: 1.25rem 1.5rem 1.5rem;
-}
-
 .airline-audit-block {
   border-radius: var(--radius-lg);
   border: 1px solid var(--border);
@@ -933,17 +935,6 @@
   animation: airline-toast-in 0.25s ease-out;
 }
 
-@keyframes airline-drawer-in {
-  from {
-    opacity: 0;
-    transform: translateX(1.5rem);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
 @keyframes airline-toast-in {
   from {
     opacity: 0;
@@ -956,7 +947,6 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .airline-drawer-panel,
   .airline-toast,
   .airline-solve-pulse,
   .airline-results-highlight {
