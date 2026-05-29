@@ -48,6 +48,17 @@ export const demoCatalog: readonly DemoCatalogEntry[] = [
     variant: "workflow",
   },
   {
+    slug: "airline",
+    sector: "Aviation",
+    title: "Airline crew recovery",
+    oneLiner:
+      "MX hold at KORD triggers tail routing repair, multi-leg crew rebid, hybrid alternates, and FAR 117 audit.",
+    runtime: "3:45",
+    status: "live",
+    href: "/demo/airline",
+    variant: "workflow",
+  },
+  {
     slug: "construction",
     sector: "Construction",
     title: "Crew resequencing",

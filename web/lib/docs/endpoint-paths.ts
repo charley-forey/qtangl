@@ -8,5 +8,8 @@ export function endpointDocsHref(endpointId: string): string {
   if (endpointId.startsWith("hospital-")) {
     return `/docs/reference/hospital/${endpointId.replace("hospital-", "")}`;
   }
+  if (endpointId.startsWith("airline-")) {
+    return `/docs/reference/airline/${endpointId.replace("airline-", "")}`;
+  }
   return `/docs/reference/${endpointId}`;
 }

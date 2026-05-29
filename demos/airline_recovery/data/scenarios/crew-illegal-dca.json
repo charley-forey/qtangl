@@ -1,0 +1,48 @@
+{
+  "id": "crew-illegal-dca",
+  "title": "FAR 117 bust at DCA",
+  "summary": "Inbound delay pushes a connecting crew over FDP at KDCA; two afternoon departures need reassignment.",
+  "disruption": {
+    "id": "disruption-fdp-dca",
+    "aircraftId": "N903DL",
+    "station": "KDCA",
+    "start": "2026-05-28T07:00:00",
+    "mxHoldHours": 0.0,
+    "affectedLegIds": [
+      "leg-004",
+      "leg-005"
+    ],
+    "crewAffected": 8,
+    "urgencyMinutes": 55,
+    "channel": "phone",
+    "reason": "Inbound delay \u2014 crew illegal on FDP",
+    "requiredQuals": [
+      "A320",
+      "ETOPS"
+    ]
+  },
+  "manualBaseline": {
+    "decisionMinutes": 28,
+    "recoveryCost": 92000.0,
+    "summary": "Controllers deadhead reserve from BOS and accept a 45-minute delay on the ORD departure."
+  },
+  "preferredCandidates": [
+    "crew-015",
+    "crew-021"
+  ],
+  "classicalSearchScope": "global",
+  "counts": [
+    {
+      "bitstring": "100000",
+      "weight": 28
+    },
+    {
+      "bitstring": "010000",
+      "weight": 36
+    },
+    {
+      "bitstring": "001000",
+      "weight": 36
+    }
+  ]
+}

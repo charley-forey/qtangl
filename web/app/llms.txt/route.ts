@@ -27,6 +27,7 @@ Qtangl helps operations teams explore feasible schedules, routes, and staffing p
 - Documentation hub: ${siteMetadata.url}/docs
 - API sandbox: ${siteMetadata.url}/sandbox
 - Hospital re-staffing demo: ${siteMetadata.url}/demo/hospital
+- Airline crew recovery demo: ${siteMetadata.url}/demo/airline
 - Request access: ${siteMetadata.url}/access
 - Blog: ${siteMetadata.url}/blog
 - Learn (quantum software library): ${siteMetadata.url}/learn

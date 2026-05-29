@@ -1,0 +1,23 @@
+{
+  "source": "FAA FAR 117 (synthetic OCC profile)",
+  "rules": [
+    {
+      "id": "rest-10h",
+      "label": "Minimum rest",
+      "description": "10-hour minimum rest before reporting.",
+      "kind": "hard"
+    },
+    {
+      "id": "fdp-14h",
+      "label": "FDP limit",
+      "description": "Maximum 14-hour flight duty period for this roster.",
+      "kind": "hard"
+    }
+  ],
+  "costLadder": {
+    "premiumPay": 1.35,
+    "reserve": 2.5,
+    "deadhead": 1.15,
+    "cancel": 4.0
+  }
+}

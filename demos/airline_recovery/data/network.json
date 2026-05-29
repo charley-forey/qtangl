@@ -1,0 +1,1156 @@
+{
+  "crew": [
+    {
+      "id": "crew-001",
+      "name": "Alex Adams",
+      "role": "CA",
+      "base": "KORD",
+      "qualifications": [
+        "A320",
+        "ETOPS"
+      ],
+      "qualifiedFleets": [
+        "A320"
+      ],
+      "seniorityDate": "2023-05-29T06:00:00",
+      "hourlyRate": 120.0,
+      "blockHoursWeek": 28,
+      "maxFdpHours": 14,
+      "cbaGroup": "LINE",
+      "dutyStart": "2026-05-28T02:00:00",
+      "lastDutyEnd": "2026-05-27T16:00:00",
+      "assignments": []
+    },
+    {
+      "id": "crew-002",
+      "name": "Blake Brooks",
+      "role": "FO",
+      "base": "KDCA",
+      "qualifications": [
+        "A320",
+        "ETOPS"
+      ],
+      "qualifiedFleets": [
+        "A320"
+      ],
+      "seniorityDate": "2022-05-29T06:00:00",
+      "hourlyRate": 85.0,
+      "blockHoursWeek": 29,
+      "maxFdpHours": 14,
+      "cbaGroup": "LINE",
+      "dutyStart": "2026-05-28T01:00:00",
+      "lastDutyEnd": "2026-05-27T15:00:00",
+      "assignments": []
+    },
+    {
+      "id": "crew-003",
+      "name": "Casey Carter",
+      "role": "FO",
+      "base": "KORD",
+      "qualifications": [
+        "A320",
+        "ETOPS",
+        "CAT-III"
+      ],
+      "qualifiedFleets": [
+        "A320"
+      ],
+      "seniorityDate": "2021-05-29T06:00:00",
+      "hourlyRate": 85.0,
+      "blockHoursWeek": 30,
+      "maxFdpHours": 14,
+      "cbaGroup": "LINE",
+      "dutyStart": "2026-05-28T00:00:00",
+      "lastDutyEnd": "2026-05-27T14:00:00",
+      "assignments": []
+    },
+    {
+      "id": "crew-004",
+      "name": "Dana Diaz",
+      "role": "FA",
+      "base": "KBOS",
+      "qualifications": [
+        "A320"
+      ],
+      "qualifiedFleets": [
+        "A320"
+      ],
+      "seniorityDate": "2020-05-29T06:00:00",
+      "hourlyRate": 85.0,
+      "blockHoursWeek": 31,
+      "maxFdpHours": 14,
+      "cbaGroup": "LINE",
+      "dutyStart": "2026-05-27T23:00:00",
+      "lastDutyEnd": "2026-05-27T13:00:00",
+      "assignments": []
+    },
+    {
+      "id": "crew-005",
+      "name": "Evan Edwards",
+      "role": "CA",
+      "base": "KATL",
+      "qualifications": [
+        "A320",
+        "ETOPS"
+      ],
+      "qualifiedFleets": [
+        "A320"
+      ],
+      "seniorityDate": "2019-05-30T06:00:00",
+      "hourlyRate": 120.0,
+      "blockHoursWeek": 32,
+      "maxFdpHours": 14,
+      "cbaGroup": "LINE",
+      "dutyStart": "2026-05-27T22:00:00",
+      "lastDutyEnd": "2026-05-27T12:00:00",
+      "assignments": []
+    },
+    {
+      "id": "crew-006",
+      "name": "Finn Foster",
+      "role": "FO",
+      "base": "KORD",
+      "qualifications": [
+        "A320",
+        "ETOPS"
+      ],
+      "qualifiedFleets": [
+        "A320"
+      ],
+      "seniorityDate": "2018-05-30T06:00:00",
+      "hourlyRate": 85.0,
+      "blockHoursWeek": 33,
+      "maxFdpHours": 14,
+      "cbaGroup": "LINE",
+      "dutyStart": "2026-05-27T21:00:00",
+      "lastDutyEnd": "2026-05-27T11:00:00",
+      "assignments": []
+    },
+    {
+      "id": "crew-007",
+      "name": "Gina Garcia",
+      "role": "FO",
+      "base": "KORD",
+      "qualifications": [
+        "A320",
+        "ETOPS",
+        "CAT-III"
+      ],
+      "qualifiedFleets": [
+        "A320"
+      ],
+      "seniorityDate": "2017-05-30T06:00:00",
+      "hourlyRate": 85.0,
+      "blockHoursWeek": 34,
+      "maxFdpHours": 14,
+      "cbaGroup": "LINE",
+      "dutyStart": "2026-05-28T02:00:00",
+      "lastDutyEnd": "2026-05-27T16:00:00",
+      "assignments": []
+    },
+    {
+      "id": "crew-008",
+      "name": "Harper Hayes",
+      "role": "FA",
+      "base": "KDFW",
+      "qualifications": [
+        "A320"
+      ],
+      "qualifiedFleets": [
+        "A320"
+      ],
+      "seniorityDate": "2016-05-30T06:00:00",
+      "hourlyRate": 85.0,
+      "blockHoursWeek": 35,
+      "maxFdpHours": 14,
+      "cbaGroup": "LINE",
+      "dutyStart": "2026-05-28T01:00:00",
+      "lastDutyEnd": "2026-05-27T15:00:00",
+      "assignments": []
+    },
+    {
+      "id": "crew-009",
+      "name": "Ivy Kim",
+      "role": "CA",
+      "base": "KBOS",
+      "qualifications": [
+        "A320",
+        "ETOPS"
+      ],
+      "qualifiedFleets": [
+        "A320"
+      ],
+      "seniorityDate": "2015-05-31T06:00:00",
+      "hourlyRate": 120.0,
+      "blockHoursWeek": 28,
+      "maxFdpHours": 14,
+      "cbaGroup": "LINE",
+      "dutyStart": "2026-05-28T00:00:00",
+      "lastDutyEnd": "2026-05-27T14:00:00",
+      "assignments": []
+    },
+    {
+      "id": "crew-010",
+      "name": "Jordan Lopez",
+      "role": "FO",
+      "base": "KATL",
+      "qualifications": [
+        "A320",
+        "ETOPS"
+      ],
+      "qualifiedFleets": [
+        "A320"
+      ],
+      "seniorityDate": "2014-05-31T06:00:00",
+      "hourlyRate": 85.0,
+      "blockHoursWeek": 29,
+      "maxFdpHours": 14,
+      "cbaGroup": "LINE",
+      "dutyStart": "2026-05-27T23:00:00",
+      "lastDutyEnd": "2026-05-27T13:00:00",
+      "assignments": []
+    },
+    {
+      "id": "crew-011",
+      "name": "Alex Adams",
+      "role": "FO",
+      "base": "KORD",
+      "qualifications": [
+        "A320",
+        "ETOPS",
+        "CAT-III"
+      ],
+      "qualifiedFleets": [
+        "A320"
+      ],
+      "seniorityDate": "2013-05-31T06:00:00",
+      "hourlyRate": 85.0,
+      "blockHoursWeek": 30,
+      "maxFdpHours": 14,
+      "cbaGroup": "LINE",
+      "dutyStart": "2026-05-27T22:00:00",
+      "lastDutyEnd": "2026-05-27T12:00:00",
+      "assignments": []
+    },
+    {
+      "id": "crew-012",
+      "name": "Blake Brooks",
+      "role": "FA",
+      "base": "KDCA",
+      "qualifications": [
+        "A320"
+      ],
+      "qualifiedFleets": [
+        "A320"
+      ],
+      "seniorityDate": "2012-05-31T06:00:00",
+      "hourlyRate": 85.0,
+      "blockHoursWeek": 31,
+      "maxFdpHours": 14,
+      "cbaGroup": "LINE",
+      "dutyStart": "2026-05-27T21:00:00",
+      "lastDutyEnd": "2026-05-27T11:00:00",
+      "assignments": []
+    },
+    {
+      "id": "crew-013",
+      "name": "Casey Carter",
+      "role": "CA",
+      "base": "KDFW",
+      "qualifications": [
+        "A320",
+        "ETOPS"
+      ],
+      "qualifiedFleets": [
+        "A320"
+      ],
+      "seniorityDate": "2023-05-29T06:00:00",
+      "hourlyRate": 120.0,
+      "blockHoursWeek": 32,
+      "maxFdpHours": 14,
+      "cbaGroup": "LINE",
+      "dutyStart": "2026-05-28T02:00:00",
+      "lastDutyEnd": "2026-05-27T16:00:00",
+      "assignments": []
+    },
+    {
+      "id": "crew-014",
+      "name": "Dana Diaz",
+      "role": "FO",
+      "base": "KBOS",
+      "qualifications": [
+        "A320",
+        "ETOPS"
+      ],
+      "qualifiedFleets": [
+        "A320"
+      ],
+      "seniorityDate": "2022-05-29T06:00:00",
+      "hourlyRate": 85.0,
+      "blockHoursWeek": 33,
+      "maxFdpHours": 14,
+      "cbaGroup": "LINE",
+      "dutyStart": "2026-05-28T01:00:00",
+      "lastDutyEnd": "2026-05-27T15:00:00",
+      "assignments": []
+    },
+    {
+      "id": "crew-015",
+      "name": "Evan Edwards",
+      "role": "FO",
+      "base": "KORD",
+      "qualifications": [
+        "A320",
+        "ETOPS",
+        "CAT-III"
+      ],
+      "qualifiedFleets": [
+        "A320"
+      ],
+      "seniorityDate": "2021-05-29T06:00:00",
+      "hourlyRate": 85.0,
+      "blockHoursWeek": 34,
+      "maxFdpHours": 14,
+      "cbaGroup": "LINE",
+      "dutyStart": "2026-05-28T00:00:00",
+      "lastDutyEnd": "2026-05-27T14:00:00",
+      "assignments": []
+    },
+    {
+      "id": "crew-016",
+      "name": "Finn Foster",
+      "role": "FA",
+      "base": "KORD",
+      "qualifications": [
+        "A320"
+      ],
+      "qualifiedFleets": [
+        "A320"
+      ],
+      "seniorityDate": "2020-05-29T06:00:00",
+      "hourlyRate": 85.0,
+      "blockHoursWeek": 35,
+      "maxFdpHours": 14,
+      "cbaGroup": "LINE",
+      "dutyStart": "2026-05-27T23:00:00",
+      "lastDutyEnd": "2026-05-27T13:00:00",
+      "assignments": []
+    },
+    {
+      "id": "crew-017",
+      "name": "Gina Garcia",
+      "role": "CA",
+      "base": "KDCA",
+      "qualifications": [
+        "A320",
+        "ETOPS"
+      ],
+      "qualifiedFleets": [
+        "A320"
+      ],
+      "seniorityDate": "2019-05-30T06:00:00",
+      "hourlyRate": 120.0,
+      "blockHoursWeek": 28,
+      "maxFdpHours": 14,
+      "cbaGroup": "LINE",
+      "dutyStart": "2026-05-27T22:00:00",
+      "lastDutyEnd": "2026-05-27T12:00:00",
+      "assignments": []
+    },
+    {
+      "id": "crew-018",
+      "name": "Harper Hayes",
+      "role": "FO",
+      "base": "KDFW",
+      "qualifications": [
+        "A320",
+        "ETOPS"
+      ],
+      "qualifiedFleets": [
+        "A320"
+      ],
+      "seniorityDate": "2018-05-30T06:00:00",
+      "hourlyRate": 85.0,
+      "blockHoursWeek": 29,
+      "maxFdpHours": 14,
+      "cbaGroup": "LINE",
+      "dutyStart": "2026-05-27T21:00:00",
+      "lastDutyEnd": "2026-05-27T11:00:00",
+      "assignments": []
+    },
+    {
+      "id": "crew-019",
+      "name": "Ivy Kim",
+      "role": "FO",
+      "base": "KBOS",
+      "qualifications": [
+        "A320",
+        "ETOPS"
+      ],
+      "qualifiedFleets": [
+        "A320"
+      ],
+      "seniorityDate": "2017-05-30T06:00:00",
+      "hourlyRate": 85.0,
+      "blockHoursWeek": 30,
+      "maxFdpHours": 14,
+      "cbaGroup": "LINE",
+      "dutyStart": "2026-05-28T02:00:00",
+      "lastDutyEnd": "2026-05-27T16:00:00",
+      "assignments": []
+    },
+    {
+      "id": "crew-020",
+      "name": "Jordan Lopez",
+      "role": "FA",
+      "base": "KATL",
+      "qualifications": [
+        "A320"
+      ],
+      "qualifiedFleets": [
+        "A320"
+      ],
+      "seniorityDate": "2016-05-30T06:00:00",
+      "hourlyRate": 85.0,
+      "blockHoursWeek": 31,
+      "maxFdpHours": 14,
+      "cbaGroup": "LINE",
+      "dutyStart": "2026-05-28T01:00:00",
+      "lastDutyEnd": "2026-05-27T15:00:00",
+      "assignments": []
+    },
+    {
+      "id": "crew-021",
+      "name": "Alex Adams",
+      "role": "CA",
+      "base": "KORD",
+      "qualifications": [
+        "A320",
+        "ETOPS",
+        "CAT-III"
+      ],
+      "qualifiedFleets": [
+        "A320"
+      ],
+      "seniorityDate": "2015-05-31T06:00:00",
+      "hourlyRate": 120.0,
+      "blockHoursWeek": 32,
+      "maxFdpHours": 14,
+      "cbaGroup": "LINE",
+      "dutyStart": "2026-05-28T00:00:00",
+      "lastDutyEnd": "2026-05-27T14:00:00",
+      "assignments": []
+    },
+    {
+      "id": "crew-022",
+      "name": "Blake Brooks",
+      "role": "FO",
+      "base": "KDCA",
+      "qualifications": [
+        "A320",
+        "ETOPS"
+      ],
+      "qualifiedFleets": [
+        "A320"
+      ],
+      "seniorityDate": "2014-05-31T06:00:00",
+      "hourlyRate": 85.0,
+      "blockHoursWeek": 33,
+      "maxFdpHours": 14,
+      "cbaGroup": "LINE",
+      "dutyStart": "2026-05-27T23:00:00",
+      "lastDutyEnd": "2026-05-27T13:00:00",
+      "assignments": []
+    },
+    {
+      "id": "crew-023",
+      "name": "Casey Carter",
+      "role": "FO",
+      "base": "KDFW",
+      "qualifications": [
+        "A320",
+        "ETOPS"
+      ],
+      "qualifiedFleets": [
+        "A320"
+      ],
+      "seniorityDate": "2013-05-31T06:00:00",
+      "hourlyRate": 85.0,
+      "blockHoursWeek": 34,
+      "maxFdpHours": 14,
+      "cbaGroup": "LINE",
+      "dutyStart": "2026-05-27T22:00:00",
+      "lastDutyEnd": "2026-05-27T12:00:00",
+      "assignments": []
+    },
+    {
+      "id": "crew-024",
+      "name": "Dana Diaz",
+      "role": "FA",
+      "base": "KBOS",
+      "qualifications": [
+        "A320"
+      ],
+      "qualifiedFleets": [
+        "A320"
+      ],
+      "seniorityDate": "2012-05-31T06:00:00",
+      "hourlyRate": 85.0,
+      "blockHoursWeek": 35,
+      "maxFdpHours": 14,
+      "cbaGroup": "LINE",
+      "dutyStart": "2026-05-27T21:00:00",
+      "lastDutyEnd": "2026-05-27T11:00:00",
+      "assignments": []
+    },
+    {
+      "id": "crew-025",
+      "name": "Evan Edwards",
+      "role": "CA",
+      "base": "KATL",
+      "qualifications": [
+        "A320",
+        "ETOPS"
+      ],
+      "qualifiedFleets": [
+        "A320"
+      ],
+      "seniorityDate": "2023-05-29T06:00:00",
+      "hourlyRate": 120.0,
+      "blockHoursWeek": 28,
+      "maxFdpHours": 14,
+      "cbaGroup": "LINE",
+      "dutyStart": "2026-05-28T02:00:00",
+      "lastDutyEnd": "2026-05-27T16:00:00",
+      "assignments": []
+    },
+    {
+      "id": "crew-026",
+      "name": "Finn Foster",
+      "role": "FO",
+      "base": "KORD",
+      "qualifications": [
+        "A320",
+        "ETOPS"
+      ],
+      "qualifiedFleets": [
+        "A320"
+      ],
+      "seniorityDate": "2022-05-29T06:00:00",
+      "hourlyRate": 85.0,
+      "blockHoursWeek": 29,
+      "maxFdpHours": 14,
+      "cbaGroup": "LINE",
+      "dutyStart": "2026-05-28T01:00:00",
+      "lastDutyEnd": "2026-05-27T15:00:00",
+      "assignments": []
+    },
+    {
+      "id": "crew-027",
+      "name": "Gina Garcia",
+      "role": "FO",
+      "base": "KDCA",
+      "qualifications": [
+        "A320",
+        "ETOPS"
+      ],
+      "qualifiedFleets": [
+        "A320"
+      ],
+      "seniorityDate": "2021-05-29T06:00:00",
+      "hourlyRate": 85.0,
+      "blockHoursWeek": 30,
+      "maxFdpHours": 14,
+      "cbaGroup": "LINE",
+      "dutyStart": "2026-05-28T00:00:00",
+      "lastDutyEnd": "2026-05-27T14:00:00",
+      "assignments": []
+    },
+    {
+      "id": "crew-028",
+      "name": "Harper Hayes",
+      "role": "FA",
+      "base": "KDFW",
+      "qualifications": [
+        "A320"
+      ],
+      "qualifiedFleets": [
+        "A320"
+      ],
+      "seniorityDate": "2020-05-29T06:00:00",
+      "hourlyRate": 85.0,
+      "blockHoursWeek": 31,
+      "maxFdpHours": 14,
+      "cbaGroup": "LINE",
+      "dutyStart": "2026-05-27T23:00:00",
+      "lastDutyEnd": "2026-05-27T13:00:00",
+      "assignments": []
+    },
+    {
+      "id": "crew-029",
+      "name": "Ivy Kim",
+      "role": "CA",
+      "base": "KBOS",
+      "qualifications": [
+        "A320",
+        "ETOPS"
+      ],
+      "qualifiedFleets": [
+        "A320"
+      ],
+      "seniorityDate": "2019-05-30T06:00:00",
+      "hourlyRate": 120.0,
+      "blockHoursWeek": 32,
+      "maxFdpHours": 14,
+      "cbaGroup": "LINE",
+      "dutyStart": "2026-05-27T22:00:00",
+      "lastDutyEnd": "2026-05-27T12:00:00",
+      "assignments": []
+    },
+    {
+      "id": "crew-030",
+      "name": "Jordan Lopez",
+      "role": "FO",
+      "base": "KATL",
+      "qualifications": [
+        "A320",
+        "ETOPS"
+      ],
+      "qualifiedFleets": [
+        "A320"
+      ],
+      "seniorityDate": "2018-05-30T06:00:00",
+      "hourlyRate": 85.0,
+      "blockHoursWeek": 33,
+      "maxFdpHours": 14,
+      "cbaGroup": "LINE",
+      "dutyStart": "2026-05-27T21:00:00",
+      "lastDutyEnd": "2026-05-27T11:00:00",
+      "assignments": []
+    },
+    {
+      "id": "crew-031",
+      "name": "Alex Adams",
+      "role": "FO",
+      "base": "KORD",
+      "qualifications": [
+        "A320",
+        "ETOPS"
+      ],
+      "qualifiedFleets": [
+        "A320"
+      ],
+      "seniorityDate": "2017-05-30T06:00:00",
+      "hourlyRate": 85.0,
+      "blockHoursWeek": 34,
+      "maxFdpHours": 14,
+      "cbaGroup": "LINE",
+      "dutyStart": "2026-05-28T02:00:00",
+      "lastDutyEnd": "2026-05-27T16:00:00",
+      "assignments": []
+    },
+    {
+      "id": "crew-032",
+      "name": "Blake Brooks",
+      "role": "FA",
+      "base": "KDCA",
+      "qualifications": [
+        "A320"
+      ],
+      "qualifiedFleets": [
+        "A320"
+      ],
+      "seniorityDate": "2016-05-30T06:00:00",
+      "hourlyRate": 85.0,
+      "blockHoursWeek": 35,
+      "maxFdpHours": 14,
+      "cbaGroup": "LINE",
+      "dutyStart": "2026-05-28T01:00:00",
+      "lastDutyEnd": "2026-05-27T15:00:00",
+      "assignments": []
+    },
+    {
+      "id": "crew-033",
+      "name": "Casey Carter",
+      "role": "CA",
+      "base": "KDFW",
+      "qualifications": [
+        "A320",
+        "ETOPS"
+      ],
+      "qualifiedFleets": [
+        "A320"
+      ],
+      "seniorityDate": "2015-05-31T06:00:00",
+      "hourlyRate": 120.0,
+      "blockHoursWeek": 28,
+      "maxFdpHours": 14,
+      "cbaGroup": "LINE",
+      "dutyStart": "2026-05-28T00:00:00",
+      "lastDutyEnd": "2026-05-27T14:00:00",
+      "assignments": []
+    },
+    {
+      "id": "crew-034",
+      "name": "Dana Diaz",
+      "role": "FO",
+      "base": "KBOS",
+      "qualifications": [
+        "A320",
+        "ETOPS"
+      ],
+      "qualifiedFleets": [
+        "A320"
+      ],
+      "seniorityDate": "2014-05-31T06:00:00",
+      "hourlyRate": 85.0,
+      "blockHoursWeek": 29,
+      "maxFdpHours": 14,
+      "cbaGroup": "LINE",
+      "dutyStart": "2026-05-27T23:00:00",
+      "lastDutyEnd": "2026-05-27T13:00:00",
+      "assignments": []
+    },
+    {
+      "id": "crew-035",
+      "name": "Evan Edwards",
+      "role": "FO",
+      "base": "KATL",
+      "qualifications": [
+        "A320",
+        "ETOPS"
+      ],
+      "qualifiedFleets": [
+        "A320"
+      ],
+      "seniorityDate": "2013-05-31T06:00:00",
+      "hourlyRate": 85.0,
+      "blockHoursWeek": 30,
+      "maxFdpHours": 14,
+      "cbaGroup": "LINE",
+      "dutyStart": "2026-05-27T22:00:00",
+      "lastDutyEnd": "2026-05-27T12:00:00",
+      "assignments": []
+    },
+    {
+      "id": "crew-036",
+      "name": "Finn Foster",
+      "role": "FA",
+      "base": "KORD",
+      "qualifications": [
+        "A320"
+      ],
+      "qualifiedFleets": [
+        "A320"
+      ],
+      "seniorityDate": "2012-05-31T06:00:00",
+      "hourlyRate": 85.0,
+      "blockHoursWeek": 31,
+      "maxFdpHours": 14,
+      "cbaGroup": "LINE",
+      "dutyStart": "2026-05-27T21:00:00",
+      "lastDutyEnd": "2026-05-27T11:00:00",
+      "assignments": []
+    },
+    {
+      "id": "crew-037",
+      "name": "Gina Garcia",
+      "role": "CA",
+      "base": "KDCA",
+      "qualifications": [
+        "A320",
+        "ETOPS"
+      ],
+      "qualifiedFleets": [
+        "A320"
+      ],
+      "seniorityDate": "2023-05-29T06:00:00",
+      "hourlyRate": 120.0,
+      "blockHoursWeek": 32,
+      "maxFdpHours": 14,
+      "cbaGroup": "LINE",
+      "dutyStart": "2026-05-28T02:00:00",
+      "lastDutyEnd": "2026-05-27T16:00:00",
+      "assignments": []
+    },
+    {
+      "id": "crew-038",
+      "name": "Harper Hayes",
+      "role": "FO",
+      "base": "KDFW",
+      "qualifications": [
+        "A320",
+        "ETOPS"
+      ],
+      "qualifiedFleets": [
+        "A320"
+      ],
+      "seniorityDate": "2022-05-29T06:00:00",
+      "hourlyRate": 85.0,
+      "blockHoursWeek": 33,
+      "maxFdpHours": 14,
+      "cbaGroup": "LINE",
+      "dutyStart": "2026-05-28T01:00:00",
+      "lastDutyEnd": "2026-05-27T15:00:00",
+      "assignments": []
+    },
+    {
+      "id": "crew-039",
+      "name": "Ivy Kim",
+      "role": "FO",
+      "base": "KBOS",
+      "qualifications": [
+        "A320",
+        "ETOPS"
+      ],
+      "qualifiedFleets": [
+        "A320"
+      ],
+      "seniorityDate": "2021-05-29T06:00:00",
+      "hourlyRate": 85.0,
+      "blockHoursWeek": 34,
+      "maxFdpHours": 14,
+      "cbaGroup": "LINE",
+      "dutyStart": "2026-05-28T00:00:00",
+      "lastDutyEnd": "2026-05-27T14:00:00",
+      "assignments": []
+    },
+    {
+      "id": "crew-040",
+      "name": "Jordan Lopez",
+      "role": "FA",
+      "base": "KATL",
+      "qualifications": [
+        "A320"
+      ],
+      "qualifiedFleets": [
+        "A320"
+      ],
+      "seniorityDate": "2020-05-29T06:00:00",
+      "hourlyRate": 85.0,
+      "blockHoursWeek": 35,
+      "maxFdpHours": 14,
+      "cbaGroup": "LINE",
+      "dutyStart": "2026-05-27T23:00:00",
+      "lastDutyEnd": "2026-05-27T13:00:00",
+      "assignments": []
+    },
+    {
+      "id": "crew-041",
+      "name": "Alex Adams",
+      "role": "CA",
+      "base": "KORD",
+      "qualifications": [
+        "A320",
+        "ETOPS"
+      ],
+      "qualifiedFleets": [
+        "A320"
+      ],
+      "seniorityDate": "2019-05-30T06:00:00",
+      "hourlyRate": 120.0,
+      "blockHoursWeek": 28,
+      "maxFdpHours": 14,
+      "cbaGroup": "LINE",
+      "dutyStart": "2026-05-27T22:00:00",
+      "lastDutyEnd": "2026-05-27T12:00:00",
+      "assignments": []
+    },
+    {
+      "id": "crew-042",
+      "name": "Blake Brooks",
+      "role": "FO",
+      "base": "KDCA",
+      "qualifications": [
+        "A320",
+        "ETOPS"
+      ],
+      "qualifiedFleets": [
+        "A320"
+      ],
+      "seniorityDate": "2018-05-30T06:00:00",
+      "hourlyRate": 85.0,
+      "blockHoursWeek": 29,
+      "maxFdpHours": 14,
+      "cbaGroup": "LINE",
+      "dutyStart": "2026-05-27T21:00:00",
+      "lastDutyEnd": "2026-05-27T11:00:00",
+      "assignments": []
+    },
+    {
+      "id": "crew-043",
+      "name": "Casey Carter",
+      "role": "FO",
+      "base": "KDFW",
+      "qualifications": [
+        "A320",
+        "ETOPS"
+      ],
+      "qualifiedFleets": [
+        "A320"
+      ],
+      "seniorityDate": "2017-05-30T06:00:00",
+      "hourlyRate": 85.0,
+      "blockHoursWeek": 30,
+      "maxFdpHours": 14,
+      "cbaGroup": "LINE",
+      "dutyStart": "2026-05-28T02:00:00",
+      "lastDutyEnd": "2026-05-27T16:00:00",
+      "assignments": []
+    },
+    {
+      "id": "crew-044",
+      "name": "Dana Diaz",
+      "role": "FA",
+      "base": "KBOS",
+      "qualifications": [
+        "A320"
+      ],
+      "qualifiedFleets": [
+        "A320"
+      ],
+      "seniorityDate": "2016-05-30T06:00:00",
+      "hourlyRate": 85.0,
+      "blockHoursWeek": 31,
+      "maxFdpHours": 14,
+      "cbaGroup": "LINE",
+      "dutyStart": "2026-05-28T01:00:00",
+      "lastDutyEnd": "2026-05-27T15:00:00",
+      "assignments": []
+    },
+    {
+      "id": "crew-045",
+      "name": "Evan Edwards",
+      "role": "CA",
+      "base": "KATL",
+      "qualifications": [
+        "A320",
+        "ETOPS"
+      ],
+      "qualifiedFleets": [
+        "A320"
+      ],
+      "seniorityDate": "2015-05-31T06:00:00",
+      "hourlyRate": 120.0,
+      "blockHoursWeek": 32,
+      "maxFdpHours": 14,
+      "cbaGroup": "LINE",
+      "dutyStart": "2026-05-28T00:00:00",
+      "lastDutyEnd": "2026-05-27T14:00:00",
+      "assignments": []
+    },
+    {
+      "id": "crew-046",
+      "name": "Finn Foster",
+      "role": "FO",
+      "base": "KORD",
+      "qualifications": [
+        "A320",
+        "ETOPS"
+      ],
+      "qualifiedFleets": [
+        "A320"
+      ],
+      "seniorityDate": "2014-05-31T06:00:00",
+      "hourlyRate": 85.0,
+      "blockHoursWeek": 33,
+      "maxFdpHours": 14,
+      "cbaGroup": "LINE",
+      "dutyStart": "2026-05-27T23:00:00",
+      "lastDutyEnd": "2026-05-27T13:00:00",
+      "assignments": []
+    },
+    {
+      "id": "crew-047",
+      "name": "Gina Garcia",
+      "role": "FO",
+      "base": "KDCA",
+      "qualifications": [
+        "A320",
+        "ETOPS"
+      ],
+      "qualifiedFleets": [
+        "A320"
+      ],
+      "seniorityDate": "2013-05-31T06:00:00",
+      "hourlyRate": 85.0,
+      "blockHoursWeek": 34,
+      "maxFdpHours": 14,
+      "cbaGroup": "LINE",
+      "dutyStart": "2026-05-27T22:00:00",
+      "lastDutyEnd": "2026-05-27T12:00:00",
+      "assignments": []
+    },
+    {
+      "id": "crew-048",
+      "name": "Harper Hayes",
+      "role": "FA",
+      "base": "KDFW",
+      "qualifications": [
+        "A320"
+      ],
+      "qualifiedFleets": [
+        "A320"
+      ],
+      "seniorityDate": "2012-05-31T06:00:00",
+      "hourlyRate": 85.0,
+      "blockHoursWeek": 35,
+      "maxFdpHours": 14,
+      "cbaGroup": "LINE",
+      "dutyStart": "2026-05-27T21:00:00",
+      "lastDutyEnd": "2026-05-27T11:00:00",
+      "assignments": []
+    }
+  ],
+  "flights": [
+    {
+      "id": "leg-001",
+      "flightNo": "B61207",
+      "origin": "KORD",
+      "dest": "KBOS",
+      "schedDep": "2026-05-28T06:00:00",
+      "schedArr": "2026-05-28T08:00:00",
+      "blockMinutes": 120,
+      "fleetType": "A320",
+      "tailId": "N812JB",
+      "requiredQuals": [
+        "A320",
+        "ETOPS"
+      ],
+      "pax": 140,
+      "connectionPax": 20,
+      "priority": "high",
+      "minCrew": 2
+    },
+    {
+      "id": "leg-002",
+      "flightNo": "B61208",
+      "origin": "KBOS",
+      "dest": "KJFK",
+      "schedDep": "2026-05-28T08:30:00",
+      "schedArr": "2026-05-28T10:00:00",
+      "blockMinutes": 90,
+      "fleetType": "A320",
+      "tailId": "N812JB",
+      "requiredQuals": [
+        "A320",
+        "ETOPS"
+      ],
+      "pax": 145,
+      "connectionPax": 23,
+      "priority": "high",
+      "minCrew": 2
+    },
+    {
+      "id": "leg-003",
+      "flightNo": "B61209",
+      "origin": "KJFK",
+      "dest": "KORD",
+      "schedDep": "2026-05-28T11:00:00",
+      "schedArr": "2026-05-28T13:30:00",
+      "blockMinutes": 150,
+      "fleetType": "A320",
+      "tailId": "N812JB",
+      "requiredQuals": [
+        "A320",
+        "ETOPS"
+      ],
+      "pax": 150,
+      "connectionPax": 26,
+      "priority": "high",
+      "minCrew": 2
+    },
+    {
+      "id": "leg-004",
+      "flightNo": "B61441",
+      "origin": "KDCA",
+      "dest": "KORD",
+      "schedDep": "2026-05-28T07:00:00",
+      "schedArr": "2026-05-28T09:10:00",
+      "blockMinutes": 130,
+      "fleetType": "A320",
+      "tailId": "N445BZ",
+      "requiredQuals": [
+        "A320",
+        "ETOPS"
+      ],
+      "pax": 155,
+      "connectionPax": 29,
+      "priority": "normal",
+      "minCrew": 2
+    },
+    {
+      "id": "leg-005",
+      "flightNo": "B61442",
+      "origin": "KORD",
+      "dest": "KDFW",
+      "schedDep": "2026-05-28T10:00:00",
+      "schedArr": "2026-05-28T12:40:00",
+      "blockMinutes": 160,
+      "fleetType": "A320",
+      "tailId": "N445BZ",
+      "requiredQuals": [
+        "A320",
+        "ETOPS"
+      ],
+      "pax": 160,
+      "connectionPax": 32,
+      "priority": "normal",
+      "minCrew": 2
+    },
+    {
+      "id": "leg-006",
+      "flightNo": "B61443",
+      "origin": "KDFW",
+      "dest": "KATL",
+      "schedDep": "2026-05-28T13:30:00",
+      "schedArr": "2026-05-28T15:50:00",
+      "blockMinutes": 140,
+      "fleetType": "A320",
+      "tailId": "N445BZ",
+      "requiredQuals": [
+        "A320",
+        "ETOPS"
+      ],
+      "pax": 165,
+      "connectionPax": 35,
+      "priority": "normal",
+      "minCrew": 2
+    }
+  ],
+  "aircraft": [
+    {
+      "id": "N812JB",
+      "fleetType": "A320",
+      "seats": 186,
+      "currentStation": "KORD",
+      "status": "mx_hold",
+      "availableFrom": "2026-05-28T09:00:00",
+      "metadata": {
+        "carrier": "B6"
+      }
+    },
+    {
+      "id": "N445BZ",
+      "fleetType": "A320",
+      "seats": 186,
+      "currentStation": "KORD",
+      "status": "available",
+      "availableFrom": "2026-05-28T06:00:00",
+      "metadata": {
+        "carrier": "B6"
+      }
+    },
+    {
+      "id": "N903DL",
+      "fleetType": "A320",
+      "seats": 186,
+      "currentStation": "KDCA",
+      "status": "available",
+      "availableFrom": "2026-05-28T06:00:00",
+      "metadata": {
+        "carrier": "B6"
+      }
+    }
+  ]
+}

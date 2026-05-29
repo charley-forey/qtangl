@@ -1,0 +1,1 @@
+We shipped an OCC recovery demo—MX hold at KORD, tail routing, multi-leg crew rebid, hybrid alternates with FAR 117 audit. Live at qtangl.com/demo/airline. Worth a look if you run disruption recovery?

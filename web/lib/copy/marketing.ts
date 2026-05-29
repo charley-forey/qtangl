@@ -143,6 +143,19 @@ export const docsCards = [
 
 export const blogPosts = [
   {
+    slug: "airline-recovery",
+    href: "/blog/airline-recovery",
+    category: "Aviation operations",
+    coverImage: "/use-case-workforce.png",
+    coverAlt:
+      "Operations control center illustration with flight boards and crew recovery overlays.",
+    title: "OCC crew recovery: multi-leg rebid with auditable hybrid alternates",
+    excerpt:
+      "MX hold → tail routing → CP-SAT crew assignment → hybrid recovery plans.",
+    description:
+      "How the airline demo turns a disruption cascade into defensible recovery plans with FAR 117 proof.",
+  },
+  {
     slug: "hospital-restaffing",
     href: "/blog/hospital-restaffing",
     category: "Healthcare operations",

@@ -1,0 +1,2 @@
+crew_id,name,role,base,qualifications,qualified_fleets,block_hours_week,last_duty_end,seniority_date,hourly_rate,max_fdp_hours,cba_group
+crew-upload-01,Upload Captain,CA,KORD,A320|ETOPS,A320,32,2026-05-27T18:00:00,2020-12-05T06:00:00,120,14,LINE

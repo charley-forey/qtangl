@@ -70,6 +70,13 @@
     "headings": []
   },
   {
+    "href": "/docs/guides/airline-demo",
+    "title": "Airline demo guide",
+    "section": "Guides",
+    "description": "",
+    "headings": []
+  },
+  {
     "href": "/docs/api",
     "title": "API guide",
     "section": "API Reference",
@@ -128,6 +135,48 @@
   {
     "href": "/docs/reference/hospital/callout-solve",
     "title": "POST /hospital/callout/solve",
+    "section": "API Reference",
+    "description": "",
+    "headings": []
+  },
+  {
+    "href": "/docs/reference/airline/network",
+    "title": "GET /airline/network",
+    "section": "API Reference",
+    "description": "",
+    "headings": []
+  },
+  {
+    "href": "/docs/reference/airline/scenarios",
+    "title": "GET /airline/scenarios",
+    "section": "API Reference",
+    "description": "",
+    "headings": []
+  },
+  {
+    "href": "/docs/reference/airline/disruption",
+    "title": "GET /airline/disruption",
+    "section": "API Reference",
+    "description": "",
+    "headings": []
+  },
+  {
+    "href": "/docs/reference/airline/qpu-trace",
+    "title": "GET /airline/qpu-trace",
+    "section": "API Reference",
+    "description": "",
+    "headings": []
+  },
+  {
+    "href": "/docs/reference/airline/upload-crew",
+    "title": "POST /airline/upload-crew",
+    "section": "API Reference",
+    "description": "",
+    "headings": []
+  },
+  {
+    "href": "/docs/reference/airline/recover-solve",
+    "title": "POST /airline/recover/solve",
     "section": "API Reference",
     "description": "",
     "headings": []

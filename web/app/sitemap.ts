@@ -19,6 +19,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/sandbox",
     "/demo/hospital",
     "/demo/hospital/methodology",
+    "/demo/airline",
+    "/demo/airline/methodology",
     "/about",
     "/technology",
     "/access",
@@ -44,7 +46,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     url: `${siteMetadata.url}${route}`,
     lastModified: new Date(),
     changeFrequency:
-      route === "" || route === "/demo/hospital" ? "weekly" : "monthly",
-    priority: route === "" ? 1 : route === "/demo/hospital" ? 0.9 : 0.7,
+      route === "" || route.startsWith("/demo/") ? "weekly" : "monthly",
+    priority:
+      route === ""
+        ? 1
+        : route === "/demo/hospital" || route === "/demo/airline"
+          ? 0.9
+          : 0.7,
   }));
 }

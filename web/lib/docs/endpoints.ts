@@ -379,6 +379,150 @@ export const docsEndpoints: Record<string, DocsEndpoint> = {
       },
     ],
   },
+  "airline-network": {
+    id: "airline-network",
+    method: "GET",
+    path: "/airline/network",
+    status: "pilot",
+    title: "GET /airline/network",
+    summary: "Load the bundled airline network fixture (crew, flights, aircraft).",
+    auth: true,
+    responseFields: [
+      { name: "crew", type: "CrewMember[]", required: true, description: "Crew roster." },
+      { name: "flights", type: "FlightLeg[]", required: true, description: "Scheduled legs." },
+      { name: "aircraft", type: "Aircraft[]", required: true, description: "Fleet tails." },
+    ],
+    examples: [
+      {
+        label: "Network fixture",
+        response: { status: "success", summary: "Airline network fixture loaded.", crew: [] },
+      },
+    ],
+  },
+  "airline-scenarios": {
+    id: "airline-scenarios",
+    method: "GET",
+    path: "/airline/scenarios",
+    status: "pilot",
+    title: "GET /airline/scenarios",
+    summary: "List disruption scenarios for the OCC recovery demo.",
+    auth: true,
+    responseFields: [
+      { name: "scenarios", type: "Scenario[]", required: true, description: "Scenario catalog." },
+    ],
+    examples: [{ label: "Scenarios", response: { status: "success", scenarios: [] } }],
+  },
+  "airline-disruption": {
+    id: "airline-disruption",
+    method: "GET",
+    path: "/airline/disruption",
+    status: "pilot",
+    title: "GET /airline/disruption",
+    summary: "Fetch disruption metadata for a scenario id.",
+    auth: true,
+    queryParams: [
+      {
+        name: "scenarioId",
+        type: "string",
+        required: false,
+        default: "mx-hold-ord-0612",
+        description: "Scenario identifier.",
+      },
+    ],
+    examples: [
+      {
+        label: "MX hold",
+        response: { status: "success", disruption: {}, scenario: {} },
+      },
+    ],
+  },
+  "airline-qpu-trace": {
+    id: "airline-qpu-trace",
+    method: "GET",
+    path: "/airline/qpu-trace",
+    status: "pilot",
+    title: "GET /airline/qpu-trace",
+    summary: "Cached QPU sampling trace for hybrid micro-window replay.",
+    auth: true,
+    examples: [{ label: "Trace", response: { status: "success", trace: {} } }],
+  },
+  "airline-upload-crew": {
+    id: "airline-upload-crew",
+    method: "POST",
+    path: "/airline/upload-crew",
+    status: "pilot",
+    title: "POST /airline/upload-crew",
+    summary: "Upload a CSV crew roster; returns a 24-hour session id.",
+    auth: true,
+    examples: [
+      {
+        label: "Upload",
+        response: { status: "success", sessionId: "airline-...", summary: "Validated crew." },
+      },
+    ],
+  },
+  "airline-recover-solve": {
+    id: "airline-recover-solve",
+    method: "POST",
+    path: "/airline/recover/solve",
+    status: "pilot",
+    title: "POST /airline/recover/solve",
+    summary:
+      "Run OCC recovery: tail routing, CP-SAT crew assignment, hybrid alternates, scoreboard, audit packs.",
+    auth: true,
+    requestFields: [
+      {
+        name: "scenarioId",
+        type: "string",
+        required: false,
+        default: "mx-hold-ord-0612",
+        description: "Disruption scenario.",
+      },
+      {
+        name: "useFixture",
+        type: "boolean",
+        required: false,
+        default: "true",
+        description: "Replay cached QPU trace when true.",
+      },
+      {
+        name: "crewSessionId",
+        type: "string",
+        required: false,
+        description: "Uploaded crew session override.",
+      },
+      { name: "seed", type: "integer", required: false, default: "1234", description: "Seed." },
+    ],
+    responseFields: [
+      { name: "routing", type: "RoutingResult", required: true, description: "Tail repair." },
+      {
+        name: "classicalPlan",
+        type: "RecoveryPlan",
+        required: true,
+        description: "CP-SAT crew assignment.",
+      },
+      {
+        name: "hybridPlans",
+        type: "RecoveryPlan[]",
+        required: true,
+        description: "Hybrid alternates.",
+      },
+      { name: "scoreboard", type: "Scoreboard", required: true, description: "KPI comparison." },
+      { name: "auditPacks", type: "AuditPack[]", required: true, description: "Audit artifacts." },
+    ],
+    examples: [
+      {
+        label: "Recover",
+        request: { scenarioId: "mx-hold-ord-0612", useFixture: true, seed: 1234 },
+        response: {
+          status: "success",
+          classicalPlan: {},
+          hybridPlans: [],
+          scoreboard: {},
+        },
+      },
+    ],
+  },
 };
 
 export function getEndpoint(id: string): DocsEndpoint | undefined {

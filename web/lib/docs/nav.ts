@@ -37,6 +37,11 @@ export const docsSections: DocsNavSection[] = [
         href: "/docs/guides/hospital-demo",
         status: "pilot",
       },
+      {
+        name: "Airline demo guide",
+        href: "/docs/guides/airline-demo",
+        status: "pilot",
+      },
     ],
   },
   {
@@ -74,6 +79,36 @@ export const docsSections: DocsNavSection[] = [
       {
         name: "POST /hospital/callout/solve",
         href: "/docs/reference/hospital/callout-solve",
+        status: "pilot",
+      },
+      {
+        name: "GET /airline/network",
+        href: "/docs/reference/airline/network",
+        status: "pilot",
+      },
+      {
+        name: "GET /airline/scenarios",
+        href: "/docs/reference/airline/scenarios",
+        status: "pilot",
+      },
+      {
+        name: "GET /airline/disruption",
+        href: "/docs/reference/airline/disruption",
+        status: "pilot",
+      },
+      {
+        name: "GET /airline/qpu-trace",
+        href: "/docs/reference/airline/qpu-trace",
+        status: "pilot",
+      },
+      {
+        name: "POST /airline/upload-crew",
+        href: "/docs/reference/airline/upload-crew",
+        status: "pilot",
+      },
+      {
+        name: "POST /airline/recover/solve",
+        href: "/docs/reference/airline/recover-solve",
         status: "pilot",
       },
       { name: "Errors & status codes", href: "/docs/errors" },

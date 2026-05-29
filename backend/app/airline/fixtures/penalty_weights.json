@@ -1,0 +1,10 @@
+{
+  "hardConstraintMultiplier": 10.0,
+  "noDoubleBookingMultiplier": 8.0,
+  "softWeights": {
+    "fatigueRisk": 1.0,
+    "fairnessDelta": 1.0,
+    "seniorityPreference": 0.5,
+    "offBasePenalty": 1.2
+  }
+}

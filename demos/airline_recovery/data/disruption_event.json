@@ -1,0 +1,20 @@
+{
+  "id": "disruption-mx-ord",
+  "aircraftId": "N812JB",
+  "station": "KORD",
+  "start": "2026-05-28T06:12:00",
+  "mxHoldHours": 3.0,
+  "affectedLegIds": [
+    "leg-001",
+    "leg-002",
+    "leg-003"
+  ],
+  "crewAffected": 12,
+  "urgencyMinutes": 48,
+  "channel": "acars",
+  "reason": "Hydraulic leak \u2014 3 hr MX hold",
+  "requiredQuals": [
+    "A320",
+    "ETOPS"
+  ]
+}

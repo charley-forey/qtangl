@@ -24,6 +24,7 @@ const docsSections = [
       { name: "Routing guide", href: "/docs/guides/routing" },
       { name: "Allocation guide", href: "/docs/guides/allocation" },
       { name: "Hospital demo guide", href: "/docs/guides/hospital-demo" },
+      { name: "Airline demo guide", href: "/docs/guides/airline-demo" },
     ],
   },
   {
@@ -43,6 +44,15 @@ const docsSections = [
       {
         name: "POST /hospital/callout/solve",
         href: "/docs/reference/hospital/callout-solve",
+      },
+      { name: "GET /airline/network", href: "/docs/reference/airline/network" },
+      { name: "GET /airline/scenarios", href: "/docs/reference/airline/scenarios" },
+      { name: "GET /airline/disruption", href: "/docs/reference/airline/disruption" },
+      { name: "GET /airline/qpu-trace", href: "/docs/reference/airline/qpu-trace" },
+      { name: "POST /airline/upload-crew", href: "/docs/reference/airline/upload-crew" },
+      {
+        name: "POST /airline/recover/solve",
+        href: "/docs/reference/airline/recover-solve",
       },
       { name: "Errors & status codes", href: "/docs/errors" },
       { name: "JSON schemas", href: "/docs/reference/schemas" },

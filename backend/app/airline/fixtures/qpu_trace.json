@@ -1,0 +1,29 @@
+{
+  "backend": {
+    "name": "ibm_torino",
+    "qubits": 133
+  },
+  "run": {
+    "jobId": "airline-demo-trace",
+    "shots": 4096,
+    "seed": 1234
+  },
+  "distribution": [
+    {
+      "bitstring": "001000000000",
+      "count": 1847,
+      "decodedPlanId": "hybrid-plan-3"
+    },
+    {
+      "bitstring": "010000000000",
+      "count": 1264,
+      "decodedPlanId": "hybrid-plan-2"
+    },
+    {
+      "bitstring": "100000000000",
+      "count": 985,
+      "decodedPlanId": "hybrid-plan-1"
+    }
+  ],
+  "summary": "Cached QPU sampling for the KORD MX-hold micro-window (12 binary vars)."
+}

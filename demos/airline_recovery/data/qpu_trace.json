@@ -1,0 +1,33 @@
+{
+  "backend": {
+    "name": "fake_brisbane",
+    "provider": "qiskit-aer fake-provider",
+    "qubits": 133,
+    "calibrationTimestamp": "2026-05-29T01:25:37.654686+00:00",
+    "status": "simulated_hardware_noise_model"
+  },
+  "run": {
+    "jobId": "airline-demo-trace",
+    "shots": 4096,
+    "seed": 1234,
+    "scenarioId": "mx-hold-ord-0612"
+  },
+  "distribution": [
+    {
+      "bitstring": "100000000000",
+      "count": 983,
+      "decodedPlanId": "hybrid-plan-1"
+    },
+    {
+      "bitstring": "010000000000",
+      "count": 1270,
+      "decodedPlanId": "hybrid-plan-2"
+    },
+    {
+      "bitstring": "001000000000",
+      "count": 1843,
+      "decodedPlanId": "hybrid-plan-3"
+    }
+  ],
+  "summary": "Cached QPU sampling for scenario mx-hold-ord-0612 (3 binary vars in the micro-window)."
+}

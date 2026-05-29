@@ -1,0 +1,50 @@
+{
+  "id": "mx-hold-ord-0612",
+  "title": "KORD MX hold \u2014 tail N812JB",
+  "summary": "06:12 at KORD \u2014 N812JB unavailable for a 3-hour maintenance hold. Three downstream legs need tail swap and crew rebid.",
+  "disruption": {
+    "id": "disruption-mx-ord",
+    "aircraftId": "N812JB",
+    "station": "KORD",
+    "start": "2026-05-28T06:12:00",
+    "mxHoldHours": 3.0,
+    "affectedLegIds": [
+      "leg-001",
+      "leg-002",
+      "leg-003"
+    ],
+    "crewAffected": 12,
+    "urgencyMinutes": 48,
+    "channel": "acars",
+    "reason": "Hydraulic leak \u2014 3 hr MX hold",
+    "requiredQuals": [
+      "A320",
+      "ETOPS"
+    ]
+  },
+  "manualBaseline": {
+    "decisionMinutes": 35,
+    "recoveryCost": 185000.0,
+    "summary": "OCC cancels the third leg and calls reserve at premium cost to protect the bank."
+  },
+  "preferredCandidates": [
+    "crew-003",
+    "crew-007",
+    "crew-011"
+  ],
+  "classicalSearchScope": "local",
+  "counts": [
+    {
+      "bitstring": "100000000000",
+      "weight": 24
+    },
+    {
+      "bitstring": "010000000000",
+      "weight": 31
+    },
+    {
+      "bitstring": "001000000000",
+      "weight": 45
+    }
+  ]
+}

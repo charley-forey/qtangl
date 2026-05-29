@@ -1,0 +1,47 @@
+{
+  "id": "wx-groundstop-dfw",
+  "title": "DFW ground stop cascade",
+  "summary": "Weather ground stop at DFW ripples through the evening bank; three legs need tail and crew recovery.",
+  "disruption": {
+    "id": "disruption-wx-dfw",
+    "aircraftId": "N445BZ",
+    "station": "KDFW",
+    "start": "2026-05-28T10:00:00",
+    "mxHoldHours": 1.5,
+    "affectedLegIds": [
+      "leg-005",
+      "leg-006"
+    ],
+    "crewAffected": 10,
+    "urgencyMinutes": 70,
+    "channel": "email",
+    "reason": "Ground stop \u2014 convective weather",
+    "requiredQuals": [
+      "A320"
+    ]
+  },
+  "manualBaseline": {
+    "decisionMinutes": 42,
+    "recoveryCost": 210000.0,
+    "summary": "Manual plan cancels one leg and hotels 140 passengers before calling reserve."
+  },
+  "preferredCandidates": [
+    "crew-005",
+    "crew-009"
+  ],
+  "classicalSearchScope": "global",
+  "counts": [
+    {
+      "bitstring": "10000",
+      "weight": 30
+    },
+    {
+      "bitstring": "01000",
+      "weight": 35
+    },
+    {
+      "bitstring": "00100",
+      "weight": 35
+    }
+  ]
+}

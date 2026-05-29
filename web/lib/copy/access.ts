@@ -109,6 +109,7 @@ export const accessSuccessCopy = {
   urgentPrefix: "Need a faster response?",
   defaultNextSteps: [
     { label: "Hospital re-staffing demo", href: "/demo/hospital" },
+    { label: "Airline crew recovery demo", href: "/demo/airline" },
     { label: "Read the docs", href: "/docs" },
     { label: "Try the sandbox", href: "/sandbox" },
   ],

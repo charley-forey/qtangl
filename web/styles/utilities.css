@@ -748,6 +748,222 @@
   }
 }
 
+/* Airline OCC demo — mirrors hospital command-center surfaces */
+.airline-section {
+  border-radius: var(--radius-xl);
+}
+
+.airline-metric {
+  min-width: 0;
+  border: 1px solid var(--border);
+  background: rgba(0, 0, 0, 0.35);
+  padding: 1rem 1.125rem;
+  border-radius: var(--radius-lg);
+}
+
+.airline-metric-label {
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-gray-500);
+}
+
+.airline-metric-value {
+  margin-top: 0.5rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: white;
+  line-height: 1.2;
+}
+
+.airline-chip {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 9999px;
+  border: 1px solid var(--border);
+  padding: 0.25rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.airline-chip-neutral {
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--color-gray-300);
+}
+
+.airline-chip-success {
+  border-color: rgba(52, 211, 153, 0.35);
+  background: rgba(16, 185, 129, 0.12);
+  color: rgb(167, 243, 208);
+}
+
+.airline-chip-alert {
+  border-color: rgba(252, 165, 165, 0.35);
+  background: rgba(239, 68, 68, 0.1);
+  color: rgb(254, 202, 202);
+}
+
+.airline-input {
+  font-variant-numeric: tabular-nums;
+}
+
+.airline-command-bar {
+  position: sticky;
+  top: 0.75rem;
+  z-index: 40;
+}
+
+.airline-scenario-card {
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  background: rgba(0, 0, 0, 0.35);
+  padding: 1rem 1.125rem;
+  text-align: left;
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.airline-scenario-card:hover {
+  border-color: var(--border-strong);
+}
+
+.airline-scenario-card[data-active="true"] {
+  border-color: var(--border-strong);
+  background: rgba(255, 255, 255, 0.07);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.06);
+}
+
+.airline-drawer-root {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.airline-drawer-backdrop {
+  position: absolute;
+  inset: 0;
+  border: none;
+  background: rgba(0, 0, 0, 0.72);
+  backdrop-filter: blur(4px);
+  cursor: pointer;
+}
+
+.airline-drawer-panel {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  height: 100%;
+  width: 100%;
+  max-width: 42rem;
+  flex-direction: column;
+  border-left: 1px solid var(--border);
+  background: #040507;
+  box-shadow: -24px 0 80px rgba(0, 0, 0, 0.55);
+  animation: airline-drawer-in 0.28s ease-out;
+}
+
+.airline-drawer-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  border-bottom: 1px solid var(--border);
+  padding: 1.25rem 1.5rem;
+}
+
+.airline-drawer-body {
+  flex: 1;
+  overflow: auto;
+  padding: 1.25rem 1.5rem 1.5rem;
+}
+
+.airline-audit-block {
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  background: rgba(0, 0, 0, 0.35);
+  padding: 1rem 1.125rem;
+}
+
+.airline-solve-pulse {
+  animation: airline-solve-pulse 1.4s ease-in-out infinite;
+}
+
+@keyframes airline-solve-pulse {
+  0%,
+  100% {
+    opacity: 0.45;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.airline-results-highlight {
+  animation: airline-results-flash 1.2s ease-out;
+}
+
+@keyframes airline-results-flash {
+  0% {
+    box-shadow: 0 0 0 0 rgba(96, 165, 250, 0.45);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(96, 165, 250, 0);
+  }
+}
+
+.airline-toast {
+  position: fixed;
+  bottom: 1.5rem;
+  left: 50%;
+  z-index: 80;
+  translate: -50% 0;
+  border-radius: 9999px;
+  border: 1px solid var(--border-strong);
+  background: rgba(10, 10, 12, 0.95);
+  padding: 0.625rem 1.25rem;
+  font-size: 0.875rem;
+  color: white;
+  box-shadow: var(--shadow-elevated);
+  animation: airline-toast-in 0.25s ease-out;
+}
+
+@keyframes airline-drawer-in {
+  from {
+    opacity: 0;
+    transform: translateX(1.5rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes airline-toast-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 0.5rem);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .airline-drawer-panel,
+  .airline-toast,
+  .airline-solve-pulse,
+  .airline-results-highlight {
+    animation: none !important;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   :where(.surface-panel-feature)::before,
   .gradient-text,

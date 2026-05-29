@@ -319,6 +319,42 @@ export function buildHospitalDemoJsonLd(options: { description: string; videoUrl
   };
 }
 
+export function buildAirlineDemoJsonLd(options: { description: string; videoUrl?: string }) {
+  const url = absoluteUrl("/demo/airline");
+  const graph: Record<string, unknown>[] = [
+    {
+      "@type": "WebPage",
+      name: "Airline crew recovery demo",
+      description: options.description,
+      url,
+      isPartOf: {
+        "@id": `${siteMetadata.url}/#website`,
+      },
+    },
+  ];
+
+  if (options.videoUrl) {
+    graph.push({
+      "@type": "VideoObject",
+      name: "Airline OCC recovery walkthrough",
+      description: options.description,
+      contentUrl: options.videoUrl,
+      embedUrl: options.videoUrl,
+      uploadDate: "2026-01-01",
+      publisher: {
+        "@type": "Organization",
+        name: siteMetadata.name,
+        url: siteMetadata.url,
+      },
+    });
+  }
+
+  return {
+    "@context": "https://schema.org",
+    "@graph": graph,
+  };
+}
+
 const docsLinks = getAllDocsHrefs()
   .map((href) => `- ${siteMetadata.url}${href}`)
   .join("\n");
@@ -337,6 +373,7 @@ Qtangl helps operations teams explore feasible schedules, routes, and staffing p
 - Documentation hub: ${siteMetadata.url}/docs
 - API sandbox: ${siteMetadata.url}/sandbox
 - Hospital re-staffing demo: ${siteMetadata.url}/demo/hospital
+- Airline crew recovery demo: ${siteMetadata.url}/demo/airline
 - Request access: ${siteMetadata.url}/access
 - Blog: ${siteMetadata.url}/blog
 - Learn (quantum software library): ${siteMetadata.url}/learn
