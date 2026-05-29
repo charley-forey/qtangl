@@ -75,20 +75,20 @@ export const platformHighlights = [
 
 export const useCases = [
   {
-    eyebrow: "Construction",
-    title: "Construction scheduling",
+    eyebrow: "Aviation",
+    title: "Airline crew recovery",
     image: "/qtangl-usecase-scheduling.svg",
     imageAlt:
-      "Black and white scheduling illustration showing crews, task sequencing, and an interference pattern across constrained work windows.",
+      "Black and white operations illustration showing flight legs, crew assignments, and an interference pattern across a disrupted schedule.",
     description:
-      "Resequence crews and inspections when one window moves — without rebuilding the whole job.",
+      "Rebuild legal crew assignments when a disruption cascades — without grounding the operation.",
     interference:
-      "Trade sequencing, inspection windows, and crew availability collide on the same timeline.",
+      "Tail routing, FAR 117 legality, and crew availability collide across every delayed leg.",
     outcome:
-      "Feasible schedule with precedence, crew windows, and zero hard violations.",
-    measurement: "Fewer idle crew hours · lower delay risk · higher schedule confidence",
-    demoHref: undefined,
-    demoStatus: "coming-soon",
+      "Feasible recovery plan with legal crew assignments and zero hard-rule violations.",
+    measurement: "Fewer cancellations · faster recovery · auditable FAR 117 compliance",
+    demoHref: "/demo/airline",
+    demoStatus: "live",
   },
   {
     eyebrow: "Logistics",
