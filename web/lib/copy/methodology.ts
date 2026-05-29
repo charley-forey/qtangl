@@ -56,3 +56,32 @@ export const airlineMethodologyCopy = {
     ],
   },
 } as const;
+
+export const evFleetMethodologyCopy = {
+  eyebrow: "Methodology",
+  title: "How the EV fleet demo is grounded",
+  description:
+    "Synthetic Oakland depot fixtures, PG&E-style TOU bands, and a cached QPU trace for charger-queue micro-window replay.",
+  sources: [
+    "PG&E B-19–style TOU bands (synthetic $/kWh and demand charge $/kW).",
+    "Last-mile fleet sizing: 18 vans, 12 L2 bays, 24 stops, embedded distance matrix.",
+    "Rank 3 use-case framing from demos/Demo_Use_Cases.md ($400–900/day peak avoidance).",
+  ],
+  solver: {
+    title: "Solver settings",
+    items: [
+      "Routing: greedy nearest-neighbor VRP with energy feasibility per van.",
+      "Classical: OR-Tools CP-SAT charger×slot assignment minimizing TOU + demand proxy.",
+      "Hybrid: vehicle×charger×slot QUBO with peak-concurrency penalty; fixture QPU replay.",
+      "QAOA defaults: reps=1, maxiter=8, shots=256; gated above QTANGL_EVFLEET_QAOA_MAX_VARIABLES (24).",
+    ],
+  },
+  evidence: {
+    title: "Evidence files",
+    items: [
+      "benchmarks/ev_fleet_results.csv",
+      "demos/ev_fleet_charging/data/qpu_trace.json",
+      "backend/app/ev_fleet/fixtures/calibration.md",
+    ],
+  },
+} as const;

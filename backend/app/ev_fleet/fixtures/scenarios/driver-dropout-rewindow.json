@@ -1,0 +1,43 @@
+{
+  "id": "driver-dropout-rewindow",
+  "title": "Driver dropout + tight windows",
+  "summary": "Van 007 drops at 16:00; customer windows tighten \u2014 routes and charge plan re-solve.",
+  "window": {
+    "id": "window-dropout",
+    "planDate": "2026-05-28",
+    "tariffId": "pge-ev-b19",
+    "depotId": "depot-oakland",
+    "fleetSize": 17,
+    "chargerCount": 12,
+    "peakWindowStart": "2026-05-28T16:00:00",
+    "peakWindowEnd": "2026-05-28T21:00:00",
+    "urgencyMinutes": 60,
+    "channel": "ops-phone",
+    "reason": "Driver call-out \u2014 reassign stops and recharge plan"
+  },
+  "manualBaseline": {
+    "decisionMinutes": 55,
+    "naiveDailyCost": 680.0,
+    "summary": "Manual re-route plus plug-in-as-available charging."
+  },
+  "preferredCandidates": [
+    "veh-002",
+    "veh-008",
+    "veh-014"
+  ],
+  "droppedVehicleId": "veh-007",
+  "counts": [
+    {
+      "bitstring": "100000000000",
+      "weight": 22
+    },
+    {
+      "bitstring": "010000000000",
+      "weight": 33
+    },
+    {
+      "bitstring": "001000000000",
+      "weight": 45
+    }
+  ]
+}

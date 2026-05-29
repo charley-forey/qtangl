@@ -319,6 +319,42 @@ export function buildHospitalDemoJsonLd(options: { description: string; videoUrl
   };
 }
 
+export function buildEvFleetDemoJsonLd(options: { description: string; videoUrl?: string }) {
+  const url = absoluteUrl("/demo/ev-fleet");
+  const graph: Record<string, unknown>[] = [
+    {
+      "@type": "WebPage",
+      name: "EV fleet depot charging demo",
+      description: options.description,
+      url,
+      isPartOf: {
+        "@id": `${siteMetadata.url}/#website`,
+      },
+    },
+  ];
+
+  if (options.videoUrl) {
+    graph.push({
+      "@type": "VideoObject",
+      name: "EV fleet depot charging walkthrough",
+      description: options.description,
+      contentUrl: options.videoUrl,
+      embedUrl: options.videoUrl,
+      uploadDate: "2026-01-01",
+      publisher: {
+        "@type": "Organization",
+        name: siteMetadata.name,
+        url: siteMetadata.url,
+      },
+    });
+  }
+
+  return {
+    "@context": "https://schema.org",
+    "@graph": graph,
+  };
+}
+
 export function buildAirlineDemoJsonLd(options: { description: string; videoUrl?: string }) {
   const url = absoluteUrl("/demo/airline");
   const graph: Record<string, unknown>[] = [
@@ -374,6 +410,7 @@ Qtangl helps operations teams explore feasible schedules, routes, and staffing p
 - API sandbox: ${siteMetadata.url}/sandbox
 - Hospital re-staffing demo: ${siteMetadata.url}/demo/hospital
 - Airline crew recovery demo: ${siteMetadata.url}/demo/airline
+- EV fleet depot charging demo: ${siteMetadata.url}/demo/ev-fleet
 - Request access: ${siteMetadata.url}/access
 - Blog: ${siteMetadata.url}/blog
 - Learn (quantum software library): ${siteMetadata.url}/learn

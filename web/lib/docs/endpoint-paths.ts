@@ -11,5 +11,8 @@ export function endpointDocsHref(endpointId: string): string {
   if (endpointId.startsWith("airline-")) {
     return `/docs/reference/airline/${endpointId.replace("airline-", "")}`;
   }
+  if (endpointId.startsWith("ev-fleet-")) {
+    return `/docs/reference/ev-fleet/${endpointId.replace("ev-fleet-", "")}`;
+  }
   return `/docs/reference/${endpointId}`;
 }

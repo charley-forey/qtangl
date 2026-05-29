@@ -68,12 +68,14 @@ export const demoCatalog: readonly DemoCatalogEntry[] = [
     variant: "workflow",
   },
   {
-    slug: "logistics",
-    sector: "Logistics",
-    title: "Route under tight windows",
+    slug: "ev-fleet",
+    sector: "Logistics / Last-mile",
+    title: "EV depot charging + routing",
     oneLiner:
-      "Re-route stops when a driver drops or customer windows tighten — ranked order, not guesswork.",
-    status: "coming-soon",
+      "VRP routes plus TOU-aware charger queue and hybrid peak staggering — $/day and peak kW on the scoreboard.",
+    runtime: "3:30",
+    status: "live",
+    href: "/demo/ev-fleet",
     variant: "workflow",
   },
 ] as const;

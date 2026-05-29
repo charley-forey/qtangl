@@ -1,0 +1,42 @@
+{
+  "id": "demand-charge-spike",
+  "title": "Demand-charge spike",
+  "summary": "18 vans hit depot within 30 minutes \u2014 site cap and demand charge dominate.",
+  "window": {
+    "id": "window-spike",
+    "planDate": "2026-05-28",
+    "tariffId": "pge-ev-b19",
+    "depotId": "depot-oakland",
+    "fleetSize": 18,
+    "chargerCount": 12,
+    "peakWindowStart": "2026-05-28T17:00:00",
+    "peakWindowEnd": "2026-05-28T19:00:00",
+    "urgencyMinutes": 30,
+    "channel": "telemetry",
+    "reason": "Concurrent plug-in spike detected"
+  },
+  "manualBaseline": {
+    "decisionMinutes": 25,
+    "naiveDailyCost": 710.0,
+    "summary": "First-come charging maxes site kW \u2014 demand charge penalty applies."
+  },
+  "preferredCandidates": [
+    "veh-001",
+    "veh-005",
+    "veh-012"
+  ],
+  "counts": [
+    {
+      "bitstring": "100000000000",
+      "weight": 28
+    },
+    {
+      "bitstring": "010000000000",
+      "weight": 35
+    },
+    {
+      "bitstring": "001000000000",
+      "weight": 37
+    }
+  ]
+}

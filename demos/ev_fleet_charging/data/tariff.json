@@ -1,0 +1,26 @@
+{
+  "id": "pge-ev-b19",
+  "source": "PG&E B-19 EV (synthetic CA TOU)",
+  "periods": [
+    {
+      "name": "offpeak",
+      "start": "00:00",
+      "end": "16:00",
+      "pricePerKwh": 0.15
+    },
+    {
+      "name": "peak",
+      "start": "16:00",
+      "end": "21:00",
+      "pricePerKwh": 0.45
+    },
+    {
+      "name": "offpeak",
+      "start": "21:00",
+      "end": "24:00",
+      "pricePerKwh": 0.15
+    }
+  ],
+  "demandChargePerKw": 22.0,
+  "sitePowerCapKw": 86.4
+}

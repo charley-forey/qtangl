@@ -156,6 +156,17 @@ export const blogPosts = [
       "How the airline demo turns a disruption cascade into defensible recovery plans with FAR 117 proof.",
   },
   {
+    slug: "ev-fleet-charging",
+    href: "/blog/ev-fleet-charging",
+    category: "Logistics / EV",
+    coverImage: "/use-case-workforce.png",
+    coverAlt: "Electric delivery vans at a depot with charging bays and route overlays.",
+    title: "EV depot charging is a QUBO-shaped problem",
+    excerpt: "VRP routes + TOU charger queue + hybrid peak staggering.",
+    description:
+      "Why last-mile fleets leave hundreds per day on the table—and how to prove savings with an audit pack.",
+  },
+  {
     slug: "hospital-restaffing",
     href: "/blog/hospital-restaffing",
     category: "Healthcare operations",

@@ -1,0 +1,2 @@
+stop_id,label,zone,window_start,window_end,demand_parcels,service_minutes
+stop-001,Customer 1,east-bay,2026-05-28T08:00:00,2026-05-28T12:00:00,1,10

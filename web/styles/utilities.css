@@ -954,6 +954,84 @@
   }
 }
 
+/* EV fleet depot demo */
+.ev-fleet-section {
+  border-radius: var(--radius-xl);
+}
+
+.ev-fleet-metric {
+  min-width: 0;
+  border: 1px solid var(--border);
+  background: rgba(0, 0, 0, 0.35);
+  padding: 1rem 1.125rem;
+  border-radius: var(--radius-lg);
+}
+
+.ev-fleet-metric-label {
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-gray-500);
+}
+
+.ev-fleet-metric-value {
+  margin-top: 0.5rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: white;
+}
+
+.ev-fleet-chip {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 9999px;
+  border: 1px solid var(--border);
+  padding: 0.25rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.ev-fleet-chip-neutral {
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--color-gray-300);
+}
+
+.ev-fleet-chip-success {
+  border-color: rgba(52, 211, 153, 0.35);
+  background: rgba(16, 185, 129, 0.12);
+  color: rgb(167, 243, 208);
+}
+
+.ev-fleet-chip-alert {
+  border-color: rgba(252, 165, 165, 0.35);
+  background: rgba(239, 68, 68, 0.1);
+  color: rgb(254, 202, 202);
+}
+
+.ev-fleet-audit-block {
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  background: rgba(0, 0, 0, 0.35);
+  padding: 1rem 1.125rem;
+}
+
+.ev-fleet-toast {
+  position: fixed;
+  bottom: 1.5rem;
+  left: 50%;
+  z-index: 80;
+  translate: -50% 0;
+  border-radius: 9999px;
+  border: 1px solid var(--border-strong);
+  background: rgba(10, 10, 12, 0.95);
+  padding: 0.625rem 1.25rem;
+  font-size: 0.875rem;
+  color: white;
+  box-shadow: var(--shadow-elevated);
+}
+
 @media (prefers-reduced-motion: reduce) {
   :where(.surface-panel-feature)::before,
   .gradient-text,

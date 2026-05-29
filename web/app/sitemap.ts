@@ -21,6 +21,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/demo/hospital/methodology",
     "/demo/airline",
     "/demo/airline/methodology",
+    "/demo/ev-fleet",
+    "/demo/ev-fleet/methodology",
     "/about",
     "/technology",
     "/access",
@@ -50,7 +52,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority:
       route === ""
         ? 1
-        : route === "/demo/hospital" || route === "/demo/airline"
+        : route === "/demo/hospital" || route === "/demo/airline" || route === "/demo/ev-fleet"
           ? 0.9
           : 0.7,
   }));

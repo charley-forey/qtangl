@@ -1,0 +1,42 @@
+{
+  "id": "tou-peak-ca",
+  "title": "CA peak TOU \u2014 Oakland depot",
+  "summary": "18 vans return by 18:00; 12 L2 bays; shift charging off the 16:00\u201321:00 peak.",
+  "window": {
+    "id": "window-tou-ca",
+    "planDate": "2026-05-28",
+    "tariffId": "pge-ev-b19",
+    "depotId": "depot-oakland",
+    "fleetSize": 18,
+    "chargerCount": 12,
+    "peakWindowStart": "2026-05-28T16:00:00",
+    "peakWindowEnd": "2026-05-28T21:00:00",
+    "urgencyMinutes": 90,
+    "channel": "dispatch",
+    "reason": "Evening depot charge plan \u2014 avoid peak TOU"
+  },
+  "manualBaseline": {
+    "decisionMinutes": 45,
+    "naiveDailyCost": 620.0,
+    "summary": "Plug vans in on return \u2014 most energy lands in peak at full concurrent draw."
+  },
+  "preferredCandidates": [
+    "veh-003",
+    "veh-007",
+    "veh-011"
+  ],
+  "counts": [
+    {
+      "bitstring": "100000000000",
+      "weight": 24
+    },
+    {
+      "bitstring": "010000000000",
+      "weight": 31
+    },
+    {
+      "bitstring": "001000000000",
+      "weight": 45
+    }
+  ]
+}

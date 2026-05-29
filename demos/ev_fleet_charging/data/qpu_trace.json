@@ -1,0 +1,29 @@
+{
+  "backend": {
+    "name": "ibm_torino",
+    "qubits": 133
+  },
+  "run": {
+    "jobId": "ev-fleet-demo-001",
+    "shots": 1024,
+    "reps": 1
+  },
+  "distribution": [
+    {
+      "bitstring": "100000000000",
+      "count": 24,
+      "decodedPlanId": "hybrid-plan-1"
+    },
+    {
+      "bitstring": "010000000000",
+      "count": 31,
+      "decodedPlanId": "hybrid-plan-2"
+    },
+    {
+      "bitstring": "001000000000",
+      "count": 45,
+      "decodedPlanId": "hybrid-plan-3"
+    }
+  ],
+  "summary": "Fixture replay of charger-queue micro-window QAOA sampling."
+}

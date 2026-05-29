@@ -1,0 +1,2 @@
+vehicle_id,name,battery_kwh,efficiency_kwh_per_km,start_soc_kwh,connector_type,max_charge_kw,depot,dispatch_deadline
+veh-001,Van 01,75,0.28,24,J1772,7.2,depot-oakland,2026-05-29T05:30:00

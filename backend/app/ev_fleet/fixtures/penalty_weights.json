@@ -1,0 +1,10 @@
+{
+  "hardConstraintMultiplier": 10.0,
+  "noDoubleBookingMultiplier": 8.0,
+  "peakConcurrencyMultiplier": 6.0,
+  "softWeights": {
+    "fairnessDelta": 0.5,
+    "peakPenalty": 1.2,
+    "readinessRisk": 1.0
+  }
+}

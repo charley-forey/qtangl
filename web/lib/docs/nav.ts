@@ -42,6 +42,11 @@ export const docsSections: DocsNavSection[] = [
         href: "/docs/guides/airline-demo",
         status: "pilot",
       },
+      {
+        name: "EV fleet demo guide",
+        href: "/docs/guides/ev-fleet-demo",
+        status: "pilot",
+      },
     ],
   },
   {
@@ -109,6 +114,41 @@ export const docsSections: DocsNavSection[] = [
       {
         name: "POST /airline/recover/solve",
         href: "/docs/reference/airline/recover-solve",
+        status: "pilot",
+      },
+      {
+        name: "GET /ev-fleet/depot",
+        href: "/docs/reference/ev-fleet/depot",
+        status: "pilot",
+      },
+      {
+        name: "GET /ev-fleet/scenarios",
+        href: "/docs/reference/ev-fleet/scenarios",
+        status: "pilot",
+      },
+      {
+        name: "GET /ev-fleet/window",
+        href: "/docs/reference/ev-fleet/window",
+        status: "pilot",
+      },
+      {
+        name: "GET /ev-fleet/qpu-trace",
+        href: "/docs/reference/ev-fleet/qpu-trace",
+        status: "pilot",
+      },
+      {
+        name: "POST /ev-fleet/upload-fleet",
+        href: "/docs/reference/ev-fleet/upload-fleet",
+        status: "pilot",
+      },
+      {
+        name: "POST /ev-fleet/upload-stops",
+        href: "/docs/reference/ev-fleet/upload-stops",
+        status: "pilot",
+      },
+      {
+        name: "POST /ev-fleet/plan/solve",
+        href: "/docs/reference/ev-fleet/plan-solve",
         status: "pilot",
       },
       { name: "Errors & status codes", href: "/docs/errors" },

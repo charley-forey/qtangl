@@ -1,0 +1,98 @@
+[
+  {
+    "id": "chg-01",
+    "name": "L2 Bay 1",
+    "level": "L2",
+    "powerKw": 7.2,
+    "connectorType": "J1772",
+    "status": "available"
+  },
+  {
+    "id": "chg-02",
+    "name": "L2 Bay 2",
+    "level": "L2",
+    "powerKw": 7.2,
+    "connectorType": "J1772",
+    "status": "available"
+  },
+  {
+    "id": "chg-03",
+    "name": "L2 Bay 3",
+    "level": "L2",
+    "powerKw": 7.2,
+    "connectorType": "J1772",
+    "status": "available"
+  },
+  {
+    "id": "chg-04",
+    "name": "L2 Bay 4",
+    "level": "L2",
+    "powerKw": 7.2,
+    "connectorType": "J1772",
+    "status": "available"
+  },
+  {
+    "id": "chg-05",
+    "name": "L2 Bay 5",
+    "level": "L2",
+    "powerKw": 7.2,
+    "connectorType": "J1772",
+    "status": "available"
+  },
+  {
+    "id": "chg-06",
+    "name": "L2 Bay 6",
+    "level": "L2",
+    "powerKw": 7.2,
+    "connectorType": "J1772",
+    "status": "available"
+  },
+  {
+    "id": "chg-07",
+    "name": "L2 Bay 7",
+    "level": "L2",
+    "powerKw": 7.2,
+    "connectorType": "J1772",
+    "status": "available"
+  },
+  {
+    "id": "chg-08",
+    "name": "L2 Bay 8",
+    "level": "L2",
+    "powerKw": 7.2,
+    "connectorType": "J1772",
+    "status": "available"
+  },
+  {
+    "id": "chg-09",
+    "name": "L2 Bay 9",
+    "level": "L2",
+    "powerKw": 7.2,
+    "connectorType": "J1772",
+    "status": "available"
+  },
+  {
+    "id": "chg-10",
+    "name": "L2 Bay 10",
+    "level": "L2",
+    "powerKw": 7.2,
+    "connectorType": "J1772",
+    "status": "available"
+  },
+  {
+    "id": "chg-11",
+    "name": "L2 Bay 11",
+    "level": "L2",
+    "powerKw": 7.2,
+    "connectorType": "J1772",
+    "status": "available"
+  },
+  {
+    "id": "chg-12",
+    "name": "L2 Bay 12",
+    "level": "L2",
+    "powerKw": 7.2,
+    "connectorType": "J1772",
+    "status": "available"
+  }
+]
