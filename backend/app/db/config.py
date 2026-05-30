@@ -3,8 +3,22 @@ from __future__ import annotations
 import os
 
 
+def normalize_database_url(url: str) -> str:
+    """Railway/Heroku provide postgresql://; we use psycopg v3 (not psycopg2)."""
+    if url.startswith("postgresql+psycopg://"):
+        return url
+    if url.startswith("postgresql://"):
+        return "postgresql+psycopg://" + url.removeprefix("postgresql://")
+    if url.startswith("postgres://"):
+        return "postgresql+psycopg://" + url.removeprefix("postgres://")
+    return url
+
+
 def database_url() -> str | None:
-    return os.getenv("DATABASE_URL") or os.getenv("QTANGL_DATABASE_URL")
+    raw = os.getenv("DATABASE_URL") or os.getenv("QTANGL_DATABASE_URL")
+    if not raw:
+        return None
+    return normalize_database_url(raw)
 
 
 def redis_url() -> str | None:
