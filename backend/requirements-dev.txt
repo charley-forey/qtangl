@@ -1,0 +1,2 @@
+# Development and CI test dependencies (not required in production Docker image).
+pytest>=8.0,<9

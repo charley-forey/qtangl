@@ -32,8 +32,10 @@ small enough to be a safe research candidate.
 ```bash
 python -m venv .venv
 .venv\Scripts\activate
-pip install -r requirements.txt
+pip install -r requirements.lock -r requirements-dev.lock
 ```
+
+For editable installs during development you may use `requirements.txt` directly, but **CI and releases use the lockfiles**.
 
 ## Run
 
@@ -134,4 +136,6 @@ Add measured results here after running the comparison script locally:
 | Problem | Classical result | QAOA result | Notes |
 |--------|------------------|-------------|-------|
 | 5-task precedence schedule | 0.017s, feasible 7-day plan, 0 violations | 6.886s, failed on simulator, memory/transpilation issues | Too large for safe simulator use in production |
-| Tiny research schedule | Pending | Pending | Use `examples/compare_schedule_solvers.py` after the QAOA recovery changes |
+| Tiny research schedule (3 tasks) | 0.017s, makespan 1 day, 0 violations | 4.3s, makespan 3 days, feasible but worse score | QAOA runs on tiny window; classical wins — see `benchmarks/results/BM-001-tiny-schedule.json` |
+| Hospital fixture (10 runs) | ~classical wall time varies by scenario | Hybrid fixture replay | Avg objective gap ≈0; see `benchmarks/results/BM-003-hospital-summary.json` |
+| PQC bank-tls-inventory fixture | — | — | ~0.2s scan; see `benchmarks/results/BM-006-pqc-scan.log` |

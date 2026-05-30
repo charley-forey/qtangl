@@ -1,0 +1,61 @@
+{
+  "benchmarkId": "BM-003",
+  "sampleCount": 10,
+  "scenarioIds": [
+    "callout-cath-acls",
+    "callout-icu-mass",
+    "callout-or-late-add"
+  ],
+  "aggregates": {
+    "avgObjectiveGap": 0.0,
+    "avgHybridCandidates": 3.0,
+    "avgClassicalWallSeconds": 0.0181
+  },
+  "sampleRows": [
+    {
+      "run_index": "1",
+      "scenario_id": "callout-cath-acls",
+      "seed": "2824",
+      "classical_objective": "1.1563",
+      "hybrid_objective": "1.1563",
+      "objective_gap": "0.0000",
+      "classical_wall_time_seconds": "0.0181",
+      "hybrid_wall_time_seconds": "6.3400",
+      "repair_window_size": "6",
+      "feasible_hybrid_candidates": "3",
+      "distinct_candidate_names": "3",
+      "top_quantum_weight": "47.0",
+      "fairness_delta": "0.1989"
+    },
+    {
+      "run_index": "2",
+      "scenario_id": "callout-icu-mass",
+      "seed": "1409",
+      "classical_objective": "0.0664",
+      "hybrid_objective": "0.0664",
+      "objective_gap": "0.0000",
+      "classical_wall_time_seconds": "0.0276",
+      "hybrid_wall_time_seconds": "6.3400",
+      "repair_window_size": "8",
+      "feasible_hybrid_candidates": "3",
+      "distinct_candidate_names": "3",
+      "top_quantum_weight": "47.0",
+      "fairness_delta": "0.1710"
+    },
+    {
+      "run_index": "3",
+      "scenario_id": "callout-or-late-add",
+      "seed": "5506",
+      "classical_objective": "0.0664",
+      "hybrid_objective": "0.0664",
+      "objective_gap": "0.0000",
+      "classical_wall_time_seconds": "0.0109",
+      "hybrid_wall_time_seconds": "6.3400",
+      "repair_window_size": "5",
+      "feasible_hybrid_candidates": "3",
+      "distinct_candidate_names": "3",
+      "top_quantum_weight": "47.0",
+      "fairness_delta": "0.1178"
+    }
+  ]
+}

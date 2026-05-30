@@ -1,0 +1,49 @@
+﻿{
+  "classical": {
+    "elapsedSeconds": 0.0273,
+    "summary": "All 3 tasks were scheduled with no resource conflicts.",
+    "metrics": {
+      "makespanDays": 1,
+      "constraintViolations": 0,
+      "savingsEstimate": "Estimated 2 hours saved versus manual resequencing for a 1-day plan."
+    },
+    "score": 1
+  },
+  "qaoa": {
+    "elapsedSeconds": 4.3606,
+    "summary": "QAOA produced a feasible 3-task schedule on the simulator with no decoded task collisions.",
+    "metrics": {
+      "makespanDays": 3,
+      "constraintViolations": 0,
+      "savingsEstimate": "Research-only result: compare against the classical baseline before using in a pilot."
+    },
+    "score": 3,
+    "diagnostics": {
+      "qaoa": {
+        "enabled": true,
+        "quboDiagnostics": {
+          "task_count": 3,
+          "horizon": 3,
+          "precedence_count": 0,
+          "binary_variable_count": 9,
+          "overlap_constraint_count": 0,
+          "max_allowed_starts_per_task": 3,
+          "blocked_resource_days": 0
+        },
+        "limits": {
+          "maxBinaryVariables": 12,
+          "maxHorizon": 6,
+          "maxOverlapConstraints": 24
+        },
+        "status": "used",
+        "reason": "QAOA candidate is within the configured research-size limits.",
+        "simulatorMethod": "matrix_product_state",
+        "seed": 1234,
+        "shots": 256,
+        "reps": 1,
+        "maxiter": 12,
+        "resultFval": 3.0
+      }
+    }
+  }
+}
