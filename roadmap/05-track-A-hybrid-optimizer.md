@@ -130,10 +130,10 @@ Hospital hybrid already computes `distinctness`, `fairness_delta`, and surfaces 
 
 ### Acceptance criteria
 
-- [ ] `POST /optimize` with `type: routing` returns feasible plan
-- [ ] `POST /optimize` with `type: allocation` returns feasible plan
-- [ ] Same classical-first + repair window pattern applies
-- [ ] E2E or API tests added
+- [x] `POST /optimize` with `type: routing` returns feasible plan
+- [x] `POST /optimize` with `type: allocation` returns feasible plan
+- [ ] Same classical-first + repair window pattern applies *(classical VRP/CP-SAT only for now)*
+- [x] E2E or API tests added
 
 ---
 

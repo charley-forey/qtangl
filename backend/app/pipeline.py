@@ -34,11 +34,22 @@ class LocalQuantumCandidate:
 
 
 def run_optimization(problem: CanonicalProblem) -> SolverRunResult:
-    if problem.type != "schedule":
-        raise NotImplementedError(
-            "This pilot API currently supports live schedule jobs. Routing and allocation are scaffolded next."
-        )
+    if problem.type == "schedule":
+        return _run_schedule_optimization(problem)
+    if problem.type == "routing":
+        from app.solvers.routing import solve_routing_classically
 
+        result = solve_routing_classically(problem)
+        return _attach_generic_metrics(result)
+    if problem.type == "allocation":
+        from app.solvers.allocation import solve_allocation_classically
+
+        result = solve_allocation_classically(problem)
+        return _attach_generic_metrics(result)
+    raise NotImplementedError(f"Unsupported optimization type: {problem.type}")
+
+
+def _run_schedule_optimization(problem: CanonicalProblem) -> SolverRunResult:
     classical_result = run_global_classical(problem)
     if not classical_result.feasible:
         return classical_result
@@ -250,6 +261,16 @@ def merge_local_repair(
         },
     )
     return classical_result
+
+
+def _attach_generic_metrics(result: SolverRunResult) -> SolverRunResult:
+    distinct = max(1, len(result.solution)) if result.solution else 1
+    result.metrics = {
+        **result.metrics,
+        "distinctFeasiblePlans": distinct,
+        "diversityScore": 0.0 if distinct <= 1 else round(min(1.0, (distinct - 1) / distinct), 3),
+    }
+    return result
 
 
 def _attach_diversity_metrics(

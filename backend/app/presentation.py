@@ -18,6 +18,8 @@ def build_optimize_response(
         }
         for assignment in result.assignments
     ]
+    if problem.type != "schedule" and result.solution:
+        solution = result.solution
 
     visualization = result.visualization or None
     if visualization and problem.type == "schedule":
@@ -34,7 +36,7 @@ def build_optimize_response(
     return OptimizeResponse(
         status="success",
         summary=result.summary,
-        solution=solution if problem.type == "schedule" else result.assignments,
+        solution=solution,
         metrics=result.metrics,
         method="hybrid" if result.method == "hybrid" else "classical",
         details={

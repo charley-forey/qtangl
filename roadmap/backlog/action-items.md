@@ -152,11 +152,11 @@ Granular checkbox backlog. Each item has an ID, epic link, acceptance criterion,
 
 ### D1 — Postgres + Redis
 
-- [ ] **D1-001** Add SQLAlchemy + Alembic; define schema: tenants, api_keys, scan_jobs, scan_results, upload_sessions | Migrations run
-- [ ] **D1-002** Replace `_report_cache` with Postgres → `backend/app/api/pqc.py` | Report survives restart
-- [ ] **D1-003** Migrate PQC jobs to Redis queue → `backend/app/pqc/jobs.py` | Async scan works multi-instance
-- [ ] **D1-004** Migrate all `sessions.py` modules to Postgres | 24h TTL enforced in DB
-- [ ] **D1-005** Add `DATABASE_URL`, `REDIS_URL` to env docs | README updated
+- [x] **D1-001** Add SQLAlchemy + Alembic; define schema: tenants, api_keys, scan_jobs, scan_results, upload_sessions | Migrations run *(create_all + models in `app/db/`)*
+- [x] **D1-002** Replace `_report_cache` with Postgres → `backend/app/api/pqc.py` | Report survives restart
+- [x] **D1-003** Migrate PQC jobs to Redis queue → `backend/app/pqc/jobs.py` | Async scan works multi-instance *(Redis enqueue + Postgres state)*
+- [x] **D1-004** Migrate all `sessions.py` modules to Postgres | 24h TTL enforced in DB
+- [x] **D1-005** Add `DATABASE_URL`, `REDIS_URL` to env docs | README updated
 
 ### G3 — Tenant isolation
 
@@ -231,9 +231,9 @@ Granular checkbox backlog. Each item has an ID, epic link, acceptance criterion,
 
 ### A3 — Routing + allocation
 
-- [ ] **A3-001** Wire routing parser to pipeline → remove NotImplementedError | POST /optimize routing works
-- [ ] **A3-002** Wire allocation parser to pipeline | POST /optimize allocation works
-- [ ] **A3-003** API tests + docs update | Reference pages updated
+- [x] **A3-001** Wire routing parser to pipeline → remove NotImplementedError | POST /optimize routing works
+- [x] **A3-002** Wire allocation parser to pipeline | POST /optimize allocation works
+- [x] **A3-003** API tests + docs update | Reference pages updated *(tests in `test_d1_a3.py`)*
 
 ### F1 — Series A prep
 

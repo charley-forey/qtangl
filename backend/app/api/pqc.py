@@ -6,7 +6,7 @@ from fastapi import APIRouter, Depends, File, HTTPException, Query, UploadFile, 
 from fastapi.responses import Response
 from pydantic import BaseModel, Field
 
-from app.auth import require_api_key
+from app.auth import AuthContext, require_api_key, require_auth
 from app.models.api import ErrorResponse
 from app.pqc.data import (
     load_dataset,
@@ -16,7 +16,7 @@ from app.pqc.data import (
     parse_uploaded_bundle_csv,
     parse_uploaded_bundle_pem,
 )
-from app.pqc.jobs import create_job, get_job, run_job_async
+from app.pqc.jobs import create_job, get_job, load_scan_bundle, run_job_async, save_scan_bundle
 from app.pqc.pipeline import run_pqc_scan
 from app.pqc.report import report_to_cbom, report_to_csv, report_to_json, report_to_pdf
 from app.pqc.serialize import serialize_asset, serialize_bundle, serialize_handshake, serialize_scenario
@@ -25,8 +25,6 @@ from app.pqc.sessions import create_session, get_session
 from app.pqc.standards import default_standards
 
 router = APIRouter(prefix="/pqc", tags=["pqc"])
-
-_report_cache: dict[str, dict] = {}
 
 
 class PqcScanRequest(BaseModel):
@@ -95,7 +93,7 @@ def get_standards(_token: str = Depends(require_api_key)) -> dict:
 @router.post("/upload-bundle", responses={401: {"model": ErrorResponse}, 422: {"model": ErrorResponse}})
 async def upload_bundle(
     file: UploadFile = File(...),
-    _token: str = Depends(require_api_key),
+    auth: AuthContext = Depends(require_auth),
 ) -> dict:
     if not file.filename:
         raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail="Upload a file.")
@@ -117,7 +115,7 @@ async def upload_bundle(
     except ValueError as exc:
         raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail=str(exc)) from exc
 
-    session_id = create_session(rows)
+    session_id = create_session(rows, tenant_id=auth.tenant_id)
     return {
         "status": "success",
         "sessionId": session_id,
@@ -128,12 +126,12 @@ async def upload_bundle(
 @router.post("/scan", responses={401: {"model": ErrorResponse}, 404: {"model": ErrorResponse}})
 def scan_pqc(
     request: PqcScanRequest,
-    _token: str = Depends(require_api_key),
+    auth: AuthContext = Depends(require_auth),
 ) -> dict:
     dataset = load_dataset()
     uploaded_rows = None
     if request.bundleSessionId:
-        uploaded_rows = get_session(request.bundleSessionId)
+        uploaded_rows = get_session(request.bundleSessionId, tenant_id=auth.tenant_id)
         if uploaded_rows is None:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
@@ -150,7 +148,7 @@ def scan_pqc(
                 uploaded_rows=uploaded_rows,
                 seed=request.seed,
             )
-            _report_cache[bundle.scan_id] = {"bundle": bundle}
+            save_scan_bundle(bundle.scan_id, bundle, tenant_id=auth.tenant_id)
             return {"status": "success", **serialize_bundle(bundle)}
 
         if not live_scan_enabled():
@@ -162,7 +160,7 @@ def scan_pqc(
                 ),
             )
 
-        scan_id = create_job()
+        scan_id = create_job(tenant_id=auth.tenant_id)
 
         def runner(on_progress):
             return run_pqc_scan(
@@ -175,7 +173,7 @@ def scan_pqc(
                 on_progress=on_progress,
             )
 
-        run_job_async(scan_id, runner)
+        run_job_async(scan_id, runner, tenant_id=auth.tenant_id)
         return {
             "status": "running",
             "scanId": scan_id,
@@ -197,9 +195,9 @@ def scan_pqc(
 @router.get("/scan/{scan_id}", responses={401: {"model": ErrorResponse}, 404: {"model": ErrorResponse}})
 def get_scan_status(
     scan_id: str,
-    _token: str = Depends(require_api_key),
+    auth: AuthContext = Depends(require_auth),
 ) -> dict:
-    job = get_job(scan_id)
+    job = get_job(scan_id, tenant_id=auth.tenant_id)
     if job:
         if job.status == "running":
             return {
@@ -210,12 +208,11 @@ def get_scan_status(
         if job.status == "error":
             return {"status": "error", "scanId": scan_id, "message": job.error, "timeline": [asdict(event) for event in job.timeline]}
         if job.bundle:
-            _report_cache[scan_id] = {"bundle": job.bundle}
             return {"status": "success", **serialize_bundle(job.bundle)}
 
-    cached = _report_cache.get(scan_id)
-    if cached and cached.get("bundle"):
-        return {"status": "success", **serialize_bundle(cached["bundle"])}
+    cached = load_scan_bundle(scan_id, tenant_id=auth.tenant_id)
+    if cached:
+        return {"status": "success", **cached}
 
     raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Scan not found.")
 
@@ -235,11 +232,16 @@ def prove_handshake_endpoint(
 def download_report(
     scan_id: str,
     format: str = Query(default="json", alias="format"),
-    _token: str = Depends(require_api_key),
+    auth: AuthContext = Depends(require_auth),
 ) -> Response:
-    cached = _report_cache.get(scan_id)
-    job = get_job(scan_id)
-    bundle = cached["bundle"] if cached else (job.bundle if job else None)
+    job = get_job(scan_id, tenant_id=auth.tenant_id)
+    bundle = job.bundle if job and job.bundle else None
+    if bundle is None:
+        payload = load_scan_bundle(scan_id, tenant_id=auth.tenant_id)
+        if payload:
+            from app.pqc.bundle_codec import bundle_from_api_dict
+
+            bundle = bundle_from_api_dict(payload)
     if bundle is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Report not found for scan.")
 

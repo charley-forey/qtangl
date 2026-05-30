@@ -13,7 +13,7 @@ Master list of all epics across tracks A–J, I, G, H, E, F, B, C, D. Update sta
 |----|------|--------|--------|---------|-------|
 | A1 | Local repair window extractor | done | L | I1 | — |
 | A2 | Diversity / alternates headline metric | done | M | A1 | — |
-| A3 | `/optimize` routing + allocation live | not-started | L | A1 | — |
+| A3 | `/optimize` routing + allocation live | done | L | A1 | — |
 | A4 | QAOA robustness + envelope expansion | not-started | M | A1, J2 | — |
 | A5 | Reproducible real-QPU opt-in path | not-started | M | A4, I1 | — |
 
@@ -42,7 +42,7 @@ Master list of all epics across tracks A–J, I, G, H, E, F, B, C, D. Update sta
 
 | ID | Epic | Status | Effort | Depends | Owner |
 |----|------|--------|--------|---------|-------|
-| D1 | Persistent stores (Postgres + Redis) | not-started | L | G2 | — |
+| D1 | Persistent stores (Postgres + Redis) | done | L | G2 | — |
 | D2 | Async job workers | not-started | M | D1 | — |
 | D3 | Observability (tracing, logs, metrics) | not-started | M | I1 | — |
 | D4 | OpenAPI + Postman collection | not-started | S | — | — |
@@ -76,7 +76,7 @@ Master list of all epics across tracks A–J, I, G, H, E, F, B, C, D. Update sta
 |----|------|--------|--------|---------|-------|
 | G1 | Secrets management & hygiene | in-progress | S | — | — |
 | G2 | Product threat model | done | M | — | — |
-| G3 | Per-tenant auth & data isolation | not-started | M | D1 | — |
+| G3 | Per-tenant auth & data isolation | in-progress | M | D1 | — |
 | G4 | Data governance & retention | not-started | M | G3 | — |
 | G9 | Safe logging & error responses (PHI redaction) | not-started | S | G2 | — |
 | G5 | SOC 2 Type I → Type II | not-started | L | G1–G4 | — |

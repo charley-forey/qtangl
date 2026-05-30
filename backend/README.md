@@ -6,11 +6,13 @@ summary, metrics, and a visualization-friendly payload.
 ## Scope
 
 - `POST /optimize` for the live pilot API
-- Scheduling solver path implemented first
-- OR-Tools CP-SAT baseline runs on every schedule request
+- Problem types: **schedule**, **routing** (greedy VRP), **allocation** (CP-SAT staffing)
+- Scheduling solver path with optional QAOA local repair window
+- OR-Tools CP-SAT baseline runs on every schedule/allocation request
 - QAOA path via `qiskit-optimization` is attempted only for tiny research-sized scheduling candidates
 - Honest fallback: if QAOA fails or does not beat the classical result, the API
   responds with the classical plan
+- **Persistence (D1):** set `DATABASE_URL` for Postgres-backed sessions, scan jobs, and reports; optional `REDIS_URL` for distributed rate limits and job queue notifications. Without these env vars, in-memory stores are used (dev/CI default).
 
 ## Operational model
 

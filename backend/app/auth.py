@@ -1,16 +1,29 @@
 from __future__ import annotations
 
+import hashlib
 import os
 import time
 from collections import defaultdict, deque
+from dataclasses import dataclass
 from threading import Lock
 
 from fastapi import Header, HTTPException, status
+
+from app.db.config import persistence_enabled
+from app.db.engine import db_session
+from app.db.models import ApiKey
+from app.queue.redis_queue import rate_limit_check
 
 _WINDOW_SECONDS = 60
 _DEFAULT_RATE_LIMIT = 120
 _requests_by_token: dict[str, deque[float]] = defaultdict(deque)
 _rate_lock = Lock()
+
+
+@dataclass(slots=True)
+class AuthContext:
+    token: str
+    tenant_id: str
 
 
 def get_expected_api_key() -> str:
@@ -30,10 +43,24 @@ def get_rate_limit() -> int:
     return max(1, value)
 
 
-def require_api_key(
+def resolve_tenant_id(token: str) -> str:
+    if not persistence_enabled():
+        return "sandbox"
+    key_hash = hashlib.sha256(token.encode("utf-8")).hexdigest()
+    try:
+        with db_session() as session:
+            row = session.query(ApiKey).filter(ApiKey.key_hash == key_hash, ApiKey.revoked_at.is_(None)).one_or_none()
+            if row is None:
+                return "sandbox"
+            return row.tenant_id
+    except Exception:
+        return "sandbox"
+
+
+def require_auth(
     authorization: str | None = Header(default=None),
     x_api_key: str | None = Header(default=None),
-) -> str:
+) -> AuthContext:
     token = None
 
     if authorization and authorization.lower().startswith("bearer "):
@@ -47,20 +74,51 @@ def require_api_key(
             detail="Missing API key. Send a bearer token or x-api-key header.",
         )
 
-    if token != get_expected_api_key():
+    if token != get_expected_api_key() and not _token_registered(token):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid API key. Check the pilot token and try again.",
         )
 
     _enforce_rate_limit(token)
-    return token
+    return AuthContext(token=token, tenant_id=resolve_tenant_id(token))
+
+
+def require_api_key(
+    authorization: str | None = Header(default=None),
+    x_api_key: str | None = Header(default=None),
+) -> str:
+    return require_auth(authorization=authorization, x_api_key=x_api_key).token
+
+
+def _token_registered(token: str) -> bool:
+    if not persistence_enabled():
+        return False
+    key_hash = hashlib.sha256(token.encode("utf-8")).hexdigest()
+    try:
+        with db_session() as session:
+            row = session.query(ApiKey).filter(ApiKey.key_hash == key_hash, ApiKey.revoked_at.is_(None)).one_or_none()
+            return row is not None
+    except Exception:
+        return False
 
 
 def _enforce_rate_limit(token: str) -> None:
-    now = time.time()
     rate_limit = get_rate_limit()
+    from app.db.config import redis_enabled
 
+    if redis_enabled():
+        if not rate_limit_check(token, limit=rate_limit, window_seconds=_WINDOW_SECONDS):
+            raise HTTPException(
+                status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+                detail=(
+                    f"Rate limit reached. The pilot API allows {rate_limit} requests "
+                    "per minute per key."
+                ),
+            )
+        return
+
+    now = time.time()
     with _rate_lock:
         window = _requests_by_token[token]
 

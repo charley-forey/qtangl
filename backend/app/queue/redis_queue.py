@@ -1,0 +1,46 @@
+from __future__ import annotations
+
+from app.db.config import redis_url
+
+_client = None
+
+
+def _get_client():
+    global _client
+    url = redis_url()
+    if not url:
+        return None
+    if _client is None:
+        import redis
+
+        _client = redis.from_url(url, decode_responses=True)
+    return _client
+
+
+def ping() -> bool:
+    client = _get_client()
+    if client is None:
+        return False
+    try:
+        return bool(client.ping())
+    except Exception:
+        return False
+
+
+def enqueue(queue_name: str, job_id: str) -> None:
+    client = _get_client()
+    if client is None:
+        return
+    client.lpush(f"qtangl:queue:{queue_name}", job_id)
+
+
+def rate_limit_check(token: str, *, limit: int, window_seconds: int = 60) -> bool:
+    """Return True if request is allowed."""
+    client = _get_client()
+    if client is None:
+        return True
+    key = f"qtangl:ratelimit:{token}"
+    count = client.incr(key)
+    if count == 1:
+        client.expire(key, window_seconds)
+    return count <= limit

@@ -47,6 +47,8 @@ faker==40.19.1
     # via -r requirements.txt
 fastapi==0.136.3
     # via -r requirements.txt
+greenlet==3.5.1
+    # via sqlalchemy
 h11==0.16.0
     # via
     #   httpcore
@@ -95,6 +97,10 @@ protobuf==6.33.6
     # via ortools
 psutil==7.2.2
     # via qiskit-aer
+psycopg==3.3.4
+    # via -r requirements.txt
+psycopg-binary==3.3.4
+    # via psycopg
 pybase64==1.4.3
     # via
     #   ibm-quantum-schemas
@@ -140,6 +146,8 @@ qiskit-ibm-runtime==0.47.0
     # via -r requirements.txt
 qiskit-optimization==0.7.0
     # via -r requirements.txt
+redis==8.0.0
+    # via -r requirements.txt
 reportlab==4.5.1
     # via -r requirements.txt
 requests==2.34.2
@@ -166,6 +174,8 @@ six==1.17.0
     # via
     #   docplex
     #   python-dateutil
+sqlalchemy==2.0.50
+    # via -r requirements.txt
 sspilib==0.5.0
     # via pyspnego
 starlette==1.2.0
@@ -179,6 +189,7 @@ typing-extensions==4.15.0
     #   pydantic
     #   pydantic-core
     #   qiskit
+    #   sqlalchemy
     #   typing-inspection
 typing-inspection==0.4.2
     # via
@@ -188,6 +199,7 @@ tzdata==2026.2
     # via
     #   faker
     #   pandas
+    #   psycopg
 urllib3==2.7.0
     # via
     #   ibm-cloud-sdk-core
