@@ -1,0 +1,10 @@
+{
+  "benchmarkId": "BM-006",
+  "scenarioId": "bank-tls-inventory",
+  "useFixture": true,
+  "scanId": "scan-2fb768c4-7308-4677-8cc8-f8d9bfa3a8cf",
+  "assetCount": 7,
+  "remediationBacklogCount": 7,
+  "wallTimeSeconds": 0.001,
+  "capturedAt": "2026-05-30"
+}

@@ -138,4 +138,4 @@ Add measured results here after running the comparison script locally:
 | 5-task precedence schedule | 0.017s, feasible 7-day plan, 0 violations | 6.886s, failed on simulator, memory/transpilation issues | Too large for safe simulator use in production |
 | Tiny research schedule (3 tasks) | 0.017s, makespan 1 day, 0 violations | 4.3s, makespan 3 days, feasible but worse score | QAOA runs on tiny window; classical wins — see `benchmarks/results/BM-001-tiny-schedule.json` |
 | Hospital fixture (10 runs) | ~classical wall time varies by scenario | Hybrid fixture replay | Avg objective gap ≈0; see `benchmarks/results/BM-003-hospital-summary.json` |
-| PQC bank-tls-inventory fixture | — | — | ~0.2s scan; see `benchmarks/results/BM-006-pqc-scan.log` |
+| PQC bank-tls-inventory fixture | — | — | ~0.001s scan, 7 assets; see `benchmarks/results/BM-006-pqc-scan.json` |
