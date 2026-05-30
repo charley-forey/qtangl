@@ -8,7 +8,7 @@ Engineering epics for the classical-first hybrid optimization core. **Keystone: 
 
 | ID | Epic | Status | Effort | Depends on |
 |----|------|--------|--------|------------|
-| A1 | Local repair window extractor | `not-started` | L | I1 CI baseline |
+| A1 | Local repair window extractor | `done` | L | I1 |
 | A2 | Diversity / alternates headline metric | `not-started` | M | A1 |
 | A3 | `/optimize` routing + allocation live | `not-started` | L | A1 |
 | A4 | QAOA robustness + envelope expansion | `not-started` | M | A1, J1 |
@@ -56,12 +56,12 @@ Effort: S = 1–2 weeks, M = 2–4 weeks, L = 4–8 weeks
 
 ### Acceptance criteria
 
-- [ ] Given a 20-task schedule with one blocked resource day, extractor returns ≤8 tasks
-- [ ] Extracted sub-problem `binary_variable_count <= QTANGL_QAOA_MAX_BINARY_VARIABLES`
-- [ ] QAOA attempted only on extracted window, not full job
-- [ ] Non-window task assignments unchanged from classical result
-- [ ] Diagnostics include `localRepairWindow.strategy != whole_problem_smoke` for large jobs
-- [ ] Tests pass in CI
+- [x] Given a 20-task schedule with one blocked resource day, extractor returns ≤8 tasks
+- [x] Extracted sub-problem `binary_variable_count <= QTANGL_QAOA_MAX_BINARY_VARIABLES`
+- [x] QAOA attempted only on extracted window, not full job (when full job exceeds limits)
+- [x] Non-window task assignments unchanged from classical result
+- [x] Diagnostics include `localRepairWindow.strategy != whole_problem_smoke` for large jobs
+- [x] Tests pass in CI
 
 ### Validation
 

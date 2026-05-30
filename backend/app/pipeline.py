@@ -4,8 +4,13 @@ from dataclasses import dataclass
 from typing import Any
 
 from app.models.canonical import CanonicalProblem
-from app.models.results import SolverRunResult
+from app.models.results import SolverRunResult, TaskAssignment
 from app.qubo.scheduling import SchedulingQuboDiagnostics, estimate_scheduling_qubo_size
+from app.repair_window.scheduling import (
+    build_window_subproblem,
+    extract_scheduling_repair_window,
+    merge_window_assignments,
+)
 from app.solvers.classical import solve_schedule_classically
 from app.solvers.qaoa import assess_qaoa_candidate, solve_schedule_with_qaoa
 
@@ -40,7 +45,7 @@ def run_optimization(problem: CanonicalProblem) -> SolverRunResult:
     if repair_window is None:
         return classical_result
 
-    quantum_candidate = build_local_quantum_candidate(problem, repair_window)
+    quantum_candidate = build_local_quantum_candidate(problem, classical_result, repair_window)
     quantum_result = solve_schedule_with_qaoa(
         quantum_candidate.problem,
         qubo_diagnostics=quantum_candidate.qubo_diagnostics,
@@ -66,10 +71,14 @@ def detect_local_repair_window(
     problem: CanonicalProblem,
     classical_result: SolverRunResult,
 ) -> LocalRepairWindow | None:
-    qubo_diagnostics = estimate_scheduling_qubo_size(problem)
-    assessment = assess_qaoa_candidate(problem, qubo_diagnostics=qubo_diagnostics)
+    full_diagnostics = estimate_scheduling_qubo_size(problem)
+    disabled_assessment = assess_qaoa_candidate(
+        problem,
+        qubo_diagnostics=full_diagnostics,
+        check_environment=True,
+    )
 
-    if assessment["status"] == "disabled":
+    if disabled_assessment["status"] == "disabled":
         classical_result.diagnostics = _merge_diagnostics(
             classical_result.diagnostics,
             {
@@ -78,12 +87,13 @@ def detect_local_repair_window(
                     "localRepairWindow": "not_used",
                     "summary": "QAOA was disabled by environment, so the full job remained classical-only.",
                 },
-                "qaoa": assessment,
+                "qaoa": disabled_assessment,
             },
         )
         return None
 
-    if assessment["status"] != "eligible":
+    extracted = extract_scheduling_repair_window(problem, classical_result)
+    if extracted is None:
         classical_result.diagnostics = _merge_diagnostics(
             classical_result.diagnostics,
             {
@@ -91,44 +101,51 @@ def detect_local_repair_window(
                     "path": "full_job_upload",
                     "localRepairWindow": "not_found",
                     "summary": (
-                        "No suitable local repair window found. Local repair extraction is "
-                        "not implemented yet and the full uploaded job exceeds the current "
-                        "micro-problem limits."
+                        "No suitable local repair window could be bounded to the current "
+                        "QAOA research limits."
                     ),
                 },
                 "qaoa": {
-                    **assessment,
+                    **disabled_assessment,
                     "status": "no_local_window",
+                    "reason": (
+                        "Local repair extraction could not produce a sub-problem within "
+                        "configured QAOA limits."
+                    ),
+                    "fullJobQuboDiagnostics": full_diagnostics.as_dict(),
                 },
             },
         )
         return None
 
     return LocalRepairWindow(
-        strategy="whole_problem_smoke",
-        summary=(
-            "No separate local repair extractor is implemented yet, so the full job is "
-            "temporarily reused as a bounded research-sized candidate."
-        ),
-        task_ids=[task.id for task in problem.tasks],
+        strategy=extracted.strategy,
+        summary=extracted.summary,
+        task_ids=extracted.task_ids,
         diagnostics={
-            "qubo": qubo_diagnostics.as_dict(),
-            "qaoa": assessment,
+            "qubo": extracted.qubo_diagnostics.as_dict(),
+            "fullJobQuboDiagnostics": full_diagnostics.as_dict(),
+            "qaoa": extracted.assessment,
+            "reasons": extracted.reasons,
+            "windowTaskCount": len(extracted.task_ids),
+            "totalTaskCount": len(problem.tasks),
         },
     )
 
 
 def build_local_quantum_candidate(
     problem: CanonicalProblem,
+    classical_result: SolverRunResult,
     repair_window: LocalRepairWindow,
 ) -> LocalQuantumCandidate:
-    qubo_diagnostics = estimate_scheduling_qubo_size(problem)
+    subproblem = build_window_subproblem(problem, classical_result, repair_window.task_ids)
+    qubo_diagnostics = estimate_scheduling_qubo_size(subproblem)
     assessment = assess_qaoa_candidate(
-        problem,
+        subproblem,
         qubo_diagnostics=qubo_diagnostics,
     )
     return LocalQuantumCandidate(
-        problem=problem,
+        problem=subproblem,
         repair_window=repair_window,
         qubo_diagnostics=qubo_diagnostics,
         assessment=assessment,
@@ -140,31 +157,72 @@ def merge_local_repair(
     quantum_result: SolverRunResult,
     quantum_candidate: LocalQuantumCandidate,
 ) -> SolverRunResult:
-    if quantum_result.feasible and quantum_result.score <= classical_result.score:
-        quantum_result.diagnostics = _merge_diagnostics(
-            quantum_result.diagnostics,
-            {
-                "orchestration": {
-                    "path": "full_job_upload",
-                    "localRepairWindow": "used",
-                    "strategy": quantum_candidate.repair_window.strategy,
-                    "summary": quantum_candidate.repair_window.summary,
-                    "taskIds": quantum_candidate.repair_window.task_ids,
-                }
-            },
-        )
-        return quantum_result
+    orchestration_base = {
+        "path": "full_job_upload",
+        "strategy": quantum_candidate.repair_window.strategy,
+        "summary": quantum_candidate.repair_window.summary,
+        "taskIds": quantum_candidate.repair_window.task_ids,
+        "windowTaskCount": len(quantum_candidate.repair_window.task_ids),
+        "quboDiagnostics": quantum_candidate.qubo_diagnostics.as_dict(),
+    }
 
     if quantum_result.feasible:
+        merged_assignments = merge_window_assignments(
+            classical_result.assignments,
+            quantum_result.assignments,
+            quantum_candidate.repair_window.task_ids,
+        )
+        merged_score = max(assignment.end_day - 1 for assignment in merged_assignments)
+        non_window_unchanged = _non_window_assignments_unchanged(
+            classical_result.assignments,
+            merged_assignments,
+            quantum_candidate.repair_window.task_ids,
+        )
+
+        if merged_score <= classical_result.score:
+            merged_result = SolverRunResult(
+                feasible=True,
+                method="hybrid",
+                solver=quantum_result.solver,
+                backend=quantum_result.backend,
+                summary=quantum_result.summary,
+                assignments=merged_assignments,
+                metrics={
+                    **quantum_result.metrics,
+                    "makespanDays": merged_score,
+                    "localRepairWindowTaskCount": len(quantum_candidate.repair_window.task_ids),
+                },
+                visualization=_visualization_from_assignments(
+                    merged_assignments,
+                    title="Hybrid plan (local repair window)",
+                    summary=quantum_result.summary,
+                ),
+                score=merged_score,
+                diagnostics=quantum_result.diagnostics,
+            )
+            merged_result.diagnostics = _merge_diagnostics(
+                merged_result.diagnostics,
+                {
+                    "orchestration": {
+                        **orchestration_base,
+                        "localRepairWindow": "used",
+                        "nonWindowAssignmentsPinned": non_window_unchanged,
+                    }
+                },
+            )
+            return merged_result
+
         classical_result.diagnostics = _merge_diagnostics(
             classical_result.diagnostics,
             {
                 "orchestration": {
-                    "path": "full_job_upload",
+                    **orchestration_base,
                     "localRepairWindow": "kept_classical",
-                    "strategy": quantum_candidate.repair_window.strategy,
-                    "summary": "Local repair window found but the classical result remained better than the QAOA candidate.",
-                    "taskIds": quantum_candidate.repair_window.task_ids,
+                    "summary": (
+                        "Local repair window found but the classical result remained "
+                        "better than the merged QAOA candidate."
+                    ),
+                    "nonWindowAssignmentsPinned": non_window_unchanged,
                 },
                 "qaoa": {
                     **quantum_result.diagnostics.get("qaoa", {}),
@@ -178,16 +236,58 @@ def merge_local_repair(
         classical_result.diagnostics,
         {
             "orchestration": {
-                "path": "full_job_upload",
+                **orchestration_base,
                 "localRepairWindow": "classical_fallback",
-                "strategy": quantum_candidate.repair_window.strategy,
-                "summary": "QAOA attempted a bounded local candidate and the API fell back to the global classical plan.",
-                "taskIds": quantum_candidate.repair_window.task_ids,
+                "summary": (
+                    "QAOA attempted a bounded local repair window and the API fell back "
+                    "to the global classical plan."
+                ),
             },
             "qaoa": quantum_result.diagnostics.get("qaoa", quantum_candidate.assessment),
         },
     )
     return classical_result
+
+
+def _non_window_assignments_unchanged(
+    classical_assignments: list[TaskAssignment],
+    merged_assignments: list[TaskAssignment],
+    window_task_ids: list[str],
+) -> bool:
+    window_set = set(window_task_ids)
+    classical_map = {assignment.task: assignment for assignment in classical_assignments}
+    merged_map = {assignment.task: assignment for assignment in merged_assignments}
+    for task_id, assignment in classical_map.items():
+        if task_id in window_set:
+            continue
+        other = merged_map.get(task_id)
+        if other is None or other.start_day != assignment.start_day or other.end_day != assignment.end_day:
+            return False
+    return True
+
+
+def _visualization_from_assignments(
+    assignments: list[TaskAssignment],
+    *,
+    title: str,
+    summary: str,
+) -> dict[str, Any]:
+    return {
+        "kind": "schedule",
+        "title": title,
+        "summary": summary,
+        "horizonLabel": "Project days",
+        "blocks": [
+            {
+                "id": assignment.task,
+                "label": assignment.task.replace("-", " ").title(),
+                "resource": assignment.resource or "Unassigned",
+                "start": assignment.start_day - 1,
+                "duration": assignment.end_day - assignment.start_day,
+            }
+            for assignment in assignments
+        ],
+    }
 
 
 def _merge_diagnostics(

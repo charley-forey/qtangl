@@ -11,7 +11,7 @@ Master list of all epics across tracks A–J, I, G, H, E, F, B, C, D. Update sta
 
 | ID | Epic | Status | Effort | Depends | Owner |
 |----|------|--------|--------|---------|-------|
-| A1 | Local repair window extractor | not-started | L | I1 | — |
+| A1 | Local repair window extractor | done | L | I1 | — |
 | A2 | Diversity / alternates headline metric | not-started | M | A1 | — |
 | A3 | `/optimize` routing + allocation live | not-started | L | A1 | — |
 | A4 | QAOA robustness + envelope expansion | not-started | M | A1, J2 | — |

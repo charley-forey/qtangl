@@ -72,8 +72,9 @@ How will we know this decision was correct? Metrics, benchmarks, review date.
 | ADR-001 | Classical-first always; quantum never required for feasible response | Accepted |
 | ADR-002 | Fixture replay default in production demos | Accepted |
 | ADR-003 | Postgres + Redis for durable state | Proposed |
-| ADR-004 | Pluggable quantum adapter interface | Proposed |
-| ADR-005 | Per-tenant API keys with row-level isolation | Proposed |
+| ADR-004 | Scheduling local repair window extraction | Accepted |
+| ADR-005 | Pluggable quantum adapter interface | Proposed |
 | ADR-006 | Production hybrid solver choice (QAOA vs quantum-inspired) | Proposed |
+| ADR-007 | Per-tenant API keys with row-level isolation | Proposed |
 
 See [04-architecture-blueprint.md](../04-architecture-blueprint.md).

@@ -23,9 +23,9 @@ Qtangl's intended API shape is:
 5. Return one final plan with diagnostics
 
 The current implementation introduces the orchestration seams for that flow, but it
-does not yet extract real local repair windows from large schedules. Until that is
-implemented, QAOA is only allowed to reuse the full job when the full job is already
-small enough to be a safe research candidate.
+does not yet extract real local repair windows from large schedules. The generic
+`/optimize` path now uses [`app/repair_window/scheduling.py`](app/repair_window/scheduling.py)
+to extract a bounded critical-path neighborhood when QAOA is enabled.
 
 ## Install
 

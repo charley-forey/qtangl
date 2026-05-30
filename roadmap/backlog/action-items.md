@@ -49,15 +49,15 @@ Granular checkbox backlog. Each item has an ID, epic link, acceptance criterion,
 
 ### A1 — Local repair window extractor
 
-- [ ] **A1-001** Read hospital repair window: `backend/app/hospital/repair_window.py` | Notes on pattern
-- [ ] **A1-002** Create `backend/app/repair_window/scheduling.py` with extraction interface | Module imports cleanly
-- [ ] **A1-003** Implement critical-path neighborhood detection from CP-SAT result | Unit test with 10-task fixture
-- [ ] **A1-004** Implement QUBO size bounding loop (shrink window until ≤ max vars) | Uses `estimate_scheduling_qubo_size`
-- [ ] **A1-005** Replace `whole_problem_smoke` in `detect_local_repair_window()` → `backend/app/pipeline.py` | Strategy != smoke for large jobs
-- [ ] **A1-006** Extend `merge_local_repair()` to pin non-window tasks to classical assignment | Non-window tasks unchanged in test
-- [ ] **A1-007** Add `backend/tests/test_scheduling_repair_window.py` with 3 cases | All pass in CI
-- [ ] **A1-008** Update diagnostics JSON to include window task IDs and QUBO size | API response verified
-- [ ] **A1-009** Write ADR-004 for repair window algorithm → `roadmap/templates/adr-template.md` | ADR committed
+- [x] **A1-001** Read hospital repair window: `backend/app/hospital/repair_window.py` | Notes on pattern
+- [x] **A1-002** Create `backend/app/repair_window/scheduling.py` with extraction interface | Module imports cleanly
+- [x] **A1-003** Implement critical-path neighborhood detection from CP-SAT result | Unit test with 10-task fixture
+- [x] **A1-004** Implement QUBO size bounding loop (shrink window until ≤ max vars) | Uses `estimate_scheduling_qubo_size`
+- [x] **A1-005** Replace `whole_problem_smoke` in `detect_local_repair_window()` → `backend/app/pipeline.py` | Strategy != smoke for large jobs
+- [x] **A1-006** Extend `merge_local_repair()` to pin non-window tasks to classical assignment | Non-window tasks unchanged in test
+- [x] **A1-007** Add `backend/tests/test_scheduling_repair_window.py` with 3 cases | All pass in CI
+- [x] **A1-008** Update diagnostics JSON to include window task IDs and QUBO size | API response verified
+- [x] **A1-009** Write ADR-004 for repair window algorithm → `roadmap/adrs/ADR-004-scheduling-repair-window.md` | ADR committed
 
 ### B1 — PQC live scan harden
 
