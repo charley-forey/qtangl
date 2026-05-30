@@ -91,7 +91,7 @@ export const faqCategories: FaqCategory[] = [
         id: "rate-limit",
         question: "What is the default rate limit?",
         answer:
-          "120 requests per minute per API key unless QTANGL_RATE_LIMIT_PER_MINUTE overrides it on the server.",
+          "300 requests per minute per API key unless QTANGL_RATE_LIMIT_PER_MINUTE overrides it on the server.",
       },
       {
         id: "infeasible",

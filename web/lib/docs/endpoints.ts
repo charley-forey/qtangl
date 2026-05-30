@@ -118,7 +118,7 @@ export const docsEndpoints: Record<string, DocsEndpoint> = {
     summary:
       "Submit a schedule, route, or staffing problem and receive a ranked plan with summary, metrics, and method details.",
     auth: true,
-    rateLimit: "120 requests per minute per API key (default)",
+    rateLimit: "300 requests per minute per API key (default)",
     requestFields: [...optimizeRequestFields],
     responseFields: [...optimizeResponseFields],
     errors: [401, 422, 429, 500, 501],

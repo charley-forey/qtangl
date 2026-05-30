@@ -15,7 +15,7 @@ from app.db.models import ApiKey
 from app.queue.redis_queue import rate_limit_check
 
 _WINDOW_SECONDS = 60
-_DEFAULT_RATE_LIMIT = 120
+_DEFAULT_RATE_LIMIT = 300
 _requests_by_token: dict[str, deque[float]] = defaultdict(deque)
 _rate_lock = Lock()
 

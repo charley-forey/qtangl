@@ -22,7 +22,7 @@ export const httpErrors: DocsErrorRow[] = [
   {
     code: 429,
     meaning: "Too many requests",
-    cause: "Per-key rate limit exceeded (default 120 requests per minute).",
+    cause: "Per-key rate limit exceeded (default 300 requests per minute).",
     fix: "Backoff with jitter; cache results; request a higher limit for production.",
   },
   {

@@ -12,7 +12,7 @@ import { buildPageMetadata } from "@/lib/seo";
 export const metadata: Metadata = buildPageMetadata({
   path: "/docs/operations/rate-limits",
   title: "Rate limits",
-  description: "Per-key rate limiting on the Qtangl pilot API (default 120 requests per minute).",
+  description: "Per-key rate limiting on the Qtangl pilot API (default 300 requests per minute).",
 });
 
 export default function RateLimitsPage() {
@@ -28,7 +28,7 @@ export default function RateLimitsPage() {
         <DocsSection>
           <DocsHeading>Default policy</DocsHeading>
           <p className="text-sm leading-8 text-[var(--color-gray-300)]">
-            The backend enforces <strong className="text-white">120 requests per minute per API key</strong>{" "}
+            The backend enforces <strong className="text-white">300 requests per minute per API key</strong>{" "}
             by default. Operators can override with the{" "}
             <code className="font-mono text-white">QTANGL_RATE_LIMIT_PER_MINUTE</code> environment
             variable on the server.
@@ -48,7 +48,7 @@ export default function RateLimitsPage() {
                 label: "Body",
                 code: {
                   detail:
-                    "Rate limit reached. The pilot API allows 120 requests per minute per key.",
+                    "Rate limit reached. The pilot API allows 300 requests per minute per key.",
                 },
               },
             ]}
