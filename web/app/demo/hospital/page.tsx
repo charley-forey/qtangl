@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 
 import { Suspense } from "react";
 
+import DemoRecordingBanner from "@/components/demo/DemoRecordingBanner";
 import HospitalDemoClient from "@/components/hospital/HospitalDemoClient";
 import PageHero from "@/components/layout/PageHero";
 import Card from "@/components/ui/Card";
@@ -73,6 +74,14 @@ export default async function HospitalDemoPage() {
           { href: "/access?source=demo-hospital", label: "Request executive briefing" },
         ]}
       />
+      <Section gap="tight" className="pb-0">
+        <DemoRecordingBanner
+          title="Hospital call-out walkthrough (3–5 min)"
+          description="Scoreboard-first demo: classical CP-SAT, hybrid alternates, and audit packs. Replace the recording URL with your Loom link when ready."
+          recordingUrl="/blog/hospital-restaffing"
+          scriptHref="https://github.com/qtangl/qtangl/blob/main/demos/hospital_restaffing/script.md"
+        />
+      </Section>
       <Section gap="tight" className="pb-0">
         <Suspense
           fallback={

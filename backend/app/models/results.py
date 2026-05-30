@@ -13,6 +13,12 @@ class TaskAssignment:
 
 
 @dataclass(slots=True)
+class DiversityMetrics:
+    distinct_feasible_plans: int
+    diversity_score: float
+
+
+@dataclass(slots=True)
 class SolverRunResult:
     feasible: bool
     method: str

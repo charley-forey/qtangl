@@ -83,9 +83,10 @@ def run_hospital(instance: dict) -> dict:
     sample_count = int(instance.get("sampleCount", 10))
     rows = run_harness(sample_count=sample_count)
     scenario_ids = sorted({row["scenario_id"] for row in rows})
+    success_runs = sum(1 for row in rows if row.get("success_metric") == "true")
     return {
         "benchmarkId": instance["benchmarkId"],
-        "scenarioId": instance["scenarioId"],
+        "scenarioId": instance.get("scenarioId"),
         "sampleCount": sample_count,
         "scenarioIds": scenario_ids,
         "capturedAt": date.today().isoformat(),
@@ -99,6 +100,10 @@ def run_hospital(instance: dict) -> dict:
             "avgClassicalWallSeconds": round(
                 sum(float(row["classical_wall_time_seconds"]) for row in rows) / len(rows), 4
             ),
+            "avgDiversityScore": round(
+                sum(float(row["diversity_score"]) for row in rows) / len(rows), 3
+            ),
+            "successMetricRate": round(success_runs / len(rows), 2),
         },
         "sampleRows": rows[:3],
     }

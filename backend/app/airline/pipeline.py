@@ -14,6 +14,7 @@ from app.airline.repair_window import detect_repair_window
 from app.airline.solver_classical import solve_crew_classically
 from app.airline.solver_hybrid import solve_hybrid_plans
 from app.airline.solver_routing import solve_routing_repair
+from app.metrics.diversity import diversity_metrics_from_signatures
 
 
 def run_airline_solve(
@@ -149,6 +150,10 @@ def run_airline_solve(
             f"{classical_result.selected_plan.score.fairness_delta:.3f})."
         )
 
+    hybrid_diversity = diversity_metrics_from_signatures(
+        [plan.id for plan in hybrid_result.plans]
+    )
+
     scoreboard = Scoreboard(
         manual=ScoreboardColumn(
             label="Manual",
@@ -181,7 +186,7 @@ def run_airline_solve(
             label="Hybrid (routing + QAOA repair)",
             solve_wall_time_seconds=round(6.8 if use_fixture else perf_counter() - hybrid_started, 2),
             objective=hybrid_objective,
-            distinct_plans=max(1, len(hybrid_result.plans)),
+            distinct_plans=max(1, hybrid_diversity.distinct_feasible_plans),
             audit_pack_available=bool(hybrid_result.plans),
             summary=hybrid_summary,
             recovery_cost=hybrid_best.score.reserve_cost + hybrid_best.score.premium_pay_cost
@@ -191,6 +196,7 @@ def run_airline_solve(
             far117_compliant=True,
             hybrid_beats_classical_objective=beats_objective,
             hybrid_beats_classical_fairness=beats_fairness,
+            diversity_score=hybrid_diversity.diversity_score,
         ),
     )
 
@@ -209,6 +215,10 @@ def run_airline_solve(
             "routing": routing.diagnostics,
             "totalWallTimeSeconds": round(perf_counter() - started, 4),
             "distribution": hybrid_result.distribution,
+            "diversity": {
+                "distinctFeasiblePlans": hybrid_diversity.distinct_feasible_plans,
+                "diversityScore": hybrid_diversity.diversity_score,
+            },
             "costDeltaVsManual": round(
                 scenario.manual_baseline.recovery_cost
                 - (classical_result.selected_plan.score.premium_pay_cost

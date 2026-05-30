@@ -1,0 +1,32 @@
+name: PQC dogfood scan
+
+on:
+  schedule:
+    - cron: "0 14 * * 1"
+  workflow_dispatch:
+
+jobs:
+  dogfood:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install backend deps
+        run: |
+          cd backend
+          pip install -r requirements.lock
+
+      - name: Fixture PQC scan (qtangl.com scenario)
+        run: |
+          cd backend
+          python -m benchmarks.run_benchmark BM-006 --write
+
+      - name: Upload scan artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: pqc-dogfood-bm-006
+          path: backend/benchmarks/results/BM-006-pqc-scan.json

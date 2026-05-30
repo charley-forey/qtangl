@@ -149,6 +149,17 @@ export const docsCards = [
 
 export const blogPosts = [
   {
+    slug: "when-classical-wins",
+    href: "/blog/when-classical-wins",
+    category: "Validation",
+    coverImage: "/qtangl-technology-solver-grid.svg",
+    coverAlt: "Benchmark table illustration with classical and hybrid solver columns.",
+    title: "When classical wins: honest benchmark results",
+    excerpt: "BM-001–BM-006 committed results — including QAOA failures.",
+    description:
+      "Why we publish failures, how Track C2 success metric works, and what hybrid is actually for.",
+  },
+  {
     slug: "airline-recovery",
     href: "/blog/airline-recovery",
     category: "Aviation operations",

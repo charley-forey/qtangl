@@ -11,6 +11,7 @@ if str(BACKEND_ROOT) not in sys.path:
 
 from app.hospital.data import load_dataset
 from app.hospital.pipeline import run_hospital_solve
+from app.metrics.success_metric import compute_success_metric
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -34,6 +35,12 @@ def run_harness(sample_count: int = 50) -> list[dict[str, str]]:
             seed=seed,
         )
         hybrid_candidates = bundle.hybrid_candidates
+        success = compute_success_metric(
+            hybrid_distinct=bundle.scoreboard.hybrid.distinct_plans,
+            classical_distinct=bundle.scoreboard.classical.distinct_plans,
+            hybrid_objective=bundle.scoreboard.hybrid.objective,
+            classical_objective=bundle.scoreboard.classical.objective,
+        )
         rows.append(
             {
                 "run_index": str(index + 1),
@@ -47,6 +54,8 @@ def run_harness(sample_count: int = 50) -> list[dict[str, str]]:
                 "repair_window_size": str(len(bundle.repair_window.nurse_ids)),
                 "feasible_hybrid_candidates": str(len(hybrid_candidates)),
                 "distinct_candidate_names": str(len({candidate.nurse_id for candidate in hybrid_candidates})),
+                "diversity_score": f"{bundle.scoreboard.hybrid.diversity_score:.3f}",
+                "success_metric": str(success["successMetric"]).lower(),
                 "top_quantum_weight": f"{(hybrid_candidates[0].quantum_weight or 0):.1f}" if hybrid_candidates else "0.0",
                 "fairness_delta": f"{sum(candidate.score.fairness_delta for candidate in hybrid_candidates) / max(len(hybrid_candidates), 1):.4f}",
             }

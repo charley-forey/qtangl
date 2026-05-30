@@ -58,6 +58,11 @@ export default function ScoreboardCard({ scoreboard }: ScoreboardCardProps) {
         <HospitalChip tone="neutral">
           {scoreboard.hybrid.distinct_plans} distinct hybrid plans
         </HospitalChip>
+        {scoreboard.hybrid.diversity_score > 0 ? (
+          <HospitalChip tone="neutral">
+            Diversity {scoreboard.hybrid.diversity_score.toFixed(2)}
+          </HospitalChip>
+        ) : null}
       </div>
       <div className="mt-6 grid gap-4 lg:grid-cols-3">
         {columns.map((column) => (
@@ -73,6 +78,9 @@ export default function ScoreboardCard({ scoreboard }: ScoreboardCardProps) {
                 <HospitalMetric label="Fairness Δ" value={column.fairness_delta.toFixed(3)} />
               ) : null}
               <HospitalMetric label="Plans surfaced" value={String(column.distinct_plans)} />
+              {column.diversity_score != null && column.diversity_score > 0 ? (
+                <HospitalMetric label="Diversity" value={column.diversity_score.toFixed(2)} />
+              ) : null}
             </div>
             <p className="mt-4 text-sm leading-5 text-[var(--color-gray-400)]">{column.summary}</p>
           </div>

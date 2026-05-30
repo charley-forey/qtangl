@@ -179,6 +179,7 @@ class ScoreboardColumn:
     agency_cost: float | None = None
     hybrid_beats_classical_objective: bool = False
     hybrid_beats_classical_fairness: bool = False
+    diversity_score: float = 0.0
 
 
 @dataclass(slots=True)

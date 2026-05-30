@@ -43,6 +43,7 @@ export type ScoreboardColumn = {
   agency_cost?: number | null;
   hybrid_beats_classical_objective?: boolean;
   hybrid_beats_classical_fairness?: boolean;
+  diversity_score?: number;
 };
 
 export type Scoreboard = {

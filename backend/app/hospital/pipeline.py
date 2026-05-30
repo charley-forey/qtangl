@@ -14,6 +14,8 @@ from app.hospital.models import (
 from app.hospital.repair_window import detect_repair_window
 from app.hospital.solver_classical import solve_callout_classically
 from app.hospital.solver_hybrid import solve_hybrid_candidates
+from app.metrics.diversity import diversity_metrics_from_signatures
+from app.metrics.success_metric import compute_success_metric
 
 
 def run_hospital_solve(
@@ -137,6 +139,16 @@ def run_hospital_solve(
             f"{classical_result.selected_candidate.score.fairness_delta:.3f}) while staying feasible."
         )
 
+    hybrid_diversity = diversity_metrics_from_signatures(
+        [candidate.nurse_id for candidate in hybrid_result.candidates]
+    )
+    success_metric = compute_success_metric(
+        hybrid_distinct=hybrid_diversity.distinct_feasible_plans,
+        classical_distinct=1,
+        hybrid_objective=hybrid_objective,
+        classical_objective=classical_result.objective_value,
+    )
+
     scoreboard = Scoreboard(
         manual=ScoreboardColumn(
             label="Manual",
@@ -164,13 +176,14 @@ def run_hospital_solve(
             label="Hybrid (CP-SAT + QAOA repair)",
             solve_wall_time_seconds=round(6.34 if use_fixture else perf_counter() - hybrid_started, 2),
             objective=hybrid_objective,
-            distinct_plans=max(1, len(hybrid_result.candidates)),
+            distinct_plans=max(1, hybrid_diversity.distinct_feasible_plans),
             audit_pack_available=True,
             summary=hybrid_summary,
             fairness_delta=hybrid_fairness_best.score.fairness_delta if hybrid_fairness_best else None,
             agency_cost=hybrid_best.score.agency_cost if hybrid_best else None,
             hybrid_beats_classical_objective=beats_objective,
             hybrid_beats_classical_fairness=beats_fairness,
+            diversity_score=hybrid_diversity.diversity_score,
         ),
     )
 
@@ -187,5 +200,10 @@ def run_hospital_solve(
             "hybrid": hybrid_result.diagnostics,
             "totalWallTimeSeconds": round(perf_counter() - started, 4),
             "distribution": hybrid_result.distribution,
+            "successMetric": success_metric,
+            "diversity": {
+                "distinctFeasiblePlans": hybrid_diversity.distinct_feasible_plans,
+                "diversityScore": hybrid_diversity.diversity_score,
+            },
         },
     )

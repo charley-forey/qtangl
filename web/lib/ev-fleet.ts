@@ -49,6 +49,7 @@ export type ScoreboardColumn = {
   on_time_probability?: number | null;
   hybrid_beats_classical_objective?: boolean;
   hybrid_beats_classical_cost?: boolean;
+  diversity_score?: number;
 };
 
 export type Scoreboard = {

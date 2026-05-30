@@ -15,6 +15,7 @@ from app.ev_fleet.repair_window import detect_repair_window
 from app.ev_fleet.solver_classical import solve_charging_classically
 from app.ev_fleet.solver_hybrid import solve_hybrid_plans
 from app.ev_fleet.solver_routing import solve_route_assignment
+from app.metrics.diversity import diversity_metrics_from_signatures
 
 
 def run_ev_fleet_solve(
@@ -140,6 +141,7 @@ def run_ev_fleet_solve(
         )
 
     manual_peak = min(dataset.depot.site_power_cap_kw, len(routing_bundle.active_vehicles) * 7.2)
+    hybrid_diversity = diversity_metrics_from_signatures([plan.id for plan in hybrid_result.plans])
     scoreboard = Scoreboard(
         manual=ScoreboardColumn(
             label="Manual (plug on return)",
@@ -167,7 +169,7 @@ def run_ev_fleet_solve(
             label="Hybrid (VRP + QAOA stagger)",
             solve_wall_time_seconds=round(6.2 if use_fixture else perf_counter() - hybrid_started, 2),
             objective=hybrid_objective,
-            distinct_plans=max(1, len(hybrid_result.plans)),
+            distinct_plans=max(1, hybrid_diversity.distinct_feasible_plans),
             audit_pack_available=bool(hybrid_result.plans),
             summary=hybrid_summary,
             daily_cost=hybrid_best.score.total_cost if hybrid_best else None,
@@ -175,6 +177,7 @@ def run_ev_fleet_solve(
             on_time_probability=hybrid_best.score.on_time_probability if hybrid_best else None,
             hybrid_beats_classical_objective=beats_objective,
             hybrid_beats_classical_cost=beats_cost,
+            diversity_score=hybrid_diversity.diversity_score,
         ),
     )
 

@@ -20,6 +20,7 @@ from app.pqc.jobs import create_job, get_job, run_job_async
 from app.pqc.pipeline import run_pqc_scan
 from app.pqc.report import report_to_cbom, report_to_csv, report_to_json, report_to_pdf
 from app.pqc.serialize import serialize_asset, serialize_bundle, serialize_handshake, serialize_scenario
+from app.pqc.safety import ScanSafetyError, live_scan_enabled
 from app.pqc.sessions import create_session, get_session
 from app.pqc.standards import default_standards
 
@@ -152,6 +153,15 @@ def scan_pqc(
             _report_cache[bundle.scan_id] = {"bundle": bundle}
             return {"status": "success", **serialize_bundle(bundle)}
 
+        if not live_scan_enabled():
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail=(
+                    "Live PQC scanning is disabled on this deployment. "
+                    "Set QTANGL_PQC_ENABLE_LIVE_SCAN=true or use fixture mode."
+                ),
+            )
+
         scan_id = create_job()
 
         def runner(on_progress):
@@ -171,11 +181,15 @@ def scan_pqc(
             "scanId": scan_id,
             "summary": "Live PQC scan started. Poll GET /pqc/scan/{scanId} for progress.",
         }
+    except HTTPException:
+        raise
     except StopIteration as exc:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Unknown PQC scenario: {request.scenarioId}",
         ) from exc
+    except ScanSafetyError as exc:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail=str(exc)) from exc
     except Exception as exc:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(exc)) from exc
 

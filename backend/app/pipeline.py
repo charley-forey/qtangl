@@ -13,6 +13,8 @@ from app.repair_window.scheduling import (
 )
 from app.solvers.classical import solve_schedule_classically
 from app.solvers.qaoa import assess_qaoa_candidate, solve_schedule_with_qaoa
+from app.metrics.diversity import assignment_signature, diversity_metrics_from_signatures
+from app.metrics.success_metric import compute_success_metric
 
 
 @dataclass(slots=True)
@@ -43,7 +45,7 @@ def run_optimization(problem: CanonicalProblem) -> SolverRunResult:
 
     repair_window = detect_local_repair_window(problem, classical_result)
     if repair_window is None:
-        return classical_result
+        return _attach_diversity_metrics(classical_result, classical_result)
 
     quantum_candidate = build_local_quantum_candidate(problem, classical_result, repair_window)
     quantum_result = solve_schedule_with_qaoa(
@@ -51,7 +53,8 @@ def run_optimization(problem: CanonicalProblem) -> SolverRunResult:
         qubo_diagnostics=quantum_candidate.qubo_diagnostics,
         candidate_assessment=quantum_candidate.assessment,
     )
-    return merge_local_repair(classical_result, quantum_result, quantum_candidate)
+    result = merge_local_repair(classical_result, quantum_result, quantum_candidate)
+    return _attach_diversity_metrics(classical_result, result)
 
 
 def run_global_classical(problem: CanonicalProblem) -> SolverRunResult:
@@ -247,6 +250,38 @@ def merge_local_repair(
         },
     )
     return classical_result
+
+
+def _attach_diversity_metrics(
+    classical_result: SolverRunResult,
+    result: SolverRunResult,
+) -> SolverRunResult:
+    classical_signature = assignment_signature(classical_result.assignments)
+    if result.method == "hybrid":
+        hybrid_signature = assignment_signature(result.assignments)
+        signatures = (
+            [classical_signature, hybrid_signature]
+            if hybrid_signature != classical_signature
+            else [hybrid_signature]
+        )
+    else:
+        signatures = [classical_signature]
+
+    diversity = diversity_metrics_from_signatures(signatures if result.method == "hybrid" else [classical_signature])
+    distinct = diversity.distinct_feasible_plans if result.method == "hybrid" else 1
+    result.metrics = {
+        **result.metrics,
+        "distinctFeasiblePlans": distinct,
+        "diversityScore": diversity.diversity_score,
+    }
+    if result.method == "hybrid":
+        result.metrics["successMetric"] = compute_success_metric(
+            hybrid_distinct=distinct,
+            classical_distinct=1,
+            hybrid_objective=float(result.score),
+            classical_objective=float(classical_result.score),
+        )
+    return result
 
 
 def _non_window_assignments_unchanged(

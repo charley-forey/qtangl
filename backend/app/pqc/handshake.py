@@ -78,6 +78,26 @@ def prove_handshake(*, use_fixture: bool = True) -> HandshakeProof:
         return _replay_with_note(f"Live handshake failed ({exc}); replaying cached trace.")
 
 
+def handshake_appendix_for_report(proof: HandshakeProof) -> dict[str, Any]:
+    """Handshake proof appendix for compliance report packs (JSON/PDF)."""
+    return {
+        "title": "Post-quantum TLS handshake proof appendix",
+        "mode": proof.mode,
+        "server": proof.server,
+        "port": proof.port,
+        "tlsVersion": proof.tls_version,
+        "hybridGroup": proof.hybrid_group,
+        "kemAlgorithm": proof.kem_algorithm,
+        "namedGroups": list(proof.named_groups),
+        "cipherSuites": list(proof.cipher_suites),
+        "clientHelloExcerpt": proof.client_hello_hex[:128],
+        "clientHelloHexLength": len(proof.client_hello_hex),
+        "summary": proof.summary,
+        "capturedAt": proof.captured_at,
+        "metadata": dict(proof.metadata),
+    }
+
+
 def _replay_with_note(note: str) -> HandshakeProof:
     trace = load_handshake_trace()
     metadata = dict(trace.metadata)

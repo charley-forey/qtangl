@@ -103,10 +103,10 @@ Hospital hybrid already computes `distinctness`, `fairness_delta`, and surfaces 
 
 ### Acceptance criteria
 
-- [ ] All three vertical scoreboards expose `distinctPlans` consistently
-- [ ] `/optimize` diagnostics report alternate count when hybrid runs
-- [ ] Demo UI shows side-by-side plans with diversity explanation
-- [ ] Documented falsifiable metric in [07-track-C-validation.md](./07-track-C-validation.md)
+- [x] All three vertical scoreboards expose `distinctPlans` consistently
+- [x] `/optimize` diagnostics report alternate count when hybrid runs
+- [x] Demo UI shows side-by-side plans with diversity explanation
+- [x] Documented falsifiable metric in [07-track-C-validation.md](./07-track-C-validation.md)
 
 ---
 

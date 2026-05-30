@@ -163,6 +163,8 @@ class MigrationReport:
     remediation_backlog: list[RemediationItem]
     standards_summary: list[dict[str, Any]]
     honesty_notes: list[str]
+    compliance_pack: dict[str, Any] = field(default_factory=dict)
+    handshake_proof: HandshakeProof | None = None
 
 
 @dataclass(slots=True)

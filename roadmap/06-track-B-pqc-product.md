@@ -133,9 +133,9 @@ Async jobs via [backend/app/pqc/jobs.py](../backend/app/pqc/jobs.py) — in-memo
 
 ### Acceptance criteria
 
-- [ ] Each scenario produces framework-mapped report section
-- [ ] Handshake proof captured in report appendix
-- [ ] Sales leave-behind updated ([demos/pqc_migration/outreach/](../demos/pqc_migration/outreach/))
+- [x] Each scenario produces framework-mapped report section
+- [x] Handshake proof captured in report appendix
+- [x] Sales leave-behind updated ([demos/pqc_migration/outreach/](../demos/pqc_migration/outreach/))
 
 ---
 
@@ -148,7 +148,7 @@ Async jobs via [backend/app/pqc/jobs.py](../backend/app/pqc/jobs.py) — in-memo
 | Demo script | [demos/pqc_migration/script.md](../demos/pqc_migration/script.md) |
 | Demo specs | [demos/pqc_migration/demo_specs.md](../demos/pqc_migration/demo_specs.md) |
 | Cold email | [demos/pqc_migration/outreach/cold_email.md](../demos/pqc_migration/outreach/cold_email.md) |
-| Pilot SOW template | New: `roadmap/templates/pqc-pilot-sow.md` (optional) |
+| Pilot SOW template | [roadmap/templates/pqc-pilot-sow.md](../roadmap/templates/pqc-pilot-sow.md) |
 
 ### Pilot success criteria
 

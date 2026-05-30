@@ -31,6 +31,11 @@ export default function ScoreboardCard({ scoreboard }: { scoreboard: Scoreboard 
           <EvFleetChip tone="success">Hybrid saves $/day</EvFleetChip>
         ) : null}
         <EvFleetChip tone="neutral">{scoreboard.hybrid.distinct_plans} hybrid plans</EvFleetChip>
+        {(scoreboard.hybrid.diversity_score ?? 0) > 0 ? (
+          <EvFleetChip tone="neutral">
+            Diversity {scoreboard.hybrid.diversity_score!.toFixed(2)}
+          </EvFleetChip>
+        ) : null}
       </div>
       <div className="mt-6 grid gap-4 lg:grid-cols-3">
         {columns.map((column) => (
@@ -54,6 +59,9 @@ export default function ScoreboardCard({ scoreboard }: { scoreboard: Scoreboard 
                   label="On-time"
                   value={`${(column.on_time_probability * 100).toFixed(0)}%`}
                 />
+              ) : null}
+              {column.diversity_score != null && column.diversity_score > 0 ? (
+                <EvFleetMetric label="Diversity" value={column.diversity_score.toFixed(2)} />
               ) : null}
             </div>
             <p className="mt-4 text-sm leading-5 text-[var(--color-gray-400)]">{column.summary}</p>

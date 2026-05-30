@@ -50,6 +50,7 @@ export type ScoreboardColumn = {
   far117_compliant?: boolean;
   hybrid_beats_classical_objective?: boolean;
   hybrid_beats_classical_fairness?: boolean;
+  diversity_score?: number;
 };
 
 export type Scoreboard = {

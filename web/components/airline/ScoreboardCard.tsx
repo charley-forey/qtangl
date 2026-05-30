@@ -53,6 +53,11 @@ export default function ScoreboardCard({ scoreboard }: { scoreboard: Scoreboard 
         <AirlineChip tone="neutral">
           {scoreboard.hybrid.distinct_plans} distinct hybrid plans
         </AirlineChip>
+        {scoreboard.hybrid.diversity_score != null && scoreboard.hybrid.diversity_score > 0 ? (
+          <AirlineChip tone="neutral">
+            Diversity {scoreboard.hybrid.diversity_score.toFixed(2)}
+          </AirlineChip>
+        ) : null}
       </div>
       <div className="mt-6 grid gap-4 lg:grid-cols-3">
         {columns.map((column) => (
@@ -74,6 +79,9 @@ export default function ScoreboardCard({ scoreboard }: { scoreboard: Scoreboard 
                 <AirlineMetric label="Recovery $" value={column.recovery_cost.toLocaleString()} />
               ) : null}
               <AirlineMetric label="Plans" value={String(column.distinct_plans)} />
+              {"diversity_score" in column && (column.diversity_score ?? 0) > 0 ? (
+                <AirlineMetric label="Diversity" value={(column.diversity_score ?? 0).toFixed(2)} />
+              ) : null}
             </div>
             <p className="mt-4 text-sm leading-5 text-[var(--color-gray-400)]">{column.summary}</p>
           </div>

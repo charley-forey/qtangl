@@ -80,7 +80,7 @@ def standards_refs_for_asset(asset: CryptoAsset, standards: dict[str, Any]) -> l
     elif "ec" in algo or "ed25519" in algo:
         refs.extend(mappings.get("ecdsa", []))
     refs.extend(mappings.get(asset.kind, []))
-  # dedupe preserve order
+    # dedupe preserve order
     seen: set[str] = set()
     out: list[str] = []
     for ref in refs:

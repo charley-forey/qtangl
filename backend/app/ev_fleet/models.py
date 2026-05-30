@@ -208,6 +208,7 @@ class ScoreboardColumn:
     on_time_probability: float | None = None
     hybrid_beats_classical_objective: bool = False
     hybrid_beats_classical_cost: bool = False
+    diversity_score: float = 0.0
 
 
 @dataclass(slots=True)

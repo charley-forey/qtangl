@@ -39,6 +39,34 @@ def assess_mosca(risk_assumptions: dict[str, Any]) -> MoscaAssessment:
     )
 
 
+def mosca_assessment_for_report(mosca: MoscaAssessment) -> dict[str, Any]:
+    """Structured Mosca block for compliance report packs (JSON/PDF)."""
+    x = mosca.data_shelf_life_years
+    y = mosca.migration_time_years
+    z = mosca.years_to_q_day
+    holds = mosca.inequality_holds
+    return {
+        "headline": "Mosca inequality assessment (harvest-now-decrypt-later)",
+        "formula": "X + Y > Z",
+        "variables": {
+            "dataShelfLifeYears": x,
+            "migrationTimeYears": y,
+            "yearsToQDay": z,
+        },
+        "sumXY": round(x + y, 2),
+        "inequalityHolds": holds,
+        "hndlRiskLevel": "elevated" if holds else "moderate",
+        "summary": mosca.summary,
+        "interpretation": (
+            "Under these assumptions, ciphertext captured today may be decrypted after Q-Day "
+            "unless migration completes in time — prioritize HNDL-exposed assets."
+            if holds
+            else "Under these assumptions, migration can complete before Q-Day; "
+            "HNDL timeline pressure is moderate but inventory gaps still require action."
+        ),
+    }
+
+
 def asset_mosca_priority(
     asset: CryptoAsset,
     *,

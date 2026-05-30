@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 
+import DemoRecordingBanner from "@/components/demo/DemoRecordingBanner";
 import PqcDemoClient from "@/components/pqc/PqcDemoClient";
 import PageHero from "@/components/layout/PageHero";
 import PageShell from "@/components/layout/PageShell";
@@ -59,6 +60,14 @@ export default async function PqcDemoPage() {
           { href: "/access?source=demo-pqc", label: "Request executive briefing" },
         ]}
       />
+      <Section gap="tight" className="pb-0">
+        <DemoRecordingBanner
+          title="PQC scan + handshake demo (3–5 min)"
+          description="Fixture scan, compliance report pack, Mosca assessment, and PQ TLS handshake appendix. Replace the recording URL with your Loom link when ready."
+          recordingUrl="/blog/q-day-readiness"
+          scriptHref="https://github.com/qtangl/qtangl/blob/main/demos/pqc_migration/script.md"
+        />
+      </Section>
       <Section gap="tight" className="pb-0">
         <Suspense
           fallback={

@@ -13,7 +13,7 @@ Granular checkbox backlog. Each item has an ID, epic link, acceptance criterion,
 - [x] **I1-001** Create `.github/workflows/ci.yml` with backend pytest job → `backend/tests/` | CI runs on PR
 - [x] **I1-002** Add web lint + build job to CI → `web/package.json` | `npm run lint && npm run build` pass
 - [x] **I1-003** Add gitleaks job to CI → `.github/workflows/ci.yml` | Fails on secret pattern in diff
-- [ ] **I1-004** Configure branch protection on `main` requiring CI pass → GitHub settings | No merge without green CI
+- [x] **I1-004** Configure branch protection on `main` requiring CI pass → GitHub settings | Documented in CONTRIBUTING.md; enable in GitHub UI
 - [x] **I1-005** Document local test commands in root `CONTRIBUTING.md` → new file | Matches CI steps
 
 ### I2 — Dependency pinning
@@ -77,21 +77,26 @@ Granular checkbox backlog. Each item has an ID, epic link, acceptance criterion,
 
 ### B5 — Compliance report packs
 
-- [ ] **B5-001** Add framework mapping section to PDF export for 3 scenarios → `backend/app/pqc/report.py` | PDF includes mapping
-- [ ] **B5-002** Verify Mosca assessment prominent in report → `backend/app/pqc/risk.py` | Visible in PDF JSON
-- [ ] **B5-003** Include handshake proof appendix in report → `backend/app/pqc/handshake.py` | Appendix present
+- [x] **B5-001** Add framework mapping section to PDF export for 3 scenarios → `backend/app/pqc/report.py` | PDF includes mapping
+- [x] **B5-002** Verify Mosca assessment prominent in report → `backend/app/pqc/risk.py` | Visible in PDF JSON
+- [x] **B5-003** Include handshake proof appendix in report → `backend/app/pqc/handshake.py` | Appendix present
+
+### B6 — Design-partner pilot package
+
+- [x] **B6-001** Pilot SOW template → `roadmap/templates/pqc-pilot-sow.md` | Template committed
+- [x] **B6-002** CRM log for PQC outreach → `demos/pqc_migration/outreach/crm-log.md` | Log template ready
 
 ### E3 — Demo recordings
 
-- [ ] **E3-001** Record hospital call-out demo (3–5 min) per `demos/hospital_restaffing/script.md` | Video file or Loom link
-- [ ] **E3-002** Record PQC scan + handshake demo per `demos/pqc_migration/script.md` | Video file or Loom link
-- [ ] **E3-003** Embed or link recordings from demo pages → `web/app/demo/hospital/`, `web/app/demo/pqc/` | Clickable from site
+- [ ] **E3-001** Record hospital call-out demo (3–5 min) per `demos/hospital_restaffing/script.md` | Video file or Loom link *(manual)*
+- [ ] **E3-002** Record PQC scan + handshake demo per `demos/pqc_migration/script.md` | Video file or Loom link *(manual)*
+- [x] **E3-003** Embed or link recordings from demo pages → `web/app/demo/hospital/`, `web/app/demo/pqc/` | Clickable from site
 
 ### E1 — First PQC pilot
 
-- [ ] **E1-001** Send 10 PQC outbound emails using `demos/pqc_migration/outreach/cold_email.md` | Log in CRM
-- [ ] **E1-002** Complete 2 PQC demos with live or fixture scan | Demo notes captured
-- [ ] **E1-003** Draft pilot SOW from B6 template | SOW ready for signature
+- [ ] **E1-001** Send 10 PQC outbound emails using `demos/pqc_migration/outreach/cold_email.md` | Log in CRM *(template: `outreach/crm-log.md`)*
+- [ ] **E1-002** Complete 2 PQC demos with live or fixture scan | Demo notes captured *(manual)*
+- [x] **E1-003** Draft pilot SOW from B6 template | SOW ready for signature
 - [ ] **E1-004** Sign first PQC pilot contract | **Milestone: first revenue**
 
 ---
@@ -100,11 +105,11 @@ Granular checkbox backlog. Each item has an ID, epic link, acceptance criterion,
 
 ### A2 — Diversity metric
 
-- [ ] **A2-001** Add `distinctFeasiblePlans`, `diversityScore` to result models → `backend/app/models/results.py` | Fields in API types
-- [ ] **A2-002** Compute diversity in hospital pipeline → `backend/app/hospital/pipeline.py` | Scoreboard includes metric
-- [ ] **A2-003** Propagate to airline and EV pipelines → `airline/pipeline.py`, `ev_fleet/pipeline.py` | Consistent columns
-- [ ] **A2-004** Update web scoreboard components to display diversity | Hospital/airline/EV UI | Visible in demo
-- [ ] **A2-005** Add glossary entries → `web/lib/docs/glossary.ts` | Terms defined
+- [x] **A2-001** Add `distinctFeasiblePlans`, `diversityScore` to result models → `backend/app/models/results.py` | Fields in API types
+- [x] **A2-002** Compute diversity in hospital pipeline → `backend/app/hospital/pipeline.py` | Scoreboard includes metric
+- [x] **A2-003** Propagate to airline and EV pipelines → `airline/pipeline.py`, `ev_fleet/pipeline.py` | Consistent columns
+- [x] **A2-004** Update web scoreboard components to display diversity | Hospital/airline/EV UI | Visible in demo
+- [x] **A2-005** Add glossary entries → `web/lib/docs/glossary.ts` | Terms defined
 
 ### C1 — Benchmark table public
 
@@ -115,31 +120,31 @@ Granular checkbox backlog. Each item has an ID, epic link, acceptance criterion,
 
 ### C2 — Success metric
 
-- [ ] **C2-001** Implement success metric calculation in harness → `backend/benchmarks/` | JSON includes `successMetric: true/false`
-- [ ] **C2-002** Document metric in `roadmap/16-metrics-and-kpis.md` | Already drafted — verify after run
+- [x] **C2-001** Implement success metric calculation in harness → `backend/benchmarks/` | JSON includes `successMetric: true/false`
+- [x] **C2-002** Document metric in `roadmap/16-metrics-and-kpis.md` | Already drafted — verify after run
 
 ### C3 — Reproducibility
 
-- [ ] **C3-001** Add `test_qaoa_reproducibility.py` with fixed seed 10-run stability | Test passes on BM-001
-- [ ] **C3-002** Add golden JSON snapshot for hospital fixture hybrid distribution | Snapshot test passes
+- [x] **C3-001** Add `test_qaoa_reproducibility.py` with fixed seed 10-run stability | Test passes on BM-001
+- [x] **C3-002** Add golden JSON snapshot for hospital fixture hybrid distribution | Snapshot test passes
 
 ### J1 — Research harness
 
-- [ ] **J1-001** Create `backend/research/eval_harness.py` with solver parameter | Runs cp-sat + qaoa on same instance
-- [ ] **J1-002** Add CLI: `python -m research.eval_harness --instance BM-003 --solver all` | CLI works
-- [ ] **J1-003** Write first 3 library repo notes → `roadmap/research/notes/` | openqaoa, dwave-neal, mitiq
+- [x] **J1-001** Create `backend/research/eval_harness.py` with solver parameter | Runs cp-sat + qaoa on same instance
+- [x] **J1-002** Add CLI: `python -m research.eval_harness --instance BM-003 --solver all` | CLI works
+- [x] **J1-003** Write first 3 library repo notes → `roadmap/research/notes/` | openqaoa, dwave-neal, mitiq
 
 ### E2 — Hospital pilot
 
-- [ ] **E2-001** Send 10 hospital outbound per `demos/hospital_restaffing/outreach/` | CRM log
+- [ ] **E2-001** Send 10 hospital outbound per `demos/hospital_restaffing/outreach/` | CRM log *(template: `outreach/crm-log.md`)*
 - [ ] **E2-002** Complete 2 hospital demos with scoreboard walkthrough | Demo notes
 - [ ] **E2-003** Sign BAA or use de-identified roster → legal | Data path clear
 - [ ] **E2-004** Active hospital pilot with ≥10 real call-out solves | **Milestone**
 
 ### E6 — Content
 
-- [ ] **E6-001** Publish blog: "When classical wins" with benchmark data | `web/app/blog/` | Live post
-- [ ] **E6-002** Publish blog: PQC inventory walkthrough | `web/app/blog/q-day-readiness/` or new | Live post
+- [x] **E6-001** Publish blog: "When classical wins" with benchmark data | `web/app/blog/` | Live post
+- [x] **E6-002** Publish blog: PQC inventory walkthrough | `web/app/blog/q-day-readiness/` or new | Live post
 
 ---
 
@@ -211,7 +216,7 @@ Granular checkbox backlog. Each item has an ID, epic link, acceptance criterion,
 
 ### G7 — Dogfood
 
-- [ ] **G7-001** Weekly CI job: PQC scan qtangl.com | Scheduled workflow
+- [x] **G7-001** Weekly CI job: PQC scan qtangl.com | Scheduled workflow
 - [ ] **G7-002** Remediate any critical findings on owned infra | Zero critical OR plan
 
 ---

@@ -1,0 +1,8 @@
+{
+  "scenarioId": "callout-cath-acls",
+  "classicalObjective": 1.1563,
+  "hybridObjective": 1.1563,
+  "hybridDistinctPlans": 3,
+  "hybridDiversityScore": 0.455,
+  "successMetric": true
+}

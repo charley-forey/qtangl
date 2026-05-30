@@ -12,7 +12,7 @@ Master list of all epics across tracks A–J, I, G, H, E, F, B, C, D. Update sta
 | ID | Epic | Status | Effort | Depends | Owner |
 |----|------|--------|--------|---------|-------|
 | A1 | Local repair window extractor | done | L | I1 | — |
-| A2 | Diversity / alternates headline metric | not-started | M | A1 | — |
+| A2 | Diversity / alternates headline metric | done | M | A1 | — |
 | A3 | `/optimize` routing + allocation live | not-started | L | A1 | — |
 | A4 | QAOA robustness + envelope expansion | not-started | M | A1, J2 | — |
 | A5 | Reproducible real-QPU opt-in path | not-started | M | A4, I1 | — |
@@ -25,16 +25,16 @@ Master list of all epics across tracks A–J, I, G, H, E, F, B, C, D. Update sta
 | B2 | CBOM export standardization | done | S | — | — |
 | B3 | Continuous monitoring / scheduled re-scans | not-started | M | B1, D1 | — |
 | B4 | Remediation workflow tracking | not-started | M | B2, D1 | — |
-| B5 | Compliance mapping + report packs | not-started | M | B2 | — |
-| B6 | Design-partner pilot package | not-started | S | B1–B5, H1 | — |
+| B5 | Compliance mapping + report packs | done | M | B2 | — |
+| B6 | Design-partner pilot package | done | S | B1–B5, H1 | — |
 
 ## Track C — Validation
 
 | ID | Epic | Status | Effort | Depends | Owner |
 |----|------|--------|--------|---------|-------|
 | C1 | Fill benchmark table (committed results) | done | M | A1, A2 | — |
-| C2 | Falsifiable success metric definition | not-started | S | A2 | — |
-| C3 | Determinism & reproducibility tests | not-started | M | I1 | — |
+| C2 | Falsifiable success metric definition | done | S | A2 | — |
+| C3 | Determinism & reproducibility tests | done | M | I1 | — |
 | C4 | Fixture vs live tolerance tests | not-started | M | A5 | — |
 | C5 | Load & performance tests | not-started | M | D1 | — |
 
@@ -55,10 +55,10 @@ Master list of all epics across tracks A–J, I, G, H, E, F, B, C, D. Update sta
 |----|------|--------|--------|---------|-------|
 | E1 | PQC design-partner program | not-started | M | B6, G3 | — |
 | E2 | Hospital optimization design partners | not-started | M | A1, H2 | — |
-| E3 | Demo recording + sales assets | not-started | S | — | — |
+| E3 | Demo recording + sales assets | in-progress | S | — | — |
 | E4 | Pricing & packaging v1 | not-started | S | — | — |
 | E5 | Partnerships & channel | not-started | M | B1 | — |
-| E6 | DevRel / content / community | not-started | M | C1 | — |
+| E6 | DevRel / content / community | in-progress | M | C1 | — |
 
 ## Track F — Business Ops
 
@@ -81,7 +81,7 @@ Master list of all epics across tracks A–J, I, G, H, E, F, B, C, D. Update sta
 | G9 | Safe logging & error responses (PHI redaction) | not-started | S | G2 | — |
 | G5 | SOC 2 Type I → Type II | not-started | L | G1–G4 | — |
 | G6 | Vertical compliance (HIPAA, CMMC) | not-started | L | G5 | — |
-| G7 | Dogfood PQC (Qtangl secures Qtangl) | not-started | S | B1 | — |
+| G7 | Dogfood PQC (Qtangl secures Qtangl) | in-progress | S | B1 | — |
 | G8 | Responsible disclosure program | not-started | S | — | — |
 
 ## Track H — Product & Onboarding
@@ -110,7 +110,7 @@ Master list of all epics across tracks A–J, I, G, H, E, F, B, C, D. Update sta
 
 | ID | Epic | Status | Effort | Depends | Owner |
 |----|------|--------|--------|---------|-------|
-| J1 | Research evaluation framework | not-started | M | I2 | — |
+| J1 | Research evaluation framework | done | M | I2 | — |
 | J2 | QAOA improvements (warm-start) | not-started | M | A1 | — |
 | J3 | Quantum annealing path (D-Wave) | not-started | M | J1 | — |
 | J4 | Quantum-inspired solvers | not-started | M | J1 | — |

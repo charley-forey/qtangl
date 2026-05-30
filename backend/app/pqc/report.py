@@ -6,9 +6,11 @@ import json
 from datetime import datetime, timezone
 from typing import Any
 
-from app.pqc.models import CryptoAsset, MigrationReport, MoscaAssessment, RemediationItem, ScanScenario
+from app.pqc.models import CryptoAsset, HandshakeProof, MigrationReport, MoscaAssessment, RemediationItem, ScanScenario
 from app.pqc.cbom import CBOM_SCHEMA_ID, CBOM_SPEC_VERSION
-from app.pqc.risk import readiness_score, remediation_coverage
+from app.pqc.compliance_packs import build_compliance_pack
+from app.pqc.handshake import handshake_appendix_for_report
+from app.pqc.risk import mosca_assessment_for_report, readiness_score, remediation_coverage
 from app.pqc.standards import standards_summary_for_report
 from app.pqc.vulnerability import vulnerability_dict
 
@@ -39,8 +41,10 @@ def build_migration_report(
     mosca: MoscaAssessment,
     standards: dict[str, Any],
     deadlines: dict[str, Any],
+    handshake_proof: HandshakeProof | None = None,
 ) -> MigrationReport:
     confidence = min(95.0, 40.0 + len(assets) * 4.0)
+    standards_summary = standards_summary_for_report(assets, standards, deadlines)
     return MigrationReport(
         scan_id=scan_id,
         scenario_id=scenario.id,
@@ -51,19 +55,23 @@ def build_migration_report(
         mosca=mosca,
         assets=assets,
         remediation_backlog=backlog,
-        standards_summary=standards_summary_for_report(assets, standards, deadlines),
+        standards_summary=standards_summary,
         honesty_notes=honesty_notes(),
+        compliance_pack=build_compliance_pack(scenario, standards_summary),
+        handshake_proof=handshake_proof,
     )
 
 
 def report_to_json(report: MigrationReport) -> dict[str, Any]:
-    return {
+    mosca_block = mosca_assessment_for_report(report.mosca)
+    payload: dict[str, Any] = {
         "scanId": report.scan_id,
         "scenarioId": report.scenario_id,
         "targetDomain": report.target_domain,
         "generatedAt": report.generated_at,
         "readinessScore": report.readiness_score,
         "coverageConfidence": report.coverage_confidence,
+        "moscaAssessment": mosca_block,
         "mosca": {
             "dataShelfLifeYears": report.mosca.data_shelf_life_years,
             "migrationTimeYears": report.mosca.migration_time_years,
@@ -71,11 +79,15 @@ def report_to_json(report: MigrationReport) -> dict[str, Any]:
             "inequalityHolds": report.mosca.inequality_holds,
             "summary": report.mosca.summary,
         },
+        "compliancePack": report.compliance_pack,
         "assets": [_asset_dict(asset) for asset in report.assets],
         "remediationBacklog": [_remediation_dict(item) for item in report.remediation_backlog],
         "standardsSummary": report.standards_summary,
         "honestyNotes": report.honesty_notes,
     }
+    if report.handshake_proof is not None:
+        payload["handshakeAppendix"] = handshake_appendix_for_report(report.handshake_proof)
+    return payload
 
 
 def report_to_csv(report: MigrationReport) -> str:
@@ -200,40 +212,117 @@ def report_to_pdf(report: MigrationReport) -> bytes:
     pdf = canvas.Canvas(buffer, pagesize=letter)
     width, height = letter
     y = height - 72
-    pdf.setFont("Helvetica-Bold", 16)
-    pdf.drawString(72, y, "Qtangl Q-Day Readiness Report")
-    y -= 24
-    pdf.setFont("Helvetica", 11)
-    lines = [
-        f"Target: {report.target_domain}",
-        f"Scenario: {report.scenario_id}",
-        f"Readiness score: {report.readiness_score}/100",
-        f"Coverage confidence: {report.coverage_confidence}%",
-        f"Assets discovered: {len(report.assets)}",
-        f"Remediation items: {len(report.remediation_backlog)}",
-        report.mosca.summary,
-    ]
-    for line in lines:
-        pdf.drawString(72, y, line[:95])
-        y -= 16
-        if y < 72:
-            pdf.showPage()
-            y = height - 72
 
-    y -= 8
-    pdf.setFont("Helvetica-Bold", 12)
-    pdf.drawString(72, y, "Top remediation backlog")
-    y -= 18
-    pdf.setFont("Helvetica", 10)
+    y = _pdf_draw_heading(pdf, y, height, "Qtangl Q-Day Readiness Report", size=16)
+    y = _pdf_draw_lines(
+        pdf,
+        y,
+        height,
+        [
+            f"Target: {report.target_domain}",
+            f"Scenario: {report.scenario_id}",
+            f"Readiness score: {report.readiness_score}/100",
+            f"Coverage confidence: {report.coverage_confidence}%",
+            f"Assets discovered: {len(report.assets)}",
+            f"Remediation items: {len(report.remediation_backlog)}",
+        ],
+    )
+
+    mosca = mosca_assessment_for_report(report.mosca)
+    y = _pdf_draw_heading(pdf, y, height, mosca["headline"], size=13)
+    y = _pdf_draw_lines(
+        pdf,
+        y,
+        height,
+        [
+            f"Formula: {mosca['formula']} — sum X+Y = {mosca['sumXY']} yr, Z = {mosca['variables']['yearsToQDay']} yr",
+            f"HNDL risk level: {mosca['hndlRiskLevel']} (inequality holds: {mosca['inequalityHolds']})",
+            mosca["summary"],
+            mosca["interpretation"],
+        ],
+    )
+
+    pack = report.compliance_pack
+    y = _pdf_draw_heading(pdf, y, height, "Compliance framework mapping", size=13)
+    if pack.get("title"):
+        y = _pdf_draw_lines(pdf, y, height, [pack["title"], f"Mandate: {pack.get('mandate', '')}"])
+    for framework in pack.get("primaryFrameworks", [])[:5]:
+        y = _pdf_draw_lines(
+            pdf,
+            y,
+            height,
+            [f"{framework['name']}: {framework['relevance']}"],
+            font_size=10,
+        )
+    for theme in pack.get("controlThemes", [])[:5]:
+        y = _pdf_draw_lines(
+            pdf,
+            y,
+            height,
+            [f"{theme['framework']} ({theme['controlRef']}): {theme['theme']}"],
+            font_size=10,
+        )
+    for gap in pack.get("gapFindings", [])[:6]:
+        y = _pdf_draw_lines(
+            pdf,
+            y,
+            height,
+            [f"[{gap.get('status', 'gap')}] {gap.get('asset', '')}: {gap.get('finding', '')}"],
+            font_size=9,
+        )
+
+    y = _pdf_draw_heading(pdf, y, height, "Top remediation backlog", size=12)
     for item in report.remediation_backlog[:12]:
-        pdf.drawString(72, y, f"{item.priority}. {item.title} — {item.deadline}")
-        y -= 14
-        if y < 72:
-            pdf.showPage()
-            y = height - 72
+        y = _pdf_draw_lines(pdf, y, height, [f"{item.priority}. {item.title} — {item.deadline}"], font_size=10)
+
+    if report.handshake_proof is not None:
+        appendix = handshake_appendix_for_report(report.handshake_proof)
+        y = _pdf_draw_heading(pdf, y, height, appendix["title"], size=12)
+        y = _pdf_draw_lines(
+            pdf,
+            y,
+            height,
+            [
+                f"Mode: {appendix['mode']} | Server: {appendix['server']}:{appendix['port']}",
+                f"TLS: {appendix['tlsVersion']} | Hybrid group: {appendix['hybridGroup']}",
+                f"KEM: {appendix['kemAlgorithm']} | Groups: {', '.join(appendix['namedGroups'][:4])}",
+                f"ClientHello excerpt ({appendix['clientHelloHexLength']} hex chars): {appendix['clientHelloExcerpt']}…",
+                appendix["summary"],
+            ],
+            font_size=9,
+        )
 
     pdf.save()
     return buffer.getvalue()
+
+
+def _pdf_draw_heading(pdf: Any, y: float, height: float, text: str, *, size: int = 12) -> float:
+    y -= 8
+    if y < 72:
+        pdf.showPage()
+        y = height - 72
+    pdf.setFont("Helvetica-Bold", size)
+    pdf.drawString(72, y, text[:95])
+    return y - (size + 6)
+
+
+def _pdf_draw_lines(
+    pdf: Any,
+    y: float,
+    height: float,
+    lines: list[str],
+    *,
+    font_size: int = 11,
+) -> float:
+    pdf.setFont("Helvetica", font_size)
+    for line in lines:
+        if y < 72:
+            pdf.showPage()
+            y = height - 72
+            pdf.setFont("Helvetica", font_size)
+        pdf.drawString(72, y, line[:115])
+        y -= font_size + 4
+    return y
 
 
 def _asset_dict(asset: CryptoAsset) -> dict[str, Any]:

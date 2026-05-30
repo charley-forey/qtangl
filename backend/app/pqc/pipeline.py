@@ -92,6 +92,7 @@ def run_pqc_scan(
         mosca=mosca,
         standards=dataset.standards,
         deadlines=dataset.deadlines,
+        handshake_proof=handshake,
     )
 
     timeline.append(

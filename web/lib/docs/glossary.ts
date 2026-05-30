@@ -69,6 +69,34 @@ for (const entry of pqcEntries) {
   merged.set(entry.id, entry);
 }
 
+const diversityEntries: GlossaryEntry[] = [
+  {
+    id: "distinct-feasible-plans",
+    quantum: "Distinct feasible plans",
+    quantumMeaning: "Count of structurally different assignments that still satisfy hard constraints.",
+    engineering: "distinctFeasiblePlans",
+    engineeringMeaning: "Headline hybrid metric — how many auditable alternates the repair window surfaced.",
+  },
+  {
+    id: "diversity-score",
+    quantum: "Diversity score",
+    quantumMeaning: "Pairwise distance between feasible plans (0–1). Higher means more meaningfully different alternates.",
+    engineering: "diversityScore",
+    engineeringMeaning: "Normalized plan distance used on scoreboards and in Track C2 success metric.",
+  },
+  {
+    id: "success-metric",
+    quantum: "Hybrid success metric",
+    quantumMeaning: "Hybrid must beat classical on alternate count while staying within ε of optimum.",
+    engineering: "successMetric",
+    engineeringMeaning: "Falsifiable C2 check: hybrid_distinct ≥ classical_distinct + 1 and objective within 2%.",
+  },
+];
+
+for (const entry of diversityEntries) {
+  merged.set(entry.id, entry);
+}
+
 export const glossary: GlossaryEntry[] = Array.from(merged.values()).sort((a, b) =>
   a.quantum.localeCompare(b.quantum),
 );
