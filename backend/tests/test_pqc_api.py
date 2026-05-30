@@ -58,6 +58,31 @@ class PqcApiTest(unittest.TestCase):
         self.assertEqual(response.status_code, 403)
         self.assertIn("disabled", response.json()["detail"].lower())
 
+    def test_live_scan_inline_returns_success_without_polling(self) -> None:
+        from app.pqc.data import load_dataset
+        from app.pqc.pipeline import run_pqc_scan
+
+        dataset = load_dataset()
+        bundle = run_pqc_scan(
+            dataset,
+            scenario_id="bank-tls-inventory",
+            use_fixture=True,
+        )
+        with (
+            patch("app.api.pqc.live_scan_enabled", return_value=True),
+            patch("app.api.pqc.use_worker_queue", return_value=False),
+            patch("app.api.pqc.run_pqc_scan", return_value=bundle),
+        ):
+            response = self.client.post(
+                "/pqc/scan",
+                headers=self.headers,
+                json={"scenarioId": "bank-tls-inventory", "useFixture": False},
+            )
+        self.assertEqual(response.status_code, 200)
+        payload = response.json()
+        self.assertEqual(payload["status"], "success")
+        self.assertIn("scoreboard", payload)
+
 
 if __name__ == "__main__":
     unittest.main()

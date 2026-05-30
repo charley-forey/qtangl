@@ -7,6 +7,7 @@ from fastapi.responses import Response
 from pydantic import BaseModel, Field
 
 from app.auth import AuthContext, require_api_key_readonly, require_auth, require_auth_readonly
+from app.db.config import use_worker_queue
 from app.models.api import ErrorResponse
 from app.pqc.data import (
     load_dataset,
@@ -160,6 +161,24 @@ def scan_pqc(
                 ),
             )
 
+        def run_live(on_progress=None):
+            return run_pqc_scan(
+                dataset,
+                scenario_id=request.scenarioId,
+                use_fixture=False,
+                target_override=request.target,
+                uploaded_rows=uploaded_rows,
+                seed=request.seed,
+                on_progress=on_progress,
+            )
+
+        # Single-process deploys (Railway default: inline jobs) run synchronously so the
+        # client does not poll — live scans can exceed 24s when probing many endpoints.
+        if not use_worker_queue():
+            bundle = run_live()
+            save_scan_bundle(bundle.scan_id, bundle, tenant_id=auth.tenant_id)
+            return {"status": "success", **serialize_bundle(bundle)}
+
         scan_id = create_job(
             tenant_id=auth.tenant_id,
             payload={
@@ -172,15 +191,7 @@ def scan_pqc(
         )
 
         def runner(on_progress):
-            return run_pqc_scan(
-                dataset,
-                scenario_id=request.scenarioId,
-                use_fixture=False,
-                target_override=request.target,
-                uploaded_rows=uploaded_rows,
-                seed=request.seed,
-                on_progress=on_progress,
-            )
+            return run_live(on_progress=on_progress)
 
         run_job_async(scan_id, runner, tenant_id=auth.tenant_id)
         return {

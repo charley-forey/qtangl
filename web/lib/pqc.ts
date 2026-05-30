@@ -188,6 +188,32 @@ export async function pollPqcScan(scanId: string) {
   );
 }
 
+const LIVE_SCAN_POLL_MS = 1500;
+const LIVE_SCAN_MAX_ATTEMPTS = 120;
+
+export async function waitForPqcScan(
+  scanId: string,
+  onProgress?: (timeline: PqcScanRunningResponse["timeline"]) => void
+): Promise<PqcScanResponse> {
+  for (let attempt = 0; attempt < LIVE_SCAN_MAX_ATTEMPTS; attempt += 1) {
+    await new Promise((resolve) => setTimeout(resolve, LIVE_SCAN_POLL_MS));
+    const polled = await pollPqcScan(scanId);
+    if (polled.status === "success") {
+      return polled;
+    }
+    if (polled.status === "error") {
+      throw new Error(polled.message ?? "Scan failed");
+    }
+    if (onProgress && polled.timeline?.length) {
+      onProgress(polled.timeline);
+    }
+  }
+  const minutes = Math.round((LIVE_SCAN_MAX_ATTEMPTS * LIVE_SCAN_POLL_MS) / 60_000);
+  throw new Error(
+    `Live scan timed out after ${minutes} minutes. The scan may still be running — retry from the dashboard or poll GET /pqc/scan/${scanId}.`
+  );
+}
+
 export async function provePqcHandshake(useFixture = true) {
   return fetchQtanglJson<{ status: "success"; proof: HandshakeProof }>("/pqc/handshake/prove", {
     method: "POST",

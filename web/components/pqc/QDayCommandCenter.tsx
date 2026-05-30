@@ -10,8 +10,8 @@ import type { CryptoAsset, PqcScanResponse, Scenario } from "@/lib/pqc";
 import {
   getPqcInventory,
   getPqcScenarios,
-  pollPqcScan,
   scanPqc,
+  waitForPqcScan,
 } from "@/lib/pqc";
 
 import BundleUploader from "./BundleUploader";
@@ -67,6 +67,7 @@ export default function QDayCommandCenter({
   const [scanResponse, setScanResponse] = useState<PqcScanResponse | null>(null);
   const [isScanning, setIsScanning] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [scanProgress, setScanProgress] = useState<string | null>(null);
   const [reportOpen, setReportOpen] = useState(false);
   const resultsRef = useRef<HTMLDivElement>(null);
 
@@ -125,6 +126,7 @@ export default function QDayCommandCenter({
     }
     setIsScanning(true);
     setError(null);
+    setScanProgress(null);
     trackEvent("pqc_scan_started", { scenarioId: activeScenarioId, useFixture });
     try {
       const result = await scanPqc({
@@ -133,25 +135,16 @@ export default function QDayCommandCenter({
         target: customDomain || undefined,
         bundleSessionId: bundleSessionId ?? undefined,
       });
-      let completed: PqcScanResponse | null = null;
+      let completed: PqcScanResponse;
       if (result.status === "running") {
-        let attempts = 0;
-        while (attempts < 30) {
-          await new Promise((r) => setTimeout(r, 800));
-          const polled = await pollPqcScan(result.scanId);
-          if (polled.status === "success") {
-            completed = polled;
-            setScanResponse(polled);
-            break;
+        setScanProgress("Starting live scan…");
+        completed = await waitForPqcScan(result.scanId, (timeline) => {
+          const latest = timeline[timeline.length - 1];
+          if (latest?.label) {
+            setScanProgress(latest.label);
           }
-          if (polled.status === "error") {
-            throw new Error(polled.message ?? "Scan failed");
-          }
-          attempts += 1;
-        }
-        if (!completed) {
-          throw new Error("Live scan timed out while polling for results.");
-        }
+        });
+        setScanResponse(completed);
       } else {
         completed = result;
         setScanResponse(result);
@@ -164,6 +157,7 @@ export default function QDayCommandCenter({
       setError(err instanceof Error ? err.message : "Scan failed");
     } finally {
       setIsScanning(false);
+      setScanProgress(null);
     }
   }
 
@@ -224,7 +218,7 @@ export default function QDayCommandCenter({
           }}
         />
         <Button onClick={handleScan} disabled={isScanning || (!useFixture && !authorized)}>
-          {isScanning ? "Scanning…" : "Run Q-Day scan"}
+          {isScanning ? (scanProgress ?? "Scanning…") : "Run Q-Day scan"}
         </Button>
         {scanResponse && (
           <Button variant="secondary" onClick={() => setReportOpen(true)}>
