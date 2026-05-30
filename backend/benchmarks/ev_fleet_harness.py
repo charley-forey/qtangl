@@ -3,7 +3,12 @@
 from __future__ import annotations
 
 import csv
+import sys
 from pathlib import Path
+
+BACKEND_ROOT = Path(__file__).resolve().parents[1]
+if str(BACKEND_ROOT) not in sys.path:
+    sys.path.insert(0, str(BACKEND_ROOT))
 
 from app.ev_fleet.data import load_dataset
 from app.ev_fleet.pipeline import run_ev_fleet_solve

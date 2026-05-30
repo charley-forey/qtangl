@@ -1,0 +1,22 @@
+{
+  "benchmarkId": "BM-002",
+  "name": "5-task precedence schedule",
+  "type": "schedule",
+  "description": "Construction chain; classical 7-day makespan; QAOA exceeds research limits",
+  "request": {
+    "type": "schedule",
+    "tasks": [
+      {"id": "site-prep", "duration": 1, "crew": "Crew A"},
+      {"id": "foundation", "duration": 2, "crew": "Crew A"},
+      {"id": "framing", "duration": 2, "crew": "Crew B"},
+      {"id": "rough-in", "duration": 1, "crew": "Crew C"},
+      {"id": "inspection", "duration": 1, "crew": "Inspector"}
+    ],
+    "constraints": [
+      "site-prep must happen before foundation",
+      "foundation must happen before framing",
+      "framing must happen before rough-in",
+      "rough-in must happen before inspection"
+    ]
+  }
+}

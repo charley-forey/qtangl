@@ -1,0 +1,9 @@
+{
+  "benchmarkId": "BM-003",
+  "name": "Hospital callout-cath-acls",
+  "type": "hospital",
+  "scenarioId": "callout-cath-acls",
+  "sampleCount": 10,
+  "useFixture": true,
+  "description": "Primary hospital demo scenario; fixture QPU replay"
+}

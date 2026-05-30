@@ -1,0 +1,18 @@
+{
+  "benchmarkId": "BM-001",
+  "name": "Tiny research schedule",
+  "type": "schedule",
+  "description": "3-task linear chain; QAOA within research limits",
+  "request": {
+    "type": "schedule",
+    "tasks": [
+      {"id": "foundation", "duration": 1, "crew": "Crew A"},
+      {"id": "inspection", "duration": 1, "crew": "Inspector"},
+      {"id": "handoff", "duration": 1, "crew": "Crew B"}
+    ],
+    "constraints": [
+      "foundation must happen before inspection",
+      "inspection must happen before handoff"
+    ]
+  }
+}

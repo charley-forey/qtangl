@@ -44,7 +44,7 @@ See diagram in [04-architecture-blueprint.md](../04-architecture-blueprint.md).
 | TH-003 | Malicious PEM/CSV upload | Upload endpoints | Size limits partial | Formal sandbox |
 | TH-004 | API key brute force | Auth | Rate limit partial | Per-tenant limits |
 | TH-005 | PHI in application logs | All verticals | Not formalized | Log redaction |
-| TH-006 | Secrets in git | Dev process | .gitignore | gitleaks CI (I1) |
+| TH-006 | Secrets in git | Dev process | `.gitignore` + gitleaks CI + `.gitleaks.toml` | G1-001 manual rotation |
 
 ---
 

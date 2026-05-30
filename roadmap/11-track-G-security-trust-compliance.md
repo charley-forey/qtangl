@@ -8,7 +8,7 @@ Internal security posture and compliance roadmap. **Gate:** No regulated-data pi
 
 | ID | Epic | Status | Effort | Depends on |
 |----|------|--------|--------|------------|
-| G1 | Secrets management & hygiene | `not-started` | S | — |
+| G1 | Secrets management & hygiene | `in-progress` | S | — |
 | G2 | Product threat model | `not-started` | M | — |
 | G3 | Per-tenant auth & data isolation | `not-started` | M | D1 |
 | G4 | Data governance & retention | `not-started` | M | G3 |
@@ -39,10 +39,10 @@ Internal security posture and compliance roadmap. **Gate:** No regulated-data pi
 
 ### Acceptance criteria
 
-- [ ] `.env.example` committed with placeholder values only
-- [ ] gitleaks CI job passes
-- [ ] Runbook: secret rotation procedure documented
-- [ ] Live-looking tokens in local `.env` rotated if they were ever shared
+- [x] `.env.example` committed with placeholder values only
+- [x] gitleaks CI job passes (with `.gitleaks.toml` for doc placeholders)
+- [x] Runbook: secret rotation procedure documented → [security/secrets-runbook.md](./security/secrets-runbook.md)
+- [ ] Live-looking tokens in local `.env` rotated if they were ever shared (G1-001 — manual)
 
 ---
 

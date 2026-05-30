@@ -1,0 +1,8 @@
+{
+  "benchmarkId": "BM-006",
+  "name": "PQC bank-tls-inventory",
+  "type": "pqc",
+  "scenarioId": "bank-tls-inventory",
+  "useFixture": true,
+  "description": "Fixture TLS inventory scan; production-safe"
+}

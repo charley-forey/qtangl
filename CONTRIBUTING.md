@@ -72,7 +72,7 @@ npm run test:access
 
 - [ ] Backend tests pass locally
 - [ ] Web lint and build pass locally
-- [ ] No secrets or credentials in the diff
+- [ ] No secrets or credentials in the diff (see [roadmap/security/secrets-runbook.md](roadmap/security/secrets-runbook.md))
 - [ ] API or schema changes update docs under `web/app/docs/`
 - [ ] Roadmap action item ID referenced in PR description when applicable (see [roadmap/backlog/action-items.md](roadmap/backlog/action-items.md))
 
@@ -81,7 +81,7 @@ npm run test:access
 After the first CI run on `main`, enable branch protection:
 
 1. GitHub → **Settings** → **Branches** → **Add rule** for `main`
-2. Require status checks: **Backend (pytest)**, **Web (lint + build)**, **Secret scan (gitleaks)**
+2. Require status checks: **Backend (pytest)**, **Web (lint + build)**, **Secret scan (gitleaks)**, **Benchmarks (BM-001, BM-003, BM-006)**
 3. Require branches to be up to date before merging
 
 ## Implementation roadmap

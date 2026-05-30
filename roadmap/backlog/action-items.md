@@ -25,10 +25,10 @@ Granular checkbox backlog. Each item has an ID, epic link, acceptance criterion,
 
 ### G1 — Secrets hygiene
 
-- [ ] **G1-001** Rotate Cursor API key and GitHub token if ever shared → local `.env` | Old tokens invalidated
-- [ ] **G1-002** Verify `.env` in `.gitignore`; run gitleaks on full history → `.gitignore` | Clean scan
-- [ ] **G1-003** Document Railway/Vercel secret setup runbook → `roadmap/` or `backend/README.md` | Runbook exists
-- [ ] **G1-004** Add secret rotation procedure (90-day API keys) → Track G doc | Procedure written
+- [ ] **G1-001** Rotate Cursor API key and GitHub token if ever shared → local `.env` | Old tokens invalidated *(manual — see [secrets-runbook.md](../security/secrets-runbook.md))*
+- [x] **G1-002** Verify `.env` in `.gitignore`; run gitleaks on full history → `.gitignore`, `.gitleaks.toml` | Clean scan (doc placeholders allowlisted)
+- [x] **G1-003** Document Railway/Vercel secret setup runbook → `roadmap/security/secrets-runbook.md` | Runbook exists
+- [x] **G1-004** Add secret rotation procedure (90-day API keys) → `roadmap/security/secrets-runbook.md` | Procedure written
 
 ### G2 — Threat model
 
@@ -108,10 +108,10 @@ Granular checkbox backlog. Each item has an ID, epic link, acceptance criterion,
 
 ### C1 — Benchmark table public
 
-- [ ] **C1-010** Define BM-001 through BM-006 instance JSON → `backend/benchmarks/instances/` | 6 instances committed
-- [ ] **C1-011** Run all 6; commit results → `backend/benchmarks/results/` | No "Pending" in README
-- [ ] **C1-012** Update `backend/README.md` benchmark table with real numbers | Table complete
-- [ ] **C1-013** Add CI job for BM-001, BM-003, BM-006 on PR → `.github/workflows/ci.yml` | Regression in CI
+- [x] **C1-010** Define BM-001 through BM-006 instance JSON → `backend/benchmarks/instances/` | 6 instances committed
+- [x] **C1-011** Run all 6; commit results → `backend/benchmarks/results/` | No "Pending" in README
+- [x] **C1-012** Update `backend/README.md` benchmark table with real numbers | Table complete
+- [x] **C1-013** Add CI job for BM-001, BM-003, BM-006 on PR → `.github/workflows/ci.yml` | Regression in CI
 
 ### C2 — Success metric
 

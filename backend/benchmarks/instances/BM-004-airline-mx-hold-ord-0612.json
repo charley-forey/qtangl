@@ -1,0 +1,9 @@
+{
+  "benchmarkId": "BM-004",
+  "name": "Airline mx-hold-ord-0612",
+  "type": "airline",
+  "scenarioId": "mx-hold-ord-0612",
+  "sampleCount": 10,
+  "useFixture": true,
+  "description": "ORD maintenance hold crew recovery; fixture QPU replay"
+}

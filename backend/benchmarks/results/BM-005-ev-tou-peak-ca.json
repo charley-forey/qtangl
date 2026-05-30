@@ -1,0 +1,14 @@
+{
+  "benchmarkId": "BM-005",
+  "scenarioId": "tou-peak-ca",
+  "useFixture": true,
+  "capturedAt": "2026-05-29",
+  "wallTimeSeconds": 0.8517,
+  "manualDailyCost": 620.0,
+  "classicalDailyCost": 552.87,
+  "hybridDailyCost": 25.59,
+  "peakKwManual": 86.4,
+  "peakKwClassical": 129.6,
+  "peakKwHybrid": 7.2,
+  "onTimeProbability": 0.98
+}

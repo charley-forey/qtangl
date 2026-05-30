@@ -1,0 +1,56 @@
+{
+  "benchmarkId": "BM-004",
+  "scenarioId": "mx-hold-ord-0612",
+  "sampleCount": 3,
+  "capturedAt": "2026-05-29",
+  "aggregates": {
+    "avgObjectiveGap": -0.9307,
+    "avgHybridPlans": 2.0,
+    "avgClassicalWallSeconds": 0.0142,
+    "avgClassicalObjective": 1.1373
+  },
+  "sampleRows": [
+    {
+      "run_index": "2",
+      "scenario_id": "mx-hold-ord-0612",
+      "seed": "1409",
+      "classical_objective": "1.1373",
+      "hybrid_objective": "0.2066",
+      "objective_gap": "-0.9307",
+      "classical_wall_time_seconds": "0.0117",
+      "hybrid_wall_time_seconds": "6.8000",
+      "repair_window_crew": "8",
+      "feasible_hybrid_plans": "2",
+      "on_time_probability": "0.980",
+      "top_quantum_weight": "45.0"
+    },
+    {
+      "run_index": "5",
+      "scenario_id": "mx-hold-ord-0612",
+      "seed": "4657",
+      "classical_objective": "1.1373",
+      "hybrid_objective": "0.2066",
+      "objective_gap": "-0.9307",
+      "classical_wall_time_seconds": "0.0203",
+      "hybrid_wall_time_seconds": "6.8000",
+      "repair_window_crew": "8",
+      "feasible_hybrid_plans": "2",
+      "on_time_probability": "0.980",
+      "top_quantum_weight": "45.0"
+    },
+    {
+      "run_index": "8",
+      "scenario_id": "mx-hold-ord-0612",
+      "seed": "9935",
+      "classical_objective": "1.1373",
+      "hybrid_objective": "0.2066",
+      "objective_gap": "-0.9307",
+      "classical_wall_time_seconds": "0.0107",
+      "hybrid_wall_time_seconds": "6.8000",
+      "repair_window_crew": "8",
+      "feasible_hybrid_plans": "2",
+      "on_time_probability": "0.980",
+      "top_quantum_weight": "45.0"
+    }
+  ]
+}

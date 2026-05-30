@@ -32,7 +32,7 @@ Master list of all epics across tracks A–J, I, G, H, E, F, B, C, D. Update sta
 
 | ID | Epic | Status | Effort | Depends | Owner |
 |----|------|--------|--------|---------|-------|
-| C1 | Fill benchmark table (committed results) | in-progress | M | A1, A2 | — |
+| C1 | Fill benchmark table (committed results) | done | M | A1, A2 | — |
 | C2 | Falsifiable success metric definition | not-started | S | A2 | — |
 | C3 | Determinism & reproducibility tests | not-started | M | I1 | — |
 | C4 | Fixture vs live tolerance tests | not-started | M | A5 | — |
@@ -74,7 +74,7 @@ Master list of all epics across tracks A–J, I, G, H, E, F, B, C, D. Update sta
 
 | ID | Epic | Status | Effort | Depends | Owner |
 |----|------|--------|--------|---------|-------|
-| G1 | Secrets management & hygiene | not-started | S | — | — |
+| G1 | Secrets management & hygiene | in-progress | S | — | — |
 | G2 | Product threat model | not-started | M | — | — |
 | G3 | Per-tenant auth & data isolation | not-started | M | D1 | — |
 | G4 | Data governance & retention | not-started | M | G3 | — |

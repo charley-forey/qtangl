@@ -1,0 +1,44 @@
+{
+  "benchmarkId": "BM-002",
+  "name": "5-task precedence schedule",
+  "capturedAt": "2026-05-29",
+  "classical": {
+    "elapsedSeconds": 0.0172,
+    "summary": "All 5 tasks were scheduled with no resource conflicts.",
+    "metrics": {
+      "makespanDays": 3,
+      "constraintViolations": 0,
+      "savingsEstimate": "Estimated 3 hours saved versus manual resequencing for a 3-day plan."
+    },
+    "score": 3,
+    "feasible": true
+  },
+  "qaoa": {
+    "elapsedSeconds": 0.0002,
+    "summary": "QAOA skipped because the candidate exceeds the binary-variable limit for safe simulator execution.",
+    "metrics": {},
+    "score": 0,
+    "feasible": false,
+    "diagnostics": {
+      "qaoa": {
+        "enabled": true,
+        "quboDiagnostics": {
+          "task_count": 5,
+          "horizon": 7,
+          "precedence_count": 0,
+          "binary_variable_count": 33,
+          "overlap_constraint_count": 12,
+          "max_allowed_starts_per_task": 7,
+          "blocked_resource_days": 0
+        },
+        "limits": {
+          "maxBinaryVariables": 12,
+          "maxHorizon": 6,
+          "maxOverlapConstraints": 24
+        },
+        "status": "too_large",
+        "reason": "QAOA skipped because the candidate exceeds the binary-variable limit for safe simulator execution."
+      }
+    }
+  }
+}

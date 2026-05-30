@@ -1,0 +1,8 @@
+{
+  "benchmarkId": "BM-005",
+  "name": "EV tou-peak-ca",
+  "type": "ev_fleet",
+  "scenarioId": "tou-peak-ca",
+  "useFixture": true,
+  "description": "California TOU peak shaving scenario"
+}

@@ -94,6 +94,8 @@ Recommended local auth for Railway CLI:
 $env:RAILWAY_TOKEN = "your-railway-token"
 ```
 
+Secrets setup and rotation: [roadmap/security/secrets-runbook.md](../roadmap/security/secrets-runbook.md).
+
 The container binds Railway's injected `PORT` automatically.
 
 ## Endpoints
@@ -131,11 +133,13 @@ The response diagnostics explain whether QAOA was:
 
 ## Classical vs QAOA notes
 
-Add measured results here after running the comparison script locally:
+Measured on Python 3.13 with pinned lockfiles. Full JSON in `benchmarks/results/`. Regenerate with `python benchmarks/run_benchmark.py BM-00N --write`.
 
-| Problem | Classical result | QAOA result | Notes |
-|--------|------------------|-------------|-------|
-| 5-task precedence schedule | 0.017s, feasible 7-day plan, 0 violations | 6.886s, failed on simulator, memory/transpilation issues | Too large for safe simulator use in production |
-| Tiny research schedule (3 tasks) | 0.017s, makespan 1 day, 0 violations | 4.3s, makespan 3 days, feasible but worse score | QAOA runs on tiny window; classical wins — see `benchmarks/results/BM-001-tiny-schedule.json` |
-| Hospital fixture (10 runs) | ~classical wall time varies by scenario | Hybrid fixture replay | Avg objective gap ≈0; see `benchmarks/results/BM-003-hospital-summary.json` |
-| PQC bank-tls-inventory fixture | — | — | ~0.001s scan, 7 assets; see `benchmarks/results/BM-006-pqc-scan.json` |
+| ID | Problem | Classical result | QAOA / hybrid result | Notes |
+|----|---------|------------------|----------------------|-------|
+| BM-001 | Tiny research schedule (3 tasks) | 0.03s, makespan 1 day, 0 violations | 4.4s, makespan 3 days, feasible but worse | Classical wins — see `BM-001-tiny-schedule.json` |
+| BM-002 | 5-task precedence schedule | 0.02s, makespan 3 days, 0 violations | Skipped (33 binary vars > limit 12) | Safe production guardrail — see `BM-002-five-task-precedence.json` |
+| BM-003 | Hospital callout-cath-acls (10 runs) | ~0.02s classical wall time | 3 hybrid candidates, gap ≈0 | Fixture replay — see `BM-003-hospital-summary.json` |
+| BM-004 | Airline mx-hold-ord-0612 | ~0.01s, objective ~1.14 | 2 hybrid plans, lower hybrid objective | Fixture replay — see `BM-004-airline-summary.json` |
+| BM-005 | EV tou-peak-ca | Manual $620/day, 86 kW peak | Hybrid $26/day, 7 kW peak | Fixture replay — see `BM-005-ev-tou-peak-ca.json` |
+| BM-006 | PQC bank-tls-inventory | — | ~0.001s scan, 7 assets | Production-safe fixture — see `BM-006-pqc-scan.json` |

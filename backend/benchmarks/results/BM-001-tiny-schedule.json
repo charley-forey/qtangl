@@ -1,16 +1,20 @@
-﻿{
+{
+  "benchmarkId": "BM-001",
+  "name": "Tiny research schedule",
+  "capturedAt": "2026-05-29",
   "classical": {
-    "elapsedSeconds": 0.0273,
+    "elapsedSeconds": 0.0156,
     "summary": "All 3 tasks were scheduled with no resource conflicts.",
     "metrics": {
       "makespanDays": 1,
       "constraintViolations": 0,
       "savingsEstimate": "Estimated 2 hours saved versus manual resequencing for a 1-day plan."
     },
-    "score": 1
+    "score": 1,
+    "feasible": true
   },
   "qaoa": {
-    "elapsedSeconds": 4.3606,
+    "elapsedSeconds": 12.399,
     "summary": "QAOA produced a feasible 3-task schedule on the simulator with no decoded task collisions.",
     "metrics": {
       "makespanDays": 3,
@@ -18,6 +22,7 @@
       "savingsEstimate": "Research-only result: compare against the classical baseline before using in a pilot."
     },
     "score": 3,
+    "feasible": true,
     "diagnostics": {
       "qaoa": {
         "enabled": true,
