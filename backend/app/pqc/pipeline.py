@@ -7,7 +7,7 @@ from typing import Any, Callable
 from app.pqc.handshake import prove_handshake
 from app.pqc.models import PqcDataset, ScanBundle, ScanScenario, TimelineEvent
 from app.pqc.report import build_migration_report
-from app.pqc.risk import apply_risk_to_assets, assess_mosca, build_scoreboard
+from app.pqc.risk import apply_risk_to_assets, assess_mosca, build_scoreboard, readiness_assessment
 from app.pqc.scanner import scan_fixture, scan_live
 from app.pqc.safety import ScanSafetyError, live_scan_enabled
 from app.pqc.standards import build_remediation_backlog
@@ -27,6 +27,8 @@ def run_pqc_scan(
     started = perf_counter()
     scenario = next(s for s in dataset.scenarios if s.id == scenario_id)
     scan_id = f"scan-{uuid.uuid4()}"
+    effective_target = target_override or scenario.target.domain
+    scan_coverage: list[dict[str, Any]] = []
 
     def emit(key: str, label: str, duration_ms: int = 0, status: str = "done") -> None:
         event = TimelineEvent(key=key, label=label, duration_ms=duration_ms, status=status)
@@ -34,14 +36,14 @@ def run_pqc_scan(
             on_progress(event)
 
     if use_fixture:
-        assets, timeline = scan_fixture(dataset, scenario, uploaded_rows=uploaded_rows)
+        assets, timeline, scan_coverage = scan_fixture(dataset, scenario, uploaded_rows=uploaded_rows)
     else:
         if not live_scan_enabled():
             raise ScanSafetyError(
                 "Live PQC scanning is disabled. Set QTANGL_PQC_ENABLE_LIVE_SCAN=true "
                 "or use fixture mode."
             )
-        assets, timeline = scan_live(
+        assets, timeline, scan_coverage = scan_live(
             scenario,
             target_override=target_override,
             uploaded_rows=uploaded_rows,
@@ -76,12 +78,14 @@ def run_pqc_scan(
         "remediationCoverage": 15,
         "summary": scenario.manual_baseline.summary,
     }
+    assessment = readiness_assessment(assets)
     scoreboard = build_scoreboard(
         manual=manual_dict,
         qtangl_assets=assets,
         scan_wall_time_seconds=wall,
         backlog_count=len(backlog),
         use_fixture=use_fixture,
+        readiness=assessment,
     )
 
     report = build_migration_report(
@@ -93,6 +97,10 @@ def run_pqc_scan(
         standards=dataset.standards,
         deadlines=dataset.deadlines,
         handshake_proof=handshake,
+        target_domain=effective_target,
+        scan_coverage=scan_coverage,
+        readiness_band=str(assessment["band"]),
+        readiness_summary=str(assessment["summary"]),
     )
 
     timeline.append(
@@ -117,7 +125,11 @@ def run_pqc_scan(
         details={
             "useFixture": use_fixture,
             "targetOverride": target_override,
+            "effectiveTarget": effective_target,
             "totalWallTimeSeconds": round(wall, 4),
             "assetCount": len(assets),
+            "scanCoverage": scan_coverage,
+            "readinessBand": assessment["band"],
+            "pqcReadyCount": assessment["pqcReadyCount"],
         },
     )

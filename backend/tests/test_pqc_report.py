@@ -49,16 +49,12 @@ class PqcComplianceReportTest(unittest.TestCase):
         self.assertIn("clientHelloExcerpt", appendix)
         self.assertIn("hybridGroup", appendix)
         self.assertEqual(appendix["mode"], "fixture")
+        self.assertIn("readinessBand", body)
+        self.assertIn("scanCoverage", body)
 
         pdf_bytes = report_to_pdf(bundle.report)
         self.assertGreater(len(pdf_bytes), 100)
-        if pdf_bytes[:4] == b"%PDF":
-            self.assertTrue(pdf_bytes.endswith(b"%%EOF\n") or pdf_bytes.endswith(b"%%EOF"))
-        else:
-            fallback = json.loads(pdf_bytes.decode("utf-8"))
-            self.assertIn("handshakeAppendix", fallback)
-            self.assertIn("compliancePack", fallback)
-            self.assertIn("moscaAssessment", fallback)
+        self.assertTrue(pdf_bytes.startswith(b"%PDF"))
 
 
 if __name__ == "__main__":

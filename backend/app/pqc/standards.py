@@ -126,6 +126,77 @@ def deadline_for_asset(asset: CryptoAsset, deadlines: dict[str, Any]) -> str:
     return str(deadlines.get("default", "2030-12-31"))
 
 
+def remediation_action_for_asset(asset: CryptoAsset) -> tuple[str, str]:
+    """Return concrete (action, summary) migration guidance."""
+    if asset.pqc_ready:
+        return (
+            "Maintain hybrid PQC configuration and monitor for downgrade",
+            "Endpoint negotiates hybrid/PQC today. Document baseline, enable downgrade detection, "
+            "and schedule certificate renewals with PQC-capable CA paths.",
+        )
+
+    algo = asset.algorithm.lower()
+    kind = asset.kind
+
+    if kind == "tls":
+        if "ec" in algo or "ecdsa" in algo or "ed25519" in algo:
+            return (
+                "Deploy TLS 1.3 hybrid KEX (X25519MLKEM768) and migrate leaf certificate to ML-DSA-65",
+                "Phase 1: enable hybrid key exchange on load balancers and API gateways. "
+                "Phase 2: re-issue ECDSA leaf certificates via a PQC-capable CA. "
+                "Maintain classical fallback during phased rollout with rollback plan.",
+            )
+        if "rsa" in algo:
+            return (
+                "Migrate to ML-KEM-768 hybrid key exchange and ML-DSA-65 certificate signatures",
+                "Replace RSA key exchange with hybrid ML-KEM-768. Plan HSM/agility requirements "
+                "for certificate rotation and validate client compatibility in staging.",
+            )
+        return (
+            "Inventory TLS cipher suites and enable hybrid PQC per NIST IR 8547",
+            "Document negotiated ciphers and groups, then pilot hybrid PQC on non-production endpoints.",
+        )
+
+    if kind == "jwks":
+        return (
+            "Rotate JWT signing keys to ML-DSA-65 (FIPS 204) with dual-key overlap",
+            "Publish new JWKS with ML-DSA keys while retaining classical keys during token TTL overlap. "
+            "Update OIDC clients and API gateways to accept both key sets.",
+        )
+
+    if kind == "ssh":
+        if "rsa" in algo:
+            return (
+                "Replace SSH RSA host keys with ML-DSA or Ed25519 + document PQC roadmap",
+                "Generate new host keys, update known_hosts inventory, and schedule bastion rotation "
+                "during maintenance windows with operator notification.",
+            )
+        return (
+            "Evaluate SSH host key against CNSA 2.0 timelines",
+            "Ed25519 host keys are classically strong; plan PQC host-key migration when OpenSSH "
+            "PQC host-key support is available in your baseline.",
+        )
+
+    if kind == "email":
+        return (
+            "Enable STARTTLS with ML-KEM hybrid where supported; upgrade MTA certificates",
+            "Verify SMTP/IMAP TLS certificates, enable MTA-STS, and plan mail-gateway certificate "
+            "migration aligned with PCI-DSS 4.0 transit encryption requirements.",
+        )
+
+    if kind in {"code_signing", "document_signing"}:
+        return (
+            "Migrate code/document signing to SLH-DSA (FIPS 205) per SP 800-208",
+            "Inventory signing pipelines, pilot SLH-DSA in CI/CD, and maintain classical signatures "
+            "during dual-sign overlap for artifact verification.",
+        )
+
+    return (
+        asset.vulnerability.pqc_replacement or "Review NIST SP 800-208 / FIPS 203-205 guidance",
+        asset.hndl_verdict or "Manual review required for this asset class.",
+    )
+
+
 def build_remediation_backlog(
     assets: list[CryptoAsset],
     *,
@@ -136,22 +207,25 @@ def build_remediation_backlog(
     items: list[RemediationItem] = []
     effort_defaults = remediation_weights.get("effortDays", {})
     for index, asset in enumerate(assets):
-        if asset.vulnerability.status == "safe" and asset.kind != "error":
+        if asset.vulnerability.status == "safe" and not asset.pqc_ready:
+            continue
+        if asset.pqc_ready and asset.vulnerability.status == "safe":
             continue
         effort = int(effort_defaults.get(asset.kind, effort_defaults.get("default", 30)))
+        action, summary = remediation_action_for_asset(asset)
         items.append(
             RemediationItem(
                 id=f"remediation-{asset.id}",
                 asset_id=asset.id,
                 priority=index + 1,
                 title=f"Migrate {asset.label}",
-                action=asset.vulnerability.pqc_replacement,
-                pqc_algorithm=asset.vulnerability.pqc_replacement.split("(")[0].strip(),
+                action=action,
+                pqc_algorithm=action.split("(")[0].strip()[:80],
                 deadline=deadline_for_asset(asset, deadlines),
                 effort_days=effort,
                 standards_refs=asset.standards_refs,
                 severity=asset.vulnerability.severity,
-                summary=asset.hndl_verdict,
+                summary=summary,
                 metadata={"host": asset.host, "port": asset.port, "kind": asset.kind},
             )
         )

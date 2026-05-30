@@ -10,6 +10,7 @@ import type { CryptoAsset, PqcScanResponse, Scenario } from "@/lib/pqc";
 import {
   getPqcInventory,
   getPqcScenarios,
+  pqcReportDownloadUrl,
   scanPqc,
   waitForPqcScan,
 } from "@/lib/pqc";
@@ -25,6 +26,7 @@ import RemediationBacklog from "./RemediationBacklog";
 import ReportDrawer from "./ReportDrawer";
 import RiskScoreboardCard from "./RiskScoreboardCard";
 import RoiCalculator from "./RoiCalculator";
+import ScanCoverage from "./ScanCoverage";
 import ScanLog from "./ScanLog";
 import ScanTargetCard from "./ScanTargetCard";
 import ScenarioPicker from "./ScenarioPicker";
@@ -239,12 +241,54 @@ export default function QDayCommandCenter({
 
       {scanResponse && (
         <div ref={resultsRef} className="space-y-6">
+          <div className="flex flex-wrap items-center gap-3 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface-strong)] p-4">
+            <div className="min-w-0 flex-1">
+              <p className="text-sm font-medium text-white">Executive report pack</p>
+              <p className="text-xs text-[var(--color-gray-400)]">
+                {scanResponse.readinessBand ?? scanResponse.scoreboard.qtangl.readiness_band ?? "Q-Day readiness"}{" "}
+                · scan {scanResponse.scanId}
+              </p>
+            </div>
+            <a
+              href={pqcReportDownloadUrl(scanResponse.scanId, "pdf")}
+              target="_blank"
+              rel="noreferrer"
+              onClick={() =>
+                trackEvent("pqc_report_downloaded", { format: "pdf", scanId: scanResponse.scanId })
+              }
+              className="inline-flex h-10 items-center justify-center rounded-full bg-white px-5 text-sm font-medium text-black hover:bg-neutral-100"
+            >
+              Download PDF report
+            </a>
+            {(["cbom", "json", "csv"] as const).map((format) => (
+              <a
+                key={format}
+                href={pqcReportDownloadUrl(scanResponse.scanId, format)}
+                target="_blank"
+                rel="noreferrer"
+                onClick={() =>
+                  trackEvent("pqc_report_downloaded", { format, scanId: scanResponse.scanId })
+                }
+                className="text-xs uppercase tracking-wide text-[var(--color-gray-300)] underline underline-offset-4 hover:text-white"
+              >
+                {format}
+              </a>
+            ))}
+            <Button variant="secondary" onClick={() => setReportOpen(true)}>
+              All formats
+            </Button>
+          </div>
           <PqcSection title="Risk scoreboard">
             <RiskScoreboardCard scoreboard={scanResponse.scoreboard} />
           </PqcSection>
           <div className="grid gap-4 lg:grid-cols-3">
             <PqcSection title="Readiness">
               <ReadinessGauge score={scanResponse.scoreboard.qtangl.readiness_score} />
+              {(scanResponse.readinessBand ?? scanResponse.scoreboard.qtangl.readiness_band) && (
+                <p className="mt-2 text-center text-xs text-[var(--color-gray-400)]">
+                  {scanResponse.readinessBand ?? scanResponse.scoreboard.qtangl.readiness_band}
+                </p>
+              )}
             </PqcSection>
             <PqcSection title="Mosca timeline">
               <MoscaTimeline mosca={scanResponse.mosca} />
@@ -259,6 +303,11 @@ export default function QDayCommandCenter({
           <PqcSection title="Crypto inventory">
             <InventoryHeatmap assets={scanResponse.assets} />
           </PqcSection>
+          {scanResponse.scanCoverage && scanResponse.scanCoverage.length > 0 && (
+            <PqcSection title="Scan coverage (unreachable / errored)">
+              <ScanCoverage entries={scanResponse.scanCoverage} />
+            </PqcSection>
+          )}
           {topAsset && (
             <PqcSection title="Top vulnerability">
               <VulnerabilityCard asset={topAsset} />

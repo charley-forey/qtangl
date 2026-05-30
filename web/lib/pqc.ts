@@ -1,4 +1,4 @@
-import { fetchQtanglJson, qtanglApiBaseUrl } from "@/lib/api";
+import { fetchQtanglJson, qtanglApiBaseUrl, qtanglSandboxApiKey } from "@/lib/api";
 
 export type Vulnerability = {
   algorithm: string;
@@ -25,6 +25,20 @@ export type CryptoAsset = {
   already_too_late: boolean;
   mosca_priority: number;
   standards_refs: string[];
+  pqc_ready?: boolean;
+  pqcReady?: boolean;
+  negotiated_cipher?: string | null;
+  negotiated_group?: string | null;
+  tls_version?: string | null;
+  metadata?: Record<string, unknown>;
+};
+
+export type ScanCoverageEntry = {
+  host: string;
+  port: number | null;
+  kind: string;
+  status: "unreachable" | "error" | "skipped";
+  detail: string;
 };
 
 export type ScanTarget = {
@@ -60,6 +74,7 @@ export type ScoreboardColumn = {
   remediation_coverage: number;
   audit_pack_available: boolean;
   summary: string;
+  readiness_band?: string;
 };
 
 export type Scoreboard = {
@@ -123,6 +138,8 @@ export type PqcScanResponse = {
   mosca: MoscaAssessment;
   timeline: TimelineEvent[];
   details: Record<string, unknown>;
+  scanCoverage?: ScanCoverageEntry[];
+  readinessBand?: string;
 };
 
 export type PqcScanRunningResponse = {
@@ -231,5 +248,13 @@ export async function uploadPqcBundle(file: File) {
 }
 
 export function pqcReportUrl(scanId: string, format: "json" | "csv" | "cbom" | "pdf") {
-  return `${qtanglApiBaseUrl}/pqc/report/${encodeURIComponent(scanId)}?format=${format}`;
+  const params = new URLSearchParams({
+    format,
+    api_key: qtanglSandboxApiKey,
+  });
+  return `${qtanglApiBaseUrl}/pqc/report/${encodeURIComponent(scanId)}?${params.toString()}`;
+}
+
+export function pqcReportDownloadUrl(scanId: string, format: "json" | "csv" | "cbom" | "pdf") {
+  return pqcReportUrl(scanId, format);
 }

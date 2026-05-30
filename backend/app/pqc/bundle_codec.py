@@ -54,6 +54,9 @@ def bundle_from_api_dict(payload: dict[str, Any]) -> ScanBundle:
         honesty_notes=list(report_payload.get("honestyNotes", [])),
         compliance_pack=dict(report_payload.get("compliancePack", {})),
         handshake_proof=handshake,
+        scan_coverage=list(report_payload.get("scanCoverage", [])),
+        readiness_band=str(report_payload.get("readinessBand", "")),
+        readiness_summary=str(report_payload.get("readinessSummary", "")),
     )
     scenario = ScanScenario(
         id=str(scenario_raw.get("id", report.scenario_id)),
@@ -119,7 +122,7 @@ def _placeholder_scoreboard(raw: dict[str, Any]):
             readiness_score=float(data.get("readinessScore", 0)),
             remediation_coverage=float(data.get("remediationCoverage", 0)),
             audit_pack_available=bool(data.get("auditPackAvailable", False)),
-            summary=str(data.get("summary", "")),
+            readiness_band=str(data.get("readinessBand", "")),
         )
 
     return RiskScoreboard(

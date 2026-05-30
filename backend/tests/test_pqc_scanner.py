@@ -12,9 +12,10 @@ class PqcScannerTest(unittest.TestCase):
     def test_fixture_scan_returns_scenario_assets(self) -> None:
         dataset = load_dataset()
         scenario = next(s for s in dataset.scenarios if s.id == "bank-tls-inventory")
-        assets, timeline = scan_fixture(dataset, scenario)
+        assets, timeline, coverage = scan_fixture(dataset, scenario)
         self.assertGreaterEqual(len(assets), 5)
         self.assertTrue(any(event.key == "fixture" for event in timeline))
+        self.assertEqual(coverage, [])
 
     def test_fixture_assets_for_scenario_filters_ids(self) -> None:
         dataset = load_dataset()
@@ -37,7 +38,7 @@ class PqcLiveScannerIntegrationTest(unittest.TestCase):
             "QTANGL_PQC_SCAN_TIMEOUT": "15",
         }
         with unittest.mock.patch.dict(os.environ, env, clear=False):
-            assets, timeline = scan_live(
+            assets, timeline, coverage = scan_live(
                 scenario,
                 target_override="test.openquantumsafe.org",
             )
@@ -46,6 +47,7 @@ class PqcLiveScannerIntegrationTest(unittest.TestCase):
         self.assertTrue(any(event.key == "resolve" for event in timeline))
         tls_assets = [asset for asset in assets if asset.kind == "tls"]
         self.assertGreaterEqual(len(tls_assets), 1)
+        self.assertIsInstance(coverage, list)
 
 
 if __name__ == "__main__":

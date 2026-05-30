@@ -32,6 +32,24 @@ class QuantumVulnerability:
 
 
 @dataclass(slots=True)
+class ScanCoverageEntry:
+    host: str
+    port: int | None
+    kind: str
+    status: Literal["unreachable", "error", "skipped"]
+    detail: str
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "host": self.host,
+            "port": self.port,
+            "kind": self.kind,
+            "status": self.status,
+            "detail": self.detail,
+        }
+
+
+@dataclass(slots=True)
 class CryptoAsset:
     id: str
     kind: AssetKind
@@ -50,6 +68,7 @@ class CryptoAsset:
     already_too_late: bool
     mosca_priority: float
     standards_refs: list[str]
+    pqc_ready: bool = False
     metadata: dict[str, Any] = field(default_factory=dict)
 
 
@@ -125,6 +144,7 @@ class ScoreboardColumn:
     remediation_coverage: float
     audit_pack_available: bool
     summary: str
+    readiness_band: str = ""
 
 
 @dataclass(slots=True)
@@ -165,6 +185,9 @@ class MigrationReport:
     honesty_notes: list[str]
     compliance_pack: dict[str, Any] = field(default_factory=dict)
     handshake_proof: HandshakeProof | None = None
+    scan_coverage: list[dict[str, Any]] = field(default_factory=list)
+    readiness_band: str = ""
+    readiness_summary: str = ""
 
 
 @dataclass(slots=True)

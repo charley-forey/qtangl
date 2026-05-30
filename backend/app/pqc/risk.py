@@ -67,6 +67,66 @@ def mosca_assessment_for_report(mosca: MoscaAssessment) -> dict[str, Any]:
     }
 
 
+def classified_assets(assets: list[CryptoAsset]) -> list[CryptoAsset]:
+    return [asset for asset in assets if asset.kind != "error"]
+
+
+def readiness_assessment(assets: list[CryptoAsset]) -> dict[str, Any]:
+    inventory = classified_assets(assets)
+    if not inventory:
+        return {
+            "score": 0.0,
+            "band": "No assets discovered",
+            "summary": "No cryptographic assets were classified in this scan window.",
+            "pqcReadyCount": 0,
+            "classifiedCount": 0,
+        }
+
+    pqc_ready_count = sum(1 for asset in inventory if asset.pqc_ready)
+    safe = sum(1 for asset in inventory if asset.vulnerability.status == "safe")
+    at_risk = sum(1 for asset in inventory if asset.vulnerability.status == "at-risk")
+    broken = sum(1 for asset in inventory if asset.vulnerability.status == "broken")
+    total = len(inventory)
+
+    hybrid_credit = (pqc_ready_count / total) * 20.0
+    inventory_baseline = min(30.0, 10.0 + total * 2.5)
+    raw = (
+        inventory_baseline
+        + 100.0 * (safe / total)
+        - 12.0 * (at_risk / total)
+        - 25.0 * (broken / total)
+        + hybrid_credit
+    )
+    score = round(max(10.0 if total > 0 else 0.0, min(95.0, raw)), 1)
+
+    if pqc_ready_count == total and total > 0:
+        band = "PQC-ready"
+    elif pqc_ready_count > 0:
+        band = "In progress"
+    elif score <= 25.0:
+        band = "Pre-migration baseline"
+    else:
+        band = "Partial readiness"
+
+    pct = round(100.0 * pqc_ready_count / total, 1)
+    summary = (
+        f"{pct}% of {total} discovered endpoints negotiate hybrid/PQC today. "
+        f"{at_risk + broken} asset(s) require migration under NIST IR 8547 timelines. "
+        "Coverage is endpoint-scoped, not a formal audit."
+    )
+    return {
+        "score": score,
+        "band": band,
+        "summary": summary,
+        "pqcReadyCount": pqc_ready_count,
+        "classifiedCount": total,
+    }
+
+
+def readiness_score(assets: list[CryptoAsset]) -> float:
+    return float(readiness_assessment(assets)["score"])
+
+
 def asset_mosca_priority(
     asset: CryptoAsset,
     *,
@@ -89,6 +149,8 @@ def asset_mosca_priority(
     base = (severity_weight + hndl_boost + broken_boost + too_late_boost) * kind_weight
     if mosca.inequality_holds and asset.vulnerability.hndl_exposed:
         base *= 1.25
+    if asset.pqc_ready:
+        base *= 0.35
     return round(base, 2)
 
 
@@ -107,7 +169,9 @@ def apply_risk_to_assets(
     updated: list[CryptoAsset] = []
     for asset in assets:
         too_late = asset.vulnerability.hndl_exposed and (x + y) > z
-        if too_late:
+        if asset.pqc_ready:
+            verdict = "Hybrid/PQC key exchange negotiated; maintain configuration and monitor for downgrade"
+        elif too_late:
             verdict = "HNDL exposure: migration window may be insufficient under Mosca X+Y>Z"
         elif asset.vulnerability.hndl_exposed:
             verdict = "Harvest-now-decrypt-later exposed; prioritize migration"
@@ -143,21 +207,11 @@ def apply_risk_to_assets(
                 already_too_late=too_late,
                 mosca_priority=priority,
                 standards_refs=refs,
+                pqc_ready=asset.pqc_ready,
                 metadata=asset.metadata,
             )
         )
     return sorted(updated, key=lambda item: item.mosca_priority, reverse=True)
-
-
-def readiness_score(assets: list[CryptoAsset]) -> float:
-    if not assets:
-        return 0.0
-    safe = sum(1 for asset in assets if asset.vulnerability.status == "safe")
-    at_risk = sum(1 for asset in assets if asset.vulnerability.status == "at-risk")
-    broken = sum(1 for asset in assets if asset.vulnerability.status == "broken")
-    # Penalize vulnerable and broken; never claim 100% from partial coverage.
-    raw = 100.0 * (safe / len(assets)) - 8.0 * at_risk / len(assets) - 20.0 * broken / len(assets)
-    return round(max(0.0, min(95.0, raw)), 1)
 
 
 def remediation_coverage(backlog_count: int, asset_count: int) -> float:
@@ -173,15 +227,18 @@ def build_scoreboard(
     scan_wall_time_seconds: float,
     backlog_count: int,
     use_fixture: bool,
+    readiness: dict[str, Any] | None = None,
 ) -> RiskScoreboard:
+    inventory = classified_assets(qtangl_assets)
+    assessment = readiness or readiness_assessment(qtangl_assets)
     q_vuln = sum(
         1
-        for asset in qtangl_assets
-        if asset.vulnerability.status in {"at-risk", "broken"}
+        for asset in inventory
+        if asset.vulnerability.status in {"at-risk", "broken"} and not asset.pqc_ready
     )
-    hndl = sum(1 for asset in qtangl_assets if asset.vulnerability.hndl_exposed)
-    score = readiness_score(qtangl_assets)
-    cov = remediation_coverage(backlog_count, len(qtangl_assets))
+    hndl = sum(1 for asset in inventory if asset.vulnerability.hndl_exposed and not asset.pqc_ready)
+    score = float(assessment["score"])
+    cov = remediation_coverage(backlog_count, len(inventory))
 
     manual_col = ScoreboardColumn(
         label="Manual spreadsheet",
@@ -197,15 +254,13 @@ def build_scoreboard(
     qtangl_col = ScoreboardColumn(
         label="Qtangl scan" + (" (fixture replay)" if use_fixture else " (live)"),
         scan_wall_time_seconds=scan_wall_time_seconds,
-        assets_discovered=len(qtangl_assets),
+        assets_discovered=len(inventory),
         quantum_vulnerable=q_vuln,
         hndl_exposed=hndl,
         readiness_score=score,
         remediation_coverage=cov,
         audit_pack_available=True,
-        summary=(
-            f"Discovered {len(qtangl_assets)} cryptographic assets with prioritized remediation backlog. "
-            "Coverage is endpoint-scoped, not a formal audit."
-        ),
+        summary=str(assessment["summary"]),
+        readiness_band=str(assessment["band"]),
     )
     return RiskScoreboard(manual=manual_col, qtangl=qtangl_col)

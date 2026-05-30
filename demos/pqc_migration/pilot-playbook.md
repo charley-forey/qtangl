@@ -169,6 +169,8 @@ Send the customer:
 
 **Do not give customers the admin key or the public sandbox key.**
 
+**Key rotation:** If a tenant API key is pasted into chat, email, or a shared doc, revoke it immediately (`DELETE /admin/keys/{id}`) and issue a replacement. Report download URLs with `api_key=` query params are convenient for pilots but must not be shared publicly.
+
 ---
 
 ## 7. How to run the assessment (paid pilot)
@@ -280,10 +282,12 @@ After any scan completes, the backend builds a **scan bundle** and stores it in 
 **Dashboard PDF link:** `GET /tenant/scans/{scanId}/report?format=pdf&api_key=<tenant-key>`  
 (The dashboard “PDF” button uses the tenant key automatically.)
 
-**Demo UI:** After scan on `/demo/pqc`, click **Migration report** in the command center.
+**Demo UI:** After scan on `/demo/pqc`, use **Download PDF report** in the results panel (or **All formats** for CBOM/JSON/CSV).
 
 ### PDF contents (compliance report pack)
 
+- Branded cover with readiness score + **readiness band** (e.g. Pre-migration baseline)
+- Executive summary and severity / Mosca charts
 - Readiness score + coverage confidence
 - **Mosca HNDL assessment**
 - **Framework mapping** (NIST / NSM-10 style, per scenario)

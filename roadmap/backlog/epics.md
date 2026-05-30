@@ -27,6 +27,7 @@ Master list of all epics across tracks A–J, I, G, H, E, F, B, C, D. Update sta
 | B4 | Remediation workflow tracking | not-started | M | B2, D1 | — |
 | B5 | Compliance mapping + report packs | done | M | B2 | — |
 | B6 | Design-partner pilot package | done | S | B1–B5, H1 | — |
+| B7 | Enterprise PDF report + live scan quality (coverage split, readiness bands, on-page download) | done | M | B1, B5 | — |
 
 ## Track C — Validation
 

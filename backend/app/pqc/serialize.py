@@ -20,6 +20,7 @@ from app.pqc.vulnerability import vulnerability_dict
 def serialize_asset(asset: CryptoAsset) -> dict[str, Any]:
     payload = asdict(asset)
     payload["vulnerability"] = vulnerability_dict(asset.vulnerability)
+    payload["pqcReady"] = asset.pqc_ready
     return payload
 
 
@@ -35,10 +36,11 @@ def serialize_handshake(proof: HandshakeProof) -> dict[str, Any]:
 
 
 def serialize_scoreboard(scoreboard: RiskScoreboard) -> dict[str, Any]:
-    return {
-        "manual": asdict(scoreboard.manual),
-        "qtangl": asdict(scoreboard.qtangl),
-    }
+    manual = asdict(scoreboard.manual)
+    qtangl = asdict(scoreboard.qtangl)
+    manual["readinessBand"] = scoreboard.manual.readiness_band
+    qtangl["readinessBand"] = scoreboard.qtangl.readiness_band
+    return {"manual": manual, "qtangl": qtangl}
 
 
 def serialize_remediation(item: RemediationItem) -> dict[str, Any]:
@@ -71,4 +73,6 @@ def serialize_bundle(bundle: ScanBundle) -> dict[str, Any]:
         "mosca": serialize_mosca(bundle.mosca),
         "timeline": serialize_timeline(bundle.timeline),
         "details": bundle.details,
+        "scanCoverage": bundle.details.get("scanCoverage", bundle.report.scan_coverage),
+        "readinessBand": bundle.details.get("readinessBand", bundle.report.readiness_band),
     }
