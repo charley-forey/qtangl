@@ -106,6 +106,14 @@ Set `QTANGL_PQC_ENABLE_LIVE_SCAN=false` and redeploy. No code change required.
 
 Live scan call graph documented in [`app/pqc/scanner.py`](app/pqc/scanner.py) module docstring.
 
+### PQC CBOM export (B2)
+
+- Format: CycloneDX **1.6** with Qtangl profile **`qtangl-cbom-v1`** (`app/pqc/cbom.py`)
+- Download: `GET /pqc/report/{scanId}?format=cbom` after scan completes
+- Sample: [demos/pqc_migration/data/sample-cbom-bank-tls-inventory.json](../demos/pqc_migration/data/sample-cbom-bank-tls-inventory.json)
+- Validate: `python -m pytest tests/test_pqc_cbom.py -q`
+- Regenerate sample: `python scripts/generate_sample_cbom.py`
+
 Hospital demo runtime notes:
 
 - The hospital demo endpoints live under `/hospital/*`.

@@ -22,7 +22,7 @@ Master list of all epics across tracks A–J, I, G, H, E, F, B, C, D. Update sta
 | ID | Epic | Status | Effort | Depends | Owner |
 |----|------|--------|--------|---------|-------|
 | B1 | Harden live scan production path | done | M | G1 | — |
-| B2 | CBOM export standardization | not-started | S | — | — |
+| B2 | CBOM export standardization | done | S | — | — |
 | B3 | Continuous monitoring / scheduled re-scans | not-started | M | B1, D1 | — |
 | B4 | Remediation workflow tracking | not-started | M | B2, D1 | — |
 | B5 | Compliance mapping + report packs | not-started | M | B2 | — |

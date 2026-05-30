@@ -7,6 +7,7 @@ from datetime import datetime, timezone
 from typing import Any
 
 from app.pqc.models import CryptoAsset, MigrationReport, MoscaAssessment, RemediationItem, ScanScenario
+from app.pqc.cbom import CBOM_SCHEMA_ID, CBOM_SPEC_VERSION
 from app.pqc.risk import readiness_score, remediation_coverage
 from app.pqc.standards import standards_summary_for_report
 from app.pqc.vulnerability import vulnerability_dict
@@ -112,36 +113,82 @@ def report_to_csv(report: MigrationReport) -> str:
 
 
 def report_to_cbom(report: MigrationReport) -> dict[str, Any]:
-    components = []
+    """Export a CycloneDX 1.6 CBOM document (Qtangl profile ``qtangl-cbom-v1``)."""
+    backlog_by_asset = {item.asset_id: item for item in report.remediation_backlog}
+    components: list[dict[str, Any]] = []
+
     for asset in report.assets:
-        components.append(
-            {
-                "type": "cryptographic-asset",
-                "name": asset.label,
-                "version": asset.algorithm,
-                "properties": [
-                    {"name": "qtangl:host", "value": asset.host},
-                    {"name": "qtangl:kind", "value": asset.kind},
-                    {"name": "qtangl:severity", "value": asset.vulnerability.severity},
-                    {"name": "qtangl:status", "value": asset.vulnerability.status},
-                    {"name": "qtangl:pqcReplacement", "value": asset.vulnerability.pqc_replacement},
-                ],
+        remediation = backlog_by_asset.get(asset.id)
+        properties = _cbom_asset_properties(asset, remediation)
+        component: dict[str, Any] = {
+            "type": "cryptographic-asset",
+            "bom-ref": f"qtangl:asset:{asset.id}",
+            "name": asset.label,
+            "version": asset.algorithm,
+            "description": asset.vulnerability.summary,
+            "properties": properties,
+        }
+        if asset.kind == "tls":
+            component["cryptoProperties"] = {
+                "assetType": "certificate",
+                "certificateProperties": {
+                    "subjectName": asset.host,
+                    "signatureAlgorithm": asset.algorithm,
+                    "certificateFormat": "X.509",
+                },
             }
-        )
+        components.append(component)
+
+    scan_uuid = report.scan_id.removeprefix("scan-")
     return {
         "bomFormat": "CycloneDX",
-        "specVersion": "1.6",
+        "specVersion": CBOM_SPEC_VERSION,
+        "serialNumber": f"urn:uuid:{scan_uuid}",
         "version": 1,
         "metadata": {
             "timestamp": report.generated_at,
-            "component": {"name": "qtangl-pqc-scanner", "version": "0.1.0"},
+            "tools": [{"vendor": "Qtangl", "name": "pqc-scanner", "version": "0.1.0"}],
+            "component": {"type": "application", "name": "qtangl-pqc-scanner", "version": "0.1.0"},
             "properties": [
+                {"name": "qtangl:cbomSchemaId", "value": CBOM_SCHEMA_ID},
+                {"name": "qtangl:scanId", "value": report.scan_id},
+                {"name": "qtangl:scenarioId", "value": report.scenario_id},
                 {"name": "qtangl:readinessScore", "value": str(report.readiness_score)},
                 {"name": "qtangl:targetDomain", "value": report.target_domain},
+                {"name": "qtangl:coverageConfidence", "value": str(report.coverage_confidence)},
             ],
         },
         "components": components,
     }
+
+
+def _cbom_asset_properties(
+    asset: CryptoAsset,
+    remediation: RemediationItem | None,
+) -> list[dict[str, str]]:
+    properties = [
+        {"name": "qtangl:assetId", "value": asset.id},
+        {"name": "qtangl:host", "value": asset.host},
+        {"name": "qtangl:port", "value": str(asset.port or "")},
+        {"name": "qtangl:kind", "value": asset.kind},
+        {"name": "qtangl:algorithm", "value": asset.algorithm},
+        {"name": "qtangl:keySize", "value": str(asset.key_size or "")},
+        {"name": "qtangl:vulnerabilityStatus", "value": asset.vulnerability.status},
+        {"name": "qtangl:severity", "value": asset.vulnerability.severity},
+        {"name": "qtangl:pqcReplacement", "value": asset.vulnerability.pqc_replacement},
+        {"name": "qtangl:moscaPriority", "value": str(asset.mosca_priority)},
+        {"name": "qtangl:hndlExposed", "value": str(asset.vulnerability.hndl_exposed).lower()},
+    ]
+    if remediation:
+        properties.extend(
+            [
+                {"name": "qtangl:remediationDeadline", "value": remediation.deadline},
+                {"name": "qtangl:remediationPqcAlgorithm", "value": remediation.pqc_algorithm},
+                {"name": "qtangl:remediationEffortDays", "value": str(remediation.effort_days)},
+                {"name": "qtangl:remediationPriority", "value": str(remediation.priority)},
+            ]
+        )
+    return properties
 
 
 def report_to_pdf(report: MigrationReport) -> bytes:

@@ -9,7 +9,7 @@ Post-quantum cryptography readiness scanner — the lead commercial product. Qua
 | ID | Epic | Status | Effort | Depends on |
 |----|------|--------|--------|------------|
 | B1 | Harden live scan production path | `done` | M | G1 |
-| B2 | CBOM export standardization | `not-started` | S | — |
+| B2 | CBOM export standardization | `done` | S | — |
 | B3 | Continuous monitoring / scheduled re-scans | `not-started` | M | B1, D1 |
 | B4 | Remediation workflow tracking | `not-started` | M | B2 |
 | B5 | Compliance mapping + report packs | `not-started` | M | B2 |
@@ -72,9 +72,9 @@ Async jobs via [backend/app/pqc/jobs.py](../backend/app/pqc/jobs.py) — in-memo
 
 ### Acceptance criteria
 
-- [ ] CBOM export validates against published schema (document version used)
-- [ ] PDF report includes executive summary + prioritized backlog
-- [ ] Demo script references CBOM handoff step ([demos/pqc_migration/script.md](../demos/pqc_migration/script.md))
+- [x] CBOM export validates against published schema (document version used)
+- [x] PDF report includes executive summary + prioritized backlog
+- [x] Demo script references CBOM handoff step ([demos/pqc_migration/script.md](../demos/pqc_migration/script.md))
 
 ---
 

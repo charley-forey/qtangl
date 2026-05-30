@@ -1,0 +1,548 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.6",
+  "serialNumber": "urn:uuid:6ba7b810-9dad-11d1-80b4-00c04fd430c8",
+  "version": 1,
+  "metadata": {
+    "timestamp": "2026-05-30T12:00:00+00:00",
+    "tools": [
+      {
+        "vendor": "Qtangl",
+        "name": "pqc-scanner",
+        "version": "0.1.0"
+      }
+    ],
+    "component": {
+      "type": "application",
+      "name": "qtangl-pqc-scanner",
+      "version": "0.1.0"
+    },
+    "properties": [
+      {
+        "name": "qtangl:cbomSchemaId",
+        "value": "qtangl-cbom-v1"
+      },
+      {
+        "name": "qtangl:scanId",
+        "value": "scan-6ba7b810-9dad-11d1-80b4-00c04fd430c8"
+      },
+      {
+        "name": "qtangl:scenarioId",
+        "value": "bank-tls-inventory"
+      },
+      {
+        "name": "qtangl:readinessScore",
+        "value": "0.0"
+      },
+      {
+        "name": "qtangl:targetDomain",
+        "value": "api.regionalbank.example"
+      },
+      {
+        "name": "qtangl:coverageConfidence",
+        "value": "68.0"
+      }
+    ]
+  },
+  "components": [
+    {
+      "type": "cryptographic-asset",
+      "bom-ref": "qtangl:asset:code-sign-legacy",
+      "name": "Release artifact code signing",
+      "version": "RSA",
+      "description": "Long-lived code signing keys are highest-priority migration.",
+      "properties": [
+        {
+          "name": "qtangl:assetId",
+          "value": "code-sign-legacy"
+        },
+        {
+          "name": "qtangl:host",
+          "value": "artifacts.regionalbank.example"
+        },
+        {
+          "name": "qtangl:port",
+          "value": ""
+        },
+        {
+          "name": "qtangl:kind",
+          "value": "code_signing"
+        },
+        {
+          "name": "qtangl:algorithm",
+          "value": "RSA"
+        },
+        {
+          "name": "qtangl:keySize",
+          "value": "4096"
+        },
+        {
+          "name": "qtangl:vulnerabilityStatus",
+          "value": "at-risk"
+        },
+        {
+          "name": "qtangl:severity",
+          "value": "critical"
+        },
+        {
+          "name": "qtangl:pqcReplacement",
+          "value": "LMS/XMSS (SP 800-208) or SLH-DSA (FIPS 205)"
+        },
+        {
+          "name": "qtangl:moscaPriority",
+          "value": "245.0"
+        },
+        {
+          "name": "qtangl:hndlExposed",
+          "value": "true"
+        },
+        {
+          "name": "qtangl:remediationDeadline",
+          "value": "2030"
+        },
+        {
+          "name": "qtangl:remediationPqcAlgorithm",
+          "value": "LMS/XMSS"
+        },
+        {
+          "name": "qtangl:remediationEffortDays",
+          "value": "90"
+        },
+        {
+          "name": "qtangl:remediationPriority",
+          "value": "1"
+        }
+      ]
+    },
+    {
+      "type": "cryptographic-asset",
+      "bom-ref": "qtangl:asset:jwks-oidc",
+      "name": "OIDC JWKS RS256",
+      "version": "RS256",
+      "description": "JWT signing keys must migrate before long-lived tokens expire.",
+      "properties": [
+        {
+          "name": "qtangl:assetId",
+          "value": "jwks-oidc"
+        },
+        {
+          "name": "qtangl:host",
+          "value": "auth.regionalbank.example"
+        },
+        {
+          "name": "qtangl:port",
+          "value": "443"
+        },
+        {
+          "name": "qtangl:kind",
+          "value": "jwks"
+        },
+        {
+          "name": "qtangl:algorithm",
+          "value": "RS256"
+        },
+        {
+          "name": "qtangl:keySize",
+          "value": "2048"
+        },
+        {
+          "name": "qtangl:vulnerabilityStatus",
+          "value": "at-risk"
+        },
+        {
+          "name": "qtangl:severity",
+          "value": "high"
+        },
+        {
+          "name": "qtangl:pqcReplacement",
+          "value": "ML-DSA-65 for JWT signing"
+        },
+        {
+          "name": "qtangl:moscaPriority",
+          "value": "158.13"
+        },
+        {
+          "name": "qtangl:hndlExposed",
+          "value": "true"
+        },
+        {
+          "name": "qtangl:remediationDeadline",
+          "value": "Available now (2024)"
+        },
+        {
+          "name": "qtangl:remediationPqcAlgorithm",
+          "value": "ML-DSA-65 for JWT signing"
+        },
+        {
+          "name": "qtangl:remediationEffortDays",
+          "value": "30"
+        },
+        {
+          "name": "qtangl:remediationPriority",
+          "value": "2"
+        }
+      ]
+    },
+    {
+      "type": "cryptographic-asset",
+      "bom-ref": "qtangl:asset:tls-api-bank",
+      "name": "API gateway TLS",
+      "version": "RSA",
+      "description": "RSA-2048 key exchange/signing is harvest-now-decrypt-later exposed.",
+      "properties": [
+        {
+          "name": "qtangl:assetId",
+          "value": "tls-api-bank"
+        },
+        {
+          "name": "qtangl:host",
+          "value": "api.regionalbank.example"
+        },
+        {
+          "name": "qtangl:port",
+          "value": "443"
+        },
+        {
+          "name": "qtangl:kind",
+          "value": "tls"
+        },
+        {
+          "name": "qtangl:algorithm",
+          "value": "RSA"
+        },
+        {
+          "name": "qtangl:keySize",
+          "value": "2048"
+        },
+        {
+          "name": "qtangl:vulnerabilityStatus",
+          "value": "at-risk"
+        },
+        {
+          "name": "qtangl:severity",
+          "value": "high"
+        },
+        {
+          "name": "qtangl:pqcReplacement",
+          "value": "ML-KEM-768 + ML-DSA-65 (hybrid TLS 1.3)"
+        },
+        {
+          "name": "qtangl:moscaPriority",
+          "value": "143.75"
+        },
+        {
+          "name": "qtangl:hndlExposed",
+          "value": "true"
+        },
+        {
+          "name": "qtangl:remediationDeadline",
+          "value": "2030"
+        },
+        {
+          "name": "qtangl:remediationPqcAlgorithm",
+          "value": "ML-KEM-768 + ML-DSA-65"
+        },
+        {
+          "name": "qtangl:remediationEffortDays",
+          "value": "45"
+        },
+        {
+          "name": "qtangl:remediationPriority",
+          "value": "3"
+        }
+      ],
+      "cryptoProperties": {
+        "assetType": "certificate",
+        "certificateProperties": {
+          "subjectName": "api.regionalbank.example",
+          "signatureAlgorithm": "RSA",
+          "certificateFormat": "X.509"
+        }
+      }
+    },
+    {
+      "type": "cryptographic-asset",
+      "bom-ref": "qtangl:asset:tls-auth-bank",
+      "name": "Customer auth TLS",
+      "version": "ECDSA",
+      "description": "P-256 certificate is quantum-vulnerable under Shor.",
+      "properties": [
+        {
+          "name": "qtangl:assetId",
+          "value": "tls-auth-bank"
+        },
+        {
+          "name": "qtangl:host",
+          "value": "auth.regionalbank.example"
+        },
+        {
+          "name": "qtangl:port",
+          "value": "443"
+        },
+        {
+          "name": "qtangl:kind",
+          "value": "tls"
+        },
+        {
+          "name": "qtangl:algorithm",
+          "value": "ECDSA"
+        },
+        {
+          "name": "qtangl:keySize",
+          "value": "256"
+        },
+        {
+          "name": "qtangl:vulnerabilityStatus",
+          "value": "at-risk"
+        },
+        {
+          "name": "qtangl:severity",
+          "value": "high"
+        },
+        {
+          "name": "qtangl:pqcReplacement",
+          "value": "ML-DSA-65 (FIPS 204)"
+        },
+        {
+          "name": "qtangl:moscaPriority",
+          "value": "143.75"
+        },
+        {
+          "name": "qtangl:hndlExposed",
+          "value": "true"
+        },
+        {
+          "name": "qtangl:remediationDeadline",
+          "value": "Available now (2024)"
+        },
+        {
+          "name": "qtangl:remediationPqcAlgorithm",
+          "value": "ML-DSA-65"
+        },
+        {
+          "name": "qtangl:remediationEffortDays",
+          "value": "45"
+        },
+        {
+          "name": "qtangl:remediationPriority",
+          "value": "4"
+        }
+      ],
+      "cryptoProperties": {
+        "assetType": "certificate",
+        "certificateProperties": {
+          "subjectName": "auth.regionalbank.example",
+          "signatureAlgorithm": "ECDSA",
+          "certificateFormat": "X.509"
+        }
+      }
+    },
+    {
+      "type": "cryptographic-asset",
+      "bom-ref": "qtangl:asset:ssh-bastion",
+      "name": "Ops bastion SSH host key",
+      "version": "ssh-rsa",
+      "description": "SSH RSA host key should be rotated to PQ-safe algorithms.",
+      "properties": [
+        {
+          "name": "qtangl:assetId",
+          "value": "ssh-bastion"
+        },
+        {
+          "name": "qtangl:host",
+          "value": "bastion.regionalbank.example"
+        },
+        {
+          "name": "qtangl:port",
+          "value": "22"
+        },
+        {
+          "name": "qtangl:kind",
+          "value": "ssh"
+        },
+        {
+          "name": "qtangl:algorithm",
+          "value": "ssh-rsa"
+        },
+        {
+          "name": "qtangl:keySize",
+          "value": "3072"
+        },
+        {
+          "name": "qtangl:vulnerabilityStatus",
+          "value": "at-risk"
+        },
+        {
+          "name": "qtangl:severity",
+          "value": "medium"
+        },
+        {
+          "name": "qtangl:pqcReplacement",
+          "value": "ssh-ed25519 or hybrid PQ SSH when available"
+        },
+        {
+          "name": "qtangl:moscaPriority",
+          "value": "101.25"
+        },
+        {
+          "name": "qtangl:hndlExposed",
+          "value": "true"
+        },
+        {
+          "name": "qtangl:remediationDeadline",
+          "value": "2030"
+        },
+        {
+          "name": "qtangl:remediationPqcAlgorithm",
+          "value": "ssh-ed25519 or hybrid PQ SSH when available"
+        },
+        {
+          "name": "qtangl:remediationEffortDays",
+          "value": "21"
+        },
+        {
+          "name": "qtangl:remediationPriority",
+          "value": "5"
+        }
+      ]
+    },
+    {
+      "type": "cryptographic-asset",
+      "bom-ref": "qtangl:asset:email-mx",
+      "name": "Inbound SMTP STARTTLS",
+      "version": "RSA",
+      "description": "Email transport encryption is vulnerable to store-now-decrypt-later.",
+      "properties": [
+        {
+          "name": "qtangl:assetId",
+          "value": "email-mx"
+        },
+        {
+          "name": "qtangl:host",
+          "value": "mx.regionalbank.example"
+        },
+        {
+          "name": "qtangl:port",
+          "value": "25"
+        },
+        {
+          "name": "qtangl:kind",
+          "value": "email"
+        },
+        {
+          "name": "qtangl:algorithm",
+          "value": "RSA"
+        },
+        {
+          "name": "qtangl:keySize",
+          "value": "2048"
+        },
+        {
+          "name": "qtangl:vulnerabilityStatus",
+          "value": "at-risk"
+        },
+        {
+          "name": "qtangl:severity",
+          "value": "medium"
+        },
+        {
+          "name": "qtangl:pqcReplacement",
+          "value": "TLS 1.3 with ML-KEM hybrid + MTA-STS"
+        },
+        {
+          "name": "qtangl:moscaPriority",
+          "value": "90.0"
+        },
+        {
+          "name": "qtangl:hndlExposed",
+          "value": "true"
+        },
+        {
+          "name": "qtangl:remediationDeadline",
+          "value": "2030"
+        },
+        {
+          "name": "qtangl:remediationPqcAlgorithm",
+          "value": "TLS 1.3 with ML-KEM hybrid + MTA-STS"
+        },
+        {
+          "name": "qtangl:remediationEffortDays",
+          "value": "60"
+        },
+        {
+          "name": "qtangl:remediationPriority",
+          "value": "6"
+        }
+      ]
+    },
+    {
+      "type": "cryptographic-asset",
+      "bom-ref": "qtangl:asset:discovery-ct-api",
+      "name": "CT-discovered subdomain",
+      "version": "ECDSA",
+      "description": "Shadow IT subdomain surfaced via certificate transparency.",
+      "properties": [
+        {
+          "name": "qtangl:assetId",
+          "value": "discovery-ct-api"
+        },
+        {
+          "name": "qtangl:host",
+          "value": "*.regionalbank.example"
+        },
+        {
+          "name": "qtangl:port",
+          "value": ""
+        },
+        {
+          "name": "qtangl:kind",
+          "value": "discovery"
+        },
+        {
+          "name": "qtangl:algorithm",
+          "value": "ECDSA"
+        },
+        {
+          "name": "qtangl:keySize",
+          "value": "256"
+        },
+        {
+          "name": "qtangl:vulnerabilityStatus",
+          "value": "at-risk"
+        },
+        {
+          "name": "qtangl:severity",
+          "value": "medium"
+        },
+        {
+          "name": "qtangl:pqcReplacement",
+          "value": "ML-DSA-65"
+        },
+        {
+          "name": "qtangl:moscaPriority",
+          "value": "78.75"
+        },
+        {
+          "name": "qtangl:hndlExposed",
+          "value": "true"
+        },
+        {
+          "name": "qtangl:remediationDeadline",
+          "value": "Available now (2024)"
+        },
+        {
+          "name": "qtangl:remediationPqcAlgorithm",
+          "value": "ML-DSA-65"
+        },
+        {
+          "name": "qtangl:remediationEffortDays",
+          "value": "30"
+        },
+        {
+          "name": "qtangl:remediationPriority",
+          "value": "7"
+        }
+      ]
+    }
+  ]
+}

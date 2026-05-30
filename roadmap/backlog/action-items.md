@@ -70,10 +70,10 @@ Granular checkbox backlog. Each item has an ID, epic link, acceptance criterion,
 
 ### B2 — CBOM standardization
 
-- [ ] **B2-001** Document CBOM schema version used in export → `backend/app/pqc/report.py` | Schema ID in export metadata
-- [ ] **B2-002** Validate sample CBOM against CycloneDX conventions | Validation script or manual checklist
-- [ ] **B2-003** Add CBOM sample to `demos/pqc_migration/data/` | Sample file committed
-- [ ] **B2-004** Update demo script CBOM handoff step → `demos/pqc_migration/script.md` | Script updated
+- [x] **B2-001** Document CBOM schema version used in export → `backend/app/pqc/report.py` | Schema ID in export metadata
+- [x] **B2-002** Validate sample CBOM against CycloneDX conventions | Validation script or manual checklist
+- [x] **B2-003** Add CBOM sample to `demos/pqc_migration/data/` | Sample file committed
+- [x] **B2-004** Update demo script CBOM handoff step → `demos/pqc_migration/script.md` | Script updated
 
 ### B5 — Compliance report packs
 
