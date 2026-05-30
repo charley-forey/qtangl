@@ -7,7 +7,7 @@ from collections import defaultdict, deque
 from dataclasses import dataclass
 from threading import Lock
 
-from fastapi import Header, HTTPException, status
+from fastapi import Header, HTTPException, Query, status
 
 from app.db.config import persistence_enabled
 from app.db.engine import db_session
@@ -44,9 +44,12 @@ def get_rate_limit() -> int:
 
 
 def resolve_tenant_id(token: str) -> str:
+    demo_key = get_expected_api_key()
+    if token == demo_key:
+        return "sandbox"
     if not persistence_enabled():
         return "sandbox"
-    key_hash = hashlib.sha256(token.encode("utf-8")).hexdigest()
+    key_hash = hash_api_key(token)
     try:
         with db_session() as session:
             row = session.query(ApiKey).filter(ApiKey.key_hash == key_hash, ApiKey.revoked_at.is_(None)).one_or_none()
@@ -57,9 +60,38 @@ def resolve_tenant_id(token: str) -> str:
         return "sandbox"
 
 
+def hash_api_key(raw_key: str) -> str:
+    return hashlib.sha256(raw_key.encode("utf-8")).hexdigest()
+
+
+def get_admin_api_key() -> str | None:
+    return os.getenv("QTANGL_ADMIN_API_KEY")
+
+
+def require_admin(
+    authorization: str | None = Header(default=None),
+    x_api_key: str | None = Header(default=None),
+) -> str:
+    admin_key = get_admin_api_key()
+    if not admin_key:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="Admin API is not configured (set QTANGL_ADMIN_API_KEY).",
+        )
+    token = None
+    if authorization and authorization.lower().startswith("bearer "):
+        token = authorization.split(" ", 1)[1].strip()
+    elif x_api_key:
+        token = x_api_key.strip()
+    if token != admin_key:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Admin API key required.")
+    return token
+
+
 def require_auth(
     authorization: str | None = Header(default=None),
     x_api_key: str | None = Header(default=None),
+    api_key: str | None = Query(default=None),
 ) -> AuthContext:
     token = None
 
@@ -67,6 +99,8 @@ def require_auth(
         token = authorization.split(" ", 1)[1].strip()
     elif x_api_key:
         token = x_api_key.strip()
+    elif api_key:
+        token = api_key.strip()
 
     if not token:
         raise HTTPException(
@@ -94,7 +128,7 @@ def require_api_key(
 def _token_registered(token: str) -> bool:
     if not persistence_enabled():
         return False
-    key_hash = hashlib.sha256(token.encode("utf-8")).hexdigest()
+    key_hash = hash_api_key(token)
     try:
         with db_session() as session:
             row = session.query(ApiKey).filter(ApiKey.key_hash == key_hash, ApiKey.revoked_at.is_(None)).one_or_none()

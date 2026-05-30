@@ -8,8 +8,8 @@ Infrastructure and platform scaling for multi-tenant production. Tenancy/auth de
 
 | ID | Epic | Status | Effort | Depends on |
 |----|------|--------|--------|------------|
-| D1 | Persistent stores (Postgres + Redis) | `not-started` | L | G2 |
-| D2 | Async job workers | `not-started` | M | D1 |
+| D1 | Persistent stores (Postgres + Redis) | `done` | L | G2 |
+| D2 | Async job workers | `in-progress` | M | D1 |
 | D3 | Observability (tracing, logs, metrics) | `not-started` | M | I1 |
 | D4 | OpenAPI + Postman collection | `not-started` | S | — |
 | D5 | Official SDKs (Python + TypeScript) | `not-started` | M | D4 |
@@ -47,9 +47,9 @@ In-memory state breaks multi-instance deployment:
 
 ### Acceptance criteria
 
-- [ ] Two Railway instances share job state correctly
-- [ ] Upload session survives instance restart (24h TTL)
-- [ ] Report download works after cache eviction (stored in Postgres)
+- [x] Two Railway instances share job state correctly *(Postgres + Redis queue; set `QTANGL_INLINE_JOBS=false` + run worker)*
+- [x] Upload session survives instance restart (24h TTL)
+- [x] Report download works after cache eviction (stored in Postgres)
 
 ---
 
@@ -62,15 +62,17 @@ In-memory state breaks multi-instance deployment:
    - Large optimize jobs (>5s classical)
    - PDF report generation
 
-2. Worker process: `python -m app.worker` (new module)
+2. Worker process: `python -m app.worker` → [backend/app/worker.py](../backend/app/worker.py)
 
 3. Poll pattern preserved: `GET /pqc/scan/{id}`
 
+4. Toggle: `QTANGL_INLINE_JOBS=true` (default) uses in-process threads for dev/CI; `false` + `REDIS_URL` enqueues to worker
+
 ### Acceptance criteria
 
-- [ ] Live PQC scan does not block API worker >2s
+- [x] Live PQC scan does not block API worker >2s *(when `QTANGL_INLINE_JOBS=false` and worker running)*
 - [ ] Failed jobs retry once with backoff
-- [ ] Job status visible in API + logs
+- [x] Job status visible in API + logs
 
 ---
 

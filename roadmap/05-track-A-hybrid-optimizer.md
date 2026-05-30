@@ -10,7 +10,7 @@ Engineering epics for the classical-first hybrid optimization core. **Keystone: 
 |----|------|--------|--------|------------|
 | A1 | Local repair window extractor | `done` | L | I1 |
 | A2 | Diversity / alternates headline metric | `not-started` | M | A1 |
-| A3 | `/optimize` routing + allocation live | `not-started` | L | A1 |
+| A3 | `/optimize` routing + allocation live | `done` | L | A1 |
 | A4 | QAOA robustness + envelope expansion | `not-started` | M | A1, J1 |
 | A5 | Reproducible real-QPU opt-in path | `not-started` | M | A4, I1 |
 
@@ -132,7 +132,7 @@ Hospital hybrid already computes `distinctness`, `fairness_delta`, and surfaces 
 
 - [x] `POST /optimize` with `type: routing` returns feasible plan
 - [x] `POST /optimize` with `type: allocation` returns feasible plan
-- [ ] Same classical-first + repair window pattern applies *(classical VRP/CP-SAT only for now)*
+- [x] Same classical-first + repair window pattern applies *(routing: local reorder on longest route; allocation: CP-SAT)*
 - [x] E2E or API tests added
 
 ---

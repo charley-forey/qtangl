@@ -55,5 +55,6 @@ class ScanJob(Base):
     timeline_json: Mapped[str] = mapped_column(Text, default="[]")
     error: Mapped[str | None] = mapped_column(Text, nullable=True)
     bundle_json: Mapped[str | None] = mapped_column(Text, nullable=True)
+    payload_json: Mapped[str | None] = mapped_column(Text, nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_utcnow)
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_utcnow, onupdate=_utcnow)

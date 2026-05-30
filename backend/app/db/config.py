@@ -22,3 +22,12 @@ def redis_enabled() -> bool:
 def auto_migrate() -> bool:
     raw = os.getenv("QTANGL_DB_AUTO_MIGRATE", "true").lower()
     return raw in {"1", "true", "yes", "on"}
+
+
+def inline_jobs() -> bool:
+    raw = os.getenv("QTANGL_INLINE_JOBS", "true").lower()
+    return raw in {"1", "true", "yes", "on"}
+
+
+def use_worker_queue() -> bool:
+    return redis_enabled() and not inline_jobs()

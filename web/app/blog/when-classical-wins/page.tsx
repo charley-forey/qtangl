@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 
 import ArticleLayout from "@/components/docs/ArticleLayout";
 import { MAIN_CONTENT_ID } from "@/components/layout/PageShell";
@@ -44,28 +45,37 @@ const sections = [
 
 export default function WhenClassicalWinsPage() {
   return (
-    <>
+    <div id={MAIN_CONTENT_ID} className="scroll-mt-24 sm:scroll-mt-28">
       <ArticleLayout
         eyebrow="Validation"
         title={title}
-        description={description}
-        sections={sections}
-        relatedLinks={[
-          { href: "/technology", label: "Technology & benchmarks" },
-          { href: "/demo/hospital", label: "Hospital demo" },
-          { href: "/blog/hospital-restaffing", label: "Hospital restaffing deep dive" },
-        ]}
-      />
+        intro={description}
+      >
+        {sections.map((section) => (
+          <section key={section.title}>
+            <h2>{section.title}</h2>
+            {section.body.map((paragraph) => (
+              <p key={paragraph}>{paragraph}</p>
+            ))}
+          </section>
+        ))}
+
+        <section>
+          <h2>Continue reading</h2>
+          <p>
+            Review the <Link href="/technology">benchmark scoreboard</Link>, open the{" "}
+            <Link href="/demo/hospital">hospital demo</Link>, or read the{" "}
+            <Link href="/blog/hospital-restaffing">hospital restaffing deep dive</Link>.
+          </p>
+        </section>
+      </ArticleLayout>
       <JsonLd
         data={buildBlogPostingJsonLd({
-          title,
-          description,
           path: "/blog/when-classical-wins",
+          headline: title,
+          description,
         })}
       />
-      <span id={MAIN_CONTENT_ID} className="sr-only">
-        {title}
-      </span>
-    </>
+    </div>
   );
 }

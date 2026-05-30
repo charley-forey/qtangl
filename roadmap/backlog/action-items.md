@@ -160,19 +160,25 @@ Granular checkbox backlog. Each item has an ID, epic link, acceptance criterion,
 
 ### G3 — Tenant isolation
 
-- [ ] **G3-001** Implement tenant + api_key tables and validation → `backend/app/auth.py` | Invalid key → 401
-- [ ] **G3-002** Add tenant_id to all customer-data queries | Cross-tenant read test fails
-- [ ] **G3-003** Admin endpoint to create/revoke keys | Manual test
+- [x] **G3-001** Implement tenant + api_key tables and validation → `backend/app/auth.py`, `backend/app/tenants/` | Invalid key → 401
+- [x] **G3-002** Add tenant_id to all customer-data queries → `backend/app/store/scan_jobs.py`, sessions | Cross-tenant read test fails (`test_g3_d2_h.py`)
+- [x] **G3-003** Admin endpoint to create/revoke keys → `backend/app/api/admin.py` | Protected by `QTANGL_ADMIN_API_KEY`
+
+### D2 — Async job workers
+
+- [x] **D2-001** Dedicated worker process `python -m app.worker` → `backend/app/worker.py` | BRPOP on `pqc_scan` queue
+- [x] **D2-002** Job payload in Postgres + Redis; `QTANGL_INLINE_JOBS` toggle → `backend/app/store/scan_jobs.py` | API enqueues when inline=false
+- [ ] **D2-003** Failed jobs retry once with backoff | Not yet
 
 ### H1 — Tenant accounts
 
-- [ ] **H1-001** Build signup flow → `web/app/access/` or new `web/app/dashboard/` | Email verify → key issued
-- [ ] **H1-002** Keep public sandbox demo key separate | Sandbox still works
+- [ ] **H1-001** Build signup flow → `web/app/access/` or new `web/app/dashboard/` | Email verify → key issued *(admin-provisioned keys via `/admin` for now; self-serve → H5)*
+- [x] **H1-002** Keep public sandbox demo key separate | Sandbox still works (`QTANGL_API_KEY` → `sandbox` tenant)
 
 ### H3 — Dashboards
 
-- [ ] **H3-001** Dashboard overview: last scans, last solves | `web/app/dashboard/` | Renders with tenant data
-- [ ] **H3-002** PQC report download from dashboard | One-click PDF/CBOM
+- [x] **H3-001** Dashboard overview: last scans, last solves | `web/app/dashboard/` | Renders with tenant data
+- [x] **H3-002** PQC report download from dashboard | One-click PDF via `/tenant/scans/{id}/report`
 
 ### D4–D5 — OpenAPI + SDKs
 
@@ -233,7 +239,8 @@ Granular checkbox backlog. Each item has an ID, epic link, acceptance criterion,
 
 - [x] **A3-001** Wire routing parser to pipeline → remove NotImplementedError | POST /optimize routing works
 - [x] **A3-002** Wire allocation parser to pipeline | POST /optimize allocation works
-- [x] **A3-003** API tests + docs update | Reference pages updated *(tests in `test_d1_a3.py`)*
+- [x] **A3-003** API tests + docs update | Reference pages updated *(tests in `test_d1_a3.py`, `test_g3_d2_h.py`)*
+- [x] **A3-004** Routing repair window (classical local search on longest route) → `backend/app/repair_window/routing.py` | `distinctFeasiblePlans` on `/optimize` routing
 
 ### F1 — Series A prep
 

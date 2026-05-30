@@ -201,3 +201,4 @@ class ScanJob:
     error: str | None
     created_at: float
     updated_at: float
+    tenant_id: str = "sandbox"

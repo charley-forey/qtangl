@@ -10,7 +10,7 @@ Internal security posture and compliance roadmap. **Gate:** No regulated-data pi
 |----|------|--------|--------|------------|
 | G1 | Secrets management & hygiene | `in-progress` | S | — |
 | G2 | Product threat model | `done` | M | — |
-| G3 | Per-tenant auth & data isolation | `not-started` | M | D1 |
+| G3 | Per-tenant auth & data isolation | `done` | M | D1 |
 | G4 | Data governance & retention | `not-started` | M | G3 |
 | G5 | SOC 2 Type I → Type II | `not-started` | L | G1–G4 |
 | G6 | Vertical compliance (HIPAA, CMMC, FedRAMP path) | `not-started` | L | G5 |
@@ -106,8 +106,8 @@ New doc: `roadmap/security/threat-model.md` (or section in this track)
 
 ### Acceptance criteria
 
-- [ ] Two tenants cannot read each other's scan results
-- [ ] Key revocation effective within 60 seconds
+- [x] Two tenants cannot read each other's scan results *(test: `test_g3_d2_h.py`)*
+- [x] Key revocation effective within 60 seconds *(revoked keys → 401 immediately)*
 - [ ] Audit log of key usage per tenant
 
 ---

@@ -8,9 +8,9 @@ Bridge from fixture demos to real multi-tenant SaaS — accounts, data ingestion
 
 | ID | Epic | Status | Effort | Depends on |
 |----|------|--------|--------|------------|
-| H1 | Tenant accounts & auth UX | `not-started` | M | G3 |
+| H1 | Tenant accounts & auth UX | `in-progress` | M | G3 |
 | H2 | Customer data ingestion (all verticals) | `not-started` | M | H1 |
-| H3 | Tenant dashboards | `not-started` | L | H1, D1 |
+| H3 | Tenant dashboards | `done` | L | H1, D1 |
 | H4 | Demo → pilot → production lifecycle | `not-started` | S | H1 |
 | H5 | Self-serve PQC signup (v1) | `not-started` | M | B1, H1, G4 |
 
@@ -42,9 +42,9 @@ Bridge from fixture demos to real multi-tenant SaaS — accounts, data ingestion
 
 ### Acceptance criteria
 
-- [ ] New tenant receives API key within 5 minutes of signup
-- [ ] Demo key remains for public sandbox ([web/app/sandbox/page.tsx](../web/app/sandbox/page.tsx))
-- [ ] Tenant cannot access other tenant's resources
+- [ ] New tenant receives API key within 5 minutes of signup *(admin-provisioned via `POST /admin/tenants` for pilots; self-serve email → H5)*
+- [x] Demo key remains for public sandbox ([web/app/sandbox/page.tsx](../web/app/sandbox/page.tsx))
+- [x] Tenant cannot access other tenant's resources
 
 ---
 
@@ -101,9 +101,9 @@ Bridge from fixture demos to real multi-tenant SaaS — accounts, data ingestion
 
 ### Acceptance criteria
 
-- [ ] Tenant sees last 10 scans and solves
-- [ ] One-click PDF/CBOM download from dashboard
-- [ ] Fixture mode clearly labeled vs live mode
+- [x] Tenant sees last 10 scans and solves → [web/app/dashboard/](../web/app/dashboard/) + `GET /tenant/scans`
+- [x] One-click PDF/CBOM download from dashboard → `GET /tenant/scans/{id}/report`
+- [ ] Fixture mode clearly labeled vs live mode *(dashboard shows persisted scans; demo pages unchanged)*
 
 ---
 

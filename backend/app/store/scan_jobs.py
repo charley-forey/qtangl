@@ -8,19 +8,20 @@ from datetime import datetime, timezone
 from threading import Lock
 from typing import Any, Callable
 
-from app.db.config import persistence_enabled, redis_enabled
+from app.db.config import persistence_enabled, use_worker_queue
 from app.db.engine import db_session
 from app.db.models import ScanJob as ScanJobRow
 from app.pqc.models import ScanBundle, ScanJob, TimelineEvent
 from app.pqc.serialize import serialize_bundle
 from app.queue.redis_queue import enqueue as enqueue_job
+from app.queue.redis_queue import store_job_payload
 
 
 _job_lock = Lock()
 _memory_jobs: dict[str, ScanJob] = {}
 
 
-def create_job(*, tenant_id: str = "sandbox") -> str:
+def create_job(*, tenant_id: str = "sandbox", payload: dict[str, Any] | None = None) -> str:
     scan_id = f"scan-{uuid.uuid4()}"
     now = time.time()
     job = ScanJob(
@@ -31,7 +32,9 @@ def create_job(*, tenant_id: str = "sandbox") -> str:
         error=None,
         created_at=now,
         updated_at=now,
+        tenant_id=tenant_id,
     )
+    payload_json = json.dumps(payload) if payload else None
     if persistence_enabled():
         with db_session() as session:
             session.add(
@@ -40,12 +43,15 @@ def create_job(*, tenant_id: str = "sandbox") -> str:
                     tenant_id=tenant_id,
                     status="running",
                     timeline_json="[]",
+                    payload_json=payload_json,
                 )
             )
     else:
         with _job_lock:
             _memory_jobs[scan_id] = job
-    if redis_enabled():
+    if use_worker_queue():
+        if payload:
+            store_job_payload(scan_id, payload)
         enqueue_job("pqc_scan", scan_id)
     return scan_id
 
@@ -58,7 +64,37 @@ def get_job(scan_id: str, *, tenant_id: str = "sandbox") -> ScanJob | None:
                 return None
             return _row_to_job(row)
     with _job_lock:
-        return _memory_jobs.get(scan_id)
+        job = _memory_jobs.get(scan_id)
+        if job is None or job.tenant_id != tenant_id:
+            return None
+        return job
+
+
+def get_job_payload(scan_id: str, *, tenant_id: str = "sandbox") -> dict[str, Any] | None:
+    if persistence_enabled():
+        with db_session() as session:
+            row = session.get(ScanJobRow, scan_id)
+            if row is None or row.tenant_id != tenant_id or not row.payload_json:
+                return None
+            return json.loads(row.payload_json)
+    return None
+
+
+def list_jobs_for_tenant(*, tenant_id: str, limit: int = 50) -> list[dict[str, Any]]:
+    if persistence_enabled():
+        with db_session() as session:
+            rows = (
+                session.query(ScanJobRow)
+                .filter(ScanJobRow.tenant_id == tenant_id)
+                .order_by(ScanJobRow.created_at.desc())
+                .limit(limit)
+                .all()
+            )
+            return [_job_summary(row) for row in rows]
+    with _job_lock:
+        jobs = [job for job in _memory_jobs.values() if job.tenant_id == tenant_id]
+    jobs.sort(key=lambda job: job.created_at, reverse=True)
+    return [_memory_job_summary(job) for job in jobs[:limit]]
 
 
 def update_job_timeline(scan_id: str, timeline: list[TimelineEvent], *, tenant_id: str = "sandbox") -> None:
@@ -72,7 +108,7 @@ def update_job_timeline(scan_id: str, timeline: list[TimelineEvent], *, tenant_i
         return
     with _job_lock:
         job = _memory_jobs.get(scan_id)
-        if not job:
+        if not job or job.tenant_id != tenant_id:
             return
         _memory_jobs[scan_id] = replace(job, timeline=list(timeline), updated_at=time.time())
 
@@ -91,7 +127,7 @@ def complete_job(scan_id: str, bundle: ScanBundle, *, tenant_id: str = "sandbox"
         return
     with _job_lock:
         job = _memory_jobs.get(scan_id)
-        if not job:
+        if not job or job.tenant_id != tenant_id:
             return
         _memory_jobs[scan_id] = replace(
             job,
@@ -122,7 +158,7 @@ def fail_job(
         return
     with _job_lock:
         job = _memory_jobs.get(scan_id)
-        if not job:
+        if not job or job.tenant_id != tenant_id:
             return
         _memory_jobs[scan_id] = replace(
             job,
@@ -165,6 +201,7 @@ def save_scan_bundle(scan_id: str, bundle: ScanBundle, *, tenant_id: str = "sand
             error=None,
             created_at=time.time(),
             updated_at=time.time(),
+            tenant_id=tenant_id,
         )
 
 
@@ -177,7 +214,9 @@ def load_scan_bundle(scan_id: str, *, tenant_id: str = "sandbox") -> dict[str, A
             return json.loads(row.bundle_json)
     with _job_lock:
         job = _memory_jobs.get(scan_id)
-        if job and job.bundle:
+        if job is None or job.tenant_id != tenant_id:
+            return None
+        if job.bundle:
             return serialize_bundle(job.bundle)
         return None
 
@@ -188,6 +227,9 @@ def run_job_async(
     *,
     tenant_id: str = "sandbox",
 ) -> None:
+    if use_worker_queue():
+        return
+
     def on_progress(event: TimelineEvent) -> None:
         if persistence_enabled():
             with db_session() as session:
@@ -201,7 +243,7 @@ def run_job_async(
             return
         with _job_lock:
             job = _memory_jobs.get(scan_id)
-            if not job:
+            if not job or job.tenant_id != tenant_id:
                 return
             timeline = list(job.timeline)
             timeline.append(event)
@@ -243,4 +285,28 @@ def _row_to_job(row: ScanJobRow) -> ScanJob:
         error=row.error,
         created_at=row.created_at.timestamp(),
         updated_at=row.updated_at.timestamp(),
+        tenant_id=row.tenant_id,
     )
+
+
+def _job_summary(row: ScanJobRow) -> dict[str, Any]:
+    payload = json.loads(row.payload_json) if row.payload_json else {}
+    return {
+        "scanId": row.id,
+        "status": row.status,
+        "error": row.error,
+        "scenarioId": payload.get("scenarioId"),
+        "createdAt": row.created_at.isoformat(),
+        "updatedAt": row.updated_at.isoformat(),
+    }
+
+
+def _memory_job_summary(job: ScanJob) -> dict[str, Any]:
+    return {
+        "scanId": job.scan_id,
+        "status": job.status,
+        "error": job.error,
+        "scenarioId": None,
+        "createdAt": datetime.fromtimestamp(job.created_at, tz=timezone.utc).isoformat(),
+        "updatedAt": datetime.fromtimestamp(job.updated_at, tz=timezone.utc).isoformat(),
+    }

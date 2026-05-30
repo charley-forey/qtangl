@@ -58,9 +58,9 @@ export default function ScoreboardCard({ scoreboard }: ScoreboardCardProps) {
         <HospitalChip tone="neutral">
           {scoreboard.hybrid.distinct_plans} distinct hybrid plans
         </HospitalChip>
-        {scoreboard.hybrid.diversity_score > 0 ? (
+        {(scoreboard.hybrid.diversity_score ?? 0) > 0 ? (
           <HospitalChip tone="neutral">
-            Diversity {scoreboard.hybrid.diversity_score.toFixed(2)}
+            Diversity {(scoreboard.hybrid.diversity_score ?? 0).toFixed(2)}
           </HospitalChip>
         ) : null}
       </div>

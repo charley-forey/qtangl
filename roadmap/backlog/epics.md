@@ -43,7 +43,7 @@ Master list of all epics across tracks A–J, I, G, H, E, F, B, C, D. Update sta
 | ID | Epic | Status | Effort | Depends | Owner |
 |----|------|--------|--------|---------|-------|
 | D1 | Persistent stores (Postgres + Redis) | done | L | G2 | — |
-| D2 | Async job workers | not-started | M | D1 | — |
+| D2 | Async job workers | in-progress | M | D1 | — |
 | D3 | Observability (tracing, logs, metrics) | not-started | M | I1 | — |
 | D4 | OpenAPI + Postman collection | not-started | S | — | — |
 | D5 | Official SDKs (Python + TypeScript) | not-started | M | D4 | — |
@@ -76,7 +76,7 @@ Master list of all epics across tracks A–J, I, G, H, E, F, B, C, D. Update sta
 |----|------|--------|--------|---------|-------|
 | G1 | Secrets management & hygiene | in-progress | S | — | — |
 | G2 | Product threat model | done | M | — | — |
-| G3 | Per-tenant auth & data isolation | in-progress | M | D1 | — |
+| G3 | Per-tenant auth & data isolation | done | M | D1 | — |
 | G4 | Data governance & retention | not-started | M | G3 | — |
 | G9 | Safe logging & error responses (PHI redaction) | not-started | S | G2 | — |
 | G5 | SOC 2 Type I → Type II | not-started | L | G1–G4 | — |
@@ -88,9 +88,9 @@ Master list of all epics across tracks A–J, I, G, H, E, F, B, C, D. Update sta
 
 | ID | Epic | Status | Effort | Depends | Owner |
 |----|------|--------|--------|---------|-------|
-| H1 | Tenant accounts & auth UX | not-started | M | G3 | — |
+| H1 | Tenant accounts & auth UX | in-progress | M | G3 | — |
 | H2 | Customer data ingestion | not-started | M | H1 | — |
-| H3 | Tenant dashboards | not-started | L | H1, D1 | — |
+| H3 | Tenant dashboards | done | L | H1, D1 | — |
 | H4 | Demo → pilot → production lifecycle | not-started | S | H1 | — |
 | H5 | Self-serve PQC signup (v1) | not-started | M | B1, H1, G4 | — |
 

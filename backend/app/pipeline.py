@@ -37,16 +37,45 @@ def run_optimization(problem: CanonicalProblem) -> SolverRunResult:
     if problem.type == "schedule":
         return _run_schedule_optimization(problem)
     if problem.type == "routing":
-        from app.solvers.routing import solve_routing_classically
-
-        result = solve_routing_classically(problem)
-        return _attach_generic_metrics(result)
+        return _run_routing_optimization(problem)
     if problem.type == "allocation":
         from app.solvers.allocation import solve_allocation_classically
 
         result = solve_allocation_classically(problem)
         return _attach_generic_metrics(result)
     raise NotImplementedError(f"Unsupported optimization type: {problem.type}")
+
+
+def _run_routing_optimization(problem: CanonicalProblem) -> SolverRunResult:
+    from app.repair_window.routing import apply_routing_repair_window
+    from app.solvers.routing import solve_routing_classically
+
+    classical_result = solve_routing_classically(problem)
+    if not classical_result.feasible:
+        return classical_result
+    result = apply_routing_repair_window(problem, classical_result)
+    return _attach_routing_diversity(classical_result, result)
+
+
+def _attach_routing_diversity(
+    classical_result: SolverRunResult,
+    result: SolverRunResult,
+) -> SolverRunResult:
+    distinct = int(result.metrics.get("distinctFeasiblePlans", 1))
+    diversity_score = 0.0 if distinct <= 1 else round(min(1.0, (distinct - 1) / distinct), 3)
+    result.metrics = {
+        **result.metrics,
+        "distinctFeasiblePlans": distinct,
+        "diversityScore": diversity_score,
+    }
+    if result.method == "hybrid":
+        result.metrics["successMetric"] = compute_success_metric(
+            hybrid_distinct=distinct,
+            classical_distinct=1,
+            hybrid_objective=float(result.score),
+            classical_objective=float(classical_result.score),
+        )
+    return result
 
 
 def _run_schedule_optimization(problem: CanonicalProblem) -> SolverRunResult:

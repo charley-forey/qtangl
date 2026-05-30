@@ -160,7 +160,16 @@ def scan_pqc(
                 ),
             )
 
-        scan_id = create_job(tenant_id=auth.tenant_id)
+        scan_id = create_job(
+            tenant_id=auth.tenant_id,
+            payload={
+                "scenarioId": request.scenarioId,
+                "target": request.target,
+                "seed": request.seed,
+                "bundleSessionId": request.bundleSessionId,
+                "tenantId": auth.tenant_id,
+            },
+        )
 
         def runner(on_progress):
             return run_pqc_scan(
