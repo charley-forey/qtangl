@@ -139,6 +139,7 @@ export default function QDayCommandCenter({
       if (result.status === "running") {
         setScanProgress("Starting live scan…");
         completed = await waitForPqcScan(result.scanId, (timeline) => {
+          if (!timeline?.length) return;
           const latest = timeline[timeline.length - 1];
           if (latest?.label) {
             setScanProgress(latest.label);
