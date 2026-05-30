@@ -8,7 +8,7 @@ Post-quantum cryptography readiness scanner — the lead commercial product. Qua
 
 | ID | Epic | Status | Effort | Depends on |
 |----|------|--------|--------|------------|
-| B1 | Harden live scan production path | `not-started` | M | G1 |
+| B1 | Harden live scan production path | `done` | M | G1 |
 | B2 | CBOM export standardization | `not-started` | S | — |
 | B3 | Continuous monitoring / scheduled re-scans | `not-started` | M | B1, D1 |
 | B4 | Remediation workflow tracking | `not-started` | M | B2 |
@@ -49,11 +49,11 @@ Async jobs via [backend/app/pqc/jobs.py](../backend/app/pqc/jobs.py) — in-memo
 
 ### Acceptance criteria
 
-- [ ] Live scan completes for `test.openquantumsafe.org` without fixture
-- [ ] SSRF attempts to `169.254.169.254`, `localhost`, private RFC1918 blocked
-- [ ] Scan timeout enforced; no hung workers
-- [ ] `GET /pqc/scan/{id}` poll works for async live scans
-- [ ] Production runbook in [backend/README.md](../backend/README.md)
+- [x] Live scan completes for `test.openquantumsafe.org` without fixture (opt-in integration test)
+- [x] SSRF attempts to `169.254.169.254`, `localhost`, private RFC1918 blocked
+- [x] Scan timeout enforced; no hung workers in timeout regression test
+- [x] `GET /pqc/scan/{id}` poll works for async live scans (existing job path)
+- [x] Production runbook in [backend/README.md](../backend/README.md)
 
 ---
 

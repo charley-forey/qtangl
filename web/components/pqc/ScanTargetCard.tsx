@@ -32,14 +32,18 @@ export default function ScanTargetCard({
           placeholder={target.domain}
         />
       </label>
-      <label className="flex items-start gap-2 text-xs text-[var(--color-gray-400)]">
+      <label className="flex items-start gap-2 rounded-lg border border-[var(--color-border)] bg-black/20 p-3 text-xs text-[var(--color-gray-300)]">
         <input
           type="checkbox"
           checked={authorized}
           onChange={(event) => onAuthorizedChange(event.target.checked)}
           className="mt-0.5"
         />
-        I am authorized to scan this domain. This tool is an inventory aid, not a formal audit.
+        <span>
+          <strong className="text-white">Authorization required for live scans.</strong> I confirm I
+          own this target or have written permission to scan it. Qtangl blocks private and metadata
+          addresses; live mode is an inventory aid, not a formal penetration test or audit.
+        </span>
       </label>
     </div>
   );

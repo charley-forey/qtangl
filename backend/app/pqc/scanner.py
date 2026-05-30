@@ -1,5 +1,14 @@
-from __future__ import annotations
+"""Live and fixture PQC scanning.
 
+Live scan entry points (B1 audit):
+  1. POST /pqc/scan with useFixture=false
+     -> app.api.pqc.scan_pqc -> run_job_async -> run_pqc_scan(use_fixture=False) -> scan_live()
+  2. run_pqc_scan(..., use_fixture=False) when called directly (benchmarks/tests)
+  3. scan_live() per-endpoint helpers: scan_tls_endpoint, scan_jwks, scan_ssh_banner,
+     scan_email_starttls, discover_ct_subdomains (all call assert_scannable)
+
+Fixture path bypasses outbound network: scan_fixture() only.
+"""
 import json
 import socket
 import ssl

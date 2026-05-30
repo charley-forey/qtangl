@@ -192,10 +192,21 @@ export default function QDayCommandCenter({
           <input
             type="checkbox"
             checked={useFixture}
-            onChange={(e) => setUseFixture(e.target.checked)}
+            onChange={(e) => {
+              const fixture = e.target.checked;
+              setUseFixture(fixture);
+              if (fixture) {
+                setAuthorized(false);
+              }
+            }}
           />
-          Fixture mode (predictable demo)
+          Fixture mode (recommended — no outbound network)
         </label>
+        {!useFixture && (
+          <span className="rounded-full border border-amber-500/40 bg-amber-500/10 px-2 py-0.5 text-[10px] uppercase tracking-wide text-amber-100">
+            Live scan enabled
+          </span>
+        )}
         <BundleUploader
           onUploaded={(sessionId, summary) => {
             setBundleSessionId(sessionId);
@@ -203,7 +214,7 @@ export default function QDayCommandCenter({
             trackEvent("pqc_bundle_uploaded", { sessionId });
           }}
         />
-        <Button onClick={handleScan} disabled={isScanning}>
+        <Button onClick={handleScan} disabled={isScanning || (!useFixture && !authorized)}>
           {isScanning ? "Scanning…" : "Run Q-Day scan"}
         </Button>
         {scanResponse && (
@@ -212,6 +223,13 @@ export default function QDayCommandCenter({
           </Button>
         )}
       </div>
+      {!useFixture && (
+        <p className="rounded-lg border border-amber-500/30 bg-amber-500/10 p-3 text-xs text-amber-100">
+          Live scan connects to real TLS, SSH, and email endpoints on the target you specify.
+          Production requires <code className="font-mono">QTANGL_PQC_ENABLE_LIVE_SCAN=true</code> on
+          the backend plus your authorization checkbox above.
+        </p>
+      )}
       {error && <p className="text-sm text-red-300">{error}</p>}
       <p className="text-[10px] text-[var(--color-gray-600)]">API: {apiBaseUrl}</p>
 

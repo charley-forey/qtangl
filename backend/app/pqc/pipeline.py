@@ -9,6 +9,7 @@ from app.pqc.models import PqcDataset, ScanBundle, ScanScenario, TimelineEvent
 from app.pqc.report import build_migration_report
 from app.pqc.risk import apply_risk_to_assets, assess_mosca, build_scoreboard
 from app.pqc.scanner import scan_fixture, scan_live
+from app.pqc.safety import ScanSafetyError, live_scan_enabled
 from app.pqc.standards import build_remediation_backlog
 
 
@@ -35,6 +36,11 @@ def run_pqc_scan(
     if use_fixture:
         assets, timeline = scan_fixture(dataset, scenario, uploaded_rows=uploaded_rows)
     else:
+        if not live_scan_enabled():
+            raise ScanSafetyError(
+                "Live PQC scanning is disabled. Set QTANGL_PQC_ENABLE_LIVE_SCAN=true "
+                "or use fixture mode."
+            )
         assets, timeline = scan_live(
             scenario,
             target_override=target_override,

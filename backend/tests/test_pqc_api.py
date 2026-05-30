@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import io
 import unittest
+from unittest.mock import patch
 
 from fastapi.testclient import TestClient
 
@@ -46,6 +47,16 @@ class PqcApiTest(unittest.TestCase):
         )
         self.assertEqual(response.status_code, 200)
         self.assertIn("sessionId", response.json())
+
+    def test_live_scan_rejected_when_disabled(self) -> None:
+        with patch("app.api.pqc.live_scan_enabled", return_value=False):
+            response = self.client.post(
+                "/pqc/scan",
+                headers=self.headers,
+                json={"scenarioId": "bank-tls-inventory", "useFixture": False},
+            )
+        self.assertEqual(response.status_code, 403)
+        self.assertIn("disabled", response.json()["detail"].lower())
 
 
 if __name__ == "__main__":

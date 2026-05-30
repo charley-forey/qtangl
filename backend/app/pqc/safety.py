@@ -14,7 +14,7 @@ class ScanSafetyError(ValueError):
 
 
 def live_scan_enabled() -> bool:
-    raw = os.getenv("QTANGL_PQC_ENABLE_LIVE_SCAN", "true").lower()
+    raw = os.getenv("QTANGL_PQC_ENABLE_LIVE_SCAN", "false").lower()
     return raw in {"1", "true", "yes", "on"}
 
 

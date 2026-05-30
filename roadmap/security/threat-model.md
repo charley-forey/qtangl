@@ -115,7 +115,7 @@ Maps **implemented controls** to threats. File paths are the source of truth.
 |------------|-------------|----------|-------------------|
 | C-01 | Bearer / `x-api-key` validation on all business routes | [`backend/app/auth.py`](../../backend/app/auth.py) `require_api_key` | TH-011 |
 | C-02 | Per-key sliding window rate limit (default 120/min) | [`backend/app/auth.py`](../../backend/app/auth.py) `_enforce_rate_limit` | TH-004, TH-009 |
-| C-03 | Live scan feature flag (default **on** in code; prod should set `false` until B1) | [`backend/app/pqc/safety.py`](../../backend/app/pqc/safety.py) `live_scan_enabled` | TH-001, TH-009 |
+| C-03 | Live scan feature flag (default **off**; prod sets `true` only for pilots) | `safety.py` `live_scan_enabled` | TH-001, TH-009 |
 | C-04 | Host allowlist optional (`QTANGL_PQC_SCAN_ALLOWLIST`) | `safety.py` `_allowlist` | TH-001 |
 | C-05 | Block private/loopback/link-local/metadata IPs after DNS resolve | `safety.py` `_is_blocked_ip`, `assert_scannable` | TH-001 |
 | C-06 | Port allowlist (443, 8443, 22, …) | `safety.py` `DEFAULT_ALLOWED_PORTS` | TH-001, TH-009 |

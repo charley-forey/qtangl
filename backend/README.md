@@ -59,10 +59,52 @@ Required Railway environment variables:
 PQC Q-Day scanner runtime notes:
 
 - Endpoints live under `/pqc/*` (inventory, scenarios, scan, handshake proof, report export).
-- Fixture mode (`useFixture: true`) is production-safe and synchronous.
-- Live scanning requires `QTANGL_PQC_ENABLE_LIVE_SCAN=true`, SSRF guards, and user authorization in the UI.
-- Optional env: `QTANGL_PQC_DATA_DIR`, `QTANGL_PQC_SCAN_ALLOWLIST`, `QTANGL_PQC_ENABLE_OQS`, `QTANGL_OQS_DEMO_SERVER` (default `test.openquantumsafe.org`), `QTANGL_PQC_SCAN_TIMEOUT`, `QTANGL_PQC_MAX_ENDPOINTS`.
+- **Production default:** fixture mode only (`useFixture: true`). Live scanning is **disabled** unless explicitly enabled.
 - Bundled fixtures: `backend/app/pqc/fixtures` (mirrored from `demos/pqc_migration/data`).
+
+### PQC live scan runbook (B1)
+
+Enable live scanning only for authorized pilots or internal dogfood (Track G7).
+
+**1. Railway / backend env**
+
+| Variable | Production recommendation | Purpose |
+|----------|---------------------------|---------|
+| `QTANGL_PQC_ENABLE_LIVE_SCAN` | `false` (default) → `true` when needed | Master gate; API returns 403 if false and `useFixture=false` |
+| `QTANGL_PQC_SCAN_ALLOWLIST` | Comma-separated hostnames | Restrict scans to customer-approved domains |
+| `QTANGL_PQC_SCAN_TIMEOUT` | `8` (seconds) | Per-endpoint socket/HTTP timeout |
+| `QTANGL_PQC_MAX_ENDPOINTS` | `24` | Cap CT + TLS + SSH + email probes per scan |
+| `QTANGL_OQS_DEMO_SERVER` | `test.openquantumsafe.org` | Handshake proof default target |
+
+Optional: `QTANGL_PQC_DATA_DIR`, `QTANGL_PQC_ENABLE_OQS`.
+
+**2. Pre-flight checklist**
+
+- [ ] Customer written authorization on file (UI checkbox is not legal consent alone)
+- [ ] Target domain(s) added to `QTANGL_PQC_SCAN_ALLOWLIST` when using allowlist mode
+- [ ] Fixture mode verified for demo recordings (`useFixture: true`)
+- [ ] SSRF guards reviewed — see [roadmap/security/threat-model.md](../roadmap/security/threat-model.md) TH-001
+
+**3. Verify locally**
+
+```bash
+cd backend
+export QTANGL_PQC_ENABLE_LIVE_SCAN=true
+export QTANGL_PQC_SCAN_ALLOWLIST=test.openquantumsafe.org
+export QTANGL_PQC_RUN_LIVE_INTEGRATION=true
+python -m pytest tests/test_pqc_scanner.py::PqcLiveScannerIntegrationTest -q
+```
+
+**4. API usage**
+
+- Fixture (sync): `POST /pqc/scan` with `{"scenarioId":"bank-tls-inventory","useFixture":true}`
+- Live (async): `{"useFixture":false,"target":"customer.example.com"}` → poll `GET /pqc/scan/{scanId}`
+
+**5. Disable after pilot**
+
+Set `QTANGL_PQC_ENABLE_LIVE_SCAN=false` and redeploy. No code change required.
+
+Live scan call graph documented in [`app/pqc/scanner.py`](app/pqc/scanner.py) module docstring.
 
 Hospital demo runtime notes:
 

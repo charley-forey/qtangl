@@ -61,12 +61,12 @@ Granular checkbox backlog. Each item has an ID, epic link, acceptance criterion,
 
 ### B1 — PQC live scan harden
 
-- [ ] **B1-001** Audit all code paths calling `scan_live()` → `backend/app/pqc/scanner.py` | Path list documented
-- [ ] **B1-002** Add integration test: scan `test.openquantumsafe.org:443` → `backend/tests/test_pqc_scanner.py` | Passes when live enabled
-- [ ] **B1-003** Add SSRF regression tests for RFC1918, localhost, metadata IP → `backend/tests/test_pqc_safety.py` | All blocked
-- [ ] **B1-004** Enforce scan timeout in test (no hang > timeout+5s) → safety tests | Passes
-- [ ] **B1-005** Add UI toggle for live scan with authorization copy → `web/app/demo/pqc/` | User must confirm
-- [ ] **B1-006** Update production runbook in `backend/README.md` for live scan env vars | Documented
+- [x] **B1-001** Audit all code paths calling `scan_live()` → `backend/app/pqc/scanner.py` | Path list documented
+- [x] **B1-002** Add integration test: scan `test.openquantumsafe.org:443` → `backend/tests/test_pqc_scanner.py` | Passes when live enabled
+- [x] **B1-003** Add SSRF regression tests for RFC1918, localhost, metadata IP → `backend/tests/test_pqc_safety.py` | All blocked
+- [x] **B1-004** Enforce scan timeout in test (no hang > timeout+5s) → safety tests | Passes
+- [x] **B1-005** Add UI toggle for live scan with authorization copy → `web/app/demo/pqc/` | User must confirm
+- [x] **B1-006** Update production runbook in `backend/README.md` for live scan env vars | Documented
 
 ### B2 — CBOM standardization
 
