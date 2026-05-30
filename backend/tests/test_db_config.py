@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import unittest
 
+from app.auth import get_rate_limit
 from app.db.config import normalize_database_url
 
 
@@ -21,6 +22,13 @@ class DatabaseUrlNormalizationTest(unittest.TestCase):
     def test_sqlite_left_unchanged(self) -> None:
         url = "sqlite:///tmp/test.db"
         self.assertEqual(normalize_database_url(url), url)
+
+    def test_rate_limit_floor_when_env_too_low(self) -> None:
+        import os
+        from unittest.mock import patch
+
+        with patch.dict(os.environ, {"QTANGL_RATE_LIMIT_PER_MINUTE": "10"}):
+            self.assertEqual(get_rate_limit(), 300)
 
 
 if __name__ == "__main__":

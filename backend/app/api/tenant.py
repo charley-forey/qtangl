@@ -3,7 +3,7 @@ from __future__ import annotations
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from fastapi.responses import JSONResponse, Response
 
-from app.auth import AuthContext, require_auth
+from app.auth import AuthContext, require_auth, require_auth_readonly
 from app.db.config import persistence_enabled
 from app.pqc.report import report_to_json, report_to_pdf
 from app.pqc.serialize import serialize_bundle
@@ -13,7 +13,7 @@ router = APIRouter(prefix="/tenant", tags=["tenant"])
 
 
 @router.get("/me")
-def tenant_me(auth: AuthContext = Depends(require_auth)) -> dict:
+def tenant_me(auth: AuthContext = Depends(require_auth_readonly)) -> dict:
     return {
         "status": "success",
         "tenantId": auth.tenant_id,
@@ -23,7 +23,7 @@ def tenant_me(auth: AuthContext = Depends(require_auth)) -> dict:
 
 @router.get("/scans")
 def tenant_scans(
-    auth: AuthContext = Depends(require_auth),
+    auth: AuthContext = Depends(require_auth_readonly),
     limit: int = Query(default=25, ge=1, le=100),
 ) -> dict:
     scans = list_jobs_for_tenant(tenant_id=auth.tenant_id, limit=limit)
@@ -36,7 +36,7 @@ def tenant_scans(
 
 
 @router.get("/scans/{scan_id}")
-def tenant_scan_detail(scan_id: str, auth: AuthContext = Depends(require_auth)) -> dict:
+def tenant_scan_detail(scan_id: str, auth: AuthContext = Depends(require_auth_readonly)) -> dict:
     job = get_job(scan_id, tenant_id=auth.tenant_id)
     if job is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Scan not found.")
@@ -63,7 +63,7 @@ def tenant_scan_detail(scan_id: str, auth: AuthContext = Depends(require_auth)) 
 @router.get("/scans/{scan_id}/report")
 def tenant_scan_report(
     scan_id: str,
-    auth: AuthContext = Depends(require_auth),
+    auth: AuthContext = Depends(require_auth_readonly),
     format: str = Query(default="pdf", pattern="^(pdf|json)$"),
 ) -> Response:
     bundle_dict = load_scan_bundle(scan_id, tenant_id=auth.tenant_id)

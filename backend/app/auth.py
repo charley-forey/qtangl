@@ -16,6 +16,7 @@ from app.queue.redis_queue import rate_limit_check
 
 _WINDOW_SECONDS = 60
 _DEFAULT_RATE_LIMIT = 300
+_MIN_RATE_LIMIT = 300
 _requests_by_token: dict[str, deque[float]] = defaultdict(deque)
 _rate_lock = Lock()
 
@@ -40,7 +41,7 @@ def get_rate_limit() -> int:
     except ValueError:
         return _DEFAULT_RATE_LIMIT
 
-    return max(1, value)
+    return max(_MIN_RATE_LIMIT, max(1, value))
 
 
 def resolve_tenant_id(token: str) -> str:
@@ -92,6 +93,8 @@ def require_auth(
     authorization: str | None = Header(default=None),
     x_api_key: str | None = Header(default=None),
     api_key: str | None = Query(default=None),
+    *,
+    count_toward_rate_limit: bool = True,
 ) -> AuthContext:
     token = None
 
@@ -114,7 +117,8 @@ def require_auth(
             detail="Invalid API key. Check the pilot token and try again.",
         )
 
-    _enforce_rate_limit(token)
+    if count_toward_rate_limit:
+        _enforce_rate_limit(token)
     return AuthContext(token=token, tenant_id=resolve_tenant_id(token))
 
 
@@ -123,6 +127,31 @@ def require_api_key(
     x_api_key: str | None = Header(default=None),
 ) -> str:
     return require_auth(authorization=authorization, x_api_key=x_api_key).token
+
+
+def require_api_key_readonly(
+    authorization: str | None = Header(default=None),
+    x_api_key: str | None = Header(default=None),
+) -> str:
+    """Authenticated catalog/read endpoints — no rate-limit counter (demo prefetch)."""
+    return require_auth(
+        authorization=authorization,
+        x_api_key=x_api_key,
+        count_toward_rate_limit=False,
+    ).token
+
+
+def require_auth_readonly(
+    authorization: str | None = Header(default=None),
+    x_api_key: str | None = Header(default=None),
+    api_key: str | None = Query(default=None),
+) -> AuthContext:
+    return require_auth(
+        authorization=authorization,
+        x_api_key=x_api_key,
+        api_key=api_key,
+        count_toward_rate_limit=False,
+    )
 
 
 def _token_registered(token: str) -> bool:

@@ -6,7 +6,7 @@ from fastapi import APIRouter, Depends, File, HTTPException, Query, UploadFile, 
 from fastapi.responses import Response
 from pydantic import BaseModel, Field
 
-from app.auth import AuthContext, require_api_key, require_auth
+from app.auth import AuthContext, require_api_key_readonly, require_auth, require_auth_readonly
 from app.models.api import ErrorResponse
 from app.pqc.data import (
     load_dataset,
@@ -41,7 +41,7 @@ class PqcHandshakeRequest(BaseModel):
 
 
 @router.get("/inventory", responses={401: {"model": ErrorResponse}})
-def get_inventory(_token: str = Depends(require_api_key)) -> dict:
+def get_inventory(_token: str = Depends(require_api_key_readonly)) -> dict:
     dataset = load_dataset()
     return {
         "status": "success",
@@ -51,7 +51,7 @@ def get_inventory(_token: str = Depends(require_api_key)) -> dict:
 
 
 @router.get("/scenarios", responses={401: {"model": ErrorResponse}})
-def get_scenarios(_token: str = Depends(require_api_key)) -> dict:
+def get_scenarios(_token: str = Depends(require_api_key_readonly)) -> dict:
     dataset = load_dataset()
     return {
         "status": "success",
@@ -62,7 +62,7 @@ def get_scenarios(_token: str = Depends(require_api_key)) -> dict:
 @router.get("/target", responses={401: {"model": ErrorResponse}, 404: {"model": ErrorResponse}})
 def get_target(
     scenarioId: str = "bank-tls-inventory",
-    _token: str = Depends(require_api_key),
+    _token: str = Depends(require_api_key_readonly),
 ) -> dict:
     try:
         scenario = load_scenario(scenarioId)
@@ -76,13 +76,13 @@ def get_target(
 
 
 @router.get("/handshake-trace", responses={401: {"model": ErrorResponse}})
-def get_handshake_trace(_token: str = Depends(require_api_key)) -> dict:
+def get_handshake_trace(_token: str = Depends(require_api_key_readonly)) -> dict:
     trace = load_handshake_trace()
     return {"status": "success", "trace": serialize_handshake(trace)}
 
 
 @router.get("/standards", responses={401: {"model": ErrorResponse}})
-def get_standards(_token: str = Depends(require_api_key)) -> dict:
+def get_standards(_token: str = Depends(require_api_key_readonly)) -> dict:
     try:
         standards = load_standards()
     except Exception:
@@ -204,7 +204,7 @@ def scan_pqc(
 @router.get("/scan/{scan_id}", responses={401: {"model": ErrorResponse}, 404: {"model": ErrorResponse}})
 def get_scan_status(
     scan_id: str,
-    auth: AuthContext = Depends(require_auth),
+    auth: AuthContext = Depends(require_auth_readonly),
 ) -> dict:
     job = get_job(scan_id, tenant_id=auth.tenant_id)
     if job:
@@ -229,7 +229,7 @@ def get_scan_status(
 @router.post("/handshake/prove", responses={401: {"model": ErrorResponse}})
 def prove_handshake_endpoint(
     request: PqcHandshakeRequest,
-    _token: str = Depends(require_api_key),
+    _auth: AuthContext = Depends(require_auth),
 ) -> dict:
     from app.pqc.handshake import prove_handshake
 
@@ -241,7 +241,7 @@ def prove_handshake_endpoint(
 def download_report(
     scan_id: str,
     format: str = Query(default="json", alias="format"),
-    auth: AuthContext = Depends(require_auth),
+    auth: AuthContext = Depends(require_auth_readonly),
 ) -> Response:
     job = get_job(scan_id, tenant_id=auth.tenant_id)
     bundle = job.bundle if job and job.bundle else None

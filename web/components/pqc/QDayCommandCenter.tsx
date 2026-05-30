@@ -75,12 +75,21 @@ export default function QDayCommandCenter({
     [activeScenarioId, scenarios]
   );
 
+  const bootstrapAttempted = useRef(false);
+
   useEffect(() => {
     trackEvent("demo_viewed", { demo: "pqc" });
   }, []);
 
   useEffect(() => {
-    if (backendConnected && inventory.length > 0) return;
+    if (bootstrapAttempted.current) {
+      return;
+    }
+    if (initialBackendConnected && initialInventory.length > 0) {
+      bootstrapAttempted.current = true;
+      return;
+    }
+    bootstrapAttempted.current = true;
     let cancelled = false;
     async function connect() {
       try {
@@ -99,7 +108,7 @@ export default function QDayCommandCenter({
     return () => {
       cancelled = true;
     };
-  }, [backendConnected, inventory.length]);
+  }, [initialBackendConnected, initialInventory.length]);
 
   function syncUrl() {
     const params = new URLSearchParams();
