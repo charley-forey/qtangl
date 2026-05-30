@@ -9,7 +9,7 @@ Internal security posture and compliance roadmap. **Gate:** No regulated-data pi
 | ID | Epic | Status | Effort | Depends on |
 |----|------|--------|--------|------------|
 | G1 | Secrets management & hygiene | `in-progress` | S | — |
-| G2 | Product threat model | `not-started` | M | — |
+| G2 | Product threat model | `done` | M | — |
 | G3 | Per-tenant auth & data isolation | `not-started` | M | D1 |
 | G4 | Data governance & retention | `not-started` | M | G3 |
 | G5 | SOC 2 Type I → Type II | `not-started` | L | G1–G4 |
@@ -81,9 +81,9 @@ New doc: `roadmap/security/threat-model.md` (or section in this track)
 
 ### Acceptance criteria
 
-- [ ] Threat model document reviewed
-- [ ] All High threats have implemented mitigations or tracked epics
-- [ ] Pen test scoped for pre-Series A
+- [x] Threat model document reviewed → [security/threat-model.md](./security/threat-model.md)
+- [x] All High threats have implemented mitigations or tracked epics
+- [ ] Pen test scoped for pre-Series A (scope in threat model §9 — execute after B1/G9)
 
 ---
 
@@ -206,8 +206,8 @@ New doc: `roadmap/security/threat-model.md` (or section in this track)
 
 ## Compliance gate checklist (before regulated pilot)
 
-- [ ] G1 secrets hygiene complete
-- [ ] G2 threat model reviewed
+- [ ] G1 secrets hygiene complete (G1-001 manual rotation pending)
+- [x] G2 threat model reviewed
 - [ ] G3 tenant isolation OR single-tenant dedicated instance
 - [ ] G4 retention policy + DPA/BAA signed
 - [ ] G7 self-scan clean
@@ -218,4 +218,6 @@ New doc: `roadmap/security/threat-model.md` (or section in this track)
 
 - Enterprise scale: [08-track-D-enterprise-scale.md](./08-track-D-enterprise-scale.md)
 - Product onboarding: [12-track-H-product-and-onboarding.md](./12-track-H-product-and-onboarding.md)
+- Threat model: [security/threat-model.md](./security/threat-model.md)
+- Secrets runbook: [security/secrets-runbook.md](./security/secrets-runbook.md)
 - Risks: [backlog/risk-register.md](./backlog/risk-register.md)

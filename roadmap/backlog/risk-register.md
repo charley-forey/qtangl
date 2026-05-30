@@ -13,7 +13,7 @@ Technical, commercial, and execution risks with mitigations and triggers. Review
 |----|------|---|---|---------|------------|-------|--------|
 | R-001 | **Quantum never beats classical at scale** — hybrid adds no measurable value | M | C | Benchmark table shows 0% success metric on all instances | Pivot headline to auditability + alternates only; invest in quantum-inspired (J4) not QPU | Eng | Open |
 | R-002 | **Fixture demos misread as live quantum** — credibility loss in due diligence | M | C | Prospect asks "is this real QPU?" and answer is unclear | Label fixture mode in UI/API; one documented real QPU run (A5); honest marketing | GTM + Eng | Open |
-| R-003 | **Selling security with weak internal security** — PQC buyer finds our own vulns | M | C | G7 self-scan finds critical RSA on qtangl.com | G1 secrets hygiene; G7 dogfood; threat model before PQC scale | Security | Open |
+| R-003 | **Selling security with weak internal security** — PQC buyer finds our own vulns | M | C | G7 self-scan finds critical RSA on qtangl.com | G1 secrets hygiene; G7 dogfood; G2 threat model | Security | Open |
 
 ---
 
@@ -26,7 +26,7 @@ Technical, commercial, and execution risks with mitigations and triggers. Review
 | R-006 | **Regulated pilot before compliance ready** — HIPAA/CMMC incident | M | H | Hospital PHI uploaded without BAA | G6 gate checklist; de-identified roster option; no PHI until BAA | Security | Open |
 | R-007 | **In-memory state in production** — data loss or cross-tenant leak on scale | H | H | Second Railway instance deployed | D1 Postgres priority; G3 tenant isolation | Eng | Open |
 | R-008 | **Qiskit dependency drift** — QAOA breaks on upgrade | M | H | CI fails after pip install | I2 lockfile; benchmark CI on dep bump | Eng | Open |
-| R-009 | **PQC live scan abuse** — SSRF/port scan used as attack vector | L | H | Abuse report or anomalous scan volume | `assert_scannable`; rate limits; isolated workers; G2 threat model | Eng | Open |
+| R-009 | **PQC live scan abuse** — SSRF/port scan used as attack vector | L | H | Abuse report or anomalous scan volume | `assert_scannable`; rate limits; B1 isolated workers; [threat-model.md](../security/threat-model.md) TH-001/TH-009 | Eng | Open |
 | R-010 | **Long sales cycle kills runway** — no revenue by month 9 | M | H | Zero signed pilots by month 6 | E1 outbound volume; lower Assessment price; services revenue | GTM | Open |
 
 ---

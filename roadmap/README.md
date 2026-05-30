@@ -85,7 +85,7 @@ Epic statuses in backlog use: `not-started` | `in-progress` | `blocked` | `done`
 | [templates/adr-template.md](./templates/adr-template.md) | Architecture decision records |
 | [templates/weekly-review-template.md](./templates/weekly-review-template.md) | Weekly operating review |
 | [templates/pilot-playbook.md](./templates/pilot-playbook.md) | Demo → pilot → production checklist |
-| [security/threat-model.md](./security/threat-model.md) | Product threat model (G2 stub) |
+| [security/threat-model.md](./security/threat-model.md) | Product threat model v1 (G2) |
 
 ---
 

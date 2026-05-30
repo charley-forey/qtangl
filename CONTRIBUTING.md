@@ -90,6 +90,8 @@ Engineering priorities and phased backlog: [roadmap/README.md](roadmap/README.md
 
 Phase 0 (foundation) action items: [roadmap/backlog/action-items.md](roadmap/backlog/action-items.md).
 
+Security: [roadmap/security/threat-model.md](roadmap/security/threat-model.md), [roadmap/security/secrets-runbook.md](roadmap/security/secrets-runbook.md).
+
 ## Agent / worktree workflow
 
 Parallel web work uses isolated git worktrees. See [scripts/web-worktrees/AGENT_CONTRACT.md](scripts/web-worktrees/AGENT_CONTRACT.md).

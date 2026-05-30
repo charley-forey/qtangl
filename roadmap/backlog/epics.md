@@ -75,9 +75,10 @@ Master list of all epics across tracks A–J, I, G, H, E, F, B, C, D. Update sta
 | ID | Epic | Status | Effort | Depends | Owner |
 |----|------|--------|--------|---------|-------|
 | G1 | Secrets management & hygiene | in-progress | S | — | — |
-| G2 | Product threat model | not-started | M | — | — |
+| G2 | Product threat model | done | M | — | — |
 | G3 | Per-tenant auth & data isolation | not-started | M | D1 | — |
 | G4 | Data governance & retention | not-started | M | G3 | — |
+| G9 | Safe logging & error responses (PHI redaction) | not-started | S | G2 | — |
 | G5 | SOC 2 Type I → Type II | not-started | L | G1–G4 | — |
 | G6 | Vertical compliance (HIPAA, CMMC) | not-started | L | G5 | — |
 | G7 | Dogfood PQC (Qtangl secures Qtangl) | not-started | S | B1 | — |

@@ -32,9 +32,9 @@ Granular checkbox backlog. Each item has an ID, epic link, acceptance criterion,
 
 ### G2 — Threat model
 
-- [ ] **G2-001** Write threat model v1 covering PQC scanner SSRF, uploads, auth → `roadmap/security/threat-model.md` or Track G | High threats listed
-- [ ] **G2-002** Map existing controls: `assert_scannable`, rate limits, API key → `backend/app/pqc/safety.py`, `auth.py` | Control matrix complete
-- [ ] **G2-003** Review threat model; create epics for unmitigated High items → `backlog/epics.md` | No unowned High threats
+- [x] **G2-001** Write threat model v1 covering PQC scanner SSRF, uploads, auth → `roadmap/security/threat-model.md` | High threats listed
+- [x] **G2-002** Map existing controls: `assert_scannable`, rate limits, API key → `backend/app/pqc/safety.py`, `auth.py` | Control matrix complete
+- [x] **G2-003** Review threat model; create epics for unmitigated High items → `backlog/epics.md` | No unowned High threats
 
 ### C1-partial — Benchmark baseline
 
