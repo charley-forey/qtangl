@@ -7,7 +7,13 @@ function isPqcReady(asset: CryptoAsset) {
   return Boolean(asset.pqcReady ?? asset.pqc_ready);
 }
 
-export default function InventoryHeatmap({ assets }: { assets: CryptoAsset[] }) {
+export default function InventoryHeatmap({
+  assets,
+  explanations,
+}: {
+  assets: CryptoAsset[];
+  explanations?: Record<string, string>;
+}) {
   return (
     <div className="grid gap-2 sm:grid-cols-2">
       {assets.map((asset) => (
@@ -35,6 +41,11 @@ export default function InventoryHeatmap({ assets }: { assets: CryptoAsset[] }) 
             {asset.negotiated_group ? ` · ${asset.negotiated_group}` : ""}
           </p>
           <p className="mt-2 text-xs text-[var(--color-gray-300)]">{asset.vulnerability.summary}</p>
+          {explanations?.[asset.id] ? (
+            <p className="mt-2 text-xs italic text-[var(--color-gray-400)]">
+              What this means: {explanations[asset.id]}
+            </p>
+          ) : null}
         </div>
       ))}
     </div>

@@ -12,6 +12,8 @@ python-multipart
 qiskit-ibm-runtime
 cryptography
 reportlab
+# Optional: ML-DSA-65 signing via liboqs (Ed25519 fallback always available)
+# oqs-python
 sqlalchemy>=2.0.30
 redis>=5.0.0
 psycopg[binary]>=3.1.18

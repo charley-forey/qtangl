@@ -2,6 +2,8 @@
 
 import type { MoscaAssessment } from "@/lib/pqc";
 
+import InfoTip from "./InfoTip";
+
 export default function MoscaTimeline({ mosca }: { mosca: MoscaAssessment }) {
   const x = mosca.data_shelf_life_years;
   const y = mosca.migration_time_years;
@@ -9,7 +11,12 @@ export default function MoscaTimeline({ mosca }: { mosca: MoscaAssessment }) {
   const max = Math.max(x + y, z, 1);
   return (
     <div className="space-y-2">
-      <p className="text-xs text-[var(--color-gray-400)]">Mosca inequality: X + Y {mosca.inequality_holds ? ">" : "≤"} Z</p>
+      <p className="flex items-center gap-1 text-xs text-[var(--color-gray-400)]">
+        <InfoTip
+          termId="mosca"
+          label={`Mosca inequality: X + Y ${mosca.inequality_holds ? ">" : "≤"} Z`}
+        />
+      </p>
       <div className="space-y-1">
         <Bar label={`X data shelf (${x}y)`} width={(x / max) * 100} tone="bg-sky-500/70" />
         <Bar label={`Y migration (${y}y)`} width={(y / max) * 100} tone="bg-amber-500/70" />

@@ -7,7 +7,7 @@ from collections import defaultdict, deque
 from dataclasses import dataclass
 from threading import Lock
 
-from fastapi import Header, HTTPException, Query, status
+from fastapi import Depends, Header, HTTPException, Query, status
 
 from app.db.config import persistence_enabled
 from app.db.engine import db_session
@@ -25,6 +25,7 @@ _rate_lock = Lock()
 class AuthContext:
     token: str
     tenant_id: str
+    role: str = "admin"
 
 
 def get_expected_api_key() -> str:
@@ -59,6 +60,22 @@ def resolve_tenant_id(token: str) -> str:
             return row.tenant_id
     except Exception:
         return "sandbox"
+
+
+def resolve_role(token: str) -> str:
+    if token == get_expected_api_key():
+        return "admin"
+    if not persistence_enabled():
+        return "admin"
+    key_hash = hash_api_key(token)
+    try:
+        with db_session() as session:
+            row = session.query(ApiKey).filter(ApiKey.key_hash == key_hash, ApiKey.revoked_at.is_(None)).one_or_none()
+            if row is None:
+                return "admin"
+            return row.role or "admin"
+    except Exception:
+        return "admin"
 
 
 def hash_api_key(raw_key: str) -> str:
@@ -119,7 +136,16 @@ def require_auth(
 
     if count_toward_rate_limit:
         _enforce_rate_limit(token)
-    return AuthContext(token=token, tenant_id=resolve_tenant_id(token))
+    return AuthContext(token=token, tenant_id=resolve_tenant_id(token), role=resolve_role(token))
+
+
+def require_auth_write(auth: AuthContext = Depends(require_auth)) -> AuthContext:
+    if auth.role == "viewer":
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Viewer role cannot modify tenant resources.",
+        )
+    return auth
 
 
 def require_api_key(

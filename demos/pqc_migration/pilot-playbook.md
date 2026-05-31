@@ -286,14 +286,56 @@ After any scan completes, the backend builds a **scan bundle** and stores it in 
 
 ### PDF contents (compliance report pack)
 
-- Branded cover with readiness score + **readiness band** (e.g. Pre-migration baseline)
-- Executive summary and severity / Mosca charts
-- Readiness score + coverage confidence
-- **Mosca HNDL assessment**
-- **Framework mapping** (NIST / NSM-10 style, per scenario)
-- Prioritized **remediation backlog**
-- **Handshake proof appendix**
+- Branded **cover** with scan ID, readiness band badge, Mosca verdict callout
+- **Executive one-pager** with top-3 priority actions
+- **How to read this report** explainer (readiness, coverage, Mosca, HNDL, severity)
+- **Manual vs Qtangl scoreboard** comparison table
+- Readiness score + coverage confidence + crypto-agility score
+- Full **Mosca HNDL block** (X+Y>Z, variable definitions, interpretation)
+- **Cryptographic inventory** (key size, Shor qubits estimate, paginated)
+- Top **HNDL-exposed asset deep-dive** (TLS cipher/group, SANs, validity)
+- **Standards summary** table with authoritative URLs + gap findings
+- Prioritized **remediation backlog** (severity, PQC algorithm, completion % when tracked)
+- **Handshake proof appendix** (fixture/replayed caveat)
+- **Glossary** + numbered **references** appendices
+- **Report integrity** appendix (SHA-256 hash, signature fingerprint, verify QR)
 - Honesty notes (*inventory aid, not formal audit*)
+
+### Evidence audit ZIP
+
+`GET /tenant/scans/{scanId}/report?format=bundle` — PDF + CBOM + JSON + CSV + methodology + signature in one ZIP.
+
+### Continuous monitoring (B3)
+
+- `POST /tenant/schedules` — weekly (or custom) re-scans; requires Postgres + Redis worker + `QTANGL_ENABLE_SCHEDULER=true`
+- Dashboard: **Scheduled monitoring** panel when persistence is enabled
+
+### Email delivery
+
+- `POST /tenant/scans/{scanId}/email` with `{ "email": "..." }`
+- Configure `QTANGL_SMTP_*` on Railway; safe no-op + log when unset
+- Optional `notifyEmail` on schedules for completion alerts
+
+### Remediation tracking (B4)
+
+- `GET/POST /tenant/scans/{scanId}/remediation` — status: open / in_progress / done / accepted_risk
+- Surfaces in JSON report and PDF completion %
+
+### Report verification
+
+- Public: `GET /pqc/verify/{scanId}` or https://www.qtangl.com/verify?scanId=…
+- Signed with ML-DSA-65 when `oqs-python`/liboqs available; **Ed25519 fallback** always
+
+### Security: revoke leaked tenant keys
+
+If a tenant API key is exposed in chat or email, revoke immediately:
+
+```bash
+curl -X DELETE "https://<RAILWAY_HOST>/admin/keys/<key-id>" \
+  -H "Authorization: Bearer $QTANGL_ADMIN_API_KEY"
+```
+
+Re-issue a replacement key for the customer dashboard.
 
 ### CBOM contents
 

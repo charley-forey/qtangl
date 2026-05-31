@@ -73,10 +73,12 @@ class PqcSafetyTest(unittest.TestCase):
             with patch("app.pqc.scanner.assert_scannable", return_value="scan.example.com"):
                 with patch("app.pqc.scanner.socket.create_connection", side_effect=slow_connect) as mock_connect:
                     started = time.perf_counter()
-                    asset = scan_tls_endpoint("scan.example.com", 443)
+                    asset, coverage = scan_tls_endpoint("scan.example.com", 443)
                     elapsed = time.perf_counter() - started
 
-        self.assertEqual(asset.kind, "error")
+        self.assertIsNone(asset)
+        self.assertIsNotNone(coverage)
+        self.assertEqual(coverage.get("status"), "unreachable")
         self.assertLess(elapsed, timeout + 5.0)
         mock_connect.assert_called_once()
         self.assertEqual(mock_connect.call_args.kwargs.get("timeout"), timeout)

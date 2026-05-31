@@ -264,3 +264,33 @@ def build_scoreboard(
         readiness_band=str(assessment["band"]),
     )
     return RiskScoreboard(manual=manual_col, qtangl=qtangl_col)
+
+
+def crypto_agility_score(assets: list[CryptoAsset]) -> float:
+    """How quickly keys/algorithms can be rotated — distinct from readiness."""
+    inventory = classified_assets(assets)
+    if not inventory:
+        return 0.0
+    pqc_ready = sum(1 for asset in inventory if asset.pqc_ready)
+    short_lived = sum(1 for asset in inventory if (asset.validity_days or 365) <= 90)
+    modern_tls = sum(
+        1
+        for asset in inventory
+        if asset.tls_version and asset.tls_version.startswith("TLS 1.3")
+    )
+    score = (
+        30.0 * (pqc_ready / len(inventory))
+        + 25.0 * (short_lived / len(inventory))
+        + 25.0 * (modern_tls / max(1, sum(1 for a in inventory if a.kind == "tls")))
+        + 20.0 * (1.0 - sum(1 for a in inventory if a.vulnerability.status == "broken") / len(inventory))
+    )
+    return round(min(100.0, score), 1)
+
+
+def scoreboard_summary_dict(scoreboard: RiskScoreboard) -> dict[str, Any]:
+    from dataclasses import asdict
+
+    return {
+        "manual": asdict(scoreboard.manual),
+        "qtangl": asdict(scoreboard.qtangl),
+    }

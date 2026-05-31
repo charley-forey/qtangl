@@ -8,6 +8,8 @@ from app.pqc.pipeline import run_pqc_scan
 from app.pqc.report import report_to_pdf
 from app.pqc.risk import readiness_assessment
 from app.pqc.scanner import _build_live_endpoints, scan_fixture, scan_live
+from app.pqc.serialize import serialize_bundle
+from app.pqc.bundle_codec import bundle_from_api_dict
 
 
 class PqcReportPdfTest(unittest.TestCase):
@@ -24,6 +26,18 @@ class PqcReportPdfTest(unittest.TestCase):
         bundle.report.assets = []
         pdf_bytes = report_to_pdf(bundle.report)
         self.assertTrue(pdf_bytes.startswith(b"%PDF"))
+
+    def test_serialize_reconstruct_pdf_round_trip(self) -> None:
+        """Regression: Postgres bundle reload must not crash PDF (ScoreboardColumn.summary)."""
+        dataset = load_dataset()
+        bundle = run_pqc_scan(dataset, scenario_id="bank-tls-inventory", use_fixture=True)
+        serialized = serialize_bundle(bundle)
+        reconstructed = bundle_from_api_dict(serialized)
+        self.assertIsNotNone(reconstructed.scoreboard.qtangl.summary)
+        self.assertGreater(reconstructed.scoreboard.qtangl.readiness_score, 0)
+        pdf_bytes = report_to_pdf(reconstructed.report)
+        self.assertTrue(pdf_bytes.startswith(b"%PDF"))
+        self.assertGreater(len(pdf_bytes), 500)
 
 
 class PqcReportTargetTest(unittest.TestCase):

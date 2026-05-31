@@ -7,8 +7,8 @@ from typing import Any, Callable
 from app.pqc.handshake import prove_handshake
 from app.pqc.models import PqcDataset, ScanBundle, ScanScenario, TimelineEvent
 from app.pqc.report import build_migration_report
-from app.pqc.risk import apply_risk_to_assets, assess_mosca, build_scoreboard, readiness_assessment
-from app.pqc.scanner import scan_fixture, scan_live
+from app.pqc.risk import apply_risk_to_assets, assess_mosca, build_scoreboard, readiness_assessment, scoreboard_summary_dict
+from app.pqc.scanner import scan_fixture, scan_live, flag_key_reuse
 from app.pqc.safety import ScanSafetyError, live_scan_enabled
 from app.pqc.standards import build_remediation_backlog
 
@@ -22,6 +22,7 @@ def run_pqc_scan(
     uploaded_rows: list[dict[str, Any]] | None = None,
     seed: int = 1234,
     on_progress: Callable[[TimelineEvent], None] | None = None,
+    depth: str = "standard",
 ) -> ScanBundle:
     del seed  # reserved for reproducibility hooks
     started = perf_counter()
@@ -51,6 +52,7 @@ def run_pqc_scan(
         )
 
     emit("risk", "Applying Mosca HNDL risk model…")
+    assets = flag_key_reuse(assets)
     mosca = assess_mosca(dataset.risk_assumptions)
     assets = apply_risk_to_assets(
         assets,
@@ -64,6 +66,10 @@ def run_pqc_scan(
         deadlines=dataset.deadlines,
         remediation_weights=dataset.remediation_weights,
     )
+
+    if depth == "lite":
+        assets = assets[: max(5, min(len(assets), 8))]
+        backlog = backlog[:3]
 
     emit("handshake", "Proving post-quantum TLS handshake…")
     handshake = prove_handshake(use_fixture=use_fixture)
@@ -101,7 +107,13 @@ def run_pqc_scan(
         scan_coverage=scan_coverage,
         readiness_band=str(assessment["band"]),
         readiness_summary=str(assessment["summary"]),
+        scoreboard_summary=scoreboard_summary_dict(scoreboard),
     )
+    report.scan_depth = depth
+    if depth == "lite":
+        report.honesty_notes = list(report.honesty_notes) + [
+            "Lite scan: subset of findings only. Contact Qtangl for full endpoint inventory and audit pack.",
+        ]
 
     timeline.append(
         TimelineEvent(
@@ -131,5 +143,6 @@ def run_pqc_scan(
             "scanCoverage": scan_coverage,
             "readinessBand": assessment["band"],
             "pqcReadyCount": assessment["pqcReadyCount"],
+            "scanDepth": depth,
         },
     )

@@ -24,8 +24,12 @@ import MoscaTimeline from "./MoscaTimeline";
 import ReadinessGauge from "./ReadinessGauge";
 import RemediationBacklog from "./RemediationBacklog";
 import ReportDrawer from "./ReportDrawer";
+import RiskQuadrant from "./RiskQuadrant";
 import RiskScoreboardCard from "./RiskScoreboardCard";
 import RoiCalculator from "./RoiCalculator";
+import ExecutivePriorities from "./ExecutivePriorities";
+import ReadinessTrend from "./ReadinessTrend";
+import ReferencesPanel from "./ReferencesPanel";
 import ScanCoverage from "./ScanCoverage";
 import ScanLog from "./ScanLog";
 import ScanTargetCard from "./ScanTargetCard";
@@ -71,6 +75,7 @@ export default function QDayCommandCenter({
   const [error, setError] = useState<string | null>(null);
   const [scanProgress, setScanProgress] = useState<string | null>(null);
   const [reportOpen, setReportOpen] = useState(false);
+  const [useLiteScan, setUseLiteScan] = useState(false);
   const resultsRef = useRef<HTMLDivElement>(null);
 
   const activeScenario = useMemo(
@@ -136,6 +141,7 @@ export default function QDayCommandCenter({
         useFixture,
         target: customDomain || undefined,
         bundleSessionId: bundleSessionId ?? undefined,
+        depth: useLiteScan ? "lite" : "standard",
       });
       let completed: PqcScanResponse;
       if (result.status === "running") {
@@ -193,7 +199,7 @@ export default function QDayCommandCenter({
           onCustomDomainChange={setCustomDomain}
         />
       </PqcSection>
-      <div className="flex flex-wrap items-center gap-3">
+      <div className="pqc-print-hide flex flex-wrap items-center gap-3">
         <label className="flex items-center gap-2 text-xs text-[var(--color-gray-400)]">
           <input
             type="checkbox"
@@ -213,6 +219,14 @@ export default function QDayCommandCenter({
             Live scan enabled
           </span>
         )}
+        <label className="flex items-center gap-2 text-xs text-[var(--color-gray-400)]">
+          <input
+            type="checkbox"
+            checked={useLiteScan}
+            onChange={(e) => setUseLiteScan(e.target.checked)}
+          />
+          Lite scan (subset of findings — upsell preview)
+        </label>
         <BundleUploader
           onUploaded={(sessionId, summary) => {
             setBundleSessionId(sessionId);
@@ -240,7 +254,7 @@ export default function QDayCommandCenter({
       <p className="text-[10px] text-[var(--color-gray-600)]">API: {apiBaseUrl}</p>
 
       {scanResponse && (
-        <div ref={resultsRef} className="space-y-6">
+        <div ref={resultsRef} className="pqc-print-area space-y-6">
           <div className="flex flex-wrap items-center gap-3 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface-strong)] p-4">
             <div className="min-w-0 flex-1">
               <p className="text-sm font-medium text-white">Executive report pack</p>
@@ -260,7 +274,7 @@ export default function QDayCommandCenter({
             >
               Download PDF report
             </a>
-            {(["cbom", "json", "csv"] as const).map((format) => (
+            {(["cbom", "json", "csv", "bundle"] as const).map((format) => (
               <a
                 key={format}
                 href={pqcReportDownloadUrl(scanResponse.scanId, format)}
@@ -274,13 +288,40 @@ export default function QDayCommandCenter({
                 {format}
               </a>
             ))}
+            <a
+              href={`/verify?scanId=${encodeURIComponent(scanResponse.scanId)}`}
+              className="text-xs uppercase tracking-wide text-[var(--color-gray-300)] underline underline-offset-4 hover:text-white"
+            >
+              verify
+            </a>
             <Button variant="secondary" onClick={() => setReportOpen(true)}>
               All formats
             </Button>
           </div>
+          <PqcSection title="Executive summary">
+            <ExecutivePriorities summary={scanResponse.report?.executiveSummary} />
+          </PqcSection>
           <PqcSection title="Risk scoreboard">
             <RiskScoreboardCard scoreboard={scanResponse.scoreboard} />
           </PqcSection>
+          <div className="grid gap-4 lg:grid-cols-2">
+            <PqcSection title="Risk quadrant (severity × HNDL)">
+              <RiskQuadrant assets={scanResponse.assets} />
+            </PqcSection>
+            <PqcSection title="Readiness trend">
+              <ReadinessTrend
+                points={[
+                  {
+                    scanId: scanResponse.scanId,
+                    createdAt: new Date().toISOString(),
+                    readinessScore: scanResponse.scoreboard.qtangl.readiness_score,
+                    readinessBand:
+                      scanResponse.readinessBand ?? scanResponse.scoreboard.qtangl.readiness_band,
+                  },
+                ]}
+              />
+            </PqcSection>
+          </div>
           <div className="grid gap-4 lg:grid-cols-3">
             <PqcSection title="Readiness">
               <ReadinessGauge score={scanResponse.scoreboard.qtangl.readiness_score} />
@@ -301,7 +342,10 @@ export default function QDayCommandCenter({
             <ScanLog events={scanResponse.timeline} isRunning={isScanning} />
           </PqcSection>
           <PqcSection title="Crypto inventory">
-            <InventoryHeatmap assets={scanResponse.assets} />
+            <InventoryHeatmap
+              assets={scanResponse.assets}
+              explanations={scanResponse.report?.assetExplanations as Record<string, string> | undefined}
+            />
           </PqcSection>
           {scanResponse.scanCoverage && scanResponse.scanCoverage.length > 0 && (
             <PqcSection title="Scan coverage (unreachable / errored)">
@@ -310,14 +354,30 @@ export default function QDayCommandCenter({
           )}
           {topAsset && (
             <PqcSection title="Top vulnerability">
-              <VulnerabilityCard asset={topAsset} />
+              <VulnerabilityCard
+                asset={topAsset}
+                explanation={
+                  (scanResponse.report?.assetExplanations as Record<string, string> | undefined)?.[
+                    topAsset.id
+                  ]
+                }
+              />
             </PqcSection>
           )}
           <PqcSection title="Remediation backlog">
             <RemediationBacklog items={scanResponse.remediationBacklog} />
           </PqcSection>
           <PqcSection title="Migration roadmap">
-            <MigrationGantt />
+            <MigrationGantt
+              milestones={
+                scanResponse.report?.migrationRoadmap as
+                  | Array<{ label: string; deadline: string; severity?: string }>
+                  | undefined
+              }
+            />
+          </PqcSection>
+          <PqcSection title="References & standards">
+            <ReferencesPanel />
           </PqcSection>
           <PqcSection title="Post-quantum handshake proof">
             <HandshakeProofPanel proof={scanResponse.handshakeProof} />

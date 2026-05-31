@@ -9,8 +9,13 @@ from typing import Any
 from app.pqc.models import CryptoAsset, HandshakeProof, MigrationReport, MoscaAssessment, RemediationItem, ScanScenario
 from app.pqc.cbom import CBOM_SCHEMA_ID, CBOM_SPEC_VERSION
 from app.pqc.compliance_packs import build_compliance_pack
+from app.pqc.compliance_controls import compliance_summary
+from app.pqc.explain import explain_asset, top_priorities
+from app.pqc.migration_roadmap import build_migration_roadmap
 from app.pqc.handshake import handshake_appendix_for_report
-from app.pqc.risk import mosca_assessment_for_report, readiness_assessment
+from app.pqc.references import attach_framework_urls
+from app.pqc.risk import crypto_agility_score, mosca_assessment_for_report, readiness_assessment
+from app.pqc.signing import sign_report_payload
 from app.pqc.standards import standards_summary_for_report
 from app.pqc.vulnerability import vulnerability_dict
 
@@ -45,12 +50,29 @@ def build_migration_report(
     scan_coverage: list[dict[str, Any]] | None = None,
     readiness_band: str = "",
     readiness_summary: str = "",
+    scoreboard_summary: dict[str, Any] | None = None,
+    remediation_completion_pct: float | None = None,
 ) -> MigrationReport:
     classified = [asset for asset in assets if asset.kind != "error"]
     confidence = min(95.0, 40.0 + len(classified) * 4.0)
     assessment = readiness_assessment(assets)
-    standards_summary = standards_summary_for_report(classified, standards, deadlines)
-    return MigrationReport(
+    standards_summary = attach_framework_urls(
+        standards_summary_for_report(classified, standards, deadlines)
+    )
+    backlog_list = backlog
+    priorities = top_priorities(classified, backlog_list)
+    explanations = {asset.id: explain_asset(asset) for asset in classified[:50]}
+    agility = crypto_agility_score(classified)
+    roadmap = build_migration_roadmap(classified, backlog_list, deadlines)
+    controls = compliance_summary(classified)
+    q_vuln = sum(
+        1 for a in classified if a.vulnerability.status in {"at-risk", "broken"} and not a.pqc_ready
+    )
+    exposure_low = q_vuln * 25_000
+    exposure_high = q_vuln * 85_000
+    pack = build_compliance_pack(scenario, standards_summary)
+    pack["complianceSummary"] = controls
+    report = MigrationReport(
         scan_id=scan_id,
         scenario_id=scenario.id,
         target_domain=target_domain or scenario.target.domain,
@@ -59,15 +81,36 @@ def build_migration_report(
         coverage_confidence=round(confidence, 1),
         mosca=mosca,
         assets=classified,
-        remediation_backlog=backlog,
+        remediation_backlog=backlog_list,
         standards_summary=standards_summary,
         honesty_notes=honesty_notes(),
-        compliance_pack=build_compliance_pack(scenario, standards_summary),
+        compliance_pack=pack,
         handshake_proof=handshake_proof,
         scan_coverage=list(scan_coverage or []),
         readiness_band=readiness_band or str(assessment["band"]),
         readiness_summary=readiness_summary or str(assessment["summary"]),
+        scoreboard_summary=scoreboard_summary or {},
+        remediation_completion_pct=remediation_completion_pct,
+        asset_explanations=explanations,
+        crypto_agility_score=agility,
+        migration_roadmap=roadmap,
+        executive_summary={
+            "verdict": assessment["summary"],
+            "readinessBand": readiness_band or str(assessment["band"]),
+            "topPriorities": priorities,
+            "nearestDeadline": _nearest_deadline(standards_summary),
+            "exposureRangeUsd": {"low": exposure_low, "high": exposure_high},
+            "cryptoAgilityScore": agility,
+        },
     )
+    json_payload = report_to_json(report)
+    report.signature = sign_report_payload(json_payload)
+    return report
+
+
+def _nearest_deadline(standards_summary: list[dict[str, Any]]) -> str:
+    deadlines = [str(entry.get("deadline", "")) for entry in standards_summary if entry.get("deadline")]
+    return deadlines[0] if deadlines else "2030"
 
 
 def report_to_json(report: MigrationReport) -> dict[str, Any]:
@@ -95,7 +138,21 @@ def report_to_json(report: MigrationReport) -> dict[str, Any]:
         "standardsSummary": report.standards_summary,
         "honestyNotes": report.honesty_notes,
         "scanCoverage": report.scan_coverage,
+        "scoreboardSummary": report.scoreboard_summary,
+        "executiveSummary": report.executive_summary,
+        "assetExplanations": report.asset_explanations,
+        "cryptoAgilityScore": report.crypto_agility_score,
+        "migrationRoadmap": report.migration_roadmap,
+        "scanDepth": report.scan_depth,
+        "complianceSummary": report.compliance_pack.get("complianceSummary", {}),
+        "remediationCompletionPct": report.remediation_completion_pct,
     }
+    if report.previous_scan_id:
+        payload["previousScanId"] = report.previous_scan_id
+    if report.scan_diff:
+        payload["scanDiff"] = report.scan_diff
+    if report.signature:
+        payload["signature"] = report.signature
     if report.handshake_proof is not None:
         payload["handshakeAppendix"] = handshake_appendix_for_report(report.handshake_proof)
     return payload

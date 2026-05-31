@@ -134,7 +134,11 @@ export type PqcScanResponse = {
   remediationBacklog: RemediationItem[];
   scoreboard: Scoreboard;
   handshakeProof: HandshakeProof;
-  report: Record<string, unknown>;
+  report: Record<string, unknown> & {
+    executiveSummary?: Record<string, unknown>;
+    migrationRoadmap?: Array<{ label: string; deadline: string; severity?: string }>;
+    assetExplanations?: Record<string, string>;
+  };
   mosca: MoscaAssessment;
   timeline: TimelineEvent[];
   details: Record<string, unknown>;
@@ -186,6 +190,7 @@ export async function scanPqc(input: {
   target?: string;
   seed?: number;
   bundleSessionId?: string;
+  depth?: "standard" | "lite";
 }) {
   return fetchQtanglJson<PqcScanResponse | PqcScanRunningResponse>("/pqc/scan", {
     method: "POST",
@@ -195,6 +200,7 @@ export async function scanPqc(input: {
       target: input.target ?? null,
       seed: input.seed ?? 1234,
       bundleSessionId: input.bundleSessionId ?? null,
+      depth: input.depth ?? "standard",
     }),
   });
 }
@@ -247,7 +253,7 @@ export async function uploadPqcBundle(file: File) {
   );
 }
 
-export function pqcReportUrl(scanId: string, format: "json" | "csv" | "cbom" | "pdf") {
+export function pqcReportUrl(scanId: string, format: "json" | "csv" | "cbom" | "pdf" | "bundle") {
   const params = new URLSearchParams({
     format,
     api_key: qtanglSandboxApiKey,
@@ -255,6 +261,6 @@ export function pqcReportUrl(scanId: string, format: "json" | "csv" | "cbom" | "
   return `${qtanglApiBaseUrl}/pqc/report/${encodeURIComponent(scanId)}?${params.toString()}`;
 }
 
-export function pqcReportDownloadUrl(scanId: string, format: "json" | "csv" | "cbom" | "pdf") {
+export function pqcReportDownloadUrl(scanId: string, format: "json" | "csv" | "cbom" | "pdf" | "bundle") {
   return pqcReportUrl(scanId, format);
 }

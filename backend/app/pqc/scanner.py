@@ -11,6 +11,7 @@ Fixture path bypasses outbound network: scan_fixture() only.
 """
 from __future__ import annotations
 
+import hashlib
 import json
 import socket
 import ssl
@@ -179,8 +180,80 @@ def _parse_cert_asset(
             "notAfter": not_after.isoformat(),
             "chainLength": negotiated.get("chainLength", 0),
             "publicKeyType": algo,
+            "spkiFingerprint": hashlib.sha256(cert_der).hexdigest()[:16],
+            "tlsHygiene": _tls_hygiene_findings(negotiated, validity_days),
         },
     )
+
+
+def _tls_hygiene_findings(negotiated: dict[str, Any], validity_days: int | None) -> list[str]:
+    findings: list[str] = []
+    version = str(negotiated.get("version", ""))
+    if version in {"TLSv1", "TLSv1.1", "SSLv3"}:
+        findings.append(f"Legacy protocol negotiated: {version}")
+    cipher = str(negotiated.get("cipher", "") or "")
+    if cipher and any(weak in cipher.upper() for weak in ("RC4", "DES", "NULL", "EXPORT", "MD5")):
+        findings.append(f"Weak/legacy cipher: {cipher}")
+    if validity_days is not None and validity_days <= 30:
+        findings.append(f"Certificate expires within {validity_days} days")
+    chain = int(negotiated.get("chainLength", 0) or 0)
+    if chain > 4:
+        findings.append(f"Deep certificate chain ({chain} certificates)")
+    return findings
+
+
+def _probe_hsts(host: str, port: int) -> list[str]:
+    findings: list[str] = []
+    try:
+        url = f"https://{host}:{port}/" if port != 443 else f"https://{host}/"
+        request = urllib.request.Request(url, method="HEAD")
+        with urllib.request.urlopen(request, timeout=scan_timeout_seconds()) as response:
+            headers = {k.lower(): v for k, v in response.headers.items()}
+            if "strict-transport-security" not in headers:
+                findings.append("Missing HSTS (Strict-Transport-Security) header")
+    except Exception:
+        pass
+    return findings
+
+
+def scan_db_tls(host: str, port: int = 5432) -> ScanResult:
+    """Probe Postgres/MySQL TLS (best-effort)."""
+    return scan_tls_endpoint(host, port)
+
+
+def scan_vpn_banner(host: str, port: int = 500) -> ScanResult:
+    safe_host = assert_scannable(host, port=port)
+    try:
+        with socket.create_connection((safe_host, port), timeout=scan_timeout_seconds()) as sock:
+            banner = sock.recv(256).decode("utf-8", errors="replace")
+        if "IKE" in banner.upper() or "VPN" in banner.upper() or banner.strip():
+            vuln = classify_algorithm("IKE/ESP", context="tls")
+            return (
+                CryptoAsset(
+                    id=_asset_id("vpn", safe_host, port),
+                    kind="vpn",
+                    host=safe_host,
+                    port=port,
+                    label=f"VPN/IKE endpoint ({port})",
+                    algorithm="IKE/ESP",
+                    key_size=None,
+                    validity_days=None,
+                    san_domains=[],
+                    negotiated_cipher=None,
+                    negotiated_group=None,
+                    tls_version=None,
+                    vulnerability=vuln,
+                    hndl_verdict="",
+                    already_too_late=False,
+                    mosca_priority=0,
+                    standards_refs=[],
+                    metadata={"banner": banner.strip()[:120]},
+                ),
+                None,
+            )
+    except Exception as exc:
+        return None, _coverage_entry(safe_host, port, "vpn", status="unreachable", detail=str(exc))
+    return None, None
 
 
 def scan_tls_endpoint(host: str, port: int) -> ScanResult:
@@ -205,16 +278,20 @@ def scan_tls_endpoint(host: str, port: int) -> ScanResult:
                 status="error",
                 detail="No peer certificate returned",
             )
-        return (
-            _parse_cert_asset(
-                host=safe_host,
-                port=port,
-                cert_der=cert_der,
-                negotiated=negotiated,
-                label=f"TLS {safe_host}:{port}",
-            ),
-            None,
+        asset = _parse_cert_asset(
+            host=safe_host,
+            port=port,
+            cert_der=cert_der,
+            negotiated=negotiated,
+            label=f"TLS {safe_host}:{port}",
         )
+        hygiene = list(asset.metadata.get("tlsHygiene", []))
+        hygiene.extend(_probe_hsts(safe_host, port))
+        meta = dict(asset.metadata)
+        meta["tlsHygiene"] = hygiene
+        from dataclasses import replace
+
+        return replace(asset, metadata=meta), None
     except Exception as exc:
         return None, _coverage_entry(
             safe_host,
@@ -439,6 +516,10 @@ def _build_live_endpoints(
     for mail_port in (25, 587, 993):
         if mail_port in declared:
             endpoints.append((domain, mail_port, "email"))
+    if 5432 in declared:
+        endpoints.append((domain, 5432, "db_tls"))
+    if 500 in declared:
+        endpoints.append((domain, 500, "vpn"))
     return endpoints
 
 
@@ -487,6 +568,10 @@ def scan_live(
             asset, cov = scan_ssh_banner(host, port)
         elif kind == "email":
             asset, cov = scan_email_starttls(host, port)
+        elif kind == "vpn":
+            asset, cov = scan_vpn_banner(host, port)
+        elif kind == "db_tls":
+            asset, cov = scan_db_tls(host, port)
         else:
             asset, cov = scan_tls_endpoint(host, port)
         if asset:
@@ -536,3 +621,35 @@ def scan_fixture(
                 payload["vulnerability"] = row["vulnerability"]
             assets.append(_build_asset(payload))
     return assets, timeline, []
+
+
+def flag_key_reuse(assets: list[CryptoAsset]) -> list[CryptoAsset]:
+    """Detect same SPKI fingerprint across hosts — high-signal finding."""
+    from dataclasses import replace
+
+    by_fp: dict[str, list[CryptoAsset]] = {}
+    for asset in assets:
+        fp = asset.metadata.get("spkiFingerprint")
+        if not fp:
+            continue
+        by_fp.setdefault(str(fp), []).append(asset)
+
+    updated: list[CryptoAsset] = []
+    for asset in assets:
+        fp = asset.metadata.get("spkiFingerprint")
+        if fp and len(by_fp.get(str(fp), [])) > 1:
+            peers = [a.host for a in by_fp[str(fp)] if a.id != asset.id]
+            meta = dict(asset.metadata)
+            meta["keyReusePeers"] = peers
+            finding = f"Same public key fingerprint as: {', '.join(peers[:5])}"
+            meta["keyReuseFinding"] = finding
+            updated.append(
+                replace(
+                    asset,
+                    metadata=meta,
+                    hndl_verdict=asset.hndl_verdict or finding,
+                )
+            )
+        else:
+            updated.append(asset)
+    return updated

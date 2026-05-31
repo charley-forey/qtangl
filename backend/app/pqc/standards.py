@@ -3,6 +3,7 @@ from __future__ import annotations
 from typing import Any
 
 from app.pqc.models import CryptoAsset, RemediationItem
+from app.pqc.references import framework_url
 
 
 def default_standards() -> dict[str, Any]:
@@ -112,6 +113,7 @@ def standards_summary_for_report(
                 "assetCount": count,
                 "deadline": deadline,
                 "summary": framework.get("summary", ""),
+                "url": framework_url(ref_id) or framework.get("url", ""),
             }
         )
     return summary

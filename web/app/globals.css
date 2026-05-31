@@ -394,3 +394,23 @@ a:not([class]) {
     font-size: 1.125rem;
   }
 }
+
+/* PQC demo + report print layout */
+@media print {
+  .pqc-print-hide,
+  nav,
+  footer,
+  button:not(.pqc-print-show) {
+    display: none !important;
+  }
+
+  .pqc-print-area {
+    color: #000;
+    background: #fff;
+  }
+
+  .pqc-print-area * {
+    border-color: #ccc !important;
+    box-shadow: none !important;
+  }
+}

@@ -1,0 +1,37 @@
+# E1 — First PQC pilot launch checklist
+
+Use this after deploying the hardened backend + web (Horizon 0).
+
+## Deploy verification
+
+- [ ] Railway: `DATABASE_URL`, `QTANGL_API_KEY`, `QTANGL_RATE_LIMIT_PER_MINUTE=300`, `QTANGL_ADMIN_API_KEY`
+- [ ] Railway: `QTANGL_PUBLIC_URL=https://www.qtangl.com`, stable `QTANGL_REPORT_SIGNING_KEY_B64`
+- [ ] Vercel: `NEXT_PUBLIC_QTANGL_API_BASE_URL` + matching `NEXT_PUBLIC_QTANGL_SANDBOX_API_KEY`
+- [ ] Run: `QTANGL_API_BASE=https://... QTANGL_API_KEY=... python backend/scripts/production_smoke.py`
+- [ ] Demo: fixture scan → PDF → `/verify?scanId=…` on https://www.qtangl.com/demo/pqc
+- [ ] Revoke any leaked tenant keys via `DELETE /admin/keys/{id}`
+
+## Outbound (week 1)
+
+- [ ] Send 10 emails using [outreach/cold_email.md](./outreach/cold_email.md) — log in [outreach/crm-log.md](./outreach/crm-log.md)
+- [ ] Target: regional banks, CMMC contractors, healthcare payers (see scenarios)
+
+## Demos (week 1–2)
+
+- [ ] Complete demo #1: fixture scan + CBOM/PDF + verify QR + Monitor diff story (two scans)
+- [ ] Complete demo #2: live scan on authorized domain OR cloud JSON upload
+- [ ] Record Loom per [script.md](./script.md) (E3-002)
+
+## Close
+
+- [ ] Customize [roadmap/templates/pqc-pilot-sow.md](../../roadmap/templates/pqc-pilot-sow.md)
+- [ ] Provision tenant: `POST /admin/tenants` + `POST /admin/tenants/{id}/keys`
+- [ ] Deliver baseline PDF + evidence ZIP within one session
+- [ ] **Sign first pilot SOW (E1-004 — first revenue)**
+
+## Monitor tier upsell talking points
+
+- Scheduled re-scans with **scan diff** (new quantum-vulnerable assets, readiness delta)
+- Regression **alerts** via email + Slack webhook
+- Remediation board + Jira/ServiceNow ticket push
+- Signed verify link for auditors

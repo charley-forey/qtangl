@@ -4,14 +4,19 @@ import { useCallback, useEffect, useState } from "react";
 
 import Card from "@/components/ui/Card";
 import Eyebrow from "@/components/ui/Eyebrow";
+import RemediationBoard from "@/components/pqc/RemediationBoard";
+import ReadinessTrend from "@/components/pqc/ReadinessTrend";
 import {
   fetchTenantJson,
   getStoredTenantApiKey,
+  postTenantJson,
   setStoredTenantApiKey,
   tenantReportUrl,
+  type ScheduledScan,
   type TenantScanSummary,
 } from "@/lib/tenant-api";
 import { qtanglApiBaseUrl } from "@/lib/api";
+import { formatUtcDateTime } from "@/lib/format";
 
 type TenantMe = {
   tenantId: string;
@@ -25,6 +30,24 @@ export default function DashboardClient() {
   const [scans, setScans] = useState<TenantScanSummary[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [emailForScan, setEmailForScan] = useState("");
+  const [scheduleTarget, setScheduleTarget] = useState("");
+  const [scheduleEmail, setScheduleEmail] = useState("");
+  const [actionMessage, setActionMessage] = useState<string | null>(null);
+  const [expandedScanId, setExpandedScanId] = useState<string | null>(null);
+  const [remediationScan, setRemediationScan] = useState<{
+    scanId: string;
+    items: Array<{ id: string; title: string; severity: string }>;
+    statuses: Array<{ remediationId: string; status: string }>;
+  } | null>(null);
+  const [portfolioRollup, setPortfolioRollup] = useState<{
+    overallReadiness: number;
+    byBusinessUnit: Record<string, number>;
+  } | null>(null);
+  const [shareUrl, setShareUrl] = useState<string | null>(null);
+  const [schedules, setSchedules] = useState<ScheduledScan[]>([]);
+  const [portfolioTargetInput, setPortfolioTargetInput] = useState("");
+  const [portfolioUnit, setPortfolioUnit] = useState("default");
 
   useEffect(() => {
     const stored = getStoredTenantApiKey();
@@ -47,6 +70,25 @@ export default function DashboardClient() {
       setScans(scansPayload.scans);
       setSavedKey(key);
       setStoredTenantApiKey(key);
+      if (mePayload.persistenceEnabled) {
+        try {
+          const portfolio = await fetchTenantJson<{
+            rollup: { overallReadiness: number; byBusinessUnit: Record<string, number> };
+          }>("/tenant/portfolio", key);
+          setPortfolioRollup(portfolio.rollup);
+        } catch {
+          setPortfolioRollup(null);
+        }
+        try {
+          const schedulesPayload = await fetchTenantJson<{ schedules: ScheduledScan[] }>(
+            "/tenant/schedules",
+            key
+          );
+          setSchedules(schedulesPayload.schedules);
+        } catch {
+          setSchedules([]);
+        }
+      }
     } catch (loadError) {
       setMe(null);
       setScans([]);
@@ -91,6 +133,76 @@ export default function DashboardClient() {
         </Card>
       ) : null}
 
+      {me && portfolioRollup ? (
+        <Card tone="panel">
+          <Eyebrow>Portfolio readiness</Eyebrow>
+          <p className="mt-2 text-2xl font-semibold text-white">{portfolioRollup.overallReadiness}</p>
+          <dl className="mt-4 grid gap-2 sm:grid-cols-2">
+            {Object.entries(portfolioRollup.byBusinessUnit).map(([unit, score]) => (
+              <div key={unit}>
+                <dt className="text-xs uppercase tracking-[0.14em] text-[var(--color-gray-500)]">{unit}</dt>
+                <dd className="text-sm text-white">{score}</dd>
+              </div>
+            ))}
+          </dl>
+          {savedKey ? (
+            <div className="mt-4 flex flex-col gap-2 sm:flex-row">
+              <input
+                type="text"
+                value={portfolioTargetInput}
+                onChange={(event) => setPortfolioTargetInput(event.target.value)}
+                placeholder="Add target domain"
+                className="w-full rounded-full border border-[var(--border-strong)] bg-black px-4 py-2 text-sm text-white"
+              />
+              <input
+                type="text"
+                value={portfolioUnit}
+                onChange={(event) => setPortfolioUnit(event.target.value)}
+                placeholder="Business unit"
+                className="w-full rounded-full border border-[var(--border-strong)] bg-black px-4 py-2 text-sm text-white sm:max-w-xs"
+              />
+              <button
+                type="button"
+                className="rounded-full border border-[var(--border-strong)] bg-white px-5 py-2 text-sm font-medium text-black"
+                onClick={async () => {
+                  if (!portfolioTargetInput) return;
+                  try {
+                    await postTenantJson("/tenant/portfolio", savedKey, {
+                      target: portfolioTargetInput,
+                      businessUnit: portfolioUnit || "default",
+                    });
+                    setActionMessage("Portfolio target added.");
+                    await loadDashboard(savedKey);
+                  } catch (portfolioError) {
+                    setActionMessage(
+                      portfolioError instanceof Error ? portfolioError.message : "Portfolio update failed."
+                    );
+                  }
+                }}
+              >
+                Add target
+              </button>
+            </div>
+          ) : null}
+        </Card>
+      ) : null}
+
+      {scans.filter((scan) => scan.readinessScore != null).length >= 2 ? (
+        <Card tone="panel">
+          <Eyebrow>Readiness trend</Eyebrow>
+          <ReadinessTrend
+            points={scans
+              .filter((scan) => scan.readinessScore != null)
+              .map((scan) => ({
+                scanId: scan.scanId,
+                createdAt: scan.createdAt,
+                readinessScore: scan.readinessScore ?? 0,
+                readinessBand: scan.readinessBand ?? undefined,
+              }))}
+          />
+        </Card>
+      ) : null}
+
       {me ? (
         <Card tone="panel">
           <Eyebrow>Tenant overview</Eyebrow>
@@ -110,6 +222,21 @@ export default function DashboardClient() {
       {savedKey && scans.length > 0 ? (
         <Card tone="panel">
           <Eyebrow>Recent PQC scans</Eyebrow>
+          <div className="mt-3 flex flex-col gap-2 sm:flex-row sm:items-center">
+            <input
+              type="email"
+              value={emailForScan}
+              onChange={(event) => setEmailForScan(event.target.value)}
+              placeholder="Email me reports…"
+              className="w-full rounded-full border border-[var(--border-strong)] bg-black px-4 py-2 text-sm text-white sm:max-w-xs"
+            />
+          </div>
+          {actionMessage ? <p className="mt-2 text-xs text-[var(--color-gray-400)]">{actionMessage}</p> : null}
+          {shareUrl ? (
+            <p className="mt-2 break-all text-xs text-[var(--color-gray-400)]">
+              Share link: <span className="font-mono text-white">{shareUrl}</span>
+            </p>
+          ) : null}
           <div className="mt-4 overflow-x-auto">
             <table className="min-w-full text-left text-sm">
               <thead className="text-xs uppercase tracking-[0.14em] text-[var(--color-gray-500)]">
@@ -118,7 +245,8 @@ export default function DashboardClient() {
                   <th className="pb-3 pr-4">Status</th>
                   <th className="pb-3 pr-4">Scenario</th>
                   <th className="pb-3 pr-4">Created</th>
-                  <th className="pb-3">Report</th>
+                  <th className="pb-3 pr-4">Readiness</th>
+                  <th className="pb-3">Actions</th>
                 </tr>
               </thead>
               <tbody className="text-[var(--color-gray-300)]">
@@ -127,17 +255,106 @@ export default function DashboardClient() {
                     <td className="py-3 pr-4 font-mono text-xs text-white">{scan.scanId}</td>
                     <td className="py-3 pr-4">{scan.status}</td>
                     <td className="py-3 pr-4">{scan.scenarioId ?? "—"}</td>
-                    <td className="py-3 pr-4">{new Date(scan.createdAt).toLocaleString()}</td>
+                    <td className="py-3 pr-4">{formatUtcDateTime(scan.createdAt)}</td>
+                    <td className="py-3 pr-4">
+                      {scan.readinessScore != null ? (
+                        <span>
+                          {scan.readinessScore}
+                          {scan.readinessBand ? ` · ${scan.readinessBand}` : ""}
+                        </span>
+                      ) : (
+                        "—"
+                      )}
+                    </td>
                     <td className="py-3">
                       {scan.status === "done" ? (
-                        <a
-                          href={tenantReportUrl(scan.scanId, savedKey, "pdf")}
-                          className="text-white underline underline-offset-4"
-                          target="_blank"
-                          rel="noreferrer"
-                        >
-                          PDF
-                        </a>
+                        <div className="flex flex-wrap gap-2">
+                          <a
+                            href={tenantReportUrl(scan.scanId, savedKey, "pdf")}
+                            className="text-white underline underline-offset-4"
+                            target="_blank"
+                            rel="noreferrer"
+                          >
+                            PDF
+                          </a>
+                          <a
+                            href={tenantReportUrl(scan.scanId, savedKey, "bundle")}
+                            className="text-white underline underline-offset-4"
+                            target="_blank"
+                            rel="noreferrer"
+                          >
+                            ZIP
+                          </a>
+                          <button
+                            type="button"
+                            className="text-white underline underline-offset-4"
+                            onClick={async () => {
+                              try {
+                                const detail = await fetchTenantJson<{
+                                  remediationBacklog: Array<{ id: string; title: string; severity: string }>;
+                                  remediationStatus: Array<{ remediationId: string; status: string }>;
+                                }>(`/tenant/scans/${scan.scanId}`, savedKey);
+                                setExpandedScanId(scan.scanId);
+                                setRemediationScan({
+                                  scanId: scan.scanId,
+                                  items: detail.remediationBacklog ?? [],
+                                  statuses: detail.remediationStatus ?? [],
+                                });
+                              } catch (loadError) {
+                                setActionMessage(
+                                  loadError instanceof Error ? loadError.message : "Failed to load remediation."
+                                );
+                              }
+                            }}
+                          >
+                            Remediation
+                          </button>
+                          <button
+                            type="button"
+                            className="text-white underline underline-offset-4"
+                            onClick={async () => {
+                              try {
+                                const payload = await postTenantJson<{ url: string }>(
+                                  `/tenant/scans/${scan.scanId}/share`,
+                                  savedKey,
+                                  { expiresHours: 168 }
+                                );
+                                setShareUrl(payload.url);
+                                setActionMessage("Share link created (7 days).");
+                              } catch (shareError) {
+                                setActionMessage(
+                                  shareError instanceof Error ? shareError.message : "Share link failed."
+                                );
+                              }
+                            }}
+                          >
+                            Share
+                          </button>
+                          <button
+                            type="button"
+                            className="text-white underline underline-offset-4"
+                            onClick={async () => {
+                              if (!emailForScan) {
+                                setActionMessage("Enter an email above to send reports.");
+                                return;
+                              }
+                              try {
+                                await postTenantJson(
+                                  `/tenant/scans/${scan.scanId}/email`,
+                                  savedKey,
+                                  { email: emailForScan }
+                                );
+                                setActionMessage(`Email queued for ${scan.scanId}.`);
+                              } catch (sendError) {
+                                setActionMessage(
+                                  sendError instanceof Error ? sendError.message : "Email failed."
+                                );
+                              }
+                            }}
+                          >
+                            Email
+                          </button>
+                        </div>
                       ) : (
                         "—"
                       )}
@@ -147,10 +364,99 @@ export default function DashboardClient() {
               </tbody>
             </table>
           </div>
+          {expandedScanId && remediationScan ? (
+            <div className="mt-6 border-t border-[var(--border-subtle)] pt-4">
+              <Eyebrow>Remediation — {expandedScanId}</Eyebrow>
+              <RemediationBoard
+                apiKey={savedKey}
+                scanId={remediationScan.scanId}
+                items={remediationScan.items}
+                initialStatuses={remediationScan.statuses}
+              />
+            </div>
+          ) : null}
         </Card>
       ) : savedKey && !loading ? (
         <Card tone="ghost">
           <p className="text-sm text-[var(--color-gray-400)]">No scans yet for this tenant.</p>
+        </Card>
+      ) : null}
+
+      {savedKey && me?.persistenceEnabled ? (
+        <Card tone="panel">
+          <Eyebrow>Scheduled monitoring</Eyebrow>
+          <p className="mt-2 text-sm text-[var(--color-gray-400)]">
+            Requires Redis worker with QTANGL_ENABLE_SCHEDULER. Gracefully unavailable on single-process deploys.
+          </p>
+          <div className="mt-4 flex flex-col gap-3 sm:flex-row">
+            <input
+              type="text"
+              value={scheduleTarget}
+              onChange={(event) => setScheduleTarget(event.target.value)}
+              placeholder="Target domain (optional)"
+              className="w-full rounded-full border border-[var(--border-strong)] bg-black px-4 py-2 text-sm text-white"
+            />
+            <input
+              type="email"
+              value={scheduleEmail}
+              onChange={(event) => setScheduleEmail(event.target.value)}
+              placeholder="Notify email"
+              className="w-full rounded-full border border-[var(--border-strong)] bg-black px-4 py-2 text-sm text-white sm:max-w-xs"
+            />
+            <button
+              type="button"
+              className="rounded-full border border-[var(--border-strong)] bg-white px-5 py-2 text-sm font-medium text-black"
+              onClick={async () => {
+                try {
+                  await postTenantJson("/tenant/schedules", savedKey, {
+                    scenarioId: "bank-tls-inventory",
+                    target: scheduleTarget || null,
+                    cadenceHours: 168,
+                    notifyEmail: scheduleEmail || null,
+                  });
+                  setActionMessage("Schedule created.");
+                } catch (scheduleError) {
+                  setActionMessage(
+                    scheduleError instanceof Error ? scheduleError.message : "Schedule failed."
+                  );
+                }
+              }}
+            >
+              Create weekly schedule
+            </button>
+          </div>
+          {schedules.length > 0 ? (
+            <ul className="mt-4 space-y-2 text-sm text-[var(--color-gray-300)]">
+              {schedules.map((schedule) => (
+                <li
+                  key={schedule.id}
+                  className="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-[var(--border-subtle)] p-3"
+                >
+                  <div>
+                    <p className="font-mono text-xs text-white">{schedule.id}</p>
+                    <p className="text-xs text-[var(--color-gray-500)]">
+                      {schedule.scenarioId} · every {schedule.cadenceHours}h · next{" "}
+                      {schedule.nextRunAt ? formatUtcDateTime(schedule.nextRunAt) : "—"}
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    className="text-xs text-red-300 underline"
+                    onClick={async () => {
+                      if (!savedKey) return;
+                      await fetchTenantJson(`/tenant/schedules/${schedule.id}`, savedKey, {
+                        method: "DELETE",
+                      });
+                      setSchedules((prev) => prev.filter((row) => row.id !== schedule.id));
+                      setActionMessage("Schedule deleted.");
+                    }}
+                  >
+                    Delete
+                  </button>
+                </li>
+              ))}
+            </ul>
+          ) : null}
         </Card>
       ) : null}
     </div>

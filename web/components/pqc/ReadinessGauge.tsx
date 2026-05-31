@@ -1,5 +1,7 @@
 "use client";
 
+import InfoTip from "./InfoTip";
+
 export default function ReadinessGauge({ score }: { score: number }) {
   const clamped = Math.max(0, Math.min(100, score));
   const angle = (clamped / 100) * 270;
@@ -15,7 +17,9 @@ export default function ReadinessGauge({ score }: { score: number }) {
           {clamped}
         </div>
       </div>
-      <p className="mt-2 text-xs text-[var(--color-gray-400)]">Q-Day readiness (endpoint-scoped)</p>
+      <p className="mt-2 flex items-center gap-1 text-xs text-[var(--color-gray-400)]">
+        <InfoTip termId="readiness_score" label="Q-Day readiness (endpoint-scoped)" />
+      </p>
     </div>
   );
 }

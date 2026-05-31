@@ -114,6 +114,7 @@ def update_job_timeline(scan_id: str, timeline: list[TimelineEvent], *, tenant_i
 
 
 def complete_job(scan_id: str, bundle: ScanBundle, *, tenant_id: str = "sandbox") -> None:
+    bundle = _prepare_bundle_for_storage(scan_id, bundle, tenant_id=tenant_id)
     if persistence_enabled():
         payload = json.dumps(serialize_bundle(bundle))
         with db_session() as session:
@@ -170,6 +171,7 @@ def fail_job(
 
 
 def save_scan_bundle(scan_id: str, bundle: ScanBundle, *, tenant_id: str = "sandbox") -> None:
+    bundle = _prepare_bundle_for_storage(scan_id, bundle, tenant_id=tenant_id)
     if persistence_enabled():
         payload = json.dumps(serialize_bundle(bundle))
         with db_session() as session:
@@ -205,6 +207,27 @@ def save_scan_bundle(scan_id: str, bundle: ScanBundle, *, tenant_id: str = "sand
         )
 
 
+def find_previous_scan(
+    *,
+    tenant_id: str,
+    target_domain: str,
+    scenario_id: str,
+    exclude_scan_id: str,
+) -> str | None:
+    """Most recent completed scan for same target + scenario."""
+    for summary in list_jobs_for_tenant(tenant_id=tenant_id, limit=30):
+        scan_id = summary["scanId"]
+        if scan_id == exclude_scan_id or summary.get("status") != "done":
+            continue
+        bundle = load_scan_bundle(scan_id, tenant_id=tenant_id)
+        if not bundle:
+            continue
+        report = bundle.get("report") or {}
+        if report.get("targetDomain") == target_domain and report.get("scenarioId") == scenario_id:
+            return scan_id
+    return None
+
+
 def load_scan_bundle(scan_id: str, *, tenant_id: str = "sandbox") -> dict[str, Any] | None:
     if persistence_enabled():
         with db_session() as session:
@@ -219,6 +242,22 @@ def load_scan_bundle(scan_id: str, *, tenant_id: str = "sandbox") -> dict[str, A
         if job.bundle:
             return serialize_bundle(job.bundle)
         return None
+
+
+def delete_job(scan_id: str, *, tenant_id: str = "sandbox") -> bool:
+    if persistence_enabled():
+        with db_session() as session:
+            row = session.get(ScanJobRow, scan_id)
+            if row is None or row.tenant_id != tenant_id:
+                return False
+            session.delete(row)
+            return True
+    with _job_lock:
+        job = _memory_jobs.get(scan_id)
+        if job is None or job.tenant_id != tenant_id:
+            return False
+        del _memory_jobs[scan_id]
+        return True
 
 
 def run_job_async(
@@ -261,6 +300,12 @@ def run_job_async(
     threading.Thread(target=_worker, daemon=True).start()
 
 
+def _prepare_bundle_for_storage(scan_id: str, bundle: ScanBundle, tenant_id: str) -> ScanBundle:
+    from app.monitoring.post_complete import enrich_completed_scan
+
+    return enrich_completed_scan(scan_id, bundle, tenant_id=tenant_id)
+
+
 def _row_to_job(row: ScanJobRow) -> ScanJob:
     timeline_raw = json.loads(row.timeline_json or "[]")
     timeline = [
@@ -291,11 +336,23 @@ def _row_to_job(row: ScanJobRow) -> ScanJob:
 
 def _job_summary(row: ScanJobRow) -> dict[str, Any]:
     payload = json.loads(row.payload_json) if row.payload_json else {}
+    readiness_score = None
+    readiness_band = None
+    target_domain = None
+    if row.bundle_json:
+        bundle = json.loads(row.bundle_json)
+        report = bundle.get("report") or {}
+        readiness_score = report.get("readinessScore")
+        readiness_band = report.get("readinessBand")
+        target_domain = report.get("targetDomain")
     return {
         "scanId": row.id,
         "status": row.status,
         "error": row.error,
         "scenarioId": payload.get("scenarioId"),
+        "targetDomain": target_domain,
+        "readinessScore": readiness_score,
+        "readinessBand": readiness_band,
         "createdAt": row.created_at.isoformat(),
         "updatedAt": row.updated_at.isoformat(),
     }

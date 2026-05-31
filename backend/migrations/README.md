@@ -22,6 +22,23 @@ export QTANGL_DB_AUTO_MIGRATE=true
 uvicorn app.main:app --reload
 ```
 
+## Environment variables (PQC product)
+
+| Variable | Purpose |
+|----------|---------|
+| `QTANGL_PUBLIC_URL` | Base URL for email links and share links (default `https://www.qtangl.com`) |
+| `QTANGL_REPORT_SIGNING_KEY_B64` | Stable Ed25519 signing key (base64) |
+| `QTANGL_ENABLE_SCHEDULER` | `true` to enqueue due scheduled scans in the worker loop |
+| `QTANGL_SCHEDULER_INTERVAL_SEC` | Worker scheduler tick interval (default 60) |
+| `QTANGL_WORKER_MAX_RETRIES` | Scan job retries with backoff (default 3) |
+| `QTANGL_ALERT_READINESS_DROP` | Alert when readiness drops by N points (default 5) |
+| `QTANGL_SMTP_HOST` / `PORT` / `USER` / `PASSWORD` / `FROM` | Report email delivery (no-op when unset) |
+| `QTANGL_STRIPE_SECRET_KEY` / `QTANGL_STRIPE_MONITOR_PRICE_ID` | Self-serve Monitor checkout |
+| `QTANGL_SIGNUP_PROVISION_SECRET` | Manual Monitor tenant provision via `/public/monitor-provision` |
+| `QTANGL_PQC_ENABLE_LIVE_SCAN` | Enable live outbound scanning |
+
+New tables (`scheduled_scans`, `remediation_status`, `share_links`, `audit_log`) are created automatically via `create_all()` when persistence is enabled.
+
 ## Health checks
 
 - `GET /health` — liveness

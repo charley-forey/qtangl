@@ -4,6 +4,8 @@ import { trackEvent } from "@/lib/analytics";
 import { pqcReportDownloadUrl } from "@/lib/pqc";
 import type { PqcScanResponse } from "@/lib/pqc";
 
+import ReferencesPanel from "./ReferencesPanel";
+
 export default function ReportDrawer({
   open,
   onClose,
@@ -48,6 +50,9 @@ export default function ReportDrawer({
             <li key={note}>• {note}</li>
           ))}
         </ul>
+        <div className="mt-6">
+          <ReferencesPanel />
+        </div>
       </div>
     </div>
   );

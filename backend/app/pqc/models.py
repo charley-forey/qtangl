@@ -11,6 +11,10 @@ AssetKind = Literal[
     "code_signing",
     "document_signing",
     "discovery",
+    "vpn",
+    "db_tls",
+    "mtls",
+    "smime",
     "error",
 ]
 VulnStatus = Literal["broken", "at-risk", "safe", "unknown"]
@@ -188,6 +192,16 @@ class MigrationReport:
     scan_coverage: list[dict[str, Any]] = field(default_factory=list)
     readiness_band: str = ""
     readiness_summary: str = ""
+    scoreboard_summary: dict[str, Any] = field(default_factory=dict)
+    signature: dict[str, Any] | None = None
+    executive_summary: dict[str, Any] = field(default_factory=dict)
+    remediation_completion_pct: float | None = None
+    asset_explanations: dict[str, str] = field(default_factory=dict)
+    crypto_agility_score: float | None = None
+    migration_roadmap: list[dict[str, Any]] = field(default_factory=list)
+    scan_depth: str = "standard"
+    scan_diff: dict[str, Any] | None = None
+    previous_scan_id: str | None = None
 
 
 @dataclass(slots=True)

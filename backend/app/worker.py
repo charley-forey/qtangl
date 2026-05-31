@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+import os
 import time
 from typing import Any
 
@@ -17,6 +18,26 @@ logger = logging.getLogger(__name__)
 
 
 def execute_pqc_scan_job(scan_id: str, payload: dict[str, Any], *, tenant_id: str) -> None:
+    max_retries = int(os.environ.get("QTANGL_WORKER_MAX_RETRIES", "3"))
+    last_error: Exception | None = None
+
+    for attempt in range(max_retries):
+        try:
+            _run_scan_once(scan_id, payload, tenant_id=tenant_id)
+            return
+        except ScanSafetyError as exc:
+            fail_job(scan_id, str(exc), tenant_id=tenant_id)
+            return
+        except Exception as exc:
+            last_error = exc
+            logger.warning("PQC job %s attempt %d failed: %s", scan_id, attempt + 1, exc)
+            if attempt < max_retries - 1:
+                time.sleep(min(30, 2**attempt))
+
+    fail_job(scan_id, str(last_error or "Unknown worker error"), tenant_id=tenant_id)
+
+
+def _run_scan_once(scan_id: str, payload: dict[str, Any], *, tenant_id: str) -> None:
     dataset = load_dataset()
     uploaded_rows = None
     bundle_session_id = payload.get("bundleSessionId")
@@ -41,13 +62,25 @@ def execute_pqc_scan_job(scan_id: str, payload: dict[str, Any], *, tenant_id: st
             uploaded_rows=uploaded_rows,
             seed=int(payload.get("seed", 1234)),
             on_progress=on_progress,
+            depth=str(payload.get("depth", "standard")),
         )
         complete_job(scan_id, bundle, tenant_id=tenant_id)
-    except ScanSafetyError as exc:
-        fail_job(scan_id, str(exc), tenant_id=tenant_id)
-    except Exception as exc:
-        logger.exception("PQC worker job failed for %s", scan_id)
-        fail_job(scan_id, str(exc), tenant_id=tenant_id)
+        notify_email = payload.get("notifyEmail")
+        if notify_email:
+            from app.notifications.email import send_report_email
+
+            base = os.environ.get("QTANGL_PUBLIC_URL", "https://www.qtangl.com")
+            send_report_email(
+                to_email=str(notify_email),
+                scan_id=scan_id,
+                target_domain=bundle.report.target_domain,
+                report_url=f"{base}/dashboard",
+                readiness_band=bundle.report.readiness_band,
+            )
+    except ScanSafetyError:
+        raise
+    except Exception:
+        raise
 
 
 def process_next_job() -> bool:
@@ -88,9 +121,19 @@ def main() -> None:
         logger.warning("QTANGL_INLINE_JOBS is enabled; worker will still consume queued jobs.")
 
     logger.info("Qtangl worker started.")
+    last_scheduler_tick = 0.0
+    scheduler_interval = float(os.environ.get("QTANGL_SCHEDULER_INTERVAL_SEC", "60"))
     while True:
         try:
             processed = process_next_job()
+            now = time.time()
+            if now - last_scheduler_tick >= scheduler_interval:
+                from app.monitoring.service import enqueue_due_scans
+
+                enqueued = enqueue_due_scans()
+                if enqueued:
+                    logger.info("Enqueued %d scheduled scan(s)", enqueued)
+                last_scheduler_tick = now
             if not processed:
                 time.sleep(0.25)
         except KeyboardInterrupt:
