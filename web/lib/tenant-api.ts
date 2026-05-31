@@ -69,7 +69,11 @@ export async function postTenantJson<T>(
   });
 }
 
-export function tenantReportUrl(scanId: string, apiKey: string, format: "pdf" | "json" | "bundle" = "pdf"): string {
+export function tenantReportUrl(
+  scanId: string,
+  apiKey: string,
+  format: "pdf" | "json" | "bundle" | "executive" = "pdf"
+): string {
   const url = new URL(`${qtanglApiBaseUrl}/tenant/scans/${scanId}/report`);
   url.searchParams.set("format", format);
   url.searchParams.set("api_key", apiKey);

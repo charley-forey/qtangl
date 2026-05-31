@@ -34,10 +34,22 @@ uvicorn app.main:app --reload
 | `QTANGL_ALERT_READINESS_DROP` | Alert when readiness drops by N points (default 5) |
 | `QTANGL_SMTP_HOST` / `PORT` / `USER` / `PASSWORD` / `FROM` | Report email delivery (no-op when unset) |
 | `QTANGL_STRIPE_SECRET_KEY` / `QTANGL_STRIPE_MONITOR_PRICE_ID` | Self-serve Monitor checkout |
+| `QTANGL_STRIPE_WEBHOOK_SECRET` | Stripe webhook signature verification |
 | `QTANGL_SIGNUP_PROVISION_SECRET` | Manual Monitor tenant provision via `/public/monitor-provision` |
 | `QTANGL_PQC_ENABLE_LIVE_SCAN` | Enable live outbound scanning |
 
 New tables (`scheduled_scans`, `remediation_status`, `share_links`, `audit_log`) are created automatically via `create_all()` when persistence is enabled.
+
+## Railway worker service
+
+Deploy a **second Railway service** from the same repo with root `backend/`:
+
+1. Add Redis plugin; link `REDIS_URL` to both API and worker services.
+2. Worker service: set custom config file to `railway.worker.json` or start command `python -m app.worker`.
+3. API service env: `QTANGL_INLINE_JOBS=false`
+4. Worker service env: `QTANGL_ENABLE_SCHEDULER=true`, `QTANGL_INLINE_JOBS=false`, same `DATABASE_URL` as API.
+
+See [docs/RAILWAY_DEPLOY.md](../docs/RAILWAY_DEPLOY.md) for the full checklist.
 
 ## Health checks
 

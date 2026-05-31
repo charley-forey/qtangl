@@ -2,10 +2,16 @@ from __future__ import annotations
 
 import os
 
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, HTTPException, Request, status
 from pydantic import BaseModel, Field
 
-from app.billing.service import create_monitor_checkout_session, provision_monitor_tenant, stripe_configured
+from app.billing.service import (
+    create_monitor_checkout_session,
+    handle_checkout_completed,
+    provision_monitor_tenant,
+    stripe_configured,
+    verify_stripe_webhook,
+)
 
 router = APIRouter(prefix="/public", tags=["public"])
 
@@ -55,3 +61,19 @@ def public_monitor_provision(body: MonitorProvisionRequest) -> dict:
     except Exception as exc:
         raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail=str(exc)) from exc
     return {"status": "success", **result}
+
+
+@router.post("/stripe-webhook")
+async def stripe_webhook(request: Request) -> dict:
+    """Stripe checkout.session.completed → auto-provision Monitor tenant."""
+    payload = await request.body()
+    signature = request.headers.get("Stripe-Signature", "")
+    event = verify_stripe_webhook(payload, signature)
+    if event is None:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid webhook signature.")
+    if event.get("type") == "checkout.session.completed":
+        session = event.get("data", {}).get("object", {})
+        if session.get("metadata", {}).get("product") == "pqc-monitor":
+            result = handle_checkout_completed(session)
+            return {"status": "success", **result}
+    return {"status": "ignored", "type": event.get("type")}

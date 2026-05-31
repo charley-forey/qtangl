@@ -304,7 +304,15 @@ def download_report(
             media_type="application/zip",
             headers={"Content-Disposition": f'attachment; filename="{scan_id}-evidence.zip"'},
         )
-    raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail="format must be json|csv|cbom|pdf|bundle")
+    if fmt == "executive":
+        from app.pqc.report import report_to_executive
+
+        body = report_to_executive(report)
+        return Response(content=__import__("json").dumps(body), media_type="application/json")
+    raise HTTPException(
+        status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+        detail="format must be json|csv|cbom|pdf|bundle|executive",
+    )
 
 
 @router.get("/verify/{scan_id}", responses={404: {"model": ErrorResponse}})

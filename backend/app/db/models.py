@@ -72,6 +72,7 @@ class ScheduledScan(Base):
     next_run_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), index=True)
     last_run_scan_id: Mapped[str | None] = mapped_column(String(80), nullable=True)
     notify_email: Mapped[str | None] = mapped_column(String(255), nullable=True)
+    import_payload_json: Mapped[str | None] = mapped_column(Text, nullable=True)
     active: Mapped[bool] = mapped_column(default=True)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_utcnow)
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_utcnow, onupdate=_utcnow)

@@ -80,3 +80,34 @@ def provision_monitor_tenant(*, email: str, company: str) -> dict[str, Any]:
         body_extra=f"Your tenant API key: {key['apiKey']} — store securely.",
     )
     return {"tenantId": tenant["tenantId"], "apiKey": key["apiKey"]}
+
+
+def verify_stripe_webhook(payload: bytes, signature_header: str) -> dict[str, Any] | None:
+    """Verify Stripe webhook signature and return parsed event."""
+    secret = os.environ.get("QTANGL_STRIPE_WEBHOOK_SECRET")
+    if not secret:
+        return None
+    try:
+        import hmac
+        import hashlib
+
+        parts = dict(item.split("=", 1) for item in signature_header.split(",") if "=" in item)
+        timestamp = parts.get("t", "")
+        sig = parts.get("v1", "")
+        signed = f"{timestamp}.{payload.decode('utf-8')}".encode()
+        expected = hmac.new(secret.encode(), signed, hashlib.sha256).hexdigest()
+        if not hmac.compare_digest(expected, sig):
+            return None
+        return json.loads(payload.decode("utf-8"))
+    except Exception:
+        return None
+
+
+def handle_checkout_completed(session: dict[str, Any]) -> dict[str, Any]:
+    """Provision tenant when checkout.session.completed fires."""
+    metadata = session.get("metadata") or {}
+    company = metadata.get("company") or session.get("customer_details", {}).get("name") or "Monitor"
+    email = session.get("customer_email") or session.get("customer_details", {}).get("email") or ""
+    if not email:
+        return {"provisioned": False, "reason": "missing_email"}
+    return {"provisioned": True, **provision_monitor_tenant(email=email, company=company)}

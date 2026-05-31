@@ -11,7 +11,7 @@ from app.auth import AuthContext, require_auth, require_auth_readonly, require_a
 from app.db.config import persistence_enabled, redis_enabled
 from app.monitoring.service import create_schedule, delete_schedule, list_schedules, scheduler_enabled
 from app.notifications.email import send_report_email
-from app.pqc.report import report_to_json, report_to_pdf
+from app.pqc.report import report_to_json, report_to_pdf, report_to_executive
 from app.pqc.report_bundle import build_evidence_bundle
 from app.remediation.service import completion_pct, list_remediation_status, upsert_remediation_status
 from app.pqc.serialize import serialize_bundle
@@ -26,6 +26,7 @@ class ScheduleCreateRequest(BaseModel):
     target: str | None = None
     cadenceHours: int = Field(default=168, ge=1, le=8760)
     notifyEmail: str | None = None
+    cloudImportPayload: str | None = None
 
 
 class RemediationUpdateRequest(BaseModel):
@@ -110,7 +111,7 @@ def tenant_delete_scan(scan_id: str, auth: AuthContext = Depends(require_auth)) 
 def tenant_scan_report(
     scan_id: str,
     auth: AuthContext = Depends(require_auth_readonly),
-    format: str = Query(default="pdf", pattern="^(pdf|json|bundle)$"),
+    format: str = Query(default="pdf", pattern="^(pdf|json|bundle|executive)$"),
 ) -> Response:
     bundle_dict = load_scan_bundle(scan_id, tenant_id=auth.tenant_id)
     if bundle_dict is None:
@@ -121,6 +122,8 @@ def tenant_scan_report(
     bundle = bundle_from_api_dict(bundle_dict)
     if format == "json":
         return JSONResponse(content=report_to_json(bundle.report))
+    if format == "executive":
+        return JSONResponse(content=report_to_executive(bundle.report))
     if format == "bundle":
         content = build_evidence_bundle(bundle.report)
         return Response(
@@ -226,6 +229,7 @@ def tenant_create_schedule(
         target=body.target,
         cadence_hours=body.cadenceHours,
         notify_email=body.notifyEmail,
+        import_payload_json=body.cloudImportPayload,
     )
     log_action(tenant_id=auth.tenant_id, action="schedule.create", resource_id=schedule["id"])
     return {"status": "success", "schedule": schedule}
@@ -382,3 +386,51 @@ def tenant_push_remediation(
         scan_id=scan_id,
     )
     return {"status": "success", **result}
+
+
+@router.post("/cloud-import")
+def tenant_cloud_import(
+    body: dict[str, Any],
+    auth: AuthContext = Depends(require_auth_write),
+) -> dict:
+    """Parse cloud PKI JSON/CSV and return normalized inventory rows for upload-bundle scans."""
+    from app.pqc.cloud_import import parse_cloud_inventory
+
+    payload = body.get("payload")
+    filename = str(body.get("filename", "import.json"))
+    if not payload or not isinstance(payload, str):
+        raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail="payload required.")
+    try:
+        rows = parse_cloud_inventory(payload, filename=filename)
+    except Exception as exc:
+        raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail=str(exc)) from exc
+    return {"status": "success", "count": len(rows), "rows": rows}
+
+
+@router.get("/export")
+def tenant_export_data(auth: AuthContext = Depends(require_auth_readonly)) -> dict:
+    """G4: export tenant scan metadata and remediation status."""
+    from app.remediation.service import remediation_velocity
+
+    scans = list_jobs_for_tenant(tenant_id=auth.tenant_id, limit=500)
+    velocity = remediation_velocity(tenant_id=auth.tenant_id)
+    return {
+        "status": "success",
+        "tenantId": auth.tenant_id,
+        "exportedAt": __import__("datetime").datetime.now(__import__("datetime").timezone.utc).isoformat(),
+        "scans": scans,
+        "remediationVelocity": velocity,
+    }
+
+
+@router.delete("/data")
+def tenant_delete_data(auth: AuthContext = Depends(require_auth_write)) -> dict:
+    """G4: delete all scan jobs for tenant (retention / offboarding)."""
+    if not persistence_enabled():
+        raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail="Persistence required.")
+    deleted = 0
+    for scan in list_jobs_for_tenant(tenant_id=auth.tenant_id, limit=500):
+        if delete_job(scan["scanId"], tenant_id=auth.tenant_id):
+            deleted += 1
+    log_action(tenant_id=auth.tenant_id, action="tenant.data.delete", detail={"deletedScans": deleted})
+    return {"status": "success", "deletedScans": deleted}

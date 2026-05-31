@@ -6,6 +6,8 @@ import Card from "@/components/ui/Card";
 import Eyebrow from "@/components/ui/Eyebrow";
 import RemediationBoard from "@/components/pqc/RemediationBoard";
 import ReadinessTrend from "@/components/pqc/ReadinessTrend";
+import ScanDiffPanel, { type ScanDiff } from "@/components/pqc/ScanDiffPanel";
+import IntegrationSettings from "@/components/dashboard/IntegrationSettings";
 import {
   fetchTenantJson,
   getStoredTenantApiKey,
@@ -48,6 +50,13 @@ export default function DashboardClient() {
   const [schedules, setSchedules] = useState<ScheduledScan[]>([]);
   const [portfolioTargetInput, setPortfolioTargetInput] = useState("");
   const [portfolioUnit, setPortfolioUnit] = useState("default");
+  const [scanDiff, setScanDiff] = useState<ScanDiff | null>(null);
+  const [jiraConfigured, setJiraConfigured] = useState(false);
+  const [remediationVelocity, setRemediationVelocity] = useState<{
+    closedCount: number;
+    openCount: number;
+    completionRatePct: number | null;
+  } | null>(null);
 
   useEffect(() => {
     const stored = getStoredTenantApiKey();
@@ -87,6 +96,23 @@ export default function DashboardClient() {
           setSchedules(schedulesPayload.schedules);
         } catch {
           setSchedules([]);
+        }
+        try {
+          const exportPayload = await fetchTenantJson<{
+            remediationVelocity: { closedCount: number; openCount: number; completionRatePct: number | null };
+          }>("/tenant/export", key);
+          setRemediationVelocity(exportPayload.remediationVelocity);
+        } catch {
+          setRemediationVelocity(null);
+        }
+        try {
+          const intPayload = await fetchTenantJson<{ integrations: Array<{ provider: string; configured: boolean }> }>(
+            "/tenant/integrations",
+            key
+          );
+          setJiraConfigured(intPayload.integrations.some((row) => row.provider === "jira" && row.configured));
+        } catch {
+          setJiraConfigured(false);
         }
       }
     } catch (loadError) {
@@ -130,6 +156,27 @@ export default function DashboardClient() {
       {error ? (
         <Card tone="ghost" className="border border-red-500/40 text-red-200">
           {error}
+        </Card>
+      ) : null}
+
+      {me && remediationVelocity ? (
+        <Card tone="panel">
+          <Eyebrow>Remediation velocity</Eyebrow>
+          <p className="mt-2 text-sm text-[var(--color-gray-300)]">
+            {remediationVelocity.closedCount} closed · {remediationVelocity.openCount} open
+            {remediationVelocity.completionRatePct != null
+              ? ` · ${remediationVelocity.completionRatePct}% completion rate`
+              : ""}
+          </p>
+        </Card>
+      ) : null}
+
+      {scanDiff ? (
+        <Card tone="panel">
+          <Eyebrow>Changes since last scan</Eyebrow>
+          <div className="mt-4">
+            <ScanDiffPanel diff={scanDiff} />
+          </div>
         </Card>
       ) : null}
 
@@ -293,8 +340,10 @@ export default function DashboardClient() {
                                 const detail = await fetchTenantJson<{
                                   remediationBacklog: Array<{ id: string; title: string; severity: string }>;
                                   remediationStatus: Array<{ remediationId: string; status: string }>;
+                                  report?: { scanDiff?: ScanDiff };
                                 }>(`/tenant/scans/${scan.scanId}`, savedKey);
                                 setExpandedScanId(scan.scanId);
+                                setScanDiff(detail.report?.scanDiff ?? null);
                                 setRemediationScan({
                                   scanId: scan.scanId,
                                   items: detail.remediationBacklog ?? [],
@@ -308,6 +357,30 @@ export default function DashboardClient() {
                             }}
                           >
                             Remediation
+                          </button>
+                          <button
+                            type="button"
+                            className="text-white underline underline-offset-4"
+                            onClick={async () => {
+                              try {
+                                const detail = await fetchTenantJson<{ report?: { scanDiff?: ScanDiff } }>(
+                                  `/tenant/scans/${scan.scanId}`,
+                                  savedKey
+                                );
+                                setScanDiff(detail.report?.scanDiff ?? null);
+                                setActionMessage(
+                                  detail.report?.scanDiff
+                                    ? `Diff loaded for ${scan.scanId}.`
+                                    : "No prior scan to compare."
+                                );
+                              } catch (loadError) {
+                                setActionMessage(
+                                  loadError instanceof Error ? loadError.message : "Failed to load diff."
+                                );
+                              }
+                            }}
+                          >
+                            Diff
                           </button>
                           <button
                             type="button"
@@ -372,6 +445,7 @@ export default function DashboardClient() {
                 scanId={remediationScan.scanId}
                 items={remediationScan.items}
                 initialStatuses={remediationScan.statuses}
+                jiraConfigured={jiraConfigured}
               />
             </div>
           ) : null}
@@ -379,6 +453,15 @@ export default function DashboardClient() {
       ) : savedKey && !loading ? (
         <Card tone="ghost">
           <p className="text-sm text-[var(--color-gray-400)]">No scans yet for this tenant.</p>
+        </Card>
+      ) : null}
+
+      {savedKey && me?.persistenceEnabled ? (
+        <Card tone="panel">
+          <Eyebrow>Integrations</Eyebrow>
+          <div className="mt-4">
+            <IntegrationSettings apiKey={savedKey} onMessage={setActionMessage} />
+          </div>
         </Card>
       ) : null}
 

@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import PageShell from "@/components/layout/PageShell";
@@ -9,6 +10,8 @@ type SharePayload = {
   scanId: string;
   readinessBand?: string;
   targetDomain?: string;
+  verifyUrl?: string;
+  scanDiff?: { summary?: string; readinessDelta?: number };
   report?: { readinessScore?: number };
 };
 
@@ -29,6 +32,10 @@ export default async function SharedReportPage({ params }: { params: Promise<{ t
     notFound();
   }
 
+  const pdfUrl = `${qtanglApiBaseUrl}/r/${encodeURIComponent(token)}/report?format=pdf`;
+  const bundleUrl = `${qtanglApiBaseUrl}/r/${encodeURIComponent(token)}/report?format=bundle`;
+  const verifyHref = data.verifyUrl ?? `/verify?scanId=${encodeURIComponent(data.scanId)}`;
+
   return (
     <PageShell>
       <Section>
@@ -45,9 +52,26 @@ export default async function SharedReportPage({ params }: { params: Promise<{ t
               <dt className="text-[var(--color-gray-500)]">Readiness score</dt>
               <dd>{data.report?.readinessScore ?? "—"}</dd>
             </div>
+            {data.scanDiff?.summary ? (
+              <div>
+                <dt className="text-[var(--color-gray-500)]">Changes since last scan</dt>
+                <dd className="text-[var(--color-gray-300)]">{data.scanDiff.summary}</dd>
+              </div>
+            ) : null}
           </dl>
+          <div className="flex flex-wrap gap-4 text-sm">
+            <a href={pdfUrl} className="text-white underline underline-offset-4" target="_blank" rel="noreferrer">
+              Download PDF
+            </a>
+            <a href={bundleUrl} className="text-white underline underline-offset-4" target="_blank" rel="noreferrer">
+              Evidence ZIP
+            </a>
+            <Link href={verifyHref} className="text-white underline underline-offset-4">
+              Verify signature
+            </Link>
+          </div>
           <p className="text-xs text-[var(--color-gray-500)]">
-            This link is read-only and may expire. Contact the issuing tenant for the full PDF audit pack.
+            This link is read-only and may expire. Contact the issuing tenant for full dashboard access.
           </p>
         </div>
       </Section>

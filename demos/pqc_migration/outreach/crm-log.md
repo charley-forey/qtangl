@@ -15,5 +15,7 @@ Track E1 outreach. Copy rows into your CRM (HubSpot, Notion, etc.).
 | 9 | | | | | | | |
 | 10 | | | | | | | |
 
-**Template:** [cold_email.md](../cold_email.md)  
-**Pilot SOW:** [roadmap/templates/pqc-pilot-sow.md](../../roadmap/templates/pqc-pilot-sow.md)
+**Template:** [cold_email.md](./cold_email.md)  
+**Week 1 playbook:** [e1-week1-playbook.md](../e1-week1-playbook.md)  
+**Pilot SOW:** [roadmap/templates/pqc-pilot-sow.md](../../roadmap/templates/pqc-pilot-sow.md)  
+**Case study (post-pilot):** [case-study-template.md](../case-study-template.md)

@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 """Production smoke test: scan → PDF → verify. Usage:
   QTANGL_API_BASE=https://your-railway.app QTANGL_API_KEY=... python scripts/production_smoke.py
+  python scripts/production_smoke.py --health-only
 """
 from __future__ import annotations
 
+import argparse
 import json
 import os
 import sys
@@ -12,6 +14,14 @@ import urllib.request
 
 
 def main() -> int:
+    parser = argparse.ArgumentParser(description="Qtangl production smoke test")
+    parser.add_argument(
+        "--health-only",
+        action="store_true",
+        help="Only check /health and /health/ready (no API key required)",
+    )
+    args = parser.parse_args()
+
     base = os.environ.get("QTANGL_API_BASE", "http://127.0.0.1:8000").rstrip("/")
     api_key = os.environ.get("QTANGL_API_KEY", "qtangl-demo-key")
     headers = {
@@ -21,8 +31,22 @@ def main() -> int:
 
     print(f"Smoke test against {base}")
 
+    health = _get(f"{base}/health")
+    print(f"  health: {health.get('status')}")
+
     ready = _get(f"{base}/health/ready")
-    print(f"  health/ready: {ready.get('status')} persistence={ready.get('persistenceEnabled')}")
+    print(
+        f"  health/ready: {ready.get('status')} "
+        f"persistence={ready.get('persistenceEnabled')} "
+        f"redis={ready.get('redisEnabled')} "
+        f"workerQueue={ready.get('workerQueueEnabled')}"
+    )
+    if ready.get("status") != "ready":
+        print("WARN: API not fully ready (check DATABASE_URL / REDIS_URL)")
+
+    if args.health_only:
+        print("OK: health checks passed")
+        return 0
 
     scan = _post(
         f"{base}/pqc/scan",
@@ -73,6 +97,11 @@ def _post(url: str, headers: dict[str, str], body: dict) -> dict:
             return json.loads(response.read().decode("utf-8"))
     except urllib.error.HTTPError as exc:
         detail = exc.read().decode("utf-8")
+        if exc.code == 401:
+            raise SystemExit(
+                f"HTTP 401: Invalid API key. Set QTANGL_API_KEY to your Railway QTANGL_API_KEY "
+                f"or a tenant key issued via POST /admin/tenants/{{id}}/keys.\n{detail}"
+            ) from exc
         raise SystemExit(f"HTTP {exc.code}: {detail}") from exc
 
 

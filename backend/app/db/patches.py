@@ -7,6 +7,7 @@ from sqlalchemy.engine import Engine
 # create_all() only creates missing tables; it does not add columns.
 _COLUMN_PATCHES: list[tuple[str, str, str]] = [
     ("api_keys", "role", "VARCHAR(16) NOT NULL DEFAULT 'admin'"),
+    ("scheduled_scans", "import_payload_json", "TEXT"),
 ]
 
 

@@ -84,6 +84,23 @@ def completion_pct(statuses: list[dict[str, Any]], total_items: int) -> float:
     return round(100.0 * done / total_items, 1)
 
 
+def remediation_velocity(*, tenant_id: str) -> dict[str, Any]:
+    """Remediation throughput summary for dashboard."""
+    if not persistence_enabled():
+        return {"closedCount": 0, "openCount": 0, "completionRatePct": None}
+    with db_session() as session:
+        rows = (
+            session.query(RemediationStatusRow)
+            .filter(RemediationStatusRow.tenant_id == tenant_id)
+            .all()
+        )
+    closed = sum(1 for row in rows if row.status in {"done", "accepted_risk"})
+    open_count = sum(1 for row in rows if row.status in {"open", "in_progress"})
+    total = len(rows)
+    rate = round(100.0 * closed / total, 1) if total else None
+    return {"closedCount": closed, "openCount": open_count, "completionRatePct": rate}
+
+
 def _row_to_dict(row: RemediationStatusRow) -> dict[str, Any]:
     return {
         "id": row.id,

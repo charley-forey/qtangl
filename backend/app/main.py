@@ -9,7 +9,7 @@ from starlette.requests import Request
 from app.auth import get_rate_limit
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, Response
 
 from app.api.public import router as public_router
 from app.api.admin import router as admin_router
@@ -133,7 +133,38 @@ def shared_report_readonly(token: str) -> dict:
             "coverageConfidence": bundle.report.coverage_confidence,
         },
         "executiveSummary": report_json.get("executiveSummary", {}),
+        "scanDiff": report_json.get("scanDiff"),
+        "verifyUrl": f"/verify?scanId={resolved['scanId']}",
     }
+
+
+@app.get("/r/{token}/report", tags=["sharing"])
+def shared_report_download(token: str, format: str = "pdf") -> Response:
+    """Download PDF or evidence bundle via expiring share token (no API key)."""
+    from fastapi import HTTPException, status
+    from app.pqc.bundle_codec import bundle_from_api_dict
+    from app.pqc.report import report_to_pdf
+    from app.pqc.report_bundle import build_evidence_bundle
+    from app.sharing.service import resolve_share_token
+    from app.store.scan_jobs import load_scan_bundle
+
+    resolved = resolve_share_token(token)
+    if resolved is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Share link invalid or expired.")
+    payload = load_scan_bundle(resolved["scanId"], tenant_id=resolved["tenantId"])
+    if payload is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Scan not found.")
+    bundle = bundle_from_api_dict(payload)
+    fmt = format.lower()
+    if fmt == "bundle":
+        content = build_evidence_bundle(bundle.report)
+        return Response(
+            content=content,
+            media_type="application/zip",
+            headers={"Content-Disposition": f'attachment; filename="{resolved["scanId"]}-evidence.zip"'},
+        )
+    pdf_bytes = report_to_pdf(bundle.report)
+    return Response(content=pdf_bytes, media_type="application/pdf")
 
 
 @app.exception_handler(Exception)

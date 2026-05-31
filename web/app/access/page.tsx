@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 
 import AccessRequestForm from "@/components/marketing/AccessRequestForm";
 import AccessTimeline from "@/components/marketing/AccessTimeline";
+import MonitorSignupForm from "@/components/marketing/MonitorSignupForm";
 import PageHero from "@/components/layout/PageHero";
 import PageShell from "@/components/layout/PageShell";
 import Section from "@/components/layout/Section";
@@ -57,6 +58,7 @@ export default async function AccessPage({ searchParams }: AccessPageProps) {
           </div>
           <div className="order-1 xl:order-2">
             <AccessRequestForm source={source} defaultInterest={interest} />
+            <MonitorSignupForm />
           </div>
         </div>
       </Section>

@@ -271,6 +271,34 @@ def _cbom_asset_properties(
     return properties
 
 
+def report_to_executive(report: MigrationReport) -> dict[str, Any]:
+    """One-page board summary for executive export."""
+    critical = sum(1 for item in report.remediation_backlog if item.severity in {"critical", "high"})
+    top = report.remediation_backlog[:5]
+    diff = report.scan_diff or {}
+    return {
+        "scanId": report.scan_id,
+        "targetDomain": report.target_domain,
+        "generatedAt": report.generated_at,
+        "readinessScore": report.readiness_score,
+        "readinessBand": report.readiness_band,
+        "coverageConfidence": report.coverage_confidence,
+        "cryptoAgilityScore": report.crypto_agility_score,
+        "moscaSummary": report.mosca.summary,
+        "moscaInequalityHolds": report.mosca.inequality_holds,
+        "criticalFindings": critical,
+        "topPriorities": [
+            {"title": item.title, "severity": item.severity, "deadline": item.deadline}
+            for item in top
+        ],
+        "compliancePackTitle": report.compliance_pack.get("title"),
+        "scanDiffSummary": diff.get("summary"),
+        "readinessDelta": diff.get("readinessDelta"),
+        "executiveSummary": report.executive_summary,
+        "verifyUrl": f"/verify?scanId={report.scan_id}",
+    }
+
+
 def report_to_pdf(report: MigrationReport) -> bytes:
     if not _HAS_REPORTLAB:
         payload = json.dumps(report_to_json(report), indent=2).encode("utf-8")
