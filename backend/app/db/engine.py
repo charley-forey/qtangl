@@ -10,6 +10,7 @@ from sqlalchemy.orm import Session, sessionmaker
 from app.db.base import Base
 from app.db.config import auto_migrate, database_url
 from app.db.models import ApiKey, Tenant
+from app.db.patches import apply_schema_patches
 
 _engine: Engine | None = None
 _SessionLocal: sessionmaker[Session] | None = None
@@ -49,6 +50,7 @@ def init_db() -> None:
     engine = get_engine()
     if engine is None or not auto_migrate():
         return
+    apply_schema_patches(engine)
     Base.metadata.create_all(engine)
     _seed_default_tenant(engine)
 
