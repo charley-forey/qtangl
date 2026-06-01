@@ -13,6 +13,7 @@ from app.db.models import TenantIntegration as IntegrationRow
 logger = logging.getLogger(__name__)
 
 SUPPORTED_PROVIDERS = {"jira", "servicenow", "linear"}
+_SYNC_STATE: dict[str, dict[str, dict[str, Any]]] = {}
 
 
 def list_integrations(*, tenant_id: str) -> list[dict[str, Any]]:
@@ -77,12 +78,34 @@ def push_remediation_ticket(
         config = json.loads(row.config_json or "{}")
 
     if provider == "jira":
-        return _push_jira(config, item, scan_id)
-    if provider == "servicenow":
-        return _push_servicenow(config, item, scan_id)
-    if provider == "linear":
-        return _push_linear(config, item, scan_id)
-    return {"sent": False, "reason": "unsupported_provider"}
+        result = _push_jira(config, item, scan_id)
+    elif provider == "servicenow":
+        result = _push_servicenow(config, item, scan_id)
+    elif provider == "linear":
+        result = _push_linear(config, item, scan_id)
+    else:
+        return {"sent": False, "reason": "unsupported_provider"}
+    if result.get("sent"):
+        _SYNC_STATE.setdefault(tenant_id, {})[str(item.get("id"))] = {
+            "provider": provider,
+            "externalRef": result.get("externalRef", ""),
+            "status": "pushed",
+            "scanId": scan_id,
+        }
+    return result
+
+
+def pull_ticket_status(
+    *,
+    tenant_id: str,
+    remediation_id: str,
+) -> dict[str, Any]:
+    tenant = _SYNC_STATE.get(tenant_id, {})
+    row = tenant.get(remediation_id)
+    if not row:
+        return {"found": False, "reason": "not_synced"}
+    # Placeholder sync pull until provider-specific GET APIs are wired.
+    return {"found": True, **row, "lastPulled": __import__("datetime").datetime.utcnow().isoformat()}
 
 
 def _push_jira(config: dict[str, Any], item: dict[str, Any], scan_id: str) -> dict[str, Any]:
@@ -108,11 +131,13 @@ def _push_jira(config: dict[str, Any], item: dict[str, Any], scan_id: str) -> di
     import base64
 
     auth = base64.b64encode(f"{email}:{token}".encode()).decode()
-    return _http_json(
+    result = _http_json(
         f"{base}/rest/api/3/issue",
         payload,
         headers={"Authorization": f"Basic {auth}"},
     )
+    result["externalRef"] = f"{project}-{item.get('id', '')}"
+    return result
 
 
 def _push_servicenow(config: dict[str, Any], item: dict[str, Any], scan_id: str) -> dict[str, Any]:
@@ -130,11 +155,13 @@ def _push_servicenow(config: dict[str, Any], item: dict[str, Any], scan_id: str)
     import base64
 
     auth = base64.b64encode(f"{user}:{password}".encode()).decode()
-    return _http_json(
+    result = _http_json(
         f"{instance}/api/now/table/{table}",
         payload,
         headers={"Authorization": f"Basic {auth}"},
     )
+    result["externalRef"] = f"{table}:{item.get('id', '')}"
+    return result
 
 
 def _push_linear(config: dict[str, Any], item: dict[str, Any], scan_id: str) -> dict[str, Any]:
@@ -157,11 +184,13 @@ def _push_linear(config: dict[str, Any], item: dict[str, Any], scan_id: str) -> 
             "description": f"Scan {scan_id}: {item.get('summary', '')}",
         },
     }
-    return _http_json(
+    result = _http_json(
         "https://api.linear.app/graphql",
         payload,
         headers={"Authorization": api_key},
     )
+    result["externalRef"] = f"linear:{item.get('id', '')}"
+    return result
 
 
 def _http_json(url: str, payload: dict[str, Any], headers: dict[str, str]) -> dict[str, Any]:

@@ -2,11 +2,13 @@ from __future__ import annotations
 
 import json
 import logging
+import uuid
 import urllib.error
 import urllib.request
 from typing import Any
 
 logger = logging.getLogger(__name__)
+_WEBHOOK_DLQ: dict[str, list[dict[str, Any]]] = {}
 
 
 def deliver_webhook(url: str, payload: dict[str, Any]) -> dict[str, Any]:
@@ -22,9 +24,11 @@ def deliver_webhook(url: str, payload: dict[str, Any]) -> dict[str, Any]:
             return {"sent": True, "statusCode": response.status}
     except urllib.error.HTTPError as exc:
         logger.warning("Webhook HTTP error %s: %s", url, exc.code)
+        _record_dead_letter(url=url, payload=payload, reason=f"HTTP {exc.code}")
         return {"sent": False, "reason": f"HTTP {exc.code}"}
     except Exception as exc:
         logger.warning("Webhook failed %s: %s", url, exc)
+        _record_dead_letter(url=url, payload=payload, reason=str(exc))
         return {"sent": False, "reason": str(exc)}
 
 
@@ -66,6 +70,7 @@ def notify_scan_complete_v2(
     alerts: list[dict[str, Any]] | None = None,
     verify_url: str = "",
     evidence_zip_url: str = "",
+    tenant_id: str = "sandbox",
     event: str = "scan.complete",
 ) -> list[dict[str, Any]]:
     """Structured webhook payload v2 for SIEM/GRC integrations."""
@@ -77,6 +82,7 @@ def notify_scan_complete_v2(
     payload = {
         "schemaVersion": "qtangl-webhook-v2",
         "event": event,
+        "tenantId": tenant_id,
         "scanId": scan_id,
         "targetDomain": target_domain,
         "readinessScore": readiness_score,
@@ -89,3 +95,35 @@ def notify_scan_complete_v2(
         "message": (alerts[0]["message"] if alerts else f"Scan complete for {target_domain}"),
     }
     return [deliver_webhook(url, payload) for url in webhooks]
+
+
+def list_dead_letters(*, tenant_id: str) -> list[dict[str, Any]]:
+    return list(_WEBHOOK_DLQ.get(tenant_id, []))
+
+
+def replay_dead_letter(*, tenant_id: str, dead_letter_id: str) -> dict[str, Any]:
+    rows = _WEBHOOK_DLQ.get(tenant_id, [])
+    row = next((item for item in rows if item.get("id") == dead_letter_id), None)
+    if row is None:
+        return {"sent": False, "reason": "dead_letter_not_found"}
+    result = deliver_webhook(row.get("url", ""), row.get("payload") or {})
+    if result.get("sent"):
+        _WEBHOOK_DLQ[tenant_id] = [item for item in rows if item.get("id") != dead_letter_id]
+    return result
+
+
+def _record_dead_letter(*, url: str, payload: dict[str, Any], reason: str) -> None:
+    tenant_id = str(payload.get("tenantId", "sandbox"))
+    bucket = _WEBHOOK_DLQ.setdefault(tenant_id, [])
+    bucket.append(
+        {
+            "id": f"dlq-{uuid.uuid4().hex[:12]}",
+            "url": url,
+            "payload": payload,
+            "reason": reason,
+            "event": payload.get("event"),
+            "scanId": payload.get("scanId"),
+        }
+    )
+    if len(bucket) > 200:
+        del bucket[:-200]

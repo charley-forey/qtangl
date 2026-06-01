@@ -81,6 +81,49 @@ def readiness_rollup(*, tenant_id: str) -> dict[str, Any]:
     return {"overallReadiness": overall, "byBusinessUnit": rollup, "scans": entries[:25]}
 
 
+def portfolio_command_center(*, tenant_id: str) -> dict[str, Any]:
+    rollup = readiness_rollup(tenant_id=tenant_id)
+    scans = rollup.get("scans", [])
+    high_risk = [
+        row
+        for row in scans
+        if str(row.get("readinessBand", "")).lower() in {"lagging", "critical", "high-risk"}
+    ]
+    return {
+        "overallReadiness": rollup.get("overallReadiness", 0),
+        "businessUnits": rollup.get("byBusinessUnit", {}),
+        "highRiskTargets": high_risk[:10],
+        "recommendedActions": [
+            "Prioritize high-risk units for 30-day remediation sprint.",
+            "Require signed board pack for each target below readiness threshold.",
+            "Track weekly readiness delta and unresolved critical findings.",
+        ],
+    }
+
+
+def weekly_executive_digest(*, tenant_id: str) -> dict[str, Any]:
+    rollup = readiness_rollup(tenant_id=tenant_id)
+    scans = rollup.get("scans", [])
+    if not scans:
+        return {
+            "headline": "No scans completed this week.",
+            "wins": [],
+            "risks": ["Portfolio has no recent evidence."],
+            "nextWeekFocus": ["Run baseline scans for all portfolio targets."],
+        }
+    improving = sorted(scans, key=lambda row: float(row.get("readinessScore", 0)), reverse=True)[:3]
+    lagging = sorted(scans, key=lambda row: float(row.get("readinessScore", 0)))[:3]
+    return {
+        "headline": f"Portfolio readiness is {rollup.get('overallReadiness', 0)}.",
+        "wins": [f"{row.get('target')}: score {row.get('readinessScore')}" for row in improving],
+        "risks": [f"{row.get('target')}: score {row.get('readinessScore')}" for row in lagging],
+        "nextWeekFocus": [
+            "Close top critical remediation items in lagging targets.",
+            "Validate board/auditor report provenance on all executive exports.",
+        ],
+    }
+
+
 def _row_to_dict(row: PortfolioTargetRow) -> dict[str, Any]:
     return {
         "id": row.id,

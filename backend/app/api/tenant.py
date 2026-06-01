@@ -13,7 +13,13 @@ from app.monitoring.service import create_schedule, delete_schedule, list_schedu
 from app.notifications.email import send_report_email
 from app.pqc.report import report_to_json, report_to_pdf, report_to_executive
 from app.pqc.report_bundle import build_evidence_bundle
-from app.remediation.service import completion_pct, list_remediation_status, upsert_remediation_status
+from app.remediation.service import (
+    completion_pct,
+    list_remediation_status,
+    recommend_remediation_plan,
+    simulate_post_migration_readiness,
+    upsert_remediation_status,
+)
 from app.pqc.serialize import serialize_bundle
 from app.sharing.service import create_share_link, revoke_share_link
 from app.store.scan_jobs import delete_job, get_job, list_jobs_for_tenant, load_scan_bundle
@@ -77,6 +83,7 @@ def tenant_scan_detail(scan_id: str, auth: AuthContext = Depends(require_auth_re
         "status": "success",
         "scanId": job.scan_id,
         "jobStatus": job.status,
+        "lifecycleState": _scan_lifecycle_state(job.status, bool(job.bundle), bool(job.error)),
         "error": job.error,
         "timeline": [
             {
@@ -111,7 +118,7 @@ def tenant_delete_scan(scan_id: str, auth: AuthContext = Depends(require_auth)) 
 def tenant_scan_report(
     scan_id: str,
     auth: AuthContext = Depends(require_auth_readonly),
-    format: str = Query(default="pdf", pattern="^(pdf|json|bundle|executive)$"),
+    format: str = Query(default="pdf", pattern="^(pdf|json|bundle|executive|board|auditor)$"),
 ) -> Response:
     bundle_dict = load_scan_bundle(scan_id, tenant_id=auth.tenant_id)
     if bundle_dict is None:
@@ -124,6 +131,14 @@ def tenant_scan_report(
         return JSONResponse(content=report_to_json(bundle.report))
     if format == "executive":
         return JSONResponse(content=report_to_executive(bundle.report))
+    if format == "board":
+        from app.pqc.report import report_to_board
+
+        return JSONResponse(content=report_to_board(bundle.report))
+    if format == "auditor":
+        from app.pqc.report import report_to_auditor
+
+        return JSONResponse(content=report_to_auditor(bundle.report))
     if format == "bundle":
         content = build_evidence_bundle(bundle.report)
         return Response(
@@ -329,6 +344,21 @@ def tenant_delete_webhook(webhook_id: str, auth: AuthContext = Depends(require_a
     return {"status": "success", "webhookId": webhook_id, "deleted": True}
 
 
+@router.get("/webhooks/dlq")
+def tenant_webhook_dlq(auth: AuthContext = Depends(require_auth_readonly)) -> dict:
+    from app.notifications.webhooks import list_dead_letters
+
+    return {"status": "success", "items": list_dead_letters(tenant_id=auth.tenant_id)}
+
+
+@router.post("/webhooks/replay")
+def tenant_webhook_replay(body: DeadLetterReplayRequest, auth: AuthContext = Depends(require_auth_write)) -> dict:
+    from app.notifications.webhooks import replay_dead_letter
+
+    result = replay_dead_letter(tenant_id=auth.tenant_id, dead_letter_id=body.deadLetterId)
+    return {"status": "success", **result}
+
+
 class IntegrationConfigRequest(BaseModel):
     config: dict[str, Any] = Field(default_factory=dict)
 
@@ -336,6 +366,18 @@ class IntegrationConfigRequest(BaseModel):
 class IntegrationPushRequest(BaseModel):
     remediationId: str
     provider: str = Field(default="jira")
+
+
+class RemediationSimulationRequest(BaseModel):
+    remediationIds: list[str] = Field(default_factory=list)
+
+
+class DeadLetterReplayRequest(BaseModel):
+    deadLetterId: str
+
+
+class IntegrationPullRequest(BaseModel):
+    remediationId: str
 
 
 @router.get("/integrations")
@@ -388,6 +430,47 @@ def tenant_push_remediation(
     return {"status": "success", **result}
 
 
+@router.post("/integrations/pull")
+def tenant_pull_integration_status(
+    body: IntegrationPullRequest,
+    auth: AuthContext = Depends(require_auth_readonly),
+) -> dict:
+    from app.integrations.service import pull_ticket_status
+
+    result = pull_ticket_status(tenant_id=auth.tenant_id, remediation_id=body.remediationId)
+    return {"status": "success", **result}
+
+
+@router.get("/scans/{scan_id}/remediation/intelligence")
+def tenant_remediation_intelligence(
+    scan_id: str,
+    auth: AuthContext = Depends(require_auth_readonly),
+) -> dict:
+    bundle_dict = load_scan_bundle(scan_id, tenant_id=auth.tenant_id)
+    if bundle_dict is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Scan not found.")
+    backlog = bundle_dict.get("remediationBacklog") or []
+    plans = [recommend_remediation_plan(item) for item in backlog[:50]]
+    return {"status": "success", "scanId": scan_id, "plans": plans}
+
+
+@router.post("/scans/{scan_id}/remediation/simulate")
+def tenant_remediation_simulate(
+    scan_id: str,
+    body: RemediationSimulationRequest,
+    auth: AuthContext = Depends(require_auth_readonly),
+) -> dict:
+    bundle_dict = load_scan_bundle(scan_id, tenant_id=auth.tenant_id)
+    if bundle_dict is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Scan not found.")
+    report = bundle_dict.get("report") or {}
+    projection = simulate_post_migration_readiness(
+        report=report,
+        selected_remediation_ids=body.remediationIds,
+    )
+    return {"status": "success", "scanId": scan_id, "projection": projection}
+
+
 @router.post("/cloud-import")
 def tenant_cloud_import(
     body: dict[str, Any],
@@ -423,6 +506,38 @@ def tenant_export_data(auth: AuthContext = Depends(require_auth_readonly)) -> di
     }
 
 
+@router.get("/slo")
+def tenant_slo(auth: AuthContext = Depends(require_auth_readonly)) -> dict:
+    scans = list_jobs_for_tenant(tenant_id=auth.tenant_id, limit=100)
+    terminal = [scan for scan in scans if scan.get("status") in {"done", "error"}]
+    success = sum(1 for scan in terminal if scan.get("status") == "done")
+    reliability = round((100.0 * success / len(terminal)), 1) if terminal else 100.0
+    report_ready = sum(1 for scan in terminal if scan.get("reportAvailable"))
+    report_rate = round((100.0 * report_ready / len(terminal)), 1) if terminal else 100.0
+    return {
+        "status": "success",
+        "tenantId": auth.tenant_id,
+        "metrics": {
+            "scanSuccessRatePct": reliability,
+            "reportAvailabilityPct": report_rate,
+            "sampleSize": len(terminal),
+            "targetSloPct": 99.0,
+        },
+    }
+
+
+@router.get("/portfolio/command-center")
+def tenant_portfolio_command_center(auth: AuthContext = Depends(require_auth_readonly)) -> dict:
+    from app.portfolio.service import portfolio_command_center, weekly_executive_digest
+
+    return {
+        "status": "success",
+        "tenantId": auth.tenant_id,
+        "commandCenter": portfolio_command_center(tenant_id=auth.tenant_id),
+        "weeklyDigest": weekly_executive_digest(tenant_id=auth.tenant_id),
+    }
+
+
 @router.delete("/data")
 def tenant_delete_data(auth: AuthContext = Depends(require_auth_write)) -> dict:
     """G4: delete all scan jobs for tenant (retention / offboarding)."""
@@ -434,3 +549,13 @@ def tenant_delete_data(auth: AuthContext = Depends(require_auth_write)) -> dict:
             deleted += 1
     log_action(tenant_id=auth.tenant_id, action="tenant.data.delete", detail={"deletedScans": deleted})
     return {"status": "success", "deletedScans": deleted}
+
+
+def _scan_lifecycle_state(job_status: str, has_bundle: bool, has_error: bool) -> str:
+    if has_error or job_status == "error":
+        return "failed"
+    if has_bundle and job_status == "done":
+        return "report_ready"
+    if job_status in {"running", "queued"}:
+        return "collecting"
+    return "initialized"

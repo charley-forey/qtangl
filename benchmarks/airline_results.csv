@@ -1,4 +1,4 @@
 run_index,scenario_id,seed,classical_objective,hybrid_objective,objective_gap,classical_wall_time_seconds,hybrid_wall_time_seconds,repair_window_crew,feasible_hybrid_plans,on_time_probability,top_quantum_weight
-1,crew-illegal-dca,2824,0.0074,0.0046,-0.0028,0.0144,6.8000,8,2,0.980,36.0
-2,mx-hold-ord-0612,1409,1.1373,0.2066,-0.9307,0.0140,6.8000,8,2,0.980,45.0
-3,wx-groundstop-dfw,5506,0.0106,0.0077,-0.0029,0.0180,6.8000,8,2,0.980,35.0
+1,crew-illegal-dca,2824,0.0074,0.0046,-0.0028,0.0119,6.8000,8,2,0.980,36.0
+2,mx-hold-ord-0612,1409,1.1373,0.2066,-0.9307,0.0099,6.8000,8,2,0.980,45.0
+3,wx-groundstop-dfw,5506,0.0106,0.0077,-0.0029,0.0146,6.8000,8,2,0.980,35.0

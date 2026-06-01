@@ -57,6 +57,18 @@ export default function DashboardClient() {
     openCount: number;
     completionRatePct: number | null;
   } | null>(null);
+  const [sloMetrics, setSloMetrics] = useState<{
+    scanSuccessRatePct: number;
+    reportAvailabilityPct: number;
+    sampleSize: number;
+    targetSloPct: number;
+  } | null>(null);
+  const [weeklyDigest, setWeeklyDigest] = useState<{
+    headline: string;
+    wins: string[];
+    risks: string[];
+    nextWeekFocus: string[];
+  } | null>(null);
 
   useEffect(() => {
     const stored = getStoredTenantApiKey();
@@ -104,6 +116,27 @@ export default function DashboardClient() {
           setRemediationVelocity(exportPayload.remediationVelocity);
         } catch {
           setRemediationVelocity(null);
+        }
+        try {
+          const sloPayload = await fetchTenantJson<{
+            metrics: {
+              scanSuccessRatePct: number;
+              reportAvailabilityPct: number;
+              sampleSize: number;
+              targetSloPct: number;
+            };
+          }>("/tenant/slo", key);
+          setSloMetrics(sloPayload.metrics);
+        } catch {
+          setSloMetrics(null);
+        }
+        try {
+          const ccPayload = await fetchTenantJson<{
+            weeklyDigest: { headline: string; wins: string[]; risks: string[]; nextWeekFocus: string[] };
+          }>("/tenant/portfolio/command-center", key);
+          setWeeklyDigest(ccPayload.weeklyDigest);
+        } catch {
+          setWeeklyDigest(null);
         }
         try {
           const intPayload = await fetchTenantJson<{ integrations: Array<{ provider: string; configured: boolean }> }>(
@@ -168,6 +201,21 @@ export default function DashboardClient() {
               ? ` · ${remediationVelocity.completionRatePct}% completion rate`
               : ""}
           </p>
+        </Card>
+      ) : null}
+      {me && sloMetrics ? (
+        <Card tone="panel">
+          <Eyebrow>Reliability SLO</Eyebrow>
+          <p className="mt-2 text-sm text-[var(--color-gray-300)]">
+            Scan success {sloMetrics.scanSuccessRatePct}% · Report availability {sloMetrics.reportAvailabilityPct}% ·
+            Target {sloMetrics.targetSloPct}% ({sloMetrics.sampleSize} samples)
+          </p>
+        </Card>
+      ) : null}
+      {weeklyDigest ? (
+        <Card tone="panel">
+          <Eyebrow>Weekly executive digest</Eyebrow>
+          <p className="mt-2 text-sm text-white">{weeklyDigest.headline}</p>
         </Card>
       ) : null}
 
@@ -331,6 +379,22 @@ export default function DashboardClient() {
                             rel="noreferrer"
                           >
                             ZIP
+                          </a>
+                          <a
+                            href={tenantReportUrl(scan.scanId, savedKey, "board")}
+                            className="text-white underline underline-offset-4"
+                            target="_blank"
+                            rel="noreferrer"
+                          >
+                            Board
+                          </a>
+                          <a
+                            href={tenantReportUrl(scan.scanId, savedKey, "auditor")}
+                            className="text-white underline underline-offset-4"
+                            target="_blank"
+                            rel="noreferrer"
+                          >
+                            Auditor
                           </a>
                           <button
                             type="button"

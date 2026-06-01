@@ -144,6 +144,10 @@ export type PqcScanResponse = {
   details: Record<string, unknown>;
   scanCoverage?: ScanCoverageEntry[];
   readinessBand?: string;
+  reportAvailable?: boolean;
+  availableFormats?: string[];
+  missingReason?: string | null;
+  scanOutcome?: "assets_found" | "no_assets_found" | "partial_assets" | "target_unreachable" | "unknown";
 };
 
 export type PqcScanRunningResponse = {
@@ -151,6 +155,10 @@ export type PqcScanRunningResponse = {
   scanId: string;
   summary?: string;
   timeline?: TimelineEvent[];
+  reportAvailable?: boolean;
+  availableFormats?: string[];
+  missingReason?: string | null;
+  scanOutcome?: "running";
 };
 
 export type PqcScanErrorResponse = {
@@ -158,6 +166,18 @@ export type PqcScanErrorResponse = {
   scanId: string;
   message?: string;
   timeline?: TimelineEvent[];
+  reportAvailable?: boolean;
+  availableFormats?: string[];
+  missingReason?: string | null;
+  scanOutcome?: "failed";
+};
+
+export type ReportAvailabilityResponse = {
+  status: "success";
+  scanId: string;
+  reportAvailable: boolean;
+  availableFormats: string[];
+  missingReason?: string | null;
 };
 
 export async function getPqcInventory() {
@@ -211,6 +231,12 @@ export async function pollPqcScan(scanId: string) {
   );
 }
 
+export async function getReportAvailability(scanId: string) {
+  return fetchQtanglJson<ReportAvailabilityResponse>(
+    `/pqc/report/${encodeURIComponent(scanId)}/availability`
+  );
+}
+
 const LIVE_SCAN_POLL_MS = 1500;
 const LIVE_SCAN_MAX_ATTEMPTS = 120;
 
@@ -253,7 +279,10 @@ export async function uploadPqcBundle(file: File) {
   );
 }
 
-export function pqcReportUrl(scanId: string, format: "json" | "csv" | "cbom" | "pdf" | "bundle") {
+export function pqcReportUrl(
+  scanId: string,
+  format: "json" | "csv" | "cbom" | "pdf" | "bundle" | "executive" | "board" | "auditor"
+) {
   const params = new URLSearchParams({
     format,
     api_key: qtanglSandboxApiKey,
@@ -261,6 +290,9 @@ export function pqcReportUrl(scanId: string, format: "json" | "csv" | "cbom" | "
   return `${qtanglApiBaseUrl}/pqc/report/${encodeURIComponent(scanId)}?${params.toString()}`;
 }
 
-export function pqcReportDownloadUrl(scanId: string, format: "json" | "csv" | "cbom" | "pdf" | "bundle") {
+export function pqcReportDownloadUrl(
+  scanId: string,
+  format: "json" | "csv" | "cbom" | "pdf" | "bundle" | "executive" | "board" | "auditor"
+) {
   return pqcReportUrl(scanId, format);
 }

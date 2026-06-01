@@ -10,6 +10,14 @@ export default function SeverityDonut({ assets }: { assets: CryptoAsset[] }) {
   }, {});
   const total = assets.length || 1;
   const entries = Object.entries(counts);
+  if (assets.length === 0) {
+    return (
+      <p className="text-xs text-[var(--color-gray-500)]">
+        No severity data captured. This scan may have found zero classified assets or returned partial
+        coverage.
+      </p>
+    );
+  }
   return (
     <div className="flex flex-wrap gap-3">
       {entries.map(([severity, count]) => (

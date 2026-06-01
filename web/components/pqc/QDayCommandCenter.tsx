@@ -6,8 +6,9 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Button from "@/components/ui/Button";
 import { trackEvent } from "@/lib/analytics";
 import { FALLBACK_SCENARIOS } from "@/lib/pqc-fallback";
-import type { CryptoAsset, PqcScanResponse, Scenario } from "@/lib/pqc";
+import type { CryptoAsset, PqcScanResponse, ReportAvailabilityResponse, Scenario } from "@/lib/pqc";
 import {
+  getReportAvailability,
   getPqcInventory,
   getPqcScenarios,
   pqcReportDownloadUrl,
@@ -76,6 +77,8 @@ export default function QDayCommandCenter({
   const [scanProgress, setScanProgress] = useState<string | null>(null);
   const [reportOpen, setReportOpen] = useState(false);
   const [useLiteScan, setUseLiteScan] = useState(false);
+  const [reportAvailability, setReportAvailability] = useState<ReportAvailabilityResponse | null>(null);
+  const [reportStatus, setReportStatus] = useState<"ready" | "checking" | "unavailable">("checking");
   const resultsRef = useRef<HTMLDivElement>(null);
 
   const activeScenario = useMemo(
@@ -117,6 +120,32 @@ export default function QDayCommandCenter({
       cancelled = true;
     };
   }, [initialBackendConnected, initialInventory.length]);
+
+  useEffect(() => {
+    let cancelled = false;
+    async function checkReportAvailability() {
+      if (!scanResponse?.scanId) {
+        setReportAvailability(null);
+        setReportStatus("checking");
+        return;
+      }
+      setReportStatus("checking");
+      try {
+        const availability = await getReportAvailability(scanResponse.scanId);
+        if (cancelled) return;
+        setReportAvailability(availability);
+        setReportStatus(availability.reportAvailable ? "ready" : "unavailable");
+      } catch {
+        if (cancelled) return;
+        setReportAvailability(null);
+        setReportStatus("unavailable");
+      }
+    }
+    checkReportAvailability();
+    return () => {
+      cancelled = true;
+    };
+  }, [scanResponse?.scanId]);
 
   function syncUrl() {
     const params = new URLSearchParams();
@@ -171,6 +200,13 @@ export default function QDayCommandCenter({
   }
 
   const topAsset = scanResponse?.assets[0];
+  const qualityIssues: string[] = [];
+  if (scanResponse?.assets.length === 0) qualityIssues.push("No assets discovered.");
+  if ((scanResponse?.timeline?.length ?? 0) === 0) qualityIssues.push("No timeline events captured.");
+  if ((scanResponse?.remediationBacklog?.length ?? 0) === 0)
+    qualityIssues.push("No remediation items generated.");
+  if (scanResponse && reportStatus === "unavailable")
+    qualityIssues.push("Report bundle is unavailable for this scan context.");
 
   return (
     <div className="space-y-6">
@@ -264,25 +300,39 @@ export default function QDayCommandCenter({
               </p>
             </div>
             <a
-              href={pqcReportDownloadUrl(scanResponse.scanId, "pdf")}
+              href={reportStatus === "ready" ? pqcReportDownloadUrl(scanResponse.scanId, "pdf") : "#"}
               target="_blank"
               rel="noreferrer"
-              onClick={() =>
-                trackEvent("pqc_report_downloaded", { format: "pdf", scanId: scanResponse.scanId })
-              }
+              onClick={(event) => {
+                if (reportStatus !== "ready") {
+                  event.preventDefault();
+                  setError(
+                    `Report unavailable${reportAvailability?.missingReason ? ` (${reportAvailability.missingReason})` : ""}.`
+                  );
+                  return;
+                }
+                trackEvent("pqc_report_downloaded", { format: "pdf", scanId: scanResponse.scanId });
+              }}
               className="inline-flex h-10 items-center justify-center rounded-full bg-white px-5 text-sm font-medium text-black hover:bg-neutral-100"
             >
               Download PDF report
             </a>
-            {(["cbom", "json", "csv", "bundle"] as const).map((format) => (
+            {(["cbom", "json", "csv", "bundle", "executive", "board", "auditor"] as const).map((format) => (
               <a
                 key={format}
-                href={pqcReportDownloadUrl(scanResponse.scanId, format)}
+                href={reportStatus === "ready" ? pqcReportDownloadUrl(scanResponse.scanId, format) : "#"}
                 target="_blank"
                 rel="noreferrer"
-                onClick={() =>
-                  trackEvent("pqc_report_downloaded", { format, scanId: scanResponse.scanId })
-                }
+                onClick={(event) => {
+                  if (reportStatus !== "ready") {
+                    event.preventDefault();
+                    setError(
+                      `Format unavailable${reportAvailability?.missingReason ? ` (${reportAvailability.missingReason})` : ""}.`
+                    );
+                    return;
+                  }
+                  trackEvent("pqc_report_downloaded", { format, scanId: scanResponse.scanId });
+                }}
                 className="text-xs uppercase tracking-wide text-[var(--color-gray-300)] underline underline-offset-4 hover:text-white"
               >
                 {format}
@@ -297,7 +347,42 @@ export default function QDayCommandCenter({
             <Button variant="secondary" onClick={() => setReportOpen(true)}>
               All formats
             </Button>
+            <span className="text-[10px] text-[var(--color-gray-500)]">
+              {reportStatus === "checking"
+                ? "report: checking"
+                : reportStatus === "ready"
+                  ? "report: ready"
+                  : `report: unavailable${reportAvailability?.missingReason ? ` (${reportAvailability.missingReason})` : ""}`}
+            </span>
           </div>
+          <PqcSection title="Data quality">
+            <p className="text-xs text-[var(--color-gray-400)]">
+              Coverage confidence: {String(scanResponse.report?.coverageConfidence ?? "n/a")} · Scan depth:{" "}
+              {String(scanResponse.report?.scanDepth ?? (useLiteScan ? "lite" : "standard"))}
+            </p>
+            <p className="mt-1 text-xs text-[var(--color-gray-500)]">
+              Outcome: {scanResponse.scanOutcome ?? "unknown"} · Generated at{" "}
+              {String(scanResponse.report?.generatedAt ?? "n/a")}
+            </p>
+            {qualityIssues.length > 0 ? (
+              <ul className="mt-2 list-disc space-y-1 pl-4 text-xs text-amber-200">
+                {qualityIssues.map((issue) => (
+                  <li key={issue}>{issue}</li>
+                ))}
+              </ul>
+            ) : (
+              <p className="mt-2 text-xs text-emerald-300">Quality checks passed for this scan result.</p>
+            )}
+          </PqcSection>
+          {qualityIssues.length > 0 && (
+            <PqcSection title="What to do next">
+              <ul className="list-disc space-y-1 pl-4 text-xs text-[var(--color-gray-300)]">
+                <li>Re-run scan after confirming target and scan mode.</li>
+                <li>Use dashboard history to verify tenant key and scan ownership context.</li>
+                <li>If report is unavailable, retry after scan completion or run a fresh fixture scan.</li>
+              </ul>
+            </PqcSection>
+          )}
           <PqcSection title="Executive summary">
             <ExecutivePriorities summary={scanResponse.report?.executiveSummary} />
           </PqcSection>
@@ -393,7 +478,13 @@ export default function QDayCommandCenter({
       )}
 
       <VideoEmbed />
-      <ReportDrawer open={reportOpen} onClose={() => setReportOpen(false)} scan={scanResponse} />
+      <ReportDrawer
+        open={reportOpen}
+        onClose={() => setReportOpen(false)}
+        scan={scanResponse}
+        reportStatus={reportStatus}
+        missingReason={reportAvailability?.missingReason ?? null}
+      />
     </div>
   );
 }

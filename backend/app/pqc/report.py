@@ -3,6 +3,8 @@ from __future__ import annotations
 import csv
 import io
 import json
+import hashlib
+import os
 from datetime import datetime, timezone
 from typing import Any
 
@@ -146,6 +148,7 @@ def report_to_json(report: MigrationReport) -> dict[str, Any]:
         "scanDepth": report.scan_depth,
         "complianceSummary": report.compliance_pack.get("complianceSummary", {}),
         "remediationCompletionPct": report.remediation_completion_pct,
+        "reportProvenance": _report_provenance(report),
     }
     if report.previous_scan_id:
         payload["previousScanId"] = report.previous_scan_id
@@ -296,6 +299,70 @@ def report_to_executive(report: MigrationReport) -> dict[str, Any]:
         "readinessDelta": diff.get("readinessDelta"),
         "executiveSummary": report.executive_summary,
         "verifyUrl": f"/verify?scanId={report.scan_id}",
+        "reportProvenance": _report_provenance(report),
+    }
+
+
+def report_to_board(report: MigrationReport) -> dict[str, Any]:
+    """Board-focused concise narrative payload."""
+    executive = report.executive_summary or {}
+    diff = report.scan_diff or {}
+    top = report.remediation_backlog[:3]
+    return {
+        "scanId": report.scan_id,
+        "generatedAt": report.generated_at,
+        "targetDomain": report.target_domain,
+        "readinessBand": report.readiness_band,
+        "readinessScore": report.readiness_score,
+        "businessRiskDelta": diff.get("summary") or report.readiness_summary,
+        "budgetForecastUsd": executive.get("exposureRangeUsd", {}),
+        "ninetyDayDecisions": [
+            {
+                "decision": item.title,
+                "deadline": item.deadline,
+                "severity": item.severity,
+            }
+            for item in top
+        ],
+        "verifyUrl": f"/verify?scanId={report.scan_id}",
+        "reportProvenance": _report_provenance(report),
+    }
+
+
+def report_to_auditor(report: MigrationReport) -> dict[str, Any]:
+    """Evidence-first payload for auditors and assurance teams."""
+    return {
+        "scanId": report.scan_id,
+        "generatedAt": report.generated_at,
+        "targetDomain": report.target_domain,
+        "controlMapping": report.compliance_pack.get("controlThemes", []),
+        "complianceSummary": report.compliance_pack.get("complianceSummary", {}),
+        "chainOfCustody": {
+            "signaturePresent": bool(report.signature),
+            "verifyUrl": f"/verify?scanId={report.scan_id}",
+            "contentHash": (report.signature or {}).get("contentHash", ""),
+            "signedAt": (report.signature or {}).get("signedAt", ""),
+        },
+        "reportProvenance": _report_provenance(report),
+    }
+
+
+def _report_provenance(report: MigrationReport) -> dict[str, Any]:
+    signature = report.signature or {}
+    signing_key_id = signature.get("keyFingerprint", "")
+    payload_for_hash = {
+        "scenarioId": report.scenario_id,
+        "targetDomain": report.target_domain,
+        "scanDepth": report.scan_depth,
+        "assetCount": len(report.assets),
+        "coverageConfidence": report.coverage_confidence,
+    }
+    config_hash = hashlib.sha256(json.dumps(payload_for_hash, sort_keys=True).encode("utf-8")).hexdigest()[:20]
+    return {
+        "signingKeyId": signing_key_id,
+        "generatedAt": report.generated_at,
+        "scanConfigHash": config_hash,
+        "environment": os.getenv("RAILWAY_ENVIRONMENT", "unknown"),
     }
 
 

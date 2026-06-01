@@ -13,6 +13,8 @@ export type ScanDiff = {
   newAssets?: Array<{ label?: string; host?: string; algorithm?: string }>;
   degradedAlgorithms?: Array<{ label?: string; previousStatus?: string; currentStatus?: string }>;
   newQuantumVulnerable?: Array<{ label?: string; host?: string; severity?: string }>;
+  assetTimeline?: Array<{ assetId?: string; label?: string; state?: string; detail?: string }>;
+  driftCauses?: Array<{ cause?: string; count?: number }>;
 };
 
 export default function ScanDiffPanel({ diff }: { diff: ScanDiff | null | undefined }) {
@@ -66,6 +68,30 @@ export default function ScanDiffPanel({ diff }: { diff: ScanDiff | null | undefi
             {diff.degradedAlgorithms.slice(0, 8).map((row, index) => (
               <li key={`${row.label}-${index}`}>
                 {row.label}: {row.previousStatus} → {row.currentStatus}
+              </li>
+            ))}
+          </ul>
+        </div>
+      ) : null}
+      {diff.driftCauses && diff.driftCauses.length > 0 ? (
+        <div>
+          <Eyebrow>Drift root causes</Eyebrow>
+          <ul className="mt-2 space-y-1 text-xs text-[var(--color-gray-400)]">
+            {diff.driftCauses.map((cause, index) => (
+              <li key={`${cause.cause}-${index}`}>
+                {cause.cause}: {cause.count ?? 0}
+              </li>
+            ))}
+          </ul>
+        </div>
+      ) : null}
+      {diff.assetTimeline && diff.assetTimeline.length > 0 ? (
+        <div>
+          <Eyebrow>Asset lifecycle timeline</Eyebrow>
+          <ul className="mt-2 space-y-1 text-xs text-[var(--color-gray-400)]">
+            {diff.assetTimeline.slice(0, 8).map((event, index) => (
+              <li key={`${event.assetId}-${index}`}>
+                {event.label ?? event.assetId}: {event.state} {event.detail ? `(${event.detail})` : ""}
               </li>
             ))}
           </ul>

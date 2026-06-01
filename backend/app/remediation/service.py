@@ -101,6 +101,54 @@ def remediation_velocity(*, tenant_id: str) -> dict[str, Any]:
     return {"closedCount": closed, "openCount": open_count, "completionRatePct": rate}
 
 
+def recommend_remediation_plan(item: dict[str, Any]) -> dict[str, Any]:
+    severity = str(item.get("severity", "medium")).lower()
+    effort = int(item.get("effortDays") or 3)
+    base_weeks = max(1, round(effort / 5))
+    if severity in {"critical", "high"}:
+        sprint = "current"
+    elif severity == "medium":
+        sprint = "next"
+    else:
+        sprint = "backlog"
+    owner = "crypto-platform" if "tls" in str(item.get("title", "")).lower() else "app-security"
+    return {
+        "remediationId": item.get("id"),
+        "ownerTeam": owner,
+        "recommendedSprint": sprint,
+        "etaWeeks": base_weeks,
+        "playbook": [
+            "Confirm impacted endpoint and key material lineage.",
+            f"Replace with {item.get('pqcAlgorithm', 'ML-KEM-768 / ML-DSA-65')} where supported.",
+            "Run staged rollout with canary and interoperability checks.",
+            "Re-scan and attach verification evidence to ticket.",
+        ],
+    }
+
+
+def simulate_post_migration_readiness(
+    *,
+    report: dict[str, Any],
+    selected_remediation_ids: list[str],
+) -> dict[str, Any]:
+    current = float(report.get("readinessScore", 0))
+    backlog = report.get("remediationBacklog") or []
+    selected = [row for row in backlog if row.get("id") in set(selected_remediation_ids)]
+    severity_weight = {"critical": 2.8, "high": 2.0, "medium": 1.2, "low": 0.6}
+    uplift = sum(severity_weight.get(str(row.get("severity", "medium")).lower(), 1.0) for row in selected)
+    projected = min(100.0, round(current + uplift, 1))
+    return {
+        "currentReadinessScore": current,
+        "projectedReadinessScore": projected,
+        "delta": round(projected - current, 1),
+        "selectedCount": len(selected),
+        "assumptions": [
+            "Each selected item is fully implemented and verified.",
+            "No new high-severity assets are introduced during migration.",
+        ],
+    }
+
+
 def _row_to_dict(row: RemediationStatusRow) -> dict[str, Any]:
     return {
         "id": row.id,

@@ -3,6 +3,13 @@
 import type { TimelineEvent } from "@/lib/pqc";
 
 export default function ScanLog({ events, isRunning }: { events: TimelineEvent[]; isRunning?: boolean }) {
+  if (!events.length && !isRunning) {
+    return (
+      <p className="text-xs text-[var(--color-gray-500)]">
+        No timeline captured yet. Re-run the scan to generate step-by-step diagnostics.
+      </p>
+    );
+  }
   return (
     <ul className="space-y-2">
       {events.map((event, index) => (

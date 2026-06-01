@@ -3,6 +3,14 @@
 import type { RemediationItem } from "@/lib/pqc";
 
 export default function RemediationBacklog({ items }: { items: RemediationItem[] }) {
+  if (!items.length) {
+    return (
+      <p className="text-xs text-[var(--color-gray-500)]">
+        No remediation generated. Assets may already be safe, scan depth may be lite, or coverage may be
+        partial.
+      </p>
+    );
+  }
   return (
     <ol className="space-y-2">
       {items.slice(0, 8).map((item) => (

@@ -14,6 +14,14 @@ export default function InventoryHeatmap({
   assets: CryptoAsset[];
   explanations?: Record<string, string>;
 }) {
+  if (!assets.length) {
+    return (
+      <p className="text-xs text-[var(--color-gray-500)]">
+        No crypto assets discovered for this run. Check target reachability, scan mode, and uploaded bundle
+        contents.
+      </p>
+    );
+  }
   return (
     <div className="grid gap-2 sm:grid-cols-2">
       {assets.map((asset) => (

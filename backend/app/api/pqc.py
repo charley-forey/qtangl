@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import asdict
+import logging
 
 import json
 from typing import Any
@@ -22,13 +23,21 @@ from app.pqc.data import (
 )
 from app.pqc.jobs import create_job, get_job, load_scan_bundle, run_job_async, save_scan_bundle
 from app.pqc.pipeline import run_pqc_scan
-from app.pqc.report import report_to_cbom, report_to_csv, report_to_json, report_to_pdf
+from app.pqc.report import (
+    report_to_auditor,
+    report_to_board,
+    report_to_cbom,
+    report_to_csv,
+    report_to_json,
+    report_to_pdf,
+)
 from app.pqc.serialize import serialize_asset, serialize_bundle, serialize_handshake, serialize_scenario
 from app.pqc.safety import ScanSafetyError, live_scan_enabled
 from app.pqc.sessions import create_session, get_session
 from app.pqc.standards import default_standards
 
 router = APIRouter(prefix="/pqc", tags=["pqc"])
+logger = logging.getLogger(__name__)
 
 
 class PqcScanRequest(BaseModel):
@@ -46,6 +55,32 @@ class VerifyReportRequest(BaseModel):
 
 class PqcHandshakeRequest(BaseModel):
     useFixture: bool = Field(default=True)
+
+
+def _report_formats() -> list[str]:
+    return ["json", "csv", "cbom", "pdf", "bundle", "executive", "board", "auditor"]
+
+
+def _report_meta(*, report_available: bool, missing_reason: str | None = None) -> dict[str, Any]:
+    return {
+        "reportAvailable": report_available,
+        "availableFormats": _report_formats() if report_available else [],
+        "missingReason": missing_reason,
+    }
+
+
+def _scan_outcome(bundle_payload: dict[str, Any] | None) -> str:
+    if not bundle_payload:
+        return "unknown"
+    assets = bundle_payload.get("assets") or []
+    coverage = bundle_payload.get("scanCoverage") or []
+    if not assets and coverage:
+        return "target_unreachable"
+    if not assets:
+        return "no_assets_found"
+    if coverage:
+        return "partial_assets"
+    return "assets_found"
 
 
 @router.get("/inventory", responses={401: {"model": ErrorResponse}})
@@ -164,7 +199,13 @@ def scan_pqc(
                 depth=request.depth,
             )
             save_scan_bundle(bundle.scan_id, bundle, tenant_id=auth.tenant_id)
-            return {"status": "success", **serialize_bundle(bundle)}
+            payload = serialize_bundle(bundle)
+            return {
+                "status": "success",
+                **payload,
+                "scanOutcome": _scan_outcome(payload),
+                **_report_meta(report_available=True),
+            }
 
         if not live_scan_enabled():
             raise HTTPException(
@@ -192,7 +233,13 @@ def scan_pqc(
         if not use_worker_queue():
             bundle = run_live()
             save_scan_bundle(bundle.scan_id, bundle, tenant_id=auth.tenant_id)
-            return {"status": "success", **serialize_bundle(bundle)}
+            payload = serialize_bundle(bundle)
+            return {
+                "status": "success",
+                **payload,
+                "scanOutcome": _scan_outcome(payload),
+                **_report_meta(report_available=True),
+            }
 
         scan_id = create_job(
             tenant_id=auth.tenant_id,
@@ -214,6 +261,7 @@ def scan_pqc(
             "status": "running",
             "scanId": scan_id,
             "summary": "Live PQC scan started. Poll GET /pqc/scan/{scanId} for progress.",
+            **_report_meta(report_available=False, missing_reason="scan_running"),
         }
     except HTTPException:
         raise
@@ -223,8 +271,15 @@ def scan_pqc(
             detail=f"Unknown PQC scenario: {request.scenarioId}",
         ) from exc
     except ScanSafetyError as exc:
+        logger.warning("pqc_scan_safety_block tenant_id=%s target=%s detail=%s", auth.tenant_id, request.target, exc)
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail=str(exc)) from exc
     except Exception as exc:
+        logger.exception(
+            "pqc_scan_error tenant_id=%s scenario=%s target=%s",
+            auth.tenant_id,
+            request.scenarioId,
+            request.target,
+        )
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(exc)) from exc
 
 
@@ -240,15 +295,35 @@ def get_scan_status(
                 "status": "running",
                 "scanId": scan_id,
                 "timeline": [asdict(event) for event in job.timeline],
+                "scanOutcome": "running",
+                **_report_meta(report_available=False, missing_reason="scan_running"),
             }
         if job.status == "error":
-            return {"status": "error", "scanId": scan_id, "message": job.error, "timeline": [asdict(event) for event in job.timeline]}
+            return {
+                "status": "error",
+                "scanId": scan_id,
+                "message": job.error,
+                "timeline": [asdict(event) for event in job.timeline],
+                "scanOutcome": "failed",
+                **_report_meta(report_available=False, missing_reason="scan_failed"),
+            }
         if job.bundle:
-            return {"status": "success", **serialize_bundle(job.bundle)}
+            payload = serialize_bundle(job.bundle)
+            return {
+                "status": "success",
+                **payload,
+                "scanOutcome": _scan_outcome(payload),
+                **_report_meta(report_available=True),
+            }
 
     cached = load_scan_bundle(scan_id, tenant_id=auth.tenant_id)
     if cached:
-        return {"status": "success", **cached}
+        return {
+            "status": "success",
+            **cached,
+            "scanOutcome": _scan_outcome(cached),
+            **_report_meta(report_available=True),
+        }
 
     raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Scan not found.")
 
@@ -279,7 +354,16 @@ def download_report(
 
             bundle = bundle_from_api_dict(payload)
     if bundle is None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Report not found for scan.")
+        logger.warning(
+            "pqc_report_missing scan_id=%s tenant_id=%s reason=bundle_not_found",
+            scan_id,
+            auth.tenant_id,
+        )
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Report not found for scan.",
+            headers={"X-Qtangl-Report-Missing-Reason": "bundle_not_found"},
+        )
 
     report = bundle.report
     fmt = format.lower()
@@ -309,10 +393,53 @@ def download_report(
 
         body = report_to_executive(report)
         return Response(content=__import__("json").dumps(body), media_type="application/json")
+    if fmt == "board":
+        body = report_to_board(report)
+        return Response(content=__import__("json").dumps(body), media_type="application/json")
+    if fmt == "auditor":
+        body = report_to_auditor(report)
+        return Response(content=__import__("json").dumps(body), media_type="application/json")
     raise HTTPException(
         status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-        detail="format must be json|csv|cbom|pdf|bundle|executive",
+        detail="format must be json|csv|cbom|pdf|bundle|executive|board|auditor",
     )
+
+
+@router.get("/report/{scan_id}/availability", responses={401: {"model": ErrorResponse}})
+def report_availability(
+    scan_id: str,
+    auth: AuthContext = Depends(require_auth_readonly),
+) -> dict:
+    job = get_job(scan_id, tenant_id=auth.tenant_id)
+    if job is None:
+        payload = load_scan_bundle(scan_id, tenant_id=auth.tenant_id)
+        if payload:
+            return {"status": "success", "scanId": scan_id, **_report_meta(report_available=True)}
+        return {
+            "status": "success",
+            "scanId": scan_id,
+            **_report_meta(report_available=False, missing_reason="scan_not_found_or_wrong_tenant"),
+        }
+    if job.status == "running":
+        return {
+            "status": "success",
+            "scanId": scan_id,
+            **_report_meta(report_available=False, missing_reason="scan_running"),
+        }
+    if job.status == "error":
+        return {
+            "status": "success",
+            "scanId": scan_id,
+            **_report_meta(report_available=False, missing_reason="scan_failed"),
+        }
+    bundle_dict = load_scan_bundle(scan_id, tenant_id=auth.tenant_id)
+    if not bundle_dict:
+        return {
+            "status": "success",
+            "scanId": scan_id,
+            **_report_meta(report_available=False, missing_reason="bundle_missing"),
+        }
+    return {"status": "success", "scanId": scan_id, **_report_meta(report_available=True)}
 
 
 @router.get("/verify/{scan_id}", responses={404: {"model": ErrorResponse}})

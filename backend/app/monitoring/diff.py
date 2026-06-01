@@ -76,6 +76,20 @@ def compare_scan_bundles(
                 }
             )
 
+    timeline = _asset_timeline(
+        new_assets=new_assets,
+        removed_assets=removed_assets,
+        degraded=degraded,
+        current_map=cur_map,
+        previous_map=prev_map,
+    )
+    drift_causes = _drift_causes(
+        new_assets=new_assets,
+        removed_assets=removed_assets,
+        degraded=degraded,
+        cert_expiring_count=len(cert_expiring),
+    )
+
     return {
         "previousScanId": previous_scan_id,
         "readinessDelta": round(cur_score - prev_score, 2),
@@ -88,6 +102,8 @@ def compare_scan_bundles(
         "newQuantumVulnerableCount": max(0, cur_qv - prev_qv),
         "certExpiringWithin30Days": cert_expiring[:25],
         "certExpiringCount": len(cert_expiring),
+        "assetTimeline": timeline[:40],
+        "driftCauses": drift_causes,
         "summary": _diff_summary(
             new_count=len(new_assets),
             removed_count=len(removed_assets),
@@ -133,3 +149,75 @@ def _diff_summary(
     if removed_count:
         parts.append(f"{removed_count} asset(s) no longer seen")
     return "; ".join(parts) if parts else "No material changes since last scan."
+
+
+def _asset_timeline(
+    *,
+    new_assets: list[dict[str, Any]],
+    removed_assets: list[dict[str, Any]],
+    degraded: list[dict[str, Any]],
+    current_map: dict[str, dict[str, Any]],
+    previous_map: dict[str, dict[str, Any]],
+) -> list[dict[str, Any]]:
+    timeline: list[dict[str, Any]] = []
+    for asset in new_assets:
+        timeline.append(
+            {
+                "assetId": asset.get("id"),
+                "label": asset.get("label"),
+                "state": "first_seen",
+                "detail": "Asset discovered in latest scan.",
+            }
+        )
+    for asset in removed_assets:
+        timeline.append(
+            {
+                "assetId": asset.get("id"),
+                "label": asset.get("label"),
+                "state": "removed",
+                "detail": "Asset no longer present.",
+            }
+        )
+    for row in degraded:
+        timeline.append(
+            {
+                "assetId": row.get("assetId"),
+                "label": row.get("label"),
+                "state": "regressed",
+                "detail": f"{row.get('previousStatus')} -> {row.get('currentStatus')}",
+            }
+        )
+    for key in set(current_map) & set(previous_map):
+        cur = current_map[key]
+        prev = previous_map[key]
+        if str(cur.get("algorithm")) != str(prev.get("algorithm")):
+            timeline.append(
+                {
+                    "assetId": cur.get("id"),
+                    "label": cur.get("label"),
+                    "state": "changed_algo",
+                    "detail": f"{prev.get('algorithm')} -> {cur.get('algorithm')}",
+                }
+            )
+    return timeline
+
+
+def _drift_causes(
+    *,
+    new_assets: list[dict[str, Any]],
+    removed_assets: list[dict[str, Any]],
+    degraded: list[dict[str, Any]],
+    cert_expiring_count: int,
+) -> list[dict[str, Any]]:
+    causes: list[dict[str, Any]] = []
+    if new_assets:
+        causes.append({"cause": "endpoint_expansion", "count": len(new_assets)})
+    if removed_assets:
+        causes.append({"cause": "endpoint_removed", "count": len(removed_assets)})
+    if degraded:
+        causes.append({"cause": "algorithm_downgrade_or_regression", "count": len(degraded)})
+    if cert_expiring_count:
+        causes.append({"cause": "certificate_horizon_risk", "count": cert_expiring_count})
+    if not causes:
+        causes.append({"cause": "no_material_drift", "count": 0})
+    return causes

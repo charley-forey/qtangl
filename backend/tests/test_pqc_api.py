@@ -82,6 +82,30 @@ class PqcApiTest(unittest.TestCase):
         payload = response.json()
         self.assertEqual(payload["status"], "success")
         self.assertIn("scoreboard", payload)
+        self.assertTrue(payload.get("reportAvailable"))
+        self.assertEqual(payload.get("scanOutcome"), "assets_found")
+
+    def test_report_availability_for_fixture_scan(self) -> None:
+        scan = self.client.post(
+            "/pqc/scan",
+            headers=self.headers,
+            json={"scenarioId": "bank-tls-inventory", "useFixture": True},
+        )
+        self.assertEqual(scan.status_code, 200)
+        scan_id = scan.json()["scanId"]
+
+        availability = self.client.get(f"/pqc/report/{scan_id}/availability", headers=self.headers)
+        self.assertEqual(availability.status_code, 200)
+        payload = availability.json()
+        self.assertTrue(payload["reportAvailable"])
+        self.assertIn("pdf", payload["availableFormats"])
+
+    def test_report_availability_missing_scan(self) -> None:
+        availability = self.client.get("/pqc/report/scan-missing/availability", headers=self.headers)
+        self.assertEqual(availability.status_code, 200)
+        payload = availability.json()
+        self.assertFalse(payload["reportAvailable"])
+        self.assertEqual(payload["missingReason"], "scan_not_found_or_wrong_tenant")
 
 
 if __name__ == "__main__":
