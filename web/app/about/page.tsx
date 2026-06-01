@@ -27,7 +27,7 @@ export default function AboutPage() {
         description={aboutReadinessContent.intro}
         actions={[
           { href: "/platform", label: "Platform overview" },
-          { href: "/demo/pqc", label: "Run Q-Day scan", variant: "secondary" },
+          { href: "/assess", label: "Run Q-Day scan", variant: "secondary" },
         ]}
       />
       <Section gap="tight">

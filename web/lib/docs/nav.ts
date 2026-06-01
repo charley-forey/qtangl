@@ -16,20 +16,110 @@ export const docsSections: DocsNavSection[] = [
     ],
   },
   {
-    id: "guides",
-    title: "Guides",
+    id: "pqc-guides",
+    title: "Q-Day guides",
     items: [
-      { name: "Concepts", href: "/docs/concepts" },
-      { name: "Data formats", href: "/docs/data-formats" },
       {
-        name: "PQC scanner demo guide",
+        name: "PQC scanner guide",
         href: "/docs/guides/pqc-demo",
         status: "pilot",
       },
-      { name: "Schedule guide", href: "/docs/guides/schedule", status: "ga" },
       { name: "Monitor setup", href: "/docs/guides/monitor-setup", status: "ga" },
+      { name: "Schedule guide", href: "/docs/guides/schedule", status: "ga" },
       { name: "CI/CD integration", href: "/docs/integrations/ci-cd", status: "ga" },
       { name: "Dashboard SSO", href: "/docs/guides/sso-setup", status: "pilot" },
+      { name: "Concepts", href: "/docs/concepts" },
+      { name: "Data formats", href: "/docs/data-formats" },
+    ],
+  },
+  {
+    id: "pqc-reference",
+    title: "PQC API reference",
+    items: [
+      { name: "API guide", href: "/docs/api" },
+      { name: "GET /health", href: "/docs/reference/health", status: "ga" },
+      {
+        name: "GET /pqc/inventory",
+        href: "/docs/reference/pqc/inventory",
+        status: "pilot",
+      },
+      {
+        name: "GET /pqc/scenarios",
+        href: "/docs/reference/pqc/scenarios",
+        status: "pilot",
+      },
+      {
+        name: "GET /pqc/target",
+        href: "/docs/reference/pqc/target",
+        status: "pilot",
+      },
+      {
+        name: "GET /pqc/handshake-trace",
+        href: "/docs/reference/pqc/handshake-trace",
+        status: "pilot",
+      },
+      {
+        name: "GET /pqc/standards",
+        href: "/docs/reference/pqc/standards",
+        status: "pilot",
+      },
+      {
+        name: "POST /pqc/upload-bundle",
+        href: "/docs/reference/pqc/upload-bundle",
+        status: "pilot",
+      },
+      {
+        name: "POST /pqc/scan",
+        href: "/docs/reference/pqc/scan",
+        status: "pilot",
+      },
+      {
+        name: "GET /pqc/scan/{scanId}",
+        href: "/docs/reference/pqc/scan-status",
+        status: "pilot",
+      },
+      {
+        name: "POST /pqc/handshake/prove",
+        href: "/docs/reference/pqc/handshake-prove",
+        status: "pilot",
+      },
+      {
+        name: "GET /pqc/report/{scanId}",
+        href: "/docs/reference/pqc/report",
+        status: "pilot",
+      },
+      { name: "Errors & status codes", href: "/docs/errors" },
+      { name: "JSON schemas", href: "/docs/reference/schemas" },
+    ],
+  },
+  {
+    id: "operations",
+    title: "Operations",
+    items: [
+      { name: "Rate limits", href: "/docs/operations/rate-limits" },
+      { name: "Environments", href: "/docs/operations/environments" },
+      { name: "Observability", href: "/docs/operations/observability" },
+      { name: "Security", href: "/docs/operations/security" },
+      { name: "Data retention", href: "/docs/operations/data-retention" },
+      { name: "CORS", href: "/docs/operations/cors" },
+    ],
+  },
+  {
+    id: "resources",
+    title: "Resources",
+    items: [
+      { name: "Glossary", href: "/docs/resources/glossary" },
+      { name: "FAQ", href: "/docs/resources/faq" },
+      { name: "Changelog", href: "/docs/resources/changelog" },
+      { name: "Roadmap", href: "/docs/resources/roadmap" },
+      { name: "Support", href: "/docs/resources/support" },
+    ],
+  },
+  {
+    id: "labs",
+    title: "Labs / optimization (expansion)",
+    items: [
+      { name: "POST /optimize", href: "/docs/reference/optimize", status: "ga" },
       {
         name: "Routing guide",
         href: "/docs/guides/routing",
@@ -55,15 +145,6 @@ export const docsSections: DocsNavSection[] = [
         href: "/docs/guides/ev-fleet-demo",
         status: "pilot",
       },
-    ],
-  },
-  {
-    id: "reference",
-    title: "API Reference",
-    items: [
-      { name: "API guide", href: "/docs/api" },
-      { name: "POST /optimize", href: "/docs/reference/optimize", status: "ga" },
-      { name: "GET /health", href: "/docs/reference/health", status: "ga" },
       {
         name: "GET /hospital/roster",
         href: "/docs/reference/hospital/roster",
@@ -125,56 +206,6 @@ export const docsSections: DocsNavSection[] = [
         status: "pilot",
       },
       {
-        name: "GET /pqc/inventory",
-        href: "/docs/reference/pqc/inventory",
-        status: "pilot",
-      },
-      {
-        name: "GET /pqc/scenarios",
-        href: "/docs/reference/pqc/scenarios",
-        status: "pilot",
-      },
-      {
-        name: "GET /pqc/target",
-        href: "/docs/reference/pqc/target",
-        status: "pilot",
-      },
-      {
-        name: "GET /pqc/handshake-trace",
-        href: "/docs/reference/pqc/handshake-trace",
-        status: "pilot",
-      },
-      {
-        name: "GET /pqc/standards",
-        href: "/docs/reference/pqc/standards",
-        status: "pilot",
-      },
-      {
-        name: "POST /pqc/upload-bundle",
-        href: "/docs/reference/pqc/upload-bundle",
-        status: "pilot",
-      },
-      {
-        name: "POST /pqc/scan",
-        href: "/docs/reference/pqc/scan",
-        status: "pilot",
-      },
-      {
-        name: "GET /pqc/scan/{scanId}",
-        href: "/docs/reference/pqc/scan-status",
-        status: "pilot",
-      },
-      {
-        name: "POST /pqc/handshake/prove",
-        href: "/docs/reference/pqc/handshake-prove",
-        status: "pilot",
-      },
-      {
-        name: "GET /pqc/report/{scanId}",
-        href: "/docs/reference/pqc/report",
-        status: "pilot",
-      },
-      {
         name: "GET /ev-fleet/depot",
         href: "/docs/reference/ev-fleet/depot",
         status: "pilot",
@@ -209,31 +240,6 @@ export const docsSections: DocsNavSection[] = [
         href: "/docs/reference/ev-fleet/plan-solve",
         status: "pilot",
       },
-      { name: "Errors & status codes", href: "/docs/errors" },
-      { name: "JSON schemas", href: "/docs/reference/schemas" },
-    ],
-  },
-  {
-    id: "operations",
-    title: "Operations",
-    items: [
-      { name: "Rate limits", href: "/docs/operations/rate-limits" },
-      { name: "Environments", href: "/docs/operations/environments" },
-      { name: "Observability", href: "/docs/operations/observability" },
-      { name: "Security", href: "/docs/operations/security" },
-      { name: "Data retention", href: "/docs/operations/data-retention" },
-      { name: "CORS", href: "/docs/operations/cors" },
-    ],
-  },
-  {
-    id: "resources",
-    title: "Resources",
-    items: [
-      { name: "Glossary", href: "/docs/resources/glossary" },
-      { name: "FAQ", href: "/docs/resources/faq" },
-      { name: "Changelog", href: "/docs/resources/changelog" },
-      { name: "Roadmap", href: "/docs/resources/roadmap" },
-      { name: "Support", href: "/docs/resources/support" },
     ],
   },
 ];

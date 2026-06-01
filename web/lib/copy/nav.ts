@@ -5,7 +5,6 @@ export const nav = [
   { name: "Convert", href: "/convert" },
   { name: "Trust", href: "/trust" },
   { name: "Dashboard", href: "/dashboard" },
-  { name: "Demo", href: "/demo/pqc" },
   { name: "Pricing", href: "/pricing" },
 ] as const;
 
@@ -23,7 +22,6 @@ export const footerNav = [
   { name: "Partners", href: "/partners" },
   { name: "Status", href: "https://status.qtangl.com" },
   { name: "Verify", href: "/verify" },
-  { name: "Labs (expansion)", href: "/labs" },
   { name: "Learn", href: "/learn" },
   { name: "Blog", href: "/blog" },
   { name: "About", href: "/about" },

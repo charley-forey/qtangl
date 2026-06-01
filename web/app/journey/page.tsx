@@ -25,7 +25,7 @@ export default function JourneyPage() {
         title={hero.title}
         description={hero.description}
         actions={[
-          { href: "/demo/pqc", label: "Run Q-Day scan" },
+          { href: "/assess", label: "Run Q-Day scan" },
           { href: "/assess", label: "Start with Assess", variant: "secondary" },
         ]}
       />

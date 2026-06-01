@@ -22,14 +22,16 @@ export default function ReadinessTrend({ points }: { points: TrendPoint[] }) {
   const max = Math.max(...sorted.map((p) => p.readinessScore), 100);
 
   return (
-    <div className="flex h-24 items-end gap-1">
+    <div className="flex gap-1">
       {sorted.map((point) => (
         <div key={point.scanId} className="flex flex-1 flex-col items-center gap-1">
-          <div
-            className="w-full rounded-t bg-[var(--color-accent)]/70"
-            style={{ height: `${Math.max(8, (point.readinessScore / max) * 100)}%` }}
-            title={`${point.readinessScore} — ${point.scanId}`}
-          />
+          <div className="flex h-24 w-full items-end">
+            <div
+              className="w-full rounded-t bg-[var(--color-accent)]/70"
+              style={{ height: `${Math.max(8, (point.readinessScore / max) * 100)}%` }}
+              title={`${point.readinessScore} — ${point.scanId}`}
+            />
+          </div>
           <span className="font-mono text-[9px] text-[var(--color-gray-500)]">
             {point.readinessScore}
           </span>

@@ -4,6 +4,7 @@ import ApiPreviewSection from "@/components/marketing/ApiPreviewSection";
 import CTA from "@/components/marketing/CTA";
 import FeatureCard from "@/components/marketing/FeatureCard";
 import Hero from "@/components/marketing/Hero";
+import QDayLearningStrip from "@/components/marketing/QDayLearningStrip";
 import ValueProofStrip from "@/components/marketing/ValueProofStrip";
 import PageShell from "@/components/layout/PageShell";
 import StateTransition from "@/components/quantum/StateTransition";
@@ -108,14 +109,17 @@ export default function Home() {
           ))}
         </div>
         <StateTransition>
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
-            <Button href={readinessHomeNarrative.optimizeLink.href} variant="ghost" size="sm" className="px-0">
-              {readinessHomeNarrative.optimizeLink.label}
-            </Button>
+          <div className="mt-8">
             <Button href={readinessHomeNarrative.qDayLink.href} variant="ghost" size="sm" className="px-0">
               {readinessHomeNarrative.qDayLink.label}
             </Button>
           </div>
+        </StateTransition>
+      </Section>
+
+      <Section gap="tight">
+        <StateTransition>
+          <QDayLearningStrip />
         </StateTransition>
       </Section>
 

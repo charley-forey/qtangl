@@ -2,7 +2,7 @@ export const assessPageCopy = {
   metadata: {
     title: "Q-Day Assessment",
     description:
-      "Baseline quantum-vulnerable cryptography with live scans, Mosca HNDL risk, CBOM exports, and signed PDF reports.",
+      "Baseline quantum-vulnerable cryptography with live scans, Mosca HNDL risk, and CBOM exports — mapped to NSM-10, CNSA 2.0, NIST IR 8547, PCI-DSS 4.0, and CMMC, with signed PDF reports your auditors can verify.",
   },
   hero: {
     eyebrow: "Assess",
@@ -10,7 +10,7 @@ export const assessPageCopy = {
     description:
       "Scan external-facing TLS, map algorithms to NSM-10 and NIST IR 8547, and export evidence your board can review.",
     actions: [
-      { href: "/demo/pqc", label: "Run live scan" },
+      { href: "#scanner", label: "Start assessment" },
       { href: "/docs/guides/pqc-demo", label: "API guide", variant: "secondary" as const },
     ],
   },
@@ -39,17 +39,17 @@ export const assessPageCopy = {
   scenarios: {
     eyebrow: "Scenarios",
     title: "Try a regulated scenario",
-    description: "Pre-loaded demo targets for banking, government, and healthcare readiness workflows.",
+    description: "Pre-loaded targets for banking, government, and healthcare readiness workflows.",
     items: [
-      { label: "Bank TLS inventory", href: "/demo/pqc?scenario=bank-tls-inventory" },
-      { label: "Gov contractor CMMC", href: "/demo/pqc?scenario=gov-contractor-cmmc" },
-      { label: "Healthcare HNDL", href: "/demo/pqc?scenario=healthcare-insurer-hndl" },
+      { label: "Bank TLS inventory", href: "/assess?scenario=bank-tls-inventory" },
+      { label: "Gov contractor CMMC", href: "/assess?scenario=gov-contractor-cmmc" },
+      { label: "Healthcare HNDL", href: "/assess?scenario=healthcare-insurer-hndl" },
     ],
   },
   cta: {
     title: "Start with a live scan",
-    description: "No account required for the demo. Request pilot access for your production domains.",
-    primary: { label: "Run Q-Day scan", href: "/demo/pqc" },
+    description: "No account required for the public scanner. Request pilot access for production domains.",
+    primary: { label: "Run Q-Day scan", href: "#scanner" },
     secondary: { label: "Request pilot", href: "/access" },
   },
 } as const;

@@ -8,12 +8,14 @@ import RemediationBoard from "@/components/pqc/RemediationBoard";
 import RemediationWhatIf from "@/components/pqc/RemediationWhatIf";
 import ReadinessTrend from "@/components/pqc/ReadinessTrend";
 import ScanDiffPanel, { type ScanDiff } from "@/components/pqc/ScanDiffPanel";
+import CompliancePanel from "@/components/pqc/CompliancePanel";
 import InventoryHeatmap from "@/components/pqc/InventoryHeatmap";
 import AlertSettings from "@/components/dashboard/AlertSettings";
 import AuditLogPanel from "@/components/dashboard/AuditLogPanel";
+import DashboardOnboarding, { DashboardSection } from "@/components/dashboard/DashboardOnboarding";
 import IntegrationSettings from "@/components/dashboard/IntegrationSettings";
 import ScheduleManager from "@/components/dashboard/ScheduleManager";
-import type { CryptoAsset } from "@/lib/pqc";
+import type { CompliancePack, ComplianceSummary, CryptoAsset } from "@/lib/pqc";
 import {
   fetchTenantJson,
   getStoredTenantApiKey,
@@ -84,6 +86,10 @@ export default function DashboardClient() {
   } | null>(null);
   const [billingPortalUrl, setBillingPortalUrl] = useState<string | null>(null);
   const [heatmapAssets, setHeatmapAssets] = useState<CryptoAsset[]>([]);
+  const [compliance, setCompliance] = useState<{
+    pack?: CompliancePack;
+    summary?: ComplianceSummary;
+  } | null>(null);
   const [analytics, setAnalytics] = useState<{
     forecast: { projected?: number; current?: number } | null;
     anomalyAlerts: Array<{ rule: string; message: string }>;
@@ -206,9 +212,19 @@ export default function DashboardClient() {
             report?: {
               remediationBacklog?: Array<{ id: string; title: string; severity: string }>;
               scanDiff?: ScanDiff;
+              compliancePack?: CompliancePack;
+              complianceSummary?: ComplianceSummary;
             };
             remediationStatus?: Array<{ remediationId: string; status: string; owner?: string | null }>;
           }>(`/tenant/scans/${latestDone.scanId}`, key);
+          if (detail.report?.compliancePack || detail.report?.complianceSummary) {
+            setCompliance({
+              pack: detail.report?.compliancePack,
+              summary: detail.report?.complianceSummary,
+            });
+          } else {
+            setCompliance(null);
+          }
           const items = detail.report?.remediationBacklog ?? [];
           if (items.length) {
             setRemediationScan({
@@ -254,7 +270,7 @@ export default function DashboardClient() {
   }, []);
 
   const apiKeyCard = (
-    <Card tone="strong" className="rounded-[var(--radius-xl)]">
+    <Card tone="strong" className="rounded-[var(--radius-xl)]" id="connect-key">
       <Eyebrow>Tenant API key</Eyebrow>
       <p className="mt-3 text-sm leading-7 text-[var(--color-gray-300)]">
         Paste the tenant key issued by Qtangl admin. It is stored in this browser session only.
@@ -292,7 +308,8 @@ export default function DashboardClient() {
   const latestScan = scans.find((scan) => scan.readinessScore != null);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
+      {!me ? <DashboardOnboarding /> : null}
       {!me ? apiKeyCard : null}
 
       {error ? (
@@ -301,271 +318,280 @@ export default function DashboardClient() {
         </Card>
       ) : null}
 
-      {me && latestScan ? (
-        <Card tone="feature" size="lg" className="rounded-[var(--radius-feature)]">
-          <Eyebrow>Readiness at a glance</Eyebrow>
-          <p className="mt-4 text-4xl font-semibold tracking-tight text-white">
-            {latestScan.readinessScore}
-            {latestScan.readinessBand ? (
-              <span className="ml-3 text-lg font-normal text-[var(--color-gray-400)]">
-                {latestScan.readinessBand}
-              </span>
-            ) : null}
-          </p>
-          <p className="mt-2 text-sm text-[var(--color-gray-400)]">
-            Latest scan {latestScan.scanId} · {formatUtcDateTime(latestScan.createdAt)}
-          </p>
-        </Card>
-      ) : null}
-
-      {trendPoints.length >= 2 ? (
-        <Card tone="panel">
-          <Eyebrow>Readiness trend</Eyebrow>
-          <ReadinessTrend points={trendPoints} />
-        </Card>
-      ) : null}
-
-      {weeklyDigest ? (
-        <Card tone="panel">
-          <Eyebrow>Weekly executive digest</Eyebrow>
-          <p className="mt-2 text-sm text-white">{weeklyDigest.headline}</p>
-          {weeklyDigest.risks.length > 0 ? (
-            <ul className="mt-3 list-disc pl-5 text-xs text-[var(--color-gray-400)]">
-              {weeklyDigest.risks.slice(0, 3).map((risk) => (
-                <li key={risk}>{risk}</li>
-              ))}
-            </ul>
-          ) : null}
-        </Card>
-      ) : null}
-
-      {commandCenter && Object.keys(commandCenter.businessUnits).length > 0 ? (
-        <Card tone="panel">
-          <Eyebrow>Portfolio command center</Eyebrow>
-          <div className="mt-4 overflow-x-auto">
-            <table className="min-w-full text-left text-sm">
-              <thead className="text-xs uppercase text-[var(--color-gray-500)]">
-                <tr>
-                  <th className="pb-2 pr-4">Business unit</th>
-                  <th className="pb-2 pr-4">Readiness</th>
-                  <th className="pb-2 pr-4">Δ vs prior</th>
-                  <th className="pb-2">Action</th>
-                </tr>
-              </thead>
-              <tbody className="text-[var(--color-gray-300)]">
-                {Object.entries(commandCenter.businessUnits)
-                  .sort(([, a], [, b]) => a - b)
-                  .map(([unit, score]) => (
-                    <tr key={unit} className="border-t border-[var(--border-subtle)]">
-                      <td className="py-2 pr-4 text-white">{unit}</td>
-                      <td className="py-2 pr-4">{score}</td>
-                      <td className="py-2 pr-4">
-                        {commandCenter.businessUnitDeltas?.[unit] != null
-                          ? commandCenter.businessUnitDeltas[unit]
-                          : "—"}
-                      </td>
-                      <td className="py-2">
-                        {savedKey ? (
-                          <button
-                            type="button"
-                            className="text-white underline underline-offset-4"
-                            onClick={() => {
-                              setScheduleTarget("");
-                              setPortfolioUnit(unit);
-                              setActionMessage(`Create a weekly schedule for BU "${unit}" below.`);
-                            }}
-                          >
-                            Schedule monitoring
-                          </button>
-                        ) : null}
-                      </td>
-                    </tr>
-                  ))}
-              </tbody>
-            </table>
-          </div>
-        </Card>
-      ) : null}
-
-      {me && latestScan ? (
-        <Card tone="panel">
-          <Eyebrow>Scan diff</Eyebrow>
-          <div className="mt-4">
-            {scanDiff ? (
-              <ScanDiffPanel diff={scanDiff} />
-            ) : (
-              <p className="text-sm text-[var(--color-gray-500)]">
-                No prior scan to compare. Run a second scan on the same target to see drift.
-              </p>
-            )}
-          </div>
-        </Card>
-      ) : null}
-
-      {heatmapAssets.length > 0 ? (
-        <Card tone="panel">
-          <Eyebrow>Asset heatmap</Eyebrow>
-          <div className="mt-4">
-            <InventoryHeatmap assets={heatmapAssets} />
-          </div>
-        </Card>
-      ) : null}
-
-      {analytics.forecast || analytics.anomalyAlerts.length > 0 ? (
-        <Card tone="panel">
-          <Eyebrow>Intelligence</Eyebrow>
-          <div className="mt-3 grid gap-4 sm:grid-cols-2 text-sm text-[var(--color-gray-300)]">
-            {analytics.forecast?.projected != null ? (
-              <div>
-                <p className="text-xs uppercase text-[var(--color-gray-500)]">Forecast (4 scans)</p>
-                <p className="mt-1 text-white">
-                  {analytics.forecast.current} → {analytics.forecast.projected}
-                </p>
-              </div>
-            ) : null}
-            {analytics.anomalyAlerts.length > 0 ? (
-              <div>
-                <p className="text-xs uppercase text-[var(--color-gray-500)]">Anomalies</p>
-                <p className="mt-1">{analytics.anomalyAlerts[0]?.message}</p>
-              </div>
-            ) : null}
-          </div>
-        </Card>
-      ) : null}
-
-      {savedKey && remediationScan ? (
-        <Card tone="panel">
-          <Eyebrow>Top remediation priorities</Eyebrow>
-          <RemediationBoard
-            apiKey={savedKey}
-            scanId={remediationScan.scanId}
-            items={remediationScan.items}
-            initialStatuses={remediationScan.statuses}
-            jiraConfigured={jiraConfigured}
-            allScans={scans.map((s) => ({ scanId: s.scanId, label: s.targetDomain ?? s.scanId }))}
-          />
-        </Card>
-      ) : null}
-
-      {me && remediationVelocity ? (
-        <Card tone="panel">
-          <Eyebrow>Remediation velocity</Eyebrow>
-          <p className="mt-2 text-sm text-[var(--color-gray-300)]">
-            {remediationVelocity.closedCount} closed · {remediationVelocity.openCount} open
-            {remediationVelocity.completionRatePct != null
-              ? ` · ${remediationVelocity.completionRatePct}% completion rate`
-              : ""}
-          </p>
-        </Card>
-      ) : null}
-      {me && sloMetrics ? (
-        <Card tone="panel">
-          <Eyebrow>Reliability SLO</Eyebrow>
-          <p className="mt-2 text-sm text-[var(--color-gray-300)]">
-            Scan success {sloMetrics.scanSuccessRatePct}% · Report availability {sloMetrics.reportAvailabilityPct}% ·
-            Target {sloMetrics.targetSloPct}% ({sloMetrics.sampleSize} samples)
-          </p>
-        </Card>
-      ) : null}
-      {me && portfolioRollup ? (
-        <Card tone="panel">
-          <Eyebrow>Portfolio readiness</Eyebrow>
-          <p className="mt-2 text-2xl font-semibold text-white">{portfolioRollup.overallReadiness}</p>
-          <dl className="mt-4 grid gap-2 sm:grid-cols-2">
-            {Object.entries(portfolioRollup.byBusinessUnit).map(([unit, score]) => (
-              <div key={unit}>
-                <dt className="text-xs uppercase tracking-[0.14em] text-[var(--color-gray-500)]">{unit}</dt>
-                <dd className="text-sm text-white">{score}</dd>
-              </div>
-            ))}
-          </dl>
-          {savedKey ? (
-            <div className="mt-4 flex flex-col gap-2 sm:flex-row">
-              <input
-                type="text"
-                value={portfolioTargetInput}
-                onChange={(event) => setPortfolioTargetInput(event.target.value)}
-                placeholder="Add target domain"
-                className="w-full rounded-full border border-[var(--border-strong)] bg-black px-4 py-2 text-sm text-white"
-              />
-              <input
-                type="text"
-                value={portfolioUnit}
-                onChange={(event) => setPortfolioUnit(event.target.value)}
-                placeholder="Business unit"
-                className="w-full rounded-full border border-[var(--border-strong)] bg-black px-4 py-2 text-sm text-white sm:max-w-xs"
-              />
-              <button
-                type="button"
-                className="rounded-full border border-[var(--border-strong)] bg-white px-5 py-2 text-sm font-medium text-black"
-                onClick={async () => {
-                  if (!portfolioTargetInput) return;
-                  try {
-                    await postTenantJson("/tenant/portfolio", savedKey, {
-                      target: portfolioTargetInput,
-                      businessUnit: portfolioUnit || "default",
-                    });
-                    setActionMessage("Portfolio target added.");
-                    await loadDashboard(savedKey);
-                  } catch (portfolioError) {
-                    setActionMessage(
-                      portfolioError instanceof Error ? portfolioError.message : "Portfolio update failed."
-                    );
-                  }
-                }}
-              >
-                Add target
-              </button>
-            </div>
-          ) : null}
-        </Card>
-      ) : null}
-
       {me ? (
-        <Card tone="panel">
-          <Eyebrow>Tenant overview</Eyebrow>
-          <dl className="mt-4 grid gap-4 sm:grid-cols-2">
-            <div>
-              <dt className="text-xs uppercase tracking-[0.18em] text-[var(--color-gray-500)]">Tenant ID</dt>
-              <dd className="mt-1 font-mono text-sm text-white">{me.tenantId}</dd>
-            </div>
-            <div>
-              <dt className="text-xs uppercase tracking-[0.18em] text-[var(--color-gray-500)]">Persistence</dt>
-              <dd className="mt-1 text-sm text-white">{me.persistenceEnabled ? "Postgres enabled" : "In-memory / demo"}</dd>
-            </div>
-            {me.entitlements?.tier ? (
-              <div>
-                <dt className="text-xs uppercase tracking-[0.18em] text-[var(--color-gray-500)]">Plan tier</dt>
-                <dd className="mt-1 text-sm text-white capitalize">{me.entitlements.tier}</dd>
-              </div>
+        <>
+          <DashboardSection title="Overview">
+            {apiKeyCard}
+            {latestScan ? (
+              <Card tone="feature" size="lg" className="rounded-[var(--radius-feature)]">
+                <Eyebrow>Readiness at a glance</Eyebrow>
+                <p className="mt-4 text-4xl font-semibold tracking-tight text-white">
+                  {latestScan.readinessScore}
+                  {latestScan.readinessBand ? (
+                    <span className="ml-3 text-lg font-normal text-[var(--color-gray-400)]">
+                      {latestScan.readinessBand}
+                    </span>
+                  ) : null}
+                </p>
+                <p className="mt-2 text-sm text-[var(--color-gray-400)]">
+                  Latest scan {latestScan.scanId} · {formatUtcDateTime(latestScan.createdAt)}
+                </p>
+              </Card>
             ) : null}
-            {me.role ? (
-              <div>
-                <dt className="text-xs uppercase tracking-[0.18em] text-[var(--color-gray-500)]">API key role</dt>
-                <dd className="mt-1 text-sm text-white">{me.role}</dd>
-              </div>
-            ) : null}
-          </dl>
-          {billingPortalUrl ? (
-            <a
-              href={billingPortalUrl}
-              className="mt-4 inline-block text-sm text-white underline underline-offset-4"
-              target="_blank"
-              rel="noreferrer"
-            >
-              Manage billing
-            </a>
-          ) : (
-            <a href="/pricing" className="mt-4 inline-block text-sm text-[var(--color-gray-400)] underline">
-              View plans
-            </a>
-          )}
-        </Card>
-      ) : null}
+            <Card tone="panel">
+              <Eyebrow>Tenant overview</Eyebrow>
+              <dl className="mt-4 grid gap-4 sm:grid-cols-2">
+                <div>
+                  <dt className="text-xs uppercase tracking-[0.18em] text-[var(--color-gray-500)]">Tenant ID</dt>
+                  <dd className="mt-1 font-mono text-sm text-white">{me.tenantId}</dd>
+                </div>
+                <div>
+                  <dt className="text-xs uppercase tracking-[0.18em] text-[var(--color-gray-500)]">Persistence</dt>
+                  <dd className="mt-1 text-sm text-white">
+                    {me.persistenceEnabled ? "Postgres enabled" : "In-memory / demo"}
+                  </dd>
+                </div>
+                {me.entitlements?.tier ? (
+                  <div>
+                    <dt className="text-xs uppercase tracking-[0.18em] text-[var(--color-gray-500)]">Plan tier</dt>
+                    <dd className="mt-1 text-sm text-white capitalize">{me.entitlements.tier}</dd>
+                  </div>
+                ) : null}
+                {me.role ? (
+                  <div>
+                    <dt className="text-xs uppercase tracking-[0.18em] text-[var(--color-gray-500)]">API key role</dt>
+                    <dd className="mt-1 text-sm text-white">{me.role}</dd>
+                  </div>
+                ) : null}
+              </dl>
+              {billingPortalUrl ? (
+                <a
+                  href={billingPortalUrl}
+                  className="mt-4 inline-block text-sm text-white underline underline-offset-4"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Manage billing
+                </a>
+              ) : (
+                <a href="/pricing" className="mt-4 inline-block text-sm text-[var(--color-gray-400)] underline">
+                  View plans
+                </a>
+              )}
+            </Card>
+          </DashboardSection>
 
-      {savedKey && scans.length > 0 ? (
-        <Card tone="panel">
-          <Eyebrow>Recent PQC scans</Eyebrow>
+          <DashboardSection title="Trend & drift">
+            {trendPoints.length >= 2 ? (
+              <Card tone="panel">
+                <Eyebrow>Readiness trend</Eyebrow>
+                <ReadinessTrend points={trendPoints} />
+              </Card>
+            ) : null}
+            {weeklyDigest ? (
+              <Card tone="panel">
+                <Eyebrow>Weekly executive digest</Eyebrow>
+                <p className="mt-2 text-sm text-white">{weeklyDigest.headline}</p>
+                {weeklyDigest.risks.length > 0 ? (
+                  <ul className="mt-3 list-disc pl-5 text-xs text-[var(--color-gray-400)]">
+                    {weeklyDigest.risks.slice(0, 3).map((risk) => (
+                      <li key={risk}>{risk}</li>
+                    ))}
+                  </ul>
+                ) : null}
+              </Card>
+            ) : null}
+            {commandCenter && Object.keys(commandCenter.businessUnits).length > 0 ? (
+              <Card tone="panel">
+                <Eyebrow>Portfolio command center</Eyebrow>
+                <div className="mt-4 overflow-x-auto">
+                  <table className="min-w-full text-left text-sm">
+                    <thead className="text-xs uppercase text-[var(--color-gray-500)]">
+                      <tr>
+                        <th className="pb-2 pr-4">Business unit</th>
+                        <th className="pb-2 pr-4">Readiness</th>
+                        <th className="pb-2 pr-4">Δ vs prior</th>
+                        <th className="pb-2">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody className="text-[var(--color-gray-300)]">
+                      {Object.entries(commandCenter.businessUnits)
+                        .sort(([, a], [, b]) => a - b)
+                        .map(([unit, score]) => (
+                          <tr key={unit} className="border-t border-[var(--border-subtle)]">
+                            <td className="py-2 pr-4 text-white">{unit}</td>
+                            <td className="py-2 pr-4">{score}</td>
+                            <td className="py-2 pr-4">
+                              {commandCenter.businessUnitDeltas?.[unit] != null
+                                ? commandCenter.businessUnitDeltas[unit]
+                                : "—"}
+                            </td>
+                            <td className="py-2">
+                              {savedKey ? (
+                                <button
+                                  type="button"
+                                  className="text-white underline underline-offset-4"
+                                  onClick={() => {
+                                    setScheduleTarget("");
+                                    setPortfolioUnit(unit);
+                                    setActionMessage(`Create a weekly schedule for BU "${unit}" below.`);
+                                  }}
+                                >
+                                  Schedule monitoring
+                                </button>
+                              ) : null}
+                            </td>
+                          </tr>
+                        ))}
+                    </tbody>
+                  </table>
+                </div>
+              </Card>
+            ) : null}
+            {latestScan ? (
+              <Card tone="panel">
+                <Eyebrow>Scan diff</Eyebrow>
+                <div className="mt-4">
+                  {scanDiff ? (
+                    <ScanDiffPanel diff={scanDiff} />
+                  ) : (
+                    <p className="text-sm text-[var(--color-gray-500)]">
+                      No prior scan to compare. Run a second scan on the same target to see drift.
+                    </p>
+                  )}
+                </div>
+              </Card>
+            ) : null}
+            {heatmapAssets.length > 0 ? (
+              <Card tone="panel">
+                <Eyebrow>Asset heatmap</Eyebrow>
+                <div className="mt-4">
+                  <InventoryHeatmap assets={heatmapAssets} />
+                </div>
+              </Card>
+            ) : null}
+            {compliance ? (
+              <Card tone="panel">
+                <Eyebrow>Compliance &amp; frameworks</Eyebrow>
+                <div className="mt-4">
+                  <CompliancePanel pack={compliance.pack} summary={compliance.summary} />
+                </div>
+              </Card>
+            ) : null}
+            {analytics.forecast || analytics.anomalyAlerts.length > 0 ? (
+              <Card tone="panel">
+                <Eyebrow>Intelligence</Eyebrow>
+                <div className="mt-3 grid gap-4 sm:grid-cols-2 text-sm text-[var(--color-gray-300)]">
+                  {analytics.forecast?.projected != null ? (
+                    <div>
+                      <p className="text-xs uppercase text-[var(--color-gray-500)]">Forecast (4 scans)</p>
+                      <p className="mt-1 text-white">
+                        {analytics.forecast.current} → {analytics.forecast.projected}
+                      </p>
+                    </div>
+                  ) : null}
+                  {analytics.anomalyAlerts.length > 0 ? (
+                    <div>
+                      <p className="text-xs uppercase text-[var(--color-gray-500)]">Anomalies</p>
+                      <p className="mt-1">{analytics.anomalyAlerts[0]?.message}</p>
+                    </div>
+                  ) : null}
+                </div>
+              </Card>
+            ) : null}
+            {portfolioRollup ? (
+              <Card tone="panel">
+                <Eyebrow>Portfolio readiness</Eyebrow>
+                <p className="mt-2 text-2xl font-semibold text-white">{portfolioRollup.overallReadiness}</p>
+                <dl className="mt-4 grid gap-2 sm:grid-cols-2">
+                  {Object.entries(portfolioRollup.byBusinessUnit).map(([unit, score]) => (
+                    <div key={unit}>
+                      <dt className="text-xs uppercase tracking-[0.14em] text-[var(--color-gray-500)]">{unit}</dt>
+                      <dd className="text-sm text-white">{score}</dd>
+                    </div>
+                  ))}
+                </dl>
+                {savedKey ? (
+                  <div className="mt-4 flex flex-col gap-2 sm:flex-row">
+                    <input
+                      type="text"
+                      value={portfolioTargetInput}
+                      onChange={(event) => setPortfolioTargetInput(event.target.value)}
+                      placeholder="Add target domain"
+                      className="w-full rounded-full border border-[var(--border-strong)] bg-black px-4 py-2 text-sm text-white"
+                    />
+                    <input
+                      type="text"
+                      value={portfolioUnit}
+                      onChange={(event) => setPortfolioUnit(event.target.value)}
+                      placeholder="Business unit"
+                      className="w-full rounded-full border border-[var(--border-strong)] bg-black px-4 py-2 text-sm text-white sm:max-w-xs"
+                    />
+                    <button
+                      type="button"
+                      className="rounded-full border border-[var(--border-strong)] bg-white px-5 py-2 text-sm font-medium text-black"
+                      onClick={async () => {
+                        if (!portfolioTargetInput) return;
+                        try {
+                          await postTenantJson("/tenant/portfolio", savedKey, {
+                            target: portfolioTargetInput,
+                            businessUnit: portfolioUnit || "default",
+                          });
+                          setActionMessage("Portfolio target added.");
+                          await loadDashboard(savedKey);
+                        } catch (portfolioError) {
+                          setActionMessage(
+                            portfolioError instanceof Error ? portfolioError.message : "Portfolio update failed."
+                          );
+                        }
+                      }}
+                    >
+                      Add target
+                    </button>
+                  </div>
+                ) : null}
+              </Card>
+            ) : null}
+          </DashboardSection>
+
+          <DashboardSection title="Remediation">
+            {savedKey && remediationScan ? (
+              <Card tone="panel">
+                <Eyebrow>Top remediation priorities</Eyebrow>
+                <RemediationBoard
+                  apiKey={savedKey}
+                  scanId={remediationScan.scanId}
+                  items={remediationScan.items}
+                  initialStatuses={remediationScan.statuses}
+                  jiraConfigured={jiraConfigured}
+                  allScans={scans.map((s) => ({ scanId: s.scanId, label: s.targetDomain ?? s.scanId }))}
+                />
+              </Card>
+            ) : null}
+            {remediationVelocity ? (
+              <Card tone="panel">
+                <Eyebrow>Remediation velocity</Eyebrow>
+                <p className="mt-2 text-sm text-[var(--color-gray-300)]">
+                  {remediationVelocity.closedCount} closed · {remediationVelocity.openCount} open
+                  {remediationVelocity.completionRatePct != null
+                    ? ` · ${remediationVelocity.completionRatePct}% completion rate`
+                    : ""}
+                </p>
+              </Card>
+            ) : null}
+            {sloMetrics ? (
+              <Card tone="panel">
+                <Eyebrow>Reliability SLO</Eyebrow>
+                <p className="mt-2 text-sm text-[var(--color-gray-300)]">
+                  Scan success {sloMetrics.scanSuccessRatePct}% · Report availability{" "}
+                  {sloMetrics.reportAvailabilityPct}% · Target {sloMetrics.targetSloPct}% (
+                  {sloMetrics.sampleSize} samples)
+                </p>
+              </Card>
+            ) : null}
+            {savedKey && scans.length > 0 ? (
+              <Card tone="panel">
+                <Eyebrow>Recent PQC scans</Eyebrow>
           <div className="mt-3 flex flex-col gap-2 sm:flex-row sm:items-center">
             <input
               type="email"
@@ -775,99 +801,103 @@ export default function DashboardClient() {
               />
             </div>
           ) : null}
-        </Card>
-      ) : savedKey && !loading ? (
-        <Card tone="ghost">
-          <p className="text-sm text-[var(--color-gray-400)]">No scans yet for this tenant.</p>
-        </Card>
-      ) : null}
+              </Card>
+            ) : savedKey && !loading ? (
+              <Card tone="ghost">
+                <p className="text-sm text-[var(--color-gray-400)]">No scans yet for this tenant.</p>
+              </Card>
+            ) : null}
+          </DashboardSection>
 
-      {savedKey && me?.persistenceEnabled ? (
-        <Card tone="panel">
-          <Eyebrow>Alert settings</Eyebrow>
-          <div className="mt-4">
-            <AlertSettings apiKey={savedKey} onMessage={setActionMessage} />
-          </div>
-        </Card>
-      ) : null}
+          <DashboardSection title="Settings">
+            {savedKey && me.persistenceEnabled ? (
+              <Card tone="panel">
+                <Eyebrow>Alert settings</Eyebrow>
+                <div className="mt-4">
+                  <AlertSettings apiKey={savedKey} onMessage={setActionMessage} />
+                </div>
+              </Card>
+            ) : null}
 
-      {savedKey && me?.persistenceEnabled ? (
-        <Card tone="panel">
-          <Eyebrow>Integrations</Eyebrow>
-          <div className="mt-4">
-            <IntegrationSettings apiKey={savedKey} onMessage={setActionMessage} />
-          </div>
-        </Card>
-      ) : null}
+            {savedKey && me.persistenceEnabled ? (
+              <Card tone="panel">
+                <Eyebrow>Integrations</Eyebrow>
+                <div className="mt-4">
+                  <IntegrationSettings apiKey={savedKey} onMessage={setActionMessage} />
+                </div>
+              </Card>
+            ) : null}
 
-      {savedKey && me?.persistenceEnabled && me.role === "admin" ? (
-        <Card tone="panel">
-          <Eyebrow>Audit log (admin)</Eyebrow>
-          <div className="mt-4">
-            <AuditLogPanel apiKey={savedKey} />
-          </div>
-        </Card>
-      ) : savedKey && me?.persistenceEnabled && me.role !== "admin" ? (
-        <Card tone="ghost">
-          <p className="text-xs text-[var(--color-gray-500)]">Audit log requires an admin API key.</p>
-        </Card>
-      ) : null}
+            {savedKey && me.persistenceEnabled && me.role === "admin" ? (
+              <Card tone="panel">
+                <Eyebrow>Audit log (admin)</Eyebrow>
+                <div className="mt-4">
+                  <AuditLogPanel apiKey={savedKey} />
+                </div>
+              </Card>
+            ) : savedKey && me.persistenceEnabled && me.role !== "admin" ? (
+              <Card tone="ghost">
+                <p className="text-xs text-[var(--color-gray-500)]">Audit log requires an admin API key.</p>
+              </Card>
+            ) : null}
 
-      {savedKey && me?.persistenceEnabled ? (
-        <Card tone="panel">
-          <Eyebrow>Scheduled monitoring</Eyebrow>
-          <p className="mt-2 text-sm text-[var(--color-gray-400)]">
-            Requires Redis worker with QTANGL_ENABLE_SCHEDULER. Gracefully unavailable on single-process deploys.
-          </p>
-          <div className="mt-4 flex flex-col gap-3 sm:flex-row">
-            <input
-              type="text"
-              value={scheduleTarget}
-              onChange={(event) => setScheduleTarget(event.target.value)}
-              placeholder="Target domain (optional)"
-              className="w-full rounded-full border border-[var(--border-strong)] bg-black px-4 py-2 text-sm text-white"
-            />
-            <input
-              type="email"
-              value={scheduleEmail}
-              onChange={(event) => setScheduleEmail(event.target.value)}
-              placeholder="Notify email"
-              className="w-full rounded-full border border-[var(--border-strong)] bg-black px-4 py-2 text-sm text-white sm:max-w-xs"
-            />
-            <button
-              type="button"
-              className="rounded-full border border-[var(--border-strong)] bg-white px-5 py-2 text-sm font-medium text-black"
-              onClick={async () => {
-                try {
-                  await postTenantJson("/tenant/schedules", savedKey, {
-                    scenarioId: "bank-tls-inventory",
-                    target: scheduleTarget || null,
-                    cadenceHours: 168,
-                    notifyEmail: scheduleEmail || null,
-                  });
-                  setActionMessage("Schedule created.");
-                } catch (scheduleError) {
-                  setActionMessage(
-                    scheduleError instanceof Error ? scheduleError.message : "Schedule failed."
-                  );
-                }
-              }}
-            >
-              Create weekly schedule
-            </button>
-          </div>
-          <div className="mt-4">
-            <ScheduleManager
-              apiKey={savedKey}
-              schedules={schedules}
-              onRefresh={() => loadDashboard(savedKey)}
-              onMessage={setActionMessage}
-            />
-          </div>
-        </Card>
+            {savedKey && me.persistenceEnabled ? (
+              <Card tone="panel">
+                <Eyebrow>Scheduled monitoring</Eyebrow>
+                <p className="mt-2 text-sm text-[var(--color-gray-400)]">
+                  Requires Redis worker with QTANGL_ENABLE_SCHEDULER. Gracefully unavailable on single-process
+                  deploys.
+                </p>
+                <div className="mt-4 flex flex-col gap-3 sm:flex-row">
+                  <input
+                    type="text"
+                    value={scheduleTarget}
+                    onChange={(event) => setScheduleTarget(event.target.value)}
+                    placeholder="Target domain (optional)"
+                    className="w-full rounded-full border border-[var(--border-strong)] bg-black px-4 py-2 text-sm text-white"
+                  />
+                  <input
+                    type="email"
+                    value={scheduleEmail}
+                    onChange={(event) => setScheduleEmail(event.target.value)}
+                    placeholder="Notify email"
+                    className="w-full rounded-full border border-[var(--border-strong)] bg-black px-4 py-2 text-sm text-white sm:max-w-xs"
+                  />
+                  <button
+                    type="button"
+                    className="rounded-full border border-[var(--border-strong)] bg-white px-5 py-2 text-sm font-medium text-black"
+                    onClick={async () => {
+                      try {
+                        await postTenantJson("/tenant/schedules", savedKey, {
+                          scenarioId: "bank-tls-inventory",
+                          target: scheduleTarget || null,
+                          cadenceHours: 168,
+                          notifyEmail: scheduleEmail || null,
+                        });
+                        setActionMessage("Schedule created.");
+                      } catch (scheduleError) {
+                        setActionMessage(
+                          scheduleError instanceof Error ? scheduleError.message : "Schedule failed."
+                        );
+                      }
+                    }}
+                  >
+                    Create weekly schedule
+                  </button>
+                </div>
+                <div className="mt-4">
+                  <ScheduleManager
+                    apiKey={savedKey}
+                    schedules={schedules}
+                    onRefresh={() => loadDashboard(savedKey)}
+                    onMessage={setActionMessage}
+                  />
+                </div>
+              </Card>
+            ) : null}
+          </DashboardSection>
+        </>
       ) : null}
-
-      {me ? apiKeyCard : null}
     </div>
   );
 }

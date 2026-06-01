@@ -210,6 +210,23 @@ def build_pdf(report: MigrationReport) -> bytes:
             Paragraph(f"Remediation completion: {report.remediation_completion_pct}%", body)
         )
     story.extend(_remediation_table(report, body))
+    verified_fixes = [
+        item
+        for item in report.remediation_backlog
+        if (getattr(item, "metadata", None) or {}).get("verifyScanId")
+    ]
+    if verified_fixes:
+        story.append(Spacer(1, 0.12 * inch))
+        story.append(Paragraph("Verified remediations (re-scan evidence)", body))
+        for item in verified_fixes[:25]:
+            meta = getattr(item, "metadata", None) or {}
+            story.append(
+                Paragraph(
+                    f"&bull; #{item.priority} {item.title[:60]} — verified via re-scan "
+                    f"{meta.get('verifyScanId')}",
+                    muted,
+                )
+            )
     story.append(PageBreak())
 
     if report.standards_summary:

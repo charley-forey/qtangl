@@ -66,7 +66,7 @@ export const roiPageCopy = {
     "Present as an estimate with your own inputs. Qtangl Monitor mid-tier is modeled at $100K/yr; Assessment land motion at $35K one-time.",
   cta: {
     primary: { label: "Request pilot access", href: "/access?interest=Q-Day%20Monitor%20(annual)" },
-    secondary: { label: "Run Q-Day scan", href: "/demo/pqc" },
+    secondary: { label: "Run Q-Day scan", href: "/assess" },
   },
 } as const;
 

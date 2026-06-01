@@ -10,7 +10,7 @@ export const platformPageCopy = {
     description:
       "One platform from first Q-Day inventory to ongoing drift monitoring and remediation proof your auditors can verify.",
     actions: [
-      { href: "/demo/pqc", label: "Run Q-Day scan" },
+      { href: "/assess", label: "Run Q-Day scan" },
       { href: "/assess", label: "Explore Assess", variant: "secondary" as const },
     ],
   },

@@ -72,9 +72,16 @@ export const miniAssessmentCopy = {
     honesty:
       "Fixture-only preview. Authorize a live scan for your production domains and a signed CBOM export.",
   },
+  selector: {
+    eyebrow: "Pick your industry",
+    label: "Choose the scenario closest to your environment for a tailored sample.",
+  },
   upsell: {
-    primary: { label: "Run live Q-Day scan", href: "/demo/pqc" },
-    secondary: { label: "Request full Assess", href: "/access?interest=Q-Day%20Assessment%20(one-time)&source=mini-assessment" },
+    primary: { label: "Run a live scan on your domain", href: "/assess" },
+    secondary: {
+      label: "Request a Monitor pilot",
+      href: "/access?interest=Q-Day%20Monitor%20(annual)&source=mini-assessment",
+    },
     tertiary: { label: "Download sample CBOM", href: "/samples/sample-cbom-bank-tls-inventory.json" },
   },
 } as const;
@@ -122,6 +129,141 @@ export const miniAssessmentFindings: MiniAssessmentFinding[] = [
     severity: "medium",
     algorithm: "RSA",
     framework: "HIPAA · NIST IR 8547",
+  },
+];
+
+export type MiniAssessmentScenario = {
+  id: "bank" | "gov" | "healthcare";
+  label: string;
+  eyebrow: string;
+  interest: string;
+  monitorPitch: string;
+  results: {
+    readinessScore: number;
+    readinessBand: string;
+    coverageConfidence: number;
+    targetDomain: string;
+  };
+  findings: MiniAssessmentFinding[];
+};
+
+export const miniAssessmentScenarios: MiniAssessmentScenario[] = [
+  {
+    id: "bank",
+    label: "Banking",
+    eyebrow: "Sample results — bank TLS scenario",
+    interest: "Q-Day Assessment (one-time)",
+    monitorPitch:
+      "With Monitor, a new RSA-2048 endpoint or certificate downgrade surfaces before your next PCI-DSS assessment — not after.",
+    results: {
+      readinessScore: 58,
+      readinessBand: "At risk",
+      coverageConfidence: 68,
+      targetDomain: "api.regionalbank.example",
+    },
+    findings: miniAssessmentFindings,
+  },
+  {
+    id: "gov",
+    label: "Government / defense",
+    eyebrow: "Sample results — gov contractor CMMC scenario",
+    interest: "Enterprise PQC program",
+    monitorPitch:
+      "Monitor tracks CNSA 2.0 and CMMC drift between assessment cycles, so primes see continuous evidence — not a stale snapshot.",
+    results: {
+      readinessScore: 51,
+      readinessBand: "At risk",
+      coverageConfidence: 64,
+      targetDomain: "portal.defensecontractor.example",
+    },
+    findings: [
+      {
+        rank: 1,
+        title: "Release artifact code signing (RSA-3072)",
+        severity: "critical",
+        algorithm: "RSA",
+        framework: "CNSA 2.0 · CMMC",
+      },
+      {
+        rank: 2,
+        title: "CAC/PIV middleware TLS (RSA-2048)",
+        severity: "high",
+        algorithm: "RSA",
+        framework: "NSM-10 · FIPS 140-3",
+      },
+      {
+        rank: 3,
+        title: "CUI transfer SFTP (RSA host key)",
+        severity: "high",
+        algorithm: "RSA",
+        framework: "CMMC L2 · NIST IR 8547",
+      },
+      {
+        rank: 4,
+        title: "OIDC SSO JWKS (ECDSA P-256)",
+        severity: "medium",
+        algorithm: "ECDSA",
+        framework: "NIST IR 8547",
+      },
+      {
+        rank: 5,
+        title: "Site-to-site VPN IKE (ECDH P-256)",
+        severity: "medium",
+        algorithm: "ECDH",
+        framework: "CNSA 2.0",
+      },
+    ],
+  },
+  {
+    id: "healthcare",
+    label: "Healthcare",
+    eyebrow: "Sample results — healthcare HNDL scenario",
+    interest: "Q-Day Monitor (annual)",
+    monitorPitch:
+      "Long-retained PHI means harvest-now-decrypt-later risk compounds. Monitor proves your transit crypto keeps improving over time.",
+    results: {
+      readinessScore: 55,
+      readinessBand: "At risk",
+      coverageConfidence: 66,
+      targetDomain: "portal.healthpayer.example",
+    },
+    findings: [
+      {
+        rank: 1,
+        title: "PHI data exchange TLS (RSA-2048)",
+        severity: "critical",
+        algorithm: "RSA",
+        framework: "HIPAA · NIST IR 8547",
+      },
+      {
+        rank: 2,
+        title: "HL7 / FHIR API TLS (ECDSA P-256)",
+        severity: "high",
+        algorithm: "ECDSA",
+        framework: "HIPAA · HNDL",
+      },
+      {
+        rank: 3,
+        title: "Claims clearinghouse SFTP (RSA host key)",
+        severity: "high",
+        algorithm: "RSA",
+        framework: "HIPAA",
+      },
+      {
+        rank: 4,
+        title: "Patient portal JWKS (RS256 signing)",
+        severity: "medium",
+        algorithm: "RSA",
+        framework: "NIST IR 8547",
+      },
+      {
+        rank: 5,
+        title: "Email STARTTLS (RSA key exchange)",
+        severity: "medium",
+        algorithm: "RSA",
+        framework: "HIPAA · NIST IR 8547",
+      },
+    ],
   },
 ];
 
@@ -186,7 +328,7 @@ export const checklistPageCopy = {
       "Use this as a self-audit worksheet — or automate each step with Qtangl Assess and Monitor.",
   },
   cta: {
-    primary: { label: "Automate with Qtangl", href: "/demo/pqc" },
+    primary: { label: "Automate with Qtangl", href: "/assess" },
     secondary: { label: "Free mini-assessment", href: "/assess/mini" },
   },
 } as const;

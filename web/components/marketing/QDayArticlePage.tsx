@@ -30,7 +30,7 @@ export default function QDayArticlePage({ slug }: QDayArticlePageProps) {
         title={article.title}
         description={article.description}
         actions={[
-          { href: "/demo/pqc", label: "Run Q-Day scan" },
+          { href: "/assess", label: "Run Q-Day scan" },
           { href: "/q-day", label: "Back to hub", variant: "secondary" },
         ]}
       />
@@ -63,7 +63,7 @@ export default function QDayArticlePage({ slug }: QDayArticlePageProps) {
 
       <Section gap="tight" className="pb-0">
         <div className="flex flex-wrap gap-3">
-          <Button href="/demo/pqc">Run Q-Day scan</Button>
+          <Button href="/assess">Run Q-Day scan</Button>
           <Link
             href="/q-day"
             className="inline-flex items-center text-sm text-[var(--color-gray-400)] underline-offset-4 hover:text-white hover:underline"

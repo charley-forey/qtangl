@@ -29,6 +29,22 @@ export default function AccessSuccess({ message, interest = "" }: AccessSuccessP
         </p>
 
         <div className="rounded-[var(--radius-xl)] border border-[var(--border)] bg-white/[0.03] p-5">
+          <Eyebrow>{accessSuccessCopy.processEyebrow}</Eyebrow>
+          <ol className="mt-4 grid gap-4 sm:grid-cols-3">
+            {accessSuccessCopy.process.map((item) => (
+              <li
+                key={item.step}
+                className="rounded-xl border border-[var(--border-subtle)] bg-black/20 px-4 py-4"
+              >
+                <p className="font-mono text-xs text-[var(--color-gray-500)]">Step {item.step}</p>
+                <p className="mt-2 text-sm font-semibold text-white">{item.title}</p>
+                <p className="mt-2 text-xs leading-6 text-[var(--color-gray-400)]">{item.detail}</p>
+              </li>
+            ))}
+          </ol>
+        </div>
+
+        <div className="rounded-[var(--radius-xl)] border border-[var(--border)] bg-white/[0.03] p-5">
           <Eyebrow>{accessSuccessCopy.exploreEyebrow}</Eyebrow>
           <ul className="mt-4 space-y-3">
             {nextSteps.map((step) => (

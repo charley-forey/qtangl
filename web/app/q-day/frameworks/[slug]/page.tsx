@@ -8,11 +8,12 @@ import Section from "@/components/layout/Section";
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
 import Eyebrow from "@/components/ui/Eyebrow";
+import JsonLd from "@/components/seo/JsonLd";
 import {
   frameworkGuideList,
   getFrameworkGuide,
 } from "@/lib/copy/readiness-frameworks";
-import { buildPageMetadata } from "@/lib/seo";
+import { buildFrameworkJsonLd, buildPageMetadata } from "@/lib/seo";
 
 type FrameworkRouteProps = {
   params: Promise<{ slug: string }>;
@@ -45,12 +46,13 @@ export default async function FrameworkGuidePage({ params }: FrameworkRouteProps
 
   return (
     <PageShell>
+      <JsonLd data={buildFrameworkJsonLd(guide)} />
       <PageHero
         eyebrow={guide.eyebrow}
         title={guide.title}
         description={guide.description}
         actions={[
-          { href: "/demo/pqc", label: "Run Q-Day scan" },
+          { href: "/assess", label: "Run Q-Day scan" },
           { href: "/q-day", label: "Q-Day hub", variant: "secondary" },
         ]}
       />

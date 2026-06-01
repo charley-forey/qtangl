@@ -78,7 +78,7 @@ export const demoCatalog: readonly DemoCatalogEntry[] = [
       "Inventory quantum-vulnerable crypto, Mosca HNDL risk, hybrid ML-KEM handshake proof, and CBOM migration reports.",
     runtime: "8:00",
     status: "live",
-    href: "/demo/pqc",
+    href: "/assess",
     variant: "workflow",
   },
   {

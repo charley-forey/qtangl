@@ -30,7 +30,6 @@ const readinessRoutes = [
   "/solutions/banking",
   "/solutions/government",
   "/solutions/healthcare",
-  "/demo/pqc",
   "/demo/pqc/methodology",
   "/trust",
   "/verify",
@@ -85,14 +84,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     url: `${siteMetadata.url}${route}`,
     lastModified: new Date(),
     changeFrequency:
-      route === "" || route.startsWith("/demo/pqc") || route.startsWith("/q-day")
+      route === "" || route.startsWith("/assess") || route.startsWith("/q-day")
         ? "weekly"
         : "monthly",
     priority:
       route === "" ||
       route === "/platform" ||
       route === "/assess" ||
-      route === "/demo/pqc" ||
       route === "/q-day"
         ? 1
         : route.startsWith("/solutions/") ||

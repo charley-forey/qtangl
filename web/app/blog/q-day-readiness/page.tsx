@@ -97,7 +97,7 @@ export default function QDayBlogPage() {
             <ol className="list-decimal space-y-2 pl-6">
               <li>
                 Run a{" "}
-                <Link href="/demo/pqc" className="text-white underline underline-offset-4">
+                <Link href="/assess" className="text-white underline underline-offset-4">
                   Q-Day readiness demo
                 </Link>{" "}
                 against a representative environment.
@@ -120,7 +120,7 @@ export default function QDayBlogPage() {
           </section>
 
           <footer className="flex flex-wrap gap-3 border-t border-[var(--color-gray-800)] pt-8">
-            <Button href="/demo/pqc">Try the Q-Day demo</Button>
+            <Button href="/assess">Try the Q-Day demo</Button>
             <Button href="/access" variant="secondary">
               Request access
             </Button>

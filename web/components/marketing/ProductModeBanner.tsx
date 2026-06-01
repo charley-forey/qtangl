@@ -13,7 +13,7 @@ export default function ProductModeBanner({
           Dashboard
         </Link>{" "}
         or run a scan on{" "}
-        <Link href="/demo/pqc" className="underline">
+        <Link href="/assess" className="underline">
           Demo
         </Link>
         .

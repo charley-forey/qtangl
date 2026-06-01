@@ -31,7 +31,7 @@ export default function DemosPage() {
         title={demosPageCopy.title}
         description={demosPageCopy.description}
         actions={[
-          { href: "/demo/pqc", label: "Run Q-Day scan" },
+          { href: "/assess", label: "Run Q-Day scan" },
           { href: "/platform", label: "Platform overview", variant: "secondary" },
         ]}
       />

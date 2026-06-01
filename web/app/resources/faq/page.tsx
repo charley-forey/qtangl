@@ -5,8 +5,9 @@ import PageHero from "@/components/layout/PageHero";
 import PageShell from "@/components/layout/PageShell";
 import Section from "@/components/layout/Section";
 import Button from "@/components/ui/Button";
-import { faqPageCopy } from "@/lib/copy/readiness-resources";
-import { buildPageMetadata } from "@/lib/seo";
+import JsonLd from "@/components/seo/JsonLd";
+import { faqPageCopy, readinessFaq } from "@/lib/copy/readiness-resources";
+import { buildFaqJsonLd, buildPageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildPageMetadata({
   path: "/resources/faq",
@@ -19,13 +20,14 @@ export default function FaqPage() {
 
   return (
     <PageShell>
+      <JsonLd data={buildFaqJsonLd(readinessFaq)} />
       <PageHero
         eyebrow={hero.eyebrow}
         title={hero.title}
         description={hero.description}
         actions={[
           { href: "/trust", label: "Trust center" },
-          { href: "/demo/pqc", label: "Run Q-Day scan", variant: "secondary" },
+          { href: "/assess", label: "Run Q-Day scan", variant: "secondary" },
         ]}
       />
       <Section gap="tight">

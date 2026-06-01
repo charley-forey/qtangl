@@ -17,6 +17,7 @@ import {
 } from "@/lib/pqc";
 
 import BundleUploader from "./BundleUploader";
+import CompliancePanel from "./CompliancePanel";
 import DemoGuideStrip from "./DemoGuideStrip";
 import HandshakeProofPanel from "./HandshakeProofPanel";
 import InventoryHeatmap from "./InventoryHeatmap";
@@ -31,12 +32,12 @@ import RoiCalculator from "./RoiCalculator";
 import ExecutivePriorities from "./ExecutivePriorities";
 import ReadinessTrend from "./ReadinessTrend";
 import ReferencesPanel from "./ReferencesPanel";
+import ScanResultsGuide from "./ScanResultsGuide";
 import ScanCoverage from "./ScanCoverage";
 import ScanLog from "./ScanLog";
 import ScanTargetCard from "./ScanTargetCard";
 import ScenarioPicker from "./ScenarioPicker";
 import SeverityDonut from "./SeverityDonut";
-import VideoEmbed from "./VideoEmbed";
 import VulnerabilityCard from "./VulnerabilityCard";
 import { PqcSection } from "./ui";
 
@@ -152,7 +153,7 @@ export default function QDayCommandCenter({
     params.set("case", activeScenarioId);
     params.set("useFixture", String(useFixture));
     if (bundleSessionId) params.set("session", bundleSessionId);
-    router.replace(`/demo/pqc?${params.toString()}`, { scroll: false });
+    router.replace(`/assess?${params.toString()}`, { scroll: false });
   }
 
   async function handleScan() {
@@ -264,7 +265,7 @@ export default function QDayCommandCenter({
           Lite scan (subset of findings — upsell preview)
         </label>
         <BundleUploader
-          onUploaded={(sessionId, summary) => {
+          onUploaded={(sessionId) => {
             setBundleSessionId(sessionId);
             setError(null);
             trackEvent("pqc_bundle_uploaded", { sessionId });
@@ -374,6 +375,7 @@ export default function QDayCommandCenter({
               <p className="mt-2 text-xs text-emerald-300">Quality checks passed for this scan result.</p>
             )}
           </PqcSection>
+          <ScanResultsGuide scan={scanResponse} />
           {qualityIssues.length > 0 && (
             <PqcSection title="What to do next">
               <ul className="list-disc space-y-1 pl-4 text-xs text-[var(--color-gray-300)]">
@@ -385,6 +387,12 @@ export default function QDayCommandCenter({
           )}
           <PqcSection title="Executive summary">
             <ExecutivePriorities summary={scanResponse.report?.executiveSummary} />
+          </PqcSection>
+          <PqcSection title="Compliance & frameworks">
+            <CompliancePanel
+              pack={scanResponse.report?.compliancePack}
+              summary={scanResponse.report?.complianceSummary}
+            />
           </PqcSection>
           <PqcSection title="Risk scoreboard">
             <RiskScoreboardCard scoreboard={scanResponse.scoreboard} />
@@ -477,7 +485,6 @@ export default function QDayCommandCenter({
         </PqcSection>
       )}
 
-      <VideoEmbed />
       <ReportDrawer
         open={reportOpen}
         onClose={() => setReportOpen(false)}

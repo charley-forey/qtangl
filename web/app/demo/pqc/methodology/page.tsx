@@ -89,7 +89,7 @@ export default function PqcMethodologyPage() {
           </section>
           <ReferencesPanel />
           <p>
-            <Link href="/demo/pqc" className="text-white underline">
+            <Link href="/assess" className="text-white underline">
               Return to the live demo
             </Link>
           </p>

@@ -105,17 +105,35 @@ export const accessSuccessCopy = {
   title: "You're on the list",
   subtitle:
     "We'll follow up within 2 business days. Check your inbox for a confirmation email.",
+  processEyebrow: "What happens next",
+  process: [
+    {
+      step: "1",
+      title: "Acknowledgement",
+      detail: "We reply within 2 business days with concrete next steps for your tier.",
+    },
+    {
+      step: "2",
+      title: "Scoping",
+      detail: "A short call to map your domains, compliance drivers, and success metrics.",
+    },
+    {
+      step: "3",
+      title: "Pilot slot",
+      detail: "Qualified teams receive demo credentials, a tenant key, and a pilot plan.",
+    },
+  ],
   exploreEyebrow: "While you wait",
   urgentPrefix: "Need a faster response?",
   defaultNextSteps: [
-    { label: "Run Q-Day scanner", href: "/demo/pqc" },
+    { label: "Run Q-Day scanner", href: "/assess" },
     { label: "Free mini-assessment", href: "/assess/mini" },
     { label: "Download sample CBOM", href: "/samples/sample-cbom-bank-tls-inventory.json" },
     { label: "Verify a report", href: "/verify" },
   ],
   nextStepsByInterest: {
     "Q-Day Assessment (one-time)": [
-      { label: "Run Q-Day scanner", href: "/demo/pqc" },
+      { label: "Run Q-Day scanner", href: "/assess" },
       { label: "Free mini-assessment", href: "/assess/mini" },
       { label: "Download sample CBOM", href: "/samples/sample-cbom-bank-tls-inventory.json" },
       { label: "See Assess tier", href: "/assess" },
@@ -144,7 +162,7 @@ export const accessSuccessCopy = {
 } as const;
 
 export const accessCtas = {
-  primary: { label: "Run Q-Day scan", href: "/demo/pqc" },
+  primary: { label: "Run Q-Day scan", href: "/assess" },
   secondary: { label: "Read docs", href: "/docs/guides/pqc-demo" },
 } as const;
 

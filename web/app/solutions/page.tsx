@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 
+import FrameworkCoverageStrip from "@/components/marketing/FrameworkCoverageStrip";
 import PageHero from "@/components/layout/PageHero";
 import PageShell from "@/components/layout/PageShell";
 import Section from "@/components/layout/Section";
@@ -24,13 +25,16 @@ export default function SolutionsIndexPage() {
         title={hero.title}
         description={hero.description}
         actions={[
-          { href: "/demo/pqc", label: "Run Q-Day scan" },
+          { href: "/assess", label: "Run Q-Day scan" },
           { href: "/assess/mini", label: "Free mini-assessment", variant: "secondary" },
         ]}
       />
-      <Section gap="tight" className="pb-0">
+      <Section gap="tight">
         <Eyebrow>Vertical playbooks</Eyebrow>
         <SolutionsIndex items={items} />
+      </Section>
+      <Section gap="tight" className="pb-0">
+        <FrameworkCoverageStrip intro="Banking, government, and healthcare teams use Qtangl to map quantum-vulnerable cryptography to the exact mandates their assessors cite — NSM-10, CNSA 2.0, NIST IR 8547, PCI-DSS 4.0, and CMMC — with signed, verifiable evidence." />
       </Section>
     </PageShell>
   );

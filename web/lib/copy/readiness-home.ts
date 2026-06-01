@@ -7,8 +7,8 @@ export const readinessHero = {
   title: "Assess. Monitor. Convert.",
   subhead:
     "Inventory quantum-vulnerable crypto in minutes. Monitor drift until Q-Day. Prove remediation with signed evidence.",
-  primaryCta: { label: "Run Q-Day scan", href: "/demo/pqc" },
-  secondaryCta: { label: "Verify a report", href: "/verify" },
+  primaryCta: { label: "Run Q-Day scan", href: "/assess" },
+  secondaryCta: { label: "Verify a report", href: "/verify?token=sample-token" },
 } as const;
 
 export const readinessHeadlineDemo = {
@@ -21,7 +21,7 @@ export const readinessHeadlineDemo = {
     { label: "Readiness score", value: "62" },
     { label: "Coverage confidence", value: "High" },
   ],
-  primaryCta: { label: "Open Q-Day scanner", href: "/demo/pqc" },
+  primaryCta: { label: "Open Q-Day scanner", href: "/assess" },
 } as const;
 
 export const readinessHomeNarrative = {
@@ -33,7 +33,6 @@ export const readinessHomeNarrative = {
   apiTitle: "Scan first. API when you're ready.",
   apiDescription:
     "POST a target domain. Get inventory, Mosca HNDL risk, CBOM exports, and a signed PDF your GRC team can verify.",
-  optimizeLink: { label: "Explore Labs (optimization expansion) →", href: "/labs" },
   qDayLink: { label: "Q-Day education hub →", href: "/q-day" },
 } as const;
 
@@ -42,9 +41,9 @@ export const readinessCtaPanel = {
   title: "Ready for your first Q-Day assessment?",
   description:
     "Run a live scan, review Mosca HNDL exposure, and export signed evidence — or request a guided pilot for your domain.",
-  primaryCta: { label: "Run Q-Day scan", href: "/demo/pqc" },
+  primaryCta: { label: "Run Q-Day scan", href: "/assess" },
   secondaryCta: { label: "Request pilot access", href: "/access" },
-  docsLink: { label: "Read the PQC demo guide", href: "/docs/guides/pqc-demo" },
+  docsLink: { label: "See a signed report", href: "/verify?token=sample-token" },
 } as const;
 
 export const readinessJourneyPoints = [
@@ -71,20 +70,20 @@ export const readinessUseCases = [
     title: "TLS inventory",
     outcome: "NSM-10 and PCI-DSS mapping for external-facing crypto.",
     measurement: `${hndl.label} exposure · CBOM export · verify link`,
-    demoHref: "/demo/pqc?scenario=bank-tls-inventory",
+    demoHref: "/assess?scenario=bank-tls-inventory",
   },
   {
     eyebrow: "Gov contractor",
     title: "CMMC crypto controls",
     outcome: "CNSA 2.0 deadline tiers mapped to your TLS footprint.",
     measurement: "Control gaps · remediation backlog · signed report",
-    demoHref: "/demo/pqc?scenario=gov-contractor-cmmc",
+    demoHref: "/assess?scenario=gov-contractor-cmmc",
   },
   {
     eyebrow: "Healthcare",
     title: "HNDL exposure",
     outcome: "HIPAA-sensitive data paths with NIST IR 8547 alignment.",
     measurement: "Mosca timeline · priority queue · audit pack",
-    demoHref: "/demo/pqc?scenario=healthcare-insurer-hndl",
+    demoHref: "/assess?scenario=healthcare-insurer-hndl",
   },
 ] as const;

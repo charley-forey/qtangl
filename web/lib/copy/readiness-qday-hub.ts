@@ -24,7 +24,7 @@ export const qDayHubCopy = {
     description:
       "Understand the threat, map your deadlines, and run a live inventory — with evidence your board and auditors can verify.",
     actions: [
-      { href: "/demo/pqc", label: "Run Q-Day scan" },
+      { href: "/assess", label: "Run Q-Day scan" },
       { href: "/assess", label: "Explore Assess", variant: "secondary" as const },
     ],
   },
@@ -136,7 +136,7 @@ export const qDayHubCopy = {
     title: "Sample artifacts",
     description: "See what a Qtangl assessment exports before you run your own scan.",
     items: [
-      { label: "Run live scanner", href: "/demo/pqc" },
+      { label: "Run live scanner", href: "/assess" },
       { label: "Free mini-assessment", href: "/assess/mini" },
       { label: "Verify a report", href: "/verify" },
       { label: "Download sample CBOM", href: "/samples/sample-cbom-bank-tls-inventory.json" },

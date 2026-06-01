@@ -126,6 +126,54 @@ export type TimelineEvent = {
   status: string;
 };
 
+export type ComplianceFramework = {
+  id: string;
+  name: string;
+  relevance: string;
+};
+
+export type ComplianceControlTheme = {
+  framework: string;
+  controlRef: string;
+  theme: string;
+};
+
+export type ComplianceGapFinding = {
+  framework: string;
+  asset?: string;
+  finding: string;
+  status: string;
+};
+
+export type ComplianceControlRow = {
+  framework: string;
+  ref: string;
+  theme: string;
+  status: string;
+  assetId?: string;
+  assetLabel?: string;
+};
+
+export type ComplianceSummary = {
+  controlsAtRisk?: ComplianceControlRow[];
+  controlsSatisfied?: ComplianceControlRow[];
+  atRiskCount?: number;
+  satisfiedCount?: number;
+};
+
+export type CompliancePack = {
+  packId: string;
+  title: string;
+  mandate?: string;
+  organization?: string;
+  persona?: string;
+  primaryFrameworks: ComplianceFramework[];
+  controlThemes: ComplianceControlTheme[];
+  mappedStandardsFromScan?: Array<Record<string, unknown>>;
+  gapFindings?: ComplianceGapFinding[];
+  complianceSummary?: ComplianceSummary;
+};
+
 export type PqcScanResponse = {
   status: "success";
   scanId: string;
@@ -138,6 +186,8 @@ export type PqcScanResponse = {
     executiveSummary?: Record<string, unknown>;
     migrationRoadmap?: Array<{ label: string; deadline: string; severity?: string }>;
     assetExplanations?: Record<string, string>;
+    compliancePack?: CompliancePack;
+    complianceSummary?: ComplianceSummary;
   };
   mosca: MoscaAssessment;
   timeline: TimelineEvent[];

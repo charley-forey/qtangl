@@ -29,7 +29,7 @@ export const maturityStages: readonly MaturityStage[] = [
     name: "Prioritized",
     characteristics: "Backlog ranked by Mosca/deadline; owners assigned",
     tier: "Assess + workshop",
-    href: "/demo/pqc",
+    href: "/assess",
     cta: "Run Q-Day scan →",
   },
   {
@@ -88,7 +88,7 @@ export const journeyPageCopy = {
     {
       title: "CISO / VP Security",
       trigger: "Board asks: how much RSA/ECDSA before 2030?",
-      entry: "/demo/pqc → Assessment → Monitor",
+      entry: "/assess → Assessment → Monitor",
     },
     {
       title: "Compliance / GRC lead",
@@ -103,7 +103,7 @@ export const journeyPageCopy = {
   ],
   touchpoints: [
     { channel: "Website", assess: "/assess", monitor: "/monitor", convert: "/convert" },
-    { channel: "Self-serve", assess: "/demo/pqc", monitor: "/access", convert: "/access" },
+    { channel: "Self-serve", assess: "/assess", monitor: "/access", convert: "/access" },
     { channel: "Dashboard", assess: "Scan history", monitor: "Drift + schedules", convert: "Remediation board" },
   ],
 } as const;

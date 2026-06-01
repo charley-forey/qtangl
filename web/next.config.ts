@@ -29,6 +29,11 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       {
+        source: "/assess",
+        destination: "/assess",
+        permanent: true,
+      },
+      {
         source: "/try",
         destination: "/sandbox",
         permanent: true,

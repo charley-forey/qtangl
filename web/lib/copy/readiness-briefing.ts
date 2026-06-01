@@ -37,7 +37,7 @@ export const executiveBriefingCopy = {
     },
   ],
   upsell: {
-    primary: { label: "Run Q-Day scan", href: "/demo/pqc" },
+    primary: { label: "Run Q-Day scan", href: "/assess" },
     secondary: { label: "Free mini-assessment", href: "/assess/mini" },
     tertiary: { label: "Request pilot access", href: "/access?interest=Enterprise%20PQC%20program&source=executive-briefing" },
   },

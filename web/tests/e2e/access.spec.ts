@@ -48,7 +48,7 @@ test("homepage primary CTA links to Q-Day scanner", async ({ page }) => {
   await page.goto("/");
   await expect(page.getByRole("link", { name: /Run Q-Day scan/i }).first()).toHaveAttribute(
     "href",
-    "/demo/pqc"
+    "/assess"
   );
 });
 

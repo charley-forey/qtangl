@@ -35,7 +35,7 @@ export default function PqcDemoGuidePage() {
           <DocsHeading>Interactive demo</DocsHeading>
           <p className="text-sm leading-8 text-[var(--color-gray-300)]">
             Open the{" "}
-            <Link href="/demo/pqc" className="text-white underline underline-offset-4">
+            <Link href="/assess" className="text-white underline underline-offset-4">
               Q-Day command center
             </Link>{" "}
             for the full UI.

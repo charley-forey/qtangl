@@ -50,6 +50,6 @@ export const convertPageCopy = {
     title: "Ready to convert?",
     description: "Convert builds on Monitor. Start with an assessment if you haven't baselined yet.",
     primary: { label: "Request pilot access", href: "/access" },
-    secondary: { label: "Run assessment first", href: "/demo/pqc" },
+    secondary: { label: "Run assessment first", href: "/assess" },
   },
 } as const;

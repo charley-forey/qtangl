@@ -256,6 +256,56 @@ export function buildContactPageJsonLd() {
   };
 }
 
+export function buildFrameworkJsonLd(guide: {
+  slug: string;
+  metadata: { title: string; description: string };
+  summary: string;
+  deadline: string;
+}) {
+  const url = absoluteUrl(`/q-day/frameworks/${guide.slug}`);
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "TechArticle",
+        headline: guide.metadata.title,
+        description: guide.metadata.description,
+        url,
+        about: { "@type": "Thing", name: guide.summary },
+        isPartOf: { "@id": `${siteMetadata.url}/#website` },
+        publisher: {
+          "@type": "Organization",
+          name: siteMetadata.name,
+          url: siteMetadata.url,
+        },
+      },
+      {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Home", item: siteMetadata.url },
+          { "@type": "ListItem", position: 2, name: "Q-Day", item: absoluteUrl("/q-day") },
+          { "@type": "ListItem", position: 3, name: guide.metadata.title, item: url },
+        ],
+      },
+    ],
+  };
+}
+
+export function buildFaqJsonLd(items: ReadonlyArray<{ question: string; answer: string }>) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: items.map((item) => ({
+      "@type": "Question",
+      name: item.question,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: item.answer,
+      },
+    })),
+  };
+}
+
 export function buildSoftwareApplicationJsonLd(options: {
   path: string;
   name: string;
@@ -355,14 +405,14 @@ export function buildEvFleetDemoJsonLd(options: { description: string; videoUrl?
   };
 }
 
-export function buildPqcDemoJsonLd(options: { description: string; videoUrl?: string }) {
-  const url = absoluteUrl("/demo/pqc");
+export function buildPqcDemoJsonLd(options: { description: string; videoUrl?: string; url?: string }) {
+  const pageUrl = options.url ?? absoluteUrl("/assess");
   const graph: Record<string, unknown>[] = [
     {
       "@type": "WebPage",
       name: "Q-Day readiness scanner",
       description: options.description,
-      url,
+      url: pageUrl,
       isPartOf: {
         "@id": `${siteMetadata.url}/#website`,
       },

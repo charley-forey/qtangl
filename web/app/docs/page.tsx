@@ -9,8 +9,8 @@ import DocsShell from "@/components/docs/DocsShell";
 import { MAIN_CONTENT_ID } from "@/components/layout/PageShell";
 import FeatureCard from "@/components/marketing/FeatureCard";
 import Card from "@/components/ui/Card";
-import { docsCards, pqcDocsCards } from "@/lib/constants";
-import { docsIndex, readinessDocsIndex } from "@/lib/copy/product";
+import { pqcDocsCards } from "@/lib/constants";
+import { readinessDocsIndex } from "@/lib/copy/product";
 import { docsSections } from "@/lib/docs/nav";
 import { docsSearchIndex } from "@/lib/docs/search-index-export";
 import { buildPageMetadata } from "@/lib/seo";
@@ -63,9 +63,9 @@ export default function DocsPage() {
           <DocsHeading>Start here — PQC</DocsHeading>
           <div className="grid gap-4 sm:grid-cols-2">
             <FeatureCard
-              title="Q-Day scanner demo"
+              title="Q-Day assessment scanner"
               description="Run a live scan with pre-built scenarios."
-              href="/demo/pqc"
+              href="/assess"
             />
             <FeatureCard
               title="PQC demo guide"
@@ -100,62 +100,12 @@ export default function DocsPage() {
         </DocsSection>
 
         <DocsSection>
-          <DocsHeading>Hybrid optimization API</DocsHeading>
-          <p className="text-sm leading-8 text-[var(--color-gray-300)]">
-            {docsIndex.whatItIs.description}
-          </p>
-        </DocsSection>
-
-        <DocsSection>
-          <DocsHeading>When to use /optimize</DocsHeading>
-          <ul className="space-y-3 text-sm leading-7 text-[var(--color-gray-300)]">
-            {docsIndex.whenToUseIt.items.map((item) => (
-              <li key={item}>{item}</li>
-            ))}
-          </ul>
-          <p className="text-sm leading-7 text-[var(--color-gray-400)]">
-            {docsIndex.whenToUseIt.kicker}
-          </p>
-        </DocsSection>
-
-        <DocsSection>
-          <DocsHeading>Start here — optimization</DocsHeading>
-          <div className="grid gap-4 sm:grid-cols-2">
-            <FeatureCard
-              title="Quickstart"
-              description="First POST /optimize in minutes."
-              href="/docs/quickstart"
-            />
-            <FeatureCard
-              title="Authentication"
-              description="Bearer tokens and API keys."
-              href="/docs/authentication"
-            />
-            <FeatureCard
-              title="API reference"
-              description="Per-endpoint fields and examples."
-              href="/docs/reference/optimize"
-            />
-            <FeatureCard
-              title="Sandbox"
-              description="Try the live API in the browser."
-              href="/sandbox"
-            />
-          </div>
-        </DocsSection>
-
-        <DocsSection>
-          <DocsHeading>Optimization guides</DocsHeading>
-          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-            {docsCards.map((card) => (
-              <FeatureCard
-                key={card.href}
-                title={card.title}
-                description={card.description}
-                href={card.href}
-              />
-            ))}
-          </div>
+          <DocsCallout variant="info" title="Labs / optimization (expansion)">
+            Hybrid scheduling and routing APIs remain available for pilot customers. Primary documentation
+            focuses on Q-Day readiness — Assess, Monitor, Convert. See{" "}
+            <Link href="/labs">Labs</Link> or the Labs section in the documentation map for optimization
+            guides and <code className="text-xs">POST /optimize</code> reference.
+          </DocsCallout>
         </DocsSection>
 
         <DocsSection>

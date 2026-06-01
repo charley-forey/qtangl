@@ -34,7 +34,7 @@ export const frameworkGuides: Record<string, FrameworkGuide> = {
       "Monitor tier tracks drift between audit cycles",
     ],
     relatedScenarios: [
-      { label: "Gov contractor CMMC", href: "/demo/pqc?scenario=gov-contractor-cmmc" },
+      { label: "Gov contractor CMMC", href: "/assess?scenario=gov-contractor-cmmc" },
     ],
     relatedArticles: [
       { label: "Compliance deadlines", href: "/q-day/deadlines" },
@@ -61,7 +61,7 @@ export const frameworkGuides: Record<string, FrameworkGuide> = {
       "Re-scan verification after each migration phase",
     ],
     relatedScenarios: [
-      { label: "Gov contractor CMMC", href: "/demo/pqc?scenario=gov-contractor-cmmc" },
+      { label: "Gov contractor CMMC", href: "/assess?scenario=gov-contractor-cmmc" },
     ],
     relatedArticles: [
       { label: "Compliance deadlines", href: "/q-day/deadlines" },
@@ -87,8 +87,8 @@ export const frameworkGuides: Record<string, FrameworkGuide> = {
       "Readiness score tracks transition progress over time",
     ],
     relatedScenarios: [
-      { label: "Healthcare HNDL", href: "/demo/pqc?scenario=healthcare-insurer-hndl" },
-      { label: "Bank TLS inventory", href: "/demo/pqc?scenario=bank-tls-inventory" },
+      { label: "Healthcare HNDL", href: "/assess?scenario=healthcare-insurer-hndl" },
+      { label: "Bank TLS inventory", href: "/assess?scenario=bank-tls-inventory" },
     ],
     relatedArticles: [
       { label: "CycloneDX CBOM", href: "/q-day/cbom" },
@@ -114,7 +114,7 @@ export const frameworkGuides: Record<string, FrameworkGuide> = {
       "Signed report for assessor review via /verify",
     ],
     relatedScenarios: [
-      { label: "Bank TLS inventory", href: "/demo/pqc?scenario=bank-tls-inventory" },
+      { label: "Bank TLS inventory", href: "/assess?scenario=bank-tls-inventory" },
     ],
     relatedArticles: [
       { label: "Banking solutions", href: "/solutions/banking" },
@@ -141,7 +141,7 @@ export const frameworkGuides: Record<string, FrameworkGuide> = {
       "Monitor drift alerts between assessment cycles",
     ],
     relatedScenarios: [
-      { label: "Gov contractor CMMC", href: "/demo/pqc?scenario=gov-contractor-cmmc" },
+      { label: "Gov contractor CMMC", href: "/assess?scenario=gov-contractor-cmmc" },
     ],
     relatedArticles: [
       { label: "Government solutions", href: "/solutions/government" },
@@ -167,7 +167,7 @@ export const frameworkGuides: Record<string, FrameworkGuide> = {
       "Re-scan verification after hybrid KEX deployment",
     ],
     relatedScenarios: [
-      { label: "Run Q-Day scanner", href: "/demo/pqc" },
+      { label: "Run Q-Day scanner", href: "/assess" },
     ],
     relatedArticles: [
       { label: "Hybrid TLS proof", href: "/q-day/hybrid-tls" },

@@ -24,7 +24,7 @@ export default function DashboardPage() {
         title="Your Q-Day command center"
         description="Connect with your tenant API key to review scan history, drift diffs, readiness trends, scheduled monitoring, and remediation workflow."
         actions={[
-          { href: "/demo/pqc", label: "Run a scan first" },
+          { href: "/assess", label: "Run a scan first" },
           { href: "/access", label: "Request pilot", variant: "secondary" },
         ]}
       />

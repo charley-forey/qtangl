@@ -61,7 +61,7 @@ Prioritized playbooks · What-if projections · Re-scan verification · Auditor 
 ## Next steps
 
 1. **Free mini-assessment** — https://www.qtangl.com/assess/mini  
-2. **Live Q-Day scan** — https://www.qtangl.com/demo/pqc  
+2. **Live Q-Day scan** — https://www.qtangl.com/assess  
 3. **Request pilot access** — https://www.qtangl.com/access  
 
 Contact: hello@qtangl.com

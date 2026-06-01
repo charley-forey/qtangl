@@ -94,7 +94,8 @@ export default function DashboardAuthGate({
                 </p>
               ) : (
                 <p className="mt-2 text-sm text-[var(--color-gray-400)]">
-                  Optional SSO — or connect with your tenant API key below for full Monitor features.
+                  <strong className="text-white">Two ways in:</strong> sign in with SSO (enterprise) or paste
+                  your tenant API key below (self-serve + automation). SSO auto-provisions a session key.
                 </p>
               )}
             </div>

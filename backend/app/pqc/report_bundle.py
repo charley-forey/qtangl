@@ -28,11 +28,24 @@ def build_evidence_bundle(
     with zipfile.ZipFile(buffer, "w", zipfile.ZIP_DEFLATED) as archive:
         archive.writestr("report.pdf", report_to_pdf(report))
         archive.writestr("report.json", json.dumps(json_payload, indent=2))
+        if report.compliance_pack:
+            archive.writestr(
+                "compliance-pack.json",
+                json.dumps(report.compliance_pack, indent=2),
+            )
         if remediation_statuses:
             archive.writestr(
                 "remediation-status.json",
                 json.dumps(remediation_statuses, indent=2),
             )
+            verified = [
+                row for row in remediation_statuses if row.get("verifyScanId")
+            ]
+            if verified:
+                archive.writestr(
+                    "verified-remediations.json",
+                    json.dumps(verified, indent=2),
+                )
         archive.writestr("remediation.csv", report_to_csv(report))
         archive.writestr("cbom.json", json.dumps(report_to_cbom(report), indent=2))
         archive.writestr(
