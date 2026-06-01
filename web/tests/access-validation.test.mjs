@@ -12,13 +12,13 @@ test("validateAccessForm requires email and interest", () => {
   const result = validateAccessForm({ email: "", interest: "" });
   assert.equal(result.valid, false);
   assert.equal(result.fieldErrors.email, "Enter a work email.");
-  assert.equal(result.fieldErrors.interest, "Select a planning workflow.");
+  assert.equal(result.fieldErrors.interest, "Select an interest area.");
 });
 
 test("validateAccessForm rejects invalid email", () => {
   const result = validateAccessForm({
     email: "not-an-email",
-    interest: "Scheduling optimization",
+    interest: "Q-Day Assessment (one-time)",
   });
   assert.equal(result.valid, false);
   assert.equal(result.fieldErrors.email, "Enter a valid work email.");
@@ -27,7 +27,7 @@ test("validateAccessForm rejects invalid email", () => {
 test("validateAccessForm accepts minimal valid payload", () => {
   const result = validateAccessForm({
     email: "ada@company.com",
-    interest: "Routing optimization",
+    interest: "Optimization pilot",
   });
   assert.equal(result.valid, true);
   assert.deepEqual(result.fieldErrors, {});
@@ -36,14 +36,14 @@ test("validateAccessForm accepts minimal valid payload", () => {
 test("parseAccessForm trims optional fields", () => {
   const formData = new FormData();
   formData.set("email", " ada@company.com ");
-  formData.set("interest", "Developer platform");
+  formData.set("interest", "Q-Day Monitor (annual)");
   formData.set("name", " Ada ");
   formData.set("company", " Example ");
   formData.set("source", "demo");
 
   const payload = parseAccessForm(formData);
   assert.equal(payload.email, "ada@company.com");
-  assert.equal(payload.interest, "Developer platform");
+  assert.equal(payload.interest, "Q-Day Monitor (annual)");
   assert.equal(payload.name, "Ada");
   assert.equal(payload.company, "Example");
   assert.equal(payload.source, "demo");

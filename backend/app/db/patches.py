@@ -3,11 +3,24 @@ from __future__ import annotations
 from sqlalchemy import inspect, text
 from sqlalchemy.engine import Engine
 
-# Incremental ALTER TABLE steps for databases created before model changes.
-# create_all() only creates missing tables; it does not add columns.
 _COLUMN_PATCHES: list[tuple[str, str, str]] = [
     ("api_keys", "role", "VARCHAR(16) NOT NULL DEFAULT 'admin'"),
     ("scheduled_scans", "import_payload_json", "TEXT"),
+    (
+        "remediation_status",
+        "asset_id",
+        "VARCHAR(80)",
+    ),
+    (
+        "remediation_status",
+        "target_date",
+        "TIMESTAMP WITH TIME ZONE",
+    ),
+    (
+        "remediation_status",
+        "verify_scan_id",
+        "VARCHAR(80)",
+    ),
 ]
 
 

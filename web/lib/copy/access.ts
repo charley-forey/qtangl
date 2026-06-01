@@ -6,18 +6,18 @@ export const accessPanel = {
   eyebrow: "Pilot access",
   title: "Request pilot access",
   description:
-    "Tell us which scheduling, routing, or staffing workflow you want to improve. We prioritize pilots with a clear constraint and a path to production.",
-  docsLink: { label: "Read docs first", href: "/docs" },
+    "Tell us which Q-Day readiness tier fits — assessment, Monitor, Convert, or enterprise program.",
+  docsLink: { label: "Read the PQC demo guide", href: "/docs/guides/pqc-demo" },
 } as const;
 
 export const accessPageCopy = {
   metadataDescription:
-    "Request pilot access for scheduling, routing, or staffing with Qtangl's quantum-aware planning API.",
+    "Request pilot access for Q-Day assessment, Monitor, Convert, or enterprise post-quantum readiness programs.",
   audienceEyebrow: "Good fit for",
   audienceItems: [
-    "Ops teams improving scheduling, routing, or staffing under real constraints.",
-    "Platform teams embedding optimization into internal or customer tools.",
-    "Partners running an API evaluation or design-partner pilot.",
+    "CISO and GRC teams with a board mandate for PQC by 2027/2030.",
+    "Engineering leads inventorying TLS, code signing, and HSM crypto.",
+    "MSSPs and audit partners evaluating white-label Monitor programs.",
   ],
   timelineEyebrow: "What happens next",
   timeline: [
@@ -29,24 +29,24 @@ export const accessPageCopy = {
     {
       step: "2",
       title: "Scoping",
-      description: "A short call to map your workflow, systems, and success metric.",
+      description: "A short call to map domains, compliance drivers, and success metrics.",
     },
     {
       step: "3",
       title: "Pilot slot",
-      description: "Qualified teams receive sandbox access and a pilot plan.",
+      description: "Qualified teams receive demo credentials and a pilot plan.",
     },
   ],
   trustNote:
-    "Classical-first planning with quantum-aware methods — operationally honest outputs your team can run.",
+    "Signed evidence on every assessment — CBOM exports and verify links your auditors can check independently.",
 } as const;
 
 export const accessFormCopy = {
   eyebrow: "Get started",
   title: "Request access",
-  description: "Work email and workflow are enough to start. Add context if you want us to prioritize faster.",
+  description: "Work email and interest area are enough to start. Add context if you want us to prioritize faster.",
   optionalSectionLabel: "Add context — helps us prioritize",
-  optionalSectionHint: "Name, company, tools, and constraints (optional)",
+  optionalSectionHint: "Name, company, domains, and compliance drivers (optional)",
   fields: {
     name: {
       label: "Name",
@@ -61,24 +61,24 @@ export const accessFormCopy = {
       placeholder: "Example Systems",
     },
     interest: {
-      label: "Planning workflow",
-      placeholder: "Select a workflow",
+      label: "Interest area",
+      placeholder: "Select an area",
       options: [
-        "Scheduling optimization",
-        "Routing optimization",
-        "Resource allocation",
-        "Developer platform",
-        "Research collaboration",
+        "Q-Day Assessment (one-time)",
+        "Q-Day Monitor (annual)",
+        "Enterprise PQC program",
+        "MSSP / partner inquiry",
+        "Optimization pilot",
       ],
     },
     currentTools: {
       label: "Current tools",
-      placeholder: "Procore, spreadsheets, Samsara, Smartsheet...",
+      placeholder: "Qualys, Venafi, ServiceNow, spreadsheets...",
     },
     message: {
-      label: "Planning context",
+      label: "Readiness context",
       placeholder:
-        "Workflow, constraints that matter, and what a better result looks like.",
+        "Domains to scan, compliance drivers (CMMC, NSM-10, HIPAA), and your target timeline.",
     },
   },
   submitLabel: "Request access",
@@ -89,8 +89,8 @@ export const accessFormCopy = {
 } as const;
 
 export const accessFormMessages = {
-  initial: "Priority access for teams evaluating a real scheduling, routing, or staffing workflow.",
-  missingFields: "Enter your work email and select a planning workflow.",
+  initial: "Priority access for teams evaluating a real Q-Day readiness program.",
+  missingFields: "Enter your work email and select an interest area.",
   invalidEmail: "Enter a valid work email so we can follow up.",
   deliveryFailed: `Couldn't submit yet. Try again or email ${contactEmail}.`,
   success:
@@ -108,43 +108,44 @@ export const accessSuccessCopy = {
   exploreEyebrow: "While you wait",
   urgentPrefix: "Need a faster response?",
   defaultNextSteps: [
-    { label: "Hospital re-staffing demo", href: "/demo/hospital" },
-    { label: "Airline crew recovery demo", href: "/demo/airline" },
-    { label: "Read the docs", href: "/docs" },
-    { label: "Try the sandbox", href: "/sandbox" },
+    { label: "Run Q-Day scanner", href: "/demo/pqc" },
+    { label: "Free mini-assessment", href: "/assess/mini" },
+    { label: "Download sample CBOM", href: "/samples/sample-cbom-bank-tls-inventory.json" },
+    { label: "Verify a report", href: "/verify" },
   ],
   nextStepsByInterest: {
-    "Scheduling optimization": [
-      { label: "Hospital re-staffing demo", href: "/demo/hospital" },
-      { label: "Scheduling guide", href: "/docs/guides/schedule" },
-      { label: "Try the sandbox", href: "/sandbox" },
+    "Q-Day Assessment (one-time)": [
+      { label: "Run Q-Day scanner", href: "/demo/pqc" },
+      { label: "Free mini-assessment", href: "/assess/mini" },
+      { label: "Download sample CBOM", href: "/samples/sample-cbom-bank-tls-inventory.json" },
+      { label: "See Assess tier", href: "/assess" },
     ],
-    "Routing optimization": [
-      { label: "Routing guide", href: "/docs/guides/routing" },
+    "Q-Day Monitor (annual)": [
+      { label: "Open dashboard", href: "/dashboard" },
+      { label: "See Monitor tier", href: "/monitor" },
+      { label: "See pricing", href: "/pricing" },
+    ],
+    "Enterprise PQC program": [
+      { label: "See Convert tier", href: "/convert" },
+      { label: "Trust center", href: "/trust" },
+      { label: "See pricing", href: "/pricing" },
+    ],
+    "MSSP / partner inquiry": [
+      { label: "Platform overview", href: "/platform" },
+      { label: "Trust center", href: "/trust" },
       { label: "Read the docs", href: "/docs" },
-      { label: "Try the sandbox", href: "/sandbox" },
     ],
-    "Resource allocation": [
-      { label: "Allocation guide", href: "/docs/guides/allocation" },
+    "Optimization pilot": [
       { label: "Hospital re-staffing demo", href: "/demo/hospital" },
-      { label: "Try the sandbox", href: "/sandbox" },
-    ],
-    "Developer platform": [
-      { label: "API reference", href: "/docs/api" },
-      { label: "Read the docs", href: "/docs" },
-      { label: "Try the sandbox", href: "/sandbox" },
-    ],
-    "Research collaboration": [
       { label: "Technology overview", href: "/technology" },
-      { label: "Learn hub", href: "/learn" },
-      { label: "Read the docs", href: "/docs" },
+      { label: "Try the sandbox", href: "/sandbox" },
     ],
   } as Record<string, { label: string; href: string }[]>,
 } as const;
 
 export const accessCtas = {
-  primary: { label: "Request access", href: "/access" },
-  secondary: { label: "Read docs", href: "/docs" },
+  primary: { label: "Run Q-Day scan", href: "/demo/pqc" },
+  secondary: { label: "Read docs", href: "/docs/guides/pqc-demo" },
 } as const;
 
 export function getAccessNextSteps(interest: string) {
@@ -153,6 +154,6 @@ export function getAccessNextSteps(interest: string) {
   );
 }
 
-export function accessMailtoHref(subject = "Qtangl pilot access request") {
+export function accessMailtoHref(subject = "Qtangl Q-Day readiness pilot request") {
   return `mailto:${contactEmail}?subject=${encodeURIComponent(subject)}`;
 }

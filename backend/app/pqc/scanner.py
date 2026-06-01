@@ -11,6 +11,7 @@ Fixture path bypasses outbound network: scan_fixture() only.
 """
 from __future__ import annotations
 
+from dataclasses import replace
 import hashlib
 import json
 import socket
@@ -572,6 +573,14 @@ def scan_live(
             asset, cov = scan_vpn_banner(host, port)
         elif kind == "db_tls":
             asset, cov = scan_db_tls(host, port)
+        elif kind in {"smime", "mtls", "code_signing", "document_signing"}:
+            asset, cov = scan_tls_endpoint(host, port)
+            if asset:
+                asset = replace(
+                    asset,
+                    kind=kind,  # type: ignore[arg-type]
+                    label=f"{kind.upper()} {asset.label}",
+                )
         else:
             asset, cov = scan_tls_endpoint(host, port)
         if asset:

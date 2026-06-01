@@ -1,35 +1,70 @@
 from __future__ import annotations
 
+import hashlib
+import hmac
 import json
 import logging
-import uuid
+import time
 import urllib.error
 import urllib.request
 from typing import Any
 
+from app.notifications.webhook_dlq import (
+    get_dead_letter,
+    mark_replayed,
+    record_dead_letter,
+)
+
+# Re-export for tenant API
+from app.notifications.webhook_dlq import list_dead_letters  # noqa: F401
+
 logger = logging.getLogger(__name__)
-_WEBHOOK_DLQ: dict[str, list[dict[str, Any]]] = {}
+
+_MAX_RETRIES = 3
+_BACKOFF_SEC = [0.5, 1.0, 2.0]
 
 
-def deliver_webhook(url: str, payload: dict[str, Any]) -> dict[str, Any]:
-    """POST JSON to tenant webhook URL. Best-effort; never raises."""
-    body = json.dumps(payload).encode("utf-8")
-    headers = {"Content-Type": "application/json", "User-Agent": "Qtangl-Webhook/2.0"}
+def deliver_webhook(
+    url: str,
+    payload: dict[str, Any],
+    *,
+    signing_secret: str = "",
+    tenant_id: str | None = None,
+) -> dict[str, Any]:
+    """POST JSON to tenant webhook URL with optional HMAC signing and retries."""
+    body_payload = payload
     if "hooks.slack.com" in url:
-        payload = _slack_payload(payload)
-        body = json.dumps(payload).encode("utf-8")
-    request = urllib.request.Request(url, data=body, headers=headers, method="POST")
-    try:
-        with urllib.request.urlopen(request, timeout=10) as response:
-            return {"sent": True, "statusCode": response.status}
-    except urllib.error.HTTPError as exc:
-        logger.warning("Webhook HTTP error %s: %s", url, exc.code)
-        _record_dead_letter(url=url, payload=payload, reason=f"HTTP {exc.code}")
-        return {"sent": False, "reason": f"HTTP {exc.code}"}
-    except Exception as exc:
-        logger.warning("Webhook failed %s: %s", url, exc)
-        _record_dead_letter(url=url, payload=payload, reason=str(exc))
-        return {"sent": False, "reason": str(exc)}
+        body_payload = _slack_payload(payload)
+    body = json.dumps(body_payload).encode("utf-8")
+    headers = {"Content-Type": "application/json", "User-Agent": "Qtangl-Webhook/2.0"}
+    if signing_secret:
+        timestamp = str(int(time.time()))
+        sig = hmac.new(
+            signing_secret.encode(),
+            f"{timestamp}.{body.decode('utf-8')}".encode(),
+            hashlib.sha256,
+        ).hexdigest()
+        headers["X-Qtangl-Timestamp"] = timestamp
+        headers["X-Qtangl-Signature"] = f"sha256={sig}"
+
+    last_reason = "unknown"
+    for attempt in range(_MAX_RETRIES):
+        if attempt > 0:
+            time.sleep(_BACKOFF_SEC[min(attempt - 1, len(_BACKOFF_SEC) - 1)])
+        request = urllib.request.Request(url, data=body, headers=headers, method="POST")
+        try:
+            with urllib.request.urlopen(request, timeout=10) as response:
+                return {"sent": True, "statusCode": response.status, "attempt": attempt + 1}
+        except urllib.error.HTTPError as exc:
+            last_reason = f"HTTP {exc.code}"
+            logger.warning("Webhook HTTP error %s: %s (attempt %s)", url, exc.code, attempt + 1)
+        except Exception as exc:
+            last_reason = str(exc)
+            logger.warning("Webhook failed %s: %s (attempt %s)", url, exc, attempt + 1)
+
+    tid = tenant_id or str(payload.get("tenantId", "sandbox"))
+    record_dead_letter(tenant_id=tid, url=url, payload=payload, reason=last_reason)
+    return {"sent": False, "reason": last_reason}
 
 
 def _slack_payload(payload: dict[str, Any]) -> dict[str, Any]:
@@ -48,6 +83,8 @@ def notify_scan_complete(
     readiness_score: float,
     readiness_band: str,
     event: str = "scan.complete",
+    signing_secret: str = "",
+    tenant_id: str = "sandbox",
 ) -> list[dict[str, Any]]:
     payload = {
         "event": event,
@@ -55,8 +92,12 @@ def notify_scan_complete(
         "targetDomain": target_domain,
         "readinessScore": readiness_score,
         "readinessBand": readiness_band,
+        "tenantId": tenant_id,
     }
-    return [deliver_webhook(url, payload) for url in webhooks]
+    return [
+        deliver_webhook(url, payload, signing_secret=signing_secret, tenant_id=tenant_id)
+        for url in webhooks
+    ]
 
 
 def notify_scan_complete_v2(
@@ -72,8 +113,8 @@ def notify_scan_complete_v2(
     evidence_zip_url: str = "",
     tenant_id: str = "sandbox",
     event: str = "scan.complete",
+    signing_secret: str = "",
 ) -> list[dict[str, Any]]:
-    """Structured webhook payload v2 for SIEM/GRC integrations."""
     top_findings: list[dict[str, Any]] = []
     if scan_diff:
         top_findings.extend(scan_diff.get("newQuantumVulnerable") or [])
@@ -94,36 +135,22 @@ def notify_scan_complete_v2(
         "topFindings": top_findings[:10],
         "message": (alerts[0]["message"] if alerts else f"Scan complete for {target_domain}"),
     }
-    return [deliver_webhook(url, payload) for url in webhooks]
+    return [
+        deliver_webhook(url, payload, signing_secret=signing_secret, tenant_id=tenant_id)
+        for url in webhooks
+    ]
 
 
-def list_dead_letters(*, tenant_id: str) -> list[dict[str, Any]]:
-    return list(_WEBHOOK_DLQ.get(tenant_id, []))
-
-
-def replay_dead_letter(*, tenant_id: str, dead_letter_id: str) -> dict[str, Any]:
-    rows = _WEBHOOK_DLQ.get(tenant_id, [])
-    row = next((item for item in rows if item.get("id") == dead_letter_id), None)
+def replay_dead_letter(*, tenant_id: str, dead_letter_id: str, signing_secret: str = "") -> dict[str, Any]:
+    row = get_dead_letter(tenant_id=tenant_id, dead_letter_id=dead_letter_id)
     if row is None:
         return {"sent": False, "reason": "dead_letter_not_found"}
-    result = deliver_webhook(row.get("url", ""), row.get("payload") or {})
-    if result.get("sent"):
-        _WEBHOOK_DLQ[tenant_id] = [item for item in rows if item.get("id") != dead_letter_id]
-    return result
-
-
-def _record_dead_letter(*, url: str, payload: dict[str, Any], reason: str) -> None:
-    tenant_id = str(payload.get("tenantId", "sandbox"))
-    bucket = _WEBHOOK_DLQ.setdefault(tenant_id, [])
-    bucket.append(
-        {
-            "id": f"dlq-{uuid.uuid4().hex[:12]}",
-            "url": url,
-            "payload": payload,
-            "reason": reason,
-            "event": payload.get("event"),
-            "scanId": payload.get("scanId"),
-        }
+    result = deliver_webhook(
+        row.get("url", ""),
+        row.get("payload") or {},
+        signing_secret=signing_secret,
+        tenant_id=tenant_id,
     )
-    if len(bucket) > 200:
-        del bucket[:-200]
+    if result.get("sent"):
+        mark_replayed(tenant_id=tenant_id, dead_letter_id=dead_letter_id)
+    return result

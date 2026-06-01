@@ -6,6 +6,7 @@ import PhaseRibbon from "@/components/layout/PhaseRibbon";
 import Section from "@/components/layout/Section";
 import FeatureCard from "@/components/marketing/FeatureCard";
 import ProductPreview from "@/components/marketing/ProductPreview";
+import ReadinessCrossLink from "@/components/marketing/ReadinessCrossLink";
 import TechnologyChapter from "@/components/technology/TechnologyChapter";
 import TechnologyBlock from "@/components/technology/TechnologyBlock";
 import Card from "@/components/ui/Card";
@@ -49,6 +50,10 @@ export default function TechnologyPage() {
         title={technologyPage.title}
         description={technologyPage.intro}
       />
+
+      <Section gap="tight" className="pt-0">
+        <ReadinessCrossLink />
+      </Section>
 
       <PhaseRibbon />
 

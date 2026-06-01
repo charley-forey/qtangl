@@ -62,6 +62,18 @@ class RateLimitHeaderMiddleware(BaseHTTPMiddleware):
         return response
 
 
+class RequestIdMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request: Request, call_next):
+        import uuid
+
+        request_id = request.headers.get("X-Request-Id") or f"req-{uuid.uuid4().hex[:16]}"
+        request.state.request_id = request_id
+        response = await call_next(request)
+        response.headers["X-Request-Id"] = request_id
+        return response
+
+
+app.add_middleware(RequestIdMiddleware)
 app.add_middleware(RateLimitHeaderMiddleware)
 
 app.add_middleware(
@@ -90,9 +102,12 @@ def health() -> dict[str, str]:
 
 @app.get("/health/ready", tags=["health"])
 def health_ready() -> dict[str, object]:
+    from app.monitoring.scheduler_state import scheduler_metrics
+
     db_ok = ping_db() if persistence_enabled() else True
     redis_ok = ping_redis() if redis_enabled() else True
     ready = db_ok and redis_ok
+    metrics = scheduler_metrics()
     return {
         "status": "ready" if ready else "degraded",
         "database": db_ok,
@@ -101,6 +116,7 @@ def health_ready() -> dict[str, object]:
         "redisEnabled": redis_enabled(),
         "inlineJobs": inline_jobs(),
         "workerQueueEnabled": use_worker_queue(),
+        "scheduler": metrics,
     }
 
 

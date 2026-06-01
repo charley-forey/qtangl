@@ -1,3 +1,33 @@
+export const pqcPreviewRequest = {
+  target: "api.example.com",
+  scan_type: "tls_inventory",
+  options: {
+    include_cbom: true,
+    mosca_data_lifetime_years: 10,
+  },
+};
+
+export const pqcPreviewResponse = {
+  status: "completed",
+  readiness_score: 62,
+  findings: {
+    quantum_vulnerable: 47,
+    transitional: 12,
+    quantum_safe: 8,
+  },
+  mosca: {
+    hndl_risk: "elevated",
+    data_lifetime_years: 10,
+    quantum_timeline_years: 8,
+  },
+  exports: {
+    cbom: "cyclonedx-json",
+    report_url: "/r/sample-token",
+    verify_url: "/verify?token=sample-token",
+  },
+  method: "pqc_scanner",
+};
+
 export const apiPreviewRequest = {
   type: "schedule",
   tasks: [

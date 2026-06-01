@@ -5,8 +5,21 @@ import Glow from "@/components/ui/Glow";
 import ParticleField from "@/components/quantum/ParticleField";
 import StateTransition from "@/components/quantum/StateTransition";
 import { homeHero } from "@/lib/copy/home";
+import { readinessHero } from "@/lib/copy/readiness-home";
 
-export default function Hero() {
+type HeroCopy = {
+  eyebrow: string;
+  title: string;
+  subhead: string;
+  primaryCta: { label: string; href: string };
+  secondaryCta: { label: string; href: string };
+};
+
+type HeroProps = {
+  copy?: HeroCopy;
+};
+
+export default function Hero({ copy = readinessHero }: HeroProps) {
   return (
     <StateTransition distance={20} parallax parallaxOffset={18}>
       <AnimatedBorderFrame className="min-h-[28rem] rounded-[var(--radius-feature)] sm:min-h-[30rem]">
@@ -18,18 +31,18 @@ export default function Hero() {
 
         <div className="relative z-10 flex min-h-[28rem] flex-col justify-center sm:min-h-[30rem]">
           <div className="max-w-3xl px-6 py-12 sm:px-10 sm:py-16 lg:px-12 lg:py-20">
-            <Eyebrow className="text-white/88">{homeHero.eyebrow}</Eyebrow>
+            <Eyebrow className="text-white/88">{copy.eyebrow}</Eyebrow>
             <h1 className="heading-display heading-display--hero gradient-text mt-6 max-w-4xl tracking-tight">
-              {homeHero.title}
+              {copy.title}
             </h1>
             <p className="mt-6 max-w-xl text-lg leading-8 text-[var(--color-gray-200)] sm:text-xl">
-              {homeHero.subhead}
+              {copy.subhead}
             </p>
 
             <div className="mt-10 flex flex-col gap-3 sm:flex-row">
-              <Button href={homeHero.primaryCta.href}>{homeHero.primaryCta.label}</Button>
-              <Button href={homeHero.secondaryCta.href} variant="secondary">
-                {homeHero.secondaryCta.label}
+              <Button href={copy.primaryCta.href}>{copy.primaryCta.label}</Button>
+              <Button href={copy.secondaryCta.href} variant="secondary">
+                {copy.secondaryCta.label}
               </Button>
             </div>
           </div>

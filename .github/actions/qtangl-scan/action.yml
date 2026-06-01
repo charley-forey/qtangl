@@ -1,0 +1,48 @@
+name: Qtangl PQC Scan
+description: Run Qtangl post-quantum readiness scan in CI
+inputs:
+  api-key:
+    description: Tenant API key
+    required: true
+  target:
+    description: Target domain or host
+    required: true
+  api-url:
+    description: Qtangl API base URL
+    default: https://api.qtangl.com
+  fail-on-new-quantum-vulnerable:
+    description: Fail job when scan diff reports new quantum-vulnerable assets
+    required: false
+    default: "false"
+runs:
+  using: composite
+  steps:
+    - name: Run scan
+      shell: bash
+      env:
+        QTANGL_API_KEY: ${{ inputs.api-key }}
+        QTANGL_API_URL: ${{ inputs.api-url }}
+        QTANGL_TARGET: ${{ inputs.target }}
+        FAIL_REGRESSION: ${{ inputs.fail-on-new-quantum-vulnerable }}
+      run: |
+        python3 << 'PY'
+        import json, os, sys, urllib.request
+        target = os.environ["QTANGL_TARGET"]
+        body = json.dumps({"target": target, "scenarioId": "bank-tls-inventory", "useFixture": True}).encode()
+        req = urllib.request.Request(
+          os.environ["QTANGL_API_URL"].rstrip("/") + "/pqc/scan",
+          data=body,
+          headers={"Authorization": "Bearer " + os.environ["QTANGL_API_KEY"], "Content-Type": "application/json"},
+          method="POST",
+        )
+        with urllib.request.urlopen(req, timeout=120) as r:
+          out = json.loads(r.read().decode())
+        print(json.dumps(out, indent=2))
+        report = out.get("report") or {}
+        diff = report.get("scanDiff") or out.get("scanDiff")
+        if os.environ.get("FAIL_REGRESSION", "").lower() in ("1", "true", "yes") and diff:
+          n = int(diff.get("newQuantumVulnerableCount") or 0)
+          if n > 0:
+            print(f"::error::Found {n} new quantum-vulnerable asset(s)")
+            sys.exit(1)
+        PY

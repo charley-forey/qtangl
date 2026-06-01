@@ -4,7 +4,7 @@ import Button from "@/components/ui/Button";
 import AnimatedBorderFrame from "@/components/ui/AnimatedBorderFrame";
 import Eyebrow from "@/components/ui/Eyebrow";
 import Glow from "@/components/ui/Glow";
-import { accessCtas, accessPanel } from "@/lib/copy/access";
+import { readinessCtaPanel } from "@/lib/copy/readiness-home";
 
 export default function CTA() {
   return (
@@ -12,21 +12,28 @@ export default function CTA() {
       <Glow className="hero-orb right-[-3rem] top-[-4rem] h-36 w-36 bg-white/18" />
       <div className="relative px-6 py-10 sm:px-10 sm:py-12">
         <div className="max-w-2xl">
-          <Eyebrow>{accessPanel.eyebrow}</Eyebrow>
+          <Eyebrow>{readinessCtaPanel.eyebrow}</Eyebrow>
           <h2 className="heading-section gradient-text mt-4 sm:!text-4xl">
-            {accessPanel.title}
+            {readinessCtaPanel.title}
           </h2>
           <p className="mt-4 text-base leading-8 text-[var(--color-gray-300)]">
-            {accessPanel.description}
+            {readinessCtaPanel.description}
           </p>
         </div>
         <div className="mt-8 flex flex-col items-start gap-4">
-          <Button href={accessCtas.primary.href}>{accessCtas.primary.label}</Button>
+          <div className="flex flex-wrap gap-3">
+            <Button href={readinessCtaPanel.primaryCta.href}>
+              {readinessCtaPanel.primaryCta.label}
+            </Button>
+            <Button href={readinessCtaPanel.secondaryCta.href} variant="secondary">
+              {readinessCtaPanel.secondaryCta.label}
+            </Button>
+          </div>
           <Link
-            href={accessPanel.docsLink.href}
+            href={readinessCtaPanel.docsLink.href}
             className="text-sm text-[var(--color-gray-400)] underline-offset-4 transition hover:text-white hover:underline"
           >
-            {accessPanel.docsLink.label}
+            {readinessCtaPanel.docsLink.label}
           </Link>
         </div>
       </div>

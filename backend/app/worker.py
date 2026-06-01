@@ -131,6 +131,9 @@ def main() -> None:
                 from app.monitoring.service import enqueue_due_scans
 
                 enqueued = enqueue_due_scans()
+                from app.monitoring.scheduler_state import record_scheduler_tick
+
+                record_scheduler_tick(enqueued=enqueued)
                 if enqueued:
                     logger.info("Enqueued %d scheduled scan(s)", enqueued)
                 last_scheduler_tick = now

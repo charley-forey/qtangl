@@ -56,7 +56,7 @@ export function validateAccessForm(
   }
 
   if (!payload.interest) {
-    fieldErrors.interest = "Select a planning workflow.";
+    fieldErrors.interest = "Select an interest area.";
   }
 
   if (Object.keys(fieldErrors).length > 0) {

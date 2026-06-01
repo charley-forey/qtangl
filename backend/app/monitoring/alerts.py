@@ -3,74 +3,111 @@ from __future__ import annotations
 import os
 from typing import Any
 
+from app.tenant.settings import DEFAULT_SETTINGS
+
 
 def evaluate_scan_alerts(
     *,
     scan_diff: dict[str, Any] | None,
     readiness_score: float,
     readiness_band: str,
+    settings: dict[str, Any] | None = None,
+    assets: list[Any] | None = None,
 ) -> list[dict[str, Any]]:
     """Return triggered alert rules for a completed scan."""
-    if not scan_diff:
-        return []
+    cfg = dict(DEFAULT_SETTINGS)
+    if settings:
+        cfg.update(settings)
 
     alerts: list[dict[str, Any]] = []
-    readiness_drop_threshold = float(os.environ.get("QTANGL_ALERT_READINESS_DROP", "5"))
-    delta = float(scan_diff.get("readinessDelta", 0))
+    readiness_drop_threshold = float(
+        cfg.get("readinessDropThreshold", os.environ.get("QTANGL_ALERT_READINESS_DROP", "5"))
+    )
+    alert_on_new_qv = bool(cfg.get("alertOnNewQuantumVulnerable", True))
+    cert_expiry_days = int(cfg.get("certExpiryDays", 30))
 
-    if delta <= -readiness_drop_threshold:
-        alerts.append(
-            {
-                "rule": "readiness_drop",
-                "severity": "high",
-                "message": f"Readiness dropped {abs(delta):.1f} points since last scan.",
-                "readinessDelta": delta,
-            }
-        )
+    if scan_diff:
+        delta = float(scan_diff.get("readinessDelta", 0))
+        if delta <= -readiness_drop_threshold:
+            alerts.append(
+                {
+                    "rule": "readiness_drop",
+                    "severity": "high",
+                    "message": f"Readiness dropped {abs(delta):.1f} points since last scan.",
+                    "readinessDelta": delta,
+                }
+            )
 
-    new_qv = int(scan_diff.get("newQuantumVulnerableCount", 0))
-    if new_qv > 0:
-        alerts.append(
-            {
-                "rule": "new_quantum_vulnerable",
-                "severity": "critical",
-                "message": f"{new_qv} new quantum-vulnerable asset(s) since last scan.",
-                "count": new_qv,
-            }
-        )
+        if alert_on_new_qv:
+            new_qv = int(scan_diff.get("newQuantumVulnerableCount", 0))
+            if new_qv > 0:
+                alerts.append(
+                    {
+                        "rule": "new_quantum_vulnerable",
+                        "severity": "critical",
+                        "message": f"{new_qv} new quantum-vulnerable asset(s) since last scan.",
+                        "count": new_qv,
+                    }
+                )
 
-    cert_count = int(scan_diff.get("certExpiringCount", 0))
-    if cert_count > 0:
-        alerts.append(
-            {
-                "rule": "cert_expiring_30d",
-                "severity": "medium",
-                "message": f"{cert_count} certificate(s) expiring within 30 days.",
-                "count": cert_count,
-            }
-        )
+        diff_cert_count = int(scan_diff.get("certExpiringCount", 0))
+        if diff_cert_count > 0:
+            alerts.append(
+                {
+                    "rule": "cert_expiring_30d",
+                    "severity": "medium",
+                    "message": f"{diff_cert_count} certificate(s) expiring within {cert_expiry_days} days.",
+                    "count": diff_cert_count,
+                }
+            )
 
-    degraded = scan_diff.get("degradedAlgorithms") or []
-    if degraded:
-        alerts.append(
-            {
-                "rule": "algorithm_degraded",
-                "severity": "high",
-                "message": f"{len(degraded)} asset(s) show worse crypto posture than last scan.",
-                "count": len(degraded),
-            }
-        )
+        degraded = scan_diff.get("degradedAlgorithms") or []
+        if degraded:
+            alerts.append(
+                {
+                    "rule": "algorithm_degraded",
+                    "severity": "high",
+                    "message": f"{len(degraded)} asset(s) show worse crypto posture than last scan.",
+                    "count": len(degraded),
+                }
+            )
 
-    if not alerts and scan_diff.get("summary"):
-        alerts.append(
-            {
-                "rule": "scan_diff_info",
-                "severity": "info",
-                "message": str(scan_diff["summary"]),
-            }
-        )
+        if not alerts and scan_diff.get("summary"):
+            alerts.append(
+                {
+                    "rule": "scan_diff_info",
+                    "severity": "info",
+                    "message": str(scan_diff["summary"]),
+                }
+            )
+
+    if assets:
+        expiring = _assets_expiring_within_days(assets, cert_expiry_days)
+        if expiring and not any(a.get("rule") == "cert_expiring_assets" for a in alerts):
+            alerts.append(
+                {
+                    "rule": "cert_expiring_assets",
+                    "severity": "medium",
+                    "message": f"{len(expiring)} certificate(s) expire within {cert_expiry_days} days.",
+                    "count": len(expiring),
+                    "assets": expiring[:10],
+                }
+            )
 
     return alerts
+
+
+def _assets_expiring_within_days(assets: list[Any], days: int) -> list[dict[str, Any]]:
+    out: list[dict[str, Any]] = []
+    for asset in assets:
+        validity = getattr(asset, "validity_days", None)
+        if validity is None and isinstance(asset, dict):
+            validity = asset.get("validityDays") or asset.get("validity_days")
+        if validity is not None and int(validity) <= days:
+            label = getattr(asset, "label", None) or (asset.get("label") if isinstance(asset, dict) else "")
+            host = getattr(asset, "host", None) or (asset.get("host") if isinstance(asset, dict) else "")
+            out.append({"label": label, "host": host, "validityDays": int(validity)})
+    return out
 
 
 def should_send_regression_email(alerts: list[dict[str, Any]]) -> bool:

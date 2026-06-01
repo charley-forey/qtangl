@@ -13,7 +13,6 @@ from app.db.models import TenantIntegration as IntegrationRow
 logger = logging.getLogger(__name__)
 
 SUPPORTED_PROVIDERS = {"jira", "servicenow", "linear"}
-_SYNC_STATE: dict[str, dict[str, dict[str, Any]]] = {}
 
 
 def list_integrations(*, tenant_id: str) -> list[dict[str, Any]]:
@@ -43,15 +42,18 @@ def upsert_integration(
             .filter(IntegrationRow.tenant_id == tenant_id, IntegrationRow.provider == provider)
             .one_or_none()
         )
+        from app.security.secrets import encrypt_config
+
+        stored = encrypt_config(config)
         if existing:
-            existing.config_json = json.dumps(config)
+            existing.config_json = stored
             row = existing
         else:
             row = IntegrationRow(
                 id=row_id,
                 tenant_id=tenant_id,
                 provider=provider,
-                config_json=json.dumps(config),
+                config_json=stored,
             )
             session.add(row)
         session.flush()
@@ -75,7 +77,9 @@ def push_remediation_ticket(
         )
         if row is None:
             return {"sent": False, "reason": "integration_not_configured"}
-        config = json.loads(row.config_json or "{}")
+        from app.security.secrets import decrypt_config
+
+        config = decrypt_config(row.config_json or "{}")
 
     if provider == "jira":
         result = _push_jira(config, item, scan_id)
@@ -86,12 +90,16 @@ def push_remediation_ticket(
     else:
         return {"sent": False, "reason": "unsupported_provider"}
     if result.get("sent"):
-        _SYNC_STATE.setdefault(tenant_id, {})[str(item.get("id"))] = {
-            "provider": provider,
-            "externalRef": result.get("externalRef", ""),
-            "status": "pushed",
-            "scanId": scan_id,
-        }
+        from app.integrations.sync_store import upsert_sync
+
+        upsert_sync(
+            tenant_id=tenant_id,
+            remediation_id=str(item.get("id")),
+            provider=provider,
+            external_ref=str(result.get("externalRef", "")),
+            scan_id=scan_id,
+            external_status="open",
+        )
     return result
 
 
@@ -100,12 +108,60 @@ def pull_ticket_status(
     tenant_id: str,
     remediation_id: str,
 ) -> dict[str, Any]:
-    tenant = _SYNC_STATE.get(tenant_id, {})
-    row = tenant.get(remediation_id)
+    from app.integrations.sync_store import get_sync
+
+    row = get_sync(tenant_id=tenant_id, remediation_id=remediation_id)
     if not row:
         return {"found": False, "reason": "not_synced"}
-    # Placeholder sync pull until provider-specific GET APIs are wired.
-    return {"found": True, **row, "lastPulled": __import__("datetime").datetime.utcnow().isoformat()}
+    provider = row.get("provider", "")
+    external_ref = row.get("externalRef", "")
+    if provider == "jira":
+        status = _pull_jira_status(tenant_id, external_ref)
+        if status:
+            row["status"] = status
+    return {
+        "found": True,
+        **row,
+        "lastPulled": __import__("datetime").datetime.now(__import__("datetime").timezone.utc).isoformat(),
+    }
+
+
+def _pull_jira_status(tenant_id: str, external_ref: str) -> str | None:
+    """Best-effort Jira issue status fetch when integration is configured."""
+    if not persistence_enabled():
+        return None
+    with db_session() as session:
+        row = (
+            session.query(IntegrationRow)
+            .filter(IntegrationRow.tenant_id == tenant_id, IntegrationRow.provider == "jira")
+            .one_or_none()
+        )
+        if row is None:
+            return None
+        from app.security.secrets import decrypt_config
+
+        config = decrypt_config(row.config_json or "{}")
+    base = config.get("baseUrl", "").rstrip("/")
+    email = config.get("email", "")
+    token = config.get("apiToken", "")
+    if not base or not token or not external_ref:
+        return None
+    import base64
+
+    auth = base64.b64encode(f"{email}:{token}".encode()).decode()
+    request = urllib.request.Request(
+        f"{base}/rest/api/3/issue/{external_ref}",
+        headers={"Authorization": f"Basic {auth}", "Accept": "application/json"},
+        method="GET",
+    )
+    try:
+        with urllib.request.urlopen(request, timeout=15) as response:
+            data = json.loads(response.read().decode("utf-8"))
+            fields = data.get("fields") or {}
+            status = fields.get("status") or {}
+            return str(status.get("name", "unknown"))
+    except Exception:
+        return None
 
 
 def _push_jira(config: dict[str, Any], item: dict[str, Any], scan_id: str) -> dict[str, Any]:
@@ -136,7 +192,10 @@ def _push_jira(config: dict[str, Any], item: dict[str, Any], scan_id: str) -> di
         payload,
         headers={"Authorization": f"Basic {auth}"},
     )
-    result["externalRef"] = f"{project}-{item.get('id', '')}"
+    if result.get("issueKey"):
+        result["externalRef"] = result["issueKey"]
+    else:
+        result["externalRef"] = f"{project}-{item.get('id', '')}"
     return result
 
 
@@ -203,7 +262,15 @@ def _http_json(url: str, payload: dict[str, Any], headers: dict[str, str]) -> di
     )
     try:
         with urllib.request.urlopen(request, timeout=15) as response:
-            return {"sent": True, "statusCode": response.status}
+            body = response.read().decode("utf-8")
+            parsed: dict[str, Any] = {}
+            if body:
+                try:
+                    parsed = json.loads(body)
+                except json.JSONDecodeError:
+                    parsed = {}
+            issue_key = parsed.get("key")
+            return {"sent": True, "statusCode": response.status, "issueKey": issue_key}
     except urllib.error.HTTPError as exc:
         logger.warning("Integration push failed: HTTP %s", exc.code)
         return {"sent": False, "reason": f"HTTP {exc.code}"}
@@ -213,7 +280,9 @@ def _http_json(url: str, payload: dict[str, Any], headers: dict[str, str]) -> di
 
 
 def _row_to_dict(row: IntegrationRow) -> dict[str, Any]:
-    config = json.loads(row.config_json or "{}")
+    from app.security.secrets import decrypt_config
+
+    config = decrypt_config(row.config_json or "{}")
     safe = {k: v for k, v in config.items() if k not in {"apiToken", "password", "apiKey"}}
     return {
         "id": row.id,

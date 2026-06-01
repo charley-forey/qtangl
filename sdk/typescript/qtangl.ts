@@ -1,4 +1,4 @@
-/** Minimal Qtangl PQC API client (TypeScript). */
+/** Qtangl PQC API client (TypeScript). */
 
 export type QtanglClientOptions = {
   baseUrl: string;
@@ -18,12 +18,45 @@ export class QtanglClient {
     return this.get("/health/ready");
   }
 
-  async scanFixture(scenarioId = "bank-tls-inventory"): Promise<{ scanId?: string }> {
-    return this.post("/pqc/scan", { scenarioId, useFixture: true });
+  async me(): Promise<Record<string, unknown>> {
+    return this.get("/tenant/me");
+  }
+
+  async scan(
+    target: string,
+    scenarioId = "bank-tls-inventory",
+    useFixture = false
+  ): Promise<Record<string, unknown>> {
+    return this.post("/pqc/scan", { target, scenarioId, useFixture });
+  }
+
+  async scanFixture(scenarioId = "bank-tls-inventory"): Promise<Record<string, unknown>> {
+    return this.scan("example.com", scenarioId, true);
+  }
+
+  async listSchedules(): Promise<Record<string, unknown>> {
+    return this.get("/tenant/schedules");
+  }
+
+  async createSchedule(body: {
+    target: string;
+    cadenceHours?: number;
+    notifyEmail?: string;
+  }): Promise<Record<string, unknown>> {
+    return this.post("/tenant/schedules", {
+      scenarioId: "bank-tls-inventory",
+      cadenceHours: body.cadenceHours ?? 168,
+      target: body.target,
+      notifyEmail: body.notifyEmail,
+    });
+  }
+
+  async getSettings(): Promise<Record<string, unknown>> {
+    return this.get("/tenant/settings");
   }
 
   reportPdfUrl(scanId: string): string {
-    const url = new URL(`${this.baseUrl}/pqc/report/${scanId}`);
+    const url = new URL(`${this.baseUrl}/tenant/scans/${scanId}/report`);
     url.searchParams.set("format", "pdf");
     url.searchParams.set("api_key", this.apiKey);
     return url.toString();
@@ -33,8 +66,18 @@ export class QtanglClient {
     return this.get(`/pqc/verify/${scanId}`);
   }
 
+  private headers(): HeadersInit {
+    return {
+      Authorization: `Bearer ${this.apiKey}`,
+      "Content-Type": "application/json",
+    };
+  }
+
   private async get(path: string): Promise<Record<string, unknown>> {
-    const response = await fetch(`${this.baseUrl}${path}`, { cache: "no-store" });
+    const response = await fetch(`${this.baseUrl}${path}`, {
+      headers: { Authorization: `Bearer ${this.apiKey}` },
+      cache: "no-store",
+    });
     if (!response.ok) {
       throw new Error(await response.text());
     }
@@ -44,10 +87,7 @@ export class QtanglClient {
   private async post(path: string, body: unknown): Promise<Record<string, unknown>> {
     const response = await fetch(`${this.baseUrl}${path}`, {
       method: "POST",
-      headers: {
-        Authorization: `Bearer ${this.apiKey}`,
-        "Content-Type": "application/json",
-      },
+      headers: this.headers(),
       body: JSON.stringify(body),
     });
     if (!response.ok) {

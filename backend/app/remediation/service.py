@@ -34,6 +34,9 @@ def upsert_remediation_status(
     status: str,
     owner: str | None = None,
     notes: str | None = None,
+    target_date: datetime | None = None,
+    asset_id: str | None = None,
+    verify_scan_id: str | None = None,
 ) -> dict[str, Any]:
     if status not in VALID_STATUSES:
         raise ValueError(f"Invalid status: {status}")
@@ -44,6 +47,9 @@ def upsert_remediation_status(
             "status": status,
             "owner": owner,
             "notes": notes,
+            "targetDate": target_date.isoformat() if target_date else None,
+            "assetId": asset_id,
+            "verifyScanId": verify_scan_id,
         }
     with db_session() as session:
         row = (
@@ -65,6 +71,9 @@ def upsert_remediation_status(
                 status=status,
                 owner=owner,
                 notes=notes,
+                asset_id=asset_id,
+                target_date=target_date,
+                verify_scan_id=verify_scan_id,
                 updated_at=now,
             )
             session.add(row)
@@ -72,9 +81,123 @@ def upsert_remediation_status(
             row.status = status
             row.owner = owner
             row.notes = notes
+            if asset_id is not None:
+                row.asset_id = asset_id
+            if target_date is not None:
+                row.target_date = target_date
+            if verify_scan_id is not None:
+                row.verify_scan_id = verify_scan_id
             row.updated_at = now
         session.flush()
         return _row_to_dict(row)
+
+
+def apply_remediation_to_migration_report(report: Any, *, statuses: list[dict[str, Any]]) -> Any:
+    """Mutate MigrationReport remediation_backlog with live workflow fields for PDF export."""
+    from dataclasses import replace
+
+    by_id = {item["remediationId"]: item for item in statuses}
+    updated = []
+    for item in report.remediation_backlog:
+        live = by_id.get(item.id)
+        if live:
+            meta = dict(getattr(item, "metadata", {}) or {})
+            meta["workflowStatus"] = live.get("status")
+            meta["owner"] = live.get("owner")
+            meta["targetDate"] = live.get("targetDate")
+            meta["verifyScanId"] = live.get("verifyScanId")
+            updated.append(replace(item, metadata=meta))
+        else:
+            updated.append(item)
+    return replace(report, remediation_backlog=updated)
+
+
+def merge_remediation_into_report(
+    report_dict: dict[str, Any],
+    *,
+    statuses: list[dict[str, Any]],
+) -> dict[str, Any]:
+    """Overlay live remediation status onto report export payloads."""
+    by_id = {item["remediationId"]: item for item in statuses}
+    backlog = report_dict.get("remediationBacklog") or []
+    merged = []
+    for item in backlog:
+        row = dict(item)
+        live = by_id.get(item.get("id"))
+        if live:
+            row["workflowStatus"] = live.get("status")
+            row["owner"] = live.get("owner")
+            row["notes"] = live.get("notes")
+            row["targetDate"] = live.get("targetDate")
+            row["verifyScanId"] = live.get("verifyScanId")
+            row["playbook"] = recommend_remediation_plan(item).get("playbook")
+        merged.append(row)
+    report_dict = dict(report_dict)
+    report_dict["remediationBacklog"] = merged
+    report_dict["remediationCompletionPct"] = completion_pct(statuses, len(backlog))
+    return report_dict
+
+
+def verify_remediation_fix(
+    *,
+    tenant_id: str,
+    remediation_id: str,
+    baseline_scan_id: str,
+    verify_scan_id: str,
+) -> dict[str, Any]:
+    """Compare asset status between baseline and verification scan."""
+    from app.pqc.bundle_codec import bundle_from_api_dict
+    from app.store.scan_jobs import load_scan_bundle
+
+    baseline = load_scan_bundle(baseline_scan_id, tenant_id=tenant_id)
+    verify = load_scan_bundle(verify_scan_id, tenant_id=tenant_id)
+    if baseline is None or verify is None:
+        return {"verified": False, "reason": "scan_not_found"}
+
+    status_row = None
+    if persistence_enabled():
+        with db_session() as session:
+            status_row = (
+                session.query(RemediationStatusRow)
+                .filter(
+                    RemediationStatusRow.tenant_id == tenant_id,
+                    RemediationStatusRow.scan_id == baseline_scan_id,
+                    RemediationStatusRow.remediation_id == remediation_id,
+                )
+                .one_or_none()
+            )
+
+    asset_id = status_row.asset_id if status_row and status_row.asset_id else remediation_id
+    b_bundle = bundle_from_api_dict(baseline)
+    v_bundle = bundle_from_api_dict(verify)
+    b_assets = {a.id: a for a in b_bundle.report.assets}
+    v_assets = {a.id: a for a in v_bundle.report.assets}
+    before = b_assets.get(asset_id)
+    after = v_assets.get(asset_id)
+    if before is None or after is None:
+        return {"verified": False, "reason": "asset_not_in_both_scans", "assetId": asset_id}
+
+    before_status = before.vulnerability.status
+    after_status = after.vulnerability.status
+    improved = after.pqc_ready or (
+        before_status in {"broken", "at-risk"} and after_status == "safe"
+    )
+    if improved and persistence_enabled():
+        upsert_remediation_status(
+            tenant_id=tenant_id,
+            scan_id=baseline_scan_id,
+            remediation_id=remediation_id,
+            status="done",
+            verify_scan_id=verify_scan_id,
+            asset_id=asset_id,
+        )
+    return {
+        "verified": improved,
+        "assetId": asset_id,
+        "beforeStatus": before_status,
+        "afterStatus": after_status,
+        "verifyScanId": verify_scan_id,
+    }
 
 
 def completion_pct(statuses: list[dict[str, Any]], total_items: int) -> float:
@@ -85,7 +208,6 @@ def completion_pct(statuses: list[dict[str, Any]], total_items: int) -> float:
 
 
 def remediation_velocity(*, tenant_id: str) -> dict[str, Any]:
-    """Remediation throughput summary for dashboard."""
     if not persistence_enabled():
         return {"closedCount": 0, "openCount": 0, "completionRatePct": None}
     with db_session() as session:
@@ -157,5 +279,8 @@ def _row_to_dict(row: RemediationStatusRow) -> dict[str, Any]:
         "status": row.status,
         "owner": row.owner,
         "notes": row.notes,
+        "assetId": row.asset_id,
+        "targetDate": row.target_date.isoformat() if row.target_date else None,
+        "verifyScanId": row.verify_scan_id,
         "updatedAt": row.updated_at.isoformat() if row.updated_at else None,
     }

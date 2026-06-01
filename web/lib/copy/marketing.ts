@@ -124,6 +124,29 @@ export const useCases = [
   },
 ] as const;
 
+export const pqcDocsCards = [
+  {
+    title: "PQC demo guide",
+    description: "Live scan workflow, scenarios, CBOM export, and verify links.",
+    href: "/docs/guides/pqc-demo",
+  },
+  {
+    title: "PQC API reference",
+    description: "Scan, inventory, report, and standards endpoints.",
+    href: "/docs/reference/pqc/scan",
+  },
+  {
+    title: "Standards mapping",
+    description: "NSM-10, CNSA 2.0, NIST IR 8547, and framework crosswalk.",
+    href: "/docs/reference/pqc/standards",
+  },
+  {
+    title: "Q-Day hub",
+    description: "HNDL, Mosca inequality, deadlines, and CBOM education.",
+    href: "/q-day",
+  },
+] as const;
+
 export const docsCards = [
   {
     title: "Data formats",
@@ -148,6 +171,19 @@ export const docsCards = [
 ] as const;
 
 export const blogPosts = [
+  {
+    slug: "q-day-readiness",
+    href: "/blog/q-day-readiness",
+    category: "Q-Day readiness",
+    coverImage: "/qtangl-technology-solver-grid.svg",
+    coverAlt: "Cryptographic inventory dashboard with readiness score and TLS endpoints.",
+    title: "Q-Day readiness in 10 minutes: what a live PQC scan actually shows",
+    excerpt: "Inventory, Mosca HNDL, CBOM export, and signed verify — not another spreadsheet.",
+    description:
+      "Walk through the Q-Day scanner demo: baseline inventory, framework mapping, and evidence your auditors can check independently.",
+    featured: true,
+    readiness: true,
+  },
   {
     slug: "when-classical-wins",
     href: "/blog/when-classical-wins",

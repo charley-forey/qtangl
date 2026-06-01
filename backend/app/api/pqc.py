@@ -177,6 +177,14 @@ def scan_pqc(
     request: PqcScanRequest,
     auth: AuthContext = Depends(require_auth),
 ) -> dict:
+    from app.billing.entitlements import check_scan_quota
+
+    quota_error = check_scan_quota(tenant_id=auth.tenant_id)
+    if quota_error:
+        raise HTTPException(
+            status_code=status.HTTP_402_PAYMENT_REQUIRED,
+            detail=quota_error,
+        )
     dataset = load_dataset()
     uploaded_rows = None
     if request.bundleSessionId:

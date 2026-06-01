@@ -21,7 +21,15 @@ export const docsSections: DocsNavSection[] = [
     items: [
       { name: "Concepts", href: "/docs/concepts" },
       { name: "Data formats", href: "/docs/data-formats" },
+      {
+        name: "PQC scanner demo guide",
+        href: "/docs/guides/pqc-demo",
+        status: "pilot",
+      },
       { name: "Schedule guide", href: "/docs/guides/schedule", status: "ga" },
+      { name: "Monitor setup", href: "/docs/guides/monitor-setup", status: "ga" },
+      { name: "CI/CD integration", href: "/docs/integrations/ci-cd", status: "ga" },
+      { name: "Dashboard SSO", href: "/docs/guides/sso-setup", status: "pilot" },
       {
         name: "Routing guide",
         href: "/docs/guides/routing",
@@ -45,11 +53,6 @@ export const docsSections: DocsNavSection[] = [
       {
         name: "EV fleet demo guide",
         href: "/docs/guides/ev-fleet-demo",
-        status: "pilot",
-      },
-      {
-        name: "PQC scanner demo guide",
-        href: "/docs/guides/pqc-demo",
         status: "pilot",
       },
     ],

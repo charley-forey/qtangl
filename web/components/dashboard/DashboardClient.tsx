@@ -5,9 +5,15 @@ import { useCallback, useEffect, useState } from "react";
 import Card from "@/components/ui/Card";
 import Eyebrow from "@/components/ui/Eyebrow";
 import RemediationBoard from "@/components/pqc/RemediationBoard";
+import RemediationWhatIf from "@/components/pqc/RemediationWhatIf";
 import ReadinessTrend from "@/components/pqc/ReadinessTrend";
 import ScanDiffPanel, { type ScanDiff } from "@/components/pqc/ScanDiffPanel";
+import InventoryHeatmap from "@/components/pqc/InventoryHeatmap";
+import AlertSettings from "@/components/dashboard/AlertSettings";
+import AuditLogPanel from "@/components/dashboard/AuditLogPanel";
 import IntegrationSettings from "@/components/dashboard/IntegrationSettings";
+import ScheduleManager from "@/components/dashboard/ScheduleManager";
+import type { CryptoAsset } from "@/lib/pqc";
 import {
   fetchTenantJson,
   getStoredTenantApiKey,
@@ -40,7 +46,7 @@ export default function DashboardClient() {
   const [remediationScan, setRemediationScan] = useState<{
     scanId: string;
     items: Array<{ id: string; title: string; severity: string }>;
-    statuses: Array<{ remediationId: string; status: string }>;
+    statuses: Array<{ remediationId: string; status: string; owner?: string | null }>;
   } | null>(null);
   const [portfolioRollup, setPortfolioRollup] = useState<{
     overallReadiness: number;
@@ -69,6 +75,11 @@ export default function DashboardClient() {
     risks: string[];
     nextWeekFocus: string[];
   } | null>(null);
+  const [heatmapAssets, setHeatmapAssets] = useState<CryptoAsset[]>([]);
+  const [analytics, setAnalytics] = useState<{
+    forecast: { projected?: number; current?: number } | null;
+    anomalyAlerts: Array<{ rule: string; message: string }>;
+  }>({ forecast: null, anomalyAlerts: [] });
 
   useEffect(() => {
     const stored = getStoredTenantApiKey();
@@ -148,6 +159,51 @@ export default function DashboardClient() {
           setJiraConfigured(false);
         }
       }
+      const latestDone = scansPayload.scans.find((scan) => scan.status === "done");
+      if (latestDone) {
+        try {
+          const detail = await fetchTenantJson<{
+            report?: {
+              remediationBacklog?: Array<{ id: string; title: string; severity: string }>;
+              scanDiff?: ScanDiff;
+            };
+            remediationStatus?: Array<{ remediationId: string; status: string; owner?: string | null }>;
+          }>(`/tenant/scans/${latestDone.scanId}`, key);
+          const items = detail.report?.remediationBacklog ?? [];
+          if (items.length) {
+            setRemediationScan({
+              scanId: latestDone.scanId,
+              items: items.slice(0, 10).map((row) => ({
+                id: row.id,
+                title: row.title,
+                severity: row.severity,
+              })),
+              statuses: detail.remediationStatus ?? [],
+            });
+            setExpandedScanId(latestDone.scanId);
+            setScanDiff(detail.report?.scanDiff ?? null);
+            const assets = (detail.report as { assets?: CryptoAsset[] })?.assets;
+            if (assets?.length) {
+              setHeatmapAssets(assets);
+            }
+          }
+        } catch {
+          setRemediationScan(null);
+        }
+        try {
+          const forecast = await fetchTenantJson<{ projected?: number; current?: number }>(
+            "/tenant/analytics/forecast",
+            key
+          );
+          const anomaly = await fetchTenantJson<{ alerts: Array<{ rule: string; message: string }> }>(
+            "/tenant/analytics/anomaly",
+            key
+          );
+          setAnalytics({ forecast, anomalyAlerts: anomaly.alerts ?? [] });
+        } catch {
+          setAnalytics({ forecast: null, anomalyAlerts: [] });
+        }
+      }
     } catch (loadError) {
       setMe(null);
       setScans([]);
@@ -157,38 +213,149 @@ export default function DashboardClient() {
     }
   }, []);
 
+  const apiKeyCard = (
+    <Card tone="strong" className="rounded-[var(--radius-xl)]">
+      <Eyebrow>Tenant API key</Eyebrow>
+      <p className="mt-3 text-sm leading-7 text-[var(--color-gray-300)]">
+        Paste the tenant key issued by Qtangl admin. It is stored in this browser session only.
+      </p>
+      <div className="mt-4 flex flex-col gap-3 sm:flex-row">
+        <input
+          type="password"
+          value={apiKey}
+          onChange={(event) => setApiKey(event.target.value)}
+          placeholder="qtangl_..."
+          className="w-full rounded-full border border-[var(--border-strong)] bg-black px-4 py-2 text-sm text-white"
+        />
+        <button
+          type="button"
+          disabled={!apiKey || loading}
+          onClick={() => loadDashboard(apiKey)}
+          className="rounded-full border border-[var(--border-strong)] bg-white px-5 py-2 text-sm font-medium text-black disabled:opacity-50"
+        >
+          {loading ? "Loading…" : "Connect"}
+        </button>
+      </div>
+      <p className="mt-3 text-xs text-[var(--color-gray-500)]">API base: {qtanglApiBaseUrl}</p>
+    </Card>
+  );
+
+  const trendPoints = scans
+    .filter((scan) => scan.readinessScore != null)
+    .map((scan) => ({
+      scanId: scan.scanId,
+      createdAt: scan.createdAt,
+      readinessScore: scan.readinessScore ?? 0,
+      readinessBand: scan.readinessBand ?? undefined,
+    }));
+
+  const latestScan = scans.find((scan) => scan.readinessScore != null);
+
   return (
     <div className="space-y-6">
-      <Card tone="strong" className="rounded-[var(--radius-xl)]">
-        <Eyebrow>Tenant API key</Eyebrow>
-        <p className="mt-3 text-sm leading-7 text-[var(--color-gray-300)]">
-          Paste the tenant key issued by Qtangl admin. It is stored in this browser session only.
-        </p>
-        <div className="mt-4 flex flex-col gap-3 sm:flex-row">
-          <input
-            type="password"
-            value={apiKey}
-            onChange={(event) => setApiKey(event.target.value)}
-            placeholder="qtangl_..."
-            className="w-full rounded-full border border-[var(--border-strong)] bg-black px-4 py-2 text-sm text-white"
-          />
-          <button
-            type="button"
-            disabled={!apiKey || loading}
-            onClick={() => loadDashboard(apiKey)}
-            className="rounded-full border border-[var(--border-strong)] bg-white px-5 py-2 text-sm font-medium text-black disabled:opacity-50"
-          >
-            {loading ? "Loading…" : "Connect"}
-          </button>
-        </div>
-        <p className="mt-3 text-xs text-[var(--color-gray-500)]">
-          API base: {qtanglApiBaseUrl}
-        </p>
-      </Card>
+      {!me ? apiKeyCard : null}
 
       {error ? (
         <Card tone="ghost" className="border border-red-500/40 text-red-200">
           {error}
+        </Card>
+      ) : null}
+
+      {me && latestScan ? (
+        <Card tone="feature" size="lg" className="rounded-[var(--radius-feature)]">
+          <Eyebrow>Readiness at a glance</Eyebrow>
+          <p className="mt-4 text-4xl font-semibold tracking-tight text-white">
+            {latestScan.readinessScore}
+            {latestScan.readinessBand ? (
+              <span className="ml-3 text-lg font-normal text-[var(--color-gray-400)]">
+                {latestScan.readinessBand}
+              </span>
+            ) : null}
+          </p>
+          <p className="mt-2 text-sm text-[var(--color-gray-400)]">
+            Latest scan {latestScan.scanId} · {formatUtcDateTime(latestScan.createdAt)}
+          </p>
+        </Card>
+      ) : null}
+
+      {trendPoints.length >= 2 ? (
+        <Card tone="panel">
+          <Eyebrow>Readiness trend</Eyebrow>
+          <ReadinessTrend points={trendPoints} />
+        </Card>
+      ) : null}
+
+      {weeklyDigest ? (
+        <Card tone="panel">
+          <Eyebrow>Weekly executive digest</Eyebrow>
+          <p className="mt-2 text-sm text-white">{weeklyDigest.headline}</p>
+          {weeklyDigest.risks.length > 0 ? (
+            <ul className="mt-3 list-disc pl-5 text-xs text-[var(--color-gray-400)]">
+              {weeklyDigest.risks.slice(0, 3).map((risk) => (
+                <li key={risk}>{risk}</li>
+              ))}
+            </ul>
+          ) : null}
+        </Card>
+      ) : null}
+
+      {me && latestScan ? (
+        <Card tone="panel">
+          <Eyebrow>Scan diff</Eyebrow>
+          <div className="mt-4">
+            {scanDiff ? (
+              <ScanDiffPanel diff={scanDiff} />
+            ) : (
+              <p className="text-sm text-[var(--color-gray-500)]">
+                No prior scan to compare. Run a second scan on the same target to see drift.
+              </p>
+            )}
+          </div>
+        </Card>
+      ) : null}
+
+      {heatmapAssets.length > 0 ? (
+        <Card tone="panel">
+          <Eyebrow>Asset heatmap</Eyebrow>
+          <div className="mt-4">
+            <InventoryHeatmap assets={heatmapAssets} />
+          </div>
+        </Card>
+      ) : null}
+
+      {analytics.forecast || analytics.anomalyAlerts.length > 0 ? (
+        <Card tone="panel">
+          <Eyebrow>Intelligence</Eyebrow>
+          <div className="mt-3 grid gap-4 sm:grid-cols-2 text-sm text-[var(--color-gray-300)]">
+            {analytics.forecast?.projected != null ? (
+              <div>
+                <p className="text-xs uppercase text-[var(--color-gray-500)]">Forecast (4 scans)</p>
+                <p className="mt-1 text-white">
+                  {analytics.forecast.current} → {analytics.forecast.projected}
+                </p>
+              </div>
+            ) : null}
+            {analytics.anomalyAlerts.length > 0 ? (
+              <div>
+                <p className="text-xs uppercase text-[var(--color-gray-500)]">Anomalies</p>
+                <p className="mt-1">{analytics.anomalyAlerts[0]?.message}</p>
+              </div>
+            ) : null}
+          </div>
+        </Card>
+      ) : null}
+
+      {savedKey && remediationScan ? (
+        <Card tone="panel">
+          <Eyebrow>Top remediation priorities</Eyebrow>
+          <RemediationBoard
+            apiKey={savedKey}
+            scanId={remediationScan.scanId}
+            items={remediationScan.items}
+            initialStatuses={remediationScan.statuses}
+            jiraConfigured={jiraConfigured}
+            allScans={scans.map((s) => ({ scanId: s.scanId, label: s.targetDomain ?? s.scanId }))}
+          />
         </Card>
       ) : null}
 
@@ -212,22 +379,6 @@ export default function DashboardClient() {
           </p>
         </Card>
       ) : null}
-      {weeklyDigest ? (
-        <Card tone="panel">
-          <Eyebrow>Weekly executive digest</Eyebrow>
-          <p className="mt-2 text-sm text-white">{weeklyDigest.headline}</p>
-        </Card>
-      ) : null}
-
-      {scanDiff ? (
-        <Card tone="panel">
-          <Eyebrow>Changes since last scan</Eyebrow>
-          <div className="mt-4">
-            <ScanDiffPanel diff={scanDiff} />
-          </div>
-        </Card>
-      ) : null}
-
       {me && portfolioRollup ? (
         <Card tone="panel">
           <Eyebrow>Portfolio readiness</Eyebrow>
@@ -279,22 +430,6 @@ export default function DashboardClient() {
               </button>
             </div>
           ) : null}
-        </Card>
-      ) : null}
-
-      {scans.filter((scan) => scan.readinessScore != null).length >= 2 ? (
-        <Card tone="panel">
-          <Eyebrow>Readiness trend</Eyebrow>
-          <ReadinessTrend
-            points={scans
-              .filter((scan) => scan.readinessScore != null)
-              .map((scan) => ({
-                scanId: scan.scanId,
-                createdAt: scan.createdAt,
-                readinessScore: scan.readinessScore ?? 0,
-                readinessBand: scan.readinessBand ?? undefined,
-              }))}
-          />
         </Card>
       ) : null}
 
@@ -403,7 +538,11 @@ export default function DashboardClient() {
                               try {
                                 const detail = await fetchTenantJson<{
                                   remediationBacklog: Array<{ id: string; title: string; severity: string }>;
-                                  remediationStatus: Array<{ remediationId: string; status: string }>;
+                                  remediationStatus: Array<{
+                                    remediationId: string;
+                                    status: string;
+                                    owner?: string | null;
+                                  }>;
                                   report?: { scanDiff?: ScanDiff };
                                 }>(`/tenant/scans/${scan.scanId}`, savedKey);
                                 setExpandedScanId(scan.scanId);
@@ -510,6 +649,15 @@ export default function DashboardClient() {
                 items={remediationScan.items}
                 initialStatuses={remediationScan.statuses}
                 jiraConfigured={jiraConfigured}
+                allScans={scans.map((s) => ({
+                  scanId: s.scanId,
+                  label: s.targetDomain ?? s.scanId,
+                }))}
+              />
+              <RemediationWhatIf
+                apiKey={savedKey}
+                scanId={remediationScan.scanId}
+                items={remediationScan.items}
               />
             </div>
           ) : null}
@@ -522,9 +670,27 @@ export default function DashboardClient() {
 
       {savedKey && me?.persistenceEnabled ? (
         <Card tone="panel">
+          <Eyebrow>Alert settings</Eyebrow>
+          <div className="mt-4">
+            <AlertSettings apiKey={savedKey} onMessage={setActionMessage} />
+          </div>
+        </Card>
+      ) : null}
+
+      {savedKey && me?.persistenceEnabled ? (
+        <Card tone="panel">
           <Eyebrow>Integrations</Eyebrow>
           <div className="mt-4">
             <IntegrationSettings apiKey={savedKey} onMessage={setActionMessage} />
+          </div>
+        </Card>
+      ) : null}
+
+      {savedKey && me?.persistenceEnabled ? (
+        <Card tone="panel">
+          <Eyebrow>Audit log</Eyebrow>
+          <div className="mt-4">
+            <AuditLogPanel apiKey={savedKey} />
           </div>
         </Card>
       ) : null}
@@ -572,40 +738,18 @@ export default function DashboardClient() {
               Create weekly schedule
             </button>
           </div>
-          {schedules.length > 0 ? (
-            <ul className="mt-4 space-y-2 text-sm text-[var(--color-gray-300)]">
-              {schedules.map((schedule) => (
-                <li
-                  key={schedule.id}
-                  className="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-[var(--border-subtle)] p-3"
-                >
-                  <div>
-                    <p className="font-mono text-xs text-white">{schedule.id}</p>
-                    <p className="text-xs text-[var(--color-gray-500)]">
-                      {schedule.scenarioId} · every {schedule.cadenceHours}h · next{" "}
-                      {schedule.nextRunAt ? formatUtcDateTime(schedule.nextRunAt) : "—"}
-                    </p>
-                  </div>
-                  <button
-                    type="button"
-                    className="text-xs text-red-300 underline"
-                    onClick={async () => {
-                      if (!savedKey) return;
-                      await fetchTenantJson(`/tenant/schedules/${schedule.id}`, savedKey, {
-                        method: "DELETE",
-                      });
-                      setSchedules((prev) => prev.filter((row) => row.id !== schedule.id));
-                      setActionMessage("Schedule deleted.");
-                    }}
-                  >
-                    Delete
-                  </button>
-                </li>
-              ))}
-            </ul>
-          ) : null}
+          <div className="mt-4">
+            <ScheduleManager
+              apiKey={savedKey}
+              schedules={schedules}
+              onRefresh={() => loadDashboard(savedKey)}
+              onMessage={setActionMessage}
+            />
+          </div>
         </Card>
       ) : null}
+
+      {me ? apiKeyCard : null}
     </div>
   );
 }

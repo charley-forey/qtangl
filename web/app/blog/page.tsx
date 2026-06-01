@@ -4,6 +4,7 @@ import PageHero from "@/components/layout/PageHero";
 import PageShell from "@/components/layout/PageShell";
 import FeatureCard from "@/components/marketing/FeatureCard";
 import Section from "@/components/layout/Section";
+import Eyebrow from "@/components/ui/Eyebrow";
 import { blogPosts } from "@/lib/constants";
 import { blogIndexCopy } from "@/lib/copy/articles";
 import { buildPageMetadata } from "@/lib/seo";
@@ -12,8 +13,17 @@ export const metadata: Metadata = buildPageMetadata({
   path: "/blog",
   title: "Blog",
   description:
-    "Read field notes from Qtangl's quantum-aware planning stack.",
+    "Q-Day readiness, PQC inventory, and hybrid optimization field notes from Qtangl.",
 });
+
+type BlogPost = (typeof blogPosts)[number];
+
+function isReadinessPost(post: BlogPost): boolean {
+  return "readiness" in post && post.readiness === true;
+}
+
+const readinessPosts = blogPosts.filter(isReadinessPost);
+const optimizationPosts = blogPosts.filter((post) => !isReadinessPost(post));
 
 export default function BlogPage() {
   return (
@@ -24,10 +34,33 @@ export default function BlogPage() {
         description={blogIndexCopy.description}
         contentClassName="max-w-3xl"
       />
+
+      {readinessPosts.length > 0 ? (
+        <Section gap="tight">
+          <Eyebrow>Q-Day readiness</Eyebrow>
+          <div className="mt-4 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+            {readinessPosts.map((post) => (
+              <FeatureCard
+                key={post.slug}
+                eyebrow={post.category}
+                title={post.title}
+                description={post.excerpt}
+                href={post.href}
+                ctaLabel="Read article"
+                imageSrc={post.coverImage}
+                imageAlt={post.coverAlt}
+              >
+                <p className="font-medium text-white">{post.description}</p>
+              </FeatureCard>
+            ))}
+          </div>
+        </Section>
+      ) : null}
+
       <Section gap="tight" className="pb-0">
-        {/* WORKTREE-TODO(web/components): Add shared "Back to blog" affordance and article CTA slots in ArticleLayout when docs-owned components are in scope. */}
-        <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-          {blogPosts.map((post) => (
+        <Eyebrow>Hybrid optimization</Eyebrow>
+        <div className="mt-4 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+          {optimizationPosts.map((post) => (
             <FeatureCard
               key={post.slug}
               eyebrow={post.category}

@@ -69,6 +69,40 @@ export async function postTenantJson<T>(
   });
 }
 
+export async function patchTenantJson<T>(
+  path: string,
+  apiKey: string,
+  body: unknown,
+  init?: RequestInit
+): Promise<T> {
+  return fetchTenantJson<T>(path, apiKey, {
+    method: "PATCH",
+    ...init,
+    headers: {
+      "Content-Type": "application/json",
+      ...(init?.headers ?? {}),
+    },
+    body: JSON.stringify(body),
+  });
+}
+
+export async function putTenantJson<T>(
+  path: string,
+  apiKey: string,
+  body: unknown,
+  init?: RequestInit
+): Promise<T> {
+  return fetchTenantJson<T>(path, apiKey, {
+    method: "PUT",
+    ...init,
+    headers: {
+      "Content-Type": "application/json",
+      ...(init?.headers ?? {}),
+    },
+    body: JSON.stringify(body),
+  });
+}
+
 export function tenantReportUrl(
   scanId: string,
   apiKey: string,

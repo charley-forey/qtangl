@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import DemoCatalogCard from "@/components/marketing/DemoCatalogCard";
+import ReadinessCrossLink from "@/components/marketing/ReadinessCrossLink";
 import PageHero from "@/components/layout/PageHero";
 import PageShell from "@/components/layout/PageShell";
 import Section from "@/components/layout/Section";
@@ -8,6 +9,7 @@ import Eyebrow from "@/components/ui/Eyebrow";
 import {
   demoCatalog,
   demosPageCopy,
+  optimizationDemoCatalog,
   sandboxCatalogEntry,
 } from "@/lib/copy/demos";
 import { buildPageMetadata } from "@/lib/seo";
@@ -16,22 +18,41 @@ export const metadata: Metadata = buildPageMetadata({
   path: "/demo",
   title: "Demos",
   description:
-    "Explore Qtangl demos: hospital re-staffing live today, API sandbox for developers, with construction and logistics workflows coming soon.",
+    "Explore Qtangl demos: Q-Day readiness scanner, hospital re-staffing, airline recovery, and EV fleet routing.",
 });
 
 export default function DemosPage() {
+  const pqcDemo = demoCatalog.find((demo) => demo.slug === "pqc");
+
   return (
     <PageShell>
       <PageHero
         eyebrow={demosPageCopy.eyebrow}
         title={demosPageCopy.title}
         description={demosPageCopy.description}
+        actions={[
+          { href: "/demo/pqc", label: "Run Q-Day scan" },
+          { href: "/platform", label: "Platform overview", variant: "secondary" },
+        ]}
       />
 
+      <Section gap="tight">
+        <ReadinessCrossLink />
+      </Section>
+
+      {pqcDemo ? (
+        <Section gap="tight" className="pb-0">
+          <Eyebrow>{demosPageCopy.catalogHeading}</Eyebrow>
+          <div className="mt-4 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+            <DemoCatalogCard demo={pqcDemo} />
+          </div>
+        </Section>
+      ) : null}
+
       <Section gap="tight" className="pb-0">
-        <Eyebrow>{demosPageCopy.catalogHeading}</Eyebrow>
+        <Eyebrow>{demosPageCopy.optimizationHeading}</Eyebrow>
         <div className="mt-4 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-          {demoCatalog.map((demo) => (
+          {optimizationDemoCatalog.map((demo) => (
             <DemoCatalogCard key={demo.slug} demo={demo} />
           ))}
         </div>

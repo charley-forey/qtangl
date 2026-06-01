@@ -24,6 +24,11 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       {
+        source: "/pqc",
+        destination: "/platform",
+        permanent: true,
+      },
+      {
         source: "/try",
         destination: "/sandbox",
         permanent: true,

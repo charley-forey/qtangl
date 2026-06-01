@@ -1,5 +1,7 @@
 import { getLibraryIndex } from "@/lib/library";
-import { siteMetadata } from "@/lib/copy/product";
+import { readinessMetadata, siteMetadata } from "@/lib/copy/product";
+import { frameworkGuideList } from "@/lib/copy/readiness-frameworks";
+import { qDayArticles } from "@/lib/copy/readiness-qday-hub";
 import { getAllDocsHrefs } from "@/lib/docs/nav";
 
 export async function GET() {
@@ -12,23 +14,67 @@ export async function GET() {
   const libraryLinks = entries
     .map((entry) => `- ${entry.title}: ${siteMetadata.url}/learn/library/${entry.slug}`)
     .join("\n");
+  const qDayLinks = Object.keys(qDayArticles)
+    .map((slug) => `- ${siteMetadata.url}/q-day/${slug}`)
+    .join("\n");
+  const frameworkLinks = frameworkGuideList
+    .map((guide) => `- ${guide.metadata.title}: ${siteMetadata.url}/q-day/frameworks/${guide.slug}`)
+    .join("\n");
 
   const content = `# Qtangl
 
-> Quantum Planning API: hold every option in superposition, rank the field, collapse to an executable plan.
+> ${readinessMetadata.oneLiner}
 
-Qtangl helps operations teams explore feasible schedules, routes, and staffing plans, rank them, and collapse to the plan their team runs.
+Qtangl is a post-quantum readiness platform — Assess quantum-vulnerable cryptography, Monitor crypto drift, and Convert your stack with signed evidence auditors can verify.
 
-## Primary pages
+## Primary pages — readiness
 
 - Home: ${siteMetadata.url}/
-- Technology: ${siteMetadata.url}/technology
-- API reference (concise): ${siteMetadata.url}/api
+- Platform: ${siteMetadata.url}/platform
+- Assess: ${siteMetadata.url}/assess
+- Free mini-assessment: ${siteMetadata.url}/assess/mini
+- Crypto agility checklist: ${siteMetadata.url}/q-day/checklist
+- Executive briefing: ${siteMetadata.url}/q-day/briefing
+- Monitor: ${siteMetadata.url}/monitor
+- Convert: ${siteMetadata.url}/convert
+- Pricing: ${siteMetadata.url}/pricing
+- Customer journey: ${siteMetadata.url}/journey
+- Resources hub: ${siteMetadata.url}/resources
+- ROI calculator: ${siteMetadata.url}/resources/roi
+- Readiness FAQ: ${siteMetadata.url}/resources/faq
+- Q-Day hub: ${siteMetadata.url}/q-day
+- Q-Day scanner demo: ${siteMetadata.url}/demo/pqc
+- Verify a report: ${siteMetadata.url}/verify
+- Trust center: ${siteMetadata.url}/trust
+- Request access: ${siteMetadata.url}/access
 - Documentation hub: ${siteMetadata.url}/docs
+- PQC demo guide: ${siteMetadata.url}/docs/guides/pqc-demo
+
+## Industry solutions
+
+- Banking: ${siteMetadata.url}/solutions/banking
+- Government & defense: ${siteMetadata.url}/solutions/government
+- Healthcare: ${siteMetadata.url}/solutions/healthcare
+
+## Q-Day education
+
+${qDayLinks}
+
+## Framework guides
+
+${frameworkLinks}
+
+## Hybrid optimization (expansion)
+
+- Technology: ${siteMetadata.url}/technology
+- Optimization hub: ${siteMetadata.url}/platform/optimize
+- API reference (concise): ${siteMetadata.url}/api
 - API sandbox: ${siteMetadata.url}/sandbox
 - Hospital re-staffing demo: ${siteMetadata.url}/demo/hospital
 - Airline crew recovery demo: ${siteMetadata.url}/demo/airline
-- Request access: ${siteMetadata.url}/access
+
+## Blog & learn
+
 - Blog: ${siteMetadata.url}/blog
 - Learn (quantum software library): ${siteMetadata.url}/learn
 - Learn library catalog: ${siteMetadata.url}/learn/library

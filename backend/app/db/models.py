@@ -85,9 +85,12 @@ class RemediationStatus(Base):
     tenant_id: Mapped[str] = mapped_column(String(64), index=True)
     scan_id: Mapped[str] = mapped_column(String(80), index=True)
     remediation_id: Mapped[str] = mapped_column(String(80), index=True)
+    asset_id: Mapped[str | None] = mapped_column(String(80), nullable=True, index=True)
     status: Mapped[str] = mapped_column(String(32), default="open")
     owner: Mapped[str | None] = mapped_column(String(255), nullable=True)
     notes: Mapped[str | None] = mapped_column(Text, nullable=True)
+    target_date: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    verify_scan_id: Mapped[str | None] = mapped_column(String(80), nullable=True)
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_utcnow, onupdate=_utcnow)
 
 
@@ -144,4 +147,75 @@ class TenantIntegration(Base):
     tenant_id: Mapped[str] = mapped_column(String(64), index=True)
     provider: Mapped[str] = mapped_column(String(32), index=True)
     config_json: Mapped[str] = mapped_column(Text, default="{}")
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_utcnow)
+
+
+class TenantSettings(Base):
+    __tablename__ = "tenant_settings"
+
+    tenant_id: Mapped[str] = mapped_column(String(64), primary_key=True)
+    settings_json: Mapped[str] = mapped_column(Text, default="{}")
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_utcnow, onupdate=_utcnow)
+
+
+class WebhookDeadLetter(Base):
+    __tablename__ = "webhook_dead_letters"
+
+    id: Mapped[str] = mapped_column(String(80), primary_key=True)
+    tenant_id: Mapped[str] = mapped_column(String(64), index=True)
+    url: Mapped[str] = mapped_column(String(512), nullable=False)
+    payload_json: Mapped[str] = mapped_column(Text, nullable=False)
+    reason: Mapped[str] = mapped_column(String(255), default="unknown")
+    event: Mapped[str | None] = mapped_column(String(64), nullable=True)
+    scan_id: Mapped[str | None] = mapped_column(String(80), nullable=True)
+    replayed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_utcnow)
+
+
+class ScheduleRunLog(Base):
+    __tablename__ = "schedule_run_logs"
+
+    id: Mapped[str] = mapped_column(String(80), primary_key=True)
+    schedule_id: Mapped[str] = mapped_column(String(80), index=True)
+    tenant_id: Mapped[str] = mapped_column(String(64), index=True)
+    scan_id: Mapped[str | None] = mapped_column(String(80), nullable=True)
+    status: Mapped[str] = mapped_column(String(32), default="enqueued")
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_utcnow)
+
+
+class RemediationExternalSync(Base):
+    __tablename__ = "remediation_external_sync"
+
+    id: Mapped[str] = mapped_column(String(80), primary_key=True)
+    tenant_id: Mapped[str] = mapped_column(String(64), index=True)
+    remediation_id: Mapped[str] = mapped_column(String(80), index=True)
+    provider: Mapped[str] = mapped_column(String(32), index=True)
+    external_ref: Mapped[str] = mapped_column(String(128), nullable=False)
+    external_status: Mapped[str | None] = mapped_column(String(64), nullable=True)
+    scan_id: Mapped[str | None] = mapped_column(String(80), nullable=True)
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_utcnow, onupdate=_utcnow)
+
+
+class TenantSubscription(Base):
+    __tablename__ = "tenant_subscriptions"
+
+    id: Mapped[str] = mapped_column(String(80), primary_key=True)
+    tenant_id: Mapped[str] = mapped_column(String(64), index=True, unique=True)
+    tier: Mapped[str] = mapped_column(String(32), default="monitor")
+    stripe_customer_id: Mapped[str | None] = mapped_column(String(128), nullable=True)
+    stripe_subscription_id: Mapped[str | None] = mapped_column(String(128), nullable=True)
+    status: Mapped[str] = mapped_column(String(32), default="active")
+    max_schedules: Mapped[int] = mapped_column(default=10)
+    max_scans_per_month: Mapped[int] = mapped_column(default=100)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_utcnow)
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_utcnow, onupdate=_utcnow)
+
+
+class PartnerChildTenant(Base):
+    __tablename__ = "partner_child_tenants"
+
+    id: Mapped[str] = mapped_column(String(80), primary_key=True)
+    parent_tenant_id: Mapped[str] = mapped_column(String(64), index=True)
+    child_tenant_id: Mapped[str] = mapped_column(String(64), index=True, unique=True)
+    label: Mapped[str] = mapped_column(String(255), default="")
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_utcnow)

@@ -10,13 +10,29 @@ from app.pqc.references import glossary_for_report, references_for_report
 from app.pqc.report import report_to_cbom, report_to_csv, report_to_json, report_to_pdf
 
 
-def build_evidence_bundle(report: MigrationReport) -> bytes:
+def build_evidence_bundle(
+    report: MigrationReport,
+    *,
+    remediation_statuses: list[dict[str, Any]] | None = None,
+) -> bytes:
     """One-download auditor handoff: PDF + CBOM + JSON + CSV + methodology + signature."""
+    from app.remediation.service import apply_remediation_to_migration_report, merge_remediation_into_report
+
+    if remediation_statuses:
+        report = apply_remediation_to_migration_report(report, statuses=remediation_statuses)
+
     buffer = io.BytesIO()
     json_payload = report_to_json(report)
+    if remediation_statuses:
+        json_payload = merge_remediation_into_report(json_payload, statuses=remediation_statuses)
     with zipfile.ZipFile(buffer, "w", zipfile.ZIP_DEFLATED) as archive:
         archive.writestr("report.pdf", report_to_pdf(report))
         archive.writestr("report.json", json.dumps(json_payload, indent=2))
+        if remediation_statuses:
+            archive.writestr(
+                "remediation-status.json",
+                json.dumps(remediation_statuses, indent=2),
+            )
         archive.writestr("remediation.csv", report_to_csv(report))
         archive.writestr("cbom.json", json.dumps(report_to_cbom(report), indent=2))
         archive.writestr(

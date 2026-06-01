@@ -2,15 +2,27 @@ import { quantumLexicon } from "@/lib/copy/voice";
 
 const { coherence, interference, measurement, phase } = quantumLexicon;
 
-export const siteMetadata = {
-  name: "Qtangl",
+export const readinessMetadata = {
+  title: "Qtangl | Post-Quantum Readiness Platform",
+  description:
+    "Assess quantum-vulnerable cryptography, monitor crypto drift, and convert your stack with signed evidence auditors can verify.",
+  tagline: "Assess. Monitor. Convert.",
+  oneLiner: "Post-quantum readiness with evidence your auditors can verify.",
+} as const;
+
+export const optimizationMetadata = {
   title: "Qtangl | Quantum Planning API",
   description:
     "Explore every feasible schedule, route, and staffing plan — rank them all, then collapse to the future your team runs.",
-  url: "https://qtangl.com",
   tagline: "Every possibility ranked. One future your team runs.",
   oneLiner:
     "Quantum Planning API: hold every option in superposition, rank the field, collapse to an executable plan.",
+} as const;
+
+export const siteMetadata = {
+  name: "Qtangl",
+  ...readinessMetadata,
+  url: "https://qtangl.com",
   contactEmail: "charley@qtangl.com",
 } as const;
 
@@ -54,6 +66,27 @@ export const aboutContent = {
       description: "Plan · reason · metric — always together, always auditable.",
     },
   ],
+} as const;
+
+export const readinessDocsIndex = {
+  eyebrow: "Post-quantum readiness",
+  title: "Qtangl PQC scanner",
+  description:
+    "Scan domains for quantum-vulnerable crypto, export CycloneDX CBOM, and generate signed reports with verify links.",
+  whatItIs: {
+    title: "What it is",
+    description:
+      "Live TLS inventory, Mosca HNDL scoring, CBOM exports, and signed PDF evidence — Assess → Monitor → Convert.",
+  },
+  whenToUseIt: {
+    title: "When to use it",
+    items: [
+      "Board or regulator mandate to inventory quantum-vulnerable cryptography.",
+      "CMMC, PCI-DSS 4.0, or HIPAA audit needs crypto control evidence.",
+      "You need continuous drift monitoring — not a one-time spreadsheet.",
+    ],
+    kicker: "Inventory aid, not formal audit. Signed evidence your GRC team can verify.",
+  },
 } as const;
 
 export const docsIndex = {
@@ -181,4 +214,4 @@ export const technologyPage = {
 } as const;
 
 export const footerBlurb =
-  "Rank feasible plans. Collapse to one your team can run. Classical-first, quantum-aware, operationally honest.";
+  "Assess quantum-vulnerable crypto. Monitor drift until Q-Day. Convert with signed evidence your auditors can verify.";

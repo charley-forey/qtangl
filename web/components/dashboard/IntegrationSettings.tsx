@@ -3,6 +3,7 @@
 import { useState } from "react";
 
 import Eyebrow from "@/components/ui/Eyebrow";
+import { qtanglApiBaseUrl } from "@/lib/api";
 import { postTenantJson, fetchTenantJson } from "@/lib/tenant-api";
 
 type Integration = {
@@ -150,15 +151,103 @@ export default function IntegrationSettings({
           </button>
         </div>
         {webhooks.length > 0 ? (
-          <ul className="mt-3 space-y-1 text-xs text-[var(--color-gray-400)]">
+          <ul className="mt-3 space-y-2 text-xs text-[var(--color-gray-400)]">
             {webhooks.map((hook) => (
-              <li key={hook.id} className="font-mono break-all">
-                {hook.url}
+              <li key={hook.id} className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
+                <span className="font-mono break-all">{hook.url}</span>
+                <button
+                  type="button"
+                  className="shrink-0 text-white underline underline-offset-4"
+                  onClick={async () => {
+                    const response = await fetch(`${qtanglApiBaseUrl}/tenant/webhooks/${hook.id}`, {
+                      method: "DELETE",
+                      headers: { Authorization: `Bearer ${apiKey}` },
+                    });
+                    if (!response.ok) {
+                      onMessage("Failed to remove webhook.");
+                      return;
+                    }
+                    onMessage("Webhook removed.");
+                    await loadSettings();
+                  }}
+                >
+                  Remove
+                </button>
               </li>
             ))}
           </ul>
         ) : null}
       </div>
+      <DlqPanel apiKey={apiKey} onMessage={onMessage} />
+    </div>
+  );
+}
+
+type DlqItem = {
+  id: string;
+  url: string;
+  reason: string;
+  event?: string;
+  scanId?: string;
+  createdAt?: string;
+};
+
+function DlqPanel({ apiKey, onMessage }: { apiKey: string; onMessage: (message: string) => void }) {
+  const [items, setItems] = useState<DlqItem[]>([]);
+  const [loaded, setLoaded] = useState(false);
+
+  async function loadDlq() {
+    try {
+      const payload = await fetchTenantJson<{ items: DlqItem[] }>("/tenant/webhooks/dlq", apiKey);
+      setItems(payload.items);
+      setLoaded(true);
+    } catch (error) {
+      onMessage(error instanceof Error ? error.message : "Failed to load DLQ.");
+    }
+  }
+
+  return (
+    <div>
+      <Eyebrow>Webhook dead letter queue</Eyebrow>
+      {!loaded ? (
+        <button type="button" className="mt-2 text-sm text-white underline" onClick={loadDlq}>
+          Load failed deliveries
+        </button>
+      ) : items.length === 0 ? (
+        <p className="mt-2 text-xs text-[var(--color-gray-500)]">No failed webhook deliveries.</p>
+      ) : (
+        <ul className="mt-3 space-y-2 text-xs text-[var(--color-gray-400)]">
+          {items.map((item) => (
+            <li
+              key={item.id}
+              className="flex flex-col gap-2 rounded-lg border border-[var(--border-subtle)] p-3 sm:flex-row sm:items-center sm:justify-between"
+            >
+              <div>
+                <p className="font-mono text-white">{item.id}</p>
+                <p>{item.reason}</p>
+                <p className="break-all">{item.url}</p>
+              </div>
+              <button
+                type="button"
+                className="shrink-0 text-white underline"
+                onClick={async () => {
+                  try {
+                    await postTenantJson("/tenant/webhooks/replay", apiKey, {
+                      deadLetterId: item.id,
+                    });
+                    onMessage(`Replayed ${item.id}`);
+                    await loadDlq();
+                  } catch (error) {
+                    onMessage(error instanceof Error ? error.message : "Replay failed.");
+                  }
+                }}
+              >
+                Replay
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 }

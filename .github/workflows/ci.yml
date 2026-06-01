@@ -38,6 +38,9 @@ jobs:
           QTANGL_ENABLE_QAOA: "false"
         run: python -m pytest tests/ -q --tb=short
 
+      - name: Dependency audit (pip-audit)
+        run: pip install pip-audit && pip-audit -r requirements.lock || true
+
   web:
     name: Web (lint + build)
     runs-on: ubuntu-latest
@@ -67,6 +70,27 @@ jobs:
         env:
           NEXT_TELEMETRY_DISABLED: "1"
         run: npm run build
+
+      - name: Install Playwright
+        run: npx playwright install chromium --with-deps
+
+      - name: E2E smoke (access)
+        env:
+          QTANGL_API_BASE_URL: http://127.0.0.1:8000
+        run: npx playwright test tests/e2e/access.spec.ts
+
+  codeql:
+    name: CodeQL (Python)
+    runs-on: ubuntu-latest
+    permissions:
+      security-events: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: github/codeql-action/init@v3
+        with:
+          languages: python
+      - uses: github/codeql-action/analyze@v3
 
   gitleaks:
     name: Secret scan (gitleaks)

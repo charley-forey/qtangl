@@ -20,9 +20,9 @@ export const articleOutcomeStrip = [
 
 export const blogIndexCopy = {
   eyebrow: "Blog",
-  title: "Field notes from a quantum-aware planning stack.",
+  title: "Q-Day readiness and hybrid optimization.",
   description:
-    "Practical optimization, hybrid execution, and the business case for better plans.",
+    "PQC inventory, crypto drift, and signed evidence — plus scheduling, routing, and staffing field notes.",
 } as const;
 
 export const blogClosingCta = {

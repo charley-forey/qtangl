@@ -15,10 +15,11 @@ export type DemoCatalogEntry = {
 
 export const demosPageCopy = {
   eyebrow: "Demos",
-  title: "See Qtangl on real planning problems.",
+  title: "See Qtangl readiness and optimization in action.",
   description:
-    "Full workflows for buyers — nurse call-outs, crew delays, and tight delivery windows. Same ranked-plan output, operationally honest.",
-  catalogHeading: "Industry workflows",
+    "Start with the Q-Day scanner for post-quantum inventory — then explore scheduling, routing, and staffing workflows.",
+  catalogHeading: "Q-Day readiness",
+  optimizationHeading: "Hybrid optimization",
   sandboxHeading: "For developers",
 } as const;
 
@@ -36,6 +37,17 @@ export const sandboxCatalogEntry: DemoCatalogEntry = {
 };
 
 export const demoCatalog: readonly DemoCatalogEntry[] = [
+  {
+    slug: "pqc",
+    sector: "Security / Cryptography",
+    title: "Q-Day readiness scanner",
+    oneLiner:
+      "Inventory quantum-vulnerable crypto, Mosca HNDL risk, hybrid ML-KEM handshake proof, and CBOM migration reports.",
+    runtime: "8:00",
+    status: "live",
+    href: "/demo/pqc",
+    variant: "workflow",
+  },
   {
     slug: "hospital",
     sector: "Healthcare",
@@ -59,26 +71,6 @@ export const demoCatalog: readonly DemoCatalogEntry[] = [
     variant: "workflow",
   },
   {
-    slug: "construction",
-    sector: "Construction",
-    title: "Crew resequencing",
-    oneLiner:
-      "Resequence trades and inspections when one crew window moves — without rebuilding the job.",
-    status: "coming-soon",
-    variant: "workflow",
-  },
-  {
-    slug: "pqc",
-    sector: "Security / Cryptography",
-    title: "Q-Day readiness scanner",
-    oneLiner:
-      "Inventory quantum-vulnerable crypto, Mosca HNDL risk, hybrid ML-KEM handshake proof, and CBOM migration reports.",
-    runtime: "3:20",
-    status: "live",
-    href: "/demo/pqc",
-    variant: "workflow",
-  },
-  {
     slug: "ev-fleet",
     sector: "Logistics / Last-mile",
     title: "EV depot charging + routing",
@@ -89,4 +81,15 @@ export const demoCatalog: readonly DemoCatalogEntry[] = [
     href: "/demo/ev-fleet",
     variant: "workflow",
   },
+  {
+    slug: "construction",
+    sector: "Construction",
+    title: "Crew resequencing",
+    oneLiner:
+      "Resequence trades and inspections when one crew window moves — without rebuilding the job.",
+    status: "coming-soon",
+    variant: "workflow",
+  },
 ] as const;
+
+export const optimizationDemoCatalog = demoCatalog.filter((demo) => demo.slug !== "pqc");

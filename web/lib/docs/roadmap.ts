@@ -18,6 +18,11 @@ export const roadmapBands: RoadmapBand[] = [
     label: "Now",
     items: [
       {
+        title: "Q-Day readiness scanner",
+        description: "Pilot /pqc/* cryptographic inventory, Mosca risk, CBOM exports, PQ handshake proof.",
+        status: "pilot",
+      },
+      {
         title: "Schedule optimization (GA)",
         description: "CP-SAT baseline on every job; hybrid QAOA on bounded research candidates.",
         status: "ga",
@@ -25,11 +30,6 @@ export const roadmapBands: RoadmapBand[] = [
       {
         title: "Hospital re-staffing demo",
         description: "Pilot /hospital/* endpoints with scoreboard and audit packs.",
-        status: "pilot",
-      },
-      {
-        title: "Q-Day readiness scanner",
-        description: "Pilot /pqc/* cryptographic inventory, Mosca risk, CBOM exports, PQ handshake proof.",
         status: "pilot",
       },
       {

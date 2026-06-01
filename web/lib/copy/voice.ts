@@ -41,6 +41,8 @@ export const quantumLexicon = {
   },
 } as const;
 
+export { readinessGuardrails } from "@/lib/copy/readiness";
+
 export const copyGuardrails = {
   brand:
     "Headlines: outcome in ≤12 words. Eyebrows carry quantum terms. Body: proof or CTA, not lectures.",

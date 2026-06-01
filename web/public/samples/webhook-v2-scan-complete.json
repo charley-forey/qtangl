@@ -1,0 +1,21 @@
+{
+  "schemaVersion": "qtangl-webhook-v2",
+  "event": "scan.complete",
+  "tenantId": "tenant-example",
+  "scanId": "scan-example",
+  "targetDomain": "api.example.com",
+  "readinessScore": 61.8,
+  "readinessBand": "at_risk",
+  "verifyUrl": "https://www.qtangl.com/verify?scanId=scan-example",
+  "alerts": [
+    {
+      "rule": "new_quantum_vulnerable",
+      "severity": "critical",
+      "message": "2 new quantum-vulnerable asset(s) since last scan."
+    }
+  ],
+  "scanDiff": {
+    "readinessDelta": -4.2,
+    "newQuantumVulnerableCount": 2
+  }
+}

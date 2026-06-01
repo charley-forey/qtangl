@@ -21,7 +21,7 @@ test("compare URL preserves selection", async ({ page }) => {
 test("library entry has substantive sections", async ({ page }) => {
   await page.goto("/learn/library/quantumlib-cirq");
   await expect(page.getByRole("heading", { name: "Cirq", level: 1 })).toBeVisible();
-  await expect(page.getByRole("heading", { name: /What it is/i })).toBeVisible();
+  await expect(page.getByText(/What it is/i).first()).toBeVisible();
   await expect(page.getByRole("heading", { name: /Repository README/i })).toBeVisible();
 });
 

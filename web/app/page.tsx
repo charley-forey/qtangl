@@ -4,6 +4,7 @@ import ApiPreviewSection from "@/components/marketing/ApiPreviewSection";
 import CTA from "@/components/marketing/CTA";
 import FeatureCard from "@/components/marketing/FeatureCard";
 import Hero from "@/components/marketing/Hero";
+import ValueProofStrip from "@/components/marketing/ValueProofStrip";
 import PageShell from "@/components/layout/PageShell";
 import StateTransition from "@/components/quantum/StateTransition";
 import Section from "@/components/layout/Section";
@@ -11,14 +12,18 @@ import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
 import Eyebrow from "@/components/ui/Eyebrow";
 import JsonLd from "@/components/seo/JsonLd";
-import { homeHeadlineDemo, homepageNarrative } from "@/lib/copy/home";
-import { quantumWorkflowPoints, useCases } from "@/lib/constants";
+import {
+  readinessHeadlineDemo,
+  readinessHomeNarrative,
+  readinessJourneyPoints,
+  readinessUseCases,
+} from "@/lib/copy/readiness-home";
 import { siteMetadata } from "@/lib/copy/product";
 import { buildOrganizationJsonLd, buildPageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildPageMetadata({
   path: "",
-  title: "Home",
+  title: "Post-Quantum Readiness Platform",
   description: siteMetadata.description,
 });
 
@@ -34,13 +39,13 @@ export default function Home() {
           <Card tone="feature" size="lg" className="rounded-[var(--radius-feature)]">
             <div className="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end">
               <div>
-                <Eyebrow>{homeHeadlineDemo.eyebrow}</Eyebrow>
-                <h2 className="heading-section mt-4">{homeHeadlineDemo.title}</h2>
+                <Eyebrow>{readinessHeadlineDemo.eyebrow}</Eyebrow>
+                <h2 className="heading-section mt-4">{readinessHeadlineDemo.title}</h2>
                 <p className="mt-4 max-w-2xl text-base leading-8 text-[var(--color-gray-300)]">
-                  {homeHeadlineDemo.description}
+                  {readinessHeadlineDemo.description}
                 </p>
                 <dl className="mt-8 grid grid-cols-3 gap-4 border-t border-[var(--border)] pt-8 sm:max-w-lg">
-                  {homeHeadlineDemo.stats.map((stat) => (
+                  {readinessHeadlineDemo.stats.map((stat) => (
                     <div key={stat.label}>
                       <dt className="text-label text-[var(--color-gray-500)]">{stat.label}</dt>
                       <dd className="mt-2 text-2xl font-semibold tracking-tight text-white">
@@ -50,8 +55,8 @@ export default function Home() {
                   ))}
                 </dl>
               </div>
-              <Button href={homeHeadlineDemo.primaryCta.href} className="shrink-0">
-                {homeHeadlineDemo.primaryCta.label}
+              <Button href={readinessHeadlineDemo.primaryCta.href} className="shrink-0">
+                {readinessHeadlineDemo.primaryCta.label}
               </Button>
             </div>
           </Card>
@@ -61,13 +66,13 @@ export default function Home() {
       <Section gap="tight">
         <StateTransition>
           <div className="content-reading">
-            <Eyebrow>{homepageNarrative.workflowEyebrow}</Eyebrow>
-            <h2 className="heading-section mt-4">{homepageNarrative.workflowTitle}</h2>
+            <Eyebrow>{readinessHomeNarrative.workflowEyebrow}</Eyebrow>
+            <h2 className="heading-section mt-4">{readinessHomeNarrative.workflowTitle}</h2>
           </div>
         </StateTransition>
         <Card tone="strong" className="mt-8 overflow-hidden rounded-[var(--radius-feature)]">
           <div className="grid divide-y divide-[var(--border)] md:grid-cols-3 md:divide-x md:divide-y-0">
-            {quantumWorkflowPoints.map((point) => (
+            {readinessJourneyPoints.map((point) => (
               <div key={point.title} className="px-6 py-6 sm:px-8">
                 <p className="text-label">{point.eyebrow}</p>
                 <p className="mt-3 text-sm font-semibold text-white">{point.title}</p>
@@ -83,18 +88,18 @@ export default function Home() {
       <Section>
         <StateTransition>
           <div className="content-reading">
-            <Eyebrow>{homepageNarrative.domainEyebrow}</Eyebrow>
-            <h2 className="heading-section mt-4">{homepageNarrative.domainTitle}</h2>
+            <Eyebrow>{readinessHomeNarrative.domainEyebrow}</Eyebrow>
+            <h2 className="heading-section mt-4">{readinessHomeNarrative.domainTitle}</h2>
           </div>
         </StateTransition>
         <div className="mt-10 grid gap-6 md:grid-cols-3">
-          {useCases.map((useCase, index) => (
+          {readinessUseCases.map((useCase, index) => (
             <StateTransition key={useCase.title} delay={0.04 * index}>
               <FeatureCard
                 eyebrow={useCase.eyebrow}
                 title={useCase.title}
                 href={useCase.demoHref}
-                ctaLabel={useCase.demoHref ? "Open demo →" : "Demo coming soon"}
+                ctaLabel="Open scenario →"
               >
                 <p className="text-sm leading-7 text-[var(--color-gray-300)]">{useCase.outcome}</p>
                 <p className="text-label mt-4 text-white">{useCase.measurement}</p>
@@ -103,11 +108,20 @@ export default function Home() {
           ))}
         </div>
         <StateTransition>
-          <div className="mt-8">
-            <Button href="/demo" variant="ghost" size="sm" className="px-0">
-              See all live demos →
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
+            <Button href={readinessHomeNarrative.optimizeLink.href} variant="ghost" size="sm" className="px-0">
+              {readinessHomeNarrative.optimizeLink.label}
+            </Button>
+            <Button href={readinessHomeNarrative.qDayLink.href} variant="ghost" size="sm" className="px-0">
+              {readinessHomeNarrative.qDayLink.label}
             </Button>
           </div>
+        </StateTransition>
+      </Section>
+
+      <Section gap="tight">
+        <StateTransition>
+          <ValueProofStrip title="Why security teams choose Qtangl" />
         </StateTransition>
       </Section>
 

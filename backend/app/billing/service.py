@@ -105,9 +105,45 @@ def verify_stripe_webhook(payload: bytes, signature_header: str) -> dict[str, An
 
 def handle_checkout_completed(session: dict[str, Any]) -> dict[str, Any]:
     """Provision tenant when checkout.session.completed fires."""
+    from app.billing.entitlements import upsert_subscription
+
     metadata = session.get("metadata") or {}
     company = metadata.get("company") or session.get("customer_details", {}).get("name") or "Monitor"
     email = session.get("customer_email") or session.get("customer_details", {}).get("email") or ""
     if not email:
         return {"provisioned": False, "reason": "missing_email"}
-    return {"provisioned": True, **provision_monitor_tenant(email=email, company=company)}
+    result = provision_monitor_tenant(email=email, company=company)
+    tier = metadata.get("product", "pqc-monitor")
+    tier_map = {"pqc-monitor": "monitor", "pqc-convert": "convert", "pqc-enterprise": "enterprise"}
+    upsert_subscription(
+        tenant_id=result["tenantId"],
+        tier=tier_map.get(tier, "monitor"),
+        stripe_customer_id=session.get("customer"),
+        stripe_subscription_id=session.get("subscription"),
+        status="active",
+    )
+    return {"provisioned": True, **result}
+
+
+def create_billing_portal_session(*, customer_id: str, return_url: str) -> dict[str, Any]:
+    secret = os.environ.get("QTANGL_STRIPE_SECRET_KEY")
+    if not secret or not customer_id:
+        return {"ok": False, "reason": "stripe_unconfigured"}
+    payload = urllib.parse.urlencode(
+        {"customer": customer_id, "return_url": return_url}
+    ).encode("utf-8")
+    request = urllib.request.Request(
+        "https://api.stripe.com/v1/billing_portal/sessions",
+        data=payload,
+        headers={
+            "Authorization": f"Bearer {secret}",
+            "Content-Type": "application/x-www-form-urlencoded",
+        },
+        method="POST",
+    )
+    try:
+        with urllib.request.urlopen(request, timeout=20) as response:
+            session = json.loads(response.read().decode("utf-8"))
+            return {"ok": True, "portalUrl": session.get("url")}
+    except Exception as exc:
+        return {"ok": False, "reason": str(exc)}

@@ -45,10 +45,15 @@ def enrich_completed_scan(scan_id: str, bundle: ScanBundle, *, tenant_id: str) -
     json_payload = report_to_json(bundle.report)
     bundle.report.signature = sign_report_payload(json_payload)
 
+    from app.tenant.settings import get_tenant_settings
+
+    settings = get_tenant_settings(tenant_id=tenant_id)
     alerts = evaluate_scan_alerts(
         scan_diff=scan_diff,
         readiness_score=bundle.report.readiness_score,
         readiness_band=bundle.report.readiness_band,
+        settings=settings,
+        assets=bundle.report.assets,
     )
 
     notify_email = os.environ.get("QTANGL_ALERT_EMAIL")  # optional global ops inbox
@@ -80,6 +85,8 @@ def enrich_completed_scan(scan_id: str, bundle: ScanBundle, *, tenant_id: str) -
             alerts=alerts,
             verify_url=f"{base}/verify?scanId={scan_id}",
             evidence_zip_url=f"{base}/dashboard",
+            tenant_id=tenant_id,
+            signing_secret=str(settings.get("webhookSigningSecret", "")),
         )
 
     if alerts:

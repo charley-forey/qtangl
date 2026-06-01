@@ -9,6 +9,7 @@
     "generate:docs-index": "node scripts/build_docs_index.mjs",
     "test:e2e": "playwright test",
     "test:access": "node --experimental-strip-types --test tests/access-validation.test.mjs",
+    "test:readiness-roi": "node --experimental-strip-types --test tests/readiness-roi.test.mjs",
     "prebuild": "npm run generate:library && npm run generate:docs-index",
     "dev": "next dev",
     "build": "next build",

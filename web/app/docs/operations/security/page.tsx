@@ -41,6 +41,16 @@ export default function SecurityPage() {
           </ul>
         </DocsSection>
         <DocsSection>
+          <DocsHeading>CAIQ / SIG (stubs)</DocsHeading>
+          <ul className="list-disc space-y-2 pl-5 text-sm leading-7 text-[var(--color-gray-300)]">
+            <li>Data classification: customer scan metadata and cryptographic inventory (no PAN).</li>
+            <li>Encryption: TLS 1.2+ in transit; optional Fernet for integration secrets at rest.</li>
+            <li>Access control: API keys with roles; SSO documented for dashboard (OIDC).</li>
+            <li>Logging: audit log API for tenant admin actions.</li>
+            <li>SOC 2: Type I in progress — no certification claim on marketing pages.</li>
+          </ul>
+        </DocsSection>
+        <DocsSection>
           <DocsHeading>Responsible disclosure</DocsHeading>
           <p className="text-sm leading-8 text-[var(--color-gray-300)]">
             Report security issues to{" "}

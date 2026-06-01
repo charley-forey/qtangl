@@ -9,16 +9,27 @@ from fastapi.responses import JSONResponse, Response
 from app.audit.service import log_action
 from app.auth import AuthContext, require_auth, require_auth_readonly, require_auth_write
 from app.db.config import persistence_enabled, redis_enabled
-from app.monitoring.service import create_schedule, delete_schedule, list_schedules, scheduler_enabled
+from app.billing.entitlements import check_schedule_quota
+from app.monitoring.service import (
+    create_schedule,
+    delete_schedule,
+    list_schedules,
+    schedule_run_history,
+    scheduler_enabled,
+    update_schedule,
+)
 from app.notifications.email import send_report_email
 from app.pqc.report import report_to_json, report_to_pdf, report_to_executive
 from app.pqc.report_bundle import build_evidence_bundle
 from app.remediation.service import (
     completion_pct,
     list_remediation_status,
+    apply_remediation_to_migration_report,
+    merge_remediation_into_report,
     recommend_remediation_plan,
     simulate_post_migration_readiness,
     upsert_remediation_status,
+    verify_remediation_fix,
 )
 from app.pqc.serialize import serialize_bundle
 from app.sharing.service import create_share_link, revoke_share_link
@@ -40,6 +51,26 @@ class RemediationUpdateRequest(BaseModel):
     status: str
     owner: str | None = None
     notes: str | None = None
+    targetDate: str | None = None
+    assetId: str | None = None
+
+
+class SchedulePatchRequest(BaseModel):
+    cadenceHours: int | None = Field(default=None, ge=1, le=8760)
+    notifyEmail: str | None = None
+    active: bool | None = None
+
+
+class TenantSettingsRequest(BaseModel):
+    readinessDropThreshold: float | None = None
+    alertOnNewQuantumVulnerable: bool | None = None
+    certExpiryDays: int | None = None
+    webhookSigningSecret: str | None = None
+
+
+class RemediationVerifyRequest(BaseModel):
+    remediationId: str
+    verifyScanId: str
 
 
 class EmailReportRequest(BaseModel):
@@ -52,11 +83,15 @@ class ShareLinkRequest(BaseModel):
 
 @router.get("/me")
 def tenant_me(auth: AuthContext = Depends(require_auth_readonly)) -> dict:
+    from app.billing.entitlements import tenant_entitlements
+
     return {
         "status": "success",
         "tenantId": auth.tenant_id,
+        "role": auth.role,
         "persistenceEnabled": persistence_enabled(),
         "schedulerEnabled": scheduler_enabled() and redis_enabled(),
+        "entitlements": tenant_entitlements(tenant_id=auth.tenant_id),
     }
 
 
@@ -127,26 +162,33 @@ def tenant_scan_report(
     from app.pqc.bundle_codec import bundle_from_api_dict
 
     bundle = bundle_from_api_dict(bundle_dict)
+    statuses = list_remediation_status(tenant_id=auth.tenant_id, scan_id=scan_id)
+
     if format == "json":
-        return JSONResponse(content=report_to_json(bundle.report))
+        payload = report_to_json(bundle.report)
+        return JSONResponse(content=merge_remediation_into_report(payload, statuses=statuses))
     if format == "executive":
-        return JSONResponse(content=report_to_executive(bundle.report))
+        payload = report_to_executive(bundle.report)
+        return JSONResponse(content=merge_remediation_into_report(payload, statuses=statuses))
     if format == "board":
         from app.pqc.report import report_to_board
 
-        return JSONResponse(content=report_to_board(bundle.report))
+        payload = report_to_board(bundle.report)
+        return JSONResponse(content=merge_remediation_into_report(payload, statuses=statuses))
     if format == "auditor":
         from app.pqc.report import report_to_auditor
 
-        return JSONResponse(content=report_to_auditor(bundle.report))
+        payload = report_to_auditor(bundle.report)
+        return JSONResponse(content=merge_remediation_into_report(payload, statuses=statuses))
     if format == "bundle":
-        content = build_evidence_bundle(bundle.report)
+        content = build_evidence_bundle(bundle.report, remediation_statuses=statuses)
         return Response(
             content=content,
             media_type="application/zip",
             headers={"Content-Disposition": f'attachment; filename="{scan_id}-evidence.zip"'},
         )
-    content = report_to_pdf(bundle.report)
+    report_for_pdf = apply_remediation_to_migration_report(bundle.report, statuses=statuses)
+    content = report_to_pdf(report_for_pdf)
     return Response(content=content, media_type="application/pdf")
 
 
@@ -194,6 +236,11 @@ def tenant_remediation_update(
     auth: AuthContext = Depends(require_auth_write),
 ) -> dict:
     try:
+        target_dt = None
+        if body.targetDate:
+            from datetime import datetime
+
+            target_dt = datetime.fromisoformat(body.targetDate.replace("Z", "+00:00"))
         item = upsert_remediation_status(
             tenant_id=auth.tenant_id,
             scan_id=scan_id,
@@ -201,6 +248,8 @@ def tenant_remediation_update(
             status=body.status,
             owner=body.owner,
             notes=body.notes,
+            target_date=target_dt,
+            asset_id=body.assetId,
         )
     except ValueError as exc:
         raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail=str(exc)) from exc
@@ -238,6 +287,9 @@ def tenant_create_schedule(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
             detail="Scheduler requires Redis + worker (QTANGL_ENABLE_SCHEDULER). Contact Qtangl.",
         )
+    quota_error = check_schedule_quota(tenant_id=auth.tenant_id)
+    if quota_error:
+        raise HTTPException(status_code=status.HTTP_402_PAYMENT_REQUIRED, detail=quota_error)
     schedule = create_schedule(
         tenant_id=auth.tenant_id,
         scenario_id=body.scenarioId,
@@ -248,6 +300,102 @@ def tenant_create_schedule(
     )
     log_action(tenant_id=auth.tenant_id, action="schedule.create", resource_id=schedule["id"])
     return {"status": "success", "schedule": schedule}
+
+
+@router.patch("/schedules/{schedule_id}")
+def tenant_patch_schedule(
+    schedule_id: str,
+    body: SchedulePatchRequest,
+    auth: AuthContext = Depends(require_auth_write),
+) -> dict:
+    schedule = update_schedule(
+        tenant_id=auth.tenant_id,
+        schedule_id=schedule_id,
+        cadence_hours=body.cadenceHours,
+        notify_email=body.notifyEmail,
+        active=body.active,
+    )
+    if schedule is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Schedule not found.")
+    log_action(tenant_id=auth.tenant_id, action="schedule.update", resource_id=schedule_id)
+    return {"status": "success", "schedule": schedule}
+
+
+@router.get("/schedules/{schedule_id}/runs")
+def tenant_schedule_runs(schedule_id: str, auth: AuthContext = Depends(require_auth_readonly)) -> dict:
+    return {
+        "status": "success",
+        "scheduleId": schedule_id,
+        "runs": schedule_run_history(tenant_id=auth.tenant_id, schedule_id=schedule_id),
+    }
+
+
+@router.get("/settings")
+def tenant_settings_get(auth: AuthContext = Depends(require_auth_readonly)) -> dict:
+    from app.tenant.settings import get_tenant_settings
+
+    return {"status": "success", "settings": get_tenant_settings(tenant_id=auth.tenant_id)}
+
+
+@router.put("/settings")
+def tenant_settings_put(
+    body: TenantSettingsRequest,
+    auth: AuthContext = Depends(require_auth_write),
+) -> dict:
+    from app.tenant.settings import get_tenant_settings, upsert_tenant_settings
+
+    current = get_tenant_settings(tenant_id=auth.tenant_id)
+    updates = body.model_dump(exclude_none=True)
+    current.update(updates)
+    saved = upsert_tenant_settings(tenant_id=auth.tenant_id, settings=current)
+    log_action(tenant_id=auth.tenant_id, action="settings.update", detail=updates)
+    return {"status": "success", "settings": saved}
+
+
+@router.get("/audit")
+def tenant_audit(
+    auth: AuthContext = Depends(require_auth_readonly),
+    limit: int = Query(default=50, ge=1, le=500),
+    action: str | None = None,
+    since: str | None = None,
+    cursor: str | None = None,
+) -> dict:
+    from datetime import datetime
+
+    from app.audit.service import list_audit
+
+    since_dt = None
+    if since:
+        since_dt = datetime.fromisoformat(since.replace("Z", "+00:00"))
+    entries, next_cursor = list_audit(
+        tenant_id=auth.tenant_id,
+        limit=limit,
+        action_prefix=action,
+        since=since_dt,
+        cursor=cursor,
+    )
+    return {"status": "success", "entries": entries, "nextCursor": next_cursor}
+
+
+@router.post("/scans/{scan_id}/remediation/verify")
+def tenant_remediation_verify(
+    scan_id: str,
+    body: RemediationVerifyRequest,
+    auth: AuthContext = Depends(require_auth_write),
+) -> dict:
+    result = verify_remediation_fix(
+        tenant_id=auth.tenant_id,
+        remediation_id=body.remediationId,
+        baseline_scan_id=scan_id,
+        verify_scan_id=body.verifyScanId,
+    )
+    log_action(
+        tenant_id=auth.tenant_id,
+        action="remediation.verify",
+        resource_id=body.remediationId,
+        detail=result,
+    )
+    return {"status": "success", **result}
 
 
 @router.delete("/schedules/{schedule_id}")
@@ -286,6 +434,9 @@ class PortfolioTargetRequest(BaseModel):
     target: str
     businessUnit: str = "default"
     label: str | None = None
+    autoSchedule: bool = False
+    cadenceHours: int = Field(default=168, ge=1, le=8760)
+    notifyEmail: str | None = None
 
 
 class WebhookRequest(BaseModel):
@@ -317,7 +468,18 @@ def tenant_add_portfolio_target(
         business_unit=body.businessUnit,
         label=body.label,
     )
-    return {"status": "success", "target": target}
+    schedule = None
+    if body.autoSchedule and persistence_enabled():
+        quota_error = check_schedule_quota(tenant_id=auth.tenant_id)
+        if quota_error is None and scheduler_enabled() and redis_enabled():
+            schedule = create_schedule(
+                tenant_id=auth.tenant_id,
+                scenario_id="bank-tls-inventory",
+                target=body.target,
+                cadence_hours=body.cadenceHours,
+                notify_email=body.notifyEmail,
+            )
+    return {"status": "success", "target": target, "schedule": schedule}
 
 
 @router.get("/webhooks")
@@ -354,8 +516,14 @@ def tenant_webhook_dlq(auth: AuthContext = Depends(require_auth_readonly)) -> di
 @router.post("/webhooks/replay")
 def tenant_webhook_replay(body: DeadLetterReplayRequest, auth: AuthContext = Depends(require_auth_write)) -> dict:
     from app.notifications.webhooks import replay_dead_letter
+    from app.tenant.settings import get_tenant_settings
 
-    result = replay_dead_letter(tenant_id=auth.tenant_id, dead_letter_id=body.deadLetterId)
+    secret = str(get_tenant_settings(tenant_id=auth.tenant_id).get("webhookSigningSecret", ""))
+    result = replay_dead_letter(
+        tenant_id=auth.tenant_id,
+        dead_letter_id=body.deadLetterId,
+        signing_secret=secret,
+    )
     return {"status": "success", **result}
 
 
@@ -492,16 +660,23 @@ def tenant_cloud_import(
 
 @router.get("/export")
 def tenant_export_data(auth: AuthContext = Depends(require_auth_readonly)) -> dict:
-    """G4: export tenant scan metadata and remediation status."""
+    """Export tenant scan metadata and live remediation status."""
     from app.remediation.service import remediation_velocity
 
     scans = list_jobs_for_tenant(tenant_id=auth.tenant_id, limit=500)
     velocity = remediation_velocity(tenant_id=auth.tenant_id)
+    remediation_by_scan: dict[str, list] = {}
+    for scan in scans:
+        if scan.get("status") == "done" and scan.get("scanId"):
+            remediation_by_scan[scan["scanId"]] = list_remediation_status(
+                tenant_id=auth.tenant_id, scan_id=scan["scanId"]
+            )
     return {
         "status": "success",
         "tenantId": auth.tenant_id,
         "exportedAt": __import__("datetime").datetime.now(__import__("datetime").timezone.utc).isoformat(),
         "scans": scans,
+        "remediationByScan": remediation_by_scan,
         "remediationVelocity": velocity,
     }
 
@@ -549,6 +724,163 @@ def tenant_delete_data(auth: AuthContext = Depends(require_auth_write)) -> dict:
             deleted += 1
     log_action(tenant_id=auth.tenant_id, action="tenant.data.delete", detail={"deletedScans": deleted})
     return {"status": "success", "deletedScans": deleted}
+
+
+@router.post("/coverage/code-scan")
+def tenant_code_scan(body: dict[str, Any], auth: AuthContext = Depends(require_auth_readonly)) -> dict:
+    from app.coverage.code_deps import scan_source_snippet
+
+    content = str(body.get("content", ""))
+    path = str(body.get("path", "upload"))
+    return {"status": "success", "findings": scan_source_snippet(content=content, path=path)}
+
+
+@router.get("/coverage/cloud/{provider}")
+def tenant_cloud_pull(provider: str, auth: AuthContext = Depends(require_auth_readonly)) -> dict:
+    from app.coverage import cloud_pull
+
+    if provider == "aws":
+        return {"status": "success", **cloud_pull.pull_aws_acm()}
+    if provider == "azure":
+        return {"status": "success", **cloud_pull.pull_azure_keyvault(vault_name="default")}
+    if provider == "gcp":
+        return {"status": "success", **cloud_pull.pull_gcp_certificate_manager(project_id="default")}
+    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Unknown cloud provider.")
+
+
+@router.post("/ai/explain")
+def tenant_ai_explain(body: dict[str, Any], auth: AuthContext = Depends(require_auth_readonly)) -> dict:
+    from app.ai.copilot import explain_finding
+
+    finding = body.get("finding") or {}
+    return {"status": "success", **explain_finding(finding=finding, context=str(body.get("context", "")))}
+
+
+@router.get("/analytics/anomaly")
+def tenant_anomaly(auth: AuthContext = Depends(require_auth_readonly)) -> dict:
+    from app.monitoring.anomaly import detect_readiness_anomalies
+
+    scores = [
+        float(scan["readinessScore"])
+        for scan in list_jobs_for_tenant(tenant_id=auth.tenant_id, limit=50)
+        if scan.get("readinessScore") is not None
+    ]
+    scores.reverse()
+    return {"status": "success", "alerts": detect_readiness_anomalies(scores=scores)}
+
+
+@router.get("/analytics/forecast")
+def tenant_forecast(auth: AuthContext = Depends(require_auth_readonly)) -> dict:
+    from app.monitoring.anomaly import forecast_readiness
+
+    scores = [
+        float(scan["readinessScore"])
+        for scan in list_jobs_for_tenant(tenant_id=auth.tenant_id, limit=50)
+        if scan.get("readinessScore") is not None
+    ]
+    scores.reverse()
+    return {"status": "success", **forecast_readiness(scores=scores)}
+
+
+@router.get("/benchmarks")
+def tenant_benchmarks(auth: AuthContext = Depends(require_auth_readonly)) -> dict:
+    from app.data.benchmarks import readiness_index_snapshot
+
+    latest = next(
+        (
+            float(s["readinessScore"])
+            for s in list_jobs_for_tenant(tenant_id=auth.tenant_id, limit=10)
+            if s.get("readinessScore") is not None
+        ),
+        None,
+    )
+    bench = readiness_index_snapshot()
+    comparison = None
+    if latest is not None:
+        from app.data.benchmarks import compare_to_benchmark
+
+        comparison = compare_to_benchmark(score=latest)
+    return {"status": "success", "index": bench, "comparison": comparison}
+
+
+@router.get("/compliance/posture")
+def tenant_compliance_posture(
+    scan_id: str = Query(...),
+    auth: AuthContext = Depends(require_auth_readonly),
+) -> dict:
+    from app.compliance.posture import map_scan_to_frameworks
+
+    bundle = load_scan_bundle(scan_id, tenant_id=auth.tenant_id)
+    if bundle is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Scan not found.")
+    report = bundle.get("report") or {}
+    return {"status": "success", "frameworks": map_scan_to_frameworks(report=report)}
+
+
+@router.get("/partner/children")
+def tenant_partner_children(auth: AuthContext = Depends(require_auth_readonly)) -> dict:
+    from app.partner.service import list_child_tenants
+
+    return {"status": "success", "children": list_child_tenants(parent_tenant_id=auth.tenant_id)}
+
+
+@router.post("/partner/children")
+def tenant_partner_link_child(
+    body: dict[str, Any],
+    auth: AuthContext = Depends(require_auth_write),
+) -> dict:
+    from app.partner.service import link_child_tenant
+
+    child = link_child_tenant(
+        parent_tenant_id=auth.tenant_id,
+        child_tenant_id=str(body.get("childTenantId", "")),
+        label=str(body.get("label", "")),
+    )
+    return {"status": "success", "child": child}
+
+
+@router.get("/billing/portal")
+def tenant_billing_portal(auth: AuthContext = Depends(require_auth_readonly)) -> dict:
+    import os
+
+    from app.billing.entitlements import tenant_entitlements
+    from app.billing.service import create_billing_portal_session, stripe_configured
+    from app.db.config import persistence_enabled
+    from app.db.engine import db_session
+    from app.db.models import TenantSubscription as SubscriptionRow
+
+    if not stripe_configured():
+        return {"status": "success", "configured": False, "portalUrl": None}
+    customer_id = None
+    if persistence_enabled():
+        with db_session() as session:
+            row = (
+                session.query(SubscriptionRow)
+                .filter(SubscriptionRow.tenant_id == auth.tenant_id)
+                .one_or_none()
+            )
+            if row:
+                customer_id = row.stripe_customer_id
+    base = os.environ.get("QTANGL_PUBLIC_URL", "https://www.qtangl.com")
+    if customer_id:
+        session_result = create_billing_portal_session(
+            customer_id=customer_id,
+            return_url=f"{base}/dashboard",
+        )
+        if session_result.get("ok"):
+            return {
+                "status": "success",
+                "configured": True,
+                "portalUrl": session_result.get("portalUrl"),
+                "entitlements": tenant_entitlements(tenant_id=auth.tenant_id),
+            }
+    return {
+        "status": "success",
+        "configured": True,
+        "portalUrl": os.environ.get("QTANGL_STRIPE_PORTAL_URL"),
+        "entitlements": tenant_entitlements(tenant_id=auth.tenant_id),
+        "message": "Contact Qtangl to link Stripe customer for self-serve portal.",
+    }
 
 
 def _scan_lifecycle_state(job_status: str, has_bundle: bool, has_error: bool) -> str:

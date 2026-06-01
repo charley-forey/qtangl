@@ -1,0 +1,90 @@
+import { readinessLexicon } from "@/lib/copy/readiness";
+
+const { evidence, exposure, hndl } = readinessLexicon;
+
+export const readinessHero = {
+  eyebrow: "Post-quantum readiness",
+  title: "Assess. Monitor. Convert.",
+  subhead:
+    "Inventory quantum-vulnerable crypto in minutes. Monitor drift until Q-Day. Prove remediation with signed evidence.",
+  primaryCta: { label: "Run Q-Day scan", href: "/demo/pqc" },
+  secondaryCta: { label: "Verify a report", href: "/verify" },
+} as const;
+
+export const readinessHeadlineDemo = {
+  eyebrow: "Headline demo",
+  title: "Q-Day inventory in 8 minutes",
+  description:
+    "Domain scan → CycloneDX CBOM + executive PDF → verify link your auditors can check independently.",
+  stats: [
+    { label: "Q-vulnerable endpoints", value: "47" },
+    { label: "Readiness score", value: "62" },
+    { label: "Coverage confidence", value: "High" },
+  ],
+  primaryCta: { label: "Open Q-Day scanner", href: "/demo/pqc" },
+} as const;
+
+export const readinessHomeNarrative = {
+  workflowEyebrow: "Assess → Monitor → Convert",
+  workflowTitle: "One platform from baseline to proof of fix.",
+  domainEyebrow: exposure.label,
+  domainTitle: "Readiness scenarios for regulated teams.",
+  apiEyebrow: evidence.label,
+  apiTitle: "Scan first. API when you're ready.",
+  apiDescription:
+    "POST a target domain. Get inventory, Mosca HNDL risk, CBOM exports, and a signed PDF your GRC team can verify.",
+  optimizeLink: { label: "Explore optimization demos →", href: "/platform/optimize" },
+  qDayLink: { label: "Q-Day education hub →", href: "/q-day" },
+} as const;
+
+export const readinessCtaPanel = {
+  eyebrow: "Q-Day readiness",
+  title: "Ready for your first Q-Day assessment?",
+  description:
+    "Run a live scan, review Mosca HNDL exposure, and export signed evidence — or request a guided pilot for your domain.",
+  primaryCta: { label: "Run Q-Day scan", href: "/demo/pqc" },
+  secondaryCta: { label: "Request pilot access", href: "/access" },
+  docsLink: { label: "Read the PQC demo guide", href: "/docs/guides/pqc-demo" },
+} as const;
+
+export const readinessJourneyPoints = [
+  {
+    eyebrow: "Assess",
+    title: "Baseline in one session",
+    description: "Live scan, Mosca HNDL, CycloneDX CBOM, and signed PDF.",
+  },
+  {
+    eyebrow: "Monitor",
+    title: "Catch drift early",
+    description: "Scheduled re-scans, diff alerts, and a remediation board.",
+  },
+  {
+    eyebrow: "Convert",
+    title: "Prove the fix",
+    description: "Prioritized playbooks, re-scan verification, and auditor packs.",
+  },
+] as const;
+
+export const readinessUseCases = [
+  {
+    eyebrow: "Banking",
+    title: "TLS inventory",
+    outcome: "NSM-10 and PCI-DSS mapping for external-facing crypto.",
+    measurement: `${hndl.label} exposure · CBOM export · verify link`,
+    demoHref: "/demo/pqc?scenario=bank-tls-inventory",
+  },
+  {
+    eyebrow: "Gov contractor",
+    title: "CMMC crypto controls",
+    outcome: "CNSA 2.0 deadline tiers mapped to your TLS footprint.",
+    measurement: "Control gaps · remediation backlog · signed report",
+    demoHref: "/demo/pqc?scenario=gov-contractor-cmmc",
+  },
+  {
+    eyebrow: "Healthcare",
+    title: "HNDL exposure",
+    outcome: "HIPAA-sensitive data paths with NIST IR 8547 alignment.",
+    measurement: "Mosca timeline · priority queue · audit pack",
+    demoHref: "/demo/pqc?scenario=healthcare-insurer-hndl",
+  },
+] as const;

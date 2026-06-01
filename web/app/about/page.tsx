@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 
 import PageHero from "@/components/layout/PageHero";
 import PageShell from "@/components/layout/PageShell";
@@ -7,38 +8,42 @@ import EntanglementField from "@/components/quantum/EntanglementField";
 import ProbabilityGrid from "@/components/quantum/ProbabilityGrid";
 import Card from "@/components/ui/Card";
 import Eyebrow from "@/components/ui/Eyebrow";
-import { aboutContent } from "@/lib/copy/product";
+import { aboutReadinessContent } from "@/lib/copy/about-readiness";
 import { buildPageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildPageMetadata({
   path: "/about",
   title: "About",
   description:
-    "Qtangl builds coherent planning systems for teams deciding under hard constraints.",
+    "Qtangl is a post-quantum readiness platform — Assess, Monitor, Convert with signed evidence auditors can verify.",
 });
 
 export default function AboutPage() {
   return (
     <PageShell>
       <PageHero
-        eyebrow={aboutContent.eyebrow}
-        title={aboutContent.title}
-        description={aboutContent.intro}
+        eyebrow={aboutReadinessContent.eyebrow}
+        title={aboutReadinessContent.title}
+        description={aboutReadinessContent.intro}
+        actions={[
+          { href: "/platform", label: "Platform overview" },
+          { href: "/demo/pqc", label: "Run Q-Day scan", variant: "secondary" },
+        ]}
       />
       <Section gap="tight">
         <Card tone="feature" size="lg" className="relative rounded-[var(--radius-feature)]">
           <ProbabilityGrid />
           <div className="relative grid gap-6 xl:grid-cols-[0.78fr_1.22fr]">
             <div>
-              <Eyebrow>{aboutContent.missionEyebrow}</Eyebrow>
+              <Eyebrow>{aboutReadinessContent.missionEyebrow}</Eyebrow>
               <p className="heading-section mt-4 !text-2xl">
-                {aboutContent.missionTitle}
+                {aboutReadinessContent.missionTitle}
               </p>
             </div>
             <div className="grid gap-4 lg:grid-cols-[1.05fr_0.95fr]">
               <EntanglementField className="h-full" />
               <div className="grid gap-4">
-                {aboutContent.principles.map((principle) => (
+                {aboutReadinessContent.principles.map((principle) => (
                   <div
                     key={principle.title}
                     className="rounded-[var(--radius-xl)] border border-[var(--border)] bg-black/55 p-4"
@@ -57,12 +62,20 @@ export default function AboutPage() {
 
       <Section gap="tight" className="pb-0">
         <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-          {aboutContent.cards.map((card) => (
+          {aboutReadinessContent.cards.map((card) => (
             <Card key={card.eyebrow} tone="strong" className="rounded-[var(--radius-xl)]">
               <Eyebrow>{card.eyebrow}</Eyebrow>
               <p className="mt-4 text-sm leading-7 text-[var(--color-gray-300)]">
                 {card.description}
               </p>
+              {"href" in card && card.href ? (
+                <Link
+                  href={card.href}
+                  className="mt-4 inline-block text-sm font-medium text-white underline-offset-4 hover:underline"
+                >
+                  {aboutReadinessContent.optimizeLink.label}
+                </Link>
+              ) : null}
             </Card>
           ))}
         </div>
