@@ -4,16 +4,13 @@ export const nav = [
   { name: "Monitor", href: "/monitor" },
   { name: "Convert", href: "/convert" },
   { name: "Trust", href: "/trust" },
-  { name: "Dashboard", href: "/dashboard" },
   { name: "Pricing", href: "/pricing" },
-] as const;
-
-export const navSecondary = [
   { name: "Docs", href: "/docs" },
-  { name: "Access", href: "/access" },
 ] as const;
 
 export const footerNav = [
+  { name: "Dashboard", href: "/dashboard" },
+  { name: "Access", href: "/access" },
   { name: "Journey", href: "/journey" },
   { name: "Resources", href: "/resources" },
   { name: "Mini-assessment", href: "/assess/mini" },
