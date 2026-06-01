@@ -156,7 +156,7 @@ export default function Navbar() {
             </Link>
             <button
               type="button"
-              className="touch-target inline-flex h-11 w-11 items-center justify-center rounded-full border border-[var(--border)] bg-white/[0.02] text-white transition hover:border-[var(--border-strong)] hover:bg-white/[0.06] md:hidden"
+              className="touch-target inline-flex h-11 w-11 items-center justify-center rounded-full border border-[var(--border)] bg-white/[0.02] text-white transition hover:border-[var(--border-strong)] hover:bg-white/[0.06] lg:hidden"
               onClick={() => setOpen(true)}
               aria-controls="mobile-navigation"
               aria-expanded={open}
