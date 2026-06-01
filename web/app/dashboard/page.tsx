@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 
+import DashboardAuthGate from "@/components/dashboard/DashboardAuthGate";
 import DashboardClient from "@/components/dashboard/DashboardClient";
+import { dashboardRequireSso, oidcConfigured } from "@/lib/auth/oidc";
 import PageHero from "@/components/layout/PageHero";
 import PageShell from "@/components/layout/PageShell";
 import Section from "@/components/layout/Section";
@@ -38,7 +40,9 @@ export default function DashboardPage() {
             Verify a report
           </Button>
         </div>
-        <DashboardClient />
+        <DashboardAuthGate ssoConfigured={oidcConfigured()} requireSso={dashboardRequireSso()}>
+          <DashboardClient />
+        </DashboardAuthGate>
       </Section>
     </PageShell>
   );

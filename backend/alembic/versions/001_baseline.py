@@ -1,9 +1,8 @@
-"""Baseline schema — use on fresh DBs; existing DBs rely on create_all + patches.
-
-Revision ID: 001_baseline
-"""
+"""Baseline schema — all tables from SQLAlchemy models."""
 
 from __future__ import annotations
+
+from alembic import op
 
 revision = "001_baseline"
 down_revision = None
@@ -12,11 +11,16 @@ depends_on = None
 
 
 def upgrade() -> None:
-    # Fresh installs: app.db.engine init_db() calls create_all.
-    # Generate autogenerate revision when schema stabilizes:
-    #   alembic revision --autogenerate -m "describe change"
-    pass
+    from app.db.base import Base
+    import app.db.models  # noqa: F401
+
+    bind = op.get_bind()
+    Base.metadata.create_all(bind)
 
 
 def downgrade() -> None:
-    pass
+    from app.db.base import Base
+    import app.db.models  # noqa: F401
+
+    bind = op.get_bind()
+    Base.metadata.drop_all(bind)

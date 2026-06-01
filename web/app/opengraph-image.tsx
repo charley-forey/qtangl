@@ -1,6 +1,6 @@
 import { ImageResponse } from "next/og";
 
-import { homeHero } from "@/lib/copy/home";
+import { readinessHero } from "@/lib/copy/readiness-home";
 import { siteMetadata } from "@/lib/copy/product";
 
 export const size = {
@@ -76,7 +76,7 @@ export default function OpenGraphImage() {
                 color: "rgba(255,255,255,0.7)",
               }}
             >
-              {homeHero.eyebrow}
+              {readinessHero.eyebrow}
             </div>
             <div style={{ fontSize: 54, lineHeight: 1.08, maxWidth: 760, fontWeight: 600 }}>
               {siteMetadata.oneLiner}
@@ -96,9 +96,9 @@ export default function OpenGraphImage() {
             color: "rgba(255,255,255,0.72)",
           }}
         >
-          <span>Scheduling</span>
-          <span>Routing</span>
-          <span>Allocation</span>
+          <span>Assess</span>
+          <span>Monitor</span>
+          <span>Convert</span>
         </div>
       </div>
     ),

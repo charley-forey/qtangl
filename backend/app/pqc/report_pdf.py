@@ -414,19 +414,27 @@ def _remediation_table(report: MigrationReport, body: ParagraphStyle) -> list[An
     if not report.remediation_backlog:
         return [Paragraph("No remediation items required.", body)]
 
-    rows: list[list[Any]] = [["#", "Title", "Severity", "PQC alg", "Action", "Deadline"]]
+    rows: list[list[Any]] = [
+        ["#", "Title", "Severity", "Status", "Owner", "Target", "PQC alg", "Deadline"]
+    ]
     for item in report.remediation_backlog[:25]:
+        meta = getattr(item, "metadata", None) or {}
         rows.append(
             [
                 str(item.priority),
                 Paragraph(item.title[:60], body),
                 item.severity,
+                str(meta.get("workflowStatus", "—")),
+                str(meta.get("owner") or "—"),
+                str(meta.get("targetDate") or "—")[:12],
                 Paragraph(item.pqc_algorithm[:40], body),
-                Paragraph(item.action[:100], body),
                 item.deadline,
             ]
         )
-    table = Table(rows, colWidths=[0.3 * inch, 1.2 * inch, 0.55 * inch, 0.8 * inch, 2.5 * inch, 0.7 * inch])
+    table = Table(
+        rows,
+        colWidths=[0.25 * inch, 1.0 * inch, 0.5 * inch, 0.55 * inch, 0.6 * inch, 0.55 * inch, 0.75 * inch, 0.65 * inch],
+    )
     table.setStyle(
         TableStyle(
             [

@@ -38,6 +38,22 @@ def auto_migrate() -> bool:
     return raw in {"1", "true", "yes", "on"}
 
 
+def production_mode() -> bool:
+    return os.getenv("QTANGL_ENV", "").lower() in {"production", "prod"}
+
+
+def require_secrets_key() -> bool:
+    raw = os.getenv("QTANGL_REQUIRE_SECRETS_KEY", "")
+    if raw:
+        return raw.lower() in {"1", "true", "yes", "on"}
+    return production_mode()
+
+
+def use_create_all_on_startup() -> bool:
+    """Dev/test only — production must run `alembic upgrade head` on deploy."""
+    return auto_migrate() and not production_mode()
+
+
 def inline_jobs() -> bool:
     raw = os.getenv("QTANGL_INLINE_JOBS", "true").lower()
     return raw in {"1", "true", "yes", "on"}

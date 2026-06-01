@@ -7,7 +7,7 @@ from fastapi import APIRouter, Depends, HTTPException, Query, status
 from fastapi.responses import JSONResponse, Response
 
 from app.audit.service import log_action
-from app.auth import AuthContext, require_auth, require_auth_readonly, require_auth_write
+from app.auth import AuthContext, require_auth, require_auth_admin, require_auth_readonly, require_auth_write
 from app.db.config import persistence_enabled, redis_enabled
 from app.billing.entitlements import check_schedule_quota
 from app.monitoring.service import (
@@ -289,6 +289,9 @@ def tenant_create_schedule(
         )
     quota_error = check_schedule_quota(tenant_id=auth.tenant_id)
     if quota_error:
+        from app.telemetry.events import track_event
+
+        track_event("tier_upgrade_clicked", tenant_id=auth.tenant_id, properties=quota_error)
         raise HTTPException(status_code=status.HTTP_402_PAYMENT_REQUIRED, detail=quota_error)
     schedule = create_schedule(
         tenant_id=auth.tenant_id,
@@ -299,6 +302,9 @@ def tenant_create_schedule(
         import_payload_json=body.cloudImportPayload,
     )
     log_action(tenant_id=auth.tenant_id, action="schedule.create", resource_id=schedule["id"])
+    from app.telemetry.events import track_event
+
+    track_event("schedule_created", tenant_id=auth.tenant_id, properties={"scheduleId": schedule["id"]})
     return {"status": "success", "schedule": schedule}
 
 
@@ -342,9 +348,9 @@ def tenant_settings_put(
     body: TenantSettingsRequest,
     auth: AuthContext = Depends(require_auth_write),
 ) -> dict:
-    from app.tenant.settings import get_tenant_settings, upsert_tenant_settings
+    from app.tenant.settings import get_tenant_settings_raw, upsert_tenant_settings
 
-    current = get_tenant_settings(tenant_id=auth.tenant_id)
+    current = get_tenant_settings_raw(tenant_id=auth.tenant_id)
     updates = body.model_dump(exclude_none=True)
     current.update(updates)
     saved = upsert_tenant_settings(tenant_id=auth.tenant_id, settings=current)
@@ -354,7 +360,7 @@ def tenant_settings_put(
 
 @router.get("/audit")
 def tenant_audit(
-    auth: AuthContext = Depends(require_auth_readonly),
+    auth: AuthContext = Depends(require_auth_admin),
     limit: int = Query(default=50, ge=1, le=500),
     action: str | None = None,
     since: str | None = None,
@@ -395,6 +401,14 @@ def tenant_remediation_verify(
         resource_id=body.remediationId,
         detail=result,
     )
+    if result.get("verified"):
+        from app.telemetry.events import track_event
+
+        track_event(
+            "remediation_verified",
+            tenant_id=auth.tenant_id,
+            properties={"remediationId": body.remediationId, "scanId": scan_id},
+        )
     return {"status": "success", **result}
 
 
@@ -516,9 +530,9 @@ def tenant_webhook_dlq(auth: AuthContext = Depends(require_auth_readonly)) -> di
 @router.post("/webhooks/replay")
 def tenant_webhook_replay(body: DeadLetterReplayRequest, auth: AuthContext = Depends(require_auth_write)) -> dict:
     from app.notifications.webhooks import replay_dead_letter
-    from app.tenant.settings import get_tenant_settings
+    from app.tenant.settings import get_tenant_settings_raw
 
-    secret = str(get_tenant_settings(tenant_id=auth.tenant_id).get("webhookSigningSecret", ""))
+    secret = str(get_tenant_settings_raw(tenant_id=auth.tenant_id).get("webhookSigningSecret", ""))
     result = replay_dead_letter(
         tenant_id=auth.tenant_id,
         dead_letter_id=body.deadLetterId,
@@ -715,20 +729,40 @@ def tenant_portfolio_command_center(auth: AuthContext = Depends(require_auth_rea
 
 @router.delete("/data")
 def tenant_delete_data(auth: AuthContext = Depends(require_auth_write)) -> dict:
-    """G4: delete all scan jobs for tenant (retention / offboarding)."""
+    """Delete all tenant data (retention / offboarding)."""
     if not persistence_enabled():
         raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail="Persistence required.")
-    deleted = 0
-    for scan in list_jobs_for_tenant(tenant_id=auth.tenant_id, limit=500):
-        if delete_job(scan["scanId"], tenant_id=auth.tenant_id):
-            deleted += 1
-    log_action(tenant_id=auth.tenant_id, action="tenant.data.delete", detail={"deletedScans": deleted})
-    return {"status": "success", "deletedScans": deleted}
+    from app.db.offboarding import offboard_tenant
+
+    counts = offboard_tenant(tenant_id=auth.tenant_id)
+    log_action(tenant_id=auth.tenant_id, action="tenant.offboard", detail=counts)
+    return {"status": "success", **counts}
+
+
+@router.post("/offboard")
+def tenant_offboard(auth: AuthContext = Depends(require_auth_admin)) -> dict:
+    """Admin-only alias for full tenant offboarding."""
+    if not persistence_enabled():
+        raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail="Persistence required.")
+    from app.db.offboarding import offboard_tenant
+
+    counts = offboard_tenant(tenant_id=auth.tenant_id)
+    log_action(tenant_id=auth.tenant_id, action="tenant.offboard", detail=counts)
+    return {"status": "success", **counts}
 
 
 @router.post("/coverage/code-scan")
 def tenant_code_scan(body: dict[str, Any], auth: AuthContext = Depends(require_auth_readonly)) -> dict:
-    from app.coverage.code_deps import scan_source_snippet
+    from app.coverage.code_deps import scan_github_repository, scan_source_snippet
+
+    if body.get("githubOwner") and body.get("githubRepo") and body.get("githubToken"):
+        result = scan_github_repository(
+            owner=str(body["githubOwner"]),
+            repo=str(body["githubRepo"]),
+            token=str(body["githubToken"]),
+            ref=str(body.get("ref", "HEAD")),
+        )
+        return {"status": "success", **result}
 
     content = str(body.get("content", ""))
     path = str(body.get("path", "upload"))

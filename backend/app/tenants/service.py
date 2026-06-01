@@ -30,7 +30,7 @@ def create_tenant(*, tenant_id: str | None = None, name: str) -> dict[str, Any]:
     return {"tenantId": tid, "name": name}
 
 
-def issue_api_key(*, tenant_id: str, label: str = "default") -> dict[str, Any]:
+def issue_api_key(*, tenant_id: str, label: str = "default", role: str = "operator") -> dict[str, Any]:
     if not persistence_enabled():
         raise RuntimeError("Tenant management requires DATABASE_URL")
     raw_key = generate_api_key()
@@ -44,9 +44,10 @@ def issue_api_key(*, tenant_id: str, label: str = "default") -> dict[str, Any]:
                 tenant_id=tenant_id,
                 key_hash=hash_api_key(raw_key),
                 label=label,
+                role=role,
             )
         )
-    return {"keyId": key_id, "tenantId": tenant_id, "label": label, "apiKey": raw_key}
+    return {"keyId": key_id, "tenantId": tenant_id, "label": label, "role": role, "apiKey": raw_key}
 
 
 def revoke_api_key(*, key_id: str) -> dict[str, Any]:

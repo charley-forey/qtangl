@@ -32,6 +32,14 @@ export default function ConvertPage() {
       />
 
       <Section gap="tight">
+        <Card tone="panel" className="mb-6 p-4">
+          <p className="text-sm text-[var(--muted)]">
+            <span className="font-medium text-white">In product today:</span> remediation board, verify-fix API, Jira when configured.
+          </p>
+          <p className="mt-2 text-sm text-[var(--muted)]">
+            <span className="font-medium text-white">Services / roadmap:</span> workshop cadence and partner orchestration are delivered with Convert engagements — not self-serve in the dashboard yet.
+          </p>
+        </Card>
         <ProductModeBanner mode="preview" />
         <ConvertPreview />
         <LiveTodayFootnote

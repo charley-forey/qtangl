@@ -66,6 +66,34 @@ class QtanglClient:
     def verify(self, scan_id: str) -> dict[str, Any]:
         return self._get(f"/pqc/verify/{scan_id}")
 
+    def list_remediation(self, scan_id: str) -> dict[str, Any]:
+        return self._get(f"/tenant/scans/{scan_id}/remediation")
+
+    def upsert_remediation(
+        self,
+        scan_id: str,
+        *,
+        remediation_id: str,
+        status: str,
+        owner: str | None = None,
+    ) -> dict[str, Any]:
+        return self._post(
+            f"/tenant/scans/{scan_id}/remediation",
+            {"remediationId": remediation_id, "status": status, "owner": owner},
+        )
+
+    def verify_remediation(self, scan_id: str, *, remediation_id: str, verify_scan_id: str) -> dict[str, Any]:
+        return self._post(
+            f"/tenant/scans/{scan_id}/remediation/verify",
+            {"remediationId": remediation_id, "verifyScanId": verify_scan_id},
+        )
+
+    def create_webhook(self, url: str) -> dict[str, Any]:
+        return self._post("/tenant/webhooks", {"url": url})
+
+    def billing_portal(self) -> dict[str, Any]:
+        return self._get("/tenant/billing/portal")
+
     def _get(self, path: str) -> dict[str, Any]:
         req = urllib.request.Request(f"{self.base_url}{path}", headers=self._headers(), method="GET")
         with urllib.request.urlopen(req, timeout=60) as response:

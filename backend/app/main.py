@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import logging
 import os
 from contextlib import asynccontextmanager
 
@@ -31,6 +32,17 @@ DEFAULT_CORS_ORIGINS = (
     "http://127.0.0.1:3000",
 )
 
+CORS_ALLOW_METHODS = ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"]
+CORS_ALLOW_HEADERS = [
+    "Authorization",
+    "Content-Type",
+    "X-Api-Key",
+    "X-Request-Id",
+    "Accept",
+]
+
+logger = logging.getLogger(__name__)
+
 
 @asynccontextmanager
 async def lifespan(_: FastAPI):
@@ -46,9 +58,9 @@ def cors_origins() -> list[str]:
 
 
 app = FastAPI(
-    title="Qtangl Backend",
+    title="Qtangl PQC Readiness API",
     version="0.1.0",
-    summary="Pilot optimization API for scheduling, routing, and staffing workflows.",
+    summary="Post-quantum readiness platform: Assess, Monitor, Convert with signed evidence.",
     lifespan=lifespan,
 )
 
@@ -81,8 +93,8 @@ app.add_middleware(
     allow_origins=cors_origins(),
     allow_origin_regex=os.getenv("QTANGL_CORS_ORIGIN_REGEX", r"https://.*\.vercel\.app"),
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=CORS_ALLOW_METHODS,
+    allow_headers=CORS_ALLOW_HEADERS,
 )
 
 app.include_router(optimize_router)
@@ -108,8 +120,15 @@ def health_ready() -> dict[str, object]:
     redis_ok = ping_redis() if redis_enabled() else True
     ready = db_ok and redis_ok
     metrics = scheduler_metrics()
+    stale = False
+    last_tick = metrics.get("lastTickAt")
+    interval = float(metrics.get("intervalSec") or 60)
+    if metrics.get("schedulerEnabled") and last_tick:
+        import time
+
+        stale = (time.time() - float(last_tick)) > (interval * 2)
     return {
-        "status": "ready" if ready else "degraded",
+        "status": "ready" if ready and not stale else "degraded",
         "database": db_ok,
         "redis": redis_ok,
         "persistenceEnabled": persistence_enabled(),
@@ -117,6 +136,7 @@ def health_ready() -> dict[str, object]:
         "inlineJobs": inline_jobs(),
         "workerQueueEnabled": use_worker_queue(),
         "scheduler": metrics,
+        "schedulerStale": stale,
     }
 
 
@@ -184,12 +204,14 @@ def shared_report_download(token: str, format: str = "pdf") -> Response:
 
 
 @app.exception_handler(Exception)
-async def unhandled_exception_handler(_: Request, exc: Exception) -> JSONResponse:
-    return JSONResponse(
-        status_code=500,
-        content={
-            "status": "error",
-            "message": "Qtangl hit an unexpected backend error. Try again or check the server logs.",
-            "detail": str(exc),
-        },
-    )
+async def unhandled_exception_handler(request: Request, exc: Exception) -> JSONResponse:
+    request_id = getattr(request.state, "request_id", "unknown")
+    logger.exception("Unhandled error request_id=%s", request_id, exc_info=exc)
+    content: dict[str, str] = {
+        "status": "error",
+        "message": "Qtangl hit an unexpected backend error. Try again or check the server logs.",
+        "requestId": request_id,
+    }
+    if os.getenv("QTANGL_DEBUG", "").lower() in {"1", "true", "yes"}:
+        content["detail"] = str(exc)
+    return JSONResponse(status_code=500, content=content)

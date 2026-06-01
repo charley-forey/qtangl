@@ -45,9 +45,9 @@ def enrich_completed_scan(scan_id: str, bundle: ScanBundle, *, tenant_id: str) -
     json_payload = report_to_json(bundle.report)
     bundle.report.signature = sign_report_payload(json_payload)
 
-    from app.tenant.settings import get_tenant_settings
+    from app.tenant.settings import get_tenant_settings_raw
 
-    settings = get_tenant_settings(tenant_id=tenant_id)
+    settings = get_tenant_settings_raw(tenant_id=tenant_id)
     alerts = evaluate_scan_alerts(
         scan_diff=scan_diff,
         readiness_score=bundle.report.readiness_score,
@@ -91,6 +91,28 @@ def enrich_completed_scan(scan_id: str, bundle: ScanBundle, *, tenant_id: str) -
 
     if alerts:
         logger.info("Scan %s triggered %d alert(s)", scan_id, len(alerts))
+        from app.telemetry.events import track_event
+
+        for alert in alerts:
+            if alert.get("severity") in {"high", "critical", "medium"}:
+                track_event(
+                    "alert_fired",
+                    tenant_id=tenant_id,
+                    properties={"scanId": scan_id, "rule": alert.get("rule")},
+                )
+                break
+
+    from app.telemetry.events import track_event
+
+    track_event(
+        "scan_completed",
+        tenant_id=tenant_id,
+        properties={
+            "scanId": scan_id,
+            "readinessScore": bundle.report.readiness_score,
+            "alertCount": len(alerts),
+        },
+    )
 
     return bundle
 

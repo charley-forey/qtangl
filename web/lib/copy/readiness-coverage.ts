@@ -31,13 +31,13 @@ export const coveragePageCopy = {
     {
       name: "GitHub code & dependencies",
       status: "beta" as const,
-      description: "Repository scan for weak crypto patterns (PAT required).",
+      description: "Snippet upload or PAT repository tree scan via POST /tenant/coverage/code-scan.",
       href: "/docs/integrations/ci-cd",
     },
     {
       name: "AWS ACM / Azure / GCP pull",
       status: "beta" as const,
-      description: "Cloud certificate inventory via IAM (AWS first).",
+      description: "AWS ACM live via IAM; Azure and GCP scheduled pull on roadmap.",
       href: "/docs/guides/monitor-setup",
     },
     {

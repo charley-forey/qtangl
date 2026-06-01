@@ -58,7 +58,10 @@ export default function BlogPage() {
       ) : null}
 
       <Section gap="tight" className="pb-0">
-        <Eyebrow>Hybrid optimization</Eyebrow>
+        <Eyebrow>Labs / expansion</Eyebrow>
+        <p className="mt-2 max-w-2xl text-sm text-[var(--color-gray-400)]">
+          Hybrid optimization field notes — separate from the Q-Day readiness product.
+        </p>
         <div className="mt-4 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
           {optimizationPosts.map((post) => (
             <FeatureCard

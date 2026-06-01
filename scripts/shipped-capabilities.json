@@ -1,0 +1,29 @@
+{
+  "capabilities": {
+    "live_tls_scan": { "status": "live", "coverageRow": "External TLS / JWKS / SSH / email" },
+    "cbom_export": { "status": "live", "coverageRow": "External TLS / JWKS / SSH / email" },
+    "signed_pdf_verify": { "status": "live", "coverageRow": "External TLS / JWKS / SSH / email" },
+    "schedules_worker": { "status": "live", "coverageRow": "Scheduled Monitor + drift", "requiresOps": "Redis worker + QTANGL_ENABLE_SCHEDULER" },
+    "webhook_v2_dlq": { "status": "live", "coverageRow": "Scheduled Monitor + drift" },
+    "dashboard_alert_thresholds": { "status": "live", "coverageRow": "Scheduled Monitor + drift" },
+    "remediation_board": { "status": "live" },
+    "verify_fix_api": { "status": "live" },
+    "jira_push_pull": { "status": "live", "note": "When tenant configures Jira integration" },
+    "portfolio_command_center": { "status": "live" },
+    "audit_log_api": { "status": "live" },
+    "partner_child_tenants": { "status": "beta" },
+    "github_repo_scan": { "status": "beta", "coverageRow": "GitHub code & dependencies", "note": "Snippet/dependency analysis via API; full PAT repo scan in progress" },
+    "aws_acm_pull": { "status": "beta", "coverageRow": "AWS ACM / Azure / GCP pull" }
+  },
+  "tierLiveToday": {
+    "Q-Day Assessment": ["Live TLS scan", "CBOM export", "Signed PDF + /verify"],
+    "Q-Day Monitor": ["Schedules + worker", "Webhook v2 + DLQ", "Dashboard alert thresholds"],
+    "Q-Day Convert": ["Remediation board", "Verify-fix API", "Jira push + status pull"],
+    "Q-Day Enterprise": ["Portfolio command center", "Audit log API", "Partner child tenants (beta)"]
+  },
+  "bannedPhrases": [
+    "SOC 2 Type II certified",
+    "complete inventory",
+    "FedRAMP authorized"
+  ]
+}

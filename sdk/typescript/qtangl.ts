@@ -66,6 +66,32 @@ export class QtanglClient {
     return this.get(`/pqc/verify/${scanId}`);
   }
 
+  async listRemediation(scanId: string): Promise<Record<string, unknown>> {
+    return this.get(`/tenant/scans/${scanId}/remediation`);
+  }
+
+  async upsertRemediation(
+    scanId: string,
+    body: { remediationId: string; status: string; owner?: string }
+  ): Promise<Record<string, unknown>> {
+    return this.post(`/tenant/scans/${scanId}/remediation`, body);
+  }
+
+  async verifyRemediation(
+    scanId: string,
+    body: { remediationId: string; verifyScanId: string }
+  ): Promise<Record<string, unknown>> {
+    return this.post(`/tenant/scans/${scanId}/remediation/verify`, body);
+  }
+
+  async createWebhook(url: string): Promise<Record<string, unknown>> {
+    return this.post("/tenant/webhooks", { url });
+  }
+
+  async billingPortal(): Promise<Record<string, unknown>> {
+    return this.get("/tenant/billing/portal");
+  }
+
   private headers(): HeadersInit {
     return {
       Authorization: `Bearer ${this.apiKey}`,

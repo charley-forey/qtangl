@@ -35,6 +35,7 @@ const readinessRoutes = [
   "/trust",
   "/verify",
   "/dashboard",
+  "/labs",
   "/journey",
   "/resources",
   "/resources/roi",

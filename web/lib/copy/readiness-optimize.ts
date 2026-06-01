@@ -1,8 +1,8 @@
 export const optimizeHubCopy = {
   metadata: {
-    title: "Hybrid Optimization",
+    title: "Labs — Hybrid Optimization",
     description:
-      "Hospital re-staffing, airline crew recovery, and EV fleet routing — Qtangl's classical-first planning API.",
+      "Expansion demos: hospital, airline, EV fleet, and planning API sandbox — separate from Q-Day readiness.",
   },
   hero: {
     eyebrow: "Hybrid optimization",

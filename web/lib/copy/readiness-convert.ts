@@ -2,13 +2,13 @@ export const convertPageCopy = {
   metadata: {
     title: "PQC Migration Program",
     description:
-      "Prioritized remediation playbooks, workshop cadence, partner orchestration, and re-scan verification for Q-Day conversion.",
+      "Prioritized remediation playbooks, re-scan verification, and auditor packs — with optional services-led workshops and partner introductions.",
   },
   hero: {
     eyebrow: "Convert",
     title: "Prove the fix with signed evidence",
     description:
-      "Move from inventory to migration program — prioritized playbooks, stakeholder workshops, and re-scan verification auditors trust.",
+      "Move from inventory to migration program — prioritized playbooks and re-scan verification in the product; workshops and partner orchestration via Qtangl services (roadmap for self-serve partner portal).",
     actions: [
       { href: "/access", label: "Talk to sales" },
       { href: "/pricing", label: "See pricing", variant: "secondary" as const },
@@ -24,11 +24,11 @@ export const convertPageCopy = {
       },
       {
         title: "Workshop cadence",
-        description: "Executive, engineering, and GRC sessions aligned to your migration timeline.",
+        description: "Executive, engineering, and GRC sessions — delivered as a services add-on, not in-product automation.",
       },
       {
-        title: "Partner orchestration",
-        description: "HSM, PKI, and SI partners coordinated through Qtangl as system of record.",
+        title: "Partner introductions",
+        description: "HSM, PKI, and SI partner referrals coordinated by Qtangl CS; partner portal on the roadmap.",
       },
       {
         title: "Re-scan verification",

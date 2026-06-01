@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import Modal from "@/components/ui/Modal";
-import { footerCopy, footerNav, nav, navbarCopy } from "@/lib/copy/nav";
+import { footerCopy, footerNav, nav, navSecondary, navbarCopy } from "@/lib/copy/nav";
 import { navCta } from "@/lib/siteConfig";
 
 function MenuIcon() {
@@ -104,7 +104,7 @@ export default function Navbar() {
             </div>
           </Link>
 
-          <nav className="hidden items-center gap-6 text-sm md:flex">
+          <nav className="hidden items-center gap-4 text-sm lg:flex xl:gap-6">
             {nav.map((item) => {
               const active = isActive(pathname, item.href);
 
@@ -128,6 +128,23 @@ export default function Navbar() {
                   >
                     {item.name}
                   </span>
+                </Link>
+              );
+            })}
+            <span className="hidden h-4 w-px bg-white/10 xl:inline-block" aria-hidden="true" />
+            {navSecondary.map((item) => {
+              const active = isActive(pathname, item.href);
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={[
+                    navLinkClass,
+                    active ? "text-white" : "text-[var(--color-gray-400)]",
+                  ].join(" ")}
+                  aria-current={active ? "page" : undefined}
+                >
+                  {item.name}
                 </Link>
               );
             })}
@@ -167,6 +184,24 @@ export default function Navbar() {
                     active
                       ? "border-[var(--border-strong)] bg-white/[0.06] text-white"
                       : "border-transparent text-white hover:border-[var(--border)] hover:bg-white/[0.04]"
+                  }`}
+                  aria-current={active ? "page" : undefined}
+                >
+                  {item.name}
+                </Link>
+              );
+            })}
+            {navSecondary.map((item) => {
+              const active = isActive(pathname, item.href);
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  onClick={() => setOpen(false)}
+                  className={`touch-target block rounded-xl border px-3 py-3 text-base transition ${
+                    active
+                      ? "border-[var(--border-strong)] bg-white/[0.06] text-white"
+                      : "border-transparent text-[var(--color-gray-300)] hover:border-[var(--border)] hover:bg-white/[0.04] hover:text-white"
                   }`}
                   aria-current={active ? "page" : undefined}
                 >

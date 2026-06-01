@@ -14,6 +14,10 @@ inputs:
     description: Fail job when scan diff reports new quantum-vulnerable assets
     required: false
     default: "false"
+  baseline-scan-id:
+    description: Optional prior scan ID to compare readiness delta against
+    required: false
+    default: ""
 runs:
   using: composite
   steps:
@@ -24,6 +28,7 @@ runs:
         QTANGL_API_URL: ${{ inputs.api-url }}
         QTANGL_TARGET: ${{ inputs.target }}
         FAIL_REGRESSION: ${{ inputs.fail-on-new-quantum-vulnerable }}
+        BASELINE_SCAN_ID: ${{ inputs.baseline-scan-id }}
       run: |
         python3 << 'PY'
         import json, os, sys, urllib.request
@@ -40,6 +45,22 @@ runs:
         print(json.dumps(out, indent=2))
         report = out.get("report") or {}
         diff = report.get("scanDiff") or out.get("scanDiff")
+        baseline = os.environ.get("BASELINE_SCAN_ID", "").strip()
+        if baseline and not diff:
+          base_req = urllib.request.Request(
+            os.environ["QTANGL_API_URL"].rstrip("/") + f"/tenant/scans/{baseline}",
+            headers={"Authorization": "Bearer " + os.environ["QTANGL_API_KEY"]},
+          )
+          try:
+            with urllib.request.urlopen(base_req, timeout=60) as br:
+              base_out = json.loads(br.read().decode())
+              base_score = float((base_out.get("report") or {}).get("readinessScore") or 0)
+              cur_score = float(report.get("readinessScore") or 0)
+              if cur_score < base_score - 5:
+                print(f"::error::Readiness dropped {base_score - cur_score:.1f} vs baseline {baseline}")
+                sys.exit(1)
+          except Exception as exc:
+            print(f"::warning::Could not load baseline scan: {exc}")
         if os.environ.get("FAIL_REGRESSION", "").lower() in ("1", "true", "yes") and diff:
           n = int(diff.get("newQuantumVulnerableCount") or 0)
           if n > 0:

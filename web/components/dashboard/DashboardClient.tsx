@@ -29,6 +29,8 @@ import { formatUtcDateTime } from "@/lib/format";
 type TenantMe = {
   tenantId: string;
   persistenceEnabled: boolean;
+  role?: string;
+  entitlements?: { tier?: string; maxScansPerMonth?: number; maxSchedules?: number };
 };
 
 export default function DashboardClient() {
@@ -75,6 +77,12 @@ export default function DashboardClient() {
     risks: string[];
     nextWeekFocus: string[];
   } | null>(null);
+  const [commandCenter, setCommandCenter] = useState<{
+    businessUnits: Record<string, number>;
+    businessUnitDeltas?: Record<string, number | null>;
+    highRiskTargets: Array<{ target: string; readinessScore: number }>;
+  } | null>(null);
+  const [billingPortalUrl, setBillingPortalUrl] = useState<string | null>(null);
   const [heatmapAssets, setHeatmapAssets] = useState<CryptoAsset[]>([]);
   const [analytics, setAnalytics] = useState<{
     forecast: { projected?: number; current?: number } | null;
@@ -82,23 +90,44 @@ export default function DashboardClient() {
   }>({ forecast: null, anomalyAlerts: [] });
 
   useEffect(() => {
-    const stored = getStoredTenantApiKey();
-    if (stored) {
-      setApiKey(stored);
-      setSavedKey(stored);
-    }
+    const syncKey = () => {
+      const stored = getStoredTenantApiKey();
+      if (stored) {
+        setApiKey(stored);
+        setSavedKey(stored);
+      }
+    };
+    syncKey();
+    window.addEventListener("qtangl-api-key-updated", syncKey);
+    return () => window.removeEventListener("qtangl-api-key-updated", syncKey);
   }, []);
 
   const loadDashboard = useCallback(async (key: string) => {
     setLoading(true);
     setError(null);
     try {
-      const mePayload = await fetchTenantJson<{ tenantId: string; persistenceEnabled: boolean }>(
-        "/tenant/me",
+      const mePayload = await fetchTenantJson<{
+        tenantId: string;
+        persistenceEnabled: boolean;
+        role?: string;
+        entitlements?: TenantMe["entitlements"];
+      }>("/tenant/me", key);
+      const scansPayload = await fetchTenantJson<{ scans: TenantScanSummary[] }>(
+        "/tenant/scans?limit=100",
         key
       );
-      const scansPayload = await fetchTenantJson<{ scans: TenantScanSummary[] }>("/tenant/scans", key);
-      setMe({ tenantId: mePayload.tenantId, persistenceEnabled: mePayload.persistenceEnabled });
+      setMe({
+        tenantId: mePayload.tenantId,
+        persistenceEnabled: mePayload.persistenceEnabled,
+        role: mePayload.role,
+        entitlements: mePayload.entitlements,
+      });
+      try {
+        const portal = await fetchTenantJson<{ portalUrl?: string | null }>("/tenant/billing/portal", key);
+        setBillingPortalUrl(portal.portalUrl ?? null);
+      } catch {
+        setBillingPortalUrl(null);
+      }
       setScans(scansPayload.scans);
       setSavedKey(key);
       setStoredTenantApiKey(key);
@@ -144,8 +173,19 @@ export default function DashboardClient() {
         try {
           const ccPayload = await fetchTenantJson<{
             weeklyDigest: { headline: string; wins: string[]; risks: string[]; nextWeekFocus: string[] };
+            commandCenter: {
+              businessUnits: Record<string, number>;
+              businessUnitDeltas?: Record<string, number | null>;
+              highRiskTargets: Array<{ target: string; readinessScore: number }>;
+            };
           }>("/tenant/portfolio/command-center", key);
           setWeeklyDigest(ccPayload.weeklyDigest);
+          const cc = ccPayload.commandCenter;
+          setCommandCenter({
+            businessUnits: cc.businessUnits,
+            businessUnitDeltas: cc.businessUnitDeltas,
+            highRiskTargets: cc.highRiskTargets ?? [],
+          });
         } catch {
           setWeeklyDigest(null);
         }
@@ -299,6 +339,54 @@ export default function DashboardClient() {
         </Card>
       ) : null}
 
+      {commandCenter && Object.keys(commandCenter.businessUnits).length > 0 ? (
+        <Card tone="panel">
+          <Eyebrow>Portfolio command center</Eyebrow>
+          <div className="mt-4 overflow-x-auto">
+            <table className="min-w-full text-left text-sm">
+              <thead className="text-xs uppercase text-[var(--color-gray-500)]">
+                <tr>
+                  <th className="pb-2 pr-4">Business unit</th>
+                  <th className="pb-2 pr-4">Readiness</th>
+                  <th className="pb-2 pr-4">Δ vs prior</th>
+                  <th className="pb-2">Action</th>
+                </tr>
+              </thead>
+              <tbody className="text-[var(--color-gray-300)]">
+                {Object.entries(commandCenter.businessUnits)
+                  .sort(([, a], [, b]) => a - b)
+                  .map(([unit, score]) => (
+                    <tr key={unit} className="border-t border-[var(--border-subtle)]">
+                      <td className="py-2 pr-4 text-white">{unit}</td>
+                      <td className="py-2 pr-4">{score}</td>
+                      <td className="py-2 pr-4">
+                        {commandCenter.businessUnitDeltas?.[unit] != null
+                          ? commandCenter.businessUnitDeltas[unit]
+                          : "—"}
+                      </td>
+                      <td className="py-2">
+                        {savedKey ? (
+                          <button
+                            type="button"
+                            className="text-white underline underline-offset-4"
+                            onClick={() => {
+                              setScheduleTarget("");
+                              setPortfolioUnit(unit);
+                              setActionMessage(`Create a weekly schedule for BU "${unit}" below.`);
+                            }}
+                          >
+                            Schedule monitoring
+                          </button>
+                        ) : null}
+                      </td>
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
+          </div>
+        </Card>
+      ) : null}
+
       {me && latestScan ? (
         <Card tone="panel">
           <Eyebrow>Scan diff</Eyebrow>
@@ -445,7 +533,33 @@ export default function DashboardClient() {
               <dt className="text-xs uppercase tracking-[0.18em] text-[var(--color-gray-500)]">Persistence</dt>
               <dd className="mt-1 text-sm text-white">{me.persistenceEnabled ? "Postgres enabled" : "In-memory / demo"}</dd>
             </div>
+            {me.entitlements?.tier ? (
+              <div>
+                <dt className="text-xs uppercase tracking-[0.18em] text-[var(--color-gray-500)]">Plan tier</dt>
+                <dd className="mt-1 text-sm text-white capitalize">{me.entitlements.tier}</dd>
+              </div>
+            ) : null}
+            {me.role ? (
+              <div>
+                <dt className="text-xs uppercase tracking-[0.18em] text-[var(--color-gray-500)]">API key role</dt>
+                <dd className="mt-1 text-sm text-white">{me.role}</dd>
+              </div>
+            ) : null}
           </dl>
+          {billingPortalUrl ? (
+            <a
+              href={billingPortalUrl}
+              className="mt-4 inline-block text-sm text-white underline underline-offset-4"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Manage billing
+            </a>
+          ) : (
+            <a href="/pricing" className="mt-4 inline-block text-sm text-[var(--color-gray-400)] underline">
+              View plans
+            </a>
+          )}
         </Card>
       ) : null}
 
@@ -686,12 +800,16 @@ export default function DashboardClient() {
         </Card>
       ) : null}
 
-      {savedKey && me?.persistenceEnabled ? (
+      {savedKey && me?.persistenceEnabled && me.role === "admin" ? (
         <Card tone="panel">
-          <Eyebrow>Audit log</Eyebrow>
+          <Eyebrow>Audit log (admin)</Eyebrow>
           <div className="mt-4">
             <AuditLogPanel apiKey={savedKey} />
           </div>
+        </Card>
+      ) : savedKey && me?.persistenceEnabled && me.role !== "admin" ? (
+        <Card tone="ghost">
+          <p className="text-xs text-[var(--color-gray-500)]">Audit log requires an admin API key.</p>
         </Card>
       ) : null}
 

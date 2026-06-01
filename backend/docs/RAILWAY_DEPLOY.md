@@ -13,8 +13,12 @@ Root directory: `backend/` (Dockerfile at `backend/Dockerfile`).
 ## API environment (minimum)
 
 ```
+QTANGL_ENV=production
 DATABASE_URL=postgresql://...
-QTANGL_DB_AUTO_MIGRATE=true
+QTANGL_DB_AUTO_MIGRATE=false
+QTANGL_SECRETS_KEY=<fernet-key>
+# Run on deploy: alembic upgrade head
+QTANGL_INLINE_JOBS=false
 QTANGL_API_KEY=<production-demo-key>
 QTANGL_ADMIN_API_KEY=<admin-secret>
 QTANGL_RATE_LIMIT_PER_MINUTE=300

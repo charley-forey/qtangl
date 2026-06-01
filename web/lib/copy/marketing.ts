@@ -185,20 +185,32 @@ export const blogPosts = [
     readiness: true,
   },
   {
+    slug: "convert-verify-workflow",
+    href: "/blog/convert-verify-workflow",
+    category: "Convert",
+    coverImage: "/qtangl-technology-solver-grid.svg",
+    coverAlt: "Remediation board with verify-fix workflow.",
+    title: "Closing the loop: verify-fix in Convert",
+    excerpt: "Attach re-scan proof to remediation items and export live workflowStatus.",
+    description: "How security teams prove fixes with verification scans and signed exports.",
+    readiness: true,
+  },
+  {
     slug: "when-classical-wins",
     href: "/blog/when-classical-wins",
-    category: "Validation",
+    category: "Labs · Validation",
     coverImage: "/qtangl-technology-solver-grid.svg",
     coverAlt: "Benchmark table illustration with classical and hybrid solver columns.",
     title: "When classical wins: honest benchmark results",
     excerpt: "BM-001–BM-006 committed results — including QAOA failures.",
     description:
       "Why we publish failures, how Track C2 success metric works, and what hybrid is actually for.",
+    labs: true,
   },
   {
     slug: "airline-recovery",
     href: "/blog/airline-recovery",
-    category: "Aviation operations",
+    category: "Labs · Aviation operations",
     coverImage: "/use-case-workforce.png",
     coverAlt:
       "Operations control center illustration with flight boards and crew recovery overlays.",
@@ -207,22 +219,24 @@ export const blogPosts = [
       "MX hold → tail routing → CP-SAT crew assignment → hybrid recovery plans.",
     description:
       "How the airline demo turns a disruption cascade into defensible recovery plans with FAR 117 proof.",
+    labs: true,
   },
   {
     slug: "ev-fleet-charging",
     href: "/blog/ev-fleet-charging",
-    category: "Logistics / EV",
+    category: "Labs · Logistics / EV",
     coverImage: "/use-case-workforce.png",
     coverAlt: "Electric delivery vans at a depot with charging bays and route overlays.",
     title: "EV depot charging is a QUBO-shaped problem",
     excerpt: "VRP routes + TOU charger queue + hybrid peak staggering.",
     description:
       "Why last-mile fleets leave hundreds per day on the table—and how to prove savings with an audit pack.",
+    labs: true,
   },
   {
     slug: "hospital-restaffing",
     href: "/blog/hospital-restaffing",
-    category: "Healthcare operations",
+    category: "Labs · Healthcare operations",
     coverImage: "/use-case-workforce.png",
     coverAlt:
       "Black and white healthcare workforce planning illustration showing staffing boards, coverage windows, and optimization overlays.",
@@ -231,11 +245,12 @@ export const blogPosts = [
       "Hospital call-out → classical solve → hybrid audit trace → buyer-facing scoreboard.",
     description:
       "See how the hospital demo turns a nurse call-out into a live solve and an ops-ready scoreboard.",
+    labs: true,
   },
   {
     slug: "quantum-optimization",
     href: "/blog/quantum-optimization",
-    category: "Quantum-forward thinking",
+    category: "Labs · Quantum-forward thinking",
     coverImage: "/qtangl-technology-solver-grid.svg",
     coverAlt:
       "Black and white abstract technology illustration showing solver workflow panels, network geometry, and a layered hybrid stack.",
@@ -244,11 +259,12 @@ export const blogPosts = [
       "Superposition, QUBO, QAOA — and why hybrid beats hype.",
     description:
       "How Qtangl frames optimization and where quantum-assisted search fits in a classical-first stack.",
+    labs: true,
   },
   {
     slug: "scheduling-use-cases",
     href: "/blog/scheduling-use-cases",
-    category: "Interference in scheduling",
+    category: "Labs · Interference in scheduling",
     coverImage: "/qtangl-usecase-scheduling.svg",
     coverAlt:
       "Black and white scheduling illustration showing crews, planning boards, and entangled task sequencing.",
@@ -257,11 +273,12 @@ export const blogPosts = [
       "Teams, dependencies, and capacity limits collide at once.",
     description:
       "Constraint-aware scheduling when dependencies and crew windows stay visible.",
+    labs: true,
   },
   {
     slug: "routing-optimization",
     href: "/blog/routing-optimization",
-    category: "Observables in routing",
+    category: "Labs · Observables in routing",
     coverImage: "/qtangl-usecase-routing.svg",
     coverAlt:
       "Black and white routing illustration showing dispatching, route maps, and network overlays with amplitude concentrated on the best path.",
@@ -270,5 +287,6 @@ export const blogPosts = [
       "The paper-perfect route fails once windows and capacity show up.",
     description:
       "Route plans teams can execute when the real observables stay in view.",
+    labs: true,
   },
 ] as const;

@@ -55,6 +55,11 @@ QTANGL_SCHEDULER_INTERVAL_SEC=60`}
             webhook-v2-scan-complete.json
           </Link>
           . Optional HMAC headers <code className="text-white">X-Qtangl-Signature</code> when signing secret is set in Dashboard alert settings.
+          Full field dictionary:{" "}
+          <Link href="/docs/integrations/siem-webhook-v2" className="text-white underline">
+            SIEM webhook v2 docs
+          </Link>
+          .
         </p>
       </Card>
 

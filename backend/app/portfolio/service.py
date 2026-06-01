@@ -48,6 +48,8 @@ def readiness_rollup(*, tenant_id: str) -> dict[str, Any]:
     by_unit: dict[str, list[float]] = {}
     entries: list[dict[str, Any]] = []
 
+    scores_by_target: dict[str, list[float]] = {}
+
     for scan in scans:
         if scan.get("status") != "done":
             continue
@@ -63,6 +65,11 @@ def readiness_rollup(*, tenant_id: str) -> dict[str, Any]:
                 unit = t["businessUnit"]
                 break
         by_unit.setdefault(unit, []).append(score)
+        scores_by_target.setdefault(target, []).append(score)
+        readiness_delta = None
+        target_history = scores_by_target[target]
+        if len(target_history) >= 2:
+            readiness_delta = round(target_history[0] - target_history[1], 1)
         entries.append(
             {
                 "scanId": scan["scanId"],
@@ -70,15 +77,30 @@ def readiness_rollup(*, tenant_id: str) -> dict[str, Any]:
                 "businessUnit": unit,
                 "readinessScore": score,
                 "readinessBand": report.get("readinessBand", ""),
+                "readinessDelta": readiness_delta,
             }
         )
+
+    bu_deltas: dict[str, float | None] = {}
+    for unit in by_unit:
+        unit_entries = [e for e in entries if e["businessUnit"] == unit and e.get("readinessDelta") is not None]
+        if unit_entries:
+            bu_deltas[unit] = round(
+                sum(float(e["readinessDelta"]) for e in unit_entries) / len(unit_entries),
+                1,
+            )
 
     rollup = {
         unit: round(sum(scores) / len(scores), 1) if scores else 0.0
         for unit, scores in by_unit.items()
     }
     overall = round(sum(rollup.values()) / len(rollup), 1) if rollup else 0.0
-    return {"overallReadiness": overall, "byBusinessUnit": rollup, "scans": entries[:25]}
+    return {
+        "overallReadiness": overall,
+        "byBusinessUnit": rollup,
+        "businessUnitDeltas": bu_deltas,
+        "scans": entries[:25],
+    }
 
 
 def portfolio_command_center(*, tenant_id: str) -> dict[str, Any]:
@@ -92,6 +114,7 @@ def portfolio_command_center(*, tenant_id: str) -> dict[str, Any]:
     return {
         "overallReadiness": rollup.get("overallReadiness", 0),
         "businessUnits": rollup.get("byBusinessUnit", {}),
+        "businessUnitDeltas": rollup.get("businessUnitDeltas", {}),
         "highRiskTargets": high_risk[:10],
         "recommendedActions": [
             "Prioritize high-risk units for 30-day remediation sprint.",

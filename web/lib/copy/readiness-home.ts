@@ -33,7 +33,7 @@ export const readinessHomeNarrative = {
   apiTitle: "Scan first. API when you're ready.",
   apiDescription:
     "POST a target domain. Get inventory, Mosca HNDL risk, CBOM exports, and a signed PDF your GRC team can verify.",
-  optimizeLink: { label: "Explore optimization demos →", href: "/platform/optimize" },
+  optimizeLink: { label: "Explore Labs (optimization expansion) →", href: "/labs" },
   qDayLink: { label: "Q-Day education hub →", href: "/q-day" },
 } as const;
 

@@ -50,9 +50,9 @@ def pull_azure_keyvault(*, vault_name: str) -> dict[str, Any]:
     return {
         "provider": "azure_keyvault",
         "vault": vault_name,
-        "status": "stub",
+        "status": "roadmap",
         "certificates": [],
-        "message": "Configure Azure credentials for live pull.",
+        "message": "Azure Key Vault scheduled pull is on the roadmap — use upload bundle import today.",
     }
 
 
@@ -60,8 +60,9 @@ def pull_gcp_certificate_manager(*, project_id: str) -> dict[str, Any]:
     return {
         "provider": "gcp_certificate_manager",
         "project": project_id,
-        "status": "stub",
+        "status": "roadmap",
         "certificates": [],
+        "message": "GCP Certificate Manager scheduled pull is on the roadmap — use upload bundle import today.",
     }
 
 

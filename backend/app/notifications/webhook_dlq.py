@@ -41,6 +41,13 @@ def record_dead_letter(
         )
         session.add(row)
         session.flush()
+        from app.telemetry.events import track_event
+
+        track_event(
+            "webhook_dlq_recorded",
+            tenant_id=tenant_id,
+            properties={"scanId": payload.get("scanId"), "reason": reason[:120]},
+        )
         return _row_to_dict(row)
 
 

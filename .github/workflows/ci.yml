@@ -33,6 +33,13 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.lock -r requirements-dev.lock
 
+      - name: Alembic upgrade (dry-run)
+        env:
+          DATABASE_URL: sqlite:///./ci_alembic.db
+        run: |
+          alembic upgrade head
+          alembic check || true
+
       - name: Run tests
         env:
           QTANGL_ENABLE_QAOA: "false"
@@ -80,7 +87,7 @@ jobs:
         run: npx playwright test tests/e2e/access.spec.ts
 
   codeql:
-    name: CodeQL (Python)
+    name: CodeQL (Python + JavaScript)
     runs-on: ubuntu-latest
     permissions:
       security-events: write
@@ -89,7 +96,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: github/codeql-action/init@v3
         with:
-          languages: python
+          languages: python, javascript-typescript
       - uses: github/codeql-action/analyze@v3
 
   gitleaks:
@@ -104,6 +111,19 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITLEAKS_CONFIG: .gitleaks.toml
+
+  alignment:
+    name: Marketing alignment gate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Verify tier liveToday vs coverage matrix
+        run: node scripts/alignment-check.mjs
 
   benchmarks:
     name: Benchmarks (BM-001, BM-003, BM-006)

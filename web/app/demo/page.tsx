@@ -50,7 +50,13 @@ export default function DemosPage() {
       ) : null}
 
       <Section gap="tight" className="pb-0">
-        <Eyebrow>{demosPageCopy.optimizationHeading}</Eyebrow>
+        <Eyebrow>{demosPageCopy.labsHeading}</Eyebrow>
+        <p className="mt-2 max-w-2xl text-sm text-[var(--color-gray-400)]">
+          Expansion motion — not part of the Q-Day readiness product.{" "}
+          <a href="/labs" className="text-white underline-offset-4 hover:underline">
+            View all Labs →
+          </a>
+        </p>
         <div className="mt-4 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
           {optimizationDemoCatalog.map((demo) => (
             <DemoCatalogCard key={demo.slug} demo={demo} />

@@ -45,6 +45,10 @@ def get_rate_limit() -> int:
     return max(_MIN_RATE_LIMIT, max(1, value))
 
 
+class AuthDatabaseError(Exception):
+    """Raised when tenant resolution cannot reach the database."""
+
+
 def resolve_tenant_id(token: str) -> str:
     demo_key = get_expected_api_key()
     if token == demo_key:
@@ -56,10 +60,15 @@ def resolve_tenant_id(token: str) -> str:
         with db_session() as session:
             row = session.query(ApiKey).filter(ApiKey.key_hash == key_hash, ApiKey.revoked_at.is_(None)).one_or_none()
             if row is None:
-                return "sandbox"
+                raise HTTPException(
+                    status_code=status.HTTP_401_UNAUTHORIZED,
+                    detail="Invalid API key. Check the pilot token and try again.",
+                )
             return row.tenant_id
-    except Exception:
-        return "sandbox"
+    except HTTPException:
+        raise
+    except Exception as exc:
+        raise AuthDatabaseError("Unable to resolve tenant from API key.") from exc
 
 
 def resolve_role(token: str) -> str:
@@ -72,10 +81,15 @@ def resolve_role(token: str) -> str:
         with db_session() as session:
             row = session.query(ApiKey).filter(ApiKey.key_hash == key_hash, ApiKey.revoked_at.is_(None)).one_or_none()
             if row is None:
-                return "admin"
+                raise HTTPException(
+                    status_code=status.HTTP_401_UNAUTHORIZED,
+                    detail="Invalid API key. Check the pilot token and try again.",
+                )
             return row.role or "admin"
-    except Exception:
-        return "admin"
+    except HTTPException:
+        raise
+    except Exception as exc:
+        raise AuthDatabaseError("Unable to resolve role from API key.") from exc
 
 
 def hash_api_key(raw_key: str) -> str:
@@ -128,15 +142,31 @@ def require_auth(
             detail="Missing API key. Send a bearer token or x-api-key header.",
         )
 
-    if token != get_expected_api_key() and not _token_registered(token):
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid API key. Check the pilot token and try again.",
-        )
+    if token != get_expected_api_key():
+        try:
+            registered = _token_registered(token)
+        except AuthDatabaseError:
+            raise HTTPException(
+                status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+                detail="Authentication service temporarily unavailable. Try again shortly.",
+            ) from None
+        if not registered:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Invalid API key. Check the pilot token and try again.",
+            )
 
     if count_toward_rate_limit:
         _enforce_rate_limit(token)
-    return AuthContext(token=token, tenant_id=resolve_tenant_id(token), role=resolve_role(token))
+    try:
+        tenant_id = resolve_tenant_id(token)
+        role = resolve_role(token)
+    except AuthDatabaseError:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="Authentication service temporarily unavailable. Try again shortly.",
+        ) from None
+    return AuthContext(token=token, tenant_id=tenant_id, role=role)
 
 
 def require_auth_write(auth: AuthContext = Depends(require_auth)) -> AuthContext:
@@ -144,6 +174,15 @@ def require_auth_write(auth: AuthContext = Depends(require_auth)) -> AuthContext
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Viewer role cannot modify tenant resources.",
+        )
+    return auth
+
+
+def require_auth_operator(auth: AuthContext = Depends(require_auth)) -> AuthContext:
+    if auth.role not in {"admin", "operator"}:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Operator or admin role required for this resource.",
         )
     return auth
 
@@ -180,6 +219,15 @@ def require_auth_readonly(
     )
 
 
+def require_auth_admin(auth: AuthContext = Depends(require_auth_readonly)) -> AuthContext:
+    if auth.role not in {"admin"}:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Admin role required for this resource.",
+        )
+    return auth
+
+
 def _token_registered(token: str) -> bool:
     if not persistence_enabled():
         return False
@@ -188,8 +236,8 @@ def _token_registered(token: str) -> bool:
         with db_session() as session:
             row = session.query(ApiKey).filter(ApiKey.key_hash == key_hash, ApiKey.revoked_at.is_(None)).one_or_none()
             return row is not None
-    except Exception:
-        return False
+    except Exception as exc:
+        raise AuthDatabaseError("Unable to validate API key registration.") from exc
 
 
 def _enforce_rate_limit(token: str) -> None:

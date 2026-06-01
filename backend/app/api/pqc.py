@@ -6,7 +6,7 @@ import logging
 import json
 from typing import Any
 
-from fastapi import APIRouter, Depends, File, HTTPException, Query, UploadFile, status
+from fastapi import APIRouter, Depends, File, Header, HTTPException, Query, UploadFile, status
 from fastapi.responses import Response
 from pydantic import BaseModel, Field
 
@@ -176,11 +176,37 @@ async def upload_bundle(
 def scan_pqc(
     request: PqcScanRequest,
     auth: AuthContext = Depends(require_auth),
+    idempotency_key: str | None = Header(default=None, alias="Idempotency-Key"),
 ) -> dict:
     from app.billing.entitlements import check_scan_quota
+    from app.store.idempotency import cache_scan_id, get_cached_scan_id
+
+    if idempotency_key:
+        cached = get_cached_scan_id(tenant_id=auth.tenant_id, idempotency_key=idempotency_key)
+        if cached:
+            job = get_job(cached, tenant_id=auth.tenant_id)
+            if job is not None:
+                if job.status == "running":
+                    return {
+                        "status": "running",
+                        "scanId": cached,
+                        "summary": "Duplicate request — returning existing in-flight scan.",
+                        **_report_meta(report_available=False, missing_reason="scan_running"),
+                    }
+                bundle_dict = load_scan_bundle(cached, tenant_id=auth.tenant_id)
+                if bundle_dict:
+                    return {
+                        "status": "success",
+                        **bundle_dict,
+                        "scanOutcome": _scan_outcome(bundle_dict),
+                        **_report_meta(report_available=True),
+                    }
 
     quota_error = check_scan_quota(tenant_id=auth.tenant_id)
     if quota_error:
+        from app.telemetry.events import track_event
+
+        track_event("tier_upgrade_clicked", tenant_id=auth.tenant_id, properties=quota_error)
         raise HTTPException(
             status_code=status.HTTP_402_PAYMENT_REQUIRED,
             detail=quota_error,
@@ -207,6 +233,12 @@ def scan_pqc(
                 depth=request.depth,
             )
             save_scan_bundle(bundle.scan_id, bundle, tenant_id=auth.tenant_id)
+            if idempotency_key:
+                cache_scan_id(
+                    tenant_id=auth.tenant_id,
+                    idempotency_key=idempotency_key,
+                    scan_id=bundle.scan_id,
+                )
             payload = serialize_bundle(bundle)
             return {
                 "status": "success",
@@ -241,6 +273,12 @@ def scan_pqc(
         if not use_worker_queue():
             bundle = run_live()
             save_scan_bundle(bundle.scan_id, bundle, tenant_id=auth.tenant_id)
+            if idempotency_key:
+                cache_scan_id(
+                    tenant_id=auth.tenant_id,
+                    idempotency_key=idempotency_key,
+                    scan_id=bundle.scan_id,
+                )
             payload = serialize_bundle(bundle)
             return {
                 "status": "success",
@@ -265,6 +303,8 @@ def scan_pqc(
             return run_live(on_progress=on_progress)
 
         run_job_async(scan_id, runner, tenant_id=auth.tenant_id)
+        if idempotency_key:
+            cache_scan_id(tenant_id=auth.tenant_id, idempotency_key=idempotency_key, scan_id=scan_id)
         return {
             "status": "running",
             "scanId": scan_id,
@@ -453,17 +493,9 @@ def report_availability(
 @router.get("/verify/{scan_id}", responses={404: {"model": ErrorResponse}})
 def verify_report(scan_id: str) -> dict:
     """Public verification: recompute content hash and verify signature."""
-    payload = None
-    if persistence_enabled():
-        from app.db.engine import db_session
-        from app.db.models import ScanJob as ScanJobRow
+    from app.store.scan_jobs import load_scan_bundle_for_public_verify
 
-        with db_session() as session:
-            row = session.get(ScanJobRow, scan_id)
-            if row and row.bundle_json:
-                payload = json.loads(row.bundle_json)
-    if payload is None:
-        payload = load_scan_bundle(scan_id, tenant_id="sandbox")
+    payload = load_scan_bundle_for_public_verify(scan_id)
     if payload is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Scan not found.")
 

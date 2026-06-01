@@ -20,10 +20,11 @@ logger = logging.getLogger(__name__)
 def execute_pqc_scan_job(scan_id: str, payload: dict[str, Any], *, tenant_id: str) -> None:
     max_retries = int(os.environ.get("QTANGL_WORKER_MAX_RETRIES", "3"))
     last_error: Exception | None = None
+    request_id = str(payload.get("requestId") or payload.get("request_id") or "")
 
     for attempt in range(max_retries):
         try:
-            _run_scan_once(scan_id, payload, tenant_id=tenant_id)
+            _run_scan_once(scan_id, payload, tenant_id=tenant_id, request_id=request_id)
             return
         except ScanSafetyError as exc:
             fail_job(scan_id, str(exc), tenant_id=tenant_id)
@@ -37,7 +38,15 @@ def execute_pqc_scan_job(scan_id: str, payload: dict[str, Any], *, tenant_id: st
     fail_job(scan_id, str(last_error or "Unknown worker error"), tenant_id=tenant_id)
 
 
-def _run_scan_once(scan_id: str, payload: dict[str, Any], *, tenant_id: str) -> None:
+def _run_scan_once(
+    scan_id: str,
+    payload: dict[str, Any],
+    *,
+    tenant_id: str,
+    request_id: str = "",
+) -> None:
+    if request_id:
+        logger.info("worker scan_id=%s tenant=%s request_id=%s", scan_id, tenant_id, request_id)
     dataset = load_dataset()
     uploaded_rows = None
     bundle_session_id = payload.get("bundleSessionId")

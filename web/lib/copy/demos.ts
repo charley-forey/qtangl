@@ -15,12 +15,45 @@ export type DemoCatalogEntry = {
 
 export const demosPageCopy = {
   eyebrow: "Demos",
-  title: "See Qtangl readiness and optimization in action.",
+  title: "Q-Day readiness — live product demo.",
   description:
-    "Start with the Q-Day scanner for post-quantum inventory — then explore scheduling, routing, and staffing workflows.",
-  catalogHeading: "Q-Day readiness",
-  optimizationHeading: "Hybrid optimization",
-  sandboxHeading: "For developers",
+    "Start with the Q-Day scanner for post-quantum inventory. Hybrid optimization workflows live under Labs (expansion).",
+  catalogHeading: "Q-Day readiness (product)",
+  labsHeading: "Labs — hybrid optimization (expansion)",
+  optimizationHeading: "Labs — hybrid optimization (expansion)",
+  sandboxHeading: "Labs — for developers",
+} as const;
+
+export const labsHubCopy = {
+  metadata: {
+    title: "Labs — Hybrid Optimization",
+    description:
+      "Expansion demos: hospital re-staffing, airline crew recovery, EV fleet routing, and the planning API sandbox. Separate from the Q-Day readiness platform.",
+  },
+  hero: {
+    eyebrow: "Labs / expansion",
+    title: "Hybrid optimization workflows",
+    description:
+      "Scheduling, routing, and staffing under real constraints — a forward-looking expansion motion after post-quantum readiness. Not part of the Assess → Monitor → Convert product.",
+  },
+  readinessBanner: {
+    text: "Looking for post-quantum readiness?",
+    href: "/platform",
+    cta: "Explore Q-Day platform →",
+  },
+  demos: {
+    eyebrow: "Live workflow demos",
+    title: "Industry optimization scenarios",
+    description:
+      "Same ranked-plan output, operationally honest — quarantined from the Q-Day readiness GTM until you choose to explore expansion.",
+  },
+  developer: {
+    eyebrow: "For developers",
+    title: "Planning API sandbox",
+    description: "Send a real POST /optimize call and see ranked JSON your app receives.",
+    href: "/sandbox",
+    cta: "Open sandbox →",
+  },
 } as const;
 
 export const sandboxCatalogEntry: DemoCatalogEntry = {

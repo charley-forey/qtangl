@@ -16,7 +16,9 @@ export const monitorPageCopy = {
   },
   features: {
     eyebrow: "Capabilities",
-    title: "Continuous readiness",
+    title: "Scheduled readiness (requires worker)",
+    opsNote:
+      "Continuous monitoring means scheduled re-scans via Redis worker + QTANGL_ENABLE_SCHEDULER — configure on deploy; not automatic on every hosting tier.",
     items: [
       {
         title: "Scheduled re-scans",

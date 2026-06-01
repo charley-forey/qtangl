@@ -46,6 +46,12 @@ Qtangl is a post-quantum readiness platform — Assess quantum-vulnerable crypto
 - Q-Day scanner demo: ${siteMetadata.url}/demo/pqc
 - Verify a report: ${siteMetadata.url}/verify
 - Trust center: ${siteMetadata.url}/trust
+- Trust security: ${siteMetadata.url}/trust/security
+- Coverage matrix: ${siteMetadata.url}/platform/coverage
+- Dashboard: ${siteMetadata.url}/dashboard
+- Labs (optimization expansion): ${siteMetadata.url}/labs
+- Partners: ${siteMetadata.url}/partners
+- SIEM webhook v2: ${siteMetadata.url}/docs/integrations/siem-webhook-v2
 - Request access: ${siteMetadata.url}/access
 - Documentation hub: ${siteMetadata.url}/docs
 - PQC demo guide: ${siteMetadata.url}/docs/guides/pqc-demo

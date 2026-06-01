@@ -41,10 +41,27 @@ export default function SecurityPage() {
           </ul>
         </DocsSection>
         <DocsSection>
-          <DocsHeading>CAIQ / SIG (stubs)</DocsHeading>
+          <DocsHeading>RBAC matrix</DocsHeading>
+          <ul className="list-disc space-y-2 pl-5 text-sm leading-7 text-[var(--color-gray-300)]">
+            <li>
+              <strong>viewer</strong> — read scans, reports, portfolio, analytics; cannot create schedules or modify
+              remediation.
+            </li>
+            <li>
+              <strong>operator</strong> — default for new keys; scans, schedules, remediation writes, integrations.
+            </li>
+            <li>
+              <strong>admin</strong> — audit log, settings, offboarding, billing portal, partner child tenants.
+            </li>
+          </ul>
+        </DocsSection>
+        <DocsSection>
+          <DocsHeading>CAIQ / SIG answer index</DocsHeading>
           <ul className="list-disc space-y-2 pl-5 text-sm leading-7 text-[var(--color-gray-300)]">
             <li>Data classification: customer scan metadata and cryptographic inventory (no PAN).</li>
-            <li>Encryption: TLS 1.2+ in transit; optional Fernet for integration secrets at rest.</li>
+            <li>Encryption: TLS 1.2+ in transit; Fernet for integration + settings secrets when QTANGL_SECRETS_KEY set.</li>
+            <li>Pen test: planned before GA enterprise tier; threat model documented internally.</li>
+            <li>Data residency: US default; EU region by enterprise agreement.</li>
             <li>Access control: API keys with roles; SSO documented for dashboard (OIDC).</li>
             <li>Logging: audit log API for tenant admin actions.</li>
             <li>SOC 2: Type I in progress — no certification claim on marketing pages.</li>
@@ -61,6 +78,14 @@ export default function SecurityPage() {
               {siteMetadata.contactEmail}
             </a>
             . We will acknowledge receipt within two business days during the pilot.
+          </p>
+        </DocsSection>
+        <DocsSection>
+          <DocsHeading>API key rotation</DocsHeading>
+          <p className="text-sm leading-8 text-[var(--color-gray-300)]">
+            Rotate tenant API keys after personnel changes or suspected exposure. Revoke the old key in admin,
+            issue a new key with the minimum role (viewer for read-only dashboards, operator for scans,
+            admin for billing and audit). Keys are stored as SHA-256 hashes — plaintext is shown once at creation.
           </p>
         </DocsSection>
         <DocsSection>

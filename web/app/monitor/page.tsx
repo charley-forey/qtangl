@@ -39,7 +39,11 @@ export default function MonitorPage() {
             <a href="/dashboard" className="text-white underline">
               Dashboard
             </a>
-            . Recorded walkthrough coming soon.
+            .
+          </p>
+          <p className="mt-2 text-sm text-[var(--muted)]">
+            <span className="font-medium text-white">Ops note:</span> scheduled re-scans require a Redis worker and{" "}
+            <code className="text-xs">QTANGL_ENABLE_SCHEDULER=true</code> — continuous monitoring is deployment-dependent, not implicit on every tier.
           </p>
         </Card>
         <MonitorPreview />
@@ -53,6 +57,9 @@ export default function MonitorPage() {
         <div className="content-reading">
           <Eyebrow>{features.eyebrow}</Eyebrow>
           <h2 className="heading-section mt-4">{features.title}</h2>
+          {"opsNote" in features && features.opsNote ? (
+            <p className="mt-4 max-w-3xl text-sm text-[var(--color-gray-400)]">{features.opsNote}</p>
+          ) : null}
         </div>
         <div className="mt-10 grid gap-6 md:grid-cols-2">
           {features.items.map((item) => (
