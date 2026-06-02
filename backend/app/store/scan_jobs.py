@@ -30,8 +30,24 @@ def _bundle_json_from_row(row: ScanJobRow) -> str | None:
     if row.bundle_json:
         return row.bundle_json
     if row.bundle_storage_key:
-        return load_bundle_blob(storage_key=row.bundle_storage_key)
+        raw = load_bundle_blob(storage_key=row.bundle_storage_key)
+        if raw:
+            return raw
+        logger.warning(
+            "bundle blob missing scan_id=%s storage_key=%s — re-read may need bundle_json column",
+            row.id,
+            row.bundle_storage_key,
+        )
     return None
+
+
+def bundle_stored(scan_id: str, *, tenant_id: str = "sandbox") -> bool:
+    """True when the scan bundle can be loaded for report export."""
+    if load_scan_bundle(scan_id, tenant_id=tenant_id) is not None:
+        return True
+    if tenant_id == "sandbox" and load_scan_bundle_for_public_verify(scan_id) is not None:
+        return True
+    return False
 
 
 def _apply_scan_metadata(row: ScanJobRow, bundle: ScanBundle, payload: str) -> None:
@@ -206,11 +222,45 @@ def save_scan_bundle(scan_id: str, bundle: ScanBundle, *, tenant_id: str = "sand
             return
         except Exception as exc:
             logger.warning(
-                "save_scan_bundle db failed scan_id=%s tenant_id=%s — using in-memory store: %s",
+                "save_scan_bundle db failed scan_id=%s tenant_id=%s — retrying bundle_json only: %s",
                 scan_id,
                 tenant_id,
                 exc,
             )
+            try:
+                with db_session() as session:
+                    row = session.get(ScanJobRow, scan_id)
+                    if row is None:
+                        session.add(
+                            ScanJobRow(
+                                id=scan_id,
+                                tenant_id=tenant_id,
+                                status="done",
+                                timeline_json=json.dumps([asdict(event) for event in bundle.timeline]),
+                                readiness_score=bundle.report.readiness_score,
+                                target_domain=bundle.report.target_domain,
+                                scenario_id=bundle.report.scenario_id,
+                                bundle_json=payload,
+                                bundle_storage_key=None,
+                            )
+                        )
+                    elif row.tenant_id == tenant_id:
+                        row.status = "done"
+                        row.bundle_json = payload
+                        row.bundle_storage_key = None
+                        row.timeline_json = json.dumps([asdict(event) for event in bundle.timeline])
+                        row.readiness_score = bundle.report.readiness_score
+                        row.target_domain = bundle.report.target_domain
+                        row.scenario_id = bundle.report.scenario_id
+                        row.updated_at = datetime.now(timezone.utc)
+                return
+            except Exception as retry_exc:
+                logger.error(
+                    "save_scan_bundle retry failed scan_id=%s tenant_id=%s: %s",
+                    scan_id,
+                    tenant_id,
+                    retry_exc,
+                )
     with _job_lock:
         _memory_jobs[scan_id] = ScanJob(
             scan_id=scan_id,

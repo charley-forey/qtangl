@@ -17,7 +17,13 @@ def bundle_storage_root() -> Path | None:
 
 
 def store_bundle_blob(*, scan_id: str, tenant_id: str, payload: str) -> str | None:
-    """Persist bundle JSON off-row when local file storage is configured."""
+    """Persist bundle JSON off-row when shared object storage is configured (S3 only).
+
+    Local file:// paths are per-container on Railway and break report downloads from the API.
+    """
+    uri = os.getenv("QTANGL_BUNDLE_STORAGE_URI", "").strip()
+    if not uri.startswith("s3://"):
+        return None
     root = bundle_storage_root()
     if root is None:
         return None

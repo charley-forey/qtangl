@@ -22,6 +22,7 @@ from app.pqc.data import (
     parse_uploaded_bundle_pem,
 )
 from app.pqc.jobs import (
+    bundle_stored,
     create_job,
     get_job,
     load_scan_bundle,
@@ -74,6 +75,15 @@ def _report_meta(*, report_available: bool, missing_reason: str | None = None) -
         "availableFormats": _report_formats() if report_available else [],
         "missingReason": missing_reason,
     }
+
+
+def _report_meta_for_scan(scan_id: str, *, tenant_id: str) -> dict[str, Any]:
+    if bundle_stored(scan_id, tenant_id=tenant_id):
+        return _report_meta(report_available=True)
+    return _report_meta(
+        report_available=False,
+        missing_reason="bundle_not_persisted",
+    )
 
 
 def _scan_outcome(bundle_payload: dict[str, Any] | None) -> str:
@@ -206,7 +216,7 @@ def scan_pqc(
                         "status": "success",
                         **bundle_dict,
                         "scanOutcome": _scan_outcome(bundle_dict),
-                        **_report_meta(report_available=True),
+                        **_report_meta_for_scan(cached, tenant_id=auth.tenant_id),
                     }
 
     quota_error = check_scan_quota(tenant_id=auth.tenant_id)
@@ -251,7 +261,7 @@ def scan_pqc(
                 "status": "success",
                 **payload,
                 "scanOutcome": _scan_outcome(payload),
-                **_report_meta(report_available=True),
+                **_report_meta_for_scan(bundle.scan_id, tenant_id=auth.tenant_id),
             }
 
         if not live_scan_enabled():
@@ -291,7 +301,7 @@ def scan_pqc(
                 "status": "success",
                 **payload,
                 "scanOutcome": _scan_outcome(payload),
-                **_report_meta(report_available=True),
+                **_report_meta_for_scan(bundle.scan_id, tenant_id=auth.tenant_id),
             }
 
         scan_id = create_job(
@@ -368,7 +378,7 @@ def get_scan_status(
                 "status": "success",
                 **payload,
                 "scanOutcome": _scan_outcome(payload),
-                **_report_meta(report_available=True),
+                **_report_meta_for_scan(scan_id, tenant_id=auth.tenant_id),
             }
 
     cached = load_scan_bundle(scan_id, tenant_id=auth.tenant_id)
@@ -377,7 +387,7 @@ def get_scan_status(
             "status": "success",
             **cached,
             "scanOutcome": _scan_outcome(cached),
-            **_report_meta(report_available=True),
+            **_report_meta_for_scan(scan_id, tenant_id=auth.tenant_id),
         }
 
     raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Scan not found.")
@@ -494,14 +504,13 @@ def report_availability(
             "scanId": scan_id,
             **_report_meta(report_available=False, missing_reason="scan_failed"),
         }
-    bundle_dict = load_scan_bundle(scan_id, tenant_id=auth.tenant_id)
-    if not bundle_dict:
-        return {
-            "status": "success",
-            "scanId": scan_id,
-            **_report_meta(report_available=False, missing_reason="bundle_missing"),
-        }
-    return {"status": "success", "scanId": scan_id, **_report_meta(report_available=True)}
+    if bundle_stored(scan_id, tenant_id=auth.tenant_id):
+        return {"status": "success", "scanId": scan_id, **_report_meta(report_available=True)}
+    return {
+        "status": "success",
+        "scanId": scan_id,
+        **_report_meta(report_available=False, missing_reason="bundle_missing"),
+    }
 
 
 @router.get("/verify/{scan_id}", responses={404: {"model": ErrorResponse}})

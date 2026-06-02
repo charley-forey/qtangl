@@ -19,6 +19,7 @@ QTANGL_DB_AUTO_MIGRATE=false
 QTANGL_RUN_MIGRATIONS_ON_START=true
 QTANGL_SECRETS_KEY=<fernet-key>
 # Migrations: Docker CMD runs `alembic upgrade head`; API startup also patches missing columns.
+# Do NOT set QTANGL_BUNDLE_STORAGE_URI=file:// on Railway — use Postgres bundle_json or s3:// only.
 QTANGL_INLINE_JOBS=false
 QTANGL_API_KEY=<production-demo-key>
 QTANGL_ADMIN_API_KEY=<admin-secret>
