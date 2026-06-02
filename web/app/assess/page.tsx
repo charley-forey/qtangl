@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import dynamic from "next/dynamic";
 
 import FeatureCard from "@/components/marketing/FeatureCard";
 import FrameworkCoverageStrip from "@/components/marketing/FrameworkCoverageStrip";
@@ -9,6 +8,7 @@ import Section from "@/components/layout/Section";
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
 import Eyebrow from "@/components/ui/Eyebrow";
+import AssessScannerLoader from "@/components/pqc/AssessScannerLoader";
 import ProductModeBanner from "@/components/marketing/ProductModeBanner";
 import JsonLd from "@/components/seo/JsonLd";
 import { qtanglApiBaseUrl } from "@/lib/api";
@@ -21,16 +21,6 @@ import { absoluteUrl, buildPageMetadata, buildPqcDemoJsonLd } from "@/lib/seo";
 
 const scannerDescription =
   "Live Q-Day assessment: inventory quantum-vulnerable cryptography, Mosca HNDL risk, and signed evidence exports.";
-
-/** Client-only: uses useSearchParams — SSR would mismatch Suspense fallback (React #418). */
-const PqcDemoClient = dynamic(() => import("@/components/pqc/PqcDemoClient"), {
-  ssr: false,
-  loading: () => (
-    <Card tone="strong" className="rounded-[var(--radius-xl)]">
-      <p className="text-sm text-[var(--color-gray-300)]">Loading assessment scanner…</p>
-    </Card>
-  ),
-});
 
 export const metadata: Metadata = buildPageMetadata({
   path: "/assess",
@@ -79,7 +69,7 @@ export default async function AssessPage() {
 
       <Section gap="tight" id="scanner" className="scroll-mt-28">
         <ProductModeBanner mode="live" />
-        <PqcDemoClient
+        <AssessScannerLoader
           initialInventory={inventory}
           initialScenarios={scenarioList}
           backendConnected={backendConnected}
