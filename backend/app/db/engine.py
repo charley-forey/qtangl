@@ -78,6 +78,27 @@ def validate_production_config() -> None:
         logger.warning("QTANGL_DB_AUTO_MIGRATE should be false in production; use alembic upgrade head")
 
 
+def _run_alembic_upgrade() -> None:
+    """Apply Alembic migrations (production deploys with QTANGL_DB_AUTO_MIGRATE=false)."""
+    url = database_url()
+    if not url:
+        return
+    raw = os.getenv("QTANGL_RUN_MIGRATIONS_ON_START", "true").lower()
+    if raw not in {"1", "true", "yes", "on"}:
+        return
+    try:
+        from alembic import command
+        from alembic.config import Config
+
+        backend_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+        cfg = Config(os.path.join(backend_root, "alembic.ini"))
+        cfg.set_main_option("sqlalchemy.url", url)
+        command.upgrade(cfg, "head")
+        logger.info("Alembic upgrade head completed")
+    except Exception as exc:
+        logger.warning("Alembic upgrade skipped or failed: %s", exc)
+
+
 def init_db() -> None:
     validate_production_config()
     engine = get_engine()
@@ -86,6 +107,9 @@ def init_db() -> None:
     if use_create_all_on_startup():
         apply_schema_patches(engine)
         Base.metadata.create_all(engine)
+    else:
+        apply_schema_patches(engine)
+        _run_alembic_upgrade()
     _seed_default_tenant(engine)
 
 

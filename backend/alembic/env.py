@@ -6,6 +6,7 @@ from logging.config import fileConfig
 from alembic import context
 from sqlalchemy import engine_from_config, pool
 
+from app.db.config import normalize_database_url
 from app.db.models import Base
 
 config = context.config
@@ -16,7 +17,10 @@ target_metadata = Base.metadata
 
 
 def get_url() -> str:
-    return os.environ.get("DATABASE_URL", "sqlite:///./qtangl.db")
+    raw = os.environ.get("DATABASE_URL") or os.environ.get("QTANGL_DATABASE_URL") or "sqlite:///./qtangl.db"
+    if raw.startswith("sqlite"):
+        return raw
+    return normalize_database_url(raw)
 
 
 def run_migrations_offline() -> None:

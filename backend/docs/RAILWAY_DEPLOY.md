@@ -16,8 +16,9 @@ Root directory: `backend/` (Dockerfile at `backend/Dockerfile`).
 QTANGL_ENV=production
 DATABASE_URL=postgresql://...
 QTANGL_DB_AUTO_MIGRATE=false
+QTANGL_RUN_MIGRATIONS_ON_START=true
 QTANGL_SECRETS_KEY=<fernet-key>
-# Run on deploy: alembic upgrade head
+# Migrations: Docker CMD runs `alembic upgrade head`; API startup also patches missing columns.
 QTANGL_INLINE_JOBS=false
 QTANGL_API_KEY=<production-demo-key>
 QTANGL_ADMIN_API_KEY=<admin-secret>

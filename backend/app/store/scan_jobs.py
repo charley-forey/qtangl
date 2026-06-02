@@ -63,16 +63,26 @@ def create_job(*, tenant_id: str = "sandbox", payload: dict[str, Any] | None = N
     )
     payload_json = json.dumps(payload) if payload else None
     if persistence_enabled():
-        with db_session() as session:
-            session.add(
-                ScanJobRow(
-                    id=scan_id,
-                    tenant_id=tenant_id,
-                    status="running",
-                    timeline_json="[]",
-                    payload_json=payload_json,
+        try:
+            with db_session() as session:
+                session.add(
+                    ScanJobRow(
+                        id=scan_id,
+                        tenant_id=tenant_id,
+                        status="running",
+                        timeline_json="[]",
+                        payload_json=payload_json,
+                    )
                 )
+        except Exception as exc:
+            logger.warning(
+                "create_job db failed scan_id=%s tenant_id=%s — using in-memory store: %s",
+                scan_id,
+                tenant_id,
+                exc,
             )
+            with _job_lock:
+                _memory_jobs[scan_id] = job
     else:
         with _job_lock:
             _memory_jobs[scan_id] = job
