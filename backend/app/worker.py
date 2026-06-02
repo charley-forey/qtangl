@@ -114,9 +114,12 @@ def process_next_job() -> bool:
     tenant_id = str(payload.get("tenantId", tenant_id))
     job = get_job(job_id, tenant_id=tenant_id)
     if job is None:
-        fail_job(job_id, "Scan job not found for tenant.", tenant_id=tenant_id)
-        return True
-    if job.status != "running":
+        logger.warning(
+            "worker job row missing scan_id=%s tenant_id=%s — running scan and upserting bundle",
+            job_id,
+            tenant_id,
+        )
+    elif job.status != "running":
         return True
 
     execute_pqc_scan_job(job_id, payload, tenant_id=tenant_id)

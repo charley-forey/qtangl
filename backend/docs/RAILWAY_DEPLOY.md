@@ -4,11 +4,24 @@
 
 | Service | Start command | Required vars |
 |---------|---------------|---------------|
-| **API** | `uvicorn app.main:app --host 0.0.0.0 --port $PORT` | `DATABASE_URL`, `QTANGL_API_KEY`, `QTANGL_PUBLIC_URL` |
-| **Worker** | `python -m app.worker` | Same as API + `REDIS_URL`, `QTANGL_INLINE_JOBS=false`, `QTANGL_ENABLE_SCHEDULER=true` |
+| **API** | `uvicorn app.main:app --host 0.0.0.0 --port $PORT` | **`DATABASE_URL` (required)**, `QTANGL_API_KEY`, `QTANGL_PUBLIC_URL`, `REDIS_URL` when using worker queue |
+| **Worker** | `python -m app.worker` | **Same `DATABASE_URL` as API**, `REDIS_URL`, `QTANGL_INLINE_JOBS=false`, `QTANGL_ENABLE_SCHEDULER=true` |
 | **Redis** | Railway Redis plugin | `REDIS_URL` (auto-linked) |
 
 Root directory: `backend/` (Dockerfile at `backend/Dockerfile`).
+
+## Postgres / Redis: private URLs only (avoid egress warnings)
+
+Railway shows warnings on **`DATABASE_PUBLIC_URL`** and **`REDIS_PUBLIC_URL`** because those use `*.proxy.rlwy.net` (public TCP proxy). **Do not** point app services at them.
+
+| Variable | Use for |
+|----------|---------|
+| **`DATABASE_URL`** | API, worker, migrations — private network (`RAILWAY_PRIVATE_DOMAIN` / internal host) |
+| `DATABASE_PUBLIC_URL` | Local laptop, GUI clients, one-off `psql` from your machine only |
+| **`REDIS_URL`** | API + worker — private Redis URL |
+| `REDIS_PUBLIC_URL` | External debugging only |
+
+On **API** and **worker** services: **Variables → Add variable reference** → select Postgres **`DATABASE_URL`** and Redis **`REDIS_URL`** from the plugins. Never set `DATABASE_URL=${{Postgres.DATABASE_PUBLIC_URL}}`.
 
 ## API environment (minimum)
 
@@ -55,6 +68,25 @@ python backend/scripts/production_smoke.py
 ```
 
 Production health verified: `GET /health/ready` returns `status: ready` with `persistenceEnabled: true`.
+
+## Report unavailable (`scan_not_found`, `bundle_not_persisted`)
+
+After deploy, the assess UI calls `POST /pqc/scan/{scanId}/persist` with the scan JSON so reports work even if the worker missed a DB write.
+
+| `missingReason` | Meaning |
+|-----------------|--------|
+| `scan_not_found` | No `scan_jobs` row — API missing `DATABASE_URL`, worker not running, or `create_job` failed |
+| `wrong_tenant` | Row exists under another tenant; Vercel API key ≠ Railway `QTANGL_API_KEY` tenant |
+| `bundle_not_persisted` | Row exists but `bundle_json` empty and blob missing — re-scan or use persist |
+| `scan_running` | Job still in queue |
+
+Checklist:
+
+1. **Both** Railway services (API + worker) reference the **same** `DATABASE_URL` from Postgres (not only on the Redis plugin).
+2. `QTANGL_INLINE_JOBS=false` when `REDIS_URL` is set; worker runs `python -m app.worker`.
+3. No `QTANGL_BUNDLE_STORAGE_URI=file://` (Postgres `bundle_json` or `s3://` only).
+4. Redeploy **API + worker + Vercel** after pulling fixes (`POST /pqc/scan/{id}/persist`, RLS-safe scan DB session).
+5. Vercel `NEXT_PUBLIC_QTANGL_SANDBOX_API_KEY` must equal Railway `QTANGL_API_KEY` byte-for-byte.
 
 ## Vercel (web)
 

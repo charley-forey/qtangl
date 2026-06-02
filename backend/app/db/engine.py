@@ -68,6 +68,35 @@ def db_session() -> Iterator[Session]:
         session.close()
 
 
+@contextmanager
+def scan_db_session(*, tenant_id: str | None = None) -> Iterator[Session]:
+    """DB session for scan_jobs — bypasses RLS so API and worker see the same rows."""
+    engine = get_engine()
+    if engine is None or _SessionLocal is None:
+        raise RuntimeError("Database is not configured")
+    session = _SessionLocal()
+    try:
+        if engine.dialect.name == "postgresql":
+            try:
+                session.execute(text("SET LOCAL row_security = off"))
+            except Exception as exc:
+                logger.debug("scan_db_session: row_security off skipped: %s", exc)
+            if tenant_id:
+                from app.db.rls import set_session_tenant
+
+                try:
+                    set_session_tenant(session.connection(), tenant_id)
+                except Exception as exc:
+                    logger.debug("scan_db_session: set_session_tenant skipped: %s", exc)
+        yield session
+        session.commit()
+    except Exception:
+        session.rollback()
+        raise
+    finally:
+        session.close()
+
+
 def validate_production_config() -> None:
     if require_secrets_key() and not os.getenv("QTANGL_SECRETS_KEY"):
         raise RuntimeError(

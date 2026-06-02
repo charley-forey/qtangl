@@ -11,7 +11,7 @@ from typing import Any, Callable
 import logging
 
 from app.db.config import persistence_enabled, use_worker_queue
-from app.db.engine import db_session
+from app.db.engine import db_session, scan_db_session
 
 logger = logging.getLogger(__name__)
 from app.db.models import ScanJob as ScanJobRow
@@ -34,20 +34,47 @@ def _bundle_json_from_row(row: ScanJobRow) -> str | None:
         if raw:
             return raw
         logger.warning(
-            "bundle blob missing scan_id=%s storage_key=%s — re-read may need bundle_json column",
+            "bundle blob missing scan_id=%s storage_key=%s — treating as empty bundle",
             row.id,
             row.bundle_storage_key,
         )
     return None
 
 
+def _clear_orphan_storage_key(row: ScanJobRow) -> bool:
+    """Drop storage_key when the blob is missing so a retry can store bundle_json."""
+    if not row.bundle_storage_key:
+        return False
+    if load_bundle_blob(storage_key=row.bundle_storage_key):
+        return False
+    row.bundle_storage_key = None
+    return True
+
+
+def _get_scan_row(scan_id: str) -> ScanJobRow | None:
+    if not persistence_enabled():
+        return None
+    with scan_db_session() as session:
+        return session.get(ScanJobRow, scan_id)
+
+
+def scan_storage_diagnosis(scan_id: str, *, tenant_id: str = "sandbox") -> str | None:
+    """Return a missing_reason code when the bundle cannot be loaded."""
+    if load_scan_bundle(scan_id, tenant_id=tenant_id) is not None:
+        return None
+    if not persistence_enabled():
+        return "scan_not_found"
+    row = _get_scan_row(scan_id)
+    if row is None:
+        return "scan_not_found"
+    if row.tenant_id != tenant_id:
+        return "wrong_tenant"
+    return "bundle_not_persisted"
+
+
 def bundle_stored(scan_id: str, *, tenant_id: str = "sandbox") -> bool:
     """True when the scan bundle can be loaded for report export."""
-    if load_scan_bundle(scan_id, tenant_id=tenant_id) is not None:
-        return True
-    if tenant_id == "sandbox" and load_scan_bundle_for_public_verify(scan_id) is not None:
-        return True
-    return False
+    return scan_storage_diagnosis(scan_id, tenant_id=tenant_id) is None
 
 
 def _apply_scan_metadata(row: ScanJobRow, bundle: ScanBundle, payload: str) -> None:
@@ -79,7 +106,7 @@ def create_job(*, tenant_id: str = "sandbox", payload: dict[str, Any] | None = N
     )
     payload_json = json.dumps(payload) if payload else None
     if persistence_enabled():
-        with db_session() as session:
+        with scan_db_session(tenant_id=tenant_id) as session:
             session.add(
                 ScanJobRow(
                     id=scan_id,
@@ -101,11 +128,10 @@ def create_job(*, tenant_id: str = "sandbox", payload: dict[str, Any] | None = N
 
 def get_job(scan_id: str, *, tenant_id: str = "sandbox") -> ScanJob | None:
     if persistence_enabled():
-        with db_session() as session:
-            row = session.get(ScanJobRow, scan_id)
-            if row is None or row.tenant_id != tenant_id:
-                return None
-            return _row_to_job(row)
+        row = _get_scan_row(scan_id)
+        if row is None or row.tenant_id != tenant_id:
+            return None
+        return _row_to_job(row)
     with _job_lock:
         job = _memory_jobs.get(scan_id)
         if job is None or job.tenant_id != tenant_id:
@@ -115,7 +141,7 @@ def get_job(scan_id: str, *, tenant_id: str = "sandbox") -> ScanJob | None:
 
 def get_job_payload(scan_id: str, *, tenant_id: str = "sandbox") -> dict[str, Any] | None:
     if persistence_enabled():
-        with db_session() as session:
+        with scan_db_session(tenant_id=tenant_id) as session:
             row = session.get(ScanJobRow, scan_id)
             if row is None or row.tenant_id != tenant_id or not row.payload_json:
                 return None
@@ -125,7 +151,7 @@ def get_job_payload(scan_id: str, *, tenant_id: str = "sandbox") -> dict[str, An
 
 def list_jobs_for_tenant(*, tenant_id: str, limit: int = 50) -> list[dict[str, Any]]:
     if persistence_enabled():
-        with db_session() as session:
+        with scan_db_session(tenant_id=tenant_id) as session:
             rows = (
                 session.query(ScanJobRow)
                 .filter(ScanJobRow.tenant_id == tenant_id)
@@ -142,7 +168,7 @@ def list_jobs_for_tenant(*, tenant_id: str, limit: int = 50) -> list[dict[str, A
 
 def update_job_timeline(scan_id: str, timeline: list[TimelineEvent], *, tenant_id: str = "sandbox") -> None:
     if persistence_enabled():
-        with db_session() as session:
+        with scan_db_session(tenant_id=tenant_id) as session:
             row = session.get(ScanJobRow, scan_id)
             if row is None or row.tenant_id != tenant_id:
                 return
@@ -169,7 +195,7 @@ def fail_job(
     tenant_id: str = "sandbox",
 ) -> None:
     if persistence_enabled():
-        with db_session() as session:
+        with scan_db_session(tenant_id=tenant_id) as session:
             row = session.get(ScanJobRow, scan_id)
             if row is None or row.tenant_id != tenant_id:
                 return
@@ -197,7 +223,7 @@ def save_scan_bundle(scan_id: str, bundle: ScanBundle, *, tenant_id: str = "sand
     if persistence_enabled():
         payload = json.dumps(serialize_bundle(bundle))
         try:
-            with db_session() as session:
+            with scan_db_session(tenant_id=tenant_id) as session:
                 row = session.get(ScanJobRow, scan_id)
                 if row is None:
                     session.add(
@@ -216,6 +242,7 @@ def save_scan_bundle(scan_id: str, bundle: ScanBundle, *, tenant_id: str = "sand
                     if row.tenant_id != tenant_id:
                         return
                     row.status = "done"
+                    _clear_orphan_storage_key(row)
                     _apply_scan_metadata(row, bundle, payload)
                     row.timeline_json = json.dumps([asdict(event) for event in bundle.timeline])
                     row.updated_at = datetime.now(timezone.utc)
@@ -228,7 +255,7 @@ def save_scan_bundle(scan_id: str, bundle: ScanBundle, *, tenant_id: str = "sand
                 exc,
             )
             try:
-                with db_session() as session:
+                with scan_db_session(tenant_id=tenant_id) as session:
                     row = session.get(ScanJobRow, scan_id)
                     if row is None:
                         session.add(
@@ -298,12 +325,11 @@ def find_previous_scan(
 def load_scan_bundle_for_public_verify(scan_id: str) -> dict[str, Any] | None:
     """Load a scan bundle by ID for public signature verification (no tenant filter)."""
     if persistence_enabled():
-        with db_session() as session:
-            row = session.get(ScanJobRow, scan_id)
-            if row is None or not _bundle_json_from_row(row):
-                return None
-            raw = _bundle_json_from_row(row)
-            return json.loads(raw) if raw else None
+        row = _get_scan_row(scan_id)
+        if row is None:
+            return None
+        raw = _bundle_json_from_row(row)
+        return json.loads(raw) if raw else None
     with _job_lock:
         job = _memory_jobs.get(scan_id)
         if job is None or not job.bundle:
@@ -313,14 +339,13 @@ def load_scan_bundle_for_public_verify(scan_id: str) -> dict[str, Any] | None:
 
 def load_scan_bundle(scan_id: str, *, tenant_id: str = "sandbox") -> dict[str, Any] | None:
     if persistence_enabled():
-        with db_session() as session:
-            row = session.get(ScanJobRow, scan_id)
-            if row is None or row.tenant_id != tenant_id:
-                return None
-            raw = _bundle_json_from_row(row)
-            if not raw:
-                return None
-            return json.loads(raw)
+        row = _get_scan_row(scan_id)
+        if row is None or row.tenant_id != tenant_id:
+            return None
+        raw = _bundle_json_from_row(row)
+        if not raw:
+            return None
+        return json.loads(raw)
     with _job_lock:
         job = _memory_jobs.get(scan_id)
         if job is None or job.tenant_id != tenant_id:
@@ -373,7 +398,7 @@ def run_job_async(
 
     def on_progress(event: TimelineEvent) -> None:
         if persistence_enabled():
-            with db_session() as session:
+            with scan_db_session(tenant_id=tenant_id) as session:
                 row = session.get(ScanJobRow, scan_id)
                 if not row or row.tenant_id != tenant_id:
                     return

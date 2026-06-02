@@ -29,6 +29,7 @@ from app.pqc.jobs import (
     load_scan_bundle_for_public_verify,
     run_job_async,
     save_scan_bundle,
+    scan_storage_diagnosis,
 )
 from app.pqc.pipeline import run_pqc_scan
 from app.pqc.report import (
@@ -472,44 +473,74 @@ def download_report(
     )
 
 
+@router.post("/scan/{scan_id}/persist", responses={401: {"model": ErrorResponse}, 422: {"model": ErrorResponse}})
+def persist_scan_bundle(
+    scan_id: str,
+    body: dict[str, Any],
+    auth: AuthContext = Depends(require_auth),
+) -> dict:
+    """Store the scan bundle from the client when DB/worker persistence did not complete."""
+    body_scan_id = body.get("scanId")
+    if body_scan_id and str(body_scan_id) != scan_id:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail="scanId in body does not match path",
+        )
+    from app.pqc.bundle_codec import bundle_from_api_dict
+
+    try:
+        bundle = bundle_from_api_dict(body)
+    except Exception as exc:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail=f"Invalid scan bundle: {exc}",
+        ) from exc
+    save_scan_bundle(scan_id, bundle, tenant_id=auth.tenant_id)
+    logger.info("persist_scan_bundle scan_id=%s tenant_id=%s", scan_id, auth.tenant_id)
+    return {
+        "status": "success",
+        "scanId": scan_id,
+        **_report_meta_for_scan(scan_id, tenant_id=auth.tenant_id),
+    }
+
+
 @router.get("/report/{scan_id}/availability", responses={401: {"model": ErrorResponse}})
 def report_availability(
     scan_id: str,
     auth: AuthContext = Depends(require_auth_readonly),
 ) -> dict:
+    diagnosis = scan_storage_diagnosis(scan_id, tenant_id=auth.tenant_id)
+    if diagnosis is None:
+        return {"status": "success", "scanId": scan_id, **_report_meta(report_available=True)}
+
     job = get_job(scan_id, tenant_id=auth.tenant_id)
-    if job is None:
-        payload = load_scan_bundle(scan_id, tenant_id=auth.tenant_id)
-        if payload:
-            return {"status": "success", "scanId": scan_id, **_report_meta(report_available=True)}
-        # Sandbox demo: allow lookup without tenant filter when row exists under another key path
-        if auth.tenant_id == "sandbox":
-            payload = load_scan_bundle_for_public_verify(scan_id)
-            if payload:
-                return {"status": "success", "scanId": scan_id, **_report_meta(report_available=True)}
-        return {
-            "status": "success",
-            "scanId": scan_id,
-            **_report_meta(report_available=False, missing_reason="scan_not_found_or_wrong_tenant"),
-        }
-    if job.status == "running":
+    if job and job.status == "running":
         return {
             "status": "success",
             "scanId": scan_id,
             **_report_meta(report_available=False, missing_reason="scan_running"),
         }
-    if job.status == "error":
+    if job and job.status == "error":
         return {
             "status": "success",
             "scanId": scan_id,
             **_report_meta(report_available=False, missing_reason="scan_failed"),
         }
-    if bundle_stored(scan_id, tenant_id=auth.tenant_id):
-        return {"status": "success", "scanId": scan_id, **_report_meta(report_available=True)}
+
+    if diagnosis == "scan_not_found" and auth.tenant_id == "sandbox":
+        if load_scan_bundle_for_public_verify(scan_id):
+            return {"status": "success", "scanId": scan_id, **_report_meta(report_available=True)}
+
+    missing_reason = diagnosis
+    if diagnosis == "scan_not_found":
+        missing_reason = "scan_not_found"
+    elif diagnosis == "wrong_tenant":
+        missing_reason = "wrong_tenant"
+
     return {
         "status": "success",
         "scanId": scan_id,
-        **_report_meta(report_available=False, missing_reason="bundle_missing"),
+        **_report_meta(report_available=False, missing_reason=missing_reason),
     }
 
 

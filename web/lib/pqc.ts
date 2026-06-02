@@ -287,6 +287,48 @@ export async function getReportAvailability(scanId: string) {
   );
 }
 
+export async function persistPqcScanBundle(scanId: string, bundle: PqcScanResponse) {
+  return fetchQtanglJson<ReportAvailabilityResponse>(
+    `/pqc/scan/${encodeURIComponent(scanId)}/persist`,
+    {
+      method: "POST",
+      body: JSON.stringify(bundle),
+    }
+  );
+}
+
+/** Persist bundle server-side, then poll until reports are downloadable. */
+export async function syncReportAfterScan(scanId: string, bundle: PqcScanResponse) {
+  try {
+    const persisted = await persistPqcScanBundle(scanId, bundle);
+    if (persisted.reportAvailable) {
+      return persisted;
+    }
+  } catch {
+    // Older API builds lack POST /pqc/scan/{id}/persist — fall through to availability polling.
+  }
+
+  for (let attempt = 0; attempt < 12; attempt += 1) {
+    if (attempt > 0) {
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+    }
+    const availability = await getReportAvailability(scanId);
+    if (availability.reportAvailable) {
+      return availability;
+    }
+    if (
+      availability.missingReason &&
+      !["scan_running", "bundle_not_persisted", "bundle_missing"].includes(
+        availability.missingReason
+      )
+    ) {
+      return availability;
+    }
+  }
+
+  return getReportAvailability(scanId);
+}
+
 const LIVE_SCAN_POLL_MS = 1500;
 const LIVE_SCAN_MAX_ATTEMPTS = 120;
 

@@ -12,6 +12,7 @@ from app.store.scan_jobs import (
     load_scan_bundle_for_public_verify,
     run_job_async,
     save_scan_bundle,
+    scan_storage_diagnosis,
     update_job_timeline,
 )
 
@@ -23,6 +24,7 @@ __all__ = [
     "get_job_payload",
     "list_jobs_for_tenant",
     "bundle_stored",
+    "scan_storage_diagnosis",
     "load_scan_bundle",
     "load_scan_bundle_for_public_verify",
     "run_job_async",

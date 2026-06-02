@@ -9,6 +9,7 @@ import { FALLBACK_SCENARIOS } from "@/lib/pqc-fallback";
 import type { CryptoAsset, PqcScanResponse, ReportAvailabilityResponse, Scenario } from "@/lib/pqc";
 import {
   getReportAvailability,
+  syncReportAfterScan,
   getPqcInventory,
   getPqcScenarios,
   pqcReportDownloadUrl,
@@ -197,6 +198,10 @@ export default function QDayCommandCenter({
       }
       trackEvent("pqc_scan_completed", { scenarioId: activeScenarioId });
       trackEvent("pqc_handshake_proved", { mode: completed.handshakeProof.mode });
+      setReportStatus("checking");
+      const availability = await syncReportAfterScan(completed.scanId, completed);
+      setReportAvailability(availability);
+      setReportStatus(availability.reportAvailable ? "ready" : "unavailable");
       syncUrl();
       resultsRef.current?.scrollIntoView({ behavior: "smooth" });
     } catch (err) {
