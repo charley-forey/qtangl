@@ -1,1 +1,1 @@
-export const navCta = { name: "Run assessment", href: "/assess" } as const;
+export const navCta = { name: "Get access", href: "/access" } as const;

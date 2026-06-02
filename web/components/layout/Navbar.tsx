@@ -135,7 +135,7 @@ export default function Navbar() {
 
           <div className="flex items-center gap-3">
             <Link href={navCta.href} className={`${primaryCtaBaseClass} hidden md:inline-flex`}>
-              {navbarCopy.primaryCtaLabel}
+              {navCta.name}
             </Link>
             <button
               type="button"
@@ -181,7 +181,7 @@ export default function Navbar() {
             onClick={() => setOpen(false)}
             className={`${primaryCtaBaseClass} inline-flex w-full justify-center`}
           >
-            {navbarCopy.primaryCtaLabel}
+            {navCta.name}
           </Link>
           <div className="hairline-divider" />
           <div className="space-y-2">

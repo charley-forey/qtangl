@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { footerCopy, footerNav, nav } from "@/lib/copy/nav";
-import { footerBlurb, siteMetadata } from "@/lib/copy/product";
+import { footerBlurb, footerContact, siteMetadata } from "@/lib/copy/product";
 
 export default function Footer() {
   return (
@@ -26,6 +26,28 @@ export default function Footer() {
           <p className="mt-6 max-w-xl text-sm leading-7 text-[var(--color-gray-300)]">
             {footerBlurb}
           </p>
+          <div className="mt-6 space-y-3 text-sm text-[var(--color-gray-300)]">
+            <a
+              href={`mailto:${siteMetadata.contactEmail}`}
+              className="block transition hover:text-white"
+            >
+              {siteMetadata.contactEmail}
+            </a>
+            <p className="text-[var(--color-gray-400)]">{footerContact.location}</p>
+            <div className="flex flex-wrap gap-x-5 gap-y-2">
+              {footerContact.social.map((item) => (
+                <a
+                  key={item.href}
+                  href={item.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="transition hover:text-white"
+                >
+                  {item.name}
+                </a>
+              ))}
+            </div>
+          </div>
           <div className="mt-6 hairline-divider max-w-xl" />
         </div>
 
@@ -56,12 +78,6 @@ export default function Footer() {
                 {item.name}
               </Link>
             ))}
-            <a
-              href={`mailto:${siteMetadata.contactEmail}`}
-              className="block transition hover:text-white"
-            >
-              {footerCopy.contactLabel}
-            </a>
           </div>
         </div>
       </div>

@@ -27,7 +27,7 @@ export const footerNav = [
 export const navbarCopy = {
   subtitle: "Q-Day Readiness",
   subtitleHref: "/platform",
-  primaryCtaLabel: "Run assessment",
+  primaryCtaLabel: "Get access",
   mobileMenuLabel: "Open menu",
   mobileTitle: "Qtangl navigation",
 } as const;
@@ -35,5 +35,4 @@ export const navbarCopy = {
 export const footerCopy = {
   primaryHeading: "Platform",
   secondaryHeading: "More",
-  contactLabel: "Contact",
 } as const;

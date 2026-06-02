@@ -215,3 +215,11 @@ export const technologyPage = {
 
 export const footerBlurb =
   "Assess quantum-vulnerable crypto. Monitor drift until Q-Day. Convert with signed evidence your auditors can verify.";
+
+export const footerContact = {
+  location: "New York City, NY",
+  social: [
+    { name: "LinkedIn", href: "https://www.linkedin.com/company/qtangl" },
+    { name: "YouTube", href: "https://www.youtube.com/@qtangl-01" },
+  ],
+} as const;
