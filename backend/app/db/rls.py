@@ -32,23 +32,33 @@ def apply_row_level_security(engine: Engine) -> None:
     """Enable RLS policies keyed to app.current_tenant GUC (Postgres only)."""
     if engine.dialect.name != "postgresql":
         return
-    with engine.begin() as conn:
-        for table in _TENANT_TABLES:
-            conn.execute(text(f'ALTER TABLE "{table}" ENABLE ROW LEVEL SECURITY'))
-            conn.execute(text(f'DROP POLICY IF EXISTS tenant_isolation ON "{table}"'))
-            conn.execute(
-                text(
-                    f"""
-                    CREATE POLICY tenant_isolation ON "{table}"
-                    USING (
-                        tenant_id = current_setting('app.current_tenant', true)
-                        OR current_setting('app.current_tenant', true) IS NULL
-                        OR current_setting('app.current_tenant', true) = ''
+    from sqlalchemy import inspect
+
+    existing = set(inspect(engine).get_table_names())
+    applied = 0
+    for table in _TENANT_TABLES:
+        if table not in existing:
+            continue
+        try:
+            with engine.begin() as conn:
+                conn.execute(text(f'ALTER TABLE "{table}" ENABLE ROW LEVEL SECURITY'))
+                conn.execute(text(f'DROP POLICY IF EXISTS tenant_isolation ON "{table}"'))
+                conn.execute(
+                    text(
+                        f"""
+                        CREATE POLICY tenant_isolation ON "{table}"
+                        USING (
+                            tenant_id = current_setting('app.current_tenant', true)
+                            OR current_setting('app.current_tenant', true) IS NULL
+                            OR current_setting('app.current_tenant', true) = ''
+                        )
+                        """
                     )
-                    """
                 )
-            )
-    logger.info("Applied Postgres RLS policies on %d tenant tables", len(_TENANT_TABLES))
+            applied += 1
+        except Exception as exc:
+            logger.warning("RLS skipped for %s: %s", table, exc)
+    logger.info("Applied Postgres RLS policies on %d tenant tables", applied)
 
 
 def set_session_tenant(conn, tenant_id: str) -> None:
