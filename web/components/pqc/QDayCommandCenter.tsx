@@ -139,6 +139,26 @@ export default function QDayCommandCenter({
       }
       setReportStatus("checking");
       try {
+        if (scanResponse.reportAvailable) {
+          setReportAvailability({
+            status: "success",
+            scanId: scanResponse.scanId,
+            reportAvailable: true,
+            availableFormats: scanResponse.availableFormats ?? [
+              "json",
+              "csv",
+              "cbom",
+              "pdf",
+              "bundle",
+              "executive",
+              "board",
+              "auditor",
+            ],
+            missingReason: null,
+          });
+          setReportStatus("ready");
+          return;
+        }
         const availability = await getReportAvailability(scanResponse.scanId);
         if (cancelled) return;
         setReportAvailability(availability);
@@ -191,9 +211,47 @@ export default function QDayCommandCenter({
           }
         });
         setScanResponse(completed);
+        if (completed.reportAvailable) {
+          setReportAvailability({
+            status: "success",
+            scanId: completed.scanId,
+            reportAvailable: true,
+            availableFormats: completed.availableFormats ?? [
+              "json",
+              "csv",
+              "cbom",
+              "pdf",
+              "bundle",
+              "executive",
+              "board",
+              "auditor",
+            ],
+            missingReason: null,
+          });
+          setReportStatus("ready");
+        }
       } else {
         completed = result;
         setScanResponse(result);
+      }
+      if (completed.reportAvailable) {
+        setReportAvailability({
+          status: "success",
+          scanId: completed.scanId,
+          reportAvailable: true,
+          availableFormats: completed.availableFormats ?? [
+            "json",
+            "csv",
+            "cbom",
+            "pdf",
+            "bundle",
+            "executive",
+            "board",
+            "auditor",
+          ],
+          missingReason: null,
+        });
+        setReportStatus("ready");
       }
       trackEvent("pqc_scan_completed", { scenarioId: activeScenarioId });
       trackEvent("pqc_handshake_proved", { mode: completed.handshakeProof.mode });

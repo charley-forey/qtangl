@@ -63,26 +63,16 @@ def create_job(*, tenant_id: str = "sandbox", payload: dict[str, Any] | None = N
     )
     payload_json = json.dumps(payload) if payload else None
     if persistence_enabled():
-        try:
-            with db_session() as session:
-                session.add(
-                    ScanJobRow(
-                        id=scan_id,
-                        tenant_id=tenant_id,
-                        status="running",
-                        timeline_json="[]",
-                        payload_json=payload_json,
-                    )
+        with db_session() as session:
+            session.add(
+                ScanJobRow(
+                    id=scan_id,
+                    tenant_id=tenant_id,
+                    status="running",
+                    timeline_json="[]",
+                    payload_json=payload_json,
                 )
-        except Exception as exc:
-            logger.warning(
-                "create_job db failed scan_id=%s tenant_id=%s — using in-memory store: %s",
-                scan_id,
-                tenant_id,
-                exc,
             )
-            with _job_lock:
-                _memory_jobs[scan_id] = job
     else:
         with _job_lock:
             _memory_jobs[scan_id] = job
@@ -151,29 +141,8 @@ def update_job_timeline(scan_id: str, timeline: list[TimelineEvent], *, tenant_i
 
 
 def complete_job(scan_id: str, bundle: ScanBundle, *, tenant_id: str = "sandbox") -> None:
-    bundle = _prepare_bundle_for_storage(scan_id, bundle, tenant_id=tenant_id)
-    if persistence_enabled():
-        payload = json.dumps(serialize_bundle(bundle))
-        with db_session() as session:
-            row = session.get(ScanJobRow, scan_id)
-            if row is None or row.tenant_id != tenant_id:
-                return
-            row.status = "done"
-            row.timeline_json = json.dumps([asdict(event) for event in bundle.timeline])
-            _apply_scan_metadata(row, bundle, payload)
-            row.updated_at = datetime.now(timezone.utc)
-        return
-    with _job_lock:
-        job = _memory_jobs.get(scan_id)
-        if not job or job.tenant_id != tenant_id:
-            return
-        _memory_jobs[scan_id] = replace(
-            job,
-            status="done",
-            bundle=bundle,
-            timeline=list(bundle.timeline),
-            updated_at=time.time(),
-        )
+    """Persist a finished scan (inserts scan_jobs row when missing — e.g. worker after API create_job)."""
+    save_scan_bundle(scan_id, bundle, tenant_id=tenant_id)
 
 
 def fail_job(

@@ -21,7 +21,14 @@ from app.pqc.data import (
     parse_uploaded_bundle_csv,
     parse_uploaded_bundle_pem,
 )
-from app.pqc.jobs import create_job, get_job, load_scan_bundle, run_job_async, save_scan_bundle
+from app.pqc.jobs import (
+    create_job,
+    get_job,
+    load_scan_bundle,
+    load_scan_bundle_for_public_verify,
+    run_job_async,
+    save_scan_bundle,
+)
 from app.pqc.pipeline import run_pqc_scan
 from app.pqc.report import (
     report_to_auditor,
@@ -397,6 +404,8 @@ def download_report(
     bundle = job.bundle if job and job.bundle else None
     if bundle is None:
         payload = load_scan_bundle(scan_id, tenant_id=auth.tenant_id)
+        if payload is None and auth.tenant_id == "sandbox":
+            payload = load_scan_bundle_for_public_verify(scan_id)
         if payload:
             from app.pqc.bundle_codec import bundle_from_api_dict
 
@@ -463,6 +472,11 @@ def report_availability(
         payload = load_scan_bundle(scan_id, tenant_id=auth.tenant_id)
         if payload:
             return {"status": "success", "scanId": scan_id, **_report_meta(report_available=True)}
+        # Sandbox demo: allow lookup without tenant filter when row exists under another key path
+        if auth.tenant_id == "sandbox":
+            payload = load_scan_bundle_for_public_verify(scan_id)
+            if payload:
+                return {"status": "success", "scanId": scan_id, **_report_meta(report_available=True)}
         return {
             "status": "success",
             "scanId": scan_id,
