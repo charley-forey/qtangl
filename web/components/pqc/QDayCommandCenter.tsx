@@ -63,15 +63,12 @@ export default function QDayCommandCenter({
   const [scenarios, setScenarios] = useState(initialScenarios);
   const [backendConnected, setBackendConnected] = useState(initialBackendConnected);
   const [backendMessage, setBackendMessage] = useState(initialBackendMessage);
-  const [activeScenarioId, setActiveScenarioId] = useState(
-    searchParams.get("case") ?? scenarios[0]?.id ?? FALLBACK_SCENARIOS[0].id
-  );
-  const [useFixture, setUseFixture] = useState(searchParams.get("useFixture") !== "false");
+  const defaultScenarioId = scenarios[0]?.id ?? FALLBACK_SCENARIOS[0].id;
+  const [activeScenarioId, setActiveScenarioId] = useState(defaultScenarioId);
+  const [useFixture, setUseFixture] = useState(true);
   const [authorized, setAuthorized] = useState(false);
   const [customDomain, setCustomDomain] = useState("");
-  const [bundleSessionId, setBundleSessionId] = useState<string | null>(
-    searchParams.get("session") ?? null
-  );
+  const [bundleSessionId, setBundleSessionId] = useState<string | null>(null);
   const [scanResponse, setScanResponse] = useState<PqcScanResponse | null>(null);
   const [isScanning, setIsScanning] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -92,6 +89,16 @@ export default function QDayCommandCenter({
   useEffect(() => {
     trackEvent("demo_viewed", { demo: "pqc" });
   }, []);
+
+  useEffect(() => {
+    const caseParam = searchParams.get("case");
+    if (caseParam) {
+      setActiveScenarioId(caseParam);
+    }
+    setUseFixture(searchParams.get("useFixture") !== "false");
+    const session = searchParams.get("session");
+    setBundleSessionId(session);
+  }, [searchParams]);
 
   useEffect(() => {
     if (bootstrapAttempted.current) {

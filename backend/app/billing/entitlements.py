@@ -1,8 +1,11 @@
 from __future__ import annotations
 
+import logging
 from typing import Any
 
 from app.db.config import persistence_enabled
+
+logger = logging.getLogger(__name__)
 from app.db.engine import db_session
 from app.db.models import TenantSubscription as SubscriptionRow
 
@@ -72,30 +75,37 @@ def scans_created_this_month(*, tenant_id: str) -> int:
     month_start = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
     from app.db.models import ScanJob as ScanJobRow
 
-    with db_session() as session:
-        return (
-            session.query(ScanJobRow)
-            .filter(
-                ScanJobRow.tenant_id == tenant_id,
-                ScanJobRow.created_at >= month_start,
+    try:
+        with db_session() as session:
+            return (
+                session.query(ScanJobRow)
+                .filter(
+                    ScanJobRow.tenant_id == tenant_id,
+                    ScanJobRow.created_at >= month_start,
+                )
+                .count()
             )
-            .count()
-        )
+    except Exception as exc:
+        logger.warning("scan quota query failed tenant_id=%s: %s", tenant_id, exc)
+        return 0
 
 
 def tenant_entitlements(*, tenant_id: str) -> dict[str, Any]:
     tier = "monitor"
     status = "active"
     if persistence_enabled():
-        with db_session() as session:
-            row = (
-                session.query(SubscriptionRow)
-                .filter(SubscriptionRow.tenant_id == tenant_id)
-                .one_or_none()
-            )
-            if row:
-                tier = row.tier
-                status = row.status
+        try:
+            with db_session() as session:
+                row = (
+                    session.query(SubscriptionRow)
+                    .filter(SubscriptionRow.tenant_id == tenant_id)
+                    .one_or_none()
+                )
+                if row:
+                    tier = row.tier
+                    status = row.status
+        except Exception as exc:
+            logger.warning("tenant entitlements query failed tenant_id=%s: %s", tenant_id, exc)
     defaults = TIER_DEFAULTS.get(tier, TIER_DEFAULTS["monitor"])
     return {"tier": tier, "status": status, **defaults}
 

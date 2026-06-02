@@ -40,7 +40,14 @@ export async function fetchQtanglJson<T>(
 
   if (!response.ok) {
     const detail = await response.text();
-    throw new Error(detail || `Qtangl request failed with ${response.status}`);
+    let message = detail || `Qtangl request failed with ${response.status}`;
+    try {
+      const parsed = JSON.parse(detail) as { detail?: string; message?: string };
+      message = parsed.detail ?? parsed.message ?? message;
+    } catch {
+      // keep raw body
+    }
+    throw new Error(message);
   }
 
   return (await response.json()) as T;

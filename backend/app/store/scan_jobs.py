@@ -8,8 +8,12 @@ from datetime import datetime, timezone
 from threading import Lock
 from typing import Any, Callable
 
+import logging
+
 from app.db.config import persistence_enabled, use_worker_queue
 from app.db.engine import db_session
+
+logger = logging.getLogger(__name__)
 from app.db.models import ScanJob as ScanJobRow
 from app.pqc.models import ScanBundle, ScanJob, TimelineEvent
 from app.pqc.serialize import serialize_bundle
@@ -197,29 +201,37 @@ def save_scan_bundle(scan_id: str, bundle: ScanBundle, *, tenant_id: str = "sand
     bundle = _prepare_bundle_for_storage(scan_id, bundle, tenant_id=tenant_id)
     if persistence_enabled():
         payload = json.dumps(serialize_bundle(bundle))
-        with db_session() as session:
-            row = session.get(ScanJobRow, scan_id)
-            if row is None:
-                session.add(
-                    ScanJobRow(
-                        id=scan_id,
-                        tenant_id=tenant_id,
-                        status="done",
-                        timeline_json=json.dumps([asdict(event) for event in bundle.timeline]),
-                        readiness_score=bundle.report.readiness_score,
-                        target_domain=bundle.report.target_domain,
-                        scenario_id=bundle.report.scenario_id,
-                        bundle_json=payload,
+        try:
+            with db_session() as session:
+                row = session.get(ScanJobRow, scan_id)
+                if row is None:
+                    session.add(
+                        ScanJobRow(
+                            id=scan_id,
+                            tenant_id=tenant_id,
+                            status="done",
+                            timeline_json=json.dumps([asdict(event) for event in bundle.timeline]),
+                            readiness_score=bundle.report.readiness_score,
+                            target_domain=bundle.report.target_domain,
+                            scenario_id=bundle.report.scenario_id,
+                            bundle_json=payload,
+                        )
                     )
-                )
-            else:
-                if row.tenant_id != tenant_id:
-                    return
-                row.status = "done"
-                _apply_scan_metadata(row, bundle, payload)
-                row.timeline_json = json.dumps([asdict(event) for event in bundle.timeline])
-                row.updated_at = datetime.now(timezone.utc)
-        return
+                else:
+                    if row.tenant_id != tenant_id:
+                        return
+                    row.status = "done"
+                    _apply_scan_metadata(row, bundle, payload)
+                    row.timeline_json = json.dumps([asdict(event) for event in bundle.timeline])
+                    row.updated_at = datetime.now(timezone.utc)
+            return
+        except Exception as exc:
+            logger.warning(
+                "save_scan_bundle db failed scan_id=%s tenant_id=%s — using in-memory store: %s",
+                scan_id,
+                tenant_id,
+                exc,
+            )
     with _job_lock:
         _memory_jobs[scan_id] = ScanJob(
             scan_id=scan_id,

@@ -20,6 +20,20 @@ logger = logging.getLogger(__name__)
 
 def enrich_completed_scan(scan_id: str, bundle: ScanBundle, *, tenant_id: str) -> ScanBundle:
     """Attach scan diff, re-sign report, and dispatch alerts/webhooks."""
+    try:
+        return _enrich_completed_scan(scan_id, bundle, tenant_id=tenant_id)
+    except Exception:
+        logger.exception(
+            "post_scan_enrichment_failed scan_id=%s tenant_id=%s — returning unsigned bundle",
+            scan_id,
+            tenant_id,
+        )
+        json_payload = report_to_json(bundle.report)
+        bundle.report.signature = sign_report_payload(json_payload)
+        return bundle
+
+
+def _enrich_completed_scan(scan_id: str, bundle: ScanBundle, *, tenant_id: str) -> ScanBundle:
     target = bundle.report.target_domain
     scenario_id = bundle.scenario.id
     previous_id = find_previous_scan(

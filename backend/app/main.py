@@ -57,6 +57,24 @@ def cors_origins() -> list[str]:
     return [origin.strip() for origin in raw.split(",") if origin.strip()]
 
 
+def cors_headers_for_request(request: Request) -> dict[str, str]:
+    """Attach CORS on error responses (custom handlers bypass middleware in some stacks)."""
+    import re
+
+    origin = request.headers.get("origin")
+    if not origin:
+        return {}
+    allowed = set(cors_origins())
+    regex = os.getenv("QTANGL_CORS_ORIGIN_REGEX", r"https://.*\.vercel\.app")
+    if origin not in allowed and not (regex and re.fullmatch(regex, origin)):
+        return {}
+    return {
+        "Access-Control-Allow-Origin": origin,
+        "Access-Control-Allow-Credentials": "true",
+        "Vary": "Origin",
+    }
+
+
 app = FastAPI(
     title="Qtangl PQC Readiness API",
     version="0.1.0",
@@ -214,4 +232,8 @@ async def unhandled_exception_handler(request: Request, exc: Exception) -> JSONR
     }
     if os.getenv("QTANGL_DEBUG", "").lower() in {"1", "true", "yes"}:
         content["detail"] = str(exc)
-    return JSONResponse(status_code=500, content=content)
+    return JSONResponse(
+        status_code=500,
+        content=content,
+        headers=cors_headers_for_request(request),
+    )
