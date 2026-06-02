@@ -27,6 +27,7 @@ import MoscaTimeline from "./MoscaTimeline";
 import ReadinessGauge from "./ReadinessGauge";
 import RemediationBacklog from "./RemediationBacklog";
 import ReportDrawer from "./ReportDrawer";
+import ReportFormatLinks, { shortScanId } from "./ReportFormatLinks";
 import RiskQuadrant from "./RiskQuadrant";
 import RiskScoreboardCard from "./RiskScoreboardCard";
 import RoiCalculator from "./RoiCalculator";
@@ -306,69 +307,78 @@ export default function QDayCommandCenter({
 
       {scanResponse && (
         <div ref={resultsRef} className="pqc-print-area space-y-6">
-          <div className="flex flex-wrap items-center gap-3 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface-strong)] p-4">
-            <div className="min-w-0 flex-1">
-              <p className="text-sm font-medium text-white">Executive report pack</p>
-              <p className="text-xs text-[var(--color-gray-400)]">
-                {scanResponse.readinessBand ?? scanResponse.scoreboard.qtangl.readiness_band ?? "Q-Day readiness"}{" "}
-                · scan {scanResponse.scanId}
-              </p>
-            </div>
-            <a
-              href={reportStatus === "ready" ? pqcReportDownloadUrl(scanResponse.scanId, "pdf") : "#"}
-              target="_blank"
-              rel="noreferrer"
-              onClick={(event) => {
-                if (reportStatus !== "ready") {
-                  event.preventDefault();
-                  setError(
-                    `Report unavailable${reportAvailability?.missingReason ? ` (${reportAvailability.missingReason})` : ""}.`
-                  );
-                  return;
-                }
-                trackEvent("pqc_report_downloaded", { format: "pdf", scanId: scanResponse.scanId });
-              }}
-              className="inline-flex h-10 items-center justify-center rounded-full bg-white px-5 text-sm font-medium text-black hover:bg-neutral-100"
-            >
-              Download PDF report
-            </a>
-            {(["cbom", "json", "csv", "bundle", "executive", "board", "auditor"] as const).map((format) => (
+          <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-surface-strong)] p-4 sm:p-5">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+              <div className="min-w-0 flex-1">
+                <div className="flex flex-wrap items-center gap-2">
+                  <p className="text-sm font-medium text-white">Executive report pack</p>
+                  <span
+                    className={`rounded-full px-2 py-0.5 text-[10px] font-medium uppercase tracking-wide ${
+                      reportStatus === "ready"
+                        ? "bg-emerald-500/15 text-emerald-200"
+                        : reportStatus === "checking"
+                          ? "bg-white/10 text-[var(--color-gray-400)]"
+                          : "bg-amber-500/15 text-amber-200"
+                    }`}
+                  >
+                    {reportStatus === "checking"
+                      ? "Checking"
+                      : reportStatus === "ready"
+                        ? "Ready"
+                        : "Unavailable"}
+                  </span>
+                </div>
+                <p className="mt-1 text-xs text-[var(--color-gray-400)]">
+                  {scanResponse.readinessBand ??
+                    scanResponse.scoreboard.qtangl.readiness_band ??
+                    "Q-Day readiness"}
+                </p>
+                <p
+                  className="mt-1 font-mono text-[10px] text-[var(--color-gray-500)]"
+                  title={scanResponse.scanId}
+                >
+                  {shortScanId(scanResponse.scanId)}
+                </p>
+              </div>
               <a
-                key={format}
-                href={reportStatus === "ready" ? pqcReportDownloadUrl(scanResponse.scanId, format) : "#"}
+                href={reportStatus === "ready" ? pqcReportDownloadUrl(scanResponse.scanId, "pdf") : "#"}
                 target="_blank"
                 rel="noreferrer"
                 onClick={(event) => {
                   if (reportStatus !== "ready") {
                     event.preventDefault();
                     setError(
-                      `Format unavailable${reportAvailability?.missingReason ? ` (${reportAvailability.missingReason})` : ""}.`
+                      `Report unavailable${reportAvailability?.missingReason ? ` (${reportAvailability.missingReason})` : ""}.`
                     );
                     return;
                   }
-                  trackEvent("pqc_report_downloaded", { format, scanId: scanResponse.scanId });
+                  trackEvent("pqc_report_downloaded", { format: "pdf", scanId: scanResponse.scanId });
                 }}
-                className="text-xs uppercase tracking-wide text-[var(--color-gray-300)] underline underline-offset-4 hover:text-white"
+                className="inline-flex h-10 shrink-0 items-center justify-center rounded-full bg-white px-5 text-sm font-medium text-black transition hover:bg-neutral-100 sm:mt-0"
               >
-                {format}
+                Download PDF
               </a>
-            ))}
-            <a
-              href={`/verify?scanId=${encodeURIComponent(scanResponse.scanId)}`}
-              className="text-xs uppercase tracking-wide text-[var(--color-gray-300)] underline underline-offset-4 hover:text-white"
-            >
-              verify
-            </a>
-            <Button variant="secondary" onClick={() => setReportOpen(true)}>
-              All formats
-            </Button>
-            <span className="text-[10px] text-[var(--color-gray-500)]">
-              {reportStatus === "checking"
-                ? "report: checking"
-                : reportStatus === "ready"
-                  ? "report: ready"
-                  : `report: unavailable${reportAvailability?.missingReason ? ` (${reportAvailability.missingReason})` : ""}`}
-            </span>
+            </div>
+            <div className="mt-4 border-t border-[var(--color-border)] pt-4">
+              <div className="flex flex-wrap items-center gap-2">
+                <ReportFormatLinks
+                  scanId={scanResponse.scanId}
+                  reportStatus={reportStatus}
+                  formats={["cbom", "json", "csv", "bundle", "executive", "board", "auditor"]}
+                  variant="inline"
+                  onUnavailable={(message) => setError(message)}
+                />
+                <a
+                  href={`/verify?scanId=${encodeURIComponent(scanResponse.scanId)}`}
+                  className="inline-flex items-center rounded-full border border-[var(--color-border)] bg-black/20 px-2.5 py-1 text-[10px] font-medium uppercase tracking-wide text-[var(--color-gray-300)] transition hover:border-white/20 hover:text-white"
+                >
+                  Verify
+                </a>
+                <Button variant="secondary" size="sm" onClick={() => setReportOpen(true)}>
+                  All formats
+                </Button>
+              </div>
+            </div>
           </div>
           <PqcSection title="Data quality">
             <p className="text-xs text-[var(--color-gray-400)]">
