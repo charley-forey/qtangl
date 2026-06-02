@@ -124,7 +124,7 @@ export default function TrustPage() {
         actions={[
           { label: "Security architecture", href: "/trust/security" },
           { label: "Sub-processors", href: "/trust/subprocessors" },
-          { href: "https://status.qtangl.com", label: "System status" },
+          { href: "/status", label: "System status" },
           { href: "/verify", label: "Verify a report" },
           { href: "/docs/operations/security", label: "Security docs", variant: "secondary" },
         ]}

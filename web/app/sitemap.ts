@@ -32,6 +32,7 @@ const readinessRoutes = [
   "/solutions/healthcare",
   "/demo/pqc/methodology",
   "/trust",
+  "/status",
   "/verify",
   "/dashboard",
   "/labs",

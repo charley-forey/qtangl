@@ -17,7 +17,7 @@ export const footerNav = [
   { name: "Q-Day hub", href: "/q-day" },
   { name: "Solutions", href: "/solutions" },
   { name: "Partners", href: "/partners" },
-  { name: "Status", href: "https://status.qtangl.com" },
+  { name: "Status", href: "/status" },
   { name: "Verify", href: "/verify" },
   { name: "Learn", href: "/learn" },
   { name: "Blog", href: "/blog" },
