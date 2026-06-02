@@ -14,6 +14,7 @@ export type PqcReportFormat =
   | "auditor";
 
 const FORMAT_LABELS: Record<PqcReportFormat, string> = {
+  pdf: "PDF",
   cbom: "CBOM",
   json: "JSON",
   csv: "CSV",
