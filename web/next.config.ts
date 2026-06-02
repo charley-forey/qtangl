@@ -29,7 +29,7 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       {
-        source: "/assess",
+        source: "/demo/pqc",
         destination: "/assess",
         permanent: true,
       },
