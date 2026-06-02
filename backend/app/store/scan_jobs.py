@@ -51,25 +51,21 @@ def _clear_orphan_storage_key(row: ScanJobRow) -> bool:
     return True
 
 
-def _get_scan_row(scan_id: str) -> ScanJobRow | None:
-    if not persistence_enabled():
-        return None
-    with scan_db_session() as session:
-        return session.get(ScanJobRow, scan_id)
-
-
 def scan_storage_diagnosis(scan_id: str, *, tenant_id: str = "sandbox") -> str | None:
     """Return a missing_reason code when the bundle cannot be loaded."""
     if load_scan_bundle(scan_id, tenant_id=tenant_id) is not None:
         return None
     if not persistence_enabled():
         return "scan_not_found"
-    row = _get_scan_row(scan_id)
-    if row is None:
-        return "scan_not_found"
-    if row.tenant_id != tenant_id:
-        return "wrong_tenant"
-    return "bundle_not_persisted"
+    with scan_db_session() as session:
+        row = session.get(ScanJobRow, scan_id)
+        if row is None:
+            return "scan_not_found"
+        if row.tenant_id != tenant_id:
+            return "wrong_tenant"
+        if not _bundle_json_from_row(row):
+            return "bundle_not_persisted"
+    return None
 
 
 def bundle_stored(scan_id: str, *, tenant_id: str = "sandbox") -> bool:
@@ -128,10 +124,11 @@ def create_job(*, tenant_id: str = "sandbox", payload: dict[str, Any] | None = N
 
 def get_job(scan_id: str, *, tenant_id: str = "sandbox") -> ScanJob | None:
     if persistence_enabled():
-        row = _get_scan_row(scan_id)
-        if row is None or row.tenant_id != tenant_id:
-            return None
-        return _row_to_job(row)
+        with scan_db_session() as session:
+            row = session.get(ScanJobRow, scan_id)
+            if row is None or row.tenant_id != tenant_id:
+                return None
+            return _row_to_job(row)
     with _job_lock:
         job = _memory_jobs.get(scan_id)
         if job is None or job.tenant_id != tenant_id:
@@ -325,11 +322,12 @@ def find_previous_scan(
 def load_scan_bundle_for_public_verify(scan_id: str) -> dict[str, Any] | None:
     """Load a scan bundle by ID for public signature verification (no tenant filter)."""
     if persistence_enabled():
-        row = _get_scan_row(scan_id)
-        if row is None:
-            return None
-        raw = _bundle_json_from_row(row)
-        return json.loads(raw) if raw else None
+        with scan_db_session() as session:
+            row = session.get(ScanJobRow, scan_id)
+            if row is None:
+                return None
+            raw = _bundle_json_from_row(row)
+            return json.loads(raw) if raw else None
     with _job_lock:
         job = _memory_jobs.get(scan_id)
         if job is None or not job.bundle:
@@ -339,13 +337,14 @@ def load_scan_bundle_for_public_verify(scan_id: str) -> dict[str, Any] | None:
 
 def load_scan_bundle(scan_id: str, *, tenant_id: str = "sandbox") -> dict[str, Any] | None:
     if persistence_enabled():
-        row = _get_scan_row(scan_id)
-        if row is None or row.tenant_id != tenant_id:
-            return None
-        raw = _bundle_json_from_row(row)
-        if not raw:
-            return None
-        return json.loads(raw)
+        with scan_db_session() as session:
+            row = session.get(ScanJobRow, scan_id)
+            if row is None or row.tenant_id != tenant_id:
+                return None
+            raw = _bundle_json_from_row(row)
+            if not raw:
+                return None
+            return json.loads(raw)
     with _job_lock:
         job = _memory_jobs.get(scan_id)
         if job is None or job.tenant_id != tenant_id:
