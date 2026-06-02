@@ -392,16 +392,16 @@ def _get_scan_status_payload(scan_id: str, *, tenant_id: str) -> dict:
                 "status": "success",
                 **payload,
                 "scanOutcome": _scan_outcome(payload),
-                **_report_meta_for_scan(scan_id, tenant_id=auth.tenant_id),
+                **_report_meta_for_scan(scan_id, tenant_id=tenant_id),
             }
 
-    cached = load_scan_bundle(scan_id, tenant_id=auth.tenant_id)
+    cached = load_scan_bundle(scan_id, tenant_id=tenant_id)
     if cached:
         return {
             "status": "success",
             **cached,
             "scanOutcome": _scan_outcome(cached),
-            **_report_meta_for_scan(scan_id, tenant_id=auth.tenant_id),
+            **_report_meta_for_scan(scan_id, tenant_id=tenant_id),
         }
 
     raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Scan not found.")
