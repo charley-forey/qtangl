@@ -24,6 +24,12 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       {
+        source: "/:path*",
+        has: [{ type: "host", value: "status.qtangl.com" }],
+        destination: "https://www.qtangl.com/status",
+        permanent: true,
+      },
+      {
         source: "/pqc",
         destination: "/platform",
         permanent: true,

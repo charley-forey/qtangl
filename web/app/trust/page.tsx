@@ -9,6 +9,7 @@ import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
 import Eyebrow from "@/components/ui/Eyebrow";
 import { valueProofItems } from "@/lib/copy/readiness-value";
+import { statusPageHref } from "@/lib/siteConfig";
 import { buildPageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildPageMetadata({
@@ -124,7 +125,7 @@ export default function TrustPage() {
         actions={[
           { label: "Security architecture", href: "/trust/security" },
           { label: "Sub-processors", href: "/trust/subprocessors" },
-          { href: "/status", label: "System status" },
+          { href: statusPageHref, label: "System status" },
           { href: "/verify", label: "Verify a report" },
           { href: "/docs/operations/security", label: "Security docs", variant: "secondary" },
         ]}

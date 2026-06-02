@@ -1,3 +1,5 @@
+import { statusPageHref } from "@/lib/siteConfig";
+
 export const nav = [
   { name: "Platform", href: "/platform" },
   { name: "Assess", href: "/assess" },
@@ -17,7 +19,7 @@ export const footerNav = [
   { name: "Q-Day hub", href: "/q-day" },
   { name: "Solutions", href: "/solutions" },
   { name: "Partners", href: "/partners" },
-  { name: "Status", href: "/status" },
+  { name: "Status", href: statusPageHref },
   { name: "Verify", href: "/verify" },
   { name: "Learn", href: "/learn" },
   { name: "Blog", href: "/blog" },
