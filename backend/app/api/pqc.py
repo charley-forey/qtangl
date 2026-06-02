@@ -354,7 +354,20 @@ def get_scan_status(
     scan_id: str,
     auth: AuthContext = Depends(require_auth_readonly),
 ) -> dict:
-    job = get_job(scan_id, tenant_id=auth.tenant_id)
+    try:
+        return _get_scan_status_payload(scan_id, tenant_id=auth.tenant_id)
+    except HTTPException:
+        raise
+    except Exception as exc:
+        logger.exception("get_scan_status failed scan_id=%s tenant_id=%s", scan_id, auth.tenant_id)
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to load scan status: {exc}",
+        ) from exc
+
+
+def _get_scan_status_payload(scan_id: str, *, tenant_id: str) -> dict:
+    job = get_job(scan_id, tenant_id=tenant_id)
     if job:
         if job.status == "running":
             return {

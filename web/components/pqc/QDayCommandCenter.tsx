@@ -78,6 +78,7 @@ export default function QDayCommandCenter({
   const [useLiteScan, setUseLiteScan] = useState(false);
   const [reportAvailability, setReportAvailability] = useState<ReportAvailabilityResponse | null>(null);
   const [reportStatus, setReportStatus] = useState<"ready" | "checking" | "unavailable">("checking");
+  const [urlSynced, setUrlSynced] = useState(false);
   const resultsRef = useRef<HTMLDivElement>(null);
 
   const activeScenario = useMemo(
@@ -99,6 +100,7 @@ export default function QDayCommandCenter({
     setUseFixture(searchParams.get("useFixture") !== "false");
     const session = searchParams.get("session");
     setBundleSessionId(session);
+    setUrlSynced(true);
   }, [searchParams]);
 
   useEffect(() => {
@@ -252,7 +254,7 @@ export default function QDayCommandCenter({
         <label className="flex items-center gap-2 text-xs text-[var(--color-gray-400)]">
           <input
             type="checkbox"
-            checked={useFixture}
+            checked={urlSynced ? useFixture : true}
             onChange={(e) => {
               const fixture = e.target.checked;
               setUseFixture(fixture);
@@ -263,7 +265,7 @@ export default function QDayCommandCenter({
           />
           Fixture mode (recommended — no outbound network)
         </label>
-        {!useFixture && (
+        {urlSynced && !useFixture && (
           <span className="rounded-full border border-amber-500/40 bg-amber-500/10 px-2 py-0.5 text-[10px] uppercase tracking-wide text-amber-100">
             Live scan enabled
           </span>

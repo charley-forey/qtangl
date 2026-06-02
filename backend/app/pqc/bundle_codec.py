@@ -25,10 +25,11 @@ def bundle_from_api_dict(payload: dict[str, Any]) -> ScanBundle:
         summary=str(mosca_payload.get("summary", "")),
     )
     handshake_raw = payload.get("handshakeProof", {})
+    port_raw = handshake_raw.get("port")
     handshake = HandshakeProof(
         mode=handshake_raw.get("mode", "fixture"),
         server=handshake_raw.get("server", ""),
-        port=int(handshake_raw.get("port", 443)),
+        port=int(port_raw) if port_raw is not None else 443,
         tls_version=handshake_raw.get("tlsVersion", ""),
         hybrid_group=handshake_raw.get("hybridGroup", ""),
         kem_algorithm=handshake_raw.get("kemAlgorithm", ""),

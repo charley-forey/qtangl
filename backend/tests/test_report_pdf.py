@@ -27,6 +27,14 @@ class PqcReportPdfTest(unittest.TestCase):
         pdf_bytes = report_to_pdf(bundle.report)
         self.assertTrue(pdf_bytes.startswith(b"%PDF"))
 
+    def test_bundle_codec_handles_null_handshake_port(self) -> None:
+        dataset = load_dataset()
+        bundle = run_pqc_scan(dataset, scenario_id="bank-tls-inventory", use_fixture=True)
+        serialized = serialize_bundle(bundle)
+        serialized["handshakeProof"]["port"] = None
+        reconstructed = bundle_from_api_dict(serialized)
+        self.assertEqual(reconstructed.handshake_proof.port, 443)
+
     def test_serialize_reconstruct_pdf_round_trip(self) -> None:
         """Regression: Postgres bundle reload must not crash PDF (ScoreboardColumn.summary)."""
         dataset = load_dataset()

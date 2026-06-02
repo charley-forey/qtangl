@@ -433,23 +433,39 @@ def _prepare_bundle_for_storage(scan_id: str, bundle: ScanBundle, tenant_id: str
     return enrich_completed_scan(scan_id, bundle, tenant_id=tenant_id)
 
 
+def _timeline_from_json(timeline_raw: list[Any]) -> list[TimelineEvent]:
+    timeline: list[TimelineEvent] = []
+    for item in timeline_raw:
+        if not isinstance(item, dict):
+            continue
+        status = item.get("status", "done")
+        if status not in ("done", "replayed", "skipped", "running", "error"):
+            status = "done"
+        timeline.append(
+            TimelineEvent(
+                key=str(item.get("key", "")),
+                label=str(item.get("label", "")),
+                duration_ms=int(item.get("duration_ms", item.get("durationMs", 0)) or 0),
+                status=status,  # type: ignore[arg-type]
+            )
+        )
+    return timeline
+
+
 def _row_to_job(row: ScanJobRow) -> ScanJob:
     timeline_raw = json.loads(row.timeline_json or "[]")
-    timeline = [
-        TimelineEvent(
-            key=item["key"],
-            label=item["label"],
-            duration_ms=item["duration_ms"],
-            status=item["status"],
-        )
-        for item in timeline_raw
-    ]
+    if not isinstance(timeline_raw, list):
+        timeline_raw = []
+    timeline = _timeline_from_json(timeline_raw)
     bundle = None
     raw = _bundle_json_from_row(row)
     if raw:
         from app.pqc.bundle_codec import bundle_from_api_dict
 
-        bundle = bundle_from_api_dict(json.loads(raw))
+        try:
+            bundle = bundle_from_api_dict(json.loads(raw))
+        except Exception as exc:
+            logger.warning("bundle_from_api_dict failed scan_id=%s: %s", row.id, exc)
     return ScanJob(
         scan_id=row.id,
         status=row.status,  # type: ignore[arg-type]
