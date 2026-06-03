@@ -84,4 +84,21 @@ export const pricingPageCopy = {
     "Optimize Pilot ($50K–$200K) and API Developer tiers ($500–$5K/mo) available as separate expansion motions.",
   roiLink: { label: "Estimate ROI with our calculator →", href: "/resources/roi" },
   optimizeLink: { label: "Explore optimization pricing →", href: "/platform/optimize" },
+  faqs: [
+    {
+      question: "Is Qtangl a formal audit or attestation?",
+      answer:
+        "No. Qtangl provides cryptographic inventory, drift monitoring, and signed evidence exports — an inventory aid your auditors can verify, not a compliance attestation.",
+    },
+    {
+      question: "Which tier should we start with?",
+      answer:
+        "Most teams start with Q-Day Assessment (Assess) for a baseline inventory and signed report, then add Monitor for scheduled re-scans and drift alerts.",
+    },
+    {
+      question: "Do you support CMMC, HIPAA, and banking scenarios?",
+      answer:
+        "Yes. Assessments map findings to NSM-10, CNSA 2.0, NIST IR 8547, CMMC, PCI-DSS 4.0, and sector playbooks at /solutions/*.",
+    },
+  ],
 } as const;

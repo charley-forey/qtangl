@@ -1,0 +1,188 @@
+import type {
+  ReadinessBlogRegistryEntry,
+  ReadinessFrameworkRegistryEntry,
+} from "@/lib/readiness-content-types";
+
+export const readinessBlogRegistry: readonly ReadinessBlogRegistryEntry[] = [
+  {
+    slug: "video-companion-q-day-explained",
+    kind: "video-companion",
+    markdownFile: "blog/video-companion-q-day-explained.md",
+    title: "After Q-Day Explained: what mid-market CISOs should do this quarter",
+    description: "Original takeaways from a popular Q-Day video — CRQC timelines, HNDL exposure, and inventory steps.",
+    category: "Q-Day readiness",
+    coverImage: "/qtangl-pqc-hndl-cover.svg",
+    coverAlt: "Q-Day timeline illustrating post-quantum cryptography risk.",
+    excerpt: "Original takeaways from a popular Q-Day explainer — plus what to do this quarter.",
+    readiness: true,
+  },
+  {
+    slug: "video-companion-hndl-jeremy-allison",
+    kind: "video-companion",
+    markdownFile: "blog/video-companion-hndl-jeremy-allison.md",
+    title: "After Jeremy Allison on HNDL: what your security team should do now",
+    description: "Practitioner insights on harvest-now-decrypt-later and how to quantify exposure before Q-Day headlines.",
+    category: "Q-Day readiness",
+    coverImage: "/qtangl-pqc-hndl-cover.svg",
+    coverAlt: "Harvest-now-decrypt-later exposure timeline.",
+    excerpt: "Practitioner insights on HNDL — and how to inventory before migration finishes.",
+    readiness: true,
+  },
+  {
+    slug: "video-companion-pq-algorithms-nist",
+    kind: "video-companion",
+    markdownFile: "blog/video-companion-pq-algorithms-nist.md",
+    title: "After the NIST PQC algorithms video: your ML-KEM migration checklist",
+    description: "ML-KEM, ML-DSA, and SLH-DSA in plain language — with hybrid TLS as the near-term path.",
+    category: "Q-Day readiness",
+    coverImage: "/qtangl-pqc-scanner-cover.svg",
+    coverAlt: "Post-quantum algorithm standards overview.",
+    excerpt: "ML-KEM, ML-DSA, and SLH-DSA in plain language — with a migration checklist.",
+    readiness: true,
+  },
+  {
+    slug: "spreadsheet-crypto-inventory-wrong",
+    kind: "blog",
+    markdownFile: "blog/spreadsheet-crypto-inventory-wrong.md",
+    title: "Why your spreadsheet crypto inventory is wrong",
+    description: "Manual TLS inventories miss drift, JWKS, STARTTLS, and re-scan verification.",
+    category: "Q-Day readiness",
+    coverImage: "/qtangl-pqc-scanner-cover.svg",
+    coverAlt: "Spreadsheet versus live cryptographic inventory comparison.",
+    excerpt: "Manual TLS inventories miss drift, JWKS, and STARTTLS — why spreadsheets fail.",
+    readiness: true,
+  },
+  {
+    slug: "reading-qtangl-cbom-export",
+    kind: "blog",
+    markdownFile: "blog/reading-qtangl-cbom-export.md",
+    title: "Reading a Qtangl CBOM export: field-by-field guide",
+    description: "Walk through a sample CycloneDX Crypto Bill of Materials — algorithms, assets, and GRC integration.",
+    category: "Q-Day readiness",
+    coverImage: "/qtangl-pqc-scanner-cover.svg",
+    coverAlt: "CycloneDX CBOM export fields and remediation mapping.",
+    excerpt: "Walk through a sample CBOM JSON — algorithms, assets, and GRC integration.",
+    readiness: true,
+  },
+  {
+    slug: "mosca-inequality-for-cisos",
+    kind: "blog",
+    markdownFile: "blog/mosca-inequality-for-cisos.md",
+    title: "Mosca inequality explained for CISOs",
+    description: "Turn Mosca's X + Y > Z into a board-ready planning question for HNDL exposure.",
+    category: "Q-Day readiness",
+    coverImage: "/qtangl-pqc-hndl-cover.svg",
+    coverAlt: "Mosca inequality X plus Y greater than Z diagram.",
+    excerpt: "Turn Mosca's X + Y > Z into a board-ready planning question.",
+    readiness: true,
+  },
+  {
+    slug: "cmmc-crypto-inventory-evidence",
+    kind: "blog",
+    markdownFile: "blog/cmmc-crypto-inventory-evidence.md",
+    title: "CMMC crypto controls: inventory evidence auditors want",
+    description: "What CMMC Level 2 assessors expect — inventory artifacts, not slide decks.",
+    category: "Q-Day readiness",
+    coverImage: "/qtangl-pqc-deadlines-cover.svg",
+    coverAlt: "CMMC Level 2 cryptographic inventory evidence checklist.",
+    excerpt: "What CMMC assessors expect — inventory artifacts, not slide decks.",
+    readiness: true,
+  },
+  {
+    slug: "crypto-drift-one-scan-not-enough",
+    kind: "blog",
+    markdownFile: "blog/crypto-drift-one-scan-not-enough.md",
+    title: "Crypto drift: why one scan is not enough",
+    description: "A baseline scan satisfies this quarter's board slide — it does not catch next week's deployment.",
+    category: "Monitor",
+    coverImage: "/qtangl-pqc-scanner-cover.svg",
+    coverAlt: "Crypto drift diff between consecutive scans.",
+    excerpt: "Why a baseline scan decays — and how Monitor catches regression.",
+    readiness: true,
+  },
+  {
+    slug: "q-day-monitor-alerts-setup",
+    kind: "blog",
+    markdownFile: "blog/q-day-monitor-alerts-setup.md",
+    title: "Setting up Q-Day Monitor alerts",
+    description: "Configure re-scan cadence, drift alerts, and readiness score trends.",
+    category: "Monitor",
+    coverImage: "/qtangl-pqc-scanner-cover.svg",
+    coverAlt: "Monitor alert configuration for crypto drift.",
+    excerpt: "Configure re-scan cadence, drift alerts, and readiness score trends.",
+    readiness: true,
+  },
+  {
+    slug: "remediation-backlog-deadline-prioritization",
+    kind: "blog",
+    markdownFile: "blog/remediation-backlog-deadline-prioritization.md",
+    title: "Remediation backlog prioritization by deadline tier",
+    description: "Prioritize PQC fixes by NSM-10, CNSA 2.0, and data shelf-life — not gut feel.",
+    category: "Convert",
+    coverImage: "/qtangl-pqc-deadlines-cover.svg",
+    coverAlt: "Remediation backlog prioritized by compliance deadline tier.",
+    excerpt: "Prioritize fixes by NSM-10, CNSA 2.0, and data shelf-life.",
+    readiness: true,
+  },
+  {
+    slug: "hybrid-tls-handshake-appendix",
+    kind: "blog",
+    markdownFile: "blog/hybrid-tls-handshake-appendix.md",
+    title: "Hybrid TLS proof: what the handshake appendix means",
+    description: "What the handshake trace appendix means for migration evidence and auditor review.",
+    category: "Convert",
+    coverImage: "/qtangl-pqc-scanner-cover.svg",
+    coverAlt: "Hybrid ML-KEM TLS handshake proof appendix.",
+    excerpt: "What the handshake trace appendix means for migration evidence.",
+    readiness: true,
+  },
+  {
+    slug: "q-day-readiness-90-day-playbook",
+    kind: "blog",
+    markdownFile: "blog/q-day-readiness-90-day-playbook.md",
+    title: "Q-Day readiness: a 90-day playbook for mid-market teams",
+    description: "Quarter-by-quarter plan from inventory to Monitor — with evidence at each step.",
+    category: "Q-Day readiness",
+    coverImage: "/qtangl-pqc-deadlines-cover.svg",
+    coverAlt: "90-day Q-Day readiness playbook timeline.",
+    excerpt: "A quarter-by-quarter plan from inventory to Monitor — with evidence at each step.",
+    readiness: true,
+  },
+] as const;
+
+export const readinessFrameworkRegistry: readonly ReadinessFrameworkRegistryEntry[] = [
+  { slug: "nsm-10", markdownFile: "frameworks/nsm-10.md", externalSourceIds: ["nsm-10", "nsa-cnsa-2", "nist-ir-8547"] },
+  { slug: "cmmc", markdownFile: "frameworks/cmmc.md", externalSourceIds: ["nsm-10", "nist-ir-8547", "palo-alto-q-day"] },
+  { slug: "pci-dss-4", markdownFile: "frameworks/pci-dss-4.md", externalSourceIds: ["nist-ir-8547", "fips-203"] },
+  { slug: "ml-kem", markdownFile: "frameworks/ml-kem.md", externalSourceIds: ["fips-203", "fips-204", "fips-205", "nist-pqc-overview"] },
+  { slug: "nist-ir-8547", markdownFile: "frameworks/nist-ir-8547.md", externalSourceIds: ["nist-ir-8547", "nist-pqc-overview"] },
+  { slug: "cnsa-2.0", markdownFile: "frameworks/cnsa-2.0.md", externalSourceIds: ["nsa-cnsa-2", "nsm-10"] },
+  { slug: "hipaa-hndl", markdownFile: "frameworks/hipaa-hndl.md", externalSourceIds: ["nist-pqc-overview", "palo-alto-q-day", "nist-ir-8547"] },
+  { slug: "eu-cra", markdownFile: "frameworks/eu-cra.md", externalSourceIds: ["nist-pqc-overview", "nist-ir-8547"] },
+] as const;
+
+export function getReadinessBlogEntry(slug: string): ReadinessBlogRegistryEntry | undefined {
+  return readinessBlogRegistry.find((entry) => entry.slug === slug);
+}
+
+export function getReadinessFrameworkMarkdownEntry(
+  slug: string,
+): ReadinessFrameworkRegistryEntry | undefined {
+  return readinessFrameworkRegistry.find((entry) => entry.slug === slug);
+}
+
+export const readinessBlogSlugs = readinessBlogRegistry.map((entry) => entry.slug);
+
+export function readinessBlogPostsForIndex() {
+  return readinessBlogRegistry.map((entry) => ({
+    slug: entry.slug,
+    href: `/blog/${entry.slug}`,
+    category: entry.category,
+    coverImage: entry.coverImage,
+    coverAlt: entry.coverAlt,
+    title: entry.title,
+    excerpt: entry.excerpt,
+    description: entry.description,
+    readiness: true as const,
+  }));
+}

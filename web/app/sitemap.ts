@@ -25,6 +25,7 @@ const readinessRoutes = [
   ...Object.keys(qDayArticles).map((slug) => `/q-day/${slug}`),
   "/q-day/checklist",
   "/q-day/briefing",
+  "/q-day/sample-report",
   ...frameworkGuideList.map((guide) => `/q-day/frameworks/${guide.slug}`),
   "/solutions",
   "/solutions/banking",

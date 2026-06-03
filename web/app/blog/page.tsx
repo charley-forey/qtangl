@@ -5,6 +5,7 @@ import PageShell from "@/components/layout/PageShell";
 import FeatureCard from "@/components/marketing/FeatureCard";
 import Section from "@/components/layout/Section";
 import Eyebrow from "@/components/ui/Eyebrow";
+import Button from "@/components/ui/Button";
 import { blogPosts } from "@/lib/constants";
 import { blogIndexCopy } from "@/lib/copy/articles";
 import { buildPageMetadata } from "@/lib/seo";
@@ -22,7 +23,8 @@ function isReadinessPost(post: BlogPost): boolean {
   return "readiness" in post && post.readiness === true;
 }
 
-const readinessPosts = blogPosts.filter(isReadinessPost);
+const featuredPost = blogPosts.find((post) => "featured" in post && post.featured === true);
+const readinessPosts = blogPosts.filter(isReadinessPost).filter((post) => post !== featuredPost);
 const optimizationPosts = blogPosts.filter((post) => !isReadinessPost(post));
 
 export default function BlogPage() {
@@ -34,6 +36,25 @@ export default function BlogPage() {
         description={blogIndexCopy.description}
         contentClassName="max-w-3xl"
       />
+
+      {featuredPost ? (
+        <Section gap="tight">
+          <Eyebrow>Featured</Eyebrow>
+          <div className="mt-4">
+            <FeatureCard
+              eyebrow={featuredPost.category}
+              title={featuredPost.title}
+              description={featuredPost.excerpt}
+              href={featuredPost.href}
+              ctaLabel="Read featured article"
+              imageSrc={featuredPost.coverImage}
+              imageAlt={featuredPost.coverAlt}
+            >
+              <p className="font-medium text-white">{featuredPost.description}</p>
+            </FeatureCard>
+          </div>
+        </Section>
+      ) : null}
 
       {readinessPosts.length > 0 ? (
         <Section gap="tight">
@@ -78,6 +99,12 @@ export default function BlogPage() {
             </FeatureCard>
           ))}
         </div>
+        <p className="mt-8 text-sm text-[var(--color-gray-500)]">
+          Subscribe:{" "}
+          <a href="/blog/feed.xml" className="text-white underline underline-offset-4">
+            Q-Day readiness RSS
+          </a>
+        </p>
       </Section>
     </PageShell>
   );

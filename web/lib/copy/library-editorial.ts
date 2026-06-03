@@ -474,6 +474,41 @@ export const libraryEditorial: Record<string, LibraryEditorialEntry> = {
       "Inspect practical PQC implementations instead of only reading standards discussions.",
       "Compare crypto-oriented quantum-safe tooling with circuit-oriented ecosystems.",
       "Use the project as a starting point for understanding the security side of the field.",
+      "Pair with Qtangl inventory at /assess and the ML-KEM guide at /q-day/frameworks/ml-kem.",
+    ],
+  },
+  "pqclean-pqclean": {
+    summary:
+      "PQClean provides clean, portable reference implementations of NIST PQC candidates — a baseline for understanding algorithm behavior before production integration.",
+    description:
+      "PQClean matters as a reference layer for post-quantum algorithm evaluation and comparison.",
+    whatItIs: [
+      "PQClean packages implementations with consistent APIs and test vectors so researchers and integrators can compare algorithms without wading through heterogeneous codebases.",
+      "For readiness teams, it is a technical reference — not an inventory tool. Pair algorithm study with operational inventory at /assess.",
+    ],
+    whoItsFor:
+      "Cryptographers, security engineers, and teams evaluating NIST-standard algorithms before TLS or signing deployment.",
+    whatYouCanBuild: [
+      "Benchmark and compare PQC algorithm families with consistent interfaces.",
+      "Validate test vectors before integrating liboqs or OpenSSL OQS forks.",
+      "Map algorithm choices to inventory findings from /assess and the ML-KEM guide at /q-day/frameworks/ml-kem.",
+    ],
+  },
+  "open-quantum-safe-openssl": {
+    summary:
+      "The Open Quantum Safe OpenSSL fork lets teams experiment with hybrid TLS and post-quantum ciphers in familiar OpenSSL workflows.",
+    description:
+      "OQS OpenSSL bridges standards research and production TLS experimentation for post-quantum migration.",
+    whatItIs: [
+      "This fork extends OpenSSL with liboqs-backed algorithms so engineers can pilot hybrid key exchange and signing without replacing their entire crypto stack overnight.",
+      "Inventory still comes first: know which endpoints depend on legacy RSA/ECDSA before swapping ciphers — Qtangl Assess produces that baseline with CBOM export.",
+    ],
+    whoItsFor:
+      "Platform engineers and security architects piloting hybrid TLS or evaluating OpenSSL-based PQC deployment paths.",
+    whatYouCanBuild: [
+      "Prototype hybrid TLS handshakes with ML-KEM alongside legacy algorithms.",
+      "Compare OQS OpenSSL behavior against production inventory from /assess.",
+      "Cross-reference deployment plans with framework guides at /q-day/frameworks/ml-kem and /q-day/frameworks/cmmc.",
     ],
   },
 };

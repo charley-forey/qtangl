@@ -1,18 +1,15 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
-import FeatureCard from "@/components/marketing/FeatureCard";
-import PageHero from "@/components/layout/PageHero";
+import FrameworkGuideLayout from "@/components/marketing/FrameworkGuideLayout";
 import PageShell from "@/components/layout/PageShell";
-import Section from "@/components/layout/Section";
-import Button from "@/components/ui/Button";
-import Card from "@/components/ui/Card";
-import Eyebrow from "@/components/ui/Eyebrow";
 import JsonLd from "@/components/seo/JsonLd";
 import {
   frameworkGuideList,
   getFrameworkGuide,
 } from "@/lib/copy/readiness-frameworks";
+import { getReadinessFrameworkMarkdownEntry } from "@/lib/copy/readiness-content-registry";
+import { loadReadinessMarkdown } from "@/lib/readiness-content";
 import { buildFrameworkJsonLd, buildPageMetadata } from "@/lib/seo";
 
 type FrameworkRouteProps = {
@@ -44,67 +41,20 @@ export default async function FrameworkGuidePage({ params }: FrameworkRouteProps
     notFound();
   }
 
+  const markdownEntry = getReadinessFrameworkMarkdownEntry(slug);
+  let markdown = null;
+  if (markdownEntry) {
+    markdown = await loadReadinessMarkdown("framework", slug, markdownEntry.markdownFile);
+  }
+
   return (
     <PageShell>
       <JsonLd data={buildFrameworkJsonLd(guide)} />
-      <PageHero
-        eyebrow={guide.eyebrow}
-        title={guide.title}
-        description={guide.description}
-        actions={[
-          { href: "/assess", label: "Run Q-Day scan" },
-          { href: "/q-day", label: "Q-Day hub", variant: "secondary" },
-        ]}
+      <FrameworkGuideLayout
+        guide={guide}
+        markdown={markdown}
+        externalSourceIds={markdownEntry?.externalSourceIds}
       />
-
-      <Section gap="tight">
-        <Card tone="feature" className="rounded-[var(--radius-xl)]">
-          <Eyebrow>Framework</Eyebrow>
-          <p className="mt-3 text-lg font-semibold text-white">{guide.summary}</p>
-          <p className="mt-2 text-sm text-[var(--color-gray-400)]">Deadline: {guide.deadline}</p>
-        </Card>
-      </Section>
-
-      <Section gap="tight">
-        <div className="content-reading">
-          <h2 className="heading-section">Why it matters</h2>
-          <p className="mt-4 text-base leading-8 text-[var(--color-gray-300)]">{guide.whyItMatters}</p>
-        </div>
-      </Section>
-
-      <Section gap="tight">
-        <Eyebrow>Qtangl mapping</Eyebrow>
-        <ul className="mt-4 space-y-3 text-sm leading-7 text-[var(--color-gray-300)]">
-          {guide.qtanglMapping.map((item) => (
-            <li key={item}>{item}</li>
-          ))}
-        </ul>
-      </Section>
-
-      <Section gap="tight">
-        <Eyebrow>Try it</Eyebrow>
-        <div className="mt-6 flex flex-wrap gap-3">
-          {guide.relatedScenarios.map((item) => (
-            <Button key={item.href} href={item.href} variant="secondary">
-              {item.label}
-            </Button>
-          ))}
-        </div>
-      </Section>
-
-      <Section gap="tight" className="pb-0">
-        <Eyebrow>Related</Eyebrow>
-        <div className="mt-6 grid gap-6 md:grid-cols-2">
-          {guide.relatedArticles.map((item) => (
-            <FeatureCard
-              key={item.href}
-              title={item.label}
-              href={item.href}
-              ctaLabel="Read →"
-            />
-          ))}
-        </div>
-      </Section>
     </PageShell>
   );
 }

@@ -162,6 +162,7 @@ export const qDayHubCopy = {
       { label: "Free mini-assessment", href: "/assess/mini" },
       { label: "Verify a report", href: "/verify" },
       { label: "Download sample CBOM", href: "/samples/sample-cbom-bank-tls-inventory.json" },
+      { label: "Sample signed report", href: "/q-day/sample-report" },
       { label: "Crypto agility checklist", href: "/q-day/checklist" },
       { label: "Executive briefing (PDF)", href: "/q-day/briefing" },
     ],

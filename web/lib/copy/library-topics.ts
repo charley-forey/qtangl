@@ -292,6 +292,82 @@ export const libraryTopics: LibraryTopic[] = [
       label: "Explore PQC resources",
     },
   },
+  {
+    slug: "pqc-readiness",
+    eyebrow: "Readiness",
+    title: "Post-quantum cryptography readiness",
+    description: "From inventory to Monitor — how teams prepare for Q-Day with evidence.",
+    intro:
+      "Post-quantum readiness is not a single tool purchase. It is a program: baseline inventory, framework-mapped evidence, scheduled re-scans, and remediation proof. These open-source libraries support the technical migration; Qtangl supports the operational workflow.",
+    heroImagePath: "/learn/topics/post-quantum-crypto-libraries.png",
+    sections: [
+      {
+        title: "Inventory before migration",
+        body: [
+          "You cannot migrate what you have not inventoried. Start with TLS endpoints, signing keys, and third-party dependencies — then map findings to NSM-10, CMMC, or NIST IR 8547 tiers.",
+        ],
+      },
+    ],
+    relatedResourceSlugs: ["open-quantum-safe-liboqs", "pqclean-pqclean"],
+    cta: { href: "/assess", label: "Run Q-Day scan" },
+  },
+  {
+    slug: "cbom-inventory",
+    eyebrow: "CBOM",
+    title: "Cryptographic bill of materials",
+    description: "CycloneDX CBOM exports for GRC and CMDB integration.",
+    intro:
+      "A Crypto Bill of Materials lists algorithms, keys, and certificates in machine-readable form. Export from Qtangl scans or study sample CBOM structure before integrating with ServiceNow or Archer.",
+    heroImagePath: "/learn/topics/post-quantum-crypto-libraries.png",
+    sections: [
+      {
+        title: "Machine-readable inventory",
+        body: [
+          "CBOM beats spreadsheets for audit cycles. Download the sample at /samples/sample-cbom-bank-tls-inventory.json and read the field guide at /blog/reading-qtangl-cbom-export.",
+        ],
+      },
+    ],
+    relatedResourceSlugs: ["open-quantum-safe-liboqs"],
+    cta: { href: "/q-day/cbom", label: "CBOM guide" },
+  },
+  {
+    slug: "hndl-risk",
+    eyebrow: "HNDL",
+    title: "Harvest-now-decrypt-later risk",
+    description: "Why long-lived data faces exposure before Q-Day arrives.",
+    intro:
+      "HNDL means adversaries capture ciphertext today and decrypt it after quantum computers mature. Healthcare, finance, and government data with decades of shelf-life are highest risk.",
+    heroImagePath: "/learn/topics/post-quantum-crypto-libraries.png",
+    sections: [
+      {
+        title: "Mosca inequality",
+        body: [
+          "When data shelf-life plus migration time exceeds the quantum timeline, you have exposure now. See /q-day/mosca-inequality for the interactive calculator.",
+        ],
+      },
+    ],
+    relatedResourceSlugs: ["open-quantum-safe-liboqs"],
+    cta: { href: "/q-day/hndl", label: "HNDL primer" },
+  },
+  {
+    slug: "ml-kem-deployment",
+    eyebrow: "ML-KEM",
+    title: "Deploying ML-KEM in TLS",
+    description: "Hybrid TLS migration with FIPS 203 ML-KEM and handshake proof.",
+    intro:
+      "FIPS 203 standardizes ML-KEM for key encapsulation. Hybrid deployment combines classical and post-quantum key exchange for incremental migration.",
+    heroImagePath: "/learn/topics/post-quantum-crypto-libraries.png",
+    sections: [
+      {
+        title: "Hybrid first",
+        body: [
+          "Pilot hybrid TLS on non-production paths, then expand. Qtangl captures handshake proof traces for auditor review.",
+        ],
+      },
+    ],
+    relatedResourceSlugs: ["open-quantum-safe-liboqs", "open-quantum-safe-openssl"],
+    cta: { href: "/q-day/frameworks/ml-kem", label: "ML-KEM guide" },
+  },
 ] as const;
 
 export const libraryTopicTeasers = libraryTopics.map((topic) => ({

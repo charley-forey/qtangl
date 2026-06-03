@@ -483,23 +483,32 @@ const docsLinks = getAllDocsHrefs()
 
 export const llmsTxtContent = `# Qtangl
 
-> Quantum Planning API: hold every option in superposition, rank the field, collapse to an executable plan.
+> Post-quantum readiness platform: Assess quantum-vulnerable cryptography, Monitor drift, Convert with auditable evidence.
 
-Qtangl helps operations teams explore feasible schedules, routes, and staffing plans, rank them, and collapse to the plan their team runs.
+Qtangl helps CISOs and compliance teams inventory quantum-vulnerable crypto, track drift, and prove remediation with signed reports.
 
 ## Primary pages
 
 - Home: ${siteMetadata.url}/
-- Technology: ${siteMetadata.url}/technology
-- API reference (concise): ${siteMetadata.url}/api
-- Documentation hub: ${siteMetadata.url}/docs
-- API sandbox: ${siteMetadata.url}/sandbox
-- Hospital re-staffing demo: ${siteMetadata.url}/demo/hospital
-- Airline crew recovery demo: ${siteMetadata.url}/demo/airline
-- EV fleet depot charging demo: ${siteMetadata.url}/demo/ev-fleet
-- Request access: ${siteMetadata.url}/access
+- Platform: ${siteMetadata.url}/platform
+- Q-Day readiness hub: ${siteMetadata.url}/q-day
+- Assess / live scanner: ${siteMetadata.url}/assess
+- Free mini-assessment: ${siteMetadata.url}/assess/mini
+- Monitor tier: ${siteMetadata.url}/monitor
+- Convert tier: ${siteMetadata.url}/convert
+- Pricing: ${siteMetadata.url}/pricing
+- Verify signed reports: ${siteMetadata.url}/verify
 - Blog: ${siteMetadata.url}/blog
-- Learn (quantum software library): ${siteMetadata.url}/learn
+- Blog RSS (readiness): ${siteMetadata.url}/blog/feed.xml
+- Learn library: ${siteMetadata.url}/learn
+- Request access: ${siteMetadata.url}/access
+
+## Lead magnets
+
+- Crypto agility checklist: ${siteMetadata.url}/q-day/checklist
+- Executive briefing: ${siteMetadata.url}/q-day/briefing
+- Sample CBOM: ${siteMetadata.url}/samples/sample-cbom-bank-tls-inventory.json
+- Sample report: ${siteMetadata.url}/q-day/sample-report
 
 ## Documentation index
 
@@ -514,4 +523,5 @@ ${docsLinks}
 - Sitemap: ${siteMetadata.url}/sitemap.xml
 - Robots: ${siteMetadata.url}/robots.txt
 - Docs changelog RSS: ${siteMetadata.url}/docs/resources/changelog/rss.xml
+- Learn library RSS: ${siteMetadata.url}/learn/feed.xml
 `;

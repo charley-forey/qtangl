@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { redirect } from "next/navigation";
 
 import FeatureCard from "@/components/marketing/FeatureCard";
 import FrameworkCoverageStrip from "@/components/marketing/FrameworkCoverageStrip";
@@ -51,7 +52,16 @@ async function prefetch() {
   }
 }
 
-export default async function AssessPage() {
+export default async function AssessPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ mode?: string }>;
+}) {
+  const params = await searchParams;
+  if (params.mode === "mini") {
+    redirect("/assess/mini");
+  }
+
   const { hero, features, scenarios, cta } = assessPageCopy;
   const { inventory, scenarios: scenarioList, backendConnected, backendMessage } = await prefetch();
 

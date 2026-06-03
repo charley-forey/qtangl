@@ -243,6 +243,40 @@ export default async function LearnPage() {
       </Section>
 
       <Section gap="tight" id="learn-topics">
+        <Card tone="feature" size="lg" className="rounded-[var(--radius-feature)]">
+          <Eyebrow>Post-quantum readiness</Eyebrow>
+          <h2 className="heading-section mt-4 !text-2xl">
+            Libraries explain algorithms. Qtangl proves what you deploy.
+          </h2>
+          <p className="mt-4 max-w-3xl text-sm leading-8 text-[var(--color-gray-300)]">
+            Learn covers open-source PQC tooling. For operational inventory, CBOM export, and
+            framework-mapped evidence, start on the Q-Day hub — secondary to this library, not a
+            replacement for it.
+          </p>
+          <div className="mt-6 flex flex-wrap gap-3">
+            <Link
+              href="/q-day"
+              className="inline-flex rounded-full border border-[var(--border)] px-5 py-3 text-sm font-medium text-[var(--color-gray-300)] transition hover:border-[var(--border-strong)] hover:text-white"
+            >
+              Q-Day hub
+            </Link>
+            <Link
+              href="/assess/mini"
+              className="inline-flex rounded-full border border-[var(--border-strong)] bg-white/[0.08] px-5 py-3 text-sm font-medium text-white transition hover:bg-white/[0.12]"
+            >
+              Free mini-assessment
+            </Link>
+            <Link
+              href="/learn/topics/pqc-readiness"
+              className="inline-flex rounded-full border border-[var(--border)] px-5 py-3 text-sm font-medium text-[var(--color-gray-300)] transition hover:border-[var(--border-strong)] hover:text-white"
+            >
+              PQC readiness topic
+            </Link>
+          </div>
+        </Card>
+      </Section>
+
+      <Section gap="tight" id="learn-topic-guides">
         <div className="content-reading">
           <Eyebrow>Topic guides</Eyebrow>
           <h2 className="heading-section mt-4">

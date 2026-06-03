@@ -189,6 +189,52 @@ export const readinessArticles = {
       },
     ],
   },
+  qDayReadinessInventory: {
+    eyebrow: "Post-quantum readiness",
+    title: "Q-Day readiness: inventory before the deadline",
+    intro:
+      "Boards are asking for RSA/ECDSA exposure counts, not slide decks. The question is no longer whether post-quantum migration matters — it is whether you can prove what you have, what changed, and who owns the fix.",
+    coverImage: "/qtangl-pqc-deadlines-cover.svg",
+    coverAlt: "Compliance deadline timeline for post-quantum cryptography migration.",
+    datePublished: "2026-03-01",
+    sourceIds: ["nist-pqc-overview", "nsm-10", "nist-ir-8547", "gqi-q-day-summary"],
+    sections: [
+      {
+        title: "The Mosca clock is already ticking",
+        body: [
+          "Michele Mosca's inequality — X + Y > Z (data lifetime + migration time exceeds adversary capability) — turns abstract quantum risk into a planning deadline. For long-lived secrets, TLS certificates, and archived ciphertext, harvest-now-decrypt-later (HNDL) means exposure today is liability tomorrow.",
+          "Use the Mosca inequality guide and HNDL primer on our Q-Day hub to quantify shelf-life against migration runway — an inventory aid, not a formal attestation.",
+        ],
+      },
+      {
+        title: "Inventory is the unblocker",
+        body: [
+          "Most enterprises cannot answer three basic questions: which systems still depend on RSA or ECDSA, which third-party libraries embed legacy crypto, and which teams own remediation. A one-time spreadsheet exercise decays within weeks as new deployments ship.",
+          "Qtangl's Assess tier produces a prioritized backlog with algorithm tags, compliance crosswalks (NSM-10, CNSA 2.0, NIST IR 8547), and signed scan artifacts suitable for audit evidence.",
+        ],
+      },
+      {
+        title: "Monitor beats annual panic",
+        body: [
+          "A single assessment satisfies this quarter's board slide. It does not catch the microservice that shipped last Tuesday with an outdated OpenSSL pin, or the partner API that rolled back a hybrid TLS experiment.",
+          "Continuous Monitor diffs each scan against the prior baseline: new findings, resolved items, readiness score trends, and scheduled re-scan windows aligned to your change cadence.",
+        ],
+      },
+      {
+        title: "Convert with evidence, not hope",
+        body: [
+          "Migration planning fails when backlog items lack owners, effort estimates, and dependency ordering. Convert ties remediation items to what-if projections: if you clear the top N findings this quarter, what does your readiness curve look like at the next audit?",
+          "Hybrid ML-KEM TLS handshakes — live in our demo — prove the target state is reachable without ripping out every legacy endpoint on day one.",
+        ],
+      },
+      {
+        title: "Where to start",
+        body: [
+          "Run a Q-Day readiness demo against a representative environment. Map your current stage on the maturity model. Estimate status-quo cost vs Monitor with the ROI calculator.",
+        ],
+      },
+    ],
+  },
 } as const;
 
 export const articles = {

@@ -163,11 +163,17 @@ export default function MiniAssessmentClient() {
         <p className="mt-3 text-sm leading-7 text-[var(--color-gray-300)]">{selected.monitorPitch}</p>
         <div className="mt-6 flex flex-wrap gap-3">
           <Button href={upsell.primary.href}>{upsell.primary.label}</Button>
+          <Button href="/assess" variant="secondary">
+            Run live scan
+          </Button>
           <Button
             href={`/access?interest=${encodeURIComponent("Q-Day Monitor (annual)")}&source=mini-assessment-${selected.id}`}
             variant="secondary"
           >
             {upsell.secondary.label}
+          </Button>
+          <Button href="/verify?token=sample-token" variant="secondary">
+            Verify sample report
           </Button>
           <Button href={sampleCbomPath} variant="secondary">
             {upsell.tertiary.label}

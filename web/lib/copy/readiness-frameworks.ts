@@ -171,6 +171,61 @@ export const frameworkGuides: Record<string, FrameworkGuide> = {
     ],
     relatedArticles: [
       { label: "Hybrid TLS proof", href: "/q-day/hybrid-tls" },
+      { label: "PQ algorithms video companion", href: "/blog/video-companion-pq-algorithms-nist" },
+    ],
+  },
+  "hipaa-hndl": {
+    slug: "hipaa-hndl",
+    metadata: {
+      title: "HIPAA & HNDL for Healthcare Payers",
+      description: "HIPAA quantum risk, long-lived PHI, and PQC inventory evidence for healthcare.",
+    },
+    eyebrow: "Healthcare",
+    title: "HIPAA & harvest-now-decrypt-later",
+    description:
+      "Healthcare records with decades-long confidentiality requirements face HNDL exposure today — inventory under HIPAA security rule obligations.",
+    deadline: "Risk analysis ongoing",
+    summary: "HIPAA Security Rule and long data shelf-life",
+    whyItMatters:
+      "Payers and providers must identify threats to ePHI confidentiality — including future cryptanalytic advances — in risk analysis.",
+    qtanglMapping: [
+      "Healthcare scenario with Mosca HNDL scoring",
+      "TLS inventory for member portals and BAA-covered APIs",
+      "Monitor drift between compliance cycles",
+    ],
+    relatedScenarios: [
+      { label: "Healthcare HNDL scenario", href: "/assess?scenario=healthcare-insurer-hndl" },
+    ],
+    relatedArticles: [
+      { label: "Healthcare solutions", href: "/solutions/healthcare" },
+      { label: "HNDL guide", href: "/q-day/hndl" },
+    ],
+  },
+  "eu-cra": {
+    slug: "eu-cra",
+    metadata: {
+      title: "EU CRA Crypto Requirements",
+      description: "EU Cyber Resilience Act crypto agility expectations for software vendors.",
+    },
+    eyebrow: "Enterprise",
+    title: "EU CRA & post-quantum readiness",
+    description:
+      "The EU Cyber Resilience Act introduces security requirements for products with digital elements — including crypto agility.",
+    deadline: "Phased enforcement",
+    summary: "EU Cyber Resilience Act product security",
+    whyItMatters:
+      "Vendors serving EU markets need documented cryptographic dependencies and update paths — PQC migration is a crypto agility exercise.",
+    qtanglMapping: [
+      "CBOM export for product crypto dependencies",
+      "Code signing inventory for update mechanisms",
+      "Monitor cadence for drift documentation",
+    ],
+    relatedScenarios: [
+      { label: "Run Q-Day scanner", href: "/assess" },
+    ],
+    relatedArticles: [
+      { label: "Platform overview", href: "/platform" },
+      { label: "NIST IR 8547 guide", href: "/q-day/frameworks/nist-ir-8547" },
     ],
   },
 };

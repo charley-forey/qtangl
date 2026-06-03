@@ -217,12 +217,36 @@ Sync web content with [demos/pqc_migration/outreach/README.md](../../demos/pqc_m
 
 | Step | Owner | Output |
 |------|-------|--------|
-| 1. Keyword + journey mapping | Marketing | Brief in Notion/MD |
-| 2. Draft in MDX | Marketing / founder | `web/content/q-day/` |
-| 3. Technical review | Engineering | Accuracy vs scanner behavior |
-| 4. Legal/compliance review | Founder | Honesty notes, no attestation claims |
-| 5. Publish + promote | Marketing | Blog, LinkedIn, cold email refresh |
-| 6. Measure | GTM | Organic traffic, demo starts, assess form fills |
+| 1. Keyword + journey mapping | Marketing | Brief using [templates/content-brief.md](./templates/content-brief.md) |
+| 2. Draft body in markdown | Marketing / founder | `web/content/readiness/blog/` or `frameworks/` with YAML frontmatter |
+| 3. Register metadata | Marketing | `web/lib/copy/readiness-content-registry.ts` + `marketing.ts` (blogs) |
+| 4. Technical review | Engineering | Accuracy vs scanner behavior |
+| 5. Legal/compliance review | Founder | Honesty notes, no attestation claims |
+| 6. Validate links | Engineering | `node scripts/check-readiness-content-links.mjs` |
+| 7. Publish + promote | Marketing | Blog RSS, LinkedIn, cold email refresh |
+| 8. Measure | GTM | Organic traffic, `/assess/mini` fills, `/access` submissions |
+
+**Hybrid authoring:** Long-form body lives in `web/content/readiness/*.md`; SEO metadata, CTAs, and card copy in TypeScript registry. Shared components: `MarkdownReadinessArticle`, `FrameworkGuideLayout`, `YouTubeEmbed`, `BlogReferencesPanel`, `ContentQualityStrip`.
+
+**Video companion rule:** Use transcripts for research only. Max 2 attributed quotes; original prose ≥70%.
+
+## Analytics KPIs (90-day)
+
+| Metric | Target |
+|--------|--------|
+| Readiness indexable pages | Track growth from `/q-day/*`, `/blog/*`, framework guides |
+| Organic sessions on `/assess`, `/assess/mini` | Baseline + month-over-month |
+| Mini-assessment email captures | Via `requestAccess` source tags |
+| `/access` form submissions | By interest tier (Assess, Monitor) |
+| Outreach link resolution | No `?scenario=` / `?case=` mismatches |
+
+## Distribution checklist (per publish)
+
+- [ ] Blog appears in `/blog/feed.xml`
+- [ ] Sitemap includes new route (auto via registry/blogPosts)
+- [ ] Cross-link from related hub page or framework guide
+- [ ] LinkedIn post: hub link + demo CTA
+- [ ] Update outreach templates if primary URL changed
 
 ---
 

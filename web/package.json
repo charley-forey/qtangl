@@ -6,6 +6,7 @@
     "generate:library": "python ../scripts/build_library_index.py",
     "generate:library-drafts": "python ../scripts/draft_library_editorial.py",
     "learn:stale": "node ../scripts/learn-stale-check.mjs",
+    "check:readiness-content": "node ../scripts/check-readiness-content-links.mjs",
     "generate:docs-index": "node scripts/build_docs_index.mjs",
     "test:e2e": "playwright test",
     "test:access": "node --experimental-strip-types --test tests/access-validation.test.mjs",

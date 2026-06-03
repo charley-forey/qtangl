@@ -43,6 +43,9 @@ export default function ChecklistPage() {
           <Button href={cta.secondary.href} variant="secondary">
             {cta.secondary.label}
           </Button>
+          <Button href="/downloads/crypto-agility-checklist.md" variant="secondary">
+            Download checklist (Markdown)
+          </Button>
           <Button href="/resources/roi" variant="secondary">
             Estimate ROI
           </Button>

@@ -401,6 +401,38 @@ export default async function LibraryResourcePage({ params }: ResourcePageProps)
         </Section>
       ) : null}
 
+      {entry.category.slug === "post-quantum-crypto" ? (
+        <Section gap="tight">
+          <Card tone="feature" size="lg" className="rounded-[var(--radius-feature)]">
+            <Eyebrow>Q-Day readiness</Eyebrow>
+            <p className="mt-4 text-sm leading-8 text-[var(--color-gray-300)]">
+              Open-source PQC libraries support the technical migration. Qtangl supports the operational
+              workflow — inventory, CBOM export, and framework-mapped evidence.
+            </p>
+            <div className="mt-6 flex flex-wrap gap-3">
+              <Link
+                href="/assess"
+                className="inline-flex rounded-full border border-[var(--border-strong)] bg-white/[0.08] px-5 py-3 text-sm font-medium text-white transition hover:bg-white/[0.12]"
+              >
+                Run Q-Day scan
+              </Link>
+              <Link
+                href="/q-day/frameworks/ml-kem"
+                className="inline-flex rounded-full border border-[var(--border)] px-5 py-3 text-sm font-medium text-[var(--color-gray-300)] transition hover:border-[var(--border-strong)] hover:text-white"
+              >
+                ML-KEM framework guide
+              </Link>
+              <Link
+                href="/learn/topics/pqc-readiness"
+                className="inline-flex rounded-full border border-[var(--border)] px-5 py-3 text-sm font-medium text-[var(--color-gray-300)] transition hover:border-[var(--border-strong)] hover:text-white"
+              >
+                PQC readiness topic
+              </Link>
+            </div>
+          </Card>
+        </Section>
+      ) : null}
+
       {readmeMarkdown ? (
         <Section gap="tight">
           <div className="content-reading min-w-0">

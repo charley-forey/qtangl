@@ -94,7 +94,7 @@ export default function QDayCommandCenter({
   }, []);
 
   useEffect(() => {
-    const caseParam = searchParams.get("case");
+    const caseParam = searchParams.get("case") ?? searchParams.get("scenario");
     if (caseParam) {
       setActiveScenarioId(caseParam);
     }

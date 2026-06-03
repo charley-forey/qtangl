@@ -8,8 +8,9 @@ import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
 import Eyebrow from "@/components/ui/Eyebrow";
 import LiveTodayFootnote from "@/components/marketing/LiveTodayFootnote";
+import JsonLd from "@/components/seo/JsonLd";
 import { pricingPageCopy } from "@/lib/copy/readiness-pricing";
-import { buildPageMetadata } from "@/lib/seo";
+import { buildFaqJsonLd, buildPageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildPageMetadata({
   path: "/pricing",
@@ -76,6 +77,7 @@ export default function PricingPage() {
           </Link>
         </div>
       </Section>
+      <JsonLd data={buildFaqJsonLd(pricingPageCopy.faqs)} />
     </PageShell>
   );
 }
