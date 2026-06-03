@@ -4,13 +4,18 @@ import Link from "next/link";
 import PageShell from "@/components/layout/PageShell";
 import Section from "@/components/layout/Section";
 import Button from "@/components/ui/Button";
-import { buildPageMetadata } from "@/lib/seo";
+import JsonLd from "@/components/seo/JsonLd";
+import { buildBlogPostingJsonLd, buildPageMetadata } from "@/lib/seo";
 
+const path = "/blog/q-day-readiness";
+const title = "Q-Day readiness: inventory before the deadline";
+const description =
+  "Why CISOs need cryptographic inventory, Mosca HNDL framing, and hybrid ML-KEM proofs in 2026.";
 export const metadata: Metadata = buildPageMetadata({
-  path: "/blog/q-day-readiness",
-  title: "Q-Day readiness: inventory before the deadline",
-  description:
-    "Why CISOs need cryptographic inventory, Mosca HNDL framing, and hybrid ML-KEM proofs in 2026.",
+  path,
+  title,
+  description,
+  type: "article",
 });
 
 export default function QDayBlogPage() {
@@ -127,6 +132,14 @@ export default function QDayBlogPage() {
           </footer>
         </article>
       </Section>
+      <JsonLd
+        data={buildBlogPostingJsonLd({
+          path,
+          headline: title,
+          description,
+          datePublished: "2026-03-01",
+        })}
+      />
     </PageShell>
   );
 }

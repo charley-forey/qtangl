@@ -4,13 +4,18 @@ import Link from "next/link";
 import PageShell from "@/components/layout/PageShell";
 import Section from "@/components/layout/Section";
 import Button from "@/components/ui/Button";
-import { buildPageMetadata } from "@/lib/seo";
+import JsonLd from "@/components/seo/JsonLd";
+import { buildBlogPostingJsonLd, buildPageMetadata } from "@/lib/seo";
+
+const path = "/blog/convert-verify-workflow";
+const title = "Closing the loop: verify-fix in Convert";
+const description =
+  "Attach re-scan proof to remediation items and export workflowStatus on board packs.";
 
 export const metadata: Metadata = buildPageMetadata({
-  path: "/blog/convert-verify-workflow",
-  title: "Closing the loop: verify-fix in Convert",
-  description:
-    "Attach re-scan proof to remediation items and export workflowStatus on board packs.",
+  path,
+  title,
+  description,
 });
 
 export default function ConvertVerifyBlogPage() {
@@ -54,6 +59,14 @@ export default function ConvertVerifyBlogPage() {
           </div>
         </article>
       </Section>
+      <JsonLd
+        data={buildBlogPostingJsonLd({
+          path,
+          headline: title,
+          description,
+          datePublished: "2026-06-01",
+        })}
+      />
     </PageShell>
   );
 }

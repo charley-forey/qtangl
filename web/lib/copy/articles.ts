@@ -33,6 +33,164 @@ export const blogClosingCta = {
   label: "Open API sandbox",
 } as const;
 
+export const readinessBlogCta = {
+  title: "See your exposure with evidence",
+  description:
+    "Run a live PQC inventory scan, export a CBOM, and verify signed reports independently.",
+  primaryHref: "/demo/pqc",
+  primaryLabel: "Try the PQC demo",
+  secondaryHref: "/assess",
+  secondaryLabel: "Explore Assess tier",
+} as const;
+
+export const readinessArticles = {
+  harvestNowDecryptLaterBoards: {
+    eyebrow: "Post-quantum readiness",
+    title: "Harvest-now-decrypt-later: what boards miss",
+    intro:
+      "Boards ask whether quantum computers will break encryption tomorrow. The harder question is whether ciphertext captured today will still be confidential when migration finishes — and most enterprises cannot answer it yet.",
+    coverImage: "/qtangl-technology-solver-grid.svg",
+    coverAlt: "Cryptographic exposure timeline illustrating harvest-now-decrypt-later risk.",
+    datePublished: "2026-06-03",
+    sourceIds: ["nist-pqc-overview", "palo-alto-q-day", "nsm-10", "video-jeremy-allison-hndl"],
+    sections: [
+      {
+        title: "The risk starts before Q-Day",
+        body: [
+          "Harvest-now-decrypt-later (HNDL) is not science fiction. Adversaries capture TLS sessions, backups, and archives today knowing that a future cryptographically relevant quantum computer (CRQC) may decrypt them later. Storage is cheap; migration is not.",
+          "Quantum-vulnerable does not mean broken today. Your RSA and ECDSA still protect data in transit and at rest right now. The exposure is temporal: if data must stay confidential for decades, ciphertext harvested before you finish migrating may become readable.",
+        ],
+      },
+      {
+        title: "Who is most exposed",
+        body: [
+          "Healthcare payers, regional banks, and government contractors hold records with 20–50 year shelf lives. Trade secrets, M&A diligence, and classified-adjacent research archives face the same Mosca clock.",
+          "Unit 42 and other incident-response data show exfiltration timelines compressing — the fastest quartile of intrusions reached data theft in 72 minutes in 2025. Harvesting does not require breaking crypto today; it requires copying ciphertext.",
+        ],
+      },
+      {
+        title: "Mosca inequality in plain language",
+        body: [
+          "Michele Mosca's inequality — X + Y > Z — turns abstract quantum risk into a planning question. X is how long your data must stay secret. Y is how long migration takes. Z is when quantum computers break your algorithms.",
+          "When X + Y exceeds Z, encrypted data captured today may be readable before you finish migrating. That is HNDL exposure — and it is why inventory and migration runway matter now, not after Q-Day headlines.",
+        ],
+      },
+      {
+        title: "What to do this quarter",
+        body: [
+          "First, inventory quantum-vulnerable crypto on external TLS and critical dependencies — not a spreadsheet snapshot, but a repeatable scan with algorithm tags and framework crosswalks.",
+          "Second, quantify HNDL exposure for your longest-lived data classes. Third, map findings to the deadlines your auditors already track (NSM-10, CNSA 2.0, NIST IR 8547). Qtangl Assess produces a prioritized backlog with signed artifacts suitable for audit evidence — an inventory aid, not a formal attestation.",
+        ],
+      },
+    ],
+    faq: [
+      {
+        question: "Is my encryption broken today?",
+        answer:
+          "No. Quantum-vulnerable algorithms like RSA and ECDSA still protect data today. HNDL is about ciphertext captured now that may be decrypted after a future CRQC arrives.",
+      },
+      {
+        question: "When will Q-Day happen?",
+        answer:
+          "No one knows the exact date. Google and Cloudflare accelerated internal readiness targets to 2029 as a planning signal — not a prediction. Migration takes years regardless of the exact timeline.",
+      },
+      {
+        question: "What is the first step for a mid-market CISO?",
+        answer:
+          "Run a cryptographic inventory: which endpoints still depend on RSA or ECDSA, which third parties embed legacy crypto, and who owns remediation. A live scan beats a one-time spreadsheet exercise.",
+      },
+    ],
+  },
+  pqcDeadlines2029: {
+    eyebrow: "Compliance & timelines",
+    title: "PQC deadlines in 2029 and beyond: what CISOs should track",
+    intro:
+      "Google and Cloudflare moved internal post-quantum readiness targets to 2029 — roughly five years sooner than prior plans. Federal and industry frameworks already set migration clocks. Your inventory must map to the deadlines auditors track.",
+    coverImage: "/qtangl-technology-solver-grid.svg",
+    coverAlt: "Compliance deadline timeline for post-quantum cryptography migration.",
+    datePublished: "2026-06-03",
+    sourceIds: [
+      "google-2029-ars",
+      "cloudflare-pq-roadmap",
+      "nist-ir-8547",
+      "gqi-q-day-summary",
+      "nsa-cnsa-2",
+      "nsm-10",
+    ],
+    sections: [
+      {
+        title: "Why industry timelines accelerated",
+        body: [
+          "In early 2026, Google and Cloudflare announced 2029 targets for full post-quantum security — including authentication, not just hybrid key exchange. The shift reflects new research suggesting ECC-256 may fall before RSA-2048 on accelerated hardware timelines.",
+          "Most experts still doubt a CRQC arrives by 2029. Treat the acceleration as a planning signal: migration is multi-year work across TLS, code signing, VPNs, and vendor dependencies. Waiting for certainty means starting too late.",
+        ],
+      },
+      {
+        title: "Framework deadline matrix",
+        body: [
+          "FIPS 203/204/205 (ML-KEM, ML-DSA, SLH-DSA) are available now — migration can start immediately. PCI-DSS 4.0 emphasizes crypto agility for payment environments. CMMC 2.0 drives defense contractors toward inventory evidence by 2026–2030.",
+          "NIST IR 8547 sets 2030 transition guidance. CNSA 2.0 tiers national security systems through 2030–2033. NSM-10 mandates federal migration away from quantum-vulnerable algorithms by 2035. HIPAA and EU CRA add sector-specific pressure.",
+        ],
+      },
+      {
+        title: "ECC may break before RSA",
+        body: [
+          "For years, RSA-2048 was the headline benchmark for Q-Day planning. Recent research from Google, Oratomic, and Alice & Bob suggests ECC-256 — widely used in TLS, VPNs, and cryptocurrencies — may be vulnerable on an earlier timeline for offline retrospective attacks.",
+          "That changes prioritization: authentication and certificate infrastructure may need attention before bulk RSA migration. Inventory must tag both algorithm families, not assume RSA is always first.",
+        ],
+      },
+      {
+        title: "A 90-day action checklist",
+        body: [
+          "Days 1–30: Run baseline cryptographic inventory on external TLS and critical SaaS dependencies. Export a CycloneDX CBOM and map findings to your active frameworks.",
+          "Days 31–60: Prioritize by deadline tier and data shelf-life. Identify owners for top findings. Schedule re-scans aligned to your change cadence.",
+          "Days 61–90: Pilot hybrid TLS on non-production paths. Attach re-scan proof to remediation items. Pitch Monitor before the next board cycle — one scan satisfies this quarter's slide; it does not catch drift.",
+        ],
+      },
+    ],
+  },
+  pqcInventoryIn10Minutes: {
+    eyebrow: "Product walkthrough",
+    title: "PQC inventory in 10 minutes: what a live scan actually shows",
+    intro:
+      "Most enterprises cannot answer three basic questions: which systems still depend on RSA or ECDSA, which third-party libraries embed legacy crypto, and which teams own remediation. A live Qtangl scan answers them in one session.",
+    coverImage: "/qtangl-technology-solver-grid.svg",
+    coverAlt: "PQC scanner dashboard showing TLS endpoints, algorithms, and readiness score.",
+    datePublished: "2026-06-03",
+    sourceIds: ["nist-pqc-overview", "fips-203", "palo-alto-q-day"],
+    sections: [
+      {
+        title: "Three questions enterprises fail",
+        body: [
+          "Security teams know post-quantum migration is coming. They struggle to prove what they have. Spreadsheets decay within weeks as new deployments ship, partner APIs change ciphers, and certificate rotations go untracked.",
+          "A PQC inventory scan enumerates external TLS endpoints, tags algorithms (RSA, ECDSA, hybrid ML-KEM), and classifies quantum vulnerability — the baseline artifact every migration program needs.",
+        ],
+      },
+      {
+        title: "Step 1: Run the scanner",
+        body: [
+          "Open the Qtangl PQC demo at /demo/pqc or authorize a live domain scan through Assess. The scanner probes TLS handshakes, certificate chains, and cipher suites — mapping each endpoint to algorithm families and key sizes.",
+          "Results appear in minutes: endpoint list, severity-ranked findings, framework crosswalks (NSM-10, CNSA 2.0, NIST IR 8547), and a readiness score combining exposure, coverage, and deadline pressure.",
+        ],
+      },
+      {
+        title: "Step 2: Export the CBOM",
+        body: [
+          "Export a CycloneDX Crypto Bill of Materials (CBOM) JSON — machine-readable inventory for ServiceNow, Archer, or custom GRC tools. Sample CBOM files are available for download before you run your own scan.",
+          "CBOM beats spreadsheets: it captures JWKS endpoints, STARTTLS configurations, and algorithm tags in a format your CMDB can ingest — not a one-time audit snapshot.",
+        ],
+      },
+      {
+        title: "Step 3: Signed evidence and verify",
+        body: [
+          "Assess tier exports a signed PDF report with an independent verify link at /verify. Auditors check signatures without trusting Qtangl alone — evidence your board can reference, not a attestation claim.",
+          "Monitor tier schedules re-scans and diffs each baseline against the prior scan: new findings, resolved items, and readiness score trends. That is how you move from annual panic to operational crypto hygiene.",
+        ],
+      },
+    ],
+  },
+} as const;
+
 export const articles = {
   quantumOptimization: {
     eyebrow: "Quantum-forward planning",

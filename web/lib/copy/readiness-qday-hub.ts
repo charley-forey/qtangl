@@ -5,6 +5,28 @@ export type QDayResource = {
   href: string;
 };
 
+export type QDayArticleSection = {
+  heading: string;
+  body: string;
+};
+
+export type QDayArticle = {
+  metadata: {
+    title: string;
+    description: string;
+  };
+  eyebrow: string;
+  title: string;
+  description: string;
+  sections: readonly QDayArticleSection[];
+  related: readonly string[];
+  externalSourceIds?: readonly string[];
+  videoId?: string;
+  videoTitle?: string;
+  blogCompanionHref?: string;
+  blogCompanionTitle?: string;
+};
+
 export type DeadlineTier = {
   framework: string;
   deadline: string;
@@ -168,14 +190,36 @@ export const qDayArticles = {
       "The day a cryptographically relevant quantum computer breaks RSA, ECC, and other public-key algorithms your stack depends on today.",
     sections: [
       {
-        heading: "Why it matters",
-        body: "TLS, code signing, VPNs, and email encryption rely on math quantum computers will eventually break. Q-Day is not a single calendar date — it's the point where your current algorithms are no longer safe.",
+        heading: "Not a calendar date — a capability milestone",
+        body:
+          "Q-Day (sometimes called Y2Q) is when a cryptographically relevant quantum computer (CRQC) can break widely deployed public-key cryptography — RSA, elliptic-curve (ECC), and the TLS, VPN, and code-signing infrastructure built on them. It is not a fixed date on anyone's calendar. It is the point where your current algorithms are no longer safe.",
+      },
+      {
+        heading: "Why industry timelines shifted in 2026",
+        body:
+          "Google and Cloudflare accelerated internal post-quantum readiness targets to 2029 — roughly five years sooner than prior plans. The move reflects new research on error correction and algorithmic advances, not a confirmed CRQC arrival date. Treat 2029 as a planning signal: migration takes years across vendors, certificates, and embedded systems.",
+      },
+      {
+        heading: "The risk starts before Q-Day",
+        body:
+          "Harvest-now-decrypt-later (HNDL) means adversaries capture encrypted data today and store it until quantum computers can decrypt it. Long-lived secrets in healthcare, finance, and government face exposure now — even while today's crypto still works. NIST finalized ML-KEM, ML-DSA, and SLH-DSA standards in 2024 so migration can begin immediately.",
       },
       {
         heading: "What to do now",
-        body: "Inventory quantum-vulnerable crypto, quantify harvest-now-decrypt-later exposure, and build a migration program with evidence auditors can verify — not a slide deck.",
+        body:
+          "Inventory quantum-vulnerable crypto, quantify HNDL exposure with Mosca's inequality, and build a migration program with evidence auditors can verify — not a slide deck. Qtangl Assess produces a prioritized backlog with signed scan artifacts; an inventory aid, not a formal attestation.",
       },
     ],
+    externalSourceIds: [
+      "nist-pqc-overview",
+      "palo-alto-q-day",
+      "google-2029-ars",
+      "cloudflare-pq-roadmap",
+    ],
+    videoId: "CJqJCpSxadE",
+    videoTitle: "Q-Day Explained: The Quantum Threat to Encryption",
+    blogCompanionHref: "/blog/pqc-deadlines-2029",
+    blogCompanionTitle: "PQC deadlines in 2029 and beyond",
     related: ["hndl", "deadlines", "readiness-score"],
   },
   hndl: {
@@ -191,13 +235,30 @@ export const qDayArticles = {
     sections: [
       {
         heading: "The threat model",
-        body: "Nation-state and sophisticated actors harvest TLS sessions, backups, and archives knowing future quantum computers will read them. Financial, healthcare, and government data with decades of shelf-life is highest risk.",
+        body:
+          "Nation-state and sophisticated actors harvest TLS sessions, backups, and archives knowing future quantum computers will read them. Storage is cheap; breaking RSA today is not required. NIST describes this as harvest now, decrypt later — one reason post-quantum encryption should deploy as soon as feasible.",
+      },
+      {
+        heading: "Who faces the highest exposure",
+        body:
+          "Healthcare records, financial transaction archives, M&A diligence, and classified-adjacent research often carry 20–50 year confidentiality requirements. Regional banks, payers, and government contractors hold exactly this data profile. Incident response data shows exfiltration timelines compressing — copying ciphertext is faster than breaking it.",
+      },
+      {
+        heading: "Mosca inequality ties it together",
+        body:
+          "If data shelf-life (X) plus migration time (Y) exceeds the time until quantum breaks crypto (Z), you have HNDL exposure today. Mosca turns abstract quantum risk into a planning inequality boards and regulators understand — especially when migration takes five to ten years across a mid-market estate.",
       },
       {
         heading: "How Qtangl quantifies it",
-        body: "Every Qtangl assessment includes Mosca HNDL scoring — mapping your data retention horizon against estimated quantum timeline and migration runway.",
+        body:
+          "Every Qtangl assessment includes Mosca HNDL scoring — mapping your data retention horizon against estimated quantum timeline and migration runway. Quantum-vulnerable does not mean broken today; it means you need inventory and a migration runway now.",
       },
     ],
+    externalSourceIds: ["nist-pqc-overview", "palo-alto-q-day", "video-jeremy-allison-hndl"],
+    videoId: "u4mVljNQnBw",
+    videoTitle: "Why Your Encrypted Data Is Already Being Stolen",
+    blogCompanionHref: "/blog/harvest-now-decrypt-later-boards",
+    blogCompanionTitle: "Harvest-now-decrypt-later: what boards miss",
     related: ["mosca-inequality", "what-is-q-day", "readiness-score"],
   },
   "mosca-inequality": {
@@ -234,14 +295,35 @@ export const qDayArticles = {
       "Multiple frameworks set migration clocks. Your inventory must map findings to the deadlines your auditors already track.",
     sections: [
       {
+        heading: "Industry acceleration: 2029 planning signal",
+        body:
+          "Google and Cloudflare moved internal full post-quantum readiness — including authentication — to 2029. Federal mandates (NSM-10 by 2035, CNSA 2.0 tiers through 2030–2033) and NIST IR 8547 (2030 guidance) already set clocks. Mid-market teams must map inventory findings to whichever frameworks their auditors enforce.",
+      },
+      {
         heading: "Federal and defense",
-        body: "NSM-10 (2035), CNSA 2.0 (2030–2033), and CMMC 2.0 (2026–2030) drive defense contractors and federal-adjacent SaaS to inventory now and migrate in tiers.",
+        body:
+          "NSM-10 mandates federal migration away from quantum-vulnerable algorithms by 2035. CNSA 2.0 sets tiered deadlines for national security systems through 2030–2033. CMMC 2.0 (2026–2030) drives defense contractors and FedRAMP-path SaaS toward crypto inventory evidence for Level 2 audits.",
       },
       {
         heading: "Industry frameworks",
-        body: "PCI-DSS 4.0 emphasizes crypto agility. NIST IR 8547 sets 2030 transition guidance. HIPAA and EU CRA add sector-specific pressure for healthcare and med-tech.",
+        body:
+          "PCI-DSS 4.0 emphasizes crypto agility for payment environments. NIST IR 8547 provides transition guidance for federal and regulated-adjacent organizations. HIPAA and EU CRA add sector-specific pressure for healthcare payers and med-tech vendors.",
+      },
+      {
+        heading: "ECC may break before RSA",
+        body:
+          "Recent research suggests ECC-256 — widely used in TLS and VPNs — may fall on an earlier timeline than RSA-2048 for offline retrospective attacks. Inventory must tag both algorithm families and prioritize authentication infrastructure, not assume RSA migration comes first.",
       },
     ],
+    externalSourceIds: [
+      "nist-ir-8547",
+      "nsa-cnsa-2",
+      "nsm-10",
+      "gqi-q-day-summary",
+      "cloudflare-pq-roadmap",
+    ],
+    blogCompanionHref: "/blog/pqc-deadlines-2029",
+    blogCompanionTitle: "PQC deadlines in 2029 and beyond",
     related: ["what-is-q-day", "cbom", "readiness-score"],
   },
   cbom: {
@@ -265,6 +347,8 @@ export const qDayArticles = {
       },
     ],
     related: ["vs-spreadsheet", "readiness-score", "hybrid-tls"],
+    blogCompanionHref: "/blog/pqc-inventory-in-10-minutes",
+    blogCompanionTitle: "PQC inventory in 10 minutes",
   },
   "hybrid-tls": {
     metadata: {
@@ -336,8 +420,8 @@ export const qDayArticles = {
 
 export type QDayArticleSlug = keyof typeof qDayArticles;
 
-export function getQDayArticle(slug: string) {
-  return qDayArticles[slug as QDayArticleSlug] ?? null;
+export function getQDayArticle(slug: string): QDayArticle | null {
+  return (qDayArticles[slug as QDayArticleSlug] as QDayArticle | undefined) ?? null;
 }
 
 export function getRelatedQDayResources(slugs: readonly string[]) {

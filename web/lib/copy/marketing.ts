@@ -196,6 +196,42 @@ export const blogPosts = [
     readiness: true,
   },
   {
+    slug: "harvest-now-decrypt-later-boards",
+    href: "/blog/harvest-now-decrypt-later-boards",
+    category: "Q-Day readiness",
+    coverImage: "/qtangl-technology-solver-grid.svg",
+    coverAlt: "Timeline illustrating harvest-now-decrypt-later exposure before Q-Day.",
+    title: "Harvest-now-decrypt-later: what boards miss",
+    excerpt: "HNDL exposure, Mosca inequality, and why inventory starts before Q-Day headlines.",
+    description:
+      "What boards miss about harvest-now-decrypt-later — and why quantum-vulnerable crypto needs a migration runway now.",
+    readiness: true,
+  },
+  {
+    slug: "pqc-deadlines-2029",
+    href: "/blog/pqc-deadlines-2029",
+    category: "Q-Day readiness",
+    coverImage: "/qtangl-technology-solver-grid.svg",
+    coverAlt: "Post-quantum compliance deadline matrix for NSM-10, CNSA 2.0, and NIST IR 8547.",
+    title: "PQC deadlines in 2029 and beyond: what CISOs should track",
+    excerpt: "Google and Cloudflare accelerated to 2029 — map frameworks to your inventory tiers.",
+    description:
+      "Industry timeline shifts, federal deadlines, ECC-before-RSA nuance, and a 90-day action checklist.",
+    readiness: true,
+  },
+  {
+    slug: "pqc-inventory-in-10-minutes",
+    href: "/blog/pqc-inventory-in-10-minutes",
+    category: "Q-Day readiness",
+    coverImage: "/qtangl-technology-solver-grid.svg",
+    coverAlt: "PQC scanner dashboard with TLS endpoints and readiness score.",
+    title: "PQC inventory in 10 minutes: what a live scan actually shows",
+    excerpt: "Endpoints, algorithm tags, CBOM export, and signed verify — not another spreadsheet.",
+    description:
+      "Walk through the Qtangl PQC demo: baseline inventory, framework mapping, and evidence auditors can verify.",
+    readiness: true,
+  },
+  {
     slug: "when-classical-wins",
     href: "/blog/when-classical-wins",
     category: "Labs · Validation",
