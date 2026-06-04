@@ -2,11 +2,13 @@ type CoverImageProps = {
   src: string;
   alt: string;
   className?: string;
-  sizes?: string;
   priority?: boolean;
 };
 
-/** Static public covers — plain img avoids next/image SVG hydration quirks. */
+/**
+ * Blog card covers — in-flow sizing so aspect-ratio parents keep height.
+ * (Absolute-only children inside aspect-[4/3] collapse to 0px in grid cards.)
+ */
 export default function CoverImage({
   src,
   alt,
@@ -20,7 +22,7 @@ export default function CoverImage({
       alt={alt}
       loading={priority ? "eager" : "lazy"}
       decoding="async"
-      className={`absolute inset-0 h-full w-full ${className}`}
+      className={`block size-full ${className}`}
     />
   );
 }
