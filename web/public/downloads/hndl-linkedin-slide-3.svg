@@ -6,7 +6,7 @@
   <text x="80" y="320" fill="#ccc" font-size="26">X = data shelf-life (years)</text>
   <text x="80" y="380" fill="#ccc" font-size="26">Y = migration runway (years)</text>
   <text x="80" y="440" fill="#ccc" font-size="26">Z = years until Q-Day</text>
-  <text x="80" y="560" fill="#fff" font-size="24">When inequality holds ’</text>
+  <text x="80" y="560" fill="#fff" font-size="24">When inequality holds &#8594;</text>
   <text x="80" y="610" fill="#f87171" font-size="28">HNDL exposure today</text>
   <text x="80" y="980" fill="#666" font-size="20">qtangl.com/assess/mini</text>
 </svg>

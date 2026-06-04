@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" fill="none" role="img" aria-labelledby="title desc">
   <title id="title">TLS handshake HNDL flow</title>
-  <desc id="desc">Diagram showing client and server exchanging ECDH handshake material and encrypted application data  both are stored for future quantum decryption.</desc>
+  <desc id="desc">Diagram showing client and server exchanging ECDH handshake material and encrypted application data; both are stored for future quantum decryption.</desc>
   <rect width="1200" height="630" fill="#0a0a0a"/>
   <text x="60" y="56" fill="#fff" font-family="system-ui,sans-serif" font-size="28" font-weight="600">What adversaries store from TLS</text>
   <rect x="80" y="120" width="200" height="80" rx="8" stroke="#888" stroke-width="2" fill="#111"/>
@@ -8,13 +8,13 @@
   <rect x="920" y="120" width="200" height="80" rx="8" stroke="#888" stroke-width="2" fill="#111"/>
   <text x="960" y="168" fill="#fff" font-size="18">Server</text>
   <rect x="340" y="240" width="520" height="60" rx="8" stroke="#6ee7a0" stroke-width="2" fill="#0d1f14"/>
-  <text x="360" y="278" fill="#6ee7a0" font-size="16">` Handshake (ECDH public keys, cert chain)  STORED</text>
+  <text x="360" y="278" fill="#6ee7a0" font-size="16">1. Handshake (ECDH keys, cert chain) &#8594; STORED</text>
   <rect x="340" y="330" width="520" height="60" rx="8" stroke="#6ee7a0" stroke-width="2" fill="#0d1f14"/>
-  <text x="360" y="368" fill="#6ee7a0" font-size="16">a Encrypted application data  STORED</text>
+  <text x="360" y="368" fill="#6ee7a0" font-size="16">2. Encrypted application data &#8594; STORED</text>
   <rect x="340" y="420" width="520" height="60" rx="8" stroke="#444" stroke-width="2" fill="#111"/>
-  <text x="360" y="458" fill="#888" font-size="16">AES session keys alone  not useful without `</text>
+  <text x="360" y="458" fill="#888" font-size="16">AES session keys are derived, not sent</text>
   <path d="M280 160 L340 270 M920 160 L860 270" stroke="#555" stroke-width="2"/>
   <path d="M280 160 L340 360 M920 160 L860 360" stroke="#555" stroke-width="2"/>
-  <text x="60" y="560" fill="#ccc" font-size="15">Future CRQC breaks ECDH in stored handshake ’ decrypts session ’ reads a</text>
-  <text x="60" y="600" fill="#666" font-size="14">Qtangl · HNDL technical primer</text>
+  <text x="60" y="560" fill="#ccc" font-size="15">Future CRQC breaks ECDH in the stored handshake &#8594; derives session key &#8594; reads data</text>
+  <text x="60" y="600" fill="#666" font-size="14">Qtangl &#183; HNDL technical primer</text>
 </svg>

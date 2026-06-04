@@ -7,13 +7,13 @@
   <text x="80" y="430" fill="#666" font-size="14">Today</text>
   <text x="1040" y="430" fill="#666" font-size="14">Future</text>
   <rect x="100" y="320" width="350" height="80" rx="6" fill="#6ee7a0" opacity="0.7"/>
-  <text x="120" y="355" fill="#000" font-size="16" font-weight="600">X  Data shelf-life</text>
+  <text x="120" y="355" fill="#000" font-size="16" font-weight="600">X: Data shelf-life</text>
   <rect x="450" y="320" width="200" height="80" rx="6" fill="#60a5fa" opacity="0.7"/>
-  <text x="470" y="355" fill="#000" font-size="16" font-weight="600">Y  Migration</text>
+  <text x="470" y="355" fill="#000" font-size="16" font-weight="600">Y: Migration</text>
   <line x1="650" y1="280" x2="650" y2="420" stroke="#f87171" stroke-width="3" stroke-dasharray="8 4"/>
-  <text x="660" y="270" fill="#f87171" font-size="16" font-weight="600">Z  Q-Day</text>
+  <text x="660" y="270" fill="#f87171" font-size="16" font-weight="600">Z: Q-Day</text>
   <rect x="100" y="180" width="550" height="50" rx="6" stroke="#6ee7a0" stroke-width="2" fill="none"/>
-  <text x="120" y="212" fill="#6ee7a0" font-size="18">X + Y &gt; Z ’ HNDL exposure today</text>
-  <text x="60" y="520" fill="#ccc" font-size="15">Example: X=35 + Y=7 = 42 vs Z=10 ’ inequality holds for healthcare payers</text>
-  <text x="60" y="600" fill="#666" font-size="14">Qtangl · Mosca calculator at /q-day/mosca-inequality</text>
+  <text x="120" y="212" fill="#6ee7a0" font-size="18">X + Y &gt; Z &#8594; HNDL exposure today</text>
+  <text x="60" y="520" fill="#ccc" font-size="15">Example: X=35 + Y=7 = 42 vs Z=10 &#8594; inequality holds for healthcare payers</text>
+  <text x="60" y="600" fill="#666" font-size="14">Qtangl &#183; Mosca calculator at /q-day/mosca-inequality</text>
 </svg>

@@ -11,5 +11,5 @@
   <circle cx="200" cy="180" r="80" stroke="#fff" stroke-width="2" opacity="0.55"/>
   <circle cx="400" cy="220" r="50" stroke="#6ee7a0" stroke-width="2" opacity="0.45"/>
   <path d="M600 120 L900 120 L750 320 Z" stroke="#fff" stroke-width="2" opacity="0.5" fill="none"/>
-  <text x="80" y="560" fill="#aaa" font-family="system-ui,sans-serif" font-size="28">Qtangl · HNDL &amp; Q-Day readiness</text>
+  <text x="80" y="560" fill="#aaa" font-family="system-ui,sans-serif" font-size="28">Qtangl &#183; HNDL &amp; Q-Day readiness</text>
 </svg>

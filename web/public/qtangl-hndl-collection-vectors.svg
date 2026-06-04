@@ -1,30 +1,119 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" fill="none" role="img" aria-labelledby="title desc">
-  <title id="title">HNDL collection vectors</title>
-  <desc id="desc">Five paths adversaries use to copy ciphertext: breach exfiltration, backups, cloud misconfiguration, bulk transit capture, and insider or supply-chain copies.</desc>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" fill="none" role="img" aria-labelledby="ttl dsc">
+  <title id="ttl">How encrypted data is harvested</title>
+  <desc id="dsc">Five collection vectors - breach exfiltration, backups and archives, cloud misconfiguration, bulk transit capture, and insider or supply-chain copies - feed a store of harvested ciphertext that adversaries aim to decrypt after Q-Day.</desc>
+  <defs>
+    <radialGradient id="bgGlow" cx="16%" cy="10%" r="62%">
+      <stop offset="0%" stop-color="#6ee7a0" stop-opacity="0.10"/>
+      <stop offset="100%" stop-color="#0a0a0a" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="vaultGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#6ee7a0" stop-opacity="0.20"/>
+      <stop offset="100%" stop-color="#6ee7a0" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="vaultBody" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#15271d"/>
+      <stop offset="100%" stop-color="#0b140f"/>
+    </linearGradient>
+    <linearGradient id="card" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#17191d"/>
+      <stop offset="100%" stop-color="#0f1115"/>
+    </linearGradient>
+    <marker id="ah" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+      <path d="M0 0 L8 3 L0 6 Z" fill="#6ee7a0" fill-opacity="0.75"/>
+    </marker>
+  </defs>
+
   <rect width="1200" height="630" fill="#0a0a0a"/>
-  <text x="60" y="56" fill="#fff" font-family="system-ui,sans-serif" font-size="28" font-weight="600">How ciphertext gets copied today</text>
-  <rect x="60" y="90" width="320" height="120" rx="12" stroke="#444" stroke-width="2" fill="#111"/>
-  <text x="80" y="125" fill="#fff" font-size="18" font-weight="600">Breach exfiltration</text>
-  <text x="80" y="155" fill="#888" font-size="14">DB dumps, file shares, backups</text>
-  <text x="80" y="185" fill="#6ee7a0" font-size="13">Likelihood: High</text>
-  <rect x="440" y="90" width="320" height="120" rx="12" stroke="#444" stroke-width="2" fill="#111"/>
-  <text x="460" y="125" fill="#fff" font-size="18" font-weight="600">Backups &amp; archives</text>
-  <text x="460" y="155" fill="#888" font-size="14">Tape, S3, email archives</text>
-  <text x="460" y="185" fill="#6ee7a0" font-size="13">Likelihood: High</text>
-  <rect x="820" y="90" width="320" height="120" rx="12" stroke="#444" stroke-width="2" fill="#111"/>
-  <text x="840" y="125" fill="#fff" font-size="18" font-weight="600">Cloud misconfig</text>
-  <text x="840" y="155" fill="#888" font-size="14">Public snapshots, open buckets</text>
-  <text x="840" y="185" fill="#fbbf24" font-size="13">Likelihood: Medium</text>
-  <rect x="250" y="260" width="320" height="120" rx="12" stroke="#444" stroke-width="2" fill="#111"/>
-  <text x="270" y="295" fill="#fff" font-size="18" font-weight="600">Bulk transit capture</text>
-  <text x="270" y="325" fill="#888" font-size="14">TLS handshakes + ciphertext</text>
-  <text x="270" y="355" fill="#fbbf24" font-size="13">Likelihood: Medium</text>
-  <rect x="630" y="260" width="320" height="120" rx="12" stroke="#444" stroke-width="2" fill="#111"/>
-  <text x="650" y="295" fill="#fff" font-size="18" font-weight="600">Insider / supply chain</text>
-  <text x="650" y="325" fill="#888" font-size="14">M&amp;A rooms, legal holds</text>
-  <text x="650" y="355" fill="#888" font-size="13">Likelihood: Lower</text>
-  <path d="M600 400 L600 480" stroke="#555" stroke-width="2" stroke-dasharray="6 4"/>
-  <rect x="400" y="480" width="400" height="80" rx="12" stroke="#666" stroke-width="2" fill="#1a1a1a"/>
-  <text x="420" y="520" fill="#ccc" font-size="16">Store cheaply; decrypt after Q-Day (no break required today)</text>
-  <text x="60" y="600" fill="#666" font-size="14">Qtangl - HNDL collection guide</text>
+  <rect width="1200" height="630" fill="url(#bgGlow)"/>
+
+  <text x="64" y="74" fill="#ffffff" font-family="system-ui,-apple-system,Segoe UI,Roboto,sans-serif" font-size="40" font-weight="700">How encrypted data is harvested</text>
+  <text x="64" y="108" fill="#9aa0a6" font-family="system-ui,sans-serif" font-size="20">Adversaries copy ciphertext today &#8212; no quantum computer required</text>
+
+  <g fill="none" stroke-width="2" marker-end="url(#ah)">
+    <path d="M394 164 C 540 164, 660 262, 718 262" stroke="#2f5141" stroke-opacity="0.85"/>
+    <path d="M394 234 C 540 234, 660 284, 718 284" stroke="#2f5141" stroke-opacity="0.85"/>
+    <path d="M394 304 C 545 304, 665 305, 718 305" stroke="#5c4d22" stroke-opacity="0.85"/>
+    <path d="M394 374 C 540 374, 660 326, 718 326" stroke="#5c4d22" stroke-opacity="0.85"/>
+    <path d="M394 444 C 540 444, 660 348, 718 348" stroke="#34383d" stroke-opacity="0.85"/>
+  </g>
+
+  <g font-family="system-ui,sans-serif">
+    <rect x="64" y="132" width="330" height="64" rx="12" fill="url(#card)" stroke="#24262b"/>
+    <rect x="64" y="132" width="6" height="64" rx="3" fill="#6ee7a0"/>
+    <g transform="translate(86,152)" stroke="#6ee7a0" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="0" y="3" width="14" height="18" rx="3"/>
+      <path d="M9 12 H23 M18 7 L23 12 L18 17"/>
+    </g>
+    <text x="122" y="160" fill="#ffffff" font-size="16" font-weight="600">Breach exfiltration</text>
+    <text x="122" y="180" fill="#868c92" font-size="12">DB dumps, file shares</text>
+    <rect x="326" y="151" width="56" height="26" rx="13" fill="#6ee7a0" fill-opacity="0.12" stroke="#6ee7a0" stroke-opacity="0.5"/>
+    <text x="354" y="169" text-anchor="middle" fill="#6ee7a0" font-size="12" font-weight="600">High</text>
+
+    <rect x="64" y="202" width="330" height="64" rx="12" fill="url(#card)" stroke="#24262b"/>
+    <rect x="64" y="202" width="6" height="64" rx="3" fill="#6ee7a0"/>
+    <g transform="translate(88,222)" stroke="#6ee7a0" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <ellipse cx="10" cy="5" rx="10" ry="3.5"/>
+      <path d="M0 5 V17 A10 3.5 0 0 0 20 17 V5"/>
+      <path d="M0 11 A10 3.5 0 0 0 20 11"/>
+    </g>
+    <text x="122" y="230" fill="#ffffff" font-size="16" font-weight="600">Backups &amp; archives</text>
+    <text x="122" y="250" fill="#868c92" font-size="12">Tape, S3 snapshots, email</text>
+    <rect x="326" y="221" width="56" height="26" rx="13" fill="#6ee7a0" fill-opacity="0.12" stroke="#6ee7a0" stroke-opacity="0.5"/>
+    <text x="354" y="239" text-anchor="middle" fill="#6ee7a0" font-size="12" font-weight="600">High</text>
+
+    <rect x="64" y="272" width="330" height="64" rx="12" fill="url(#card)" stroke="#24262b"/>
+    <rect x="64" y="272" width="6" height="64" rx="3" fill="#fbbf24"/>
+    <g transform="translate(86,276)" stroke="#fbbf24" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M5 18 a5 5 0 0 1 0.6 -10 a7 7 0 0 1 13 1.6 a4.5 4.5 0 0 1 -1.1 8.4 Z"/>
+    </g>
+    <text x="122" y="300" fill="#ffffff" font-size="16" font-weight="600">Cloud misconfig</text>
+    <text x="122" y="320" fill="#868c92" font-size="12">Public snapshots, buckets</text>
+    <rect x="320" y="291" width="62" height="26" rx="13" fill="#fbbf24" fill-opacity="0.12" stroke="#fbbf24" stroke-opacity="0.5"/>
+    <text x="351" y="309" text-anchor="middle" fill="#fbbf24" font-size="12" font-weight="600">Med</text>
+
+    <rect x="64" y="342" width="330" height="64" rx="12" fill="url(#card)" stroke="#24262b"/>
+    <rect x="64" y="342" width="6" height="64" rx="3" fill="#fbbf24"/>
+    <g transform="translate(86,366)" stroke="#fbbf24" stroke-width="2" fill="none" stroke-linecap="round">
+      <path d="M0 8 q5 -11 10 0 t10 0"/>
+    </g>
+    <text x="122" y="370" fill="#ffffff" font-size="16" font-weight="600">Bulk transit capture</text>
+    <text x="122" y="390" fill="#868c92" font-size="12">TLS handshakes captured</text>
+    <rect x="320" y="361" width="62" height="26" rx="13" fill="#fbbf24" fill-opacity="0.12" stroke="#fbbf24" stroke-opacity="0.5"/>
+    <text x="351" y="379" text-anchor="middle" fill="#fbbf24" font-size="12" font-weight="600">Med</text>
+
+    <rect x="64" y="412" width="330" height="64" rx="12" fill="url(#card)" stroke="#24262b"/>
+    <rect x="64" y="412" width="6" height="64" rx="3" fill="#9aa0a6"/>
+    <g transform="translate(90,432)" stroke="#9aa0a6" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="10" cy="6" r="4"/>
+      <path d="M2 22 a8 8 0 0 1 16 0"/>
+    </g>
+    <text x="122" y="440" fill="#ffffff" font-size="16" font-weight="600">Insider / supply chain</text>
+    <text x="122" y="460" fill="#868c92" font-size="12">M&amp;A rooms, legal holds</text>
+    <rect x="324" y="431" width="58" height="26" rx="13" fill="#9aa0a6" fill-opacity="0.12" stroke="#9aa0a6" stroke-opacity="0.5"/>
+    <text x="353" y="449" text-anchor="middle" fill="#c4c9ce" font-size="12" font-weight="600">Low</text>
+  </g>
+
+  <ellipse cx="828" cy="300" rx="160" ry="150" fill="url(#vaultGlow)"/>
+  <path d="M740 224 V376 A88 24 0 0 0 916 376 V224" fill="url(#vaultBody)" stroke="#6ee7a0" stroke-width="2"/>
+  <ellipse cx="828" cy="224" rx="88" ry="24" fill="#15271d" stroke="#6ee7a0" stroke-width="2"/>
+  <g transform="translate(812,238)" stroke="#6ee7a0" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="0" y="12" width="32" height="22" rx="4" fill="#0b140f"/>
+    <path d="M6 12 V7 a10 10 0 0 1 20 0 V12"/>
+    <circle cx="16" cy="21" r="2.6" fill="#6ee7a0" stroke="none"/>
+    <rect x="14.7" y="22" width="2.6" height="7" fill="#6ee7a0" stroke="none"/>
+  </g>
+  <text x="828" y="318" text-anchor="middle" fill="#ffffff" font-family="system-ui,sans-serif" font-size="19" font-weight="600">Harvested</text>
+  <text x="828" y="342" text-anchor="middle" fill="#6ee7a0" font-family="system-ui,sans-serif" font-size="19" font-weight="600">ciphertext</text>
+  <text x="828" y="364" text-anchor="middle" fill="#7e858b" font-family="system-ui,sans-serif" font-size="12.5">storage is cheap</text>
+
+  <line x1="64" y1="520" x2="1136" y2="520" stroke="#2c2f34" stroke-width="2" stroke-dasharray="2 7"/>
+  <circle cx="120" cy="520" r="6" fill="#6ee7a0"/>
+  <text x="120" y="550" text-anchor="middle" fill="#9aa0a6" font-family="system-ui,sans-serif" font-size="13">Copy today</text>
+  <line x1="628" y1="500" x2="628" y2="540" stroke="#f87171" stroke-width="2" stroke-dasharray="6 4"/>
+  <text x="628" y="550" text-anchor="middle" fill="#f87171" font-family="system-ui,sans-serif" font-size="13">Q-Day (CRQC)</text>
+  <circle cx="1080" cy="520" r="6" fill="#f87171"/>
+  <text x="1080" y="550" text-anchor="middle" fill="#9aa0a6" font-family="system-ui,sans-serif" font-size="13">Decrypt later</text>
+
+  <text x="64" y="600" fill="#5f656b" font-family="system-ui,sans-serif" font-size="13">qtangl.com/q-day/hndl</text>
+  <text x="1136" y="600" text-anchor="end" fill="#5f656b" font-family="system-ui,sans-serif" font-size="13">Qtangl &#183; HNDL collection guide</text>
 </svg>

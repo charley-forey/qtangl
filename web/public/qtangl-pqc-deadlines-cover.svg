@@ -17,5 +17,5 @@
   <circle cx="200" cy="200" r="8" fill="#fbbf24"/>
   <circle cx="500" cy="260" r="8" fill="#fbbf24"/>
   <circle cx="800" cy="320" r="8" fill="#fff"/>
-  <text x="80" y="560" fill="#aaa" font-family="system-ui,sans-serif" font-size="28">Qtangl · Compliance deadlines</text>
+  <text x="80" y="560" fill="#aaa" font-family="system-ui,sans-serif" font-size="28">Qtangl &#183; Compliance deadlines</text>
 </svg>

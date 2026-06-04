@@ -3,23 +3,23 @@
   <desc id="desc">Visual overview of HNDL risk: ciphertext stored today, decrypted after Q-Day, with Mosca inequality timeline.</desc>
   <rect width="1200" height="630" fill="#0a0a0a"/>
   <text x="60" y="70" fill="#fff" font-family="system-ui,sans-serif" font-size="32" font-weight="600">Harvest now, decrypt later</text>
-  <text x="60" y="110" fill="#888" font-size="18">Copy ciphertext today · Decrypt after Q-Day</text>
+  <text x="60" y="110" fill="#888" font-size="18">Copy ciphertext today &#183; decrypt after Q-Day</text>
   <rect x="60" y="160" width="340" height="140" rx="12" stroke="#6ee7a0" stroke-width="2" fill="#0d1f14"/>
   <text x="80" y="200" fill="#6ee7a0" font-size="16" font-weight="600">Today</text>
-  <text x="80" y="235" fill="#ccc" font-size="14">Breach · Backups · TLS capture</text>
+  <text x="80" y="235" fill="#ccc" font-size="14">Breach &#183; backups &#183; TLS capture</text>
   <text x="80" y="265" fill="#888" font-size="13">Storage is cheap</text>
   <path d="M420 230 L520 230" stroke="#555" stroke-width="2" marker-end="url(#arrow)"/>
   <rect x="540" y="160" width="340" height="140" rx="12" stroke="#f87171" stroke-width="2" fill="#1f0d0d"/>
   <text x="560" y="200" fill="#f87171" font-size="16" font-weight="600">After Q-Day</text>
-  <text x="560" y="235" fill="#ccc" font-size="14">Break RSA / ECDH · Read archives</text>
+  <text x="560" y="235" fill="#ccc" font-size="14">Break RSA / ECDH &#183; read archives</text>
   <text x="560" y="265" fill="#888" font-size="13">No break required today</text>
   <rect x="60" y="360" width="1080" height="100" rx="12" stroke="#444" stroke-width="2" fill="#111"/>
-  <text x="80" y="400" fill="#fff" font-size="16">Mosca: X + Y &gt; Z ’ exposure now</text>
-  <text x="80" y="430" fill="#888" font-size="14">X = shelf-life · Y = migration · Z = quantum timeline</text>
+  <text x="80" y="400" fill="#fff" font-size="16">Mosca: X + Y &gt; Z &#8594; exposure now</text>
+  <text x="80" y="430" fill="#888" font-size="14">X = shelf-life &#183; Y = migration &#183; Z = quantum timeline</text>
   <defs>
     <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
       <path d="M0,0 L10,3 L0,6 Z" fill="#555"/>
     </marker>
   </defs>
-  <text x="60" y="580" fill="#666" font-size="14">Qtangl · /q-day/hndl</text>
+  <text x="60" y="580" fill="#666" font-size="14">Qtangl &#183; /q-day/hndl</text>
 </svg>

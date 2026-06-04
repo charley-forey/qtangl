@@ -15,5 +15,5 @@
     <line x1="360" y1="140" x2="360" y2="500"/>
     <line x1="720" y1="140" x2="720" y2="500"/>
   </g>
-  <text x="80" y="560" fill="#aaa" font-family="system-ui,sans-serif" font-size="28">Qtangl · PQC inventory &amp; scanner</text>
+  <text x="80" y="560" fill="#aaa" font-family="system-ui,sans-serif" font-size="28">Qtangl &#183; PQC inventory &amp; scanner</text>
 </svg>
