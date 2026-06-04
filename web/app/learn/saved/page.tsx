@@ -11,6 +11,7 @@ export const metadata: Metadata = buildPageMetadata({
   path: "/learn/saved",
   title: "Saved resources",
   description: "Your saved quantum software library entries.",
+  noIndex: true,
 });
 
 export default async function SavedPage() {

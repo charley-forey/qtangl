@@ -35,7 +35,6 @@ const readinessRoutes = [
   "/trust",
   "/status",
   "/verify",
-  "/dashboard",
   "/labs",
   "/journey",
   "/resources",
@@ -73,9 +72,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/learn/compare",
     "/learn/map",
     "/learn/whats-new",
-    "/learn/saved",
-    "/learn/submit",
-    "/learn/feed.xml",
     ...libraryCategories.map((category) => `/learn/category/${category.slug}`),
     ...libraryEntries.map((entry) => `/learn/library/${entry.slug}`),
     ...libraryTopicTeasers.map((topic) => `/learn/topics/${topic.slug}`),
@@ -98,7 +94,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         : route.startsWith("/solutions/") ||
             route === "/monitor" ||
             route === "/convert" ||
-            route === "/pricing"
+            route === "/pricing" ||
+            route.startsWith("/q-day/frameworks/") ||
+            route.startsWith("/blog/")
           ? 0.9
           : route === "/demo/hospital" ||
               route === "/demo/airline" ||

@@ -14,6 +14,7 @@ export const metadata: Metadata = buildPageMetadata({
   title: "Q-Day Monitor Dashboard",
   description:
     "Scheduled re-scans, crypto drift alerts, readiness trends, and remediation tracking for your Qtangl tenant.",
+  noIndex: true,
 });
 
 export default function DashboardPage() {
