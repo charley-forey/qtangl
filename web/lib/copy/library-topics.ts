@@ -298,18 +298,30 @@ export const libraryTopics: LibraryTopic[] = [
     title: "Post-quantum cryptography readiness",
     description: "From inventory to Monitor — how teams prepare for Q-Day with evidence.",
     intro:
-      "Post-quantum readiness is not a single tool purchase. It is a program: baseline inventory, framework-mapped evidence, scheduled re-scans, and remediation proof. These open-source libraries support the technical migration; Qtangl supports the operational workflow.",
-    heroImagePath: "/learn/topics/post-quantum-crypto-libraries.png",
+      "Post-quantum readiness is not a single tool purchase. It is a program: baseline inventory, HNDL quantification, framework-mapped evidence, scheduled re-scans, and remediation proof.",
+    heroImagePath: "/learn/topics/hndl-risk.svg",
     sections: [
       {
         title: "Inventory before migration",
         body: [
-          "You cannot migrate what you have not inventoried. Start with TLS endpoints, signing keys, and third-party dependencies — then map findings to NSM-10, CMMC, or NIST IR 8547 tiers.",
+          "You cannot migrate what you have not inventoried. Start with TLS endpoints, JWKS, SSH, STARTTLS, and third-party dependencies — then map findings to NSM-10, CMMC, or NIST IR 8547 tiers.",
+        ],
+      },
+      {
+        title: "Quantify HNDL exposure",
+        body: [
+          "Use Mosca inequality (X + Y > Z) to determine whether ciphertext captured today may be readable before migration finishes. The HNDL hub at /q-day/hndl includes an interactive exposure estimator.",
+        ],
+      },
+      {
+        title: "Assess → Monitor → Convert",
+        body: [
+          "Assess delivers baseline CBOM and signed PDF. Monitor catches crypto drift between audit cycles. Convert attaches re-scan proof to remediation items. See /journey for the full maturity model.",
         ],
       },
     ],
     relatedResourceSlugs: ["open-quantum-safe-liboqs", "pqclean-pqclean"],
-    cta: { href: "/assess", label: "Run Q-Day scan" },
+    cta: { href: "/assess/mini", label: "Free mini-assessment" },
   },
   {
     slug: "cbom-inventory",
@@ -336,18 +348,39 @@ export const libraryTopics: LibraryTopic[] = [
     title: "Harvest-now-decrypt-later risk",
     description: "Why long-lived data faces exposure before Q-Day arrives.",
     intro:
-      "HNDL means adversaries capture ciphertext today and decrypt it after quantum computers mature. Healthcare, finance, and government data with decades of shelf-life are highest risk.",
-    heroImagePath: "/learn/topics/post-quantum-crypto-libraries.png",
+      "HNDL means adversaries capture ciphertext today and decrypt it after quantum computers mature. Healthcare, finance, and government data with decades of shelf-life are highest risk — even while today's crypto still works.",
+    heroImagePath: "/learn/topics/hndl-risk.svg",
     sections: [
+      {
+        title: "How ciphertext gets copied",
+        body: [
+          "Breach exfiltration, backups and archives, cloud misconfiguration, and bulk network collection are the dominant paths. Adversaries do not need to break RSA today — copying is faster than cryptanalysis.",
+          "See the practitioner guide at /blog/how-encrypted-data-is-harvested and the interactive collection matrix at /q-day/hndl.",
+        ],
+      },
       {
         title: "Mosca inequality",
         body: [
-          "When data shelf-life plus migration time exceeds the quantum timeline, you have exposure now. See /q-day/mosca-inequality for the interactive calculator.",
+          "When data shelf-life (X) plus migration time (Y) exceeds the quantum timeline (Z), you have HNDL exposure now. Healthcare payers often see X = 30–50 years with Y = 5–10 years.",
+          "Use the Mosca calculator at /q-day/mosca-inequality or the vertical exposure estimator at /q-day/hndl.",
+        ],
+      },
+      {
+        title: "Shelf-life by vertical",
+        body: [
+          "Healthcare: 30–50 years. Government: 15–50 years. Banking: 7–25 years. SaaS: 1–7 years for transit; watch archives.",
+          "Framework guides: /q-day/frameworks/hipaa-hndl, banking-hndl, and gov-hndl.",
+        ],
+      },
+      {
+        title: "What to do this quarter",
+        body: [
+          "Run cryptographic inventory, tag findings by shelf-life tier, pilot hybrid TLS, and export CBOM for GRC. Start with the free mini-assessment at /assess/mini.",
         ],
       },
     ],
-    relatedResourceSlugs: ["open-quantum-safe-liboqs"],
-    cta: { href: "/q-day/hndl", label: "HNDL primer" },
+    relatedResourceSlugs: ["open-quantum-safe-liboqs", "pqclean-pqclean"],
+    cta: { href: "/q-day/hndl", label: "HNDL hub" },
   },
   {
     slug: "ml-kem-deployment",

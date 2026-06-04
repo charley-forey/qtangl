@@ -25,9 +25,10 @@ export default async function OpenGraphImage({ params }: BlogOgImageProps) {
   const content = await loadReadinessMarkdown(registry.kind, slug, registry.markdownFile);
 
   return renderReadinessOgImage({
-    eyebrow: "Q-Day readiness",
+    eyebrow: registry.hndl ? "HNDL · Q-Day readiness" : "Q-Day readiness",
     title: content.title,
     description: content.description,
     footer: "Qtangl Blog",
+    variant: registry.hndl ? "hndl" : "default",
   });
 }

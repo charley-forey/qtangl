@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 
 import MiniAssessmentClient from "@/components/marketing/MiniAssessmentClient";
 import PageHero from "@/components/layout/PageHero";
@@ -20,7 +21,13 @@ export default function MiniAssessmentPage() {
     <PageShell>
       <PageHero eyebrow={hero.eyebrow} title={hero.title} description={hero.description} />
       <Section gap="tight" className="pb-0">
-        <MiniAssessmentClient />
+        <Suspense
+          fallback={
+            <div className="mx-auto h-64 max-w-xl animate-pulse rounded-[var(--radius-feature)] bg-white/5" />
+          }
+        >
+          <MiniAssessmentClient />
+        </Suspense>
       </Section>
     </PageShell>
   );

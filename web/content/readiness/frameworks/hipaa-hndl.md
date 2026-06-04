@@ -20,6 +20,18 @@ HIPAA requires covered entities and business associates to protect electronic pr
 
 Medical records, claims archives, and research datasets may remain confidential for 30–50 years. Mosca's inequality applies: if data shelf-life plus migration time exceeds the quantum timeline, ciphertext harvested today is a liability.
 
+## How PHI ciphertext gets copied
+
+| Vector | Healthcare example | What is stored |
+|--------|-------------------|----------------|
+| Breach exfiltration | Ransomware on claims DB | Encrypted PHI dumps |
+| Long-term archives | 30-year claims retention | Tape, S3, cold storage |
+| Cloud misconfiguration | Open backup bucket | Member portal exports |
+| Email STARTTLS | Claims notification systems | TLS sessions + handshakes |
+| Third-party BAA flows | Payer-processor APIs | Quantum-vulnerable TLS |
+
+Typical Mosca inputs for payers: X = 35 years, Y = 7 years, Z = 10 years → inequality holds.
+
 ## What payers and providers should inventory
 
 - External TLS for member portals and API integrations

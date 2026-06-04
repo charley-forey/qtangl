@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import Card from "@/components/ui/Card";
 import Eyebrow from "@/components/ui/Eyebrow";
+import { trackEvent } from "@/lib/analytics";
 
 export default function MoscaCalculator() {
   const [dataYears, setDataYears] = useState(10);
@@ -11,6 +12,10 @@ export default function MoscaCalculator() {
   const [quantumYears, setQuantumYears] = useState(8);
 
   const holds = dataYears + migrationYears > quantumYears;
+
+  useEffect(() => {
+    trackEvent("hndl_mosca_calc_run", { holds });
+  }, [dataYears, migrationYears, quantumYears, holds]);
 
   return (
     <Card tone="feature" size="lg" className="rounded-[var(--radius-feature)]">
@@ -28,6 +33,7 @@ export default function MoscaCalculator() {
             value={dataYears}
             onChange={(event) => setDataYears(Number(event.target.value))}
             className="mt-2 w-full rounded-xl border border-[var(--border)] bg-black/40 px-3 py-2 text-white"
+            aria-label="Data shelf-life in years"
           />
         </label>
         <label className="block text-sm">
@@ -39,6 +45,7 @@ export default function MoscaCalculator() {
             value={migrationYears}
             onChange={(event) => setMigrationYears(Number(event.target.value))}
             className="mt-2 w-full rounded-xl border border-[var(--border)] bg-black/40 px-3 py-2 text-white"
+            aria-label="Migration runway in years"
           />
         </label>
         <label className="block text-sm">
@@ -50,10 +57,11 @@ export default function MoscaCalculator() {
             value={quantumYears}
             onChange={(event) => setQuantumYears(Number(event.target.value))}
             className="mt-2 w-full rounded-xl border border-[var(--border)] bg-black/40 px-3 py-2 text-white"
+            aria-label="Quantum timeline in years"
           />
         </label>
       </div>
-      <div className="mt-8 rounded-xl border border-[var(--border)] bg-black/55 px-5 py-4">
+      <div className="mt-8 rounded-xl border border-[var(--border)] bg-black/55 px-5 py-4" aria-live="polite">
         <p className="text-sm text-[var(--color-gray-400)]">
           {dataYears} + {migrationYears} = {dataYears + migrationYears} vs Z = {quantumYears}
         </p>

@@ -201,6 +201,62 @@ export const frameworkGuides: Record<string, FrameworkGuide> = {
       { label: "HNDL guide", href: "/q-day/hndl" },
     ],
   },
+  "banking-hndl": {
+    slug: "banking-hndl",
+    metadata: {
+      title: "Banking HNDL Guide",
+      description: "Harvest-now-decrypt-later for regional banks — transaction archives, PCI-DSS agility, and Mosca scoring.",
+    },
+    eyebrow: "Banking",
+    title: "Banking & harvest-now-decrypt-later",
+    description:
+      "Transaction archives and wire audit logs with 7–25 year shelf-life create present-day HNDL exposure when migration takes years.",
+    deadline: "PCI-DSS 4.0 ongoing",
+    summary: "Financial data shelf-life and crypto agility",
+    whyItMatters:
+      "Regional banks need inventory evidence for QSAs and boards — Mosca inequality often holds for transaction retention policies.",
+    qtanglMapping: [
+      "Bank TLS inventory scenario with HNDL scoring",
+      "PCI-DSS 4.0 control mapping in compliance pack",
+      "CBOM export for GRC integration",
+    ],
+    relatedScenarios: [
+      { label: "Bank TLS inventory", href: "/assess?scenario=bank-tls-inventory" },
+    ],
+    relatedArticles: [
+      { label: "Banking solutions", href: "/solutions/banking" },
+      { label: "HNDL hub", href: "/q-day/hndl" },
+      { label: "Banking HNDL blog", href: "/blog/hndl-banking-shelf-life" },
+    ],
+  },
+  "gov-hndl": {
+    slug: "gov-hndl",
+    metadata: {
+      title: "Government Contractor HNDL Guide",
+      description: "HNDL for defense contractors — NSM-10, CMMC, and long-retention deliverable archives.",
+    },
+    eyebrow: "Defense",
+    title: "Gov contractor & harvest-now-decrypt-later",
+    description:
+      "Contract deliverables and personnel records with 15–50 year confidentiality requirements face HNDL exposure under NSM-10 timelines.",
+    deadline: "2035 (NSM-10)",
+    summary: "CMMC inventory and federal HNDL exposure",
+    whyItMatters:
+      "DIB contractors need CMMC-ready crypto inventory — assessors expect artifacts, not attestation claims.",
+    qtanglMapping: [
+      "Gov contractor CMMC scenario scan",
+      "NSM-10 and CNSA 2.0 framework mapping",
+      "Signed verify links for prime audit cycles",
+    ],
+    relatedScenarios: [
+      { label: "Gov contractor CMMC", href: "/assess?scenario=gov-contractor-cmmc" },
+    ],
+    relatedArticles: [
+      { label: "Government solutions", href: "/solutions/government" },
+      { label: "HNDL hub", href: "/q-day/hndl" },
+      { label: "Gov HNDL blog", href: "/blog/hndl-gov-contractor-archives" },
+    ],
+  },
   "eu-cra": {
     slug: "eu-cra",
     metadata: {

@@ -31,6 +31,7 @@ export async function generateMetadata({ params }: FrameworkRouteProps): Promise
     path: `/q-day/frameworks/${slug}`,
     title: guide.metadata.title,
     description: guide.metadata.description,
+    image: `/q-day/frameworks/${slug}/opengraph-image`,
   });
 }
 

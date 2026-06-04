@@ -44,63 +44,6 @@ export const readinessBlogCta = {
 } as const;
 
 export const readinessArticles = {
-  harvestNowDecryptLaterBoards: {
-    eyebrow: "Post-quantum readiness",
-    title: "Harvest-now-decrypt-later: what boards miss",
-    intro:
-      "Boards ask whether quantum computers will break encryption tomorrow. The harder question is whether ciphertext captured today will still be confidential when migration finishes — and most enterprises cannot answer it yet.",
-    coverImage: "/qtangl-technology-solver-grid.svg",
-    coverAlt: "Cryptographic exposure timeline illustrating harvest-now-decrypt-later risk.",
-    datePublished: "2026-06-03",
-    sourceIds: ["nist-pqc-overview", "palo-alto-q-day", "nsm-10", "video-jeremy-allison-hndl"],
-    sections: [
-      {
-        title: "The risk starts before Q-Day",
-        body: [
-          "Harvest-now-decrypt-later (HNDL) is not science fiction. Adversaries capture TLS sessions, backups, and archives today knowing that a future cryptographically relevant quantum computer (CRQC) may decrypt them later. Storage is cheap; migration is not.",
-          "Quantum-vulnerable does not mean broken today. Your RSA and ECDSA still protect data in transit and at rest right now. The exposure is temporal: if data must stay confidential for decades, ciphertext harvested before you finish migrating may become readable.",
-        ],
-      },
-      {
-        title: "Who is most exposed",
-        body: [
-          "Healthcare payers, regional banks, and government contractors hold records with 20–50 year shelf lives. Trade secrets, M&A diligence, and classified-adjacent research archives face the same Mosca clock.",
-          "Unit 42 and other incident-response data show exfiltration timelines compressing — the fastest quartile of intrusions reached data theft in 72 minutes in 2025. Harvesting does not require breaking crypto today; it requires copying ciphertext.",
-        ],
-      },
-      {
-        title: "Mosca inequality in plain language",
-        body: [
-          "Michele Mosca's inequality — X + Y > Z — turns abstract quantum risk into a planning question. X is how long your data must stay secret. Y is how long migration takes. Z is when quantum computers break your algorithms.",
-          "When X + Y exceeds Z, encrypted data captured today may be readable before you finish migrating. That is HNDL exposure — and it is why inventory and migration runway matter now, not after Q-Day headlines.",
-        ],
-      },
-      {
-        title: "What to do this quarter",
-        body: [
-          "First, inventory quantum-vulnerable crypto on external TLS and critical dependencies — not a spreadsheet snapshot, but a repeatable scan with algorithm tags and framework crosswalks.",
-          "Second, quantify HNDL exposure for your longest-lived data classes. Third, map findings to the deadlines your auditors already track (NSM-10, CNSA 2.0, NIST IR 8547). Qtangl Assess produces a prioritized backlog with signed artifacts suitable for audit evidence — an inventory aid, not a formal attestation.",
-        ],
-      },
-    ],
-    faq: [
-      {
-        question: "Is my encryption broken today?",
-        answer:
-          "No. Quantum-vulnerable algorithms like RSA and ECDSA still protect data today. HNDL is about ciphertext captured now that may be decrypted after a future CRQC arrives.",
-      },
-      {
-        question: "When will Q-Day happen?",
-        answer:
-          "No one knows the exact date. Google and Cloudflare accelerated internal readiness targets to 2029 as a planning signal — not a prediction. Migration takes years regardless of the exact timeline.",
-      },
-      {
-        question: "What is the first step for a mid-market CISO?",
-        answer:
-          "Run a cryptographic inventory: which endpoints still depend on RSA or ECDSA, which third parties embed legacy crypto, and who owns remediation. A live scan beats a one-time spreadsheet exercise.",
-      },
-    ],
-  },
   pqcDeadlines2029: {
     eyebrow: "Compliance & timelines",
     title: "PQC deadlines in 2029 and beyond: what CISOs should track",

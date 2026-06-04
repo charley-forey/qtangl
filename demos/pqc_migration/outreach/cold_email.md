@@ -12,6 +12,8 @@ Qtangl is a post-quantum readiness platform:
 
 Try the Q-Day scanner: https://qtangl.com/assess
 
+**HNDL primer (how ciphertext is copied today):** https://qtangl.com/q-day/hndl
+
 Free mini-assessment (60 seconds): https://qtangl.com/assess/mini
 
 Vertical scenarios (use `scenario=` or `case=` — both work):

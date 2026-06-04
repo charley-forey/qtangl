@@ -16,7 +16,25 @@ Qtangl turns that mandate into a prioritized backlog with compliance crosswalks 
 
 ---
 
-## 2. Mosca's inequality — why start now
+## 2. How HNDL works — ciphertext copied today
+
+Adversaries **do not break encryption today**. They copy ciphertext via:
+
+| Path | Examples |
+|------|----------|
+| Breach exfiltration | DB dumps, file shares, backup appliances |
+| Backups & archives | Tape, S3, email archives (20–50 year retention) |
+| Cloud misconfiguration | Public snapshots, open buckets |
+| Bulk transit capture | TLS handshakes + ciphertext |
+
+**Mosca inequality:** When X (data shelf-life) + Y (migration years) > Z (years to Q-Day), you have HNDL exposure **now**.
+
+See the full guide: https://www.qtangl.com/q-day/hndl  
+Infographic: https://www.qtangl.com/downloads/hndl-infographic.svg
+
+---
+
+## 3. Mosca's inequality — why start now
 
 **X + Y > Z**
 
@@ -30,7 +48,7 @@ For long-lived secrets, TLS certificates, and archived ciphertext, exposure toda
 
 ---
 
-## 3. Regulatory clocks (2025–2035)
+## 4. Regulatory clocks (2025–2035)
 
 | Framework | Horizon | Implication |
 |-----------|---------|-------------|
@@ -43,7 +61,7 @@ Inventory now. Migrate on your tier. Prove progress each audit cycle.
 
 ---
 
-## 4. What Qtangl delivers
+## 5. What Qtangl delivers
 
 ### Assess (one-time)
 Live domain scan · Mosca HNDL timeline · CycloneDX CBOM · Signed executive PDF · Verify link

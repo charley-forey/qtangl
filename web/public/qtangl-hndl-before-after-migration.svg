@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" fill="none" role="img" aria-labelledby="title desc">
+  <title id="title">Before and after PQC migration</title>
+  <desc id="desc">Three-step migration path: inventory quantum-vulnerable crypto, pilot hybrid TLS, attach re-scan proof after remediation.</desc>
+  <rect width="1200" height="630" fill="#0a0a0a"/>
+  <text x="60" y="56" fill="#fff" font-family="system-ui,sans-serif" font-size="28" font-weight="600">Reduce HNDL exposure: migration path</text>
+  <rect x="60" y="120" width="320" height="200" rx="12" stroke="#666" stroke-width="2" fill="#111"/>
+  <text x="80" y="160" fill="#888" font-size="14">Before</text>
+  <text x="80" y="200" fill="#fff" font-size="18">RSA / ECDH everywhere</text>
+  <text x="80" y="235" fill="#888" font-size="14">Unknown inventory</text>
+  <text x="80" y="265" fill="#f87171" font-size="14">Ciphertext harvestable</text>
+  <text x="440" y="220" fill="#666" font-size="32">’</text>
+  <rect x="520" y="120" width="320" height="200" rx="12" stroke="#fbbf24" stroke-width="2" fill="#111"/>
+  <text x="540" y="160" fill="#888" font-size="14">During</text>
+  <text x="540" y="200" fill="#fff" font-size="18">Inventory + hybrid TLS pilot</text>
+  <text x="540" y="235" fill="#888" font-size="14">Mosca-scored backlog</text>
+  <text x="540" y="265" fill="#fbbf24" font-size="14">Migration in progress</text>
+  <text x="900" y="220" fill="#666" font-size="32">’</text>
+  <rect x="980" y="120" width="160" height="200" rx="12" stroke="#6ee7a0" stroke-width="2" fill="#0d1f14"/>
+  <text x="1000" y="160" fill="#888" font-size="14">After</text>
+  <text x="1000" y="200" fill="#fff" font-size="16">Hybrid / PQC KEX</text>
+  <text x="1000" y="235" fill="#888" font-size="13">Signed verify proof</text>
+  <text x="1000" y="265" fill="#6ee7a0" font-size="13">Future traffic protected</text>
+  <text x="60" y="400" fill="#ccc" font-size="15">Note: Previously harvested ciphertext cannot be un-copied  migration protects new data.</text>
+  <text x="60" y="600" fill="#666" font-size="14">Qtangl · Assess ’ Convert workflow</text>
+</svg>

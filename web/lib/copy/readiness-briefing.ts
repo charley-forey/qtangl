@@ -28,6 +28,10 @@ export const executiveBriefingCopy = {
       body: "X + Y > Z: data lifetime plus migration time exceeds adversary capability. Long-lived secrets and archived ciphertext mean exposure today is liability tomorrow.",
     },
     {
+      title: "How HNDL works",
+      body: "Adversaries copy ciphertext via breach exfiltration, backups, and bulk capture — not by breaking RSA today. See /q-day/hndl for the collection guide and exposure estimator.",
+    },
+    {
       title: "Regulatory clocks",
       body: "PCI-DSS 4.0, CMMC 2.0, NIST IR 8547, and CNSA 2.0/NSM-10 create overlapping deadlines from 2025 through 2035. Inventory now; migrate on your tier.",
     },

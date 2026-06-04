@@ -182,8 +182,8 @@ export const blogPosts = [
     excerpt: "Inventory, Mosca HNDL, CBOM export, and signed verify — not another spreadsheet.",
     description:
       "Walk through the Q-Day scanner demo: baseline inventory, framework mapping, and evidence your auditors can check independently.",
-    featured: true,
     readiness: true,
+    hndl: true,
   },
   {
     slug: "convert-verify-workflow",
@@ -194,18 +194,6 @@ export const blogPosts = [
     title: "Closing the loop: verify-fix in Convert",
     excerpt: "Attach re-scan proof to remediation items and export live workflowStatus.",
     description: "How security teams prove fixes with verification scans and signed exports.",
-    readiness: true,
-  },
-  {
-    slug: "harvest-now-decrypt-later-boards",
-    href: "/blog/harvest-now-decrypt-later-boards",
-    category: "Q-Day readiness",
-    coverImage: "/qtangl-pqc-hndl-cover.svg",
-    coverAlt: "Timeline illustrating harvest-now-decrypt-later exposure before Q-Day.",
-    title: "Harvest-now-decrypt-later: what boards miss",
-    excerpt: "HNDL exposure, Mosca inequality, and why inventory starts before Q-Day headlines.",
-    description:
-      "What boards miss about harvest-now-decrypt-later — and why quantum-vulnerable crypto needs a migration runway now.",
     readiness: true,
   },
   {

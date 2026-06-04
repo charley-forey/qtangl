@@ -14,6 +14,7 @@ type FeatureCardProps = {
   ctaLabel?: string;
   imageSrc?: string;
   imageAlt?: string;
+  onLinkClick?: () => void;
 };
 
 export default function FeatureCard({
@@ -25,6 +26,7 @@ export default function FeatureCard({
   ctaLabel,
   imageSrc,
   imageAlt,
+  onLinkClick,
 }: FeatureCardProps) {
   const titleId = useId();
   const resolvedImageAlt = imageSrc ? imageAlt?.trim() || `${title} illustration` : undefined;
@@ -56,6 +58,7 @@ export default function FeatureCard({
           {href ? (
             <Link
               href={href}
+              onClick={onLinkClick}
               className="focus-visible:outline-none after:absolute after:inset-0 after:content-['']"
             >
               {title}

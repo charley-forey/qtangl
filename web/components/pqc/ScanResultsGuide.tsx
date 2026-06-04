@@ -24,7 +24,18 @@ export default function ScanResultsGuide({ scan }: ScanResultsGuideProps) {
         Readiness score <strong className="text-white">{score}</strong>
         {band ? ` (${band})` : ""} reflects {qVuln} quantum-vulnerable asset
         {qVuln === 1 ? "" : "s"} in this scan. Mosca HNDL exposure is{" "}
-        <strong className="text-white">{hndl}</strong> — {scan.mosca.summary} This is an inventory aid, not
+        <strong className="text-white">{hndl}</strong> — {scan.mosca.summary}{" "}
+        {scan.mosca.inequality_holds ? (
+          <>
+            <Link
+              href="/q-day/hndl#this-quarter"
+              className="text-white underline underline-offset-4"
+            >
+              See HNDL action plan →
+            </Link>{" "}
+          </>
+        ) : null}
+        This is an inventory aid, not
         a formal attestation; export signed evidence and share the verify link with auditors.
       </p>
 

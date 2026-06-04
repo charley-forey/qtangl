@@ -18,6 +18,7 @@ export type SolutionPageCopy = {
     primary: { label: string; href: string };
     secondary: { label: string; href: string };
   };
+  hndlResources?: readonly { label: string; href: string }[];
 };
 
 export const solutionsCopy = {
@@ -113,6 +114,11 @@ export const solutionsCopy = {
       primary: { label: "Run bank scenario", href: "/assess?scenario=bank-tls-inventory" },
       secondary: { label: "Request pilot", href: "/access" },
     },
+    hndlResources: [
+      { label: "HNDL hub", href: "/q-day/hndl" },
+      { label: "Banking HNDL framework", href: "/q-day/frameworks/banking-hndl" },
+      { label: "How harvesting works", href: "/blog/how-encrypted-data-is-harvested" },
+    ],
   },
   government: {
     slug: "government",
@@ -174,6 +180,11 @@ export const solutionsCopy = {
       primary: { label: "Run CMMC scenario", href: "/assess?scenario=gov-contractor-cmmc" },
       secondary: { label: "Request pilot", href: "/access" },
     },
+    hndlResources: [
+      { label: "HNDL hub", href: "/q-day/hndl" },
+      { label: "Gov contractor HNDL framework", href: "/q-day/frameworks/gov-hndl" },
+      { label: "CMMC HNDL blog", href: "/blog/hndl-gov-contractor-archives" },
+    ],
   },
   healthcare: {
     slug: "healthcare",
@@ -234,6 +245,11 @@ export const solutionsCopy = {
       primary: { label: "Run healthcare scenario", href: "/assess?scenario=healthcare-insurer-hndl" },
       secondary: { label: "Request pilot", href: "/access" },
     },
+    hndlResources: [
+      { label: "HNDL hub", href: "/q-day/hndl" },
+      { label: "HIPAA HNDL framework", href: "/q-day/frameworks/hipaa-hndl" },
+      { label: "Mosca for CISOs", href: "/blog/mosca-inequality-for-cisos" },
+    ],
   },
 } as const;
 

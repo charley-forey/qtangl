@@ -27,6 +27,7 @@ export const readinessBlogRegistry: readonly ReadinessBlogRegistryEntry[] = [
     coverAlt: "Harvest-now-decrypt-later exposure timeline.",
     excerpt: "Practitioner insights on HNDL — and how to inventory before migration finishes.",
     readiness: true,
+    hndl: true,
   },
   {
     slug: "video-companion-pq-algorithms-nist",
@@ -75,6 +76,7 @@ export const readinessBlogRegistry: readonly ReadinessBlogRegistryEntry[] = [
     coverAlt: "Mosca inequality X plus Y greater than Z diagram.",
     excerpt: "Turn Mosca's X + Y > Z into a board-ready planning question.",
     readiness: true,
+    hndl: true,
   },
   {
     slug: "cmmc-crypto-inventory-evidence",
@@ -147,6 +149,104 @@ export const readinessBlogRegistry: readonly ReadinessBlogRegistryEntry[] = [
     coverAlt: "90-day Q-Day readiness playbook timeline.",
     excerpt: "A quarter-by-quarter plan from inventory to Monitor — with evidence at each step.",
     readiness: true,
+    hndl: true,
+  },
+  {
+    slug: "how-encrypted-data-is-harvested",
+    kind: "blog",
+    markdownFile: "blog/how-encrypted-data-is-harvested.md",
+    title: "How encrypted data is harvested (without breaking crypto today)",
+    description: "Practitioner guide to HNDL collection vectors — breach, backups, cloud, and bulk capture.",
+    category: "Q-Day readiness",
+    coverImage: "/qtangl-hndl-collection-vectors.svg",
+    coverAlt: "Diagram of HNDL collection vectors.",
+    excerpt: "How adversaries copy ciphertext today — without breaking RSA.",
+    readiness: true,
+    hndl: true,
+    featured: true,
+  },
+  {
+    slug: "hndl-myths-misconceptions",
+    kind: "blog",
+    markdownFile: "blog/hndl-myths-misconceptions.md",
+    title: "HNDL myths: AES, TLS 1.3, and \"we'll rotate in 2035\"",
+    description: "Common harvest-now-decrypt-later misconceptions for skeptical security teams.",
+    category: "Q-Day readiness",
+    coverImage: "/qtangl-pqc-hndl-cover.svg",
+    coverAlt: "HNDL myths debunked.",
+    excerpt: "Honest answers to the myths blocking HNDL inventory work.",
+    readiness: true,
+    hndl: true,
+  },
+  {
+    slug: "hndl-for-security-engineers",
+    kind: "blog",
+    markdownFile: "blog/hndl-for-security-engineers.md",
+    title: "HNDL for security engineers: handshakes, archives, and evidence",
+    description: "Technical HNDL primer — TLS records, hybrid migration, and auditor evidence.",
+    category: "Q-Day readiness",
+    coverImage: "/qtangl-hndl-tls-handshake-flow.svg",
+    coverAlt: "TLS handshake HNDL flow diagram.",
+    excerpt: "Which protocol artifacts matter and what evidence to attach after migration.",
+    readiness: true,
+    hndl: true,
+  },
+  {
+    slug: "hndl-banking-shelf-life",
+    kind: "blog",
+    markdownFile: "blog/hndl-banking-shelf-life.md",
+    title: "HNDL for banking: transaction archives and Mosca",
+    description: "Financial data shelf-life and harvest-now-decrypt-later for regional banks.",
+    category: "Q-Day readiness",
+    coverImage: "/qtangl-hndl-shelf-life-by-vertical.svg",
+    coverAlt: "Banking data shelf-life chart.",
+    excerpt: "When transaction archives make Mosca inequality hold today.",
+    readiness: true,
+    hndl: true,
+  },
+  {
+    slug: "hndl-gov-contractor-archives",
+    kind: "blog",
+    markdownFile: "blog/hndl-gov-contractor-archives.md",
+    title: "HNDL for government contractors: CMMC and long-retention data",
+    description: "HNDL exposure for defense contractors — NSM-10, CMMC, and archive shelf-life.",
+    category: "Q-Day readiness",
+    coverImage: "/qtangl-pqc-deadlines-cover.svg",
+    coverAlt: "Government contractor HNDL timeline.",
+    excerpt: "CMMC evidence and Mosca scoring for long-retention contract data.",
+    readiness: true,
+    hndl: true,
+  },
+  {
+    slug: "harvest-now-decrypt-later-boards",
+    kind: "blog",
+    markdownFile: "blog/harvest-now-decrypt-later-boards.md",
+    title: "Harvest-now-decrypt-later: what boards miss",
+    description:
+      "What boards miss about harvest-now-decrypt-later — Mosca inequality, HNDL exposure, and why quantum-vulnerable crypto needs inventory now.",
+    category: "Q-Day readiness",
+    coverImage: "/qtangl-pqc-hndl-cover.svg",
+    coverAlt: "Timeline illustrating harvest-now-decrypt-later exposure before Q-Day.",
+    excerpt: "HNDL exposure, Mosca inequality, and why inventory starts before Q-Day headlines.",
+    readiness: true,
+    hndl: true,
+    faq: [
+      {
+        question: "Is my encryption broken today?",
+        answer:
+          "No. Quantum-vulnerable algorithms like RSA and ECDSA still protect data today. HNDL is about ciphertext captured now that may be decrypted after a future CRQC arrives.",
+      },
+      {
+        question: "When will Q-Day happen?",
+        answer:
+          "No one knows the exact date. Google and Cloudflare accelerated internal readiness targets to 2029 as a planning signal — not a prediction. Migration takes years regardless of the exact timeline.",
+      },
+      {
+        question: "What is the first step for a mid-market CISO?",
+        answer:
+          "Run a cryptographic inventory: which endpoints still depend on RSA or ECDSA, which third parties embed legacy crypto, and who owns remediation. A live scan beats a one-time spreadsheet exercise.",
+      },
+    ],
   },
 ] as const;
 
@@ -158,6 +258,8 @@ export const readinessFrameworkRegistry: readonly ReadinessFrameworkRegistryEntr
   { slug: "nist-ir-8547", markdownFile: "frameworks/nist-ir-8547.md", externalSourceIds: ["nist-ir-8547", "nist-pqc-overview"] },
   { slug: "cnsa-2.0", markdownFile: "frameworks/cnsa-2.0.md", externalSourceIds: ["nsa-cnsa-2", "nsm-10"] },
   { slug: "hipaa-hndl", markdownFile: "frameworks/hipaa-hndl.md", externalSourceIds: ["nist-pqc-overview", "palo-alto-q-day", "nist-ir-8547"] },
+  { slug: "banking-hndl", markdownFile: "frameworks/banking-hndl.md", externalSourceIds: ["nist-pqc-overview", "nist-ir-8547", "mosca-inequality"] },
+  { slug: "gov-hndl", markdownFile: "frameworks/gov-hndl.md", externalSourceIds: ["nsm-10", "nsa-cnsa-2", "nist-ir-8547", "mosca-inequality"] },
   { slug: "eu-cra", markdownFile: "frameworks/eu-cra.md", externalSourceIds: ["nist-pqc-overview", "nist-ir-8547"] },
 ] as const;
 
@@ -184,5 +286,7 @@ export function readinessBlogPostsForIndex() {
     excerpt: entry.excerpt,
     description: entry.description,
     readiness: true as const,
+    ...(entry.hndl ? { hndl: true as const } : {}),
+    ...(entry.featured ? { featured: true as const } : {}),
   }));
 }

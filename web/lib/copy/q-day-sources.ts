@@ -16,7 +16,7 @@ export type QDaySource = {
   tags: readonly QDaySourceTag[];
 };
 
-export const qDaySourcesLastVerified = "2026-06-03";
+export const qDaySourcesLastVerified = "2026-06-04";
 
 export const qDaySources: readonly QDaySource[] = [
   {
@@ -160,6 +160,26 @@ export const qDaySources: readonly QDaySource[] = [
     summary:
       "Practitioner perspective on HNDL, PQC migration complexity, and FIPS certification for open source.",
     tags: ["video", "hndl"],
+  },
+  {
+    id: "unit42-exfil-timeline",
+    title: "Unit 42 Incident Response Report — exfiltration timelines",
+    url: "https://www.paloaltonetworks.com/resources/research/unit-42-incident-response-report",
+    publisher: "Palo Alto Networks Unit 42",
+    date: "2025",
+    summary:
+      "Incident response data showing compressed exfiltration timelines — copying ciphertext is faster than breaking crypto today.",
+    tags: ["hndl", "industry"],
+  },
+  {
+    id: "mosca-inequality",
+    title: "Quantum Threat Timeline Report (Mosca inequality)",
+    url: "https://globalriskinstitute.org/publications/quantum-threat-timeline-report-2023/",
+    publisher: "Global Risk Institute",
+    date: "2023",
+    summary:
+      "Dr. Michele Mosca's X + Y > Z framework for harvest-now-decrypt-later exposure planning.",
+    tags: ["hndl", "q-day-basics"],
   },
 ] as const;
 

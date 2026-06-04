@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" fill="none" role="img" aria-labelledby="title desc">
+  <title id="title">Data shelf-life by vertical</title>
+  <desc id="desc">Bar chart of typical data confidentiality shelf-life: healthcare 30-50 years, government 15-50 years, banking 7-25 years, SaaS 1-7 years.</desc>
+  <rect width="1200" height="630" fill="#0a0a0a"/>
+  <text x="60" y="56" fill="#fff" font-family="system-ui,sans-serif" font-size="28" font-weight="600">Typical data shelf-life (X) by industry</text>
+  <line x1="120" y1="480" x2="1080" y2="480" stroke="#444" stroke-width="2"/>
+  <rect x="140" y="180" width="180" height="300" rx="4" fill="#6ee7a0" opacity="0.85"/>
+  <text x="170" y="520" fill="#ccc" font-size="14">Healthcare</text>
+  <text x="175" y="160" fill="#fff" font-size="16">3050y</text>
+  <rect x="380" y="240" width="180" height="240" rx="4" fill="#60a5fa" opacity="0.85"/>
+  <text x="420" y="520" fill="#ccc" font-size="14">Government</text>
+  <text x="415" y="220" fill="#fff" font-size="16">1550y</text>
+  <rect x="620" y="300" width="180" height="180" rx="4" fill="#fbbf24" opacity="0.85"/>
+  <text x="660" y="520" fill="#ccc" font-size="14">Banking</text>
+  <text x="665" y="280" fill="#fff" font-size="16">725y</text>
+  <rect x="860" y="400" width="180" height="80" rx="4" fill="#888" opacity="0.85"/>
+  <text x="900" y="520" fill="#ccc" font-size="14">SaaS</text>
+  <text x="905" y="380" fill="#fff" font-size="16">17y</text>
+  <text x="60" y="600" fill="#666" font-size="14">Qtangl · Mosca X parameter by vertical</text>
+</svg>

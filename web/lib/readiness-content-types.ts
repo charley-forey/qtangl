@@ -30,6 +30,7 @@ export type ReadinessBlogRegistryEntry = {
   excerpt: string;
   readiness: true;
   featured?: boolean;
+  hndl?: boolean;
   faq?: readonly { question: string; answer: string }[];
 };
 

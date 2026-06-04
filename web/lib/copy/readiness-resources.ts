@@ -1,7 +1,7 @@
 export type FaqItem = {
   question: string;
   answer: string;
-  category: "timing" | "build" | "competition" | "trust" | "scope" | "price";
+  category: "timing" | "build" | "competition" | "trust" | "scope" | "price" | "hndl";
 };
 
 export const resourcesPageCopy = {
@@ -46,6 +46,26 @@ export const resourcesPageCopy = {
       title: "Q-Day hub",
       description: "HNDL, Mosca, deadlines, CBOM, and framework guides.",
       href: "/q-day",
+    },
+    {
+      title: "HNDL primer",
+      description: "How ciphertext is copied today — collection vectors, Mosca calculator, and exposure estimator.",
+      href: "/q-day/hndl",
+    },
+    {
+      title: "How harvesting works",
+      description: "Practitioner blog on breach exfiltration, backups, and TLS handshake capture.",
+      href: "/blog/how-encrypted-data-is-harvested",
+    },
+    {
+      title: "HNDL infographic",
+      description: "One-page visual: collection vectors, Mosca inequality, and quarterly action plan.",
+      href: "/downloads/hndl-infographic.png",
+    },
+    {
+      title: "Board briefing",
+      description: "Executive Mosca framing, deadlines, and Qtangl deliverables — gated download.",
+      href: "/q-day/briefing",
     },
   ],
 } as const;
@@ -151,6 +171,42 @@ export const readinessFaq: readonly FaqItem[] = [
     answer:
       "Start with a one-time Assessment to build the internal case, or run the free demo scan to quantify exposure before procurement.",
   },
+  {
+    category: "hndl",
+    question: "How is encrypted data harvested without breaking crypto?",
+    answer:
+      "Adversaries copy ciphertext via breach exfiltration, backups and archives, cloud misconfiguration, and bulk network collection. See the HNDL hub at /q-day/hndl for collection vectors and an interactive exposure estimator.",
+  },
+  {
+    category: "hndl",
+    question: "Does TLS 1.3 protect us from HNDL?",
+    answer:
+      "Forward secrecy limits passive decryption, but stored TLS handshakes with ECDH remain quantum-vulnerable. Long-retention backups and breach exfiltration are still primary HNDL paths.",
+  },
+  {
+    category: "hndl",
+    question: "Are our backups an HNDL risk?",
+    answer:
+      "Yes, when backups contain ciphertext wrapped in quantum-vulnerable public-key algorithms and must stay confidential for years. Backup exfiltration is a common ransomware path.",
+  },
+  {
+    category: "hndl",
+    question: "What data shelf-life should we use for Mosca?",
+    answer:
+      "Use your retention policy for the longest-lived data class: healthcare often 30–50 years, banking 7–25 years, government 15–50 years. The HNDL exposure estimator at /q-day/hndl pre-fills by vertical.",
+  },
+  {
+    category: "hndl",
+    question: "What does Qtangl do about HNDL?",
+    answer:
+      "Qtangl scores Mosca HNDL exposure per asset, maps to compliance frameworks, exports CycloneDX CBOM, and provides signed verify links. Inventory aid, not formal audit.",
+  },
+  {
+    category: "hndl",
+    question: "Can migration undo already-harvested ciphertext?",
+    answer:
+      "No. Migration protects new data and future sessions. Ciphertext copied before migration completes may still be decryptable after Q-Day if Mosca inequality held when it was captured.",
+  },
 ] as const;
 
 export const faqCategories: Record<FaqItem["category"], string> = {
@@ -160,4 +216,5 @@ export const faqCategories: Record<FaqItem["category"], string> = {
   trust: "Trust & security",
   scope: "Scope & accuracy",
   price: "Price & procurement",
+  hndl: "Harvest now, decrypt later",
 };

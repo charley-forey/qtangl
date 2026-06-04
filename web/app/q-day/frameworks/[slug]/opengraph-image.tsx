@@ -22,9 +22,10 @@ export default async function OpenGraphImage({ params }: FrameworkOgImageProps) 
   }
 
   return renderReadinessOgImage({
-    eyebrow: "Framework guide",
+    eyebrow: guide.slug.endsWith("-hndl") ? "HNDL · Framework guide" : "Framework guide",
     title: guide.metadata.title,
     description: guide.metadata.description,
     footer: "Qtangl Q-Day",
+    variant: guide.slug.endsWith("-hndl") ? "hndl" : "default",
   });
 }

@@ -22,9 +22,10 @@ export default async function OpenGraphImage({ params }: QDayOgImageProps) {
   }
 
   return renderReadinessOgImage({
-    eyebrow: "Q-Day hub",
+    eyebrow: slug === "hndl" ? "HNDL · Q-Day hub" : "Q-Day hub",
     title: article.metadata.title,
     description: article.metadata.description,
     footer: "Qtangl Q-Day",
+    variant: slug === "hndl" ? "hndl" : "default",
   });
 }

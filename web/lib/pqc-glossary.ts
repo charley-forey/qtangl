@@ -48,6 +48,57 @@ export const PQC_GLOSSARY: GlossaryEntry[] = [
       "Asset flagged when Mosca inequality holds for its data class — migration may not protect previously intercepted ciphertext.",
   },
   {
+    id: "hndl_exposed",
+    term: "HNDL exposed",
+    plain:
+      "Asset flagged when Mosca inequality holds for its data class — migration may not protect previously intercepted ciphertext.",
+  },
+  {
+    id: "crqc",
+    term: "CRQC (Cryptographically Relevant Quantum Computer)",
+    plain:
+      "A quantum computer capable of breaking widely deployed public-key cryptography such as RSA and elliptic-curve algorithms at scale.",
+    url: "https://www.nist.gov/cybersecurity-and-privacy/what-post-quantum-cryptography",
+  },
+  {
+    id: "ciphertext",
+    term: "Ciphertext",
+    plain:
+      "Encrypted data — readable only with the correct key. HNDL adversaries store ciphertext today to decrypt later when quantum computers break the wrapping public-key layer.",
+  },
+  {
+    id: "forward_secrecy",
+    term: "Forward secrecy",
+    plain:
+      "Property of TLS 1.3 where session keys are ephemeral — passive capture of application data alone is insufficient without the handshake record.",
+  },
+  {
+    id: "key_encapsulation",
+    term: "Key encapsulation (KEM)",
+    plain:
+      "Mechanism for securely exchanging symmetric keys. ML-KEM (FIPS 203) is the NIST-standardized post-quantum key encapsulation algorithm.",
+    url: "https://csrc.nist.gov/pubs/fips/203/final",
+  },
+  {
+    id: "ecdh",
+    term: "ECDH (Elliptic Curve Diffie-Hellman)",
+    plain:
+      "Key exchange using elliptic curves — quantum-vulnerable via Shor's algorithm. Used in most modern TLS handshakes.",
+  },
+  {
+    id: "starttls",
+    term: "STARTTLS",
+    plain:
+      "Email encryption upgrade from plaintext to TLS in transit. Often uses RSA or ECDH — inventory email paths alongside web TLS.",
+  },
+  {
+    id: "ml_kem",
+    term: "ML-KEM",
+    plain:
+      "NIST FIPS 203 module-lattice key encapsulation — the standardized post-quantum replacement for RSA/ECDH key exchange in hybrid TLS.",
+    url: "https://csrc.nist.gov/pubs/fips/203/final",
+  },
+  {
     id: "shor_qubits",
     term: "Shor logical qubits",
     plain:

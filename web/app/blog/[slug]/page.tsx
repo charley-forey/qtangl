@@ -4,7 +4,6 @@ import { notFound } from "next/navigation";
 import MarkdownReadinessArticle from "@/components/marketing/MarkdownReadinessArticle";
 import {
   getReadinessBlogEntry,
-  readinessBlogRegistry,
   readinessBlogSlugs,
 } from "@/lib/copy/readiness-content-registry";
 import { loadReadinessMarkdown } from "@/lib/readiness-content";
@@ -33,6 +32,7 @@ export async function generateMetadata({ params }: ReadinessBlogRouteProps): Pro
     description: content.description,
     type: "article",
     absoluteTitle: true,
+    image: `/blog/${slug}/opengraph-image`,
   });
 }
 

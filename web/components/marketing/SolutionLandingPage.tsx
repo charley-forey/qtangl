@@ -83,6 +83,19 @@ export default function SolutionLandingPage({ copy }: SolutionLandingPageProps) 
         </ol>
       </Section>
 
+      {copy.hndlResources?.length ? (
+        <Section gap="tight">
+          <Eyebrow>HNDL education</Eyebrow>
+          <div className="mt-6 flex flex-wrap gap-3">
+            {copy.hndlResources.map((link) => (
+              <Button key={link.href} href={link.href} variant="secondary" size="sm">
+                {link.label}
+              </Button>
+            ))}
+          </div>
+        </Section>
+      ) : null}
+
       <Section gap="tight" className="pb-0">
         <Card tone="feature" size="lg" className="rounded-[var(--radius-feature)]">
           <h2 className="heading-section">{cta.title}</h2>

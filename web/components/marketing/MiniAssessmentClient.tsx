@@ -1,18 +1,21 @@
 "use client";
 
-import { useActionState, useState } from "react";
+import { useActionState, useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "next/navigation";
 
 import { requestAccess } from "@/app/access/actions";
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
 import Eyebrow from "@/components/ui/Eyebrow";
 import { initialAccessFormState } from "@/lib/access/form-state";
+import { trackEvent } from "@/lib/analytics";
 import {
   miniAssessmentCopy,
   miniAssessmentScenarios,
   sampleCbomPath,
   type MiniAssessmentScenario,
 } from "@/lib/copy/readiness-value";
+import { readMiniAssessmentFunnel } from "@/lib/hndl-funnel";
 
 const SEVERITY_CLASS: Record<string, string> = {
   critical: "text-red-300",
@@ -52,12 +55,28 @@ function ScenarioPicker({
 }
 
 export default function MiniAssessmentClient() {
+  const searchParams = useSearchParams();
+  const funnel = useMemo(() => readMiniAssessmentFunnel(searchParams), [searchParams]);
   const [state, formAction, pending] = useActionState(requestAccess, initialAccessFormState);
   const [selected, setSelected] = useState<MiniAssessmentScenario>(miniAssessmentScenarios[0]!);
   const [formStartedAt] = useState(() => Date.now());
   const unlocked = state.status === "success";
   const { gate, selector, upsell } = miniAssessmentCopy;
   const { results, findings } = selected;
+  const formSource =
+    funnel.source !== "mini-assessment-direct"
+      ? funnel.source
+      : `mini-assessment-${selected.id}`;
+
+  useEffect(() => {
+    trackEvent("mini_assessment_view", {
+      source: funnel.source,
+      utmSource: funnel.utmSource,
+      utmMedium: funnel.utmMedium,
+      utmCampaign: funnel.utmCampaign,
+      utmContent: funnel.utmContent,
+    });
+  }, [funnel]);
 
   if (!unlocked) {
     return (
@@ -73,7 +92,7 @@ export default function MiniAssessmentClient() {
           <p className="mt-4 text-sm leading-7 text-[var(--color-gray-300)]">{gate.description}</p>
           <form action={formAction} className="mt-6 space-y-4">
             <input type="hidden" name="interest" value="Q-Day Assessment (one-time)" />
-            <input type="hidden" name="source" value={`mini-assessment-${selected.id}`} />
+            <input type="hidden" name="source" value={formSource} />
             <input type="hidden" name="formStartedAt" value={String(formStartedAt)} />
             <input type="text" name="website" tabIndex={-1} autoComplete="off" className="hidden" aria-hidden />
             <label className="block text-sm">
@@ -167,7 +186,7 @@ export default function MiniAssessmentClient() {
             Run live scan
           </Button>
           <Button
-            href={`/access?interest=${encodeURIComponent("Q-Day Monitor (annual)")}&source=mini-assessment-${selected.id}`}
+            href={`/access?interest=${encodeURIComponent("Q-Day Monitor (annual)")}&source=${encodeURIComponent(formSource)}`}
             variant="secondary"
           >
             {upsell.secondary.label}

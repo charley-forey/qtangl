@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" fill="none" role="img" aria-labelledby="title desc">
+  <title id="title">HNDL collection vectors</title>
+  <desc id="desc">Five paths adversaries use to copy ciphertext: breach exfiltration, backups, cloud misconfiguration, bulk transit capture, and insider or supply-chain copies.</desc>
+  <rect width="1200" height="630" fill="#0a0a0a"/>
+  <text x="60" y="56" fill="#fff" font-family="system-ui,sans-serif" font-size="28" font-weight="600">How ciphertext gets copied today</text>
+  <rect x="60" y="90" width="320" height="120" rx="12" stroke="#444" stroke-width="2" fill="#111"/>
+  <text x="80" y="125" fill="#fff" font-size="18" font-weight="600">Breach exfiltration</text>
+  <text x="80" y="155" fill="#888" font-size="14">DB dumps, file shares, backups</text>
+  <text x="80" y="185" fill="#6ee7a0" font-size="13">Likelihood: High</text>
+  <rect x="440" y="90" width="320" height="120" rx="12" stroke="#444" stroke-width="2" fill="#111"/>
+  <text x="460" y="125" fill="#fff" font-size="18" font-weight="600">Backups &amp; archives</text>
+  <text x="460" y="155" fill="#888" font-size="14">Tape, S3, email archives</text>
+  <text x="460" y="185" fill="#6ee7a0" font-size="13">Likelihood: High</text>
+  <rect x="820" y="90" width="320" height="120" rx="12" stroke="#444" stroke-width="2" fill="#111"/>
+  <text x="840" y="125" fill="#fff" font-size="18" font-weight="600">Cloud misconfig</text>
+  <text x="840" y="155" fill="#888" font-size="14">Public snapshots, open buckets</text>
+  <text x="840" y="185" fill="#fbbf24" font-size="13">Likelihood: Medium</text>
+  <rect x="250" y="260" width="320" height="120" rx="12" stroke="#444" stroke-width="2" fill="#111"/>
+  <text x="270" y="295" fill="#fff" font-size="18" font-weight="600">Bulk transit capture</text>
+  <text x="270" y="325" fill="#888" font-size="14">TLS handshakes + ciphertext</text>
+  <text x="270" y="355" fill="#fbbf24" font-size="13">Likelihood: Medium</text>
+  <rect x="630" y="260" width="320" height="120" rx="12" stroke="#444" stroke-width="2" fill="#111"/>
+  <text x="650" y="295" fill="#fff" font-size="18" font-weight="600">Insider / supply chain</text>
+  <text x="650" y="325" fill="#888" font-size="14">M&amp;A rooms, legal holds</text>
+  <text x="650" y="355" fill="#888" font-size="13">Likelihood: Lower</text>
+  <path d="M600 400 L600 480" stroke="#555" stroke-width="2" stroke-dasharray="6 4"/>
+  <rect x="400" y="480" width="400" height="80" rx="12" stroke="#666" stroke-width="2" fill="#1a1a1a"/>
+  <text x="420" y="520" fill="#ccc" font-size="16">Store cheaply ’ decrypt after Q-Day (no break required today)</text>
+  <text x="60" y="600" fill="#666" font-size="14">Qtangl · HNDL collection guide</text>
+</svg>

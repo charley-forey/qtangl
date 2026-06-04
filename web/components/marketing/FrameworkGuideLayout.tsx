@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import BlogReferencesPanel from "@/components/marketing/BlogReferencesPanel";
 import ContentQualityStrip from "@/components/marketing/ContentQualityStrip";
+import HndlFrameworkEstimator from "@/components/marketing/HndlFrameworkEstimator";
 import ReadinessMarkdown from "@/components/marketing/ReadinessMarkdown";
 import FeatureCard from "@/components/marketing/FeatureCard";
 import PageHero from "@/components/layout/PageHero";
@@ -10,8 +11,14 @@ import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
 import Eyebrow from "@/components/ui/Eyebrow";
 import type { FrameworkGuide } from "@/lib/copy/readiness-frameworks";
+import type { HndlVerticalId } from "@/lib/copy/hndl-data";
 import { getQDaySourcesByIds } from "@/lib/copy/q-day-sources";
 import type { LoadedReadinessContent } from "@/lib/readiness-content-types";
+
+const frameworkVerticalPresets: Partial<Record<string, HndlVerticalId>> = {
+  "banking-hndl": "banking",
+  "gov-hndl": "government",
+};
 
 type FrameworkGuideLayoutProps = {
   guide: FrameworkGuide;
@@ -27,6 +34,7 @@ export default function FrameworkGuideLayout({
   const sources = getQDaySourcesByIds(
     externalSourceIds.length > 0 ? externalSourceIds : [],
   );
+  const verticalPreset = frameworkVerticalPresets[guide.slug];
 
   return (
     <>
@@ -60,6 +68,10 @@ export default function FrameworkGuideLayout({
           </div>
         </Section>
       )}
+
+      {verticalPreset ? (
+        <HndlFrameworkEstimator defaultVertical={verticalPreset} frameworkSlug={guide.slug} />
+      ) : null}
 
       <Section gap="tight">
         <Eyebrow>Qtangl mapping</Eyebrow>

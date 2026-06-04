@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 
 import BlogReferencesPanel from "@/components/marketing/BlogReferencesPanel";
+import HndlKeyTerms from "@/components/marketing/HndlKeyTerms";
 import PageShell from "@/components/layout/PageShell";
 import Section from "@/components/layout/Section";
 import Button from "@/components/ui/Button";
@@ -19,6 +20,7 @@ type ReadinessBlogArticleProps = {
   path: string;
   hubHref?: string;
   hubLabel?: string;
+  keyTermIds?: readonly string[];
   faq?: readonly { question: string; answer: string }[];
 };
 
@@ -27,6 +29,7 @@ export default function ReadinessBlogArticle({
   path,
   hubHref,
   hubLabel,
+  keyTermIds,
   faq,
 }: ReadinessBlogArticleProps) {
   const article = readinessArticles[slug];
@@ -40,6 +43,7 @@ export default function ReadinessBlogArticle({
             <Eyebrow>{article.eyebrow}</Eyebrow>
             <h1 className="text-3xl font-semibold text-white">{article.title}</h1>
             <p className="text-lg leading-8">{article.intro}</p>
+            {keyTermIds?.length ? <HndlKeyTerms termIds={keyTermIds} /> : null}
           </header>
 
           {article.coverImage ? (

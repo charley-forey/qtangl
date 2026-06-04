@@ -15,6 +15,7 @@ type PageHeroProps = {
   title: ReactNode;
   description: ReactNode;
   actions?: readonly PageHeroAction[];
+  actionsSlot?: ReactNode;
   contentClassName?: string;
 };
 
@@ -23,6 +24,7 @@ export default function PageHero({
   title,
   description,
   actions,
+  actionsSlot,
   contentClassName = "content-reading",
 }: PageHeroProps) {
   return (
@@ -36,7 +38,9 @@ export default function PageHero({
           {description}
         </p>
 
-        {actions?.length ? (
+        {actionsSlot ? (
+          actionsSlot
+        ) : actions?.length ? (
           <div className="mt-8 flex flex-wrap gap-3">
             {actions.map((action) => (
               <Button

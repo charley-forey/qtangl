@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1080" fill="none" role="img">
+  <title>HNDL slide 2: Collection vectors</title>
+  <rect width="1080" height="1080" fill="#0a0a0a"/>
+  <text x="80" y="100" fill="#fff" font-size="36" font-weight="600">5 ways ciphertext gets copied</text>
+  <text x="80" y="200" fill="#6ee7a0" font-size="24">` Breach exfiltration</text>
+  <text x="80" y="280" fill="#6ee7a0" font-size="24">a Backups &amp; archives</text>
+  <text x="80" y="360" fill="#fbbf24" font-size="24">b Cloud misconfiguration</text>
+  <text x="80" y="440" fill="#fbbf24" font-size="24">c Bulk TLS capture</text>
+  <text x="80" y="520" fill="#888" font-size="24">d Insider / supply chain</text>
+  <text x="80" y="640" fill="#ccc" font-size="22">No RSA break required today.</text>
+  <text x="80" y="980" fill="#666" font-size="20">qtangl.com/q-day/hndl</text>
+</svg>

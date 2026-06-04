@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import LibraryResourceCard from "@/components/learn/LibraryResourceCard";
+import FeatureCard from "@/components/marketing/FeatureCard";
 import PageHero from "@/components/layout/PageHero";
 import PageShell from "@/components/layout/PageShell";
 import Section from "@/components/layout/Section";
@@ -50,6 +51,32 @@ export default async function WhatsNewPage() {
         actions={[{ href: "/learn", label: "Back to Learn", variant: "secondary" }]}
         contentClassName="max-w-4xl"
       />
+      <Section gap="tight">
+        <Eyebrow>Qtangl editorial · June 2026</Eyebrow>
+        <p className="mt-2 max-w-2xl text-sm text-[var(--color-gray-400)]">
+          New HNDL education — how ciphertext is copied today, vertical exposure guides, and interactive tools.
+        </p>
+        <div className="mt-6 grid gap-6 md:grid-cols-3">
+          <FeatureCard
+            title="HNDL hub"
+            description="Collection vectors, Mosca calculator, and exposure estimator."
+            href="/q-day/hndl"
+            ctaLabel="Open hub →"
+          />
+          <FeatureCard
+            title="How harvesting works"
+            description="Practitioner blog on breach, backups, and TLS capture."
+            href="/blog/how-encrypted-data-is-harvested"
+            ctaLabel="Read article →"
+          />
+          <FeatureCard
+            title="HNDL learn topic"
+            description="Shelf-life by vertical and Mosca framing."
+            href="/learn/topics/hndl-risk"
+            ctaLabel="Open topic →"
+          />
+        </div>
+      </Section>
       <Section gap="tight" className="pb-0">
         {[...grouped.entries()].map(([key, monthEntries]) => (
           <div key={key} className="mb-12">

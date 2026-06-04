@@ -8,6 +8,10 @@ export type QDayResource = {
 export type QDayArticleSection = {
   heading: string;
   body: string;
+  anchor?: string;
+  keyTerms?: readonly string[];
+  diagram?: string;
+  diagramAlt?: string;
 };
 
 export type QDayArticle = {
@@ -63,7 +67,8 @@ export const qDayHubCopy = {
       {
         slug: "hndl",
         title: "Harvest now, decrypt later",
-        description: "Why data encrypted today is already at risk — even before Q-Day arrives.",
+        description:
+          "How ciphertext is copied today, who is exposed, and what to do this quarter — with Mosca calculator and collection guide.",
         href: "/q-day/hndl",
       },
       {
@@ -236,26 +241,78 @@ export const qDayArticles = {
     sections: [
       {
         heading: "The threat model",
+        anchor: "threat-model",
+        keyTerms: ["hndl", "crqc", "ciphertext"],
         body:
           "Nation-state and sophisticated actors harvest TLS sessions, backups, and archives knowing future quantum computers will read them. Storage is cheap; breaking RSA today is not required. NIST describes this as harvest now, decrypt later — one reason post-quantum encryption should deploy as soon as feasible.",
       },
       {
-        heading: "Who faces the highest exposure",
+        heading: "How ciphertext gets copied today",
+        anchor: "how-collection-works",
+        keyTerms: ["ciphertext", "forward_secrecy"],
+        diagram: "/qtangl-hndl-collection-vectors.svg",
+        diagramAlt: "Diagram of HNDL collection vectors: breach exfiltration, backups, cloud misconfiguration, and bulk network capture.",
         body:
-          "Healthcare records, financial transaction archives, M&A diligence, and classified-adjacent research often carry 20–50 year confidentiality requirements. Regional banks, payers, and government contractors hold exactly this data profile. Incident response data shows exfiltration timelines compressing — copying ciphertext is faster than breaking it.",
+          "Adversaries do not need to break encryption today. The most common paths are breach and ransomware exfiltration (database dumps, file shares, backup appliances), long-term backups and archives (tape, S3 snapshots, email archives), cloud misconfiguration (public snapshots, open prefixes), and bulk network collection at scale. Incident response data shows exfiltration timelines compressing — copying ciphertext is faster than breaking it.",
+      },
+      {
+        heading: "What adversaries store vs ignore",
+        anchor: "what-is-stored",
+        keyTerms: ["ecdh", "forward_secrecy", "key_encapsulation"],
+        diagram: "/qtangl-hndl-tls-handshake-flow.svg",
+        diagramAlt: "TLS handshake flow showing which parts of a session are stored for future quantum decryption.",
+        body:
+          "Harvesting matters when public-key cryptography wraps the secret. Adversaries store TLS handshakes plus ciphertext (not application data alone), database and backup blobs encrypted with RSA or ECIES, email and file archives, and signing keys. Modern TLS 1.3 with forward secrecy still leaves the handshake vulnerable to future discrete-log attacks — passive wire capture of application data alone is not enough without the handshake record.",
+      },
+      {
+        heading: "Who faces the highest exposure",
+        anchor: "who-is-exposed",
+        keyTerms: ["mosca", "hndl_exposed"],
+        diagram: "/qtangl-hndl-shelf-life-by-vertical.svg",
+        diagramAlt: "Bar chart of typical data shelf-life by industry: healthcare 30-50 years, banking 7-25 years, government 15-50 years.",
+        body:
+          "Healthcare records, financial transaction archives, M&A diligence, and classified-adjacent research often carry 20–50 year confidentiality requirements. Regional banks, payers, and government contractors hold exactly this data profile. When migration takes five to ten years across a mid-market estate, Mosca inequality often holds today.",
+      },
+      {
+        heading: "Common misconceptions",
+        anchor: "misconceptions",
+        keyTerms: ["crqc", "forward_secrecy"],
+        body:
+          "Quantum-vulnerable does not mean broken today — RSA and ECDSA still protect data in transit and at rest right now. AES-256 symmetric encryption is not the primary HNDL concern; public-key layers are. TLS 1.3 forward secrecy limits passive decryption but stored handshakes remain a quantum target. Waiting until 2035 to start inventory compresses your migration runway and does not un-copy ciphertext already exfiltrated.",
       },
       {
         heading: "Mosca inequality ties it together",
+        anchor: "mosca",
+        keyTerms: ["mosca"],
+        diagram: "/qtangl-hndl-mosca-timeline.svg",
+        diagramAlt: "Mosca timeline diagram showing data shelf-life X plus migration Y compared to quantum timeline Z.",
         body:
           "If data shelf-life (X) plus migration time (Y) exceeds the time until quantum breaks crypto (Z), you have HNDL exposure today. Mosca turns abstract quantum risk into a planning inequality boards and regulators understand — especially when migration takes five to ten years across a mid-market estate.",
       },
       {
-        heading: "How Qtangl quantifies it",
+        heading: "What to do this quarter",
+        anchor: "this-quarter",
+        keyTerms: ["pqc_ready", "crypto_agility"],
+        diagram: "/qtangl-hndl-before-after-migration.svg",
+        diagramAlt: "Before and after migration diagram showing inventory, hybrid TLS pilot, and re-scan proof.",
         body:
-          "Every Qtangl assessment includes Mosca HNDL scoring — mapping your data retention horizon against estimated quantum timeline and migration runway. Quantum-vulnerable does not mean broken today; it means you need inventory and a migration runway now.",
+          "Run a cryptographic inventory on external TLS, JWKS, SSH, and email STARTTLS — not a spreadsheet snapshot. Tag findings by data shelf-life tier. Quantify Mosca exposure for your longest-retained data classes. Pilot hybrid TLS on a non-production path and attach re-scan proof after remediation. Export a CycloneDX CBOM for your GRC toolchain.",
+      },
+      {
+        heading: "How Qtangl quantifies it",
+        anchor: "qtangl",
+        keyTerms: ["readiness_score", "hndl_exposed"],
+        body:
+          "Every Qtangl assessment includes Mosca HNDL scoring — mapping your data retention horizon against estimated quantum timeline and migration runway. Quantum-vulnerable does not mean broken today; it means you need inventory and a migration runway now. Inventory aid, not formal audit.",
       },
     ],
-    externalSourceIds: ["nist-pqc-overview", "palo-alto-q-day", "video-jeremy-allison-hndl"],
+    externalSourceIds: [
+      "nist-pqc-overview",
+      "palo-alto-q-day",
+      "video-jeremy-allison-hndl",
+      "unit42-exfil-timeline",
+      "mosca-inequality",
+    ],
     videoId: "u4mVljNQnBw",
     videoTitle: "Why Your Encrypted Data Is Already Being Stolen",
     blogCompanionHref: "/blog/harvest-now-decrypt-later-boards",

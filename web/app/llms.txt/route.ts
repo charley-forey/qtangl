@@ -69,6 +69,18 @@ ${qDayLinks}
 
 ${frameworkLinks}
 
+## HNDL education
+
+- HNDL hub: ${siteMetadata.url}/q-day/hndl
+- How encrypted data is harvested: ${siteMetadata.url}/blog/how-encrypted-data-is-harvested
+- HNDL myths: ${siteMetadata.url}/blog/hndl-myths-misconceptions
+- HNDL for engineers: ${siteMetadata.url}/blog/hndl-for-security-engineers
+- Banking HNDL: ${siteMetadata.url}/q-day/frameworks/banking-hndl
+- Gov contractor HNDL: ${siteMetadata.url}/q-day/frameworks/gov-hndl
+- HIPAA HNDL: ${siteMetadata.url}/q-day/frameworks/hipaa-hndl
+- HNDL infographic: ${siteMetadata.url}/downloads/hndl-infographic.svg
+- Learn topic — HNDL risk: ${siteMetadata.url}/learn/topics/hndl-risk
+
 ## Hybrid optimization (expansion)
 
 - Technology: ${siteMetadata.url}/technology

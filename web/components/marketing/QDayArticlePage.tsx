@@ -1,17 +1,21 @@
 import Link from "next/link";
+import Image from "next/image";
 
 import BlogReferencesPanel from "@/components/marketing/BlogReferencesPanel";
 import FeatureCard from "@/components/marketing/FeatureCard";
+import HndlFeatureCard from "@/components/marketing/HndlFeatureCard";
+import HndlHubFooterActions from "@/components/marketing/HndlHubFooterActions";
+import HndlHubHeroActions from "@/components/marketing/HndlHubHeroActions";
+import HndlHubSections from "@/components/marketing/HndlHubSections";
+import HndlKeyTerms from "@/components/marketing/HndlKeyTerms";
 import PageHero from "@/components/layout/PageHero";
 import Section from "@/components/layout/Section";
 import YouTubeEmbed from "@/components/marketing/YouTubeEmbed";
-import Button from "@/components/ui/Button";
 import Eyebrow from "@/components/ui/Eyebrow";
 import { getQDaySourcesByIds } from "@/lib/copy/q-day-sources";
 import {
   getQDayArticle,
   getRelatedQDayResources,
-  qDayHubCopy,
 } from "@/lib/copy/readiness-qday-hub";
 
 type QDayArticlePageProps = {
@@ -28,6 +32,7 @@ export default function QDayArticlePage({ slug }: QDayArticlePageProps) {
   const sources = article.externalSourceIds
     ? getQDaySourcesByIds(article.externalSourceIds)
     : [];
+  const isHndl = slug === "hndl";
 
   return (
     <>
@@ -35,20 +40,41 @@ export default function QDayArticlePage({ slug }: QDayArticlePageProps) {
         eyebrow={article.eyebrow}
         title={article.title}
         description={article.description}
-        actions={[
-          { href: "/assess", label: "Run Q-Day scan" },
-          { href: "/q-day", label: "Back to hub", variant: "secondary" },
-        ]}
+        actions={
+          isHndl
+            ? undefined
+            : [
+                { href: "/assess/mini", label: "Free mini-assessment" },
+                { href: "/q-day", label: "Back to hub", variant: "secondary" },
+              ]
+        }
+        actionsSlot={isHndl ? <HndlHubHeroActions /> : undefined}
       />
 
       {article.sections.map((section) => (
-        <Section key={section.heading} gap="tight">
+        <Section key={section.heading} gap="tight" id={section.anchor}>
           <div className="content-reading">
             <h2 className="heading-section">{section.heading}</h2>
             <p className="mt-4 text-base leading-8 text-[var(--color-gray-300)]">{section.body}</p>
+            {section.keyTerms?.length ? (
+              <HndlKeyTerms termIds={section.keyTerms} />
+            ) : null}
+            {section.diagram ? (
+              <figure className="mt-8 overflow-hidden rounded-[var(--radius-feature)] border border-[var(--border)]">
+                <Image
+                  src={section.diagram}
+                  alt={section.diagramAlt ?? section.heading}
+                  width={1200}
+                  height={630}
+                  className="h-auto w-full"
+                />
+              </figure>
+            ) : null}
           </div>
         </Section>
       ))}
+
+      {isHndl ? <HndlHubSections /> : null}
 
       {article.videoId && article.videoTitle ? (
         <Section gap="tight">
@@ -68,13 +94,32 @@ export default function QDayArticlePage({ slug }: QDayArticlePageProps) {
       {article.blogCompanionHref && article.blogCompanionTitle ? (
         <Section gap="tight">
           <Eyebrow>Deep dive</Eyebrow>
-          <div className="mt-6 max-w-xl">
-            <FeatureCard
-              title={article.blogCompanionTitle}
-              description="Extended analysis with industry context, action checklists, and Qtangl product tie-ins."
-              href={article.blogCompanionHref}
-              ctaLabel="Read blog post →"
-            />
+          <div className="mt-6 grid gap-6 md:grid-cols-2">
+            {isHndl ? (
+              <HndlFeatureCard
+                title={article.blogCompanionTitle}
+                description="Extended analysis with industry context, action checklists, and Qtangl product tie-ins."
+                href={article.blogCompanionHref}
+                ctaLabel="Read blog post →"
+                placement="deep-dive"
+              />
+            ) : (
+              <FeatureCard
+                title={article.blogCompanionTitle}
+                description="Extended analysis with industry context, action checklists, and Qtangl product tie-ins."
+                href={article.blogCompanionHref}
+                ctaLabel="Read blog post →"
+              />
+            )}
+            {isHndl ? (
+              <HndlFeatureCard
+                title="How encrypted data is harvested"
+                description="Practitioner guide to collection vectors — breach, backups, cloud, and transit."
+                href="/blog/how-encrypted-data-is-harvested"
+                ctaLabel="Read guide →"
+                placement="deep-dive"
+              />
+            ) : null}
           </div>
         </Section>
       ) : null}
@@ -83,48 +128,55 @@ export default function QDayArticlePage({ slug }: QDayArticlePageProps) {
         <Section gap="tight">
           <Eyebrow>Related</Eyebrow>
           <div className="mt-6 grid gap-6 md:grid-cols-3">
-            {related.map((item) => (
-              <FeatureCard
-                key={item.slug}
-                title={item.title}
-                description={item.description}
-                href={item.href}
-                ctaLabel="Read guide →"
-              />
-            ))}
+            {related.map((item) =>
+              isHndl ? (
+                <HndlFeatureCard
+                  key={item.slug}
+                  title={item.title}
+                  description={item.description}
+                  href={item.href}
+                  ctaLabel="Read guide →"
+                  placement="related"
+                />
+              ) : (
+                <FeatureCard
+                  key={item.slug}
+                  title={item.title}
+                  description={item.description}
+                  href={item.href}
+                  ctaLabel="Read guide →"
+                />
+              ),
+            )}
           </div>
         </Section>
       ) : null}
 
       <Section gap="tight" className="pb-0">
-        <div className="flex flex-wrap gap-3">
-          <Button href="/assess">Run Q-Day scan</Button>
-          <Button href="/demo/pqc" variant="secondary">
-            Try PQC demo
-          </Button>
-          <Link
-            href="/q-day"
-            className="inline-flex items-center text-sm text-[var(--color-gray-400)] underline-offset-4 hover:text-white hover:underline"
-          >
-            ← Q-Day hub
-          </Link>
-        </div>
-      </Section>
-    </>
-  );
-}
-
-export function QDayHubExtras() {
-  return (
-    <>
-      <Section gap="tight">
-        <div className="content-reading">
-          <Eyebrow>{qDayHubCopy.deadlines.eyebrow}</Eyebrow>
-          <h2 className="heading-section mt-4">{qDayHubCopy.deadlines.title}</h2>
-          <p className="mt-4 max-w-3xl text-base leading-8 text-[var(--color-gray-300)]">
-            {qDayHubCopy.deadlines.description}
-          </p>
-        </div>
+        {isHndl ? (
+          <HndlHubFooterActions />
+        ) : (
+          <div className="flex flex-wrap gap-3">
+            <Link
+              href="/assess/mini"
+              className="touch-target relative inline-flex h-12 items-center justify-center rounded-full bg-white px-6 text-sm font-medium text-black"
+            >
+              Free mini-assessment
+            </Link>
+            <Link
+              href="/demo/pqc"
+              className="touch-target relative inline-flex h-12 items-center justify-center rounded-full border border-[var(--border)] bg-white/[0.02] px-6 text-sm font-medium text-white"
+            >
+              Try PQC demo
+            </Link>
+            <Link
+              href="/q-day"
+              className="inline-flex items-center text-sm text-[var(--color-gray-400)] underline-offset-4 hover:text-white hover:underline"
+            >
+              ← Q-Day hub
+            </Link>
+          </div>
+        )}
       </Section>
     </>
   );

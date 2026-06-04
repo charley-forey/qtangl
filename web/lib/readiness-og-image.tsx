@@ -12,6 +12,7 @@ type ReadinessOgImageProps = {
   title: string;
   description: string;
   footer?: string;
+  variant?: "default" | "hndl";
 };
 
 export function renderReadinessOgImage({
@@ -19,7 +20,13 @@ export function renderReadinessOgImage({
   title,
   description,
   footer = "Qtangl",
+  variant = "default",
 }: ReadinessOgImageProps) {
+  const accent =
+    variant === "hndl"
+      ? "radial-gradient(circle at top right, rgba(110,231,160,0.18), transparent 42%)"
+      : "radial-gradient(circle at bottom right, rgba(255,255,255,0.08), transparent 36%)";
+
   return new ImageResponse(
     (
       <div
@@ -34,14 +41,14 @@ export function renderReadinessOgImage({
           color: "#fff",
           fontFamily: "Inter, sans-serif",
           position: "relative",
+          ...(variant === "hndl" ? { borderTop: "6px solid #6ee7a0" } : {}),
         }}
       >
         <div
           style={{
             position: "absolute",
             inset: 0,
-            background:
-              "radial-gradient(circle at top left, rgba(255,255,255,0.10), transparent 40%), radial-gradient(circle at bottom right, rgba(255,255,255,0.08), transparent 36%)",
+            background: `radial-gradient(circle at top left, rgba(255,255,255,0.10), transparent 40%), ${accent}`,
           }}
         />
 

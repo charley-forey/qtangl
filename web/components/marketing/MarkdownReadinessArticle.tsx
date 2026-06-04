@@ -3,6 +3,7 @@ import Image from "next/image";
 
 import BlogReferencesPanel from "@/components/marketing/BlogReferencesPanel";
 import ContentQualityStrip from "@/components/marketing/ContentQualityStrip";
+import HndlBlogLeadCapture from "@/components/marketing/HndlBlogLeadCapture";
 import PageShell from "@/components/layout/PageShell";
 import ReadinessMarkdown from "@/components/marketing/ReadinessMarkdown";
 import Section from "@/components/layout/Section";
@@ -16,6 +17,7 @@ import type { ReadinessBlogRegistryEntry } from "@/lib/readiness-content-types";
 import { getQDaySourcesByIds } from "@/lib/copy/q-day-sources";
 import type { LoadedReadinessContent } from "@/lib/readiness-content-types";
 import { buildBlogPostingJsonLd, buildFaqJsonLd } from "@/lib/seo";
+import { buildAssessMiniHref } from "@/lib/hndl-funnel";
 
 type MarkdownReadinessArticleProps = {
   content: LoadedReadinessContent;
@@ -30,6 +32,9 @@ export default function MarkdownReadinessArticle({
 }: MarkdownReadinessArticleProps) {
   const sources = getQDaySourcesByIds(content.sourceIds);
   const faq = registry.faq;
+  const primaryHref = registry.hndl
+    ? buildAssessMiniHref({ source: `blog-${registry.slug}`, content: "cta-primary" })
+    : content.ctaPrimary;
 
   return (
     <PageShell>
@@ -71,11 +76,13 @@ export default function MarkdownReadinessArticle({
           <ContentQualityStrip />
           <BlogReferencesPanel sources={sources} />
 
+          {registry.hndl ? <HndlBlogLeadCapture slug={registry.slug} /> : null}
+
           <section className="space-y-4 border-t border-[var(--border-subtle)] pt-8">
             <h2 className="text-xl font-semibold text-white">{readinessBlogCta.title}</h2>
             <p className="text-sm leading-7">{readinessBlogCta.description}</p>
             <div className="flex flex-wrap gap-3">
-              <Button href={content.ctaPrimary}>{readinessBlogCta.primaryLabel}</Button>
+              <Button href={primaryHref}>{readinessBlogCta.primaryLabel}</Button>
               <Button href={readinessBlogCta.secondaryHref} variant="secondary">
                 {readinessBlogCta.secondaryLabel}
               </Button>
