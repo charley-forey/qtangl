@@ -1,8 +1,8 @@
 import Link from "next/link";
-import Image from "next/image";
 
 import BlogReferencesPanel from "@/components/marketing/BlogReferencesPanel";
 import ContentQualityStrip from "@/components/marketing/ContentQualityStrip";
+import CoverImage from "@/components/marketing/CoverImage";
 import HndlBlogLeadCapture from "@/components/marketing/HndlBlogLeadCapture";
 import PageShell from "@/components/layout/PageShell";
 import ReadinessMarkdown from "@/components/marketing/ReadinessMarkdown";
@@ -18,7 +18,6 @@ import { getQDaySourcesByIds } from "@/lib/copy/q-day-sources";
 import type { LoadedReadinessContent } from "@/lib/readiness-content-types";
 import { buildBlogPostingJsonLd, buildFaqJsonLd } from "@/lib/seo";
 import { buildAssessMiniHref } from "@/lib/hndl-funnel";
-import { coverImageLoadingProps } from "@/lib/cover-image";
 
 type MarkdownReadinessArticleProps = {
   content: LoadedReadinessContent;
@@ -49,14 +48,7 @@ export default function MarkdownReadinessArticle({
 
           <Card tone="feature" size="sm" className="relative overflow-hidden rounded-[var(--radius-feature)] p-0">
             <div className="relative aspect-[16/9]">
-              <Image
-                src={registry.coverImage}
-                alt={registry.coverAlt}
-                fill
-                sizes="(min-width: 768px) 768px, 100vw"
-                {...coverImageLoadingProps(registry.coverImage)}
-                className="object-cover"
-              />
+              <CoverImage src={registry.coverImage} alt={registry.coverAlt} />
             </div>
           </Card>
 

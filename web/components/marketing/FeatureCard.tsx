@@ -1,10 +1,10 @@
-import Image from "next/image";
 import Link from "next/link";
 import { ReactNode, useId } from "react";
 
+import CoverImage from "@/components/marketing/CoverImage";
 import Eyebrow from "@/components/ui/Eyebrow";
 import Card from "@/components/ui/Card";
-import { coverImageLoadingProps, isSvgCover } from "@/lib/cover-image";
+import { isSvgCover } from "@/lib/cover-image";
 
 type FeatureCardProps = {
   eyebrow?: string;
@@ -46,12 +46,9 @@ export default function FeatureCard({
       <div className="relative">
         {imageSrc ? (
           <div className="relative mb-6 aspect-[4/3] overflow-hidden rounded-[var(--radius-xl)] border border-[var(--border)] bg-black/60">
-            <Image
+            <CoverImage
               src={imageSrc}
               alt={resolvedImageAlt ?? title}
-              fill
-              sizes="(min-width: 1280px) 24vw, (min-width: 768px) 42vw, 100vw"
-              {...coverImageLoadingProps(imageSrc)}
               className={
                 svgCover
                   ? "object-cover transition duration-500 group-hover:scale-[1.02]"

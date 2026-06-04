@@ -40,11 +40,11 @@ function isActive(pathname: string, href: string) {
 export default function Navbar() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
-  const [compressed, setCompressed] = useState(() =>
-    typeof window === "undefined" ? false : window.scrollY > 24
-  );
+  const [compressed, setCompressed] = useState(false);
 
   useEffect(() => {
+    setCompressed(window.scrollY > 24);
+
     let frame = 0;
     let lastCompressed = window.scrollY > 24;
 
@@ -85,24 +85,24 @@ export default function Navbar() {
             compressed ? "py-3" : "py-3.5 sm:py-4",
           ].join(" ")}
         >
-          <Link href="/" className="flex items-center gap-3">
-            <Image
-              src="/logo-mark.svg"
-              alt="Qtangl logo mark"
-              width={32}
-              height={32}
-              priority
-            />
-            <div className="min-w-0">
+          <div className="flex min-w-0 items-center gap-3">
+            <Link href="/" className="flex items-center gap-3">
+              <Image
+                src="/logo-mark.svg"
+                alt="Qtangl logo mark"
+                width={32}
+                height={32}
+                priority
+              />
               <div className="brand-wordmark">Qtangl</div>
-              <Link
-                href={navbarCopy.subtitleHref}
-                className="mt-1 inline-block text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-[var(--color-gray-300)] transition hover:text-white"
-              >
-                {navbarCopy.subtitle}
-              </Link>
-            </div>
-          </Link>
+            </Link>
+            <Link
+              href={navbarCopy.subtitleHref}
+              className="hidden text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-[var(--color-gray-300)] transition hover:text-white sm:inline-block"
+            >
+              {navbarCopy.subtitle}
+            </Link>
+          </div>
 
           <nav className="hidden items-center gap-4 text-sm lg:flex xl:gap-6">
             {nav.map((item) => {
