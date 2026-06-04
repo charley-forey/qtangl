@@ -41,6 +41,32 @@ export default function ReadinessMarkdown({ markdown, className }: ReadinessMark
             );
           },
           strong: ({ children }) => <strong className="font-semibold text-white">{children}</strong>,
+          table: ({ children }) => (
+            <div className="my-6 w-full overflow-x-auto rounded-[var(--radius-xl)] border border-[var(--border)]">
+              <table className="w-full min-w-[34rem] border-collapse text-left text-sm [&_tr:last-child_td]:border-0">
+                {children}
+              </table>
+            </div>
+          ),
+          thead: ({ children }) => <thead className="bg-white/[0.04]">{children}</thead>,
+          tbody: ({ children }) => <tbody>{children}</tbody>,
+          tr: ({ children }) => <tr>{children}</tr>,
+          th: ({ children, style }) => (
+            <th
+              style={style}
+              className="border-b border-[var(--border-strong)] px-4 py-3 text-xs font-semibold uppercase tracking-wide text-white"
+            >
+              {children}
+            </th>
+          ),
+          td: ({ children, style }) => (
+            <td
+              style={style}
+              className="border-b border-[var(--border)] px-4 py-3 align-top text-[var(--color-gray-300)]"
+            >
+              {children}
+            </td>
+          ),
         }}
       >
         {markdown}
