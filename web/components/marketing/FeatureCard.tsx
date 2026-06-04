@@ -4,6 +4,7 @@ import { ReactNode, useId } from "react";
 
 import Eyebrow from "@/components/ui/Eyebrow";
 import Card from "@/components/ui/Card";
+import { coverImageLoadingProps, isSvgCover } from "@/lib/cover-image";
 
 type FeatureCardProps = {
   eyebrow?: string;
@@ -30,6 +31,7 @@ export default function FeatureCard({
 }: FeatureCardProps) {
   const titleId = useId();
   const resolvedImageAlt = imageSrc ? imageAlt?.trim() || `${title} illustration` : undefined;
+  const svgCover = imageSrc ? isSvgCover(imageSrc) : false;
 
   return (
     <Card
@@ -49,7 +51,12 @@ export default function FeatureCard({
               alt={resolvedImageAlt ?? title}
               fill
               sizes="(min-width: 1280px) 24vw, (min-width: 768px) 42vw, 100vw"
-              className="object-cover grayscale transition duration-500 group-hover:scale-[1.02]"
+              {...coverImageLoadingProps(imageSrc)}
+              className={
+                svgCover
+                  ? "object-cover transition duration-500 group-hover:scale-[1.02]"
+                  : "object-cover grayscale transition duration-500 group-hover:scale-[1.02]"
+              }
             />
           </div>
         ) : null}

@@ -1,11 +1,21 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" fill="none">
   <rect width="1200" height="630" fill="#0a0a0a"/>
-  <g opacity="0.3" stroke="#fff" stroke-width="2">
+  <rect width="1200" height="630" fill="url(#deadlineGlow)" opacity="0.9"/>
+  <defs>
+    <radialGradient id="deadlineGlow" cx="0.5" cy="1" r="0.9">
+      <stop offset="0%" stop-color="#fbbf24" stop-opacity="0.14"/>
+      <stop offset="100%" stop-color="#0a0a0a" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <g opacity="0.6" stroke="#fff" stroke-width="2">
     <line x1="100" y1="480" x2="1100" y2="480"/>
     <line x1="200" y1="480" x2="200" y2="200"/>
     <line x1="500" y1="480" x2="500" y2="260"/>
     <line x1="800" y1="480" x2="800" y2="320"/>
     <line x1="1000" y1="480" x2="1000" y2="380"/>
   </g>
-  <text x="80" y="560" fill="#888" font-family="system-ui,sans-serif" font-size="28">Qtangl · Compliance deadlines</text>
+  <circle cx="200" cy="200" r="8" fill="#fbbf24"/>
+  <circle cx="500" cy="260" r="8" fill="#fbbf24"/>
+  <circle cx="800" cy="320" r="8" fill="#fff"/>
+  <text x="80" y="560" fill="#aaa" font-family="system-ui,sans-serif" font-size="28">Qtangl · Compliance deadlines</text>
 </svg>

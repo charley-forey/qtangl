@@ -18,6 +18,7 @@ import { getQDaySourcesByIds } from "@/lib/copy/q-day-sources";
 import type { LoadedReadinessContent } from "@/lib/readiness-content-types";
 import { buildBlogPostingJsonLd, buildFaqJsonLd } from "@/lib/seo";
 import { buildAssessMiniHref } from "@/lib/hndl-funnel";
+import { coverImageLoadingProps } from "@/lib/cover-image";
 
 type MarkdownReadinessArticleProps = {
   content: LoadedReadinessContent;
@@ -53,7 +54,8 @@ export default function MarkdownReadinessArticle({
                 alt={registry.coverAlt}
                 fill
                 sizes="(min-width: 768px) 768px, 100vw"
-                className="object-cover grayscale"
+                {...coverImageLoadingProps(registry.coverImage)}
+                className="object-cover"
               />
             </div>
           </Card>

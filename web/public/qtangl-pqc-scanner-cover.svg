@@ -1,6 +1,13 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" fill="none">
   <rect width="1200" height="630" fill="#0a0a0a"/>
-  <g opacity="0.35" stroke="#fff" stroke-width="2">
+  <rect width="1200" height="630" fill="url(#scanGlow)" opacity="0.9"/>
+  <defs>
+    <radialGradient id="scanGlow" cx="0.75" cy="0.2" r="0.8">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#0a0a0a" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <g opacity="0.65" stroke="#fff" stroke-width="2">
     <rect x="120" y="140" width="960" height="360" rx="8"/>
     <line x1="120" y1="220" x2="1080" y2="220"/>
     <line x1="120" y1="300" x2="1080" y2="300"/>
@@ -8,5 +15,5 @@
     <line x1="360" y1="140" x2="360" y2="500"/>
     <line x1="720" y1="140" x2="720" y2="500"/>
   </g>
-  <text x="80" y="560" fill="#888" font-family="system-ui,sans-serif" font-size="28">Qtangl · PQC inventory &amp; scanner</text>
+  <text x="80" y="560" fill="#aaa" font-family="system-ui,sans-serif" font-size="28">Qtangl · PQC inventory &amp; scanner</text>
 </svg>

@@ -11,6 +11,7 @@ import Eyebrow from "@/components/ui/Eyebrow";
 import JsonLd from "@/components/seo/JsonLd";
 import { readinessBlogCta, readinessArticles } from "@/lib/copy/articles";
 import { getQDaySourcesByIds } from "@/lib/copy/q-day-sources";
+import { coverImageLoadingProps } from "@/lib/cover-image";
 import { buildBlogPostingJsonLd, buildFaqJsonLd } from "@/lib/seo";
 
 type ReadinessArticleKey = keyof typeof readinessArticles;
@@ -54,7 +55,8 @@ export default function ReadinessBlogArticle({
                   alt={article.coverAlt}
                   fill
                   sizes="(min-width: 768px) 768px, 100vw"
-                  className="object-cover grayscale"
+                  {...coverImageLoadingProps(article.coverImage)}
+                  className="object-cover"
                 />
               </div>
             </Card>
