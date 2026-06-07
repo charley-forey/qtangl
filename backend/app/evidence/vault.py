@@ -98,3 +98,23 @@ def vault_summary(*, tenant_id: str) -> dict[str, Any]:
     now = datetime.now(timezone.utc)
     active = [obj for obj in objects if obj.get("retainedUntil") and obj["retainedUntil"] > now.isoformat()]
     return {"total": len(objects), "active": len(active), "objects": objects[:20]}
+
+
+def purge_expired_vault_objects(*, now: datetime | None = None) -> int:
+    """Remove vault metadata rows past retention (FR-E11)."""
+    if not persistence_enabled():
+        return 0
+    now = now or datetime.now(timezone.utc)
+    with db_session() as session:
+        rows = (
+            session.query(EvidenceVaultObject)
+            .filter(
+                EvidenceVaultObject.retained_until.isnot(None),
+                EvidenceVaultObject.retained_until < now,
+            )
+            .all()
+        )
+        count = len(rows)
+        for row in rows:
+            session.delete(row)
+        return count

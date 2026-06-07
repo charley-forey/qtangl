@@ -1,84 +1,60 @@
-# Demo Video Script — Qtangl Q-Day Readiness (5 minutes)
+# Demo video script — Qtangl readiness (2–3 min)
 
 **Audience:** CISO, security architect, GRC lead  
-**Goal:** Show scan → signed report → independent verify → passport share  
-**Recording:** 1920×1080, dark theme dashboard, no customer data
+**CTA:** `/assess/mini` or `/access`
 
 ---
 
-## 0:00 — Hook (15s)
+## Opening (0:00–0:20)
 
-**VO:** "Regulators want a cryptographic inventory. Spreadsheets won't survive audit. Here's Qtangl in five minutes."
+> Quantum readiness is not a single scan — it's provable evidence and a merged view of every cryptographic asset you depend on. Qtangl Monitor gives you signed reports auditors can verify independently, plus multi-source CBOM aggregation from scanners, cloud KMS, and PKI tools.
 
-**Visual:** Trust center transparency root hash (live from `/trust`)
-
----
-
-## 0:15 — Assess (60s)
-
-**VO:** "Start with a target domain or upload a cert bundle."
-
-**Visual:**
-1. `/assess` or dashboard — run scan on demo domain
-2. Show readiness band and asset heatmap
-3. Highlight Mosca timeline / HNDL exposure in report summary
-
-**On-screen text:** "Inventory aid — validate in your environment"
+**Visual:** Homepage hero → `/platform`
 
 ---
 
-## 1:15 — Evidence & verify (75s)
+## Problem (0:20–0:45)
 
-**VO:** "Every report is hashed and signed. Verify without trusting our dashboard."
+> Most teams discover crypto in silos. When audit season hits, you can't prove what changed — or that a report wasn't altered after delivery.
 
-**Visual:**
-1. Download PDF + JSON from scan actions
-2. Open `/verify` — paste content hash or upload JSON
-3. Show green verify + transparency inclusion snippet
-
-**On-screen text:** "ML-DSA-65 when available · Ed25519 fallback"
+**Visual:** Split screen: spreadsheet vs signed PDF
 
 ---
 
-## 2:30 — Drift & remediation (60s)
+## Demo — Verify (0:45–1:15)
 
-**VO:** "Run a second scan to see drift. Prioritize remediation in the board."
+> Every report includes a content hash and signature. Anyone can paste the JSON at qtangl.com/verify — no login — and see log inclusion in our transparency registry.
 
-**Visual:**
-1. Dashboard Scan diff panel (prominent)
-2. Remediation board — mark item in progress, optional Jira push
+**Visual:** `/verify?scanId=...` → valid + inclusion proof → `/trust` live root
 
 ---
 
-## 3:30 — Passport & vault (45s)
+## Demo — Aggregate (1:15–1:50)
 
-**VO:** "Share a Readiness Passport with auditors. Retain bundles in the evidence vault."
+> Import a Keyfactor or ServiceNow CBOM, pull AWS ACM and Azure Key Vault read-only, and merge into one inventory. Drift alerts fire when new quantum-vulnerable assets appear.
 
-**Visual:**
-1. Passport panel — label "Q2 board review", scope passport
-2. Copy `/r/{token}` link
-3. Evidence vault — retain scan, show retention date
+**Visual:** Dashboard CBOM section → import → drift widget
 
 ---
 
-## 4:15 — Cloud & CBOM (30s)
+## Demo — Passport (1:50–2:15)
 
-**VO:** "Pull AWS ACM or Azure Key Vault read-only. Merge with vendor CBOM exports."
+> Share a Readiness Passport with procurement or external auditors — expiring link, view audit, evidence bundle download.
 
-**Visual:** Cloud integration panel → test → pull CBOM
+**Visual:** Passport modal → `/r/{token}` incognito
 
 ---
 
-## 4:45 — Close (15s)
+## Close (2:15–2:45)
 
-**VO:** "Start free at qtangl.com/assess. Book a pilot for Monitor and enterprise retention."
+> Start with a free mini-assessment, schedule Monitor for continuous evidence, or book a 20-minute readiness review.
 
-**Visual:** Logo + CTAs: `/assess/mini` · `/access` · `/trust`
+**CTA on screen:** `/assess/mini` · `/pricing` · `/access`
 
 ---
 
 ## Production notes
 
-- Use sandbox API key; blur tenant ID if shown
-- B-roll: transparency CLI curl from TrustTransparencyLive
-- Captions required; link verify-spec in description
+- Record at 1920×1080; captions required for accessibility
+- Use prod or staging with transparency log enabled
+- B-roll: PDF download, webhook SIEM docs page

@@ -140,14 +140,39 @@ def main() -> None:
             processed = process_next_job()
             now = time.time()
             if now - last_scheduler_tick >= scheduler_interval:
-                from app.monitoring.service import enqueue_due_scans
+                from app.monitoring.service import enqueue_due_cloud_pulls, enqueue_due_scans
 
                 enqueued = enqueue_due_scans()
+                cloud_enqueued = enqueue_due_cloud_pulls()
                 from app.monitoring.scheduler_state import record_scheduler_tick
 
-                record_scheduler_tick(enqueued=enqueued)
+                record_scheduler_tick(enqueued=enqueued + cloud_enqueued)
                 if enqueued:
                     logger.info("Enqueued %d scheduled scan(s)", enqueued)
+                if cloud_enqueued:
+                    logger.info("Enqueued %d scheduled cloud pull(s)", cloud_enqueued)
+                try:
+                    from app.notifications.lead_drip import process_due_drip_emails
+
+                    drip_sent = process_due_drip_emails()
+                    if drip_sent:
+                        logger.info("Sent %d onboarding drip email(s)", drip_sent)
+                except Exception:
+                    logger.debug("drip tick skipped", exc_info=True)
+                try:
+                    from app.evidence.vault import purge_expired_vault_objects
+                    from app.lifecycle.retention import (
+                        purge_old_schedule_run_logs,
+                        purge_replayed_webhook_dlq,
+                        sweep_expired_upload_sessions,
+                    )
+
+                    purge_expired_vault_objects()
+                    sweep_expired_upload_sessions()
+                    purge_replayed_webhook_dlq()
+                    purge_old_schedule_run_logs()
+                except Exception:
+                    logger.debug("lifecycle sweep skipped", exc_info=True)
                 try:
                     from app.pqc.transparency import current_root
                     from app.pqc.anchoring import maybe_anchor_on_milestone

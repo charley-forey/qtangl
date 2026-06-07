@@ -1,59 +1,65 @@
-# Customer Case Study Template
+# Customer case study template
 
-> Fill before publishing. Obtain customer approval and redact sensitive identifiers.
+Use for first design partner or paying Monitor customer. Publish on `/learn` or sales deck after approval.
+
+---
 
 ## Headline
 
-[Company type] cuts Q-Day inventory time from [X weeks] to [Y days] with Qtangl
+**[Company type] cut Q-Day audit prep from X weeks to Y days with verifiable Qtangl evidence**
+
+---
 
 ## Snapshot
 
 | Field | Value |
 |-------|-------|
-| Industry | e.g. Regional bank, healthcare system, defense contractor |
-| Size | e.g. 2,000 employees, 40 public domains |
-| Qtangl tier | Assess / Monitor / Convert |
+| Industry | e.g. Financial services |
+| Size | e.g. 5,000 employees |
+| Use case | Monitor + CBOM aggregation |
 | Timeline | Pilot start → production |
+
+---
 
 ## Challenge
 
-- Regulatory or board pressure (NSM-10, EU PQC, internal 2030 target)
-- Fragmented inventory (Keyfactor export, manual spreadsheets, cloud certs)
-- Need for **auditable evidence**, not slide-deck estimates
+- What triggered the project? (regulation, board ask, vendor RFP)
+- What failed with prior approach? (spreadsheets, point scanners, no verify path)
 
-## Approach
+---
 
-1. Initial Qtangl scan on [targets]
-2. CBOM merge from [sources]
-3. Remediation board + Jira integration (if applicable)
-4. Readiness Passport shared with [auditor / board / partner]
+## Solution
+
+- Qtangl Monitor schedules on [targets]
+- CBOM sources: [Keyfactor / AWS / Azure / manual]
+- Readiness Passport shared with [auditor / procurement]
+
+**Quote (customer):**  
+> "..."
+
+---
 
 ## Results (quantify where possible)
 
-- Readiness score: [before] → [after]
-- Assets discovered: [N] cryptographic components
-- Critical findings remediated: [N] within [timeframe]
-- Verification: auditor independently verified signed report via `/verify`
+| Metric | Before | After |
+|--------|--------|-------|
+| Time to evidence package | | |
+| Crypto assets inventoried | | |
+| Third-party verify rate | | |
+| Open merge conflicts | | |
 
-## Quote
+---
 
-> "[Customer quote about evidence portability or time saved.]"
->
-> — [Name], [Title], [Company]
+## Technical proof points
 
-## Technical detail (optional sidebar)
+- Link to public verify example (with permission)
+- Transparency log inclusion screenshot
+- Webhook / SIEM integration (if applicable)
 
-- Scan cadence: weekly / monthly
-- Integrations: AWS ACM pull, Slack webhooks, SSO
-- Evidence vault retention: [months]
-
-## Call to action
-
-- Mini-assessment: https://www.qtangl.com/assess/mini
-- Enterprise pilot: https://www.qtangl.com/access
+---
 
 ## Approval
 
-- [ ] Customer marketing approved
-- [ ] Legal reviewed claims
-- [ ] No non-public domains or PII in published version
+- [ ] Customer marketing approval
+- [ ] Legal / NDA check
+- [ ] Anonymization level: named / anonymized

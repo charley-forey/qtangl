@@ -335,6 +335,16 @@ def load_scan_bundle_for_public_verify(scan_id: str) -> dict[str, Any] | None:
         return serialize_bundle(job.bundle)
 
 
+def get_scan_tenant_id(scan_id: str) -> str | None:
+    if persistence_enabled():
+        with scan_db_session() as session:
+            row = session.get(ScanJobRow, scan_id)
+            return row.tenant_id if row else None
+    with _job_lock:
+        job = _memory_jobs.get(scan_id)
+        return job.tenant_id if job else None
+
+
 def load_scan_bundle(scan_id: str, *, tenant_id: str = "sandbox") -> dict[str, Any] | None:
     if persistence_enabled():
         with scan_db_session() as session:

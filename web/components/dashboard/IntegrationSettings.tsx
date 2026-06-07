@@ -19,6 +19,13 @@ type Webhook = {
   events: string;
 };
 
+const WEBHOOK_EVENT_OPTIONS = [
+  "scan.complete",
+  "report.verified",
+  "passport.viewed",
+  "cbom.ingested",
+] as const;
+
 export default function IntegrationSettings({
   apiKey,
   onMessage,
@@ -31,6 +38,7 @@ export default function IntegrationSettings({
   const [jiraToken, setJiraToken] = useState("");
   const [jiraProject, setJiraProject] = useState("SEC");
   const [webhookUrl, setWebhookUrl] = useState("");
+  const [webhookEvents, setWebhookEvents] = useState<string[]>(["scan.complete"]);
   const [integrations, setIntegrations] = useState<Integration[]>([]);
   const [webhooks, setWebhooks] = useState<Webhook[]>([]);
   const [loaded, setLoaded] = useState(false);
@@ -126,6 +134,22 @@ export default function IntegrationSettings({
       </div>
       <div>
         <Eyebrow>Slack / webhook</Eyebrow>
+        <div className="mt-3 flex flex-wrap gap-2">
+          {WEBHOOK_EVENT_OPTIONS.map((event) => (
+            <label key={event} className="flex items-center gap-2 text-xs text-[var(--color-gray-400)]">
+              <input
+                type="checkbox"
+                checked={webhookEvents.includes(event)}
+                onChange={(e) => {
+                  setWebhookEvents((prev) =>
+                    e.target.checked ? [...prev, event] : prev.filter((item) => item !== event)
+                  );
+                }}
+              />
+              {event}
+            </label>
+          ))}
+        </div>
         <div className="mt-3 flex flex-col gap-2 sm:flex-row">
           <input
             type="url"
@@ -140,7 +164,7 @@ export default function IntegrationSettings({
             onClick={async () => {
               await postTenantJson("/tenant/webhooks", apiKey, {
                 url: webhookUrl,
-                events: "scan.complete",
+                events: webhookEvents.join(","),
               });
               onMessage("Webhook registered.");
               setWebhookUrl("");
@@ -154,7 +178,10 @@ export default function IntegrationSettings({
           <ul className="mt-3 space-y-2 text-xs text-[var(--color-gray-400)]">
             {webhooks.map((hook) => (
               <li key={hook.id} className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
-                <span className="font-mono break-all">{hook.url}</span>
+                <span className="font-mono break-all">
+                  {hook.url}
+                  <span className="ml-2 text-[var(--color-gray-500)]">({hook.events})</span>
+                </span>
                 <button
                   type="button"
                   className="shrink-0 text-white underline underline-offset-4"

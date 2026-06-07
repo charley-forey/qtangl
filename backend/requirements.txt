@@ -18,3 +18,6 @@ sqlalchemy>=2.0.30
 redis>=5.0.0
 psycopg[binary]>=3.1.18
 alembic>=1.13.0
+# Optional cloud CBOM pull (Azure Key Vault)
+azure-identity>=1.16.0
+azure-keyvault-certificates>=4.8.0

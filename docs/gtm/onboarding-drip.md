@@ -68,6 +68,7 @@ Five-email sequence for leads who complete `/assess/mini`. Backend stub: `backen
 
 ## Operational notes
 
-- Trigger: mini-assessment email capture + step counter in CRM
-- Unsubscribe: honor marketing opt-out; transactional scan emails separate
+- Trigger: mini-assessment email capture via `POST /public/lead-capture` (wired from `/assess/mini` server action)
+- Worker sends steps 2–5 on schedule via `process_due_drip_emails()` in worker tick
+- Unsubscribe: `POST /public/unsubscribe` + honor marketing opt-out; transactional scan emails separate
 - A/B test subject lines after 500 sends per step

@@ -191,7 +191,7 @@ export default function MiniAssessmentClient() {
           >
             {upsell.secondary.label}
           </Button>
-          <Button href="/verify?token=sample-token" variant="secondary">
+          <Button href="/verify?scanId=golden-bank-tls-inventory" variant="secondary">
             Verify sample report
           </Button>
           <Button href={sampleCbomPath} variant="secondary">

@@ -45,6 +45,23 @@ class ScheduleCreateRequest(BaseModel):
     cadenceHours: int = Field(default=168, ge=1, le=8760)
     notifyEmail: str | None = None
     cloudImportPayload: str | None = None
+    jobType: str = Field(default="scan", pattern="^(scan|cloud_pull)$")
+    integrationProvider: str | None = None
+
+
+class TenantSettingsRequest(BaseModel):
+    readinessDropThreshold: float | None = None
+    alertOnNewQuantumVulnerable: bool | None = None
+    certExpiryDays: int | None = None
+    webhookSigningSecret: str | None = None
+    autoRetainScans: bool | None = None
+    evidenceRetentionMonths: int | None = Field(default=None, ge=1, le=120)
+
+
+class SchedulePatchRequest(BaseModel):
+    cadenceHours: int | None = Field(default=None, ge=1, le=8760)
+    notifyEmail: str | None = None
+    active: bool | None = None
 
 
 class RemediationUpdateRequest(BaseModel):
@@ -54,19 +71,6 @@ class RemediationUpdateRequest(BaseModel):
     notes: str | None = None
     targetDate: str | None = None
     assetId: str | None = None
-
-
-class SchedulePatchRequest(BaseModel):
-    cadenceHours: int | None = Field(default=None, ge=1, le=8760)
-    notifyEmail: str | None = None
-    active: bool | None = None
-
-
-class TenantSettingsRequest(BaseModel):
-    readinessDropThreshold: float | None = None
-    alertOnNewQuantumVulnerable: bool | None = None
-    certExpiryDays: int | None = None
-    webhookSigningSecret: str | None = None
 
 
 class RemediationVerifyRequest(BaseModel):
@@ -296,6 +300,11 @@ def tenant_create_schedule(
 
         track_event("tier_upgrade_clicked", tenant_id=auth.tenant_id, properties=quota_error)
         raise HTTPException(status_code=status.HTTP_402_PAYMENT_REQUIRED, detail=quota_error)
+    if body.jobType == "cloud_pull" and body.integrationProvider not in {"aws", "azure"}:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail="integrationProvider must be aws or azure for cloud_pull schedules.",
+        )
     schedule = create_schedule(
         tenant_id=auth.tenant_id,
         scenario_id=body.scenarioId,
@@ -303,6 +312,8 @@ def tenant_create_schedule(
         cadence_hours=body.cadenceHours,
         notify_email=body.notifyEmail,
         import_payload_json=body.cloudImportPayload,
+        job_type=body.jobType,
+        integration_provider=body.integrationProvider,
     )
     log_action(tenant_id=auth.tenant_id, action="schedule.create", resource_id=schedule["id"])
     from app.telemetry.events import track_event

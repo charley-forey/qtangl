@@ -14,6 +14,8 @@ DEFAULT_SETTINGS: dict[str, Any] = {
     "alertOnNewQuantumVulnerable": True,
     "certExpiryDays": 30,
     "webhookSigningSecret": "",
+    "autoRetainScans": False,
+    "evidenceRetentionMonths": 12,
 }
 
 

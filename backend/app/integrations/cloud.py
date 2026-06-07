@@ -60,12 +60,21 @@ def test_cloud_connection(*, tenant_id: str, provider: str) -> dict[str, Any]:
         return {"ok": False, "reason": "integration_not_configured"}
     if provider == "aws":
         region = config.get("region", "us-east-1")
-        result = pull_aws_acm(region=region)
+        result = pull_aws_acm(
+            region=region,
+            role_arn=str(config.get("roleArn") or ""),
+            external_id=str(config.get("externalId") or ""),
+        )
         ok = result.get("status") == "ok"
         preview_count = int(result.get("count") or 0)
     elif provider == "azure":
         vault = config.get("vaultName", "")
-        result = pull_azure_keyvault(vault_name=vault)
+        result = pull_azure_keyvault(
+            vault_name=vault,
+            tenant_id=str(config.get("tenantId") or config.get("azureTenantId") or ""),
+            client_id=str(config.get("clientId") or ""),
+            client_secret=str(config.get("clientSecret") or ""),
+        )
         ok = result.get("status") == "ok"
         preview_count = len(result.get("certificates") or [])
     else:
@@ -87,12 +96,34 @@ def pull_cloud_inventory(*, tenant_id: str, provider: str) -> dict[str, Any]:
         return {"ok": False, "reason": "integration_not_configured"}
     if provider == "aws":
         region = config.get("region", "us-east-1")
-        rows_json = acm_rows_for_import(region=region)
+        result = pull_aws_acm(
+            region=region,
+            role_arn=str(config.get("roleArn") or ""),
+            external_id=str(config.get("externalId") or ""),
+        )
+        if result.get("status") != "ok":
+            _mark_pull(tenant_id=tenant_id, provider=provider, status="error")
+            _maybe_disable_integration(tenant_id=tenant_id, provider=provider, result=result)
+            return {"ok": False, "reason": result.get("message") or result.get("status")}
+        rows_json = acm_rows_for_import(
+            region=region,
+            role_arn=str(config.get("roleArn") or ""),
+            external_id=str(config.get("externalId") or ""),
+        )
         rows = json.loads(rows_json)
         pull_status = "ok"
     elif provider == "azure":
         vault = config.get("vaultName", "")
-        result = pull_azure_keyvault(vault_name=vault)
+        result = pull_azure_keyvault(
+            vault_name=vault,
+            tenant_id=str(config.get("tenantId") or config.get("azureTenantId") or ""),
+            client_id=str(config.get("clientId") or ""),
+            client_secret=str(config.get("clientSecret") or ""),
+        )
+        if result.get("status") not in {"ok"}:
+            _mark_pull(tenant_id=tenant_id, provider=provider, status=str(result.get("status", "error")))
+            _maybe_disable_integration(tenant_id=tenant_id, provider=provider, result=result)
+            return {"ok": False, "reason": result.get("message") or result.get("status")}
         rows = [
             {
                 "host": cert.get("name", "azure-cert"),
@@ -104,7 +135,7 @@ def pull_cloud_inventory(*, tenant_id: str, provider: str) -> dict[str, Any]:
             }
             for cert in result.get("certificates", [])
         ]
-        pull_status = result.get("status", "partial")
+        pull_status = "ok"
     else:
         return {"ok": False, "reason": "unsupported_provider"}
 
@@ -187,6 +218,25 @@ def _mark_test(*, tenant_id: str, provider: str, status: str) -> None:
         if row:
             row.last_test_at = datetime.now(timezone.utc)
             row.last_pull_status = status
+
+
+def _maybe_disable_integration(*, tenant_id: str, provider: str, result: dict[str, Any]) -> None:
+    """Disable integration on auth failures (FR-C7)."""
+    status = str(result.get("status", ""))
+    message = str(result.get("message", "")).lower()
+    if status != "error" and "auth" not in message and "credential" not in message and "assume_role" not in message:
+        return
+    if not persistence_enabled():
+        return
+    with db_session() as session:
+        row = (
+            session.query(IntegrationRow)
+            .filter(IntegrationRow.tenant_id == tenant_id, IntegrationRow.provider == provider)
+            .one_or_none()
+        )
+        if row:
+            row.status = "disabled"
+            row.last_pull_status = "auth_failed"
 
 
 def _mark_pull(*, tenant_id: str, provider: str, status: str) -> None:

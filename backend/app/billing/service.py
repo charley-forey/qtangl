@@ -125,6 +125,86 @@ def handle_checkout_completed(session: dict[str, Any]) -> dict[str, Any]:
     return {"provisioned": True, **result}
 
 
+def handle_subscription_updated(subscription: dict[str, Any]) -> dict[str, Any]:
+    from app.billing.entitlements import upsert_subscription
+
+    status_map = {
+        "active": "active",
+        "trialing": "active",
+        "past_due": "past_due",
+        "canceled": "cancelled",
+        "unpaid": "cancelled",
+        "incomplete": "incomplete",
+    }
+    stripe_status = str(subscription.get("status", "active"))
+    mapped = status_map.get(stripe_status, "active")
+    customer_id = subscription.get("customer")
+    sub_id = subscription.get("id")
+    tenant_id = _tenant_id_for_stripe_customer(customer_id)
+    if not tenant_id:
+        return {"updated": False, "reason": "tenant_not_found"}
+    tier = "monitor" if mapped == "active" else "free"
+    upsert_subscription(
+        tenant_id=tenant_id,
+        tier=tier,
+        stripe_customer_id=str(customer_id) if customer_id else None,
+        stripe_subscription_id=str(sub_id) if sub_id else None,
+        status=mapped,
+    )
+    return {"updated": True, "tenantId": tenant_id, "status": mapped}
+
+
+def handle_subscription_deleted(subscription: dict[str, Any]) -> dict[str, Any]:
+    from app.billing.entitlements import upsert_subscription
+
+    customer_id = subscription.get("customer")
+    tenant_id = _tenant_id_for_stripe_customer(customer_id)
+    if not tenant_id:
+        return {"updated": False, "reason": "tenant_not_found"}
+    upsert_subscription(
+        tenant_id=tenant_id,
+        tier="free",
+        stripe_customer_id=str(customer_id) if customer_id else None,
+        stripe_subscription_id=None,
+        status="cancelled",
+    )
+    return {"updated": True, "tenantId": tenant_id, "status": "cancelled"}
+
+
+def handle_payment_failed(invoice: dict[str, Any]) -> dict[str, Any]:
+    customer_id = invoice.get("customer")
+    tenant_id = _tenant_id_for_stripe_customer(customer_id)
+    if not tenant_id:
+        return {"updated": False, "reason": "tenant_not_found"}
+    from app.billing.entitlements import upsert_subscription
+
+    upsert_subscription(
+        tenant_id=tenant_id,
+        tier="monitor",
+        stripe_customer_id=str(customer_id) if customer_id else None,
+        status="past_due",
+    )
+    return {"updated": True, "tenantId": tenant_id, "status": "past_due"}
+
+
+def _tenant_id_for_stripe_customer(customer_id: str | None) -> str | None:
+    if not customer_id:
+        return None
+    from app.db.config import persistence_enabled
+    from app.db.engine import db_session
+    from app.db.models import TenantSubscription as SubscriptionRow
+
+    if not persistence_enabled():
+        return None
+    with db_session() as session:
+        row = (
+            session.query(SubscriptionRow)
+            .filter(SubscriptionRow.stripe_customer_id == customer_id)
+            .one_or_none()
+        )
+        return row.tenant_id if row else None
+
+
 def create_billing_portal_session(*, customer_id: str, return_url: str) -> dict[str, Any]:
     secret = os.environ.get("QTANGL_STRIPE_SECRET_KEY")
     if not secret or not customer_id:

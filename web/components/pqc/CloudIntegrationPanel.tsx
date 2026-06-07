@@ -131,9 +131,13 @@ export default function CloudIntegrationPanel({
   function statusLine(provider: string) {
     const row = integrations.find((item) => item.provider === provider);
     if (!row?.configured) return null;
+    const roadmap = row.lastPullStatus === "roadmap";
     return (
-      <p className="mt-2 text-xs text-emerald-300">
-        Configured
+      <p className={`mt-2 text-xs ${roadmap ? "text-amber-300" : "text-emerald-300"}`}>
+        {roadmap ? "Roadmap — configure credentials and save to enable live pull" : "Configured"}
+        {row.lastPullStatus && row.lastPullStatus !== "ok" && !roadmap
+          ? ` · last pull ${row.lastPullStatus}`
+          : ""}
         {row.lastTestAt ? ` · last test ${new Date(row.lastTestAt).toLocaleString()}` : ""}
         {row.lastPullAt ? ` · last pull ${new Date(row.lastPullAt).toLocaleString()}` : ""}
       </p>

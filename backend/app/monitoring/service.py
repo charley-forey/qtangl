@@ -36,6 +36,8 @@ def create_schedule(
     cadence_hours: int,
     notify_email: str | None = None,
     import_payload_json: str | None = None,
+    job_type: str = "scan",
+    integration_provider: str | None = None,
 ) -> dict[str, Any]:
     if not persistence_enabled():
         raise RuntimeError("Scheduled monitoring requires Postgres persistence.")
@@ -52,6 +54,8 @@ def create_schedule(
             next_run_at=next_run,
             notify_email=notify_email,
             import_payload_json=import_payload_json,
+            job_type=job_type if job_type in {"scan", "cloud_pull"} else "scan",
+            integration_provider=integration_provider,
             active=True,
         )
         session.add(row)
@@ -181,6 +185,8 @@ def enqueue_due_scans() -> int:
         return 0
     enqueued = 0
     for schedule in due_schedules():
+        if schedule.get("jobType") == "cloud_pull":
+            continue
         payload: dict[str, Any] = {
             "scenarioId": schedule["scenarioId"],
             "tenantId": schedule["tenantId"],
@@ -217,6 +223,51 @@ def enqueue_due_scans() -> int:
     return enqueued
 
 
+def enqueue_due_cloud_pulls() -> int:
+    """Pull cloud CBOM inventory for due cloud_pull schedules (FR-I11)."""
+    if not scheduler_enabled():
+        return 0
+    from app.integrations.cloud import pull_cloud_inventory
+    from app.cbom.service import ingest_cbom_document, post_ingest_cbom_hooks
+
+    enqueued = 0
+    for schedule in due_schedules():
+        if schedule.get("jobType") != "cloud_pull":
+            continue
+        provider = schedule.get("integrationProvider")
+        tenant_id = schedule["tenantId"]
+        if not provider:
+            continue
+        pull = pull_cloud_inventory(tenant_id=tenant_id, provider=provider)
+        if not pull.get("ok"):
+            mark_run(schedule["id"], scan_id=f"cloud-pull-failed-{provider}")
+            _log_schedule_run(
+                schedule_id=schedule["id"],
+                tenant_id=tenant_id,
+                scan_id="",
+                status=f"failed:{pull.get('reason', 'unknown')}",
+            )
+            continue
+        document = pull.get("document") or {}
+        ingest = ingest_cbom_document(
+            tenant_id=tenant_id,
+            document=document,
+            source_label=f"cloud-{provider}",
+            verification_status="cloud-readonly",
+            actor="scheduler",
+        )
+        post_ingest_cbom_hooks(tenant_id=tenant_id, ingest_result=ingest)
+        mark_run(schedule["id"], scan_id=ingest.get("ingestJobId", "cloud-pull"))
+        _log_schedule_run(
+            schedule_id=schedule["id"],
+            tenant_id=tenant_id,
+            scan_id=str(ingest.get("ingestJobId", "")),
+            status="cloud_pull_ok",
+        )
+        enqueued += 1
+    return enqueued
+
+
 def _row_to_dict(row: ScheduledScanRow) -> dict[str, Any]:
     return {
         "id": row.id,
@@ -228,6 +279,8 @@ def _row_to_dict(row: ScheduledScanRow) -> dict[str, Any]:
         "lastRunScanId": row.last_run_scan_id,
         "notifyEmail": row.notify_email,
         "hasCloudImport": bool(row.import_payload_json),
+        "jobType": getattr(row, "job_type", None) or "scan",
+        "integrationProvider": getattr(row, "integration_provider", None),
         "active": row.active,
         "createdAt": row.created_at.isoformat() if row.created_at else None,
     }

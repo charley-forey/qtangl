@@ -505,6 +505,37 @@ def get_cbom_drift(*, tenant_id: str) -> dict[str, Any]:
     return {"available": True, **drift}
 
 
+def post_ingest_cbom_hooks(*, tenant_id: str, ingest_result: dict[str, Any]) -> None:
+    """Evaluate CBOM drift alerts and fire cbom.ingested webhooks."""
+    if not ingest_result.get("ok") or ingest_result.get("idempotent"):
+        return
+    from app.monitoring.alerts import evaluate_cbom_alerts
+    from app.notifications.webhook_store import active_webhook_urls
+    from app.notifications.webhooks import notify_tenant_event
+    from app.tenant.settings import get_tenant_settings_raw
+
+    drift = get_cbom_drift(tenant_id=tenant_id)
+    alerts = evaluate_cbom_alerts(drift) if drift.get("available") else []
+    settings = get_tenant_settings_raw(tenant_id=tenant_id)
+    signing_secret = str(settings.get("webhookSigningSecret") or "")
+    urls = active_webhook_urls(tenant_id=tenant_id, event="cbom.ingested")
+    if urls:
+        notify_tenant_event(
+            webhooks=urls,
+            event="cbom.ingested",
+            tenant_id=tenant_id,
+            payload={
+                "ingestJobId": ingest_result.get("ingestJobId"),
+                "componentCount": ingest_result.get("componentCount"),
+                "newComponents": ingest_result.get("newComponents"),
+                "conflictCount": ingest_result.get("conflictCount"),
+                "cbomDrift": drift,
+                "alerts": alerts,
+            },
+            signing_secret=signing_secret,
+        )
+
+
 def parse_pem_bundle_to_document(pem_text: str) -> dict[str, Any]:
     """Build minimal CycloneDX document from PEM certificates."""
     from app.pqc.data import parse_uploaded_bundle_pem

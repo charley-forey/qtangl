@@ -92,7 +92,11 @@ export default function ScheduleManager({
         >
           <div className="flex flex-wrap items-start justify-between gap-2">
             <div>
-              <p className="font-medium text-white">{schedule.target || schedule.scenarioId}</p>
+              <p className="font-medium text-white">
+                {schedule.jobType === "cloud_pull"
+                  ? `Cloud CBOM · ${schedule.integrationProvider ?? "cloud"}`
+                  : schedule.target || schedule.scenarioId}
+              </p>
               <p className="text-xs text-[var(--muted)]">
                 Every {schedule.cadenceHours}h · next{" "}
                 {schedule.nextRunAt ? formatUtcDateTime(schedule.nextRunAt) : "—"}

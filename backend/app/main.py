@@ -183,6 +183,25 @@ def shared_report_readonly(token: str, request: Request) -> dict:
         tenant_id=resolved["tenantId"],
         properties={"scanId": resolved["scanId"], "scope": resolved.get("scope", "report")},
     )
+    from app.notifications.webhook_store import active_webhook_urls
+    from app.notifications.webhooks import notify_tenant_event
+    from app.tenant.settings import get_tenant_settings_raw
+
+    urls = active_webhook_urls(tenant_id=resolved["tenantId"], event="passport.viewed")
+    if urls:
+        settings = get_tenant_settings_raw(tenant_id=resolved["tenantId"])
+        notify_tenant_event(
+            webhooks=urls,
+            event="passport.viewed",
+            tenant_id=resolved["tenantId"],
+            payload={
+                "scanId": resolved["scanId"],
+                "linkId": resolved["linkId"],
+                "scope": resolved.get("scope", "report"),
+                "label": resolved.get("label", ""),
+            },
+            signing_secret=str(settings.get("webhookSigningSecret") or ""),
+        )
     payload = load_scan_bundle(resolved["scanId"], tenant_id=resolved["tenantId"])
     if payload is None:
         from fastapi import HTTPException, status

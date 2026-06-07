@@ -22,6 +22,8 @@ export type ScheduledScan = {
   nextRunAt: string | null;
   lastRunScanId: string | null;
   notifyEmail: string | null;
+  jobType?: string;
+  integrationProvider?: string | null;
 };
 
 export function getStoredTenantApiKey(): string | null {
@@ -101,6 +103,10 @@ export async function putTenantJson<T>(
     },
     body: JSON.stringify(body),
   });
+}
+
+export async function deleteTenantJson<T>(path: string, apiKey: string, init?: RequestInit): Promise<T> {
+  return fetchTenantJson<T>(path, apiKey, { method: "DELETE", ...init });
 }
 
 export function tenantReportUrl(

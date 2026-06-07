@@ -141,6 +141,26 @@ def notify_scan_complete_v2(
     ]
 
 
+def notify_tenant_event(
+    *,
+    webhooks: list[str],
+    event: str,
+    tenant_id: str,
+    payload: dict[str, Any],
+    signing_secret: str = "",
+) -> list[dict[str, Any]]:
+    body = {
+        "schemaVersion": "qtangl-webhook-v2",
+        "event": event,
+        "tenantId": tenant_id,
+        **payload,
+    }
+    return [
+        deliver_webhook(url, body, signing_secret=signing_secret, tenant_id=tenant_id)
+        for url in webhooks
+    ]
+
+
 def replay_dead_letter(*, tenant_id: str, dead_letter_id: str, signing_secret: str = "") -> dict[str, Any]:
     row = get_dead_letter(tenant_id=tenant_id, dead_letter_id=dead_letter_id)
     if row is None:

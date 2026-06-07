@@ -10,7 +10,28 @@ import {
   parseAccessForm,
   validateAccessForm,
 } from "@/lib/access/validation";
+import { qtanglApiBaseUrl } from "@/lib/api";
 import { accessFormMessages } from "@/lib/copy/access";
+
+async function triggerMiniAssessmentDrip(payload: {
+  email: string;
+  source: string;
+  scenario: string;
+}) {
+  try {
+    await fetch(`${qtanglApiBaseUrl}/public/lead-capture`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        email: payload.email,
+        source: payload.source,
+        scenario: payload.scenario,
+      }),
+    });
+  } catch {
+    // Non-blocking — Resend delivery may still succeed
+  }
+}
 
 export async function requestAccess(
   _previousState: AccessFormState,
@@ -43,6 +64,14 @@ export async function requestAccess(
         submittedAt: new Date().toISOString(),
       });
 
+      if (payload.source.startsWith("mini-assessment")) {
+        await triggerMiniAssessmentDrip({
+          email: payload.email,
+          source: payload.source,
+          scenario: payload.source.replace("mini-assessment-", "") || "default",
+        });
+      }
+
       return {
         status: "success",
         message: accessFormMessages.capturedForReview,
@@ -65,6 +94,14 @@ export async function requestAccess(
       message: accessFormMessages.deliveryFailed,
       fieldErrors: {},
     };
+  }
+
+  if (payload.source.startsWith("mini-assessment")) {
+    await triggerMiniAssessmentDrip({
+      email: payload.email,
+      source: payload.source,
+      scenario: payload.source.replace("mini-assessment-", "") || "default",
+    });
   }
 
   return {

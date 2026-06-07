@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from dataclasses import asdict
 import logging
+import os
 
 import json
 from typing import Any
@@ -567,6 +568,39 @@ def report_availability(
     }
 
 
+def _dispatch_verify_webhook(
+    *,
+    scan_id: str,
+    valid: bool,
+    readiness_band: str,
+    target_domain: str,
+) -> None:
+    from app.notifications.webhook_store import active_webhook_urls
+    from app.notifications.webhooks import notify_tenant_event
+    from app.store.scan_jobs import get_scan_tenant_id
+    from app.tenant.settings import get_tenant_settings_raw
+
+    tenant_id = get_scan_tenant_id(scan_id) or "sandbox"
+    urls = active_webhook_urls(tenant_id=tenant_id, event="report.verified")
+    if not urls:
+        return
+    settings = get_tenant_settings_raw(tenant_id=tenant_id)
+    base = os.environ.get("QTANGL_PUBLIC_URL", "https://www.qtangl.com")
+    notify_tenant_event(
+        webhooks=urls,
+        event="report.verified",
+        tenant_id=tenant_id,
+        payload={
+            "scanId": scan_id,
+            "valid": valid,
+            "readinessBand": readiness_band,
+            "targetDomain": target_domain,
+            "verifyUrl": f"{base}/verify?scanId={scan_id}",
+        },
+        signing_secret=str(settings.get("webhookSigningSecret") or ""),
+    )
+
+
 @router.get("/verify/{scan_id}", responses={404: {"model": ErrorResponse}})
 def verify_report(scan_id: str, request: Request) -> dict:
     """Public verification: recompute content hash and verify signature."""
@@ -595,6 +629,12 @@ def verify_report(scan_id: str, request: Request) -> dict:
     track_event(
         "report_verified",
         properties={"scanId": scan_id, "valid": result.get("valid"), "source": "public_verify"},
+    )
+    _dispatch_verify_webhook(
+        scan_id=scan_id,
+        valid=bool(result.get("valid")),
+        readiness_band=bundle.report.readiness_band,
+        target_domain=bundle.report.target_domain,
     )
     return {
         "status": "success",
@@ -630,6 +670,14 @@ def verify_report_json(body: VerifyReportRequest, request: Request) -> dict:
             "source": "paste_verify",
         },
     )
+    scan_id = str(report_json.get("scanId") or "")
+    if scan_id:
+        _dispatch_verify_webhook(
+            scan_id=scan_id,
+            valid=bool(result.get("valid")),
+            readiness_band=str(report_json.get("readinessBand") or ""),
+            target_domain=str(report_json.get("targetDomain") or ""),
+        )
     return {"status": "success", "verification": result}
 
 
@@ -724,6 +772,9 @@ async def cbom_ingest(request: Request, auth: AuthContext = Depends(require_auth
             status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
             detail={"errors": result.get("errors", [])},
         )
+    from app.cbom.service import post_ingest_cbom_hooks
+
+    post_ingest_cbom_hooks(tenant_id=auth.tenant_id, ingest_result=result)
     return {"status": "success", **result}
 
 
@@ -818,6 +869,9 @@ def cbom_cloud_pull(provider: str, auth: AuthContext = Depends(require_auth)) ->
     )
     if not result.get("ok"):
         raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail=result.get("errors"))
+    from app.cbom.service import post_ingest_cbom_hooks
+
+    post_ingest_cbom_hooks(tenant_id=auth.tenant_id, ingest_result=result)
     return {"status": "success", "pull": pull, "ingest": result}
 
 

@@ -147,6 +147,19 @@ def _enrich_completed_scan(scan_id: str, bundle: ScanBundle, *, tenant_id: str) 
         },
     )
 
+    if settings.get("autoRetainScans"):
+        try:
+            from app.evidence.vault import retain_scan_evidence
+
+            content_hash = (bundle.report.signature or {}).get("contentHash", "")
+            retain_scan_evidence(
+                tenant_id=tenant_id,
+                scan_id=scan_id,
+                content_hash=str(content_hash),
+            )
+        except Exception:
+            logger.debug("auto_retain skipped for scan_id=%s", scan_id)
+
     return bundle
 
 

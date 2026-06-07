@@ -28,7 +28,7 @@ Update weekly alongside [optimization_OLD_FUTURE/backlog/epics.md](../optimizati
 | K13 | Brand identity & design system | `not-started` | M | K1, K2 |
 | K14 | Data & threat-intelligence program | `not-started` | M | B3 |
 | K15 | Org, hiring & governance cadence | `not-started` | S | — |
-| K16 | Evidence & trust layer | `in-progress` | L | B3, G1 |
+| K16 | Evidence & trust layer | `done` | L | B3, G1 |
 | K17 | CBOM aggregation & ingestion | `done` | M | B3, K14 |
 
 **Cross-track dependencies:** B3, B4, B6 (Track B) · H1, H5 (Track H) · E1, E5 (Track E) · D1, D2 (Track D) · G1–G6 (Track G) · F1–F5 (Track F)

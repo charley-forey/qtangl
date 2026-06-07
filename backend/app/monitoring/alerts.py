@@ -110,5 +110,43 @@ def _assets_expiring_within_days(assets: list[Any], days: int) -> list[dict[str,
     return out
 
 
+def evaluate_cbom_alerts(drift: dict[str, Any]) -> list[dict[str, Any]]:
+    """Return triggered alerts for CBOM ingest drift."""
+    if not drift.get("available"):
+        return []
+    alerts: list[dict[str, Any]] = []
+    added = int(drift.get("addedCount") or 0)
+    changed = int(drift.get("changedCount") or 0)
+    removed = int(drift.get("removedCount") or 0)
+    if added > 0:
+        alerts.append(
+            {
+                "rule": "cbom_assets_added",
+                "severity": "medium",
+                "message": f"{added} new cryptographic asset(s) in merged CBOM inventory.",
+                "count": added,
+            }
+        )
+    if changed > 0:
+        alerts.append(
+            {
+                "rule": "cbom_assets_changed",
+                "severity": "high",
+                "message": f"{changed} CBOM asset(s) changed algorithm or metadata since last ingest.",
+                "count": changed,
+            }
+        )
+    if removed > 0:
+        alerts.append(
+            {
+                "rule": "cbom_assets_removed",
+                "severity": "info",
+                "message": f"{removed} asset(s) no longer present in latest CBOM snapshot.",
+                "count": removed,
+            }
+        )
+    return alerts
+
+
 def should_send_regression_email(alerts: list[dict[str, Any]]) -> bool:
     return any(alert.get("severity") in {"high", "critical"} for alert in alerts)

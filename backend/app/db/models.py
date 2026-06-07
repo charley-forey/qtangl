@@ -78,7 +78,23 @@ class ScheduledScan(Base):
     last_run_scan_id: Mapped[str | None] = mapped_column(String(80), nullable=True)
     notify_email: Mapped[str | None] = mapped_column(String(255), nullable=True)
     import_payload_json: Mapped[str | None] = mapped_column(Text, nullable=True)
+    job_type: Mapped[str] = mapped_column(String(32), default="scan")
+    integration_provider: Mapped[str | None] = mapped_column(String(32), nullable=True)
     active: Mapped[bool] = mapped_column(default=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_utcnow)
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_utcnow, onupdate=_utcnow)
+
+
+class OnboardingLead(Base):
+    __tablename__ = "onboarding_leads"
+
+    id: Mapped[str] = mapped_column(String(80), primary_key=True)
+    email: Mapped[str] = mapped_column(String(320), unique=True, index=True)
+    source: Mapped[str] = mapped_column(String(128), default="mini-assessment")
+    scenario: Mapped[str] = mapped_column(String(64), default="")
+    steps_sent: Mapped[int] = mapped_column(default=0)
+    next_step_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    unsubscribed: Mapped[bool] = mapped_column(default=False)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_utcnow)
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_utcnow, onupdate=_utcnow)
 

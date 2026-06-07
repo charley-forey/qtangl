@@ -11,10 +11,12 @@ import ScanDiffPanel, { type ScanDiff } from "@/components/pqc/ScanDiffPanel";
 import CompliancePanel from "@/components/pqc/CompliancePanel";
 import InventoryHeatmap from "@/components/pqc/InventoryHeatmap";
 import CbomImportPanel from "@/components/pqc/CbomImportPanel";
+import CbomDriftWidget from "@/components/pqc/CbomDriftWidget";
 import CloudIntegrationPanel from "@/components/pqc/CloudIntegrationPanel";
 import EvidenceVaultPanel from "@/components/pqc/EvidenceVaultPanel";
 import MergeConflictPanel, { type MergeConflict } from "@/components/pqc/MergeConflictPanel";
 import MultiSourceInventoryWidget from "@/components/pqc/MultiSourceInventoryWidget";
+import PassportListPanel from "@/components/pqc/PassportListPanel";
 import PassportPanel from "@/components/pqc/PassportPanel";
 import AlertSettings from "@/components/dashboard/AlertSettings";
 import AuditLogPanel from "@/components/dashboard/AuditLogPanel";
@@ -51,6 +53,8 @@ export default function DashboardClient() {
   const [emailForScan, setEmailForScan] = useState("");
   const [scheduleTarget, setScheduleTarget] = useState("");
   const [scheduleEmail, setScheduleEmail] = useState("");
+  const [scheduleCloudPull, setScheduleCloudPull] = useState(false);
+  const [scheduleCloudProvider, setScheduleCloudProvider] = useState<"aws" | "azure">("aws");
   const [actionMessage, setActionMessage] = useState<string | null>(null);
   const [expandedScanId, setExpandedScanId] = useState<string | null>(null);
   const [remediationScan, setRemediationScan] = useState<{
@@ -114,6 +118,12 @@ export default function DashboardClient() {
     } | null;
   } | null>(null);
   const [cbomConflicts, setCbomConflicts] = useState<MergeConflict[]>([]);
+  const [cbomDrift, setCbomDrift] = useState<{
+    available?: boolean;
+    addedCount?: number;
+    removedCount?: number;
+    changedCount?: number;
+  } | null>(null);
 
   useEffect(() => {
     const syncKey = () => {
@@ -176,9 +186,20 @@ export default function DashboardClient() {
           const conflictPayload = await conflictResponse.json();
           setCbomConflicts(conflictPayload.conflicts ?? []);
         }
+        const driftResponse = await fetch(`${qtanglApiBaseUrl}/pqc/cbom/diff`, {
+          headers: { Authorization: `Bearer ${key}` },
+          cache: "no-store",
+        });
+        if (driftResponse.ok) {
+          const driftPayload = await driftResponse.json();
+          setCbomDrift(driftPayload.drift ?? null);
+        } else {
+          setCbomDrift(null);
+        }
       } catch {
         setCbomAggregate(null);
         setCbomConflicts([]);
+        setCbomDrift(null);
       }
       setSavedKey(key);
       setStoredTenantApiKey(key);
@@ -704,6 +725,9 @@ export default function DashboardClient() {
                   </div>
                 </Card>
                 <Card tone="panel">
+                  <CbomDriftWidget drift={cbomDrift} />
+                </Card>
+                <Card tone="panel">
                   <Eyebrow>Cloud inventory pull</Eyebrow>
                   <div className="mt-4">
                     <CloudIntegrationPanel apiKey={savedKey} onMessage={setActionMessage} />
@@ -945,6 +969,15 @@ export default function DashboardClient() {
 
             {savedKey && me.persistenceEnabled ? (
               <Card tone="panel">
+                <Eyebrow>Readiness passports</Eyebrow>
+                <div className="mt-4">
+                  <PassportListPanel apiKey={savedKey} onMessage={setActionMessage} />
+                </div>
+              </Card>
+            ) : null}
+
+            {savedKey && me.persistenceEnabled ? (
+              <Card tone="panel">
                 <Eyebrow>Scheduled monitoring</Eyebrow>
                 <p className="mt-2 text-sm text-[var(--color-gray-400)]">
                   Requires Redis worker with QTANGL_ENABLE_SCHEDULER. Gracefully unavailable on single-process
@@ -965,6 +998,26 @@ export default function DashboardClient() {
                     placeholder="Notify email"
                     className="w-full rounded-full border border-[var(--border-strong)] bg-black px-4 py-2 text-sm text-white sm:max-w-xs"
                   />
+                  <label className="flex items-center gap-2 text-sm text-[var(--color-gray-400)]">
+                    <input
+                      type="checkbox"
+                      checked={scheduleCloudPull}
+                      onChange={(event) => setScheduleCloudPull(event.target.checked)}
+                    />
+                    Also refresh cloud CBOM on schedule
+                  </label>
+                  {scheduleCloudPull ? (
+                    <select
+                      value={scheduleCloudProvider}
+                      onChange={(event) =>
+                        setScheduleCloudProvider(event.target.value as "aws" | "azure")
+                      }
+                      className="rounded-full border border-[var(--border-strong)] bg-black px-4 py-2 text-sm text-white"
+                    >
+                      <option value="aws">AWS ACM</option>
+                      <option value="azure">Azure Key Vault</option>
+                    </select>
+                  ) : null}
                   <button
                     type="button"
                     className="rounded-full border border-[var(--border-strong)] bg-white px-5 py-2 text-sm font-medium text-black"
@@ -975,8 +1028,13 @@ export default function DashboardClient() {
                           target: scheduleTarget || null,
                           cadenceHours: 168,
                           notifyEmail: scheduleEmail || null,
+                          jobType: scheduleCloudPull ? "cloud_pull" : "scan",
+                          integrationProvider: scheduleCloudPull ? scheduleCloudProvider : null,
                         });
-                        setActionMessage("Schedule created.");
+                        setActionMessage(
+                          scheduleCloudPull ? "Cloud CBOM schedule created." : "Schedule created."
+                        );
+                        await loadDashboard(savedKey);
                       } catch (scheduleError) {
                         setActionMessage(
                           scheduleError instanceof Error ? scheduleError.message : "Schedule failed."

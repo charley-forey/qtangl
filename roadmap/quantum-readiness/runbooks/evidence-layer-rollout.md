@@ -134,6 +134,32 @@ Log append is **fail-safe**: signing and report delivery never fail if log appen
 
 ---
 
+## Signing key rotation (dry-run)
+
+Use when rotating Ed25519 or ML-DSA keys without breaking verify for historical reports.
+
+### Procedure
+
+1. **Generate new key** — store in secrets manager; set `QTANGL_REPORT_SIGNING_KEY_B64` (or ML-DSA vars).
+2. **Deploy API + worker** — new reports sign with new key; registry records new fingerprint via `register_signing_key`.
+3. **Publish trust surface** — confirm `GET /pqc/transparency/keys` lists both active + retired keys.
+4. **Retire old key** — admin API:
+   ```bash
+   curl -X POST "$API/pqc/transparency/keys/retire" \
+     -H "Authorization: Bearer $ADMIN_KEY" \
+     -H "Content-Type: application/json" \
+     -d '{"keyFingerprint":"<old-fingerprint>"}'
+   ```
+   Or call `retire_signing_key()` from [`key_registry.py`](../../../backend/app/pqc/key_registry.py).
+5. **Verify historical reports** — reports signed before retirement still verify; only new reports use new key.
+6. **Smoke** — `pytest tests/test_pqc_golden.py` + `verify_production_rollout.py --full`.
+
+### Rollback
+
+Re-enable previous key in env; re-register fingerprint if retired in error. Do not delete log entries.
+
+---
+
 ## Related docs
 
 - Open verify spec: [docs/verify-spec.md](../../../docs/verify-spec.md)

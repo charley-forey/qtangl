@@ -35,8 +35,13 @@ def active_webhook_urls(*, tenant_id: str, event: str = "scan.complete") -> list
     return [
         row["url"]
         for row in list_webhooks(tenant_id=tenant_id)
-        if event in row.get("events", "")
+        if _event_matches(row.get("events", ""), event)
     ]
+
+
+def _event_matches(events_csv: str, event: str) -> bool:
+    parts = [part.strip() for part in events_csv.split(",") if part.strip()]
+    return event in parts or events_csv.strip() == event
 
 
 def delete_webhook(*, tenant_id: str, webhook_id: str) -> bool:

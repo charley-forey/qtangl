@@ -17,7 +17,16 @@ import urllib.request
 def main() -> int:
     parser = argparse.ArgumentParser(description="Verify production rollout gates")
     parser.add_argument("--full", action="store_true", help="Run scan + verify + transparency checks")
+    parser.add_argument("--gtm", action="store_true", help="Run conversion/GTM smoke checks")
     args = parser.parse_args()
+
+    if args.gtm:
+        import subprocess
+        import sys
+        from pathlib import Path
+
+        script = Path(__file__).resolve().parent / "conversion_smoke.py"
+        return subprocess.call([sys.executable, str(script)])
 
     base = os.environ.get("QTANGL_API_BASE", "http://127.0.0.1:8000").rstrip("/")
     api_key = os.environ.get("QTANGL_API_KEY", "qtangl-demo-key")
