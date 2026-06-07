@@ -16,6 +16,44 @@ Phased implementation plan with gates, aligned to [web/lib/docs/roadmap.ts](../w
 | **3** | Enterprise MVP | Weeks 25–36 | Persistence, tenancy, dashboards, SDK |
 | **4** | Scale + research | Weeks 37–52 | Real QPU, solver research publish, SOC2 Type I |
 | **5** | Growth | Months 13–18 | Self-serve PQC, Series A prep, vertical expansion |
+| **4b** | Evidence moat (Track K) | Weeks 16–32 (parallel Phase 2–3) | Transparency log GA, Readiness Passport, CBOM aggregation |
+
+---
+
+## Track K — Evidence layer epics (K16 / K17)
+
+Cross-cutting readiness moat work, parallel to Phase 2–3. Detail: [09-epics-and-backlog.md](../quantum-readiness/09-epics-and-backlog.md), rollout: [evidence-layer-rollout.md](../quantum-readiness/runbooks/evidence-layer-rollout.md).
+
+| ID | Epic | Phase | Effort | Owner | Depends on |
+|----|------|-------|--------|-------|------------|
+| **K16** | Evidence & Trust Layer (transparency log, key registry, passport, open verify) | Phase 2–3 (Weeks 16–28) | M (3–4 wk) | Eng (PQC) | D1 Postgres, B2 signing stable |
+| **K17** | CBOM Aggregation & Ingestion (provenance, merge/dedupe, cloud import) | Phase 3–4 (Weeks 24–32) | M (3–4 wk) | Eng (PQC) | K16-001 log live, B2 CBOM |
+
+### K16 deliverables & gates
+
+| ID | Deliverable | Owner | Target week |
+|----|-------------|-------|-------------|
+| K16-001 | Alembic `004_evidence_layer` applied; `QTANGL_ENABLE_TRANSPARENCY_LOG=true` in staging | Eng | 16 |
+| K16-002 | Stable signing keys (env or persisted); key registry endpoint live | Eng | 17 |
+| K16-003 | Transparency log append on every sign; backfill script run once | Eng | 18 |
+| K16-004 | `/verify` returns `logInclusion`; verify page shows seq + root | Eng + Web | 19 |
+| K16-005 | `qtangl_verify.py` + [verify-spec.md](../../docs/verify-spec.md) published | Eng | 20 |
+| K16-006 | Readiness Passport MVP (ShareLink + evidence bundle) | Eng + Product | 24 |
+| K16-007 | Log root anchoring + trust center section | Eng + GTM | 26 |
+
+**K16 gate:** ≥1 design-partner auditor verifies a report offline (CLI or `/verify`) and cites log inclusion.
+
+### K17 deliverables & gates
+
+| ID | Deliverable | Owner | Target week |
+|----|-------------|-------|-------------|
+| K17-001 | CBOM upload with `source` / `provenance` tags | Eng | 24 |
+| K17-002 | Merge/dedupe across Qtangl scan + imported CBOM | Eng | 26 |
+| K17-003 | Unverified-source labeling in reports | Eng + Product | 27 |
+| K17-004 | AWS ACM / Azure KV scheduled import (read-only creds) | Eng | 28 |
+| K17-005 | CycloneDX 1.6 + 1.7 validation on import | Eng | 30 |
+
+**K17 gate:** ≥1 tenant with merged CBOM (Qtangl scan + external import) and signed merged report in transparency log.
 
 ---
 
@@ -42,6 +80,7 @@ gantt
   A2_diversity_metric         :p2a, 2026-09-01, 21d
   C1_benchmark_table_public   :p2b, 2026-09-15, 21d
   E1_E2_design_partners       :p2c, 2026-08-01, 90d
+  K16_evidence_trust_layer    :k16, 2026-09-15, 42d
   Hospital_pilot              :milestone, p2m, 2026-11-01, 0d
 
   section Phase3
@@ -49,6 +88,7 @@ gantt
   G3_tenant_isolation         :p3b, 2026-11-15, 28d
   H1_H3_dashboards            :p3c, 2026-12-01, 45d
   D5_SDKs                     :p3d, 2026-12-15, 28d
+  K17_cbom_aggregation        :k17, 2026-12-01, 56d
 
   section Phase4
   A5_real_QPU                 :p4a, 2027-02-01, 28d
@@ -161,6 +201,8 @@ Multi-tenant production infrastructure and customer dashboards.
 | H3 | Dashboards MVP | H |
 | D4–D5 | OpenAPI + Python/TS SDKs | D |
 | B3 | Scheduled PQC re-scans | B |
+| K16 | Evidence & Trust Layer (transparency log GA) | K |
+| K17-partial | CBOM import + provenance tags | K |
 
 ### Milestone: 3 production tenants (~Week 36)
 

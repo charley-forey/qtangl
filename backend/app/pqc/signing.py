@@ -38,20 +38,26 @@ def _canonical_json(payload: dict[str, Any]) -> bytes:
     return json.dumps(payload, sort_keys=True, separators=(",", ":")).encode("utf-8")
 
 
-def _content_hash(payload: dict[str, Any]) -> str:
+def content_hash_for_payload(payload: dict[str, Any]) -> str:
+    """Public helper for verify CLI and transparency log."""
     return hashlib.sha256(_canonical_json(payload)).hexdigest()
 
 
+def _content_hash(payload: dict[str, Any]) -> str:
+    return content_hash_for_payload(payload)
+
+
 def _load_ed25519_key() -> tuple[Any, bytes]:
-    raw = os.environ.get(_SIGNING_KEY_ENV)
-    if raw and _HAS_CRYPTO:
-        key_bytes = base64.b64decode(raw)
-        private_key = Ed25519PrivateKey.from_private_bytes(key_bytes)
-        return private_key, key_bytes
-    if _HAS_CRYPTO:
+    if not _HAS_CRYPTO:
+        raise RuntimeError("cryptography package required for report signing")
+    from app.pqc.key_registry import load_stable_ed25519_private_bytes
+
+    key_bytes = load_stable_ed25519_private_bytes()
+    if key_bytes is None:
         private_key = Ed25519PrivateKey.generate()
         return private_key, private_key.private_bytes(Encoding.Raw, PrivateFormat.Raw, NoEncryption())
-    raise RuntimeError("cryptography package required for report signing")
+    private_key = Ed25519PrivateKey.from_private_bytes(key_bytes)
+    return private_key, key_bytes
 
 
 def sign_report_payload(report_payload: dict[str, Any]) -> dict[str, Any]:
@@ -61,17 +67,17 @@ def sign_report_payload(report_payload: dict[str, Any]) -> dict[str, Any]:
 
     if _HAS_OQS:
         try:
-            secret_b64 = os.environ.get(_ML_DSA_SECRET_ENV)
-            public_b64 = os.environ.get(_ML_DSA_PUBLIC_ENV)
+            from app.pqc.key_registry import load_stable_mldsa_keypair
+
             with oqs.Signature(_ML_DSA_ALG) as signer:
-                if secret_b64 and public_b64:
-                    secret = base64.b64decode(secret_b64)
-                    public_key = base64.b64decode(public_b64)
+                keypair = load_stable_mldsa_keypair()
+                if keypair:
+                    secret, public_key = keypair
                     signer.secret_key = secret
                 else:
                     public_key = signer.generate_keypair()
                 signature = signer.sign(content_hash.encode("utf-8"))
-                return {
+                block = {
                     "alg": _ML_DSA_ALG,
                     "signatureB64": base64.b64encode(signature).decode("ascii"),
                     "publicKeyB64": base64.b64encode(public_key).decode("ascii"),
@@ -79,6 +85,14 @@ def sign_report_payload(report_payload: dict[str, Any]) -> dict[str, Any]:
                     "contentHash": content_hash,
                     "signedAt": signed_at,
                 }
+                from app.pqc.key_registry import register_signing_key
+
+                register_signing_key(
+                    alg=_ML_DSA_ALG,
+                    public_key_b64=block["publicKeyB64"],
+                    key_fingerprint=block["keyFingerprint"],
+                )
+                return block
         except Exception:
             pass
 
@@ -97,7 +111,7 @@ def sign_report_payload(report_payload: dict[str, Any]) -> dict[str, Any]:
     public_key = private_key.public_key()
     public_bytes = public_key.public_bytes(Encoding.Raw, PublicFormat.Raw)
     signature = private_key.sign(content_hash.encode("utf-8"))
-    return {
+    block = {
         "alg": _ED25519_ALG,
         "signatureB64": base64.b64encode(signature).decode("ascii"),
         "publicKeyB64": base64.b64encode(public_bytes).decode("ascii"),
@@ -105,6 +119,14 @@ def sign_report_payload(report_payload: dict[str, Any]) -> dict[str, Any]:
         "contentHash": content_hash,
         "signedAt": signed_at,
     }
+    from app.pqc.key_registry import register_signing_key
+
+    register_signing_key(
+        alg=_ED25519_ALG,
+        public_key_b64=block["publicKeyB64"],
+        key_fingerprint=block["keyFingerprint"],
+    )
+    return block
 
 
 def verify_report_signature(

@@ -1,0 +1,53 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.6",
+  "version": 1,
+  "metadata": {
+    "timestamp": "2026-06-01T12:00:00Z",
+    "tools": [{ "vendor": "Keyfactor", "name": "CipherInsights", "version": "2.1.0" }],
+    "component": { "type": "application", "name": "acme-corp", "version": "1.0" }
+  },
+  "components": [
+    {
+      "type": "cryptographic-asset",
+      "bom-ref": "keyfactor:cert:api.acme.com",
+      "name": "api.acme.com TLS certificate",
+      "version": "RSA-2048",
+      "cryptoProperties": {
+        "assetType": "certificate",
+        "certificateProperties": {
+          "subjectName": "CN=api.acme.com",
+          "signatureAlgorithm": "RSA-2048",
+          "certificateFormat": "X.509"
+        }
+      },
+      "properties": [
+        { "name": "qtangl:host", "value": "api.acme.com" },
+        { "name": "qtangl:kind", "value": "tls" }
+      ]
+    },
+    {
+      "type": "cryptographic-asset",
+      "bom-ref": "keyfactor:cert:legacy.acme.com",
+      "name": "legacy.acme.com TLS certificate",
+      "version": "RSA-1024",
+      "cryptoProperties": {
+        "assetType": "certificate",
+        "certificateProperties": {
+          "subjectName": "CN=legacy.acme.com",
+          "signatureAlgorithm": "RSA-1024",
+          "certificateFormat": "X.509"
+        }
+      }
+    },
+    {
+      "type": "cryptographic-asset",
+      "bom-ref": "keyfactor:kms:signing-key-1",
+      "name": "Production code-signing key",
+      "version": "ECDSA-P256",
+      "properties": [
+        { "name": "location", "value": "aws-kms:us-east-1:key/abc123" }
+      ]
+    }
+  ]
+}

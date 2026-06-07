@@ -164,4 +164,14 @@ Enterprise customers often require minimum coverage limits — confirm before si
 - Security/trust: [12-platform-security-and-trust.md](./12-platform-security-and-trust.md)
 - Legal basics (original): [10-track-F-business-ops.md](../optimization_OLD_FUTURE/10-track-F-business-ops.md)
 - Data retention: [data-retention-policy.md](../optimization_OLD_FUTURE/security/data-retention-policy.md)
+- **Evidence log retention (K16):** The append-only `evidence_log` table stores SHA-256 content hashes and signing metadata only — no scan targets, PEMs, or roster fields. It is **exempt from tenant deletion requests** and retained indefinitely as an integrity artifact. Customer-facing DPA addendum: "Qtangl may retain cryptographic fingerprints of signed reports to support third-party verification."
+
+---
+
+## Tier-4 credibility (non-eng)
+
+| Task | Owner | Status | Notes |
+|------|-------|--------|-------|
+| PKI Consortium PQCCM vendor listing | Founder/GTM | `not-started` | Submit at pqc-tools.org when log MVP ships |
+| NIST NCCoE Migration-to-PQC participation | Founder | `not-started` | Express interest; contribute verify spec + CBOM samples |
 - Pilot SOW: [pqc-pilot-sow.md](../optimization_OLD_FUTURE/templates/pqc-pilot-sow.md)

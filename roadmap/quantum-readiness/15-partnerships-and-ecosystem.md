@@ -35,7 +35,9 @@ flowchart TB
 |---------|------|-----------------|------------------|--------|
 | **Open Quantum Safe (OQS)** | Standards / libs | Handshake proof, liboqs alignment, credibility | Adopter reference, upstream contributions | Active (handshake) |
 | **CA / PKI (DigiCert, Sectigo, Let's Encrypt)** | Cert issuance | PQC-capable cert paths for Convert | Demand signal for PQ certs | Target |
-| **Keyfactor / Venafi** | CLM | Integration vs overlap (be the assessment layer) | PQC posture insight | Evaluate (coopetition) |
+| **Keyfactor / Venafi** | CLM | **Aggregator:** import their CBOM; be the verifiable evidence layer | PQC posture proof for their CLM customers | Evaluate (coopetition) |
+| **IBM Quantum Safe** | CBOM standard author | CBOM-compatible ingest + signed merged posture | Neutral verification partner | Target |
+| **SandboxAQ / Fortanix** | Discovery | Fast agentless baseline + evidence; import their exports | Passport for their mid-market accounts | Coopetition |
 | **HSM (Thales, Entrust)** | Key storage | Convert handoff for key material | Migration pull-through | Target |
 | **SIEM (Splunk, Microsoft Sentinel)** | Detection | Webhook drift events into SIEM | PQC telemetry source | Target ([webhooks.py](../../backend/app/notifications/webhooks.py); field-mapping doc planned) |
 | **GRC (ServiceNow, Archer)** | Compliance | CBOM + control mapping export | Crypto evidence feed | Target |
@@ -66,15 +68,19 @@ These make Assess/Monitor cover internal certs, not just external endpoints — 
 | **Offer** | White-label Monitor; deliver Convert migration labor |
 | **Economics** | 20–30% rev-share on Monitor ARR; partner bills migration services |
 | **Enablement** | Sample CBOM, signed PDF, demo script, partner portal (Track K7) |
-| **Qtangl retains** | Platform, signed evidence, re-scan verification |
+| **Qtangl retains** | Platform, transparency log, Readiness Passport, re-scan verification |
+| **MSSP verify adoption** | White-label passport URLs; MSSP-branded verify page; rev-share on Monitor only — Qtangl hosts log + keys |
+| **Partner verify kit** | Sample passport, CLI install doc, transparency root URL for their SOC |
 
 ### Audit / consulting firms
 
 | Element | Detail |
 |---------|--------|
-| **Offer** | Verify link + evidence ZIP in audit packs; Qtangl as inventory engine |
+| **Offer** | Readiness Passport + offline verify CLI in audit packs; Qtangl as evidence layer (not attestation) |
 | **Economics** | Referral fee or co-marketing; consulting keeps advisory revenue |
-| **Play** | Replace 6-week spreadsheet inventory with Qtangl; they focus on advisory |
+| **Enablement** | [verify-spec.md](../../docs/verify-spec.md), sample passport, auditor worksheet (signature + log inclusion checklist) |
+| **Play** | Replace 6-week spreadsheet inventory with Qtangl; they focus on advisory; auditors verify independently via `/verify` + `qtangl_verify.py` |
+| **Adoption metric** | ≥1 audit firm using passport in a delivered engagement (Track K16) |
 
 ### System integrators
 
@@ -150,6 +156,8 @@ flowchart LR
 | Metric | Target (12 mo) |
 |--------|----------------|
 | Auditor intro meetings | 2+ |
+| Auditors using Readiness Passport in engagement | 1+ |
+| MSSPs delivering white-label verify/passport | 1+ |
 | Signed MSSP rev-share SOWs | 1+ |
 | Partner-sourced pipeline | 20% of new pipeline by month 18 |
 | Cloud inventory integrations live | 2 (ACM + Key Vault) |

@@ -8,7 +8,9 @@ from typing import Any
 CBOM_SCHEMA_ID = "qtangl-cbom-v1"
 CBOM_SPEC_VERSION = "1.6"
 CBOM_FORMAT = "CycloneDX"
+CBOM_IMPORT_SPEC_VERSIONS = ("1.6", "1.7")
 
+_IMPORT_REQUIRED_TOP = ("bomFormat", "specVersion", "version", "components")
 _REQUIRED_TOP_LEVEL = ("bomFormat", "specVersion", "version", "metadata", "components")
 _REQUIRED_METADATA_PROPS = ("qtangl:cbomSchemaId", "qtangl:scanId", "qtangl:targetDomain")
 _REQUIRED_ASSET_PROPS = (
@@ -63,5 +65,41 @@ def validate_cbom(document: dict[str, Any]) -> list[str]:
             for name in _REQUIRED_ASSET_PROPS:
                 if name not in props:
                     errors.append(f"components[{index}] missing property: {name}")
+
+    return errors
+
+
+def validate_import_cbom(document: dict[str, Any]) -> list[str]:
+    """Permissive validator for ingested CycloneDX 1.6/1.7 CBOMs (third-party or Qtangl)."""
+    errors: list[str] = []
+
+    for key in _IMPORT_REQUIRED_TOP:
+        if key not in document:
+            errors.append(f"missing top-level field: {key}")
+
+    if document.get("bomFormat") != CBOM_FORMAT:
+        errors.append("bomFormat must be CycloneDX")
+
+    spec = str(document.get("specVersion", ""))
+    if spec not in CBOM_IMPORT_SPEC_VERSIONS:
+        errors.append(f"specVersion must be one of {', '.join(CBOM_IMPORT_SPEC_VERSIONS)}")
+
+    components = document.get("components")
+    if not isinstance(components, list):
+        errors.append("components must be a list")
+    elif not components:
+        errors.append("components must not be empty")
+    else:
+        for index, component in enumerate(components):
+            if not isinstance(component, dict):
+                errors.append(f"components[{index}] must be an object")
+                continue
+            ctype = component.get("type", "")
+            if ctype not in {"cryptographic-asset", "library", "application", "file"}:
+                errors.append(
+                    f"components[{index}].type must be cryptographic-asset or mappable type (got {ctype!r})"
+                )
+            if not component.get("name") and not component.get("bom-ref"):
+                errors.append(f"components[{index}] requires name or bom-ref")
 
     return errors

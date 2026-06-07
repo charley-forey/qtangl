@@ -30,3 +30,24 @@ jobs:
         with:
           name: pqc-dogfood-bm-006
           path: backend/benchmarks/results/BM-006-pqc-scan.json
+
+      - name: Generate readiness badge
+        run: |
+          cd backend
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = Path("benchmarks/results/BM-006-pqc-scan.json")
+          data = json.loads(p.read_text())
+          band = (data.get("report") or {}).get("readinessBand") or "unknown"
+          score = (data.get("report") or {}).get("readinessScore") or 0
+          badge = f"![Qtangl readiness](https://img.shields.io/badge/Qtangl%20readiness-{band}-{score:.0f}?style=flat-square)"
+          Path("benchmarks/results/readiness-badge.md").write_text(badge + "\n", encoding="utf-8")
+          print(badge)
+          PY
+
+      - name: Upload readiness badge
+        uses: actions/upload-artifact@v4
+        with:
+          name: pqc-readiness-badge
+          path: backend/benchmarks/results/readiness-badge.md

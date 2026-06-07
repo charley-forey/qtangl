@@ -15,6 +15,16 @@ PRD_EVENTS = frozenset(
         "webhook_dlq_recorded",
         "remediation_verified",
         "tier_upgrade_clicked",
+        "report_verified",
+        "report_verified_third_party",
+        "verify_cli_ping",
+        "passport_opened",
+        "cbom_ingested",
+        "cbom_merged",
+        "cbom_conflict_opened",
+        "cbom_conflict_resolved",
+        "aggregated_cbom_exported",
+        "integration_connected",
     }
 )
 

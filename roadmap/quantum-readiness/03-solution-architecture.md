@@ -12,6 +12,7 @@ flowchart TB
     LiveScan["Live scan: TLS CT SSH JWKS SMTP"]
     Upload["PEM bundle / cloud inventory upload"]
     CloudPull["AWS ACM / Azure KV scheduled import"]
+    CBOMImport["External CBOM import (CycloneDX)"]
   end
   subgraph engine [Analysis engine]
     Classify["Vulnerability classification"]
@@ -27,9 +28,12 @@ flowchart TB
     Diff["Scan diff / drift detection"]
   end
   subgraph evidence [Evidence layer]
-    Sign["Report signing"]
-    CBOM["CycloneDX CBOM"]
-    Verify["Public verify endpoint"]
+    Sign["Report signing + key registry"]
+    Log["Transparency log (append-only hash chain)"]
+    Anchor["Log-root anchoring / witness"]
+    Vault["Evidence vault (ZIP bundle)"]
+    CBOM["CycloneDX CBOM export"]
+    Passport["Readiness passport / verify"]
     Compliance["Framework compliance packs"]
   end
   subgraph notify [Notifications]
@@ -43,9 +47,14 @@ flowchart TB
     JourneyPages["/assess /monitor /convert"]
   end
   ingest --> engine
+  CBOMImport --> engine
   engine --> workflow
   engine --> evidence
   workflow --> evidence
+  Sign --> Log
+  Log --> Anchor
+  Sign --> Vault
+  Log --> Passport
   workflow --> notify
   evidence --> ui
   workflow --> ui
@@ -77,10 +86,27 @@ flowchart TB
 |-----------|--------|------|
 | PDF / JSON / CSV / CBOM export | `done` | [backend/app/pqc/report.py](../../backend/app/pqc/report.py) |
 | Report signing | `done` | [backend/app/pqc/signing.py](../../backend/app/pqc/signing.py) |
+| Signing key registry | `in-progress` | [backend/app/pqc/key_registry.py](../../backend/app/pqc/key_registry.py) |
+| Transparency log (append-only) | `in-progress` | [backend/app/pqc/transparency.py](../../backend/app/pqc/transparency.py) |
+| Log-root anchoring | `in-progress` | [backend/app/pqc/anchoring.py](../../backend/app/pqc/anchoring.py) |
+| Evidence vault (ZIP bundle) | `in-progress` | [backend/app/pqc/report_bundle.py](../../backend/app/pqc/report_bundle.py) |
 | Compliance packs (bank, CMMC, healthcare) | `done` | [backend/app/pqc/compliance_packs.py](../../backend/app/pqc/compliance_packs.py) |
 | Board / auditor / executive exports | `done` | report.py `report_to_*` |
-| Public verify page | `pilot` | [web/app/verify/page.tsx](../../web/app/verify/page.tsx) |
+| Readiness passport (`/verify`) | `in-progress` | [web/app/verify/VerifyPageClient.tsx](../../web/app/verify/VerifyPageClient.tsx) |
+| Offline verify CLI | `in-progress` | [backend/scripts/qtangl_verify.py](../../backend/scripts/qtangl_verify.py) |
 | Trust page | `pilot` | [web/app/trust/page.tsx](../../web/app/trust/page.tsx) |
+
+### Ingestion & CBOM aggregation — in progress
+
+| Component | Status | Path | Gap |
+|-----------|--------|------|-----|
+| CBOM export (Qtangl → CycloneDX) | `done` | [backend/app/pqc/cbom.py](../../backend/app/pqc/cbom.py) | — |
+| CBOM validation schema | `done` | cbom.py `validate_cbom` | — |
+| External CBOM import API | `coming-soon` | [backend/app/api/pqc.py](../../backend/app/api/pqc.py) | `POST /pqc/cbom/import` |
+| CBOM normalize + merge with scan | `coming-soon` | cbom.py + report.py | Dedupe + source tags |
+| Multi-source inventory UI | `coming-soon` | DashboardClient.tsx | Import count widget |
+| Cloud inventory upload | `pilot` | `parse_cloud_inventory` via upload-bundle | — |
+| AWS/Azure scheduled pull | `coming-soon` | `cloudImportPayload` in partnerships.md | Scheduled worker |
 
 ### Monitor & drift — in progress
 
@@ -164,6 +190,7 @@ flowchart LR
 | Integration | Status | Implementation |
 |-------------|--------|----------------|
 | CycloneDX CBOM export | `done` | Standard tool import |
+| CycloneDX CBOM import | `coming-soon` | `POST /pqc/cbom/import` — IBM CBOMkit, partner exports |
 | Webhook v2 | `pilot` | [webhooks.py](../../backend/app/notifications/webhooks.py) |
 | Cloud inventory upload | `pilot` | `parse_cloud_inventory` via upload-bundle |
 | Jira ticket sync | `coming-soon` | Remediation status → Jira bi-directional |
@@ -227,7 +254,10 @@ Core routes for journey:
 | Assess | `GET /pqc/report/{id}` | report reference |
 | Monitor | `GET /pqc/scan/{id}/diff` | diff endpoint (Track B3) |
 | Convert | `PUT /pqc/remediation/{id}/status` | remediation API |
-| Evidence | `GET /verify?scanId=` | public |
+| Evidence | `GET /verify?scanId=` | public passport |
+| Evidence | `GET /pqc/transparency/root` | log root + witness |
+| Evidence | `GET /pqc/report/{id}?format=evidence` | evidence vault ZIP |
+| Ingestion | `POST /pqc/cbom/import` | external CBOM merge (K17) |
 
 ---
 

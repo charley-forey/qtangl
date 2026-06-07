@@ -10,13 +10,13 @@ Messaging hierarchy, voice, taglines, and competitive framing for the readiness-
 
 **Who** face board mandates to inventory quantum-vulnerable cryptography before 2030
 
-**Qtangl** is a post-quantum readiness platform
+**Qtangl** is a post-quantum readiness platform and **neutral evidence layer**
 
-**That** delivers baseline assessment in minutes, continuous drift monitoring, and a prioritized conversion workflow with auditor-ready evidence
+**That** delivers baseline assessment in minutes, continuous drift monitoring, a prioritized conversion workflow, and **PQ-signed, publicly verifiable proof** (transparency log + Readiness Passport) — plus CBOM aggregation from any discovery source
 
-**Unlike** Big 4 consulting (slow, expensive), open-source scanners (no workflow), or pure PQ-TLS vendors (no inventory + compliance crosswalk)
+**Unlike** Big 4 consulting (slow, expensive), open-source scanners (no workflow), discovery incumbents (dashboard-only proof), or pure PQ-TLS vendors (no inventory + compliance crosswalk)
 
-**We** combine fast live scanning, Mosca HNDL scoring, signed verify links, and remediation tracking at mid-market price — with hybrid optimization as the expansion path once defense is proven.
+**We** combine fast agentless scanning, Mosca HNDL scoring, tamper-evident transparency log inclusion, and remediation tracking at mid-market price — without trying to out-discover SandboxAQ, IBM, or Keyfactor. We are the **system of record** that proves migration progress; hybrid optimization is the expansion path once defense is proven.
 
 ---
 
@@ -26,7 +26,7 @@ Use this order on every readiness surface (homepage, `/assess`, sales deck, cold
 
 | Level | Message | Proof |
 |-------|---------|-------|
-| **1 — Outcome** | Know your quantum crypto exposure and prove you're fixing it | Readiness score, signed PDF, `/verify` link |
+| **1 — Outcome** | Know your quantum crypto exposure and **prove** you're fixing it — independently verifiable | Readiness score, PQ-signed PDF, transparency log seq, `/verify` link |
 | **2 — Urgency** | HNDL means data encrypted today is already at risk | Mosca inequality, deadline tiers |
 | **3 — Method** | Live scan → prioritized backlog → re-scan proof | Demo in minutes, CBOM export |
 | **4 — Ongoing** | Crypto drifts; one scan is not enough | Diff alerts, Monitor tier |
@@ -70,7 +70,11 @@ Use this order on every readiness surface (homepage, `/assess`, sales deck, cold
 | **Readiness** | Composite score + band for PQC migration progress | Homepage, dashboard |
 | **Exposure** | Count/severity of quantum-vulnerable assets | Reports, sales |
 | **Drift** | Crypto posture change between scans | Monitor tier |
-| **Evidence** | Signed report + verify link + CBOM | Audit, trust |
+| **Evidence** | PQ-signed report + transparency log inclusion + verify link + CBOM | Audit, trust |
+| **Evidence layer** | Cross-cutting signing, log, passport, open verify spec | Platform architecture |
+| **Readiness Passport** | Shareable evidence bundle (PDF + CBOM + verify + log receipt) | Audit packs, MSSP delivery |
+| **Transparency log** | Append-only hash chain of signed report content hashes | Independent verification |
+| **Aggregator** | Import and merge CBOMs from any source with provenance tags | Coopetition with CLM/discovery vendors |
 | **Convert** | Execute remediation with re-scan proof | Convert tier |
 | **Agility** | Ability to swap algorithms without breakage | Enterprise narrative |
 | **HNDL** | Harvest-now-decrypt-later risk | Executive briefings |
@@ -129,7 +133,8 @@ From [02-market-and-competition](../optimization_OLD_FUTURE/02-market-and-compet
 
 | Objection | Response |
 |-----------|----------|
-| "We already have a crypto inventory tool" | Qtangl adds **signed verify links**, **scan diff**, and **Mosca timeline** — auditor-ready evidence, not another spreadsheet |
+| "We already have a crypto inventory tool" | Keep your discovery tool — Qtangl is the **evidence layer**: PQ-signed reports, transparency log, Readiness Passport. Auditors verify offline without our dashboard |
+| "We use Keyfactor / IBM / SandboxAQ for discovery" | Perfect — import their CBOM, we add provenance tags, sign the merged posture, and produce verifiable proof. We don't compete on host depth |
 | "Quantum is years away" | HNDL risk for data encrypted today; Mosca inequality shows whether migration runway exceeds shelf life |
 | "Are you a quantum computing company?" | We're a **readiness platform**. Quantum is the threat we help you defend against; our scanner proves hybrid PQ TLS works |
 | "Can you migrate our stack?" | We **orchestrate and verify** migration via Convert tier + partners; you get re-scan proof in Qtangl |
@@ -170,6 +175,10 @@ graph TB
 | Mosca HNDL assessment | [backend/app/pqc/risk.py](../../backend/app/pqc/risk.py) | `done` |
 | PQ TLS handshake proof | [backend/app/pqc/handshake.py](../../backend/app/pqc/handshake.py) | `done` |
 | Signed report + `/verify` | [web/app/verify/page.tsx](../../web/app/verify/page.tsx) | `pilot` |
+| Transparency log + inclusion proof | [backend/app/pqc/transparency.py](../../backend/app/pqc/transparency.py) | `pilot` |
+| Signing key registry | [backend/app/pqc/key_registry.py](../../backend/app/pqc/key_registry.py) | `pilot` |
+| Offline verify CLI | [backend/scripts/qtangl_verify.py](../../backend/scripts/qtangl_verify.py) | `pilot` |
+| Open verify spec | [docs/verify-spec.md](../../docs/verify-spec.md) | `pilot` |
 | Scan diff / drift | [backend/app/monitoring/diff.py](../../backend/app/monitoring/diff.py) | `in-progress` |
 | Remediation workflow | [backend/app/remediation/service.py](../../backend/app/remediation/service.py) | `in-progress` |
 | Compliance packs (bank, CMMC, healthcare) | [backend/app/pqc/compliance_packs.py](../../backend/app/pqc/compliance_packs.py) | `done` |

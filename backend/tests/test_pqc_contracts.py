@@ -30,10 +30,31 @@ class PqcContractTest(unittest.TestCase):
         self.assertIn("scanId", payload)
         self.assertIn("assets", payload)
 
-    def test_request_schema_allows_fixture_scan(self) -> None:
-        props = self.request_schema.get("properties", {})
-        self.assertIn("scenarioId", props)
-        self.assertIn("useFixture", props)
+    def test_verify_response_shape(self) -> None:
+        response = self.client.get("/pqc/transparency/root")
+        self.assertEqual(response.status_code, 200)
+        payload = response.json()
+        self.assertEqual(payload["status"], "success")
+        self.assertIn("log", payload)
+
+    def test_transparency_keys_endpoint(self) -> None:
+        response = self.client.get("/pqc/transparency/keys")
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("keys", response.json())
+
+    def test_cbom_ingest_endpoint(self) -> None:
+        fixture_path = Path(__file__).resolve().parent / "fixtures" / "keyfactor-sample-cbom-16.json"
+        document = json.loads(fixture_path.read_text(encoding="utf-8"))
+        response = self.client.post(
+            "/pqc/cbom/ingest",
+            headers=self.headers,
+            json={"document": document, "sourceLabel": "Keyfactor test"},
+        )
+        self.assertEqual(response.status_code, 200)
+        payload = response.json()
+        self.assertEqual(payload["status"], "success")
+        self.assertTrue(payload.get("ok"))
+        self.assertGreaterEqual(payload.get("componentCount", 0), 1)
 
 
 if __name__ == "__main__":

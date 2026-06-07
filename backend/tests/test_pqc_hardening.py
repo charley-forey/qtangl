@@ -116,6 +116,13 @@ class ReportSignatureIntegrationTest(unittest.TestCase):
         self.assertTrue(result.get("valid") or signed.get("alg") == "none")
         self.assertEqual(report_json["signature"]["contentHash"], signed["contentHash"])
 
+    def test_signing_key_stable_across_calls(self) -> None:
+        p1 = sign_report_payload({"scanId": "k1", "readinessScore": 1})
+        p2 = sign_report_payload({"scanId": "k2", "readinessScore": 2})
+        if p1.get("alg") == "none":
+            self.skipTest("signing unavailable")
+        self.assertEqual(p1.get("keyFingerprint"), p2.get("keyFingerprint"))
+
 
 if __name__ == "__main__":
     unittest.main()

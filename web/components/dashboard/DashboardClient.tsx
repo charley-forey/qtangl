@@ -10,6 +10,9 @@ import ReadinessTrend from "@/components/pqc/ReadinessTrend";
 import ScanDiffPanel, { type ScanDiff } from "@/components/pqc/ScanDiffPanel";
 import CompliancePanel from "@/components/pqc/CompliancePanel";
 import InventoryHeatmap from "@/components/pqc/InventoryHeatmap";
+import CbomImportPanel from "@/components/pqc/CbomImportPanel";
+import MergeConflictPanel, { type MergeConflict } from "@/components/pqc/MergeConflictPanel";
+import MultiSourceInventoryWidget from "@/components/pqc/MultiSourceInventoryWidget";
 import AlertSettings from "@/components/dashboard/AlertSettings";
 import AuditLogPanel from "@/components/dashboard/AuditLogPanel";
 import DashboardOnboarding, { DashboardSection } from "@/components/dashboard/DashboardOnboarding";
@@ -94,6 +97,20 @@ export default function DashboardClient() {
     forecast: { projected?: number; current?: number } | null;
     anomalyAlerts: Array<{ rule: string; message: string }>;
   }>({ forecast: null, anomalyAlerts: [] });
+  const [cbomAggregate, setCbomAggregate] = useState<{
+    componentCount: number;
+    openConflicts: number;
+    readiness: {
+      score?: number;
+      band?: string;
+      label?: string;
+      coverageConfidence?: number;
+      verifiedCount?: number;
+      importedCount?: number;
+      unverifiedCount?: number;
+    } | null;
+  } | null>(null);
+  const [cbomConflicts, setCbomConflicts] = useState<MergeConflict[]>([]);
 
   useEffect(() => {
     const syncKey = () => {
@@ -135,6 +152,31 @@ export default function DashboardClient() {
         setBillingPortalUrl(null);
       }
       setScans(scansPayload.scans);
+      try {
+        const aggResponse = await fetch(`${qtanglApiBaseUrl}/pqc/cbom/aggregate`, {
+          headers: { Authorization: `Bearer ${key}` },
+          cache: "no-store",
+        });
+        if (aggResponse.ok) {
+          const aggPayload = await aggResponse.json();
+          setCbomAggregate({
+            componentCount: aggPayload.aggregate?.componentCount ?? 0,
+            openConflicts: aggPayload.aggregate?.openConflicts ?? 0,
+            readiness: aggPayload.aggregate?.readiness ?? null,
+          });
+        }
+        const conflictResponse = await fetch(`${qtanglApiBaseUrl}/pqc/cbom/conflicts`, {
+          headers: { Authorization: `Bearer ${key}` },
+          cache: "no-store",
+        });
+        if (conflictResponse.ok) {
+          const conflictPayload = await conflictResponse.json();
+          setCbomConflicts(conflictPayload.conflicts ?? []);
+        }
+      } catch {
+        setCbomAggregate(null);
+        setCbomConflicts([]);
+      }
       setSavedKey(key);
       setStoredTenantApiKey(key);
       if (mePayload.persistenceEnabled) {
@@ -551,6 +593,49 @@ export default function DashboardClient() {
                   </div>
                 ) : null}
               </Card>
+            ) : null}
+          </DashboardSection>
+
+          <DashboardSection title="CBOM aggregation">
+            {savedKey ? (
+              <>
+                <Card tone="panel">
+                  <Eyebrow>Multi-source inventory</Eyebrow>
+                  <div className="mt-3">
+                    <MultiSourceInventoryWidget
+                      componentCount={cbomAggregate?.componentCount ?? 0}
+                      readiness={cbomAggregate?.readiness ?? null}
+                      openConflicts={cbomAggregate?.openConflicts ?? 0}
+                    />
+                  </div>
+                </Card>
+                <Card tone="panel">
+                  <CbomImportPanel
+                    apiKey={savedKey}
+                    onImported={() => {
+                      if (savedKey) {
+                        void loadDashboard(savedKey);
+                      }
+                    }}
+                  />
+                </Card>
+                {cbomConflicts.length > 0 ? (
+                  <Card tone="panel">
+                    <Eyebrow>Merge conflicts</Eyebrow>
+                    <div className="mt-3">
+                      <MergeConflictPanel
+                        apiKey={savedKey}
+                        conflicts={cbomConflicts}
+                        onResolved={() => {
+                          if (savedKey) {
+                            void loadDashboard(savedKey);
+                          }
+                        }}
+                      />
+                    </div>
+                  </Card>
+                ) : null}
+              </>
             ) : null}
           </DashboardSection>
 

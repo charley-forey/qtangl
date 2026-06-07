@@ -48,6 +48,19 @@ Supporting north star: **Assess → Monitor conversion rate within 6 months** (t
 | Verify link views / report | ≥1 per report | /verify analytics |
 | Readiness score delta (Monitor cohort) | Net positive QoQ | Dashboard |
 
+### Moat & evidence (Phase 4)
+
+| KPI | Target | Source |
+|-----|--------|--------|
+| Reports in transparency log | 100% of signed reports | evidence_log table |
+| Verify with log inclusion proof | 100% of new reports | /verify API |
+| **% reports verified by third party** | ≥25% of Monitor reports | CRM + /verify referrer |
+| Evidence vault downloads / report | ≥0.5 | API metrics |
+| Log-root anchors published / month | ≥1 | anchor artifacts |
+| External CBOM imports / tenant / quarter | ≥1 (Convert tier) | import API metrics |
+| CBOM import validation pass rate | ≥90% first attempt | import error logs |
+| Multi-source inventory tenants | ≥30% of Convert | dashboard analytics |
+
 ### Revenue (lagging)
 
 | KPI | Target | Horizon | Source |
@@ -80,6 +93,7 @@ Supporting north star: **Assess → Monitor conversion rate within 6 months** (t
 | **G3 — Scale content** | Q-Day hub live + 2 guides | Delay paid acquisition |
 | **G4 — Self-serve** | Stripe Monitor + ≥3 self-serve signups | Stay manual provision |
 | **G5 — $200K ARR** | Run-rate achieved | Delay second engineer; extend runway plan |
+| **G6 — Evidence moat** | Transparency log live + ≥1 third-party verify | Delay CBOM import; extend consultative verify demos |
 
 ---
 
@@ -97,6 +111,8 @@ Supporting north star: **Assess → Monitor conversion rate within 6 months** (t
 | KR-008 | Partner delivery quality | M | H | Re-scan fails after partner migration | Qtangl verification required; partner certification | Partners | open |
 | KR-009 | Support COGS erodes margin | M | M | >4 hrs/customer/mo sustained | Automate playbooks; tiered support | Ops | open |
 | KR-010 | Overclaiming (audit attestation) | L | H | Legal challenge or lost trust | Honesty notes on every report; SOW scope | Legal | open |
+| KR-011 | Signing key compromise | L | H | Unauthorized signature or key leak detected | HSM/KMS for prod keys; rotation runbook (G1); transparency log detects tamper | Eng | open |
+| KR-012 | External CBOM data quality | M | M | >20% import validation failures or wrong posture | Strict `validate_cbom`; source attribution; never overwrite scan data silently | Product | open |
 
 **L** = Likelihood · **I** = Impact
 
@@ -148,6 +164,8 @@ If **KR-001** triggered (demo drop):
 | Sales calls citing "not formal audit" | 100% | Reduce KR-010 |
 | Optimization demos showing classical win | When applicable | Brand consistency |
 | Public benchmark claims with evidence row | 100% | Due diligence |
+| Transparency log entries match signed reports | 100% | Detect signing bypass |
+| Imported CBOM assets tagged with source | 100% | KR-012 mitigation |
 
 ---
 
@@ -165,8 +183,10 @@ Add to [weekly-review-template.md](../optimization_OLD_FUTURE/templates/weekly-r
 | Demos completed | | |
 | Assess SOWs in pipeline | | |
 | Monitor ARR | | |
+| Reports in transparency log | | |
+| Third-party verify rate | | |
 
-**Epic progress:** K1 ___ | K2 ___ | K3 ___ | K4 ___ | K6 ___
+**Epic progress:** K1 ___ | K2 ___ | K3 ___ | K4 ___ | K6 ___ | K16 ___ | K17 ___
 
 **Top risk this week:** KR-___
 

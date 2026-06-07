@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from datetime import datetime, timezone
 
-from sqlalchemy import DateTime, Float, ForeignKey, Index, String, Text, UniqueConstraint
+from sqlalchemy import DateTime, Float, ForeignKey, Index, Integer, String, Text, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.base import Base
@@ -225,4 +225,122 @@ class PartnerChildTenant(Base):
     parent_tenant_id: Mapped[str] = mapped_column(String(64), index=True)
     child_tenant_id: Mapped[str] = mapped_column(String(64), index=True, unique=True)
     label: Mapped[str] = mapped_column(String(255), default="")
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_utcnow)
+
+
+class SigningKeyRecord(Base):
+    __tablename__ = "signing_keys"
+
+    id: Mapped[str] = mapped_column(String(80), primary_key=True)
+    alg: Mapped[str] = mapped_column(String(32), nullable=False)
+    public_key_b64: Mapped[str] = mapped_column(Text, nullable=False)
+    key_fingerprint: Mapped[str] = mapped_column(String(64), unique=True, index=True)
+    status: Mapped[str] = mapped_column(String(16), default="active")
+    activated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_utcnow)
+    retired_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+
+
+class EvidenceLogEntry(Base):
+    __tablename__ = "evidence_log"
+    __table_args__ = (
+        Index("ix_evidence_log_seq", "seq"),
+        UniqueConstraint("content_hash", name="uq_evidence_log_content_hash"),
+    )
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    seq: Mapped[int] = mapped_column(nullable=False, unique=True)
+    content_hash: Mapped[str] = mapped_column(String(64), nullable=False)
+    key_fingerprint: Mapped[str] = mapped_column(String(64), default="")
+    alg: Mapped[str] = mapped_column(String(32), default="")
+    signed_at: Mapped[str] = mapped_column(String(64), default="")
+    prev_entry_hash: Mapped[str] = mapped_column(String(64), nullable=False)
+    entry_hash: Mapped[str] = mapped_column(String(64), nullable=False)
+    tenant_id: Mapped[str | None] = mapped_column(String(64), nullable=True, index=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_utcnow)
+
+
+class EvidenceAnchorRecord(Base):
+    __tablename__ = "evidence_anchors"
+
+    id: Mapped[str] = mapped_column(String(80), primary_key=True)
+    root_hash: Mapped[str] = mapped_column(String(64), index=True)
+    seq: Mapped[int] = mapped_column(default=0)
+    entry_count: Mapped[int] = mapped_column(default=0)
+    witness_id: Mapped[str] = mapped_column(String(32), index=True)
+    method: Mapped[str] = mapped_column(String(32), default="file_witness")
+    anchored_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_utcnow)
+
+
+class CbomSource(Base):
+    __tablename__ = "cbom_sources"
+
+    id: Mapped[str] = mapped_column(String(80), primary_key=True)
+    tenant_id: Mapped[str] = mapped_column(String(64), ForeignKey("tenants.id"), index=True)
+    source_type: Mapped[str] = mapped_column(String(32), default="third-party")
+    label: Mapped[str] = mapped_column(String(255), default="")
+    status: Mapped[str] = mapped_column(String(32), default="active")
+    last_ingested_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_utcnow)
+
+
+class CbomIngestJob(Base):
+    __tablename__ = "cbom_ingest_jobs"
+    __table_args__ = (
+        UniqueConstraint("tenant_id", "source_id", "content_hash", name="uq_cbom_ingest_idempotent"),
+    )
+
+    id: Mapped[str] = mapped_column(String(80), primary_key=True)
+    tenant_id: Mapped[str] = mapped_column(String(64), ForeignKey("tenants.id"), index=True)
+    source_id: Mapped[str] = mapped_column(String(80), index=True)
+    content_hash: Mapped[str] = mapped_column(String(64), nullable=False)
+    format: Mapped[str] = mapped_column(String(16), default="cdx16")
+    component_count: Mapped[int] = mapped_column(default=0)
+    status: Mapped[str] = mapped_column(String(32), default="completed")
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_utcnow)
+
+
+class CbomComponent(Base):
+    __tablename__ = "cbom_components"
+    __table_args__ = (
+        Index("ix_cbom_components_tenant_key", "tenant_id", "component_key"),
+    )
+
+    id: Mapped[str] = mapped_column(String(80), primary_key=True)
+    tenant_id: Mapped[str] = mapped_column(String(64), ForeignKey("tenants.id"), index=True)
+    component_key: Mapped[str] = mapped_column(String(64), index=True)
+    bom_ref: Mapped[str] = mapped_column(String(255), default="")
+    name: Mapped[str] = mapped_column(String(255), nullable=False)
+    component_type: Mapped[str] = mapped_column(String(64), default="cryptographic-asset")
+    algorithm: Mapped[str] = mapped_column(String(128), default="")
+    key_size: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    location: Mapped[str] = mapped_column(String(512), default="")
+    host: Mapped[str] = mapped_column(String(255), default="")
+    kind: Mapped[str] = mapped_column(String(32), default="imported")
+    vulnerability_status: Mapped[str] = mapped_column(String(32), default="unknown")
+    severity: Mapped[str] = mapped_column(String(16), default="info")
+    pqc_replacement: Mapped[str] = mapped_column(String(255), default="")
+    verification_status: Mapped[str] = mapped_column(String(32), default="unverified-source")
+    provenance_json: Mapped[str] = mapped_column(Text, default="{}")
+    source_id: Mapped[str] = mapped_column(String(80), index=True)
+    ingest_job_id: Mapped[str] = mapped_column(String(80), index=True)
+    component_json: Mapped[str] = mapped_column(Text, default="{}")
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_utcnow)
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_utcnow, onupdate=_utcnow)
+
+
+class MergeConflict(Base):
+    __tablename__ = "cbom_merge_conflicts"
+    __table_args__ = (Index("ix_cbom_conflicts_tenant_status", "tenant_id", "status"),)
+
+    id: Mapped[str] = mapped_column(String(80), primary_key=True)
+    tenant_id: Mapped[str] = mapped_column(String(64), ForeignKey("tenants.id"), index=True)
+    component_key: Mapped[str] = mapped_column(String(64), index=True)
+    field: Mapped[str] = mapped_column(String(64), nullable=False)
+    value_a: Mapped[str] = mapped_column(Text, default="")
+    value_b: Mapped[str] = mapped_column(Text, default="")
+    source_a: Mapped[str] = mapped_column(String(80), default="")
+    source_b: Mapped[str] = mapped_column(String(80), default="")
+    resolved_value: Mapped[str | None] = mapped_column(Text, nullable=True)
+    status: Mapped[str] = mapped_column(String(16), default="open")
+    resolved_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_utcnow)

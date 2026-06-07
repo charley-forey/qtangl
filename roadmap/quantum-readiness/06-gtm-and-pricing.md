@@ -49,6 +49,26 @@ Repositioned go-to-market: ICP, packaging, pricing, sales motion, partner model,
 
 Reconciles with [17-financial-model.md](../optimization_OLD_FUTURE/17-financial-model.md) and [06-track-B](../optimization_OLD_FUTURE/06-track-B-pqc-product.md) pricing hypothesis.
 
+### Evidence layer packaging (transparency log + Readiness Passport)
+
+The **evidence layer** is cross-cutting — not a separate SKU. It is the moat that differentiates Qtangl from discovery-only vendors. Package by tier:
+
+| Capability | Assess | Monitor | Convert | Enterprise |
+|------------|--------|---------|---------|------------|
+| **Signed report** (ML-DSA-65 / Ed25519) | ✅ | ✅ | ✅ | ✅ |
+| **Public `/verify` link** | ✅ | ✅ | ✅ | ✅ |
+| **Transparency log inclusion** | ✅ (on sign) | ✅ + root in alerts | ✅ + per-remediation proof | ✅ + anchored roots |
+| **Readiness Passport** (shareable evidence bundle) | Sample only | ✅ per scan | ✅ + remediation timeline | ✅ multi-domain |
+| **Offline verify CLI** (`qtangl_verify.py`) | Public docs | Public docs | Partner enablement | Auditor kit |
+| **CBOM import / merge** (aggregator) | — | Upload + tag | Multi-source merge | Federated ingest |
+| **Key transparency** (`/pqc/transparency/keys`) | Public | Public | Public | Public + SLA |
+
+**GTM framing:** Discovery is table stakes; **verifiable evidence** is the product. Lead demos with signature → transparency log seq → `/verify` — not another CBOM export.
+
+**Readiness Passport** (extends ShareLink): time-limited or revocable URL bundling signed PDF + CBOM + verify metadata + log inclusion receipt. Pitch to auditors and MSSPs as "drop this link in your audit pack — they verify without logging into Qtangl."
+
+**Upsell hook:** Assess buyers who ask "how do we prove this to our auditor?" → Monitor (continuous log inclusion + drift) or Convert (passport per remediation closure).
+
 ---
 
 ## Unit economics (unchanged — readiness-first GTM)
@@ -107,7 +127,8 @@ graph LR
 
 1. Fixture or live scan on `/demo/pqc`
 2. Download PDF + CBOM
-3. Open `/verify?scanId=…`
+3. Open `/verify?scanId=…` — show signature valid + **transparency log seq**
+4. Optional: run `qtangl_verify.py` offline; show log root at `/pqc/transparency/root`
 
 **Demo #2 — Monitor drift**
 
@@ -132,7 +153,7 @@ From [e1-week1-playbook.md](../../demos/pqc_migration/e1-week1-playbook.md) — 
 
 | Objection | Response |
 |-----------|----------|
-| "We already have a crypto inventory tool" | Qtangl adds signed verify links, scan diff, Mosca timeline — auditor-ready evidence |
+| "We already have a crypto inventory tool" | Qtangl is the **evidence layer** on top — PQ-signed reports, transparency log inclusion, Readiness Passport — auditors verify without trusting our dashboard |
 | "Quantum is years away" | HNDL for data encrypted today; Mosca inequality |
 | "Can we self-serve?" | Monitor checkout on `/access` or hello@qtangl.com |
 | "Are you a quantum computing company?" | We're a readiness platform; quantum is the threat we defend against |
@@ -159,9 +180,10 @@ From [partnerships.md](../../demos/pqc_migration/partnerships.md):
 
 | Element | Detail |
 |---------|--------|
-| **Offer** | Verify link + evidence ZIP in audit packs |
+| **Offer** | Readiness Passport + verify link + offline CLI in audit packs |
 | **Economics** | Referral fee or co-marketing |
-| **Next step** | Send sample CBOM + signed PDF; 2 intro meetings (Track E5) |
+| **Enablement** | [verify-spec.md](../../docs/verify-spec.md), sample passport, transparency root URL |
+| **Next step** | Send sample CBOM + signed PDF + passport demo; 2 intro meetings (Track E5) |
 
 ### Cloud PKI integrations
 

@@ -725,6 +725,46 @@ export const docsEndpoints: Record<string, DocsEndpoint> = {
     ],
     examples: [{ label: "JSON report", response: {} }],
   },
+  "pqc-transparency": {
+    id: "pqc-transparency",
+    method: "GET",
+    path: "/pqc/transparency/root",
+    status: "pilot",
+    title: "GET /pqc/transparency/*",
+    summary:
+      "Append-only transparency log: root hash, signing key history, and inclusion proofs for report content hashes.",
+    auth: false,
+    examples: [
+      {
+        label: "Log root",
+        response: { status: "success", log: { seq: 42, rootHash: "abc…", entryCount: 42 } },
+      },
+      {
+        label: "Inclusion proof",
+        response: {
+          status: "success",
+          inclusion: { seq: 7, contentHash: "…", rootHash: "…", entryHash: "…" },
+        },
+      },
+    ],
+  },
+  "pqc-cbom-ingest": {
+    id: "pqc-cbom-ingest",
+    method: "POST",
+    path: "/pqc/cbom/ingest",
+    status: "pilot",
+    title: "POST /pqc/cbom/ingest",
+    summary:
+      "Ingest CycloneDX 1.6/1.7 CBOM from third-party tools; normalize, provenance-tag, and merge into tenant aggregate.",
+    auth: true,
+    examples: [
+      {
+        label: "Ingest JSON",
+        request: { document: { bomFormat: "CycloneDX", specVersion: "1.6", version: 1, components: [] } },
+        response: { status: "success", ok: true, componentCount: 12 },
+      },
+    ],
+  },
   "ev-fleet-plan-solve": {
     id: "ev-fleet-plan-solve",
     method: "POST",

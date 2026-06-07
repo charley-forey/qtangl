@@ -28,6 +28,8 @@ Update weekly alongside [optimization_OLD_FUTURE/backlog/epics.md](../optimizati
 | K13 | Brand identity & design system | `not-started` | M | K1, K2 |
 | K14 | Data & threat-intelligence program | `not-started` | M | B3 |
 | K15 | Org, hiring & governance cadence | `not-started` | S | — |
+| K16 | Evidence & trust layer | `not-started` | L | B3, G1 |
+| K17 | CBOM aggregation & ingestion | `not-started` | M | B3, K14 |
 
 **Cross-track dependencies:** B3, B4, B6 (Track B) · H1, H5 (Track H) · E1, E5 (Track E) · D1, D2 (Track D) · G1–G6 (Track G) · F1–F5 (Track F)
 
@@ -50,6 +52,8 @@ Update weekly alongside [optimization_OLD_FUTURE/backlog/epics.md](../optimizati
 | K13 | [20-brand-identity-and-design-system.md](./20-brand-identity-and-design-system.md) |
 | K14 | [21-data-and-threat-intelligence.md](./21-data-and-threat-intelligence.md) |
 | K15 | [18-organization-and-hiring.md](./18-organization-and-hiring.md), [22-governance-and-operating-cadence.md](./22-governance-and-operating-cadence.md) |
+| K16 | [12-platform-security-and-trust.md](./12-platform-security-and-trust.md), [03-solution-architecture.md](./03-solution-architecture.md) |
+| K17 | [21-data-and-threat-intelligence.md](./21-data-and-threat-intelligence.md), [03-solution-architecture.md](./03-solution-architecture.md) |
 
 ---
 
@@ -311,6 +315,61 @@ Execute hiring sequence ([18-organization-and-hiring.md](./18-organization-and-h
 
 ---
 
+## K16 — Evidence & trust layer
+
+### Approach
+
+Build the verifiable evidence moat: append-only transparency log for signed report hashes, evidence vault (ZIP bundle export), readiness passport (public `/verify` with log inclusion proof), signing key registry with rotation, and external log-root anchoring per [12-platform-security-and-trust.md](./12-platform-security-and-trust.md).
+
+### Files to touch
+
+| File | Change |
+|------|--------|
+| [backend/app/pqc/transparency.py](../../backend/app/pqc/transparency.py) | Append-on-sign; inclusion proofs |
+| [backend/app/pqc/anchoring.py](../../backend/app/pqc/anchoring.py) | Log-root witness files |
+| [backend/app/pqc/key_registry.py](../../backend/app/pqc/key_registry.py) | DB-backed key registry |
+| [backend/app/pqc/report_bundle.py](../../backend/app/pqc/report_bundle.py) | Evidence vault ZIP |
+| [backend/app/api/pqc.py](../../backend/app/api/pqc.py) | `/verify`, `/transparency/root` |
+| [web/app/verify/VerifyPageClient.tsx](../../web/app/verify/VerifyPageClient.tsx) | Passport UI + log inclusion |
+| [backend/scripts/qtangl_verify.py](../../backend/scripts/qtangl_verify.py) | Offline verify CLI |
+
+### Acceptance criteria
+
+- [ ] Every signed report appends to transparency log (flag-gated, fail-safe)
+- [ ] `/verify` shows signature validity + log inclusion proof
+- [ ] Evidence vault ZIP downloadable (report + CBOM + signature + proof)
+- [ ] Signing keys in DB registry; rotation documented (Track G1)
+- [ ] Log roots anchored externally (file witness + CI artifact)
+- [ ] Golden verify tests + `qtangl_verify` CLI in CI
+
+---
+
+## K17 — CBOM aggregation & ingestion
+
+### Approach
+
+Accept external CycloneDX CBOMs (IBM CBOMkit, partner tools, customer exports), validate and normalize via [backend/app/pqc/cbom.py](../../backend/app/pqc/cbom.py), merge with Qtangl scan inventory for unified posture view, and feed anonymized aggregates into K14 benchmarks per [21-data-and-threat-intelligence.md](./21-data-and-threat-intelligence.md).
+
+### Files to touch
+
+| File | Change |
+|------|--------|
+| [backend/app/pqc/cbom.py](../../backend/app/pqc/cbom.py) | Import validation + normalization |
+| [backend/app/api/pqc.py](../../backend/app/api/pqc.py) | `POST /pqc/cbom/import` |
+| [backend/app/pqc/report.py](../../backend/app/pqc/report.py) | Merged inventory in reports |
+| [web/components/pqc/ReportDrawer.tsx](../../web/components/pqc/ReportDrawer.tsx) | Import UI + source attribution |
+
+### Acceptance criteria
+
+- [ ] External CycloneDX CBOM import API live (validate → normalize → store)
+- [ ] Imported assets merge with scan inventory (dedupe by fingerprint)
+- [ ] Source attribution on merged assets (qtangl-scan vs external-import)
+- [ ] Import errors surfaced with actionable validation messages
+- [ ] CBOM import golden tests in CI
+- [ ] Dashboard shows multi-source inventory count
+
+---
+
 ## Action items
 
 **Format:** `- [ ] **ID** Description → files | acceptance`
@@ -393,6 +452,23 @@ Execute hiring sequence ([18-organization-and-hiring.md](./18-organization-and-h
 - [ ] **K15-001** Set quarterly OKRs; cascade to Track K → [22-governance-and-operating-cadence.md](./22-governance-and-operating-cadence.md) | OKRs published
 - [ ] **K15-002** Write platform-engineer role spec + JD → [18-organization-and-hiring.md](./18-organization-and-hiring.md) | Ready to post
 - [ ] **K15-003** Record ADR-005 readiness-first positioning → roadmap/adrs/ | Merged
+
+### Phase 4 — Moat & aggregation (Weeks ~16–32)
+
+- [ ] **K16-001** Wire transparency log append on every sign → [transparency.py](../../backend/app/pqc/transparency.py) | Flag on in prod; idempotent
+- [ ] **K16-002** Log-root anchoring + witness files → [anchoring.py](../../backend/app/pqc/anchoring.py) | Latest anchor in repo artifact
+- [ ] **K16-003** DB signing key registry + rotation runbook → [key_registry.py](../../backend/app/pqc/key_registry.py) | Keys queryable; G1 doc updated
+- [ ] **K16-004** Evidence vault ZIP export → [report_bundle.py](../../backend/app/pqc/report_bundle.py) | Download from API + dashboard
+- [ ] **K16-005** Verify passport shows log inclusion → [VerifyPageClient.tsx](../../web/app/verify/VerifyPageClient.tsx) | seq + rootHash visible
+- [ ] **K16-006** `qtangl_verify` CLI + golden snapshot tests → [qtangl_verify.py](../../backend/scripts/qtangl_verify.py), [test_pqc_golden.py](../../backend/tests/test_pqc_golden.py) | CI green
+- [ ] **K16-007** PQC dogfood workflow appends to log → [pqc-dogfood.yml](../../.github/workflows/pqc-dogfood.yml) | Weekly entry in log
+- [ ] **K16-008** Backfill existing signed reports into log → [backfill_transparency_log.py](../../backend/scripts/backfill_transparency_log.py) | One-time idempotent run
+- [x] **K17-001** CBOM import API (`POST /pqc/cbom/ingest`) → [pqc.py](../../backend/app/api/pqc.py) | Validates CycloneDX 1.6+
+- [x] **K17-002** Normalize external CBOM to Qtangl schema → [cbom/](../../backend/app/cbom/) | `validate_import_cbom` + adapter
+- [x] **K17-003** Merge imported assets with scan inventory → [service.py](../../backend/app/cbom/service.py) | Dedupe; source tags; conflict queue
+- [x] **K17-004** Import UI on dashboard → [CbomImportPanel.tsx](../../web/components/pqc/CbomImportPanel.tsx) | Upload + error display
+- [x] **K17-005** CBOM import golden tests → [test_pqc_cbom_import.py](../../backend/tests/test_pqc_cbom_import.py) | In CI
+- [x] **K17-006** Multi-source inventory widget on dashboard → [DashboardClient.tsx](../../web/components/dashboard/DashboardClient.tsx) | Scan + import counts
 
 ---
 

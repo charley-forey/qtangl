@@ -83,9 +83,9 @@ flowchart TB
 |---------|-----------------------------------------------|--------|
 | Eyebrow | "Quantum Planning API" | "Post-quantum readiness" |
 | Title | "Every possibility ranked. One future your team runs." | "Assess. Monitor. Convert." |
-| Subhead | Superposition/collapse language | "Inventory quantum-vulnerable crypto in minutes. Monitor drift until Q-Day. Prove remediation with signed evidence." |
+| Subhead | Superposition/collapse language | "Inventory quantum-vulnerable crypto in minutes. Monitor drift until Q-Day. Prove remediation with PQ-signed evidence your auditors can verify independently." |
 | Primary CTA | Find Quantum → `/demo` | Run Q-Day scan → `/demo/pqc` |
-| Secondary CTA | Request access → `/access` | View sample report → `/verify` or PDF sample |
+| Secondary CTA | Request access → `/access` | Verify a sample report → `/verify` (show log inclusion) |
 | Visual | Quantum state animation | Readiness score gauge + scan progress mock |
 
 ### Section 2 — Headline demo (replace hospital)
@@ -94,7 +94,7 @@ flowchart TB
 |---------|---------|--------|
 | Eyebrow | "Headline demo" | "Headline demo" |
 | Title | "Hospital re-staffing in 4:11" | "Q-Day inventory in 8 minutes" |
-| Description | Nurse call-out pipeline | Domain scan → CBOM + PDF → verify link |
+| Description | Nurse call-out pipeline | Domain scan → CBOM + PDF → verify + transparency log seq |
 | Stats | Hard violations, Overtime, Runtime | Q-vulnerable endpoints, Readiness score, Coverage confidence |
 | CTA | Open hospital demo | Open Q-Day scanner |
 
@@ -126,6 +126,15 @@ Replace scheduling JSON example with PQC scan request/response snippet from [web
 
 Eyebrow: "Evidence" not "Measurement"
 
+Add **evidence proof strip** below API preview:
+
+| Badge | Copy | Link |
+|-------|------|------|
+| PQ-signed | ML-DSA-65 primary, Ed25519 fallback | `/trust` |
+| Transparency log | Append-only hash chain; public root | `/pqc/transparency/root` (API) |
+| Offline verify | `qtangl_verify.py` + open spec | [docs/verify-spec.md](../../docs/verify-spec.md) |
+| Readiness Passport | Shareable evidence bundle for auditors | `/verify` sample |
+
 ### Section 6 — CTA
 
 Update [web/components/marketing/CTA.tsx](../../web/components/marketing/CTA.tsx) copy source:
@@ -140,7 +149,7 @@ Update [web/components/marketing/CTA.tsx](../../web/components/marketing/CTA.tsx
 
 | Route | Purpose | Key components | Copy module |
 |-------|---------|----------------|-------------|
-| `/platform` | Journey overview + architecture diagram | PageHero, journey cards, proof strip | `readiness-platform.ts` |
+| `/platform` | Journey overview + architecture diagram (evidence layer callout) | PageHero, journey cards, evidence proof strip | `readiness-platform.ts` |
 | `/assess` | Assess tier landing | Scenario picker, sample CBOM download, pricing teaser | `readiness-assess.ts` |
 | `/monitor` | Monitor tier landing | Diff demo embed, alert mock, scheduling UI screenshot | `readiness-monitor.ts` |
 | `/convert` | Convert tier landing | Remediation backlog mock, partner logos, workshop outline | `readiness-convert.ts` |
@@ -156,6 +165,7 @@ Update [web/components/marketing/CTA.tsx](../../web/components/marketing/CTA.tsx
 | Route | Change |
 |-------|--------|
 | [web/app/pqc/page.tsx](../../web/app/pqc/page.tsx) | Redirect to `/platform` or merge; currently "Both sides" — reorder CTAs (PQC first) |
+| [web/app/trust/page.tsx](../../web/app/trust/page.tsx) | Transparency log, key registry, verify spec link, dogfood verify |
 | [web/app/demo/page.tsx](../../web/app/demo/page.tsx) | Reorder cards: PQC first; add readiness intro |
 | [web/app/access/page.tsx](../../web/app/access/page.tsx) | Rewrite [access.ts](../../web/lib/copy/access.ts) for PQC pilot interest options |
 | [web/app/about/page.tsx](../../web/app/about/page.tsx) | Mission → readiness-first; optimization as expansion |

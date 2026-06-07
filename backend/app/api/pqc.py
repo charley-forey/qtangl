@@ -6,7 +6,7 @@ import logging
 import json
 from typing import Any
 
-from fastapi import APIRouter, Depends, File, Header, HTTPException, Query, UploadFile, status
+from fastapi import APIRouter, Depends, File, Header, HTTPException, Query, Request, UploadFile, status
 from fastapi.responses import Response
 from pydantic import BaseModel, Field
 
@@ -60,6 +60,16 @@ class PqcScanRequest(BaseModel):
 
 class VerifyReportRequest(BaseModel):
     reportJson: dict[str, Any]
+
+
+class CbomIngestRequest(BaseModel):
+    document: dict[str, Any]
+    sourceLabel: str | None = None
+    verificationStatus: str = Field(default="unverified-source")
+
+
+class CbomConflictResolveRequest(BaseModel):
+    resolvedValue: str
 
 
 class PqcHandshakeRequest(BaseModel):
@@ -568,11 +578,21 @@ def verify_report(scan_id: str) -> dict:
 
     from app.pqc.bundle_codec import bundle_from_api_dict
     from app.pqc.signing import verify_report_signature
+    from app.pqc.transparency import log_inclusion_block
+    from app.telemetry.events import track_event
 
     bundle = bundle_from_api_dict(payload)
     report_json = report_to_json(bundle.report)
     signature = report_json.get("signature") or bundle.report.signature or {}
     result = verify_report_signature(report_json, signature)
+    content_hash = result.get("contentHash") or signature.get("contentHash")
+    log_inclusion = log_inclusion_block(str(content_hash)) if content_hash else None
+    if log_inclusion:
+        result["logInclusion"] = log_inclusion
+    track_event(
+        "report_verified",
+        properties={"scanId": scan_id, "valid": result.get("valid"), "source": "public_verify"},
+    )
     return {
         "status": "success",
         "scanId": scan_id,
@@ -586,8 +606,153 @@ def verify_report(scan_id: str) -> dict:
 def verify_report_json(body: VerifyReportRequest) -> dict:
     """Verify pasted report JSON + signature block."""
     from app.pqc.signing import verify_report_signature
+    from app.pqc.transparency import log_inclusion_block
+    from app.telemetry.events import track_event
 
     report_json = dict(body.reportJson)
     signature = report_json.pop("signature", {}) or {}
     result = verify_report_signature(report_json, signature)
+    content_hash = result.get("contentHash") or signature.get("contentHash")
+    log_inclusion = log_inclusion_block(str(content_hash)) if content_hash else None
+    if log_inclusion:
+        result["logInclusion"] = log_inclusion
+    track_event(
+        "report_verified",
+        properties={
+            "scanId": report_json.get("scanId"),
+            "valid": result.get("valid"),
+            "source": "paste_verify",
+        },
+    )
     return {"status": "success", "verification": result}
+
+
+@router.get("/transparency/root")
+def transparency_root() -> dict:
+    """Current append-only transparency log root (hashes only; no PII)."""
+    from app.pqc.transparency import current_root
+
+    return {"status": "success", "log": current_root()}
+
+
+@router.get("/transparency/keys")
+def transparency_keys() -> dict:
+    """Public signing key history for offline verification."""
+    from app.pqc.key_registry import list_public_signing_keys
+
+    return {"status": "success", "keys": list_public_signing_keys()}
+
+
+@router.get("/transparency/{content_hash}")
+def transparency_inclusion(content_hash: str) -> dict:
+    """Inclusion proof for a report content hash."""
+    from app.pqc.transparency import inclusion_proof
+
+    proof = inclusion_proof(content_hash.lower().strip())
+    if proof is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Hash not in log.")
+    return {"status": "success", "inclusion": proof}
+
+
+_CBOM_MAX_BYTES = 25 * 1024 * 1024
+
+
+@router.post("/cbom/ingest", responses={401: {"model": ErrorResponse}, 422: {"model": ErrorResponse}})
+async def cbom_ingest(request: Request, auth: AuthContext = Depends(require_auth)) -> dict:
+    """Ingest a third-party CycloneDX CBOM (1.6/1.7) into the tenant aggregate."""
+    from app.cbom.service import ingest_cbom_document
+
+    content_type = request.headers.get("content-type", "")
+    document: dict[str, Any] | None = None
+    source_label: str | None = None
+    verification_status = "unverified-source"
+
+    if "multipart/form-data" in content_type:
+        form = await request.form()
+        upload = form.get("file")
+        if upload is None:
+            raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail="Missing file field.")
+        raw = await upload.read()  # type: ignore[union-attr]
+        if len(raw) > _CBOM_MAX_BYTES:
+            raise HTTPException(status_code=status.HTTP_413_REQUEST_ENTITY_TOO_LARGE, detail="CBOM exceeds 25MB limit.")
+        document = json.loads(raw.decode("utf-8"))
+        if form.get("sourceLabel"):
+            source_label = str(form.get("sourceLabel"))
+    else:
+        payload = await request.json()
+        if "document" in payload:
+            document = payload["document"]
+            source_label = payload.get("sourceLabel")
+            verification_status = payload.get("verificationStatus") or "unverified-source"
+        else:
+            document = payload
+
+    if document is None:
+        raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail="CBOM document required.")
+
+    result = ingest_cbom_document(
+        tenant_id=auth.tenant_id,
+        document=document,
+        source_label=source_label,
+        verification_status=verification_status,
+        actor=auth.tenant_id,
+    )
+    if not result.get("ok"):
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail={"errors": result.get("errors", [])},
+        )
+    return {"status": "success", **result}
+
+
+@router.get("/cbom/sources", responses={401: {"model": ErrorResponse}})
+def cbom_sources(auth: AuthContext = Depends(require_auth_readonly)) -> dict:
+    from app.cbom.service import list_sources
+
+    return {"status": "success", "sources": list_sources(tenant_id=auth.tenant_id)}
+
+
+@router.get("/cbom/aggregate", responses={401: {"model": ErrorResponse}})
+def cbom_aggregate(
+    auth: AuthContext = Depends(require_auth_readonly),
+    format: str | None = Query(default=None, alias="format"),
+) -> dict:
+    from app.cbom.service import get_aggregate
+    from app.telemetry.events import track_event
+
+    spec = "1.7" if format == "cdx17" else "1.6"
+    aggregate = get_aggregate(tenant_id=auth.tenant_id, spec_version=spec)
+    if format in {"cdx16", "cdx17"}:
+        track_event(
+            "aggregated_cbom_exported",
+            tenant_id=auth.tenant_id,
+            properties={"format": format, "verifiedPct": aggregate["readiness"].get("verifiedPct")},
+        )
+        return {"status": "success", "document": aggregate["document"]}
+    return {"status": "success", "aggregate": aggregate}
+
+
+@router.get("/cbom/conflicts", responses={401: {"model": ErrorResponse}})
+def cbom_conflicts(auth: AuthContext = Depends(require_auth_readonly)) -> dict:
+    from app.cbom.service import list_conflicts
+
+    return {"status": "success", "conflicts": list_conflicts(tenant_id=auth.tenant_id, status="open")}
+
+
+@router.put("/cbom/conflicts/{conflict_id}", responses={401: {"model": ErrorResponse}, 404: {"model": ErrorResponse}})
+def cbom_resolve_conflict(
+    conflict_id: str,
+    body: CbomConflictResolveRequest,
+    auth: AuthContext = Depends(require_auth),
+) -> dict:
+    from app.cbom.service import resolve_conflict
+
+    result = resolve_conflict(
+        tenant_id=auth.tenant_id,
+        conflict_id=conflict_id,
+        resolved_value=body.resolvedValue,
+        actor=auth.tenant_id,
+    )
+    if result is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Conflict not found.")
+    return {"status": "success", **result}

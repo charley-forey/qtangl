@@ -107,6 +107,9 @@ def build_migration_report(
     )
     json_payload = report_to_json(report)
     report.signature = sign_report_payload(json_payload)
+    from app.pqc.transparency import safe_append_after_sign
+
+    safe_append_after_sign(json_payload, report.signature or {})
     return report
 
 

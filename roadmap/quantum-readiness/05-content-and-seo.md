@@ -10,10 +10,28 @@ Readiness content engine: Q-Day hub, framework guides, keyword strategy, blog ca
 
 **Principles:**
 
-1. **Evidence-led** — every article links to demo, sample CBOM, or verify flow
+1. **Evidence-led** — every article links to demo, sample CBOM, verify flow, or transparency log receipt
 2. **Honest** — "inventory aid, not formal audit"; quantum-vulnerable ≠ broken today
 3. **Framework-native** — map content to NIST, NSM-10, CMMC, HIPAA deadlines buyers already track
 4. **Journey-aligned** — content maps to maturity stages in [02-customer-journey.md](./02-customer-journey.md)
+
+---
+
+## Readiness lexicon (evidence layer — use consistently)
+
+Align with [01-positioning-and-brand.md](./01-positioning-and-brand.md) and [23-glossary-and-references.md](./23-glossary-and-references.md).
+
+| Term | Definition | Prefer over |
+|------|------------|-------------|
+| **Evidence layer** | Cross-cutting PQ signing, transparency log, passport, open verify | "Trust features" |
+| **Transparency log** | Append-only SHA-256 chain of signed report content hashes | "Audit log" (internal) |
+| **Log inclusion** | Receipt proving a report hash appears in the transparency log at a given seq | "Logged" (vague) |
+| **Readiness Passport** | Shareable evidence bundle: PDF + CBOM + verify metadata + log receipt | "Share link" (internal) |
+| **Aggregator** | Import/merge CBOMs from any discovery source with provenance tags | "Importer" (too narrow) |
+| **Verifiable evidence** | Proof an auditor can check offline without Qtangl credentials | "Signed report" alone |
+| **Key transparency** | Public history of signing key fingerprints at `/pqc/transparency/keys` | — |
+
+**Banned on readiness surfaces:** "tamper-proof" (use "tamper-evident"), "formal audit" (use "inventory aid"), "full estate coverage" (use "fast external baseline").
 
 ---
 
@@ -42,7 +60,7 @@ Central education destination linked from homepage, nav footer, and blog.
 | **Timeline widget** | Deadline tiers from [deadlines.json](../../demos/pqc_migration/data/deadlines.json) |
 | **Mosca calculator** | Simple X/Y/Z inputs → inequality holds? |
 | **Try it CTA** | → `/demo/pqc` |
-| **Sample artifacts** | CBOM JSON, redacted PDF, verify link demo |
+| **Sample artifacts** | CBOM JSON, redacted PDF, verify link demo, transparency log seq screenshot |
 | **Framework grid** | Links to framework guides below |
 
 **Implementation:** MDX under `web/content/q-day/` or App Router pages with copy from `web/lib/copy/readiness-qday-hub.ts`.
@@ -80,6 +98,8 @@ Long-form guides (2,000–4,000 words) targeting compliance search intent.
 | Q-Day readiness | Medium | `/q-day` | P0 |
 | crypto agility assessment | Medium | `/platform` | P1 |
 | CycloneDX CBOM export | Low (technical) | `/q-day/cbom` | P1 |
+| post-quantum signed report verify | Low (technical) | `/verify`, [verify-spec.md](../../docs/verify-spec.md) | P1 |
+| cryptographic transparency log | Low (niche) | `/trust`, `/docs/guides/verify` | P2 |
 
 ### Secondary (education — blog + hub)
 
@@ -112,7 +132,8 @@ Reprioritize [web/app/blog/](../../web/app/blog/) toward readiness. Keep optimiz
 | 3 | Why your spreadsheet crypto inventory is wrong | Sales enablement | Assess |
 | 4 | Reading a Qtangl CBOM export | Technical | Assess |
 | 5 | Mosca inequality explained for CISOs | Education | Assess |
-| 6 | CMMC crypto controls: inventory evidence auditors want | Framework | Assess |
+| 6 | CMMC crypto controls: verifiable evidence auditors want | Framework | Assess |
+| 6b | How Qtangl's transparency log works (and why it matters) | Technical | Assess |
 | 7 | Crypto drift: why one scan is not enough | Product | Monitor |
 | 8 | Setting up Q-Day Monitor alerts | How-to | Monitor |
 | 9 | Remediation backlog prioritization by deadline tier | How-to | Convert |

@@ -15,6 +15,14 @@ type VerifyResult = {
   contentHash?: string;
   signedAt?: string;
   reason?: string;
+  logInclusion?: {
+    included?: boolean;
+    seq?: number;
+    entryHash?: string;
+    rootHash?: string;
+    rootSeq?: number;
+    signedAt?: string;
+  };
 };
 
 function VerifyResultPanel({ result }: { result: VerifyResult }) {
@@ -41,6 +49,18 @@ function VerifyResultPanel({ result }: { result: VerifyResult }) {
           <dt className="text-xs uppercase tracking-[0.14em] text-[var(--color-gray-500)]">Reason</dt>
           <dd>{result.reason}</dd>
         </div>
+      ) : null}
+      {result.logInclusion?.included ? (
+        <>
+          <div>
+            <dt className="text-xs uppercase tracking-[0.14em] text-[var(--color-gray-500)]">Transparency log</dt>
+            <dd className="text-white">Included (seq {result.logInclusion.seq})</dd>
+          </div>
+          <div>
+            <dt className="text-xs uppercase tracking-[0.14em] text-[var(--color-gray-500)]">Log root</dt>
+            <dd className="break-all font-mono text-xs">{result.logInclusion.rootHash ?? "—"}</dd>
+          </div>
+        </>
       ) : null}
     </dl>
   );

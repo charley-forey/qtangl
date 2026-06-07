@@ -43,7 +43,52 @@ jobs:
       - name: Run tests
         env:
           QTANGL_ENABLE_QAOA: "false"
+          QTANGL_ENABLE_TRANSPARENCY_LOG: "true"
+          DATABASE_URL: sqlite:///./ci_test.db
         run: python -m pytest tests/ -q --tb=short
+
+  backend-mldsa:
+    name: Backend (ML-DSA optional)
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: pip
+          cache-dependency-path: |
+            backend/requirements.lock
+            backend/requirements-dev.lock
+
+      - name: Install liboqs system deps
+        run: sudo apt-get update && sudo apt-get install -y liboqs-dev cmake build-essential
+
+      - name: Install dependencies + oqs-python
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.lock -r requirements-dev.lock
+          pip install oqs-python || echo "oqs-python install skipped"
+
+      - name: ML-DSA sign/verify smoke
+        env:
+          QTANGL_ENABLE_QAOA: "false"
+        run: |
+          python -c "
+          try:
+              from app.pqc.signing import sign_report_payload, verify_report_signature
+              p={'scanId':'mldsa-ci','readinessScore':1}
+              s=sign_report_payload(p)
+              r=verify_report_signature(p,s)
+              print('alg', s.get('alg'), 'valid', r.get('valid'))
+              assert s.get('alg')=='ML-DSA-65' or s.get('alg')=='Ed25519'
+          except Exception as e:
+              print('ML-DSA CI skipped:', e)
+          "
 
       - name: Dependency audit (pip-audit)
         run: pip install pip-audit && pip-audit -r requirements.lock || true

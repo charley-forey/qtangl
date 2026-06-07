@@ -30,6 +30,9 @@ def enrich_completed_scan(scan_id: str, bundle: ScanBundle, *, tenant_id: str) -
         )
         json_payload = report_to_json(bundle.report)
         bundle.report.signature = sign_report_payload(json_payload)
+        from app.pqc.transparency import safe_append_after_sign
+
+        safe_append_after_sign(json_payload, bundle.report.signature or {}, tenant_id=tenant_id)
         return bundle
 
 
@@ -58,6 +61,9 @@ def _enrich_completed_scan(scan_id: str, bundle: ScanBundle, *, tenant_id: str) 
 
     json_payload = report_to_json(bundle.report)
     bundle.report.signature = sign_report_payload(json_payload)
+    from app.pqc.transparency import safe_append_after_sign
+
+    safe_append_after_sign(json_payload, bundle.report.signature or {}, tenant_id=tenant_id)
 
     from app.tenant.settings import get_tenant_settings_raw
 

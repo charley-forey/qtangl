@@ -12,6 +12,7 @@ Phased plan to execute the quantum-readiness transformation — mapped onto exis
 | **Phase 1** | 2–8 | Website repositioning | Homepage live; PQC in nav |
 | **Phase 2** | 4–16 | Product journey polish | Dashboard readiness-first; B3/B4 beta |
 | **Phase 3** | 8–24 | GTM scale | 2 Monitor customers; Q-Day hub indexed |
+| **Phase 4** | 16–32 | Moat & aggregation | Transparency log live; CBOM import; verify moat |
 
 Phases overlap intentionally — content and product run parallel to website.
 
@@ -171,6 +172,70 @@ Phases overlap intentionally — content and product run parallel to website.
 
 ---
 
+## Phase 4 — Moat & aggregation (Weeks ~16–32)
+
+Build the verifiable evidence moat and multi-source CBOM aggregation — the differentiation layer competitors cannot easily replicate.
+
+### Prerequisites
+
+| ID | Prerequisite | Why |
+|----|--------------|-----|
+| **P1** | B3 scheduled scans live (Phase 2 gate) | Monitor cohort produces recurring signed reports |
+| **P2** | ≥1 Monitor customer with signed reports | Real-world verify + log data for dogfood |
+| **P3** | G1 signing key rotation runbook | Safe key lifecycle before log goes prod |
+
+### Workstreams
+
+**A. Evidence & trust layer (Track K16)**
+
+| Task | File | Week |
+|------|------|------|
+| Transparency log append-on-sign | transparency.py + signing.py | 16–18 |
+| Signing key registry in DB | key_registry.py + migration 004 | 16–20 |
+| Log-root anchoring + witness files | anchoring.py | 18–22 |
+| Evidence vault ZIP export | report_bundle.py + API | 18–24 |
+| Verify passport + log inclusion UI | VerifyPageClient.tsx | 20–24 |
+| `qtangl_verify` CLI | scripts/qtangl_verify.py | 22–26 |
+| Backfill existing reports into log | backfill_transparency_log.py | 24–26 |
+
+**B. CBOM aggregation & ingestion (Track K17)**
+
+| Task | File | Week |
+|------|------|------|
+| CBOM import API + validation | cbom.py + pqc.py | 18–22 |
+| Normalize + merge with scan inventory | report.py | 22–26 |
+| Import UI on dashboard | ReportDrawer.tsx | 24–28 |
+| Multi-source inventory widget | DashboardClient.tsx | 26–30 |
+| Feed anonymized aggregates to K14 | 21-data-and-threat-intelligence.md | 28–32 |
+
+**C. CI & test hardening**
+
+| Task | File | Week |
+|------|------|------|
+| Transparency log unit tests | test_transparency_log.py | 16–18 |
+| Golden verify + report hash snapshots | test_pqc_golden.py | 18–22 |
+| CBOM import golden tests | test_pqc_cbom.py | 22–26 |
+| PQC dogfood signs + logs weekly | pqc-dogfood.yml | 20+ |
+| Hardening regression suite | test_pqc_hardening.py | ongoing |
+
+### Gate — Phase 4 complete
+
+- [ ] Transparency log enabled in production; every new signed report appended
+- [ ] `/verify` shows signature validity + log inclusion proof
+- [ ] Evidence vault ZIP downloadable from API and dashboard
+- [ ] External CycloneDX CBOM import validates and merges with scan inventory
+- [ ] `qtangl_verify` CLI + golden tests green in CI
+- [ ] ≥1 third-party verify of a customer report (auditor or partner)
+
+### Track mapping
+
+| Track K | Main track |
+|---------|------------|
+| K16 Evidence & trust layer | G1 (key rotation), G7 (dogfood CI) |
+| K17 CBOM aggregation | B3 (scan data), K14 (benchmarks) |
+
+---
+
 ## Gantt chart
 
 ```mermaid
@@ -199,6 +264,12 @@ gantt
   Self-serve Monitor        :p3b, 2026-09-01, 42d
   Partner program           :p3c, 2026-10-01, 56d
   Case study published      :milestone, p3m2, 2026-10-15, 0d
+
+  section Phase4
+  Transparency log + vault  :p4a, 2026-10-01, 42d
+  CBOM import + merge       :p4b, 2026-10-15, 42d
+  Verify CLI + golden CI    :p4c, 2026-11-01, 28d
+  Third-party verify        :milestone, p4m1, 2026-12-15, 0d
 ```
 
 ---
@@ -219,6 +290,10 @@ graph TB
   K6 --> K7["K7 Partners"]
   K6 --> K5["K5 Lead magnets"]
   H5["H5 Self-serve"] --> K5
+  B3 --> K16["K16 Evidence layer"]
+  G1["G1 Key rotation"] --> K16
+  K16 --> K17["K17 CBOM aggregation"]
+  K14["K14 Data program"] --> K17
 ```
 
 ---
@@ -232,6 +307,8 @@ K1 strategy lock
   → B3 Monitor (retention product)
   → K6 GTM scale
   → $200K ARR → hire second engineer
+  → K16 evidence moat (transparency log + verify)
+  → K17 CBOM aggregation (multi-source inventory)
 ```
 
 Optimization tracks (A, J) **not on critical path** until ≥$200K PQC ARR per financial model rule.

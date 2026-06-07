@@ -216,3 +216,19 @@ Deliverable: written report + remediation tickets linked to threat IDs.
 | Date | Version | Change |
 |------|---------|--------|
 | 2026-05-30 | v1.0 | G2 complete: full inventory, control matrix, epic mapping, pen test scope |
+| 2026-06-07 | v1.1 | K16 transparency log: global hash-only log, public root privacy, rate limits on `/pqc/transparency/*` and `/pqc/verify` |
+
+---
+
+## 12. Transparency log (K16) — privacy & abuse
+
+**Decision:** Single **global** append-only log storing **content hashes and signing metadata only** (no tenant PII, no scan targets). Public endpoints: `GET /pqc/transparency/root`, `/keys`, `/{contentHash}`.
+
+| Risk | Control | Residual |
+|------|---------|----------|
+| Scan cadence / existence leakage via hash enumeration | Hashes are SHA-256 of canonical report JSON; not reversible to domain without report | Medium — rate limit public endpoints (`QTANGL_RATE_LIMIT_PER_MINUTE`) |
+| Operator rewrites log | Append-only DB constraint + periodic **file witness** anchors (`QTANGL_TRANSPARENCY_ANCHOR_DIR`); external mirror planned (P3) | Medium until multi-witness |
+| DoS on public verify/transparency | Same rate limiter as API; no auth required by design | Low |
+| Retention vs deletion requests | Log rows exempt from tenant deletion (hashes only); documented in DPA § evidence log | Low |
+
+**Retention exemption:** `evidence_log` stores no customer content — only `content_hash`, `key_fingerprint`, `alg`, `signed_at`, chain metadata. Exempt from 24h PEM deletion and subject to indefinite append-only retention per [17-legal-regulatory-and-compliance.md](../../quantum-readiness/17-legal-regulatory-and-compliance.md).

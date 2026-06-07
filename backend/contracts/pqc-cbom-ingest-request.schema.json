@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "PqcCbomIngestRequest",
+  "type": "object",
+  "required": ["document"],
+  "properties": {
+    "document": { "type": "object" },
+    "sourceLabel": { "type": "string" },
+    "verificationStatus": {
+      "type": "string",
+      "enum": ["verified", "imported", "unverified-source"]
+    }
+  }
+}
