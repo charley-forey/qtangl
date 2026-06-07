@@ -55,6 +55,17 @@ QTANGL_ALERT_READINESS_DROP=5
 
 Optional alerts: `QTANGL_SMTP_*`, tenant Slack webhook via dashboard.
 
+## Enable transparency log (post-deploy)
+
+After migrations 004–006 apply and smoke tests pass:
+
+1. Set `QTANGL_ENABLE_TRANSPARENCY_LOG=true` on the **API** service
+2. Run `python scripts/backfill_transparency_log.py` once (Railway shell or local with prod `DATABASE_URL`)
+3. Verify: `python scripts/verify_production_rollout.py --full`
+4. Confirm trust page shows live root at `/trust`
+
+See [evidence-layer-rollout.md](../quantum-readiness/runbooks/evidence-layer-rollout.md).
+
 ## Smoke test
 
 ```bash

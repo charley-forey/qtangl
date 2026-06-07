@@ -88,6 +88,21 @@ export const docsSections: DocsNavSection[] = [
         href: "/docs/reference/pqc/report",
         status: "pilot",
       },
+      {
+        name: "POST /tenant/scans/{scanId}/share",
+        href: "/docs/reference/pqc/passport",
+        status: "pilot",
+      },
+      {
+        name: "GET /pqc/transparency/root",
+        href: "/docs/reference/pqc/transparency",
+        status: "pilot",
+      },
+      {
+        name: "POST /pqc/cbom/ingest",
+        href: "/docs/reference/pqc/cbom-import",
+        status: "pilot",
+      },
       { name: "Errors & status codes", href: "/docs/errors" },
       { name: "JSON schemas", href: "/docs/reference/schemas" },
     ],

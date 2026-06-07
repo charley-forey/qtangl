@@ -47,6 +47,14 @@ jobs:
           DATABASE_URL: sqlite:///./ci_test.db
         run: python -m pytest tests/ -q --tb=short
 
+      - name: Offline verify CLI smoke
+        env:
+          QTANGL_ENABLE_TRANSPARENCY_LOG: "true"
+          DATABASE_URL: sqlite:///./ci_test.db
+        run: |
+          python -m pytest tests/test_pqc_golden.py -q --tb=short
+          python scripts/qtangl_verify.py --help
+
   backend-mldsa:
     name: Backend (ML-DSA optional)
     runs-on: ubuntu-latest

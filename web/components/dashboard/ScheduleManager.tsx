@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 
+import { qtanglApiBaseUrl } from "@/lib/api";
 import { fetchTenantJson, patchTenantJson, type ScheduledScan } from "@/lib/tenant-api";
 import { formatUtcDateTime } from "@/lib/format";
 
@@ -61,6 +62,23 @@ export default function ScheduleManager({
     }
   }
 
+  async function deleteSchedule(scheduleId: string) {
+    try {
+      const response = await fetch(`${qtanglApiBaseUrl}/tenant/schedules/${scheduleId}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${apiKey}` },
+      });
+      if (!response.ok) {
+        const detail = await response.text();
+        throw new Error(detail || "Delete failed.");
+      }
+      onMessage("Schedule deleted.");
+      onRefresh();
+    } catch (error) {
+      onMessage(error instanceof Error ? error.message : "Delete failed.");
+    }
+  }
+
   if (!schedules.length) {
     return <p className="text-sm text-[var(--muted)]">No active schedules. Create one below.</p>;
   }
@@ -80,17 +98,26 @@ export default function ScheduleManager({
                 {schedule.nextRunAt ? formatUtcDateTime(schedule.nextRunAt) : "—"}
               </p>
             </div>
-            <button
-              type="button"
-              className="text-xs text-white underline"
-              onClick={() => {
-                setEditingId(schedule.id);
-                setCadenceHours(schedule.cadenceHours);
-                setNotifyEmail(schedule.notifyEmail ?? "");
-              }}
-            >
-              Edit
-            </button>
+            <div className="flex gap-3">
+              <button
+                type="button"
+                className="text-xs text-white underline"
+                onClick={() => {
+                  setEditingId(schedule.id);
+                  setCadenceHours(schedule.cadenceHours);
+                  setNotifyEmail(schedule.notifyEmail ?? "");
+                }}
+              >
+                Edit
+              </button>
+              <button
+                type="button"
+                className="text-xs text-red-300 underline"
+                onClick={() => void deleteSchedule(schedule.id)}
+              >
+                Delete
+              </button>
+            </div>
           </div>
           {editingId === schedule.id ? (
             <div className="mt-3 grid gap-2 sm:grid-cols-3">

@@ -148,6 +148,18 @@ def main() -> None:
                 record_scheduler_tick(enqueued=enqueued)
                 if enqueued:
                     logger.info("Enqueued %d scheduled scan(s)", enqueued)
+                try:
+                    from app.pqc.transparency import current_root
+                    from app.pqc.anchoring import maybe_anchor_on_milestone
+
+                    root = current_root()
+                    maybe_anchor_on_milestone(
+                        seq=int(root.get("seq") or 0),
+                        root_hash=str(root.get("rootHash") or ""),
+                        entry_count=int(root.get("entryCount") or 0),
+                    )
+                except Exception:
+                    pass
                 last_scheduler_tick = now
             if not processed:
                 time.sleep(0.25)

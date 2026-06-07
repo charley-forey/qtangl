@@ -19,6 +19,8 @@ PRD_EVENTS = frozenset(
         "report_verified_third_party",
         "verify_cli_ping",
         "passport_opened",
+        "passport_viewed",
+        "cloud_pull_completed",
         "cbom_ingested",
         "cbom_merged",
         "cbom_conflict_opened",

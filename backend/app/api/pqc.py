@@ -10,7 +10,7 @@ from fastapi import APIRouter, Depends, File, Header, HTTPException, Query, Requ
 from fastapi.responses import Response
 from pydantic import BaseModel, Field
 
-from app.auth import AuthContext, require_api_key_readonly, require_auth, require_auth_readonly
+from app.auth import AuthContext, require_api_key_readonly, require_auth, require_auth_admin, require_auth_readonly
 from app.db.config import persistence_enabled, use_worker_queue
 from app.models.api import ErrorResponse
 from app.pqc.data import (
@@ -470,7 +470,7 @@ def download_report(
         pdf_bytes = report_to_pdf(report)
         media_type = "application/pdf" if pdf_bytes[:4] == b"%PDF" else "application/json"
         return Response(content=pdf_bytes, media_type=media_type)
-    if fmt == "bundle":
+    if fmt == "bundle" or fmt == "evidence":
         from app.pqc.report_bundle import build_evidence_bundle
 
         content = build_evidence_bundle(report)
@@ -492,7 +492,7 @@ def download_report(
         return Response(content=__import__("json").dumps(body), media_type="application/json")
     raise HTTPException(
         status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-        detail="format must be json|csv|cbom|pdf|bundle|executive|board|auditor",
+        detail="format must be json|csv|cbom|pdf|bundle|evidence|executive|board|auditor",
     )
 
 
@@ -568,9 +568,12 @@ def report_availability(
 
 
 @router.get("/verify/{scan_id}", responses={404: {"model": ErrorResponse}})
-def verify_report(scan_id: str) -> dict:
+def verify_report(scan_id: str, request: Request) -> dict:
     """Public verification: recompute content hash and verify signature."""
+    from app.api.public_rate_limit import enforce_public_rate_limit
     from app.store.scan_jobs import load_scan_bundle_for_public_verify
+
+    enforce_public_rate_limit(request)
 
     payload = load_scan_bundle_for_public_verify(scan_id)
     if payload is None:
@@ -603,8 +606,11 @@ def verify_report(scan_id: str) -> dict:
 
 
 @router.post("/verify", responses={422: {"model": ErrorResponse}})
-def verify_report_json(body: VerifyReportRequest) -> dict:
+def verify_report_json(body: VerifyReportRequest, request: Request) -> dict:
     """Verify pasted report JSON + signature block."""
+    from app.api.public_rate_limit import enforce_public_rate_limit
+
+    enforce_public_rate_limit(request)
     from app.pqc.signing import verify_report_signature
     from app.pqc.transparency import log_inclusion_block
     from app.telemetry.events import track_event
@@ -628,25 +634,32 @@ def verify_report_json(body: VerifyReportRequest) -> dict:
 
 
 @router.get("/transparency/root")
-def transparency_root() -> dict:
+def transparency_root(request: Request) -> dict:
     """Current append-only transparency log root (hashes only; no PII)."""
+    from app.api.public_rate_limit import enforce_public_rate_limit
     from app.pqc.transparency import current_root
 
+    enforce_public_rate_limit(request)
     return {"status": "success", "log": current_root()}
 
 
 @router.get("/transparency/keys")
-def transparency_keys() -> dict:
+def transparency_keys(request: Request) -> dict:
     """Public signing key history for offline verification."""
+    from app.api.public_rate_limit import enforce_public_rate_limit
     from app.pqc.key_registry import list_public_signing_keys
 
+    enforce_public_rate_limit(request)
     return {"status": "success", "keys": list_public_signing_keys()}
 
 
 @router.get("/transparency/{content_hash}")
-def transparency_inclusion(content_hash: str) -> dict:
+def transparency_inclusion(content_hash: str, request: Request) -> dict:
     """Inclusion proof for a report content hash."""
+    from app.api.public_rate_limit import enforce_public_rate_limit
     from app.pqc.transparency import inclusion_proof
+
+    enforce_public_rate_limit(request)
 
     proof = inclusion_proof(content_hash.lower().strip())
     if proof is None:
@@ -675,7 +688,16 @@ async def cbom_ingest(request: Request, auth: AuthContext = Depends(require_auth
         raw = await upload.read()  # type: ignore[union-attr]
         if len(raw) > _CBOM_MAX_BYTES:
             raise HTTPException(status_code=status.HTTP_413_REQUEST_ENTITY_TOO_LARGE, detail="CBOM exceeds 25MB limit.")
-        document = json.loads(raw.decode("utf-8"))
+        filename = getattr(upload, "filename", "") or ""
+        text = raw.decode("utf-8", errors="replace")
+        if filename.lower().endswith((".pem", ".crt", ".cer")) or "BEGIN CERTIFICATE" in text:
+            from app.cbom.service import parse_pem_bundle_to_document
+
+            document = parse_pem_bundle_to_document(text)
+            source_label = source_label or "PEM certificate upload"
+            verification_status = "imported"
+        else:
+            document = json.loads(text)
         if form.get("sourceLabel"):
             source_label = str(form.get("sourceLabel"))
     else:
@@ -756,3 +778,60 @@ def cbom_resolve_conflict(
     if result is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Conflict not found.")
     return {"status": "success", **result}
+
+
+@router.get("/cbom/diff", responses={401: {"model": ErrorResponse}})
+def cbom_diff(auth: AuthContext = Depends(require_auth_readonly)) -> dict:
+    from app.cbom.service import get_cbom_drift
+
+    return {"status": "success", "drift": get_cbom_drift(tenant_id=auth.tenant_id)}
+
+
+@router.post("/cbom/pull/{provider}", responses={401: {"model": ErrorResponse}, 422: {"model": ErrorResponse}})
+def cbom_cloud_pull(provider: str, auth: AuthContext = Depends(require_auth)) -> dict:
+    from app.integrations.cloud import pull_cloud_inventory
+    from app.cbom.service import ingest_cbom_document
+    from app.telemetry.events import track_event
+
+    pull = pull_cloud_inventory(tenant_id=auth.tenant_id, provider=provider.lower())
+    if not pull.get("ok"):
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail=pull.get("reason", "cloud_pull_failed"),
+        )
+    document = pull["document"]
+    result = ingest_cbom_document(
+        tenant_id=auth.tenant_id,
+        document=document,
+        source_label=f"{provider.upper()} read-only pull",
+        verification_status="imported",
+        actor=auth.tenant_id,
+    )
+    track_event(
+        "cloud_pull_completed",
+        tenant_id=auth.tenant_id,
+        properties={
+            "provider": provider,
+            "assetCount": pull.get("componentCount", 0),
+            "partial": pull.get("status") == "partial",
+        },
+    )
+    if not result.get("ok"):
+        raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail=result.get("errors"))
+    return {"status": "success", "pull": pull, "ingest": result}
+
+
+class RetireKeyRequest(BaseModel):
+    keyFingerprint: str
+
+
+@router.post("/transparency/keys/retire", responses={401: {"model": ErrorResponse}, 404: {"model": ErrorResponse}})
+def retire_signing_key_endpoint(
+    body: RetireKeyRequest,
+    auth: AuthContext = Depends(require_auth_admin),
+) -> dict:
+    from app.pqc.key_registry import retire_signing_key
+
+    if not retire_signing_key(key_fingerprint=body.keyFingerprint):
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Key not found.")
+    return {"status": "success", "keyFingerprint": body.keyFingerprint, "retired": True}

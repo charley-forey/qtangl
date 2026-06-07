@@ -60,6 +60,19 @@ def _enrich_completed_scan(scan_id: str, bundle: ScanBundle, *, tenant_id: str) 
             bundle.report.scan_diff = scan_diff
 
     json_payload = report_to_json(bundle.report)
+    try:
+        from app.cbom.service import get_aggregate
+
+        aggregate = get_aggregate(tenant_id=tenant_id, sync_scan=True)
+        json_payload["aggregatedCbomSummary"] = {
+            "componentCount": aggregate.get("componentCount"),
+            "totalStored": aggregate.get("totalStored"),
+            "verifiedPct": (aggregate.get("readiness") or {}).get("verifiedPct"),
+            "sourceCount": len(aggregate.get("sources") or []),
+            "openConflicts": aggregate.get("openConflicts"),
+        }
+    except Exception:
+        logger.debug("aggregatedCbomSummary skipped for scan_id=%s", scan_id)
     bundle.report.signature = sign_report_payload(json_payload)
     from app.pqc.transparency import safe_append_after_sign
 

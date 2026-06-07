@@ -765,6 +765,150 @@ export const docsEndpoints: Record<string, DocsEndpoint> = {
       },
     ],
   },
+  "tenant-passport": {
+    id: "tenant-passport",
+    method: "POST",
+    path: "/tenant/scans/{scanId}/share",
+    status: "pilot",
+    title: "POST /tenant/scans/{scanId}/share",
+    summary:
+      "Create a Readiness Passport — an expiring share link with label and scope (report, bundle, or passport).",
+    auth: true,
+    requestFields: [
+      {
+        name: "label",
+        type: "string",
+        required: false,
+        description: "Human-readable label for audit logs and recipient context.",
+        example: "Q2 board review",
+      },
+      {
+        name: "scope",
+        type: '"report" | "bundle" | "passport"',
+        required: false,
+        default: "report",
+        description: "Controls downloadable artifacts: PDF only, evidence ZIP, or full passport.",
+      },
+      {
+        name: "expiresHours",
+        type: "integer",
+        required: false,
+        default: "168",
+        description: "Link lifetime in hours (1–720).",
+      },
+    ],
+    responseFields: [
+      { name: "url", type: "string", required: true, description: "Public /r/{token} URL." },
+      { name: "token", type: "string", required: true, description: "Opaque share token." },
+      { name: "scope", type: "string", required: true, description: "Effective scope." },
+      { name: "expiresAt", type: "string (ISO8601)", required: true, description: "Expiration timestamp." },
+    ],
+    examples: [
+      {
+        label: "Create passport",
+        request: { label: "Auditor handoff", scope: "passport", expiresHours: 168 },
+        response: {
+          status: "success",
+          url: "https://www.qtangl.com/r/…",
+          scope: "passport",
+          expiresAt: "2026-06-13T12:00:00Z",
+        },
+      },
+    ],
+    notes: [
+      "List active passports via GET /tenant/passports?scanId=…",
+      "Revoke via DELETE /tenant/share/{linkId}",
+    ],
+  },
+  "tenant-evidence-vault": {
+    id: "tenant-evidence-vault",
+    method: "GET",
+    path: "/tenant/evidence",
+    status: "pilot",
+    title: "GET /tenant/evidence",
+    summary: "List retained signed bundles in the tenant evidence vault with retention metadata.",
+    auth: true,
+    responseFields: [
+      { name: "total", type: "integer", required: true, description: "Total vault objects." },
+      { name: "active", type: "integer", required: true, description: "Objects not yet expired." },
+      { name: "objects", type: "VaultObject[]", required: true, description: "Recent retained scans." },
+    ],
+    examples: [
+      {
+        label: "Vault summary",
+        response: {
+          status: "success",
+          total: 3,
+          active: 2,
+          objects: [{ id: "vault-…", scanId: "scan-…", objectType: "bundle", retainedUntil: "2027-06-01T00:00:00Z" }],
+        },
+      },
+    ],
+  },
+  "tenant-evidence-retain": {
+    id: "tenant-evidence-retain",
+    method: "POST",
+    path: "/tenant/evidence/{scanId}/retain",
+    status: "pilot",
+    title: "POST /tenant/evidence/{scanId}/retain",
+    summary: "Retain a scan's signed evidence bundle per tenant retention policy (default 12 months).",
+    auth: true,
+    responseFields: [
+      { name: "retained", type: "boolean", required: true, description: "Whether retention succeeded." },
+      { name: "retainedUntil", type: "string (ISO8601)", required: false, description: "Expiration of retention." },
+    ],
+    examples: [
+      {
+        label: "Retain scan",
+        response: { status: "success", retained: true, scanId: "scan-…", retainedUntil: "2027-06-01T00:00:00Z" },
+      },
+    ],
+  },
+  "tenant-cloud-integration": {
+    id: "tenant-cloud-integration",
+    method: "POST",
+    path: "/tenant/integrations/{provider}",
+    status: "pilot",
+    title: "POST /tenant/integrations/{provider}",
+    summary: "Configure read-only cloud CBOM pull for AWS ACM or Azure Key Vault.",
+    auth: true,
+    requestFields: [
+      { name: "region", type: "string", required: false, description: "AWS region (provider=aws)." },
+      { name: "roleArn", type: "string", required: false, description: "Cross-account IAM role ARN (aws)." },
+      { name: "vaultName", type: "string", required: false, description: "Azure Key Vault name (azure)." },
+    ],
+    examples: [
+      {
+        label: "AWS config",
+        request: { region: "us-east-1", roleArn: "arn:aws:iam::123456789012:role/QtanglReadOnly" },
+        response: { status: "success", integration: { provider: "aws", configured: true } },
+      },
+    ],
+    notes: [
+      "Test connectivity: POST /tenant/integrations/{provider}/test",
+      "Pull and ingest: POST /pqc/cbom/pull/{provider}",
+      "List configs: GET /tenant/integrations/cloud",
+    ],
+  },
+  "pqc-cbom-cloud-pull": {
+    id: "pqc-cbom-cloud-pull",
+    method: "POST",
+    path: "/pqc/cbom/pull/{provider}",
+    status: "pilot",
+    title: "POST /pqc/cbom/pull/{provider}",
+    summary: "Pull read-only certificate inventory from configured AWS or Azure integration and ingest as CBOM.",
+    auth: true,
+    examples: [
+      {
+        label: "AWS pull",
+        response: {
+          status: "success",
+          pull: { ok: true, provider: "aws", componentCount: 42 },
+          ingest: { ok: true, componentCount: 42 },
+        },
+      },
+    ],
+  },
   "ev-fleet-plan-solve": {
     id: "ev-fleet-plan-solve",
     method: "POST",

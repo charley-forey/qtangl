@@ -106,8 +106,36 @@ class ShareLink(Base):
     tenant_id: Mapped[str] = mapped_column(String(64), ForeignKey("tenants.id"), index=True)
     scan_id: Mapped[str] = mapped_column(String(80), ForeignKey("scan_jobs.id", ondelete="CASCADE"), index=True)
     token_hash: Mapped[str] = mapped_column(String(128), unique=True, index=True)
+    label: Mapped[str] = mapped_column(String(255), default="")
+    scope: Mapped[str] = mapped_column(String(32), default="report")
+    view_count: Mapped[int] = mapped_column(default=0)
     expires_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), index=True)
     revoked_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_utcnow)
+
+
+class ShareLinkView(Base):
+    __tablename__ = "share_link_views"
+
+    id: Mapped[str] = mapped_column(String(80), primary_key=True)
+    link_id: Mapped[str] = mapped_column(String(80), ForeignKey("share_links.id", ondelete="CASCADE"), index=True)
+    tenant_id: Mapped[str] = mapped_column(String(64), ForeignKey("tenants.id"), index=True)
+    viewer_ip_hash: Mapped[str] = mapped_column(String(64), default="")
+    user_agent: Mapped[str] = mapped_column(String(512), default="")
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_utcnow)
+
+
+class EvidenceVaultObject(Base):
+    __tablename__ = "evidence_vault_objects"
+    __table_args__ = (Index("ix_evidence_vault_tenant_scan", "tenant_id", "scan_id"),)
+
+    id: Mapped[str] = mapped_column(String(80), primary_key=True)
+    tenant_id: Mapped[str] = mapped_column(String(64), ForeignKey("tenants.id"), index=True)
+    scan_id: Mapped[str] = mapped_column(String(80), nullable=False)
+    object_type: Mapped[str] = mapped_column(String(32), default="bundle")
+    storage_key: Mapped[str] = mapped_column(String(512), default="")
+    content_hash: Mapped[str] = mapped_column(String(64), default="")
+    retained_until: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_utcnow)
 
 
@@ -154,6 +182,10 @@ class TenantIntegration(Base):
     tenant_id: Mapped[str] = mapped_column(String(64), ForeignKey("tenants.id"), index=True)
     provider: Mapped[str] = mapped_column(String(32), index=True)
     config_json: Mapped[str] = mapped_column(Text, default="{}")
+    status: Mapped[str] = mapped_column(String(32), default="active")
+    last_test_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    last_pull_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    last_pull_status: Mapped[str | None] = mapped_column(String(32), nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_utcnow)
 
 

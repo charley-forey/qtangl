@@ -5,6 +5,7 @@ import PageHero from "@/components/layout/PageHero";
 import PageShell from "@/components/layout/PageShell";
 import Section from "@/components/layout/Section";
 import ReferencesPanel from "@/components/pqc/ReferencesPanel";
+import TrustTransparencyLive from "@/components/trust/TrustTransparencyLive";
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
 import Eyebrow from "@/components/ui/Eyebrow";
@@ -139,6 +140,27 @@ export default function TrustPage() {
               <p className="mt-2 text-sm leading-7 text-[var(--color-gray-400)]">{item.description}</p>
             </Card>
           ))}
+        </div>
+      </Section>
+
+      <Section gap="tight">
+        <div className="mx-auto max-w-3xl space-y-4">
+          <TrustTransparencyLive />
+          <p className="text-sm text-[var(--color-gray-400)]">
+            Offline verification spec:{" "}
+            <Link
+              href="https://github.com/qtangl/qtangl/blob/main/docs/verify-spec.md"
+              className="text-white underline underline-offset-4"
+              target="_blank"
+              rel="noreferrer"
+            >
+              verify-spec.md
+            </Link>
+            {" · "}
+            <Link href="/verify" className="text-white underline underline-offset-4">
+              Verify a report
+            </Link>
+          </p>
         </div>
       </Section>
 

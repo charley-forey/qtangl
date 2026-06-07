@@ -27,3 +27,10 @@ reference/*/
 *.pyc
 .venv/
 backend/.venv/
+
+# Local SQLite test databases
+*.db
+backend/data/
+
+# Transparency anchor artifacts (generated at runtime)
+backend/data/transparency/

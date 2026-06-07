@@ -8,7 +8,7 @@ from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.requests import Request
 
 from app.auth import get_rate_limit
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, Response
 
@@ -159,17 +159,30 @@ def health_ready() -> dict[str, object]:
 
 
 @app.get("/r/{token}", tags=["sharing"])
-def shared_report_readonly(token: str) -> dict:
+def shared_report_readonly(token: str, request: Request) -> dict:
     """Expiring read-only report summary via signed share token."""
     from app.pqc.bundle_codec import bundle_from_api_dict
-    from app.sharing.service import resolve_share_token
+    from app.sharing.service import record_share_view, resolve_share_token
     from app.store.scan_jobs import load_scan_bundle
+    from app.telemetry.events import track_event
 
     resolved = resolve_share_token(token)
     if resolved is None:
         from fastapi import HTTPException, status
 
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Share link invalid or expired.")
+    client_host = request.client.host if request.client else ""
+    record_share_view(
+        link_id=resolved["linkId"],
+        tenant_id=resolved["tenantId"],
+        viewer_ip=client_host,
+        user_agent=request.headers.get("user-agent", ""),
+    )
+    track_event(
+        "passport_viewed",
+        tenant_id=resolved["tenantId"],
+        properties={"scanId": resolved["scanId"], "scope": resolved.get("scope", "report")},
+    )
     payload = load_scan_bundle(resolved["scanId"], tenant_id=resolved["tenantId"])
     if payload is None:
         from fastapi import HTTPException, status

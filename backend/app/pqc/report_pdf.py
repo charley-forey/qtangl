@@ -319,6 +319,24 @@ def build_pdf(report: MigrationReport) -> bytes:
         story.append(Paragraph(f"Signed at: {sig.get('signedAt', '—')}", muted))
         verify_url = f"https://www.qtangl.com/verify?scanId={report.scan_id}"
         story.append(Paragraph(f"Verify: {verify_url}", muted))
+        content_hash = sig.get("contentHash")
+        if content_hash:
+            try:
+                from app.pqc.transparency import log_inclusion_block
+
+                inclusion = log_inclusion_block(str(content_hash))
+                if inclusion and inclusion.get("included"):
+                    root_hash = inclusion.get("rootHash", "")
+                    root_snippet = f"{root_hash[:16]}…" if root_hash else "—"
+                    story.append(
+                        Paragraph(
+                            f"Transparency log seq {inclusion.get('seq', '—')} · "
+                            f"root {root_snippet}",
+                            muted,
+                        )
+                    )
+            except Exception:
+                pass
         if _HAS_QR:
             story.append(_qr_drawing(verify_url))
 

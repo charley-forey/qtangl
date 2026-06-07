@@ -9,6 +9,7 @@ from fastapi.responses import JSONResponse, Response
 from app.audit.service import log_action
 from app.auth import AuthContext, require_auth, require_auth_admin, require_auth_readonly, require_auth_write
 from app.db.config import persistence_enabled, redis_enabled
+import os
 from app.billing.entitlements import check_schedule_quota
 from app.monitoring.service import (
     create_schedule,
@@ -32,7 +33,7 @@ from app.remediation.service import (
     verify_remediation_fix,
 )
 from app.pqc.serialize import serialize_bundle
-from app.sharing.service import create_share_link, revoke_share_link
+from app.sharing.service import create_share_link, list_share_links, revoke_share_link
 from app.store.scan_jobs import delete_job, get_job, list_jobs_for_tenant, load_scan_bundle
 
 router = APIRouter(prefix="/tenant", tags=["tenant"])
@@ -79,6 +80,8 @@ class EmailReportRequest(BaseModel):
 
 class ShareLinkRequest(BaseModel):
     expiresHours: int = Field(default=168, ge=1, le=720)
+    label: str = Field(default="", max_length=255)
+    scope: str = Field(default="report", pattern="^(report|bundle|passport)$")
 
 
 @router.get("/me")
@@ -432,9 +435,19 @@ def tenant_create_share_link(
         tenant_id=auth.tenant_id,
         scan_id=scan_id,
         expires_hours=body.expiresHours,
+        label=body.label,
+        scope=body.scope,
     )
-    log_action(tenant_id=auth.tenant_id, action="share.create", resource_id=scan_id)
+    log_action(tenant_id=auth.tenant_id, action="passport.create" if body.scope == "passport" else "share.create", resource_id=scan_id)
     return {"status": "success", **link}
+
+
+@router.get("/passports")
+def tenant_list_passports(
+    auth: AuthContext = Depends(require_auth_readonly),
+    scanId: str | None = Query(default=None),
+) -> dict:
+    return {"status": "success", "links": list_share_links(tenant_id=auth.tenant_id, scan_id=scanId)}
 
 
 @router.delete("/share/{link_id}")
@@ -925,3 +938,70 @@ def _scan_lifecycle_state(job_status: str, has_bundle: bool, has_error: bool) ->
     if job_status in {"running", "queued"}:
         return "collecting"
     return "initialized"
+
+
+class CloudIntegrationRequest(BaseModel):
+    region: str | None = None
+    vaultName: str | None = None
+    roleArn: str | None = None
+    externalId: str | None = None
+
+
+@router.get("/evidence")
+def tenant_evidence_vault(auth: AuthContext = Depends(require_auth_readonly)) -> dict:
+    from app.evidence.vault import vault_summary
+
+    return {"status": "success", **vault_summary(tenant_id=auth.tenant_id)}
+
+
+@router.post("/evidence/{scan_id}/retain")
+def tenant_retain_evidence(scan_id: str, auth: AuthContext = Depends(require_auth)) -> dict:
+    from app.evidence.vault import retain_scan_evidence
+    from app.pqc.report import report_to_json
+    from app.pqc.bundle_codec import bundle_from_api_dict
+
+    payload = load_scan_bundle(scan_id, tenant_id=auth.tenant_id)
+    content_hash = ""
+    if payload:
+        bundle = bundle_from_api_dict(payload)
+        report_json = report_to_json(bundle.report)
+        content_hash = str((report_json.get("signature") or {}).get("contentHash") or "")
+    result = retain_scan_evidence(
+        tenant_id=auth.tenant_id,
+        scan_id=scan_id,
+        content_hash=content_hash,
+    )
+    log_action(tenant_id=auth.tenant_id, action="evidence.retain", resource_id=scan_id)
+    return {"status": "success", **result}
+
+
+@router.get("/integrations/cloud")
+def tenant_cloud_integrations(auth: AuthContext = Depends(require_auth_readonly)) -> dict:
+    from app.integrations.cloud import list_cloud_integrations
+
+    return {"status": "success", "integrations": list_cloud_integrations(tenant_id=auth.tenant_id)}
+
+
+@router.post("/integrations/{provider}")
+def tenant_upsert_cloud_integration(
+    provider: str,
+    body: CloudIntegrationRequest,
+    auth: AuthContext = Depends(require_auth),
+) -> dict:
+    from app.integrations.cloud import upsert_cloud_integration
+    from app.telemetry.events import track_event
+
+    config = body.model_dump(exclude_none=True)
+    try:
+        row = upsert_cloud_integration(tenant_id=auth.tenant_id, provider=provider.lower(), config=config)
+    except ValueError as exc:
+        raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail=str(exc)) from exc
+    track_event("integration_connected", tenant_id=auth.tenant_id, properties={"provider": provider})
+    return {"status": "success", "integration": row}
+
+
+@router.post("/integrations/{provider}/test")
+def tenant_test_cloud_integration(provider: str, auth: AuthContext = Depends(require_auth)) -> dict:
+    from app.integrations.cloud import test_cloud_connection
+
+    return {"status": "success", **test_cloud_connection(tenant_id=auth.tenant_id, provider=provider.lower())}

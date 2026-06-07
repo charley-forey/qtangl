@@ -25,6 +25,17 @@ def build_evidence_bundle(
     json_payload = report_to_json(report)
     if remediation_statuses:
         json_payload = merge_remediation_into_report(json_payload, statuses=remediation_statuses)
+
+    log_inclusion: dict[str, Any] | None = None
+    content_hash = (report.signature or {}).get("contentHash")
+    if content_hash:
+        try:
+            from app.pqc.transparency import log_inclusion_block
+
+            log_inclusion = log_inclusion_block(str(content_hash))
+        except Exception:
+            log_inclusion = None
+
     with zipfile.ZipFile(buffer, "w", zipfile.ZIP_DEFLATED) as archive:
         archive.writestr("report.pdf", report_to_pdf(report))
         archive.writestr("report.json", json.dumps(json_payload, indent=2))
@@ -62,6 +73,8 @@ def build_evidence_bundle(
         )
         if report.signature:
             archive.writestr("signature.json", json.dumps(report.signature, indent=2))
+        if log_inclusion and log_inclusion.get("included"):
+            archive.writestr("log-inclusion.json", json.dumps(log_inclusion, indent=2))
     return buffer.getvalue()
 
 

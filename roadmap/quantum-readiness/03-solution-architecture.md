@@ -86,14 +86,14 @@ flowchart TB
 |-----------|--------|------|
 | PDF / JSON / CSV / CBOM export | `done` | [backend/app/pqc/report.py](../../backend/app/pqc/report.py) |
 | Report signing | `done` | [backend/app/pqc/signing.py](../../backend/app/pqc/signing.py) |
-| Signing key registry | `in-progress` | [backend/app/pqc/key_registry.py](../../backend/app/pqc/key_registry.py) |
-| Transparency log (append-only) | `in-progress` | [backend/app/pqc/transparency.py](../../backend/app/pqc/transparency.py) |
-| Log-root anchoring | `in-progress` | [backend/app/pqc/anchoring.py](../../backend/app/pqc/anchoring.py) |
-| Evidence vault (ZIP bundle) | `in-progress` | [backend/app/pqc/report_bundle.py](../../backend/app/pqc/report_bundle.py) |
+| Signing key registry | `done` | [backend/app/pqc/key_registry.py](../../backend/app/pqc/key_registry.py) |
+| Transparency log (append-only) | `done` | [backend/app/pqc/transparency.py](../../backend/app/pqc/transparency.py) |
+| Log-root anchoring | `done` | [backend/app/pqc/anchoring.py](../../backend/app/pqc/anchoring.py) |
+| Evidence vault (ZIP bundle) | `done` | [backend/app/pqc/report_bundle.py](../../backend/app/pqc/report_bundle.py) |
 | Compliance packs (bank, CMMC, healthcare) | `done` | [backend/app/pqc/compliance_packs.py](../../backend/app/pqc/compliance_packs.py) |
 | Board / auditor / executive exports | `done` | report.py `report_to_*` |
-| Readiness passport (`/verify`) | `in-progress` | [web/app/verify/VerifyPageClient.tsx](../../web/app/verify/VerifyPageClient.tsx) |
-| Offline verify CLI | `in-progress` | [backend/scripts/qtangl_verify.py](../../backend/scripts/qtangl_verify.py) |
+| Readiness passport (`/verify`) | `done` | [web/app/verify/VerifyPageClient.tsx](../../web/app/verify/VerifyPageClient.tsx) |
+| Offline verify CLI | `done` | [backend/scripts/qtangl_verify.py](../../backend/scripts/qtangl_verify.py) |
 | Trust page | `pilot` | [web/app/trust/page.tsx](../../web/app/trust/page.tsx) |
 
 ### Ingestion & CBOM aggregation — in progress
@@ -102,19 +102,19 @@ flowchart TB
 |-----------|--------|------|-----|
 | CBOM export (Qtangl → CycloneDX) | `done` | [backend/app/pqc/cbom.py](../../backend/app/pqc/cbom.py) | — |
 | CBOM validation schema | `done` | cbom.py `validate_cbom` | — |
-| External CBOM import API | `coming-soon` | [backend/app/api/pqc.py](../../backend/app/api/pqc.py) | `POST /pqc/cbom/import` |
-| CBOM normalize + merge with scan | `coming-soon` | cbom.py + report.py | Dedupe + source tags |
-| Multi-source inventory UI | `coming-soon` | DashboardClient.tsx | Import count widget |
+| External CBOM import API | `done` | [backend/app/api/pqc.py](../../backend/app/api/pqc.py) | `POST /pqc/cbom/ingest` |
+| CBOM normalize + merge with scan | `done` | [backend/app/cbom/](../../backend/app/cbom/) | Dedupe + source tags |
+| Multi-source inventory UI | `done` | DashboardClient.tsx | Import count widget |
 | Cloud inventory upload | `pilot` | `parse_cloud_inventory` via upload-bundle | — |
-| AWS/Azure scheduled pull | `coming-soon` | `cloudImportPayload` in partnerships.md | Scheduled worker |
+| AWS/Azure scheduled pull | `pilot` | [backend/app/integrations/cloud.py](../../backend/app/integrations/cloud.py) | Read-only pull + CBOM merge |
 
 ### Monitor & drift — in progress
 
 | Component | Status | Path | Gap |
 |-----------|--------|------|-----|
 | Scan bundle comparison | `in-progress` | [backend/app/monitoring/diff.py](../../backend/app/monitoring/diff.py) | Wire to scheduled jobs |
-| Scheduled re-scans | `in-progress` | Track B3 | Cron/worker trigger |
-| Diff UI panel | `in-progress` | [web/components/pqc/ScanDiffPanel.tsx](../../web/components/pqc/ScanDiffPanel.tsx) | Dashboard prominence |
+| Scheduled re-scans | `done` | Track B3 | Cron/worker trigger |
+| Diff UI panel | `done` | [web/components/pqc/ScanDiffPanel.tsx](../../web/components/pqc/ScanDiffPanel.tsx) | Dashboard prominence |
 | Webhook on scan complete | `pilot` | [backend/app/notifications/webhooks.py](../../backend/app/notifications/webhooks.py) | SIEM mapping doc |
 | Alert threshold config | `coming-soon` | Tenant settings | UI + API |
 

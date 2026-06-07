@@ -67,7 +67,15 @@ def main() -> int:
 
     verify = _get(f"{base}/pqc/verify/{scan_id}")
     verification = verify.get("verification") or {}
-    print(f"  verify: valid={verification.get('valid')} alg={verification.get('alg')}")
+    log_inclusion = verification.get("logInclusion") or {}
+    print(
+        f"  verify: valid={verification.get('valid')} alg={verification.get('alg')} "
+        f"logIncluded={log_inclusion.get('included', False)}"
+    )
+
+    root = _get(f"{base}/pqc/transparency/root")
+    log_meta = root.get("log") or {}
+    print(f"  transparency/root: seq={log_meta.get('seq')} entries={log_meta.get('entryCount')}")
 
     bundle = _get_bytes(f"{base}/pqc/report/{scan_id}?format=bundle&api_key={api_key}")
     if not bundle.startswith(b"PK"):

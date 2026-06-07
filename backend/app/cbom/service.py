@@ -461,3 +461,79 @@ def resolve_conflict(
     log_action(tenant_id=tenant_id, action="cbom_conflict_resolved", actor=actor, resource_id=conflict_id)
     track_event("cbom_conflict_resolved", tenant_id=tenant_id, properties={"conflictId": conflict_id})
     return {"id": conflict_id, "status": "resolved", "resolvedValue": resolved_value}
+
+
+def get_cbom_drift(*, tenant_id: str) -> dict[str, Any]:
+    """Compare current aggregate to snapshot from previous ingest job."""
+    from app.cbom.diff import diff_cbom_snapshots
+
+    if persistence_enabled():
+        with db_session() as session:
+            jobs = (
+                session.query(CbomIngestJobRow)
+                .filter(CbomIngestJobRow.tenant_id == tenant_id)
+                .order_by(CbomIngestJobRow.created_at.desc())
+                .limit(2)
+                .all()
+            )
+            if len(jobs) < 2:
+                return {"available": False, "reason": "need_two_ingest_jobs"}
+            prev_job, curr_job = jobs[1], jobs[0]
+            prev_rows = (
+                session.query(CbomComponentRow)
+                .filter(CbomComponentRow.tenant_id == tenant_id, CbomComponentRow.ingest_job_id == prev_job.id)
+                .all()
+            )
+            curr_rows = (
+                session.query(CbomComponentRow)
+                .filter(CbomComponentRow.tenant_id == tenant_id, CbomComponentRow.ingest_job_id == curr_job.id)
+                .all()
+            )
+            prev = [{"componentKey": r.component_key, "algorithm": r.algorithm, "name": r.name} for r in prev_rows]
+            curr = [{"componentKey": r.component_key, "algorithm": r.algorithm, "name": r.name} for r in curr_rows]
+    else:
+        with _memory_lock:
+            jobs = sorted(_memory_jobs.get(_mem_key(tenant_id), []), key=lambda j: j.get("created_at", ""), reverse=True)
+            if len(jobs) < 2:
+                return {"available": False, "reason": "need_two_ingest_jobs"}
+            prev_job_id, curr_job_id = jobs[1]["id"], jobs[0]["id"]
+            components = _memory_components.get(_mem_key(tenant_id), [])
+            prev = [c for c in components if c.get("ingest_job_id") == prev_job_id]
+            curr = [c for c in components if c.get("ingest_job_id") == curr_job_id]
+
+    drift = diff_cbom_snapshots(prev, curr)
+    return {"available": True, **drift}
+
+
+def parse_pem_bundle_to_document(pem_text: str) -> dict[str, Any]:
+    """Build minimal CycloneDX document from PEM certificates."""
+    from app.pqc.data import parse_uploaded_bundle_pem
+
+    rows = parse_uploaded_bundle_pem(pem_text)
+    components = []
+    for index, row in enumerate(rows):
+        components.append(
+            {
+                "type": "cryptographic-asset",
+                "name": row.get("label") or row.get("host") or f"cert-{index}",
+                "bom-ref": f"pem-{index}",
+                "cryptoProperties": {
+                    "assetType": "certificate",
+                    "certificateProperties": {
+                        "subjectName": row.get("host", ""),
+                        "signatureAlgorithm": row.get("algorithm", "unknown"),
+                    },
+                },
+                "properties": [
+                    {"name": "qtangl:sourceMethod", "value": "pem-upload"},
+                    {"name": "qtangl:verificationStatus", "value": "imported"},
+                ],
+            }
+        )
+    return {
+        "bomFormat": "CycloneDX",
+        "specVersion": "1.6",
+        "version": 1,
+        "metadata": {"component": {"type": "application", "name": "qtangl-pem-upload"}},
+        "components": components,
+    }

@@ -51,3 +51,40 @@ jobs:
         with:
           name: pqc-readiness-badge
           path: backend/benchmarks/results/readiness-badge.md
+
+      - name: Sign + verify + transparency smoke
+        env:
+          QTANGL_ENABLE_TRANSPARENCY_LOG: "true"
+          DATABASE_URL: sqlite:///./dogfood_evidence.db
+        run: |
+          cd backend
+          alembic upgrade head
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from app.pqc.signing import sign_report_payload, verify_report_signature
+          from app.pqc.transparency import safe_append_after_sign, log_inclusion_block
+
+          p = Path("benchmarks/results/BM-006-pqc-scan.json")
+          data = json.loads(p.read_text())
+          report = data.get("report") or {}
+          report["scanId"] = report.get("scanId") or "dogfood-bm-006"
+          sig = sign_report_payload(report)
+          report["signature"] = sig
+          safe_append_after_sign(content_hash=sig["contentHash"], signature=sig, tenant_id="dogfood")
+          result = verify_report_signature(report, sig)
+          inclusion = log_inclusion_block(sig["contentHash"])
+          assert result.get("valid"), result
+          assert inclusion and inclusion.get("included"), inclusion
+          Path("benchmarks/results/dogfood-verify.json").write_text(
+              json.dumps({"valid": True, "logIncluded": True, "seq": inclusion.get("seq")}, indent=2),
+              encoding="utf-8",
+          )
+          print("dogfood verify + log inclusion OK")
+          PY
+
+      - name: Upload dogfood verify artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: pqc-dogfood-verify
+          path: backend/benchmarks/results/dogfood-verify.json

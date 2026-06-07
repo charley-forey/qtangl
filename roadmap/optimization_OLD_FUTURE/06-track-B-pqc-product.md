@@ -10,8 +10,8 @@ Post-quantum cryptography readiness scanner — the lead commercial product. Qua
 |----|------|--------|--------|------------|
 | B1 | Harden live scan production path | `done` | M | G1 |
 | B2 | CBOM export standardization | `done` | S | — |
-| B3 | Continuous monitoring / scheduled re-scans | `not-started` | M | B1, D1 |
-| B4 | Remediation workflow tracking | `not-started` | M | B2 |
+| B3 | Continuous monitoring / scheduled re-scans | `done` | M | B1, D1 |
+| B4 | Remediation workflow tracking | `done` | M | B2 |
 | B5 | Compliance mapping + report packs | `not-started` | M | B2 |
 | B6 | Design-partner pilot package | `not-started` | S | B1–B5, H1 |
 

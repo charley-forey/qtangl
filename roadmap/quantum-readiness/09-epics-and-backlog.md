@@ -28,8 +28,8 @@ Update weekly alongside [optimization_OLD_FUTURE/backlog/epics.md](../optimizati
 | K13 | Brand identity & design system | `not-started` | M | K1, K2 |
 | K14 | Data & threat-intelligence program | `not-started` | M | B3 |
 | K15 | Org, hiring & governance cadence | `not-started` | S | — |
-| K16 | Evidence & trust layer | `not-started` | L | B3, G1 |
-| K17 | CBOM aggregation & ingestion | `not-started` | M | B3, K14 |
+| K16 | Evidence & trust layer | `in-progress` | L | B3, G1 |
+| K17 | CBOM aggregation & ingestion | `done` | M | B3, K14 |
 
 **Cross-track dependencies:** B3, B4, B6 (Track B) · H1, H5 (Track H) · E1, E5 (Track E) · D1, D2 (Track D) · G1–G6 (Track G) · F1–F5 (Track F)
 
@@ -455,14 +455,14 @@ Accept external CycloneDX CBOMs (IBM CBOMkit, partner tools, customer exports), 
 
 ### Phase 4 — Moat & aggregation (Weeks ~16–32)
 
-- [ ] **K16-001** Wire transparency log append on every sign → [transparency.py](../../backend/app/pqc/transparency.py) | Flag on in prod; idempotent
-- [ ] **K16-002** Log-root anchoring + witness files → [anchoring.py](../../backend/app/pqc/anchoring.py) | Latest anchor in repo artifact
-- [ ] **K16-003** DB signing key registry + rotation runbook → [key_registry.py](../../backend/app/pqc/key_registry.py) | Keys queryable; G1 doc updated
-- [ ] **K16-004** Evidence vault ZIP export → [report_bundle.py](../../backend/app/pqc/report_bundle.py) | Download from API + dashboard
-- [ ] **K16-005** Verify passport shows log inclusion → [VerifyPageClient.tsx](../../web/app/verify/VerifyPageClient.tsx) | seq + rootHash visible
-- [ ] **K16-006** `qtangl_verify` CLI + golden snapshot tests → [qtangl_verify.py](../../backend/scripts/qtangl_verify.py), [test_pqc_golden.py](../../backend/tests/test_pqc_golden.py) | CI green
-- [ ] **K16-007** PQC dogfood workflow appends to log → [pqc-dogfood.yml](../../.github/workflows/pqc-dogfood.yml) | Weekly entry in log
-- [ ] **K16-008** Backfill existing signed reports into log → [backfill_transparency_log.py](../../backend/scripts/backfill_transparency_log.py) | One-time idempotent run
+- [x] **K16-001** Wire transparency log append on every sign → [transparency.py](../../backend/app/pqc/transparency.py) | Flag on in prod; idempotent
+- [x] **K16-002** Log-root anchoring + witness files → [anchoring.py](../../backend/app/pqc/anchoring.py) | Latest anchor in repo artifact
+- [x] **K16-003** DB signing key registry + rotation runbook → [key_registry.py](../../backend/app/pqc/key_registry.py) | Keys queryable; G1 doc updated
+- [x] **K16-004** Evidence vault ZIP export → [report_bundle.py](../../backend/app/pqc/report_bundle.py) | Download from API + dashboard
+- [x] **K16-005** Verify passport shows log inclusion → [VerifyPageClient.tsx](../../web/app/verify/VerifyPageClient.tsx) | seq + rootHash visible
+- [x] **K16-006** `qtangl_verify` CLI + golden snapshot tests → [qtangl_verify.py](../../backend/scripts/qtangl_verify.py), [test_pqc_golden.py](../../backend/tests/test_pqc_golden.py) | CI green
+- [x] **K16-007** PQC dogfood workflow appends to log → [pqc-dogfood.yml](../../.github/workflows/pqc-dogfood.yml) | Weekly entry in log
+- [x] **K16-008** Backfill existing signed reports into log → [backfill_transparency_log.py](../../backend/scripts/backfill_transparency_log.py) | One-time idempotent run
 - [x] **K17-001** CBOM import API (`POST /pqc/cbom/ingest`) → [pqc.py](../../backend/app/api/pqc.py) | Validates CycloneDX 1.6+
 - [x] **K17-002** Normalize external CBOM to Qtangl schema → [cbom/](../../backend/app/cbom/) | `validate_import_cbom` + adapter
 - [x] **K17-003** Merge imported assets with scan inventory → [service.py](../../backend/app/cbom/service.py) | Dedupe; source tags; conflict queue

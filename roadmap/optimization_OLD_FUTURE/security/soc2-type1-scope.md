@@ -1,43 +1,22 @@
-# SOC 2 Type I — scoping document (G5)
+# SOC 2 Type I — observation scope (starter)
 
-**Target:** Q3 2026  
-**Trust service criteria:** Security (required); Availability (optional phase 2)
+**Status:** observation planning — not certified.
 
-## In-scope systems
+## Trust service criteria in scope
 
-| System | Role |
-|--------|------|
-| Qtangl API (Railway) | PQC scan, report, tenant API |
-| Qtangl Web (Vercel) | Demo, dashboard, verify |
-| Postgres (Railway) | Tenant data persistence |
-| Redis (Railway) | Job queue, scheduler (Monitor tier) |
+- Security (CC series)
+- Availability (A1) — API + worker uptime
+- Confidentiality (C1) — tenant isolation, encrypted credentials
 
-## Out of scope (phase 1)
+## Evidence collection
 
-- Hospital optimization workloads (separate pilot track)
-- Customer on-prem deployments
-- FedRAMP / IL5 environments
+- Access control: API keys hashed, admin separation
+- Change management: GitHub CI, Alembic migrations
+- Monitoring: `/health/ready`, worker scheduler logs, webhook DLQ
+- Vendor management: sub-processors list at `/trust/subprocessors`
 
-## Control themes to implement
+## Next steps
 
-1. **Access control** — API keys per tenant, admin key separation, role field on keys
-2. **Encryption** — TLS in transit; Postgres at-rest via Railway; signed reports (Ed25519)
-3. **Logging** — Audit log for share/create/delete; no cert material in application logs (G9)
-4. **Change management** — GitHub CI, pinned dependencies (Track I2)
-5. **Vendor management** — Railway, Vercel, Stripe DPAs
-
-## Evidence already in product
-
-- Signed report verify (`/pqc/verify/{scanId}`)
-- Tenant isolation tests (`backend/tests/test_g3_d2_h.py`)
-- Threat model (`roadmap/security/threat-model.md`)
-- Data retention policy (`roadmap/security/data-retention-policy.md`)
-
-## Recommended platform
-
-Vanta or Drata — connect GitHub, Railway, Vercel for automated evidence collection.
-
-## Milestone
-
-- **Type I observation period:** 3 months after control implementation
-- **Gate:** Required before PHI/gov pilots with production data
+1. Select auditor / compliance automation (Vanta, Drata)
+2. Map controls to [12-platform-security-and-trust.md](../../quantum-readiness/12-platform-security-and-trust.md)
+3. 90-day observation window before Type I report

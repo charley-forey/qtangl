@@ -150,6 +150,33 @@ def register_signing_key(
         logger.debug("register_signing_key skipped: %s", exc)
 
 
+def retire_signing_key(*, key_fingerprint: str) -> bool:
+    """Mark a signing key retired; historical signatures remain verifiable."""
+    if not key_fingerprint:
+        return False
+    try:
+        from app.db.engine import db_session
+        from app.db.models import SigningKeyRecord
+    except Exception:
+        return False
+
+    try:
+        with db_session() as session:
+            row = (
+                session.query(SigningKeyRecord)
+                .filter(SigningKeyRecord.key_fingerprint == key_fingerprint)
+                .one_or_none()
+            )
+            if row is None:
+                return False
+            row.status = "retired"
+            row.retired_at = datetime.now(timezone.utc)
+            return True
+    except Exception as exc:
+        logger.warning("retire_signing_key failed: %s", exc)
+        return False
+
+
 def list_public_signing_keys() -> list[dict[str, Any]]:
     """Return public signing keys with fingerprint history for transparency endpoint."""
     keys: list[dict[str, Any]] = []

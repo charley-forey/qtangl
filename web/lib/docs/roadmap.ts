@@ -56,12 +56,12 @@ export const roadmapBands: RoadmapBand[] = [
       {
         title: "Readiness Passport",
         description: "Revocable share links for auditors and MSSPs with verify + log inclusion.",
-        status: "coming-soon",
+        status: "pilot",
       },
       {
         title: "Cloud / KMS import GA",
         description: "Read-only credential model for AWS KMS, Azure Key Vault inventory.",
-        status: "coming-soon",
+        status: "pilot",
       },
       {
         title: "Schedule optimization (GA)",
