@@ -10,6 +10,8 @@ type TenantSettings = {
   alertOnNewQuantumVulnerable: boolean;
   certExpiryDays: number;
   webhookSigningSecret: string;
+  benchmarkOptIn?: boolean;
+  industry?: string;
 };
 
 export default function AlertSettings({
@@ -81,6 +83,31 @@ export default function AlertSettings({
           className="rounded-full border border-[var(--border-strong)] bg-black px-4 py-2"
         />
       </label>
+      <div className="border-t border-[var(--border-subtle)] pt-4">
+        <Eyebrow>Readiness Index (peer benchmarks)</Eyebrow>
+        <label className="mt-3 flex items-center gap-2 text-sm text-white">
+          <input
+            type="checkbox"
+            checked={Boolean(settings.benchmarkOptIn)}
+            onChange={(e) => setSettings({ ...settings, benchmarkOptIn: e.target.checked })}
+          />
+          Opt in to anonymized aggregate benchmarks (no PII)
+        </label>
+        <label className="mt-3 flex flex-col gap-1 text-sm text-white">
+          Industry cohort
+          <select
+            value={settings.industry ?? "financial"}
+            onChange={(e) => setSettings({ ...settings, industry: e.target.value })}
+            className="rounded-full border border-[var(--border-strong)] bg-black px-4 py-2"
+          >
+            <option value="financial">Financial services</option>
+            <option value="healthcare">Healthcare</option>
+            <option value="technology">Technology</option>
+            <option value="government">Government</option>
+            <option value="general">General</option>
+          </select>
+        </label>
+      </div>
       <label className="flex flex-col gap-1 text-sm text-white">
         Webhook HMAC signing secret
         <input

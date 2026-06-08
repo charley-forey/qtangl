@@ -372,7 +372,13 @@ def get_aggregate(*, tenant_id: str, spec_version: str = "1.6", sync_scan: bool 
     open_conflicts = list_conflicts(tenant_id=tenant_id, status="open")
     conflict_keys = {c["componentKey"] for c in open_conflicts}
     merged = [c for c in components if component_dedupe_key(c) not in conflict_keys]
+    sources = list_sources(tenant_id=tenant_id)
+    from app.cbom.coverage import compute_coverage_confidence
+
+    coverage = compute_coverage_confidence(components=merged, sources=sources)
     readiness = aggregated_readiness(merged)
+    readiness["coverageConfidence"] = coverage.get("score")
+    readiness["coverageBand"] = coverage.get("band")
     doc = export_aggregate_cbom(merged, tenant_id=tenant_id, spec_version=spec_version)
     return {
         "tenantId": tenant_id,
@@ -380,8 +386,9 @@ def get_aggregate(*, tenant_id: str, spec_version: str = "1.6", sync_scan: bool 
         "totalStored": len(components),
         "openConflicts": len(open_conflicts),
         "readiness": readiness,
+        "coverageConfidence": coverage,
         "document": doc,
-        "sources": list_sources(tenant_id=tenant_id),
+        "sources": sources,
     }
 
 

@@ -73,14 +73,26 @@ def _enrich_completed_scan(scan_id: str, bundle: ScanBundle, *, tenant_id: str) 
         }
     except Exception:
         logger.debug("aggregatedCbomSummary skipped for scan_id=%s", scan_id)
+
+    from app.tenant.settings import get_tenant_settings_raw
+
+    settings = get_tenant_settings_raw(tenant_id=tenant_id)
+    if settings.get("benchmarkOptIn"):
+        try:
+            from app.data.benchmarks import compare_to_benchmark
+
+            industry = str(settings.get("industry") or "financial")
+            peer = compare_to_benchmark(score=bundle.report.readiness_score, industry=industry)
+            if peer.get("available"):
+                json_payload["peerComparison"] = peer
+        except Exception:
+            logger.debug("peerComparison skipped for scan_id=%s", scan_id)
+
     bundle.report.signature = sign_report_payload(json_payload)
     from app.pqc.transparency import safe_append_after_sign
 
     safe_append_after_sign(json_payload, bundle.report.signature or {}, tenant_id=tenant_id)
 
-    from app.tenant.settings import get_tenant_settings_raw
-
-    settings = get_tenant_settings_raw(tenant_id=tenant_id)
     alerts = evaluate_scan_alerts(
         scan_diff=scan_diff,
         readiness_score=bundle.report.readiness_score,

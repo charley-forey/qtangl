@@ -1,0 +1,15 @@
+[project]
+name = "qtangl-verify"
+version = "1.1.0"
+description = "Offline Qtangl report verifier"
+requires-python = ">=3.10"
+
+[project.scripts]
+qtangl-verify = "qtangl_verify.cli:main"
+
+[project.optional-dependencies]
+pqc = ["oqs-python"]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"

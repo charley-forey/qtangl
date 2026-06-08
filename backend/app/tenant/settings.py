@@ -16,6 +16,8 @@ DEFAULT_SETTINGS: dict[str, Any] = {
     "webhookSigningSecret": "",
     "autoRetainScans": False,
     "evidenceRetentionMonths": 12,
+    "benchmarkOptIn": False,
+    "industry": "financial",
 }
 
 

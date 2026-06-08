@@ -1,0 +1,20 @@
+name: Qtangl Verify Report
+description: Verify Qtangl signed report integrity offline or via API
+inputs:
+  report-path:
+    description: Path to report JSON file
+    required: true
+  api-base:
+    description: Qtangl API base URL for inclusion check
+    required: false
+    default: ""
+runs:
+  using: composite
+  steps:
+    - name: Verify report
+      shell: bash
+      run: |
+        python backend/scripts/qtangl_verify.py "${{ inputs.report-path }}" \
+          ${API_BASE:+--api-base "$API_BASE"} --json
+      env:
+        API_BASE: ${{ inputs.api-base }}

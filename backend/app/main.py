@@ -158,6 +158,14 @@ def health_ready() -> dict[str, object]:
     }
 
 
+@app.get("/metrics", tags=["health"])
+def metrics_endpoint() -> Response:
+    from app.observability.metrics import prometheus_text
+    from fastapi.responses import PlainTextResponse
+
+    return PlainTextResponse(prometheus_text(), media_type="text/plain; version=0.0.4")
+
+
 @app.get("/r/{token}", tags=["sharing"])
 def shared_report_readonly(token: str, request: Request) -> dict:
     """Expiring read-only report summary via signed share token."""

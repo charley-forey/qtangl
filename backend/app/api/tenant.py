@@ -56,6 +56,8 @@ class TenantSettingsRequest(BaseModel):
     webhookSigningSecret: str | None = None
     autoRetainScans: bool | None = None
     evidenceRetentionMonths: int | None = Field(default=None, ge=1, le=120)
+    benchmarkOptIn: bool | None = None
+    industry: str | None = None
 
 
 class SchedulePatchRequest(BaseModel):

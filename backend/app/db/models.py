@@ -286,6 +286,8 @@ class SigningKeyRecord(Base):
     status: Mapped[str] = mapped_column(String(16), default="active")
     activated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_utcnow)
     retired_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    kms_provider: Mapped[str | None] = mapped_column(String(32), nullable=True)
+    kms_key_id: Mapped[str | None] = mapped_column(String(512), nullable=True)
 
 
 class EvidenceLogEntry(Base):
@@ -317,6 +319,63 @@ class EvidenceAnchorRecord(Base):
     witness_id: Mapped[str] = mapped_column(String(32), index=True)
     method: Mapped[str] = mapped_column(String(32), default="file_witness")
     anchored_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_utcnow)
+    git_commit_sha: Mapped[str | None] = mapped_column(String(64), nullable=True)
+    git_url: Mapped[str | None] = mapped_column(String(512), nullable=True)
+    tsa_token_b64: Mapped[str | None] = mapped_column(Text, nullable=True)
+    tsa_time: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    merkle_root: Mapped[str | None] = mapped_column(String(64), nullable=True)
+
+
+class BenchmarkAggregate(Base):
+    __tablename__ = "benchmark_aggregates"
+    __table_args__ = (Index("ix_benchmark_aggregates_cohort", "industry", "cohort_key"),)
+
+    id: Mapped[str] = mapped_column(String(80), primary_key=True)
+    industry: Mapped[str] = mapped_column(String(64), nullable=False)
+    cohort_key: Mapped[str] = mapped_column(String(128), nullable=False)
+    sample_size: Mapped[int] = mapped_column(default=0)
+    median_readiness: Mapped[float] = mapped_column(nullable=False)
+    p25: Mapped[float] = mapped_column(nullable=False)
+    p75: Mapped[float] = mapped_column(nullable=False)
+    as_of: Mapped[str] = mapped_column(String(32), nullable=False)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_utcnow)
+
+
+class WitnessCosignature(Base):
+    __tablename__ = "witness_cosignatures"
+
+    id: Mapped[str] = mapped_column(String(80), primary_key=True)
+    witness_id: Mapped[str] = mapped_column(String(64), nullable=False, index=True)
+    root_hash: Mapped[str] = mapped_column(String(64), nullable=False, index=True)
+    seq: Mapped[int] = mapped_column(nullable=False)
+    alg: Mapped[str] = mapped_column(String(32), nullable=False)
+    signature_b64: Mapped[str] = mapped_column(Text, nullable=False)
+    public_key_b64: Mapped[str] = mapped_column(Text, nullable=False)
+    observed_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_utcnow)
+
+
+class DriftAggregate(Base):
+    __tablename__ = "drift_aggregates"
+
+    id: Mapped[str] = mapped_column(String(80), primary_key=True)
+    industry: Mapped[str] = mapped_column(String(64), nullable=False)
+    cohort_key: Mapped[str] = mapped_column(String(128), nullable=False)
+    pattern_type: Mapped[str] = mapped_column(String(64), nullable=False)
+    sample_size: Mapped[int] = mapped_column(default=0)
+    metric_json: Mapped[str] = mapped_column(Text, default="{}")
+    as_of: Mapped[str] = mapped_column(String(32), nullable=False)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_utcnow)
+
+
+class TenantOidcConfig(Base):
+    __tablename__ = "tenant_oidc_config"
+
+    tenant_id: Mapped[str] = mapped_column(String(64), ForeignKey("tenants.id"), primary_key=True)
+    issuer_url: Mapped[str] = mapped_column(String(512), nullable=False)
+    client_id: Mapped[str] = mapped_column(String(255), nullable=False)
+    client_secret_enc: Mapped[str] = mapped_column(Text, default="")
+    enabled: Mapped[bool] = mapped_column(default=False)
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_utcnow)
 
 
 class CbomSource(Base):

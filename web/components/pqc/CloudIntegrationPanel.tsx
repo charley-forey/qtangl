@@ -27,6 +27,7 @@ export default function CloudIntegrationPanel({
   const [awsRegion, setAwsRegion] = useState("us-east-1");
   const [awsRoleArn, setAwsRoleArn] = useState("");
   const [azureVaultName, setAzureVaultName] = useState("");
+  const [gcpProjectId, setGcpProjectId] = useState("");
   const [integrations, setIntegrations] = useState<CloudIntegration[]>([]);
   const [loaded, setLoaded] = useState(false);
   const [busy, setBusy] = useState<string | null>(null);
@@ -47,19 +48,25 @@ export default function CloudIntegrationPanel({
       if (azure?.config) {
         setAzureVaultName(azure.config.vaultName ?? "");
       }
+      const gcp = payload.integrations.find((row) => row.provider === "gcp");
+      if (gcp?.config) {
+        setGcpProjectId(gcp.config.projectId ?? "");
+      }
       setLoaded(true);
     } catch (error) {
       onMessage?.(error instanceof Error ? error.message : "Failed to load cloud integrations.");
     }
   }, [apiKey, onMessage]);
 
-  async function saveProvider(provider: "aws" | "azure") {
+  async function saveProvider(provider: "aws" | "azure" | "gcp") {
     setBusy(`save-${provider}`);
     try {
       const body =
         provider === "aws"
           ? { region: awsRegion, roleArn: awsRoleArn || undefined }
-          : { vaultName: azureVaultName };
+          : provider === "azure"
+            ? { vaultName: azureVaultName }
+            : { projectId: gcpProjectId };
       await postTenantJson(`/tenant/integrations/${provider}`, apiKey, body);
       onMessage?.(`${provider.toUpperCase()} integration saved.`);
       await loadIntegrations();
@@ -70,7 +77,7 @@ export default function CloudIntegrationPanel({
     }
   }
 
-  async function testProvider(provider: "aws" | "azure") {
+  async function testProvider(provider: "aws" | "azure" | "gcp") {
     setBusy(`test-${provider}`);
     try {
       const result = await postTenantJson<{ ok?: boolean; previewCount?: number; message?: string }>(
@@ -91,7 +98,7 @@ export default function CloudIntegrationPanel({
     }
   }
 
-  async function pullProvider(provider: "aws" | "azure") {
+  async function pullProvider(provider: "aws" | "azure" | "gcp") {
     setBusy(`pull-${provider}`);
     try {
       const response = await fetch(`${qtanglApiBaseUrl}/pqc/cbom/pull/${provider}`, {
@@ -239,6 +246,32 @@ export default function CloudIntegrationPanel({
           </Button>
         </div>
         {statusLine("azure")}
+      </div>
+
+      <div className="rounded-xl border border-[var(--border-subtle)] p-4">
+        <Eyebrow>GCP Certificate Manager</Eyebrow>
+        <p className="mt-2 text-sm text-[var(--color-gray-400)]">
+          Read-only certificate inventory from Google Cloud Certificate Manager.
+        </p>
+        <input
+          type="text"
+          value={gcpProjectId}
+          onChange={(event) => setGcpProjectId(event.target.value)}
+          placeholder="GCP project ID"
+          className="mt-3 w-full rounded-full border border-[var(--border-strong)] bg-black px-4 py-2 text-sm text-white"
+        />
+        <div className="mt-3 flex flex-wrap gap-2">
+          <Button type="button" size="sm" disabled={busy !== null} onClick={() => void saveProvider("gcp")}>
+            {busy === "save-gcp" ? "Saving…" : "Save GCP"}
+          </Button>
+          <Button type="button" size="sm" variant="secondary" disabled={busy !== null} onClick={() => void testProvider("gcp")}>
+            {busy === "test-gcp" ? "Testing…" : "Test"}
+          </Button>
+          <Button type="button" size="sm" variant="secondary" disabled={busy !== null} onClick={() => void pullProvider("gcp")}>
+            {busy === "pull-gcp" ? "Pulling…" : "Pull CBOM"}
+          </Button>
+        </div>
+        {statusLine("gcp")}
       </div>
     </div>
   );

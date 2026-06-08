@@ -149,14 +149,67 @@ def pull_azure_keyvault(
         }
 
 
-def pull_gcp_certificate_manager(*, project_id: str) -> dict[str, Any]:
-    return {
-        "provider": "gcp_certificate_manager",
-        "project": project_id,
-        "status": "roadmap",
-        "certificates": [],
-        "message": "GCP Certificate Manager scheduled pull is on the roadmap — use upload bundle import today.",
-    }
+def pull_gcp_certificate_manager(
+    *,
+    project_id: str,
+    location: str = "global",
+    credentials_json: str = "",
+) -> dict[str, Any]:
+    if not project_id:
+        return {
+            "provider": "gcp_certificate_manager",
+            "project": project_id,
+            "status": "error",
+            "certificates": [],
+            "message": "project_id is required",
+        }
+    try:
+        from google.cloud import certificate_manager_v1
+        from google.oauth2 import service_account
+    except ImportError:
+        return {
+            "provider": "gcp_certificate_manager",
+            "project": project_id,
+            "status": "unavailable",
+            "certificates": [],
+            "message": "Install google-cloud-certificate-manager for GCP pull.",
+        }
+
+    try:
+        if credentials_json:
+            info = json.loads(credentials_json)
+            credentials = service_account.Credentials.from_service_account_info(info)
+            client = certificate_manager_v1.CertificateManagerClient(credentials=credentials)
+        else:
+            client = certificate_manager_v1.CertificateManagerClient()
+
+        parent = f"projects/{project_id}/locations/{location}"
+        certs: list[dict[str, Any]] = []
+        for cert in client.list_certificates(parent=parent):
+            certs.append(
+                {
+                    "name": cert.name,
+                    "domain": cert.managed.domains[0] if cert.managed and cert.managed.domains else "",
+                    "state": str(cert.managed.state) if cert.managed else "unknown",
+                    "expireTime": cert.expire_time.isoformat() if cert.expire_time else "",
+                }
+            )
+        return {
+            "provider": "gcp_certificate_manager",
+            "project": project_id,
+            "location": location,
+            "status": "ok",
+            "count": len(certs),
+            "certificates": certs[:200],
+        }
+    except Exception as exc:
+        return {
+            "provider": "gcp_certificate_manager",
+            "project": project_id,
+            "status": "error",
+            "certificates": [],
+            "message": str(exc),
+        }
 
 
 def acm_rows_for_import(

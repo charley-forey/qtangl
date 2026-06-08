@@ -639,6 +639,7 @@ def verify_report(scan_id: str, request: Request) -> dict:
     return {
         "status": "success",
         "scanId": scan_id,
+        "verifySpecVersion": result.get("verifySpecVersion"),
         "verification": result,
         "readinessBand": bundle.report.readiness_band,
         "targetDomain": bundle.report.target_domain,
@@ -678,7 +679,88 @@ def verify_report_json(body: VerifyReportRequest, request: Request) -> dict:
             readiness_band=str(report_json.get("readinessBand") or ""),
             target_domain=str(report_json.get("targetDomain") or ""),
         )
-    return {"status": "success", "verification": result}
+    return {"status": "success", "verifySpecVersion": result.get("verifySpecVersion"), "verification": result}
+
+
+@router.get("/index")
+def readiness_index(request: Request, industry: str = "financial") -> dict:
+    """Published Readiness Index snapshot (public, rate-limited)."""
+    from app.api.public_rate_limit import enforce_public_rate_limit
+    from app.data.benchmarks import readiness_index_snapshot
+
+    enforce_public_rate_limit(request)
+    snapshot = readiness_index_snapshot(industry=industry)
+    return {"status": "success", "index": snapshot}
+
+
+@router.get("/transparency/consistency")
+def transparency_consistency(request: Request, from_seq: int = 0, to_seq: int = 0) -> dict:
+    from app.api.public_rate_limit import enforce_public_rate_limit
+    from app.pqc.transparency import consistency_proof
+
+    enforce_public_rate_limit(request)
+    proof = consistency_proof(from_seq=from_seq, to_seq=to_seq)
+    if proof is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Consistency proof unavailable.")
+    return {"status": "success", "consistency": proof}
+
+
+class WitnessSubmitRequest(BaseModel):
+    witnessId: str
+    rootHash: str
+    seq: int
+    alg: str
+    signatureB64: str
+    publicKeyB64: str
+
+
+@router.get("/transparency/witnesses")
+def transparency_witnesses(request: Request) -> dict:
+    from app.api.public_rate_limit import enforce_public_rate_limit
+    from app.db.engine import db_session
+    from app.db.models import WitnessCosignature
+
+    enforce_public_rate_limit(request)
+    try:
+        with db_session() as session:
+            rows = session.query(WitnessCosignature).order_by(WitnessCosignature.observed_at.desc()).limit(50).all()
+            witnesses = [
+                {
+                    "witnessId": r.witness_id,
+                    "rootHash": r.root_hash,
+                    "seq": r.seq,
+                    "alg": r.alg,
+                    "observedAt": r.observed_at.isoformat() if r.observed_at else None,
+                }
+                for r in rows
+            ]
+    except Exception:
+        witnesses = []
+    return {"status": "success", "witnesses": witnesses}
+
+
+@router.post("/transparency/witness")
+def transparency_witness_submit(body: WitnessSubmitRequest, request: Request) -> dict:
+    from app.api.public_rate_limit import enforce_public_rate_limit
+    from app.db.engine import db_session
+    from app.db.models import WitnessCosignature
+    import uuid
+    from datetime import datetime, timezone
+
+    enforce_public_rate_limit(request)
+    with db_session() as session:
+        row = WitnessCosignature(
+            id=f"witness-{uuid.uuid4().hex[:16]}",
+            witness_id=body.witnessId,
+            root_hash=body.rootHash,
+            seq=body.seq,
+            alg=body.alg,
+            signature_b64=body.signatureB64,
+            public_key_b64=body.publicKeyB64,
+            observed_at=datetime.now(timezone.utc),
+        )
+        session.add(row)
+    return {"status": "success", "witnessId": body.witnessId}
 
 
 @router.get("/transparency/root")

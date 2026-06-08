@@ -1,7 +1,7 @@
 # Qtangl Open Verify Specification
 
-**Version:** `1.0.0`  
-**Status:** Draft (implemented in `backend/app/pqc/signing.py`, `transparency.py`)  
+**Version:** `1.1.0`  
+**Status:** Implemented (`backend/app/pqc/signing.py`, `transparency.py`, `merkle.py`, `anchoring.py`)  
 **Canonical implementation:** [backend/scripts/qtangl_verify.py](../backend/scripts/qtangl_verify.py)
 
 This document defines how third parties independently verify Qtangl signed reports and transparency log inclusion — without Qtangl credentials or trust in the Qtangl dashboard.
@@ -13,9 +13,9 @@ This document defines how third parties independently verify Qtangl signed repor
 | In scope | Out of scope |
 |----------|--------------|
 | Report content hashing | Full CBOM schema validation |
-| ML-DSA-65 and Ed25519 signatures | Formal audit attestation |
-| Transparency log inclusion receipts | Merkle inclusion proofs (future) |
-| Public API contracts | Tenant-private scan data |
+| ML-DSA-65 and Ed25519 signatures (dual `signatures[]`) | Formal audit attestation |
+| Transparency log inclusion + Merkle audit path | Tenant-private scan data |
+| Git + RFC 3161 external anchors | |
 
 **Honesty note:** Verification confirms report integrity and Qtangl signing — not that the underlying scan is a complete estate inventory.
 
@@ -27,6 +27,7 @@ Spec versions follow semver. Implementations MUST include `verifySpecVersion` in
 
 | Version | Date | Changes |
 |---------|------|---------|
+| `1.1.0` | 2026-06-08 | Dual signatures[], Merkle audit path, Git+TSA anchors, verifySpecVersion |
 | `1.0.0` | 2026-06-06 | Initial: signature block, content hash, logInclusion schema |
 
 Breaking changes increment major version. New optional fields increment minor version.

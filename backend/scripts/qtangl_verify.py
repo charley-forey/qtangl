@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Offline Qtangl report verifier — recompute hash, verify signature, check log inclusion."""
+"""Offline Qtangl report verifier — recompute hash, verify signature(s), Merkle inclusion."""
 
 from __future__ import annotations
 
@@ -48,8 +48,21 @@ def verify_offline(
         except (HTTPError, URLError, TimeoutError) as exc:
             inclusion = {"included": False, "reason": str(exc)}
 
+    if inclusion:
+        merkle_root = inclusion.get("merkleRoot")
+        audit_path = inclusion.get("auditPath") or []
+        leaf = inclusion.get("contentHash") or content_hash
+        if merkle_root and audit_path and leaf:
+            from app.pqc.merkle import verify_merkle_path
+
+            inclusion["merkleValid"] = verify_merkle_path(
+                leaf=str(leaf),
+                audit_path=audit_path,
+                root=str(merkle_root),
+            )
+
     if inclusion and published_root:
-        root_hash = inclusion.get("rootHash") or inclusion.get("entryHash")
+        root_hash = inclusion.get("merkleRoot") or inclusion.get("rootHash") or inclusion.get("entryHash")
         if root_hash and root_hash != published_root:
             inclusion["rootMatch"] = False
             result["valid"] = False
@@ -81,7 +94,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument(
         "--published-root",
         default=None,
-        help="Expected log root hash from published anchor",
+        help="Expected Merkle or log root hash from published anchor",
     )
     parser.add_argument("--json", action="store_true", help="Emit JSON result only")
     args = parser.parse_args(argv)
@@ -103,11 +116,18 @@ def main(argv: list[str] | None = None) -> int:
     else:
         valid = result.get("valid")
         print(f"Valid: {valid}")
-        print(f"Algorithm: {result.get('alg', '—')}")
+        print(f"Verify spec: {result.get('verifySpecVersion', '—')}")
+        print(f"Primary algorithm: {result.get('alg', '—')}")
         print(f"Content hash: {result.get('contentHash', '—')}")
+        per_sig = result.get("perSignature") or []
+        if len(per_sig) > 1:
+            for sig in per_sig:
+                print(f"  - {sig.get('alg')}: {'ok' if sig.get('valid') else sig.get('reason')}")
         if result.get("logInclusion"):
             inc = result["logInclusion"]
-            print(f"Log inclusion: seq={inc.get('seq')} root={inc.get('rootHash', '—')}")
+            print(f"Log inclusion: seq={inc.get('seq')} merkleRoot={inc.get('merkleRoot', '—')}")
+            if inc.get("merkleValid") is not None:
+                print(f"Merkle path valid: {inc.get('merkleValid')}")
         if not valid:
             print(f"Reason: {result.get('reason', 'unknown')}")
 

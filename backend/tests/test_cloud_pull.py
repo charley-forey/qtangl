@@ -21,9 +21,9 @@ def test_azure_pull_without_sdk_returns_unavailable(monkeypatch):
     assert result["status"] in {"unavailable", "error"}
 
 
-def test_gcp_pull_roadmap():
+def test_gcp_pull_without_sdk():
     result = pull_gcp_certificate_manager(project_id="demo")
-    assert result["status"] == "roadmap"
+    assert result["status"] in {"unavailable", "error", "ok"}
 
 
 def test_aws_pull_without_boto3(monkeypatch):

@@ -174,7 +174,29 @@ def main() -> None:
                 except Exception:
                     logger.debug("lifecycle sweep skipped", exc_info=True)
                 try:
-                    from app.pqc.transparency import current_root
+                    from app.pqc.anchoring import anchor_tick
+
+                    schedule_hours = float(os.environ.get("QTANGL_ANCHOR_SCHEDULE_HOURS", "24"))
+                    if int(now // 3600) % max(1, int(schedule_hours)) == 0:
+                        anchor_tick()
+                except Exception:
+                    pass
+                try:
+                    from app.data.index_pipeline import run_index_pipeline
+
+                    if int(now // 86400) != int((now - scheduler_interval) // 86400):
+                        run_index_pipeline()
+                except Exception:
+                    pass
+                try:
+                    from app.monitoring.drift_intel import run_drift_intel_pipeline
+
+                    if int(now // 86400) != int((now - scheduler_interval) // 86400):
+                        run_drift_intel_pipeline()
+                except Exception:
+                    pass
+                try:
+                    from app.pqc.transparency import current_root, detect_anchor_drift
                     from app.pqc.anchoring import maybe_anchor_on_milestone
 
                     root = current_root()
@@ -182,6 +204,7 @@ def main() -> None:
                         seq=int(root.get("seq") or 0),
                         root_hash=str(root.get("rootHash") or ""),
                         entry_count=int(root.get("entryCount") or 0),
+                        merkle_root=str(root.get("merkleRoot") or ""),
                     )
                 except Exception:
                     pass

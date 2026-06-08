@@ -9,7 +9,16 @@ import { qtanglApiBaseUrl } from "@/lib/api";
 type LogRoot = {
   seq?: number;
   rootHash?: string;
+  merkleRoot?: string;
   entryCount?: number;
+  anchor?: {
+    witnessId?: string;
+    anchoredAt?: string;
+    method?: string;
+    git?: { commitSha?: string; url?: string };
+    tsa?: { tsaTime?: string };
+    merkleRoot?: string;
+  };
 };
 
 type SigningKey = {
@@ -20,9 +29,18 @@ type SigningKey = {
   createdAt?: string;
 };
 
+type Witness = {
+  witnessId?: string;
+  rootHash?: string;
+  seq?: number;
+  alg?: string;
+  observedAt?: string;
+};
+
 export default function TrustTransparencyLive() {
   const [root, setRoot] = useState<LogRoot | null>(null);
   const [keys, setKeys] = useState<SigningKey[]>([]);
+  const [witnesses, setWitnesses] = useState<Witness[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -32,18 +50,23 @@ export default function TrustTransparencyLive() {
       setLoading(true);
       setError(null);
       try {
-        const [rootResponse, keysResponse] = await Promise.all([
+        const [rootResponse, keysResponse, witnessResponse] = await Promise.all([
           fetch(`${qtanglApiBaseUrl}/pqc/transparency/root`, { cache: "no-store" }),
           fetch(`${qtanglApiBaseUrl}/pqc/transparency/keys`, { cache: "no-store" }),
+          fetch(`${qtanglApiBaseUrl}/pqc/transparency/witnesses`, { cache: "no-store" }),
         ]);
         if (!rootResponse.ok || !keysResponse.ok) {
           throw new Error("Transparency endpoints unavailable.");
         }
         const rootPayload = (await rootResponse.json()) as { log?: LogRoot };
         const keysPayload = (await keysResponse.json()) as { keys?: SigningKey[] };
+        const witnessPayload = witnessResponse.ok
+          ? ((await witnessResponse.json()) as { witnesses?: Witness[] })
+          : { witnesses: [] };
         if (!cancelled) {
           setRoot(rootPayload.log ?? null);
           setKeys(keysPayload.keys ?? []);
+          setWitnesses(witnessPayload.witnesses ?? []);
         }
       } catch (loadError) {
         if (!cancelled) {
@@ -61,16 +84,16 @@ export default function TrustTransparencyLive() {
     };
   }, []);
 
-  const cliSnippet = `curl -s "${qtanglApiBaseUrl}/pqc/transparency/root" | jq .log.rootHash
+  const anchor = root?.anchor;
+  const cliSnippet = `curl -s "${qtanglApiBaseUrl}/pqc/transparency/root" | jq '.log.merkleRoot'
 curl -s "${qtanglApiBaseUrl}/pqc/transparency/keys" | jq '.keys[] | {fingerprint, algorithm, active}'
-# Verify a report offline:
-python scripts/qtangl_verify.py --report report.json --api-base ${qtanglApiBaseUrl}`;
+python scripts/qtangl_verify.py report.json --api-base ${qtanglApiBaseUrl}`;
 
   return (
     <Card tone="panel" className="rounded-[var(--radius-xl)]">
       <Eyebrow>Live transparency log</Eyebrow>
       <p className="mt-3 text-sm text-[var(--color-gray-400)]">
-        Append-only hash log and public signing keys — fetched live from{" "}
+        Append-only hash log, Merkle root, Git + RFC 3161 anchors — fetched live from{" "}
         <span className="font-mono text-[var(--color-gray-300)]">{qtanglApiBaseUrl}</span>.
       </p>
 
@@ -81,15 +104,31 @@ python scripts/qtangl_verify.py --report report.json --api-base ${qtanglApiBaseU
         <dl className="mt-4 grid gap-4 sm:grid-cols-2">
           <div>
             <dt className="text-xs uppercase tracking-[0.14em] text-[var(--color-gray-500)]">Log root hash</dt>
-            <dd className="mt-1 break-all font-mono text-sm text-white">
-              {root?.rootHash ?? "—"}
-            </dd>
+            <dd className="mt-1 break-all font-mono text-sm text-white">{root?.rootHash ?? "—"}</dd>
+            <dt className="mt-3 text-xs uppercase tracking-[0.14em] text-[var(--color-gray-500)]">Merkle root</dt>
+            <dd className="mt-1 break-all font-mono text-sm text-white">{root?.merkleRoot ?? "—"}</dd>
             <p className="mt-1 text-xs text-[var(--color-gray-500)]">
               seq {root?.seq ?? "—"} · {root?.entryCount ?? 0} entries
             </p>
           </div>
           <div>
-            <dt className="text-xs uppercase tracking-[0.14em] text-[var(--color-gray-500)]">Signing keys</dt>
+            <dt className="text-xs uppercase tracking-[0.14em] text-[var(--color-gray-500)]">External anchor</dt>
+            <dd className="mt-2 space-y-1 text-xs text-[var(--color-gray-300)]">
+              {anchor ? (
+                <>
+                  <div>Method: {anchor.method ?? "—"}</div>
+                  {anchor.git?.url ? (
+                    <a href={anchor.git.url} className="text-[var(--color-accent)] underline" target="_blank" rel="noreferrer">
+                      Git witness ({anchor.git.commitSha?.slice(0, 8) ?? "…"})
+                    </a>
+                  ) : null}
+                  {anchor.tsa?.tsaTime ? <div>TSA: {anchor.tsa.tsaTime}</div> : null}
+                </>
+              ) : (
+                <p className="text-[var(--color-gray-500)]">No external anchor published yet.</p>
+              )}
+            </dd>
+            <dt className="mt-4 text-xs uppercase tracking-[0.14em] text-[var(--color-gray-500)]">Signing keys</dt>
             <dd className="mt-2 space-y-2">
               {keys.length === 0 ? (
                 <p className="text-sm text-[var(--color-gray-500)]">No keys published.</p>
@@ -105,6 +144,18 @@ python scripts/qtangl_verify.py --report report.json --api-base ${qtanglApiBaseU
               )}
             </dd>
           </div>
+          {witnesses.length > 0 ? (
+            <div className="sm:col-span-2">
+              <dt className="text-xs uppercase tracking-[0.14em] text-[var(--color-gray-500)]">Third-party witnesses</dt>
+              <dd className="mt-2 space-y-1">
+                {witnesses.slice(0, 5).map((w) => (
+                  <div key={`${w.witnessId}-${w.seq}`} className="text-xs text-[var(--color-gray-300)]">
+                    {w.witnessId} · seq {w.seq} · {w.alg}
+                  </div>
+                ))}
+              </dd>
+            </div>
+          ) : null}
         </dl>
       ) : null}
 

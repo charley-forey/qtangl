@@ -8,7 +8,7 @@ import uuid
 from datetime import datetime, timezone
 from typing import Any
 
-from app.coverage.cloud_pull import acm_rows_for_import, pull_aws_acm, pull_azure_keyvault
+from app.coverage.cloud_pull import acm_rows_for_import, pull_aws_acm, pull_azure_keyvault, pull_gcp_certificate_manager
 from app.db.config import persistence_enabled
 from app.db.engine import db_session
 from app.db.models import TenantIntegration as IntegrationRow
@@ -16,7 +16,7 @@ from app.security.secrets import decrypt_config, encrypt_config
 
 logger = logging.getLogger(__name__)
 
-CLOUD_PROVIDERS = {"aws", "azure"}
+CLOUD_PROVIDERS = {"aws", "azure", "gcp", "kubernetes"}
 
 
 def upsert_cloud_integration(
@@ -77,6 +77,14 @@ def test_cloud_connection(*, tenant_id: str, provider: str) -> dict[str, Any]:
         )
         ok = result.get("status") == "ok"
         preview_count = len(result.get("certificates") or [])
+    elif provider == "gcp":
+        project_id = str(config.get("projectId") or "")
+        result = pull_gcp_certificate_manager(
+            project_id=project_id,
+            credentials_json=str(config.get("credentialsJson") or ""),
+        )
+        ok = result.get("status") == "ok"
+        preview_count = int(result.get("count") or 0)
     else:
         return {"ok": False, "reason": "unsupported_provider"}
     _mark_test(tenant_id=tenant_id, provider=provider, status="ok" if ok else "failed")
@@ -132,6 +140,27 @@ def pull_cloud_inventory(*, tenant_id: str, provider: str) -> dict[str, Any]:
                 "algorithm": cert.get("algorithm", "RSA"),
                 "label": cert.get("name", "Azure Key Vault cert"),
                 "source": "azure-keyvault",
+            }
+            for cert in result.get("certificates", [])
+        ]
+        pull_status = "ok"
+    elif provider == "gcp":
+        project_id = str(config.get("projectId") or "")
+        result = pull_gcp_certificate_manager(
+            project_id=project_id,
+            credentials_json=str(config.get("credentialsJson") or ""),
+        )
+        if result.get("status") != "ok":
+            _mark_pull(tenant_id=tenant_id, provider=provider, status=str(result.get("status", "error")))
+            return {"ok": False, "reason": result.get("message") or result.get("status")}
+        rows = [
+            {
+                "host": cert.get("domain") or cert.get("name", "gcp-cert"),
+                "port": 443,
+                "kind": "tls",
+                "algorithm": "RSA",
+                "label": cert.get("domain") or cert.get("name", "GCP cert"),
+                "source": "gcp-certificate-manager",
             }
             for cert in result.get("certificates", [])
         ]

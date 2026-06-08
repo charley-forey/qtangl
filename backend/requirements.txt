@@ -1,23 +1,32 @@
-fastapi
-uvicorn[standard]
-pydantic
-httpx
-qiskit
-qiskit-aer
-qiskit-optimization
-docplex
-ortools
-faker
-python-multipart
-qiskit-ibm-runtime
-cryptography
-reportlab
-# Optional: ML-DSA-65 signing via liboqs (Ed25519 fallback always available)
-# oqs-python  # enable in CI matrix job; install manually for ML-DSA path
-sqlalchemy>=2.0.30
-redis>=5.0.0
-psycopg[binary]>=3.1.18
-alembic>=1.13.0
-# Optional cloud CBOM pull (Azure Key Vault)
-azure-identity>=1.16.0
-azure-keyvault-certificates>=4.8.0
+fastapi
+uvicorn[standard]
+pydantic
+httpx
+qiskit
+qiskit-aer
+qiskit-optimization
+docplex
+ortools
+faker
+python-multipart
+qiskit-ibm-runtime
+cryptography
+reportlab
+# Optional: ML-DSA-65 / SLH-DSA signing via liboqs (Ed25519 fallback always available)
+# oqs-python  # enable in CI matrix job; install manually for ML-DSA path
+# Optional: RFC 3161 TSA anchoring
+rfc3161ng>=0.1.0
+sqlalchemy>=2.0.30
+redis>=5.0.0
+psycopg[binary]>=3.1.18
+alembic>=1.13.0
+# Optional cloud CBOM pull
+azure-identity>=1.16.0
+azure-keyvault-certificates>=4.8.0
+# Optional GCP Certificate Manager pull
+google-cloud-certificate-manager>=1.0.0
+google-auth>=2.29.0
+# Optional Kubernetes cert-manager pull
+kubernetes>=29.0.0
+# Optional AWS KMS signing / ACM pull
+boto3>=1.34.0
