@@ -28,11 +28,12 @@ RUN git clone --depth=1 --branch "${LIBOQS_VERSION}" \
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# ML-DSA-65 / SLH-DSA signing via the official Open Quantum Safe Python wrapper
-# (loads the system liboqs installed above). The verification step fails the
-# build early if the post-quantum signing path is broken.
+# PQC signing via the official Open Quantum Safe Python wrapper (loads the
+# system liboqs installed above). ML-DSA-65 is the default primary algorithm and
+# is verified strictly; SLH-DSA (FIPS 205) is optional/non-default, so its
+# availability is reported without failing the build.
 RUN pip install --no-cache-dir liboqs-python \
-    && python -c "import oqs; oqs.Signature('ML-DSA-65'); oqs.Signature('SLH-DSA-SHA2-128s'); print('liboqs-python PQC ready:', oqs.oqs_version())"
+    && python -c "import oqs; sigs=set(oqs.get_enabled_sig_mechanisms()); oqs.Signature('ML-DSA-65'); print('liboqs-python PQC ready | ML-DSA-65 OK | SLH-DSA', 'OK' if 'SLH_DSA_PURE_SHA2_128S' in sigs else 'unavailable')"
 
 COPY app ./app
 COPY alembic ./alembic

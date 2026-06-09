@@ -30,7 +30,11 @@ except ImportError:  # pragma: no cover
 
 _ML_DSA_ALG = "ML-DSA-65"
 _ED25519_ALG = "Ed25519"
+# Public / verify-spec label (FIPS 205). liboqs >= 0.15 exposes this parameter
+# set under the slhdsa-c identifier below, so the mechanism name passed to oqs
+# differs from the stored algorithm label.
 _SLH_DSA_ALG = "SLH-DSA-SHA2-128s"
+_SLH_DSA_MECH = "SLH_DSA_PURE_SHA2_128S"
 _VERIFY_SPEC_VERSION = "1.1.0"
 
 
@@ -120,7 +124,7 @@ def _sign_slh_dsa(content_hash: str, signed_at: str) -> dict[str, Any] | None:
     if not _HAS_OQS:
         return None
     try:
-        with oqs.Signature(_SLH_DSA_ALG) as signer:
+        with oqs.Signature(_SLH_DSA_MECH) as signer:
             public_key = signer.generate_keypair()
             signature = signer.sign(content_hash.encode("utf-8"))
             return {
@@ -237,7 +241,7 @@ def _verify_single(
 
     if alg == _SLH_DSA_ALG and _HAS_OQS:
         try:
-            with oqs.Signature(_SLH_DSA_ALG) as verifier:
+            with oqs.Signature(_SLH_DSA_MECH) as verifier:
                 verifier.import_public_key(public_key)
                 valid = verifier.verify(content_hash.encode("utf-8"), signature)
                 return {

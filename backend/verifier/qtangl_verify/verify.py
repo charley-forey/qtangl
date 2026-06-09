@@ -13,23 +13,27 @@ from qtangl_verify.merkle import verify_merkle_path
 
 VERIFY_SPEC_VERSION = "1.1.0"
 
+# Some published algorithm labels differ from the liboqs runtime mechanism name.
+# liboqs >= 0.15 exposes SLH-DSA (FIPS 205) under the slhdsa-c identifier.
+_OQS_MECHANISM = {"SLH-DSA-SHA2-128s": "SLH_DSA_PURE_SHA2_128S"}
+
 
 def _verify_mldsa(*, content_hash: str, signature_block: dict[str, Any]) -> dict[str, Any]:
     alg = signature_block.get("alg") or "ML-DSA-65"
     try:
         import oqs  # type: ignore[import-untyped]
     except ImportError:
-        return {"valid": False, "reason": "oqs-python not installed", "alg": alg, "contentHash": content_hash}
+        return {"valid": False, "reason": "liboqs-python not installed", "alg": alg, "contentHash": content_hash}
 
     public_b64 = signature_block.get("publicKeyB64") or ""
     signature_b64 = signature_block.get("signatureB64") or ""
     if not public_b64 or not signature_b64:
-        return {"valid": False, "reason": "Missing ML-DSA key material", "alg": alg, "contentHash": content_hash}
+        return {"valid": False, "reason": "Missing PQC key material", "alg": alg, "contentHash": content_hash}
 
     try:
         public_key = base64.b64decode(public_b64)
         signature = base64.b64decode(signature_b64)
-        with oqs.Signature(alg) as verifier:
+        with oqs.Signature(_OQS_MECHANISM.get(alg, alg)) as verifier:
             valid = verifier.verify(content_hash.encode("utf-8"), signature, public_key)
         return {"valid": bool(valid), "alg": alg, "contentHash": content_hash}
     except Exception as exc:
