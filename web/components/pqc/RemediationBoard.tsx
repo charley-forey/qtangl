@@ -100,13 +100,14 @@ export default function RemediationBoard({
   useEffect(() => {
     if (!scanId) return;
     fetchTenantJson<{ playbooks?: Record<string, string[]> }>(
-      `/tenant/scans/${encodeURIComponent(scanId)}/remediation/intelligence`
+      `/tenant/scans/${encodeURIComponent(scanId)}/remediation/intelligence`,
+      apiKey
     )
       .then((data) => {
         if (data.playbooks) setPlaybooks(data.playbooks);
       })
       .catch(() => {});
-  }, [scanId]);
+  }, [scanId, apiKey]);
 
   const done = items.filter(
     (item) => statuses[item.id] === "done" || statuses[item.id] === "accepted_risk"

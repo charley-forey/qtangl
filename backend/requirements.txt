@@ -28,7 +28,7 @@ reportlab
 
 # Optional: ML-DSA-65 / SLH-DSA signing via liboqs (Ed25519 fallback always available)
 
-# oqs-python  # enable in CI matrix job; install manually for ML-DSA path
+# liboqs-python  # installed in the Docker image (needs system liboqs); install manually for the ML-DSA path
 
 # Optional: RFC 3161 TSA anchoring
 
