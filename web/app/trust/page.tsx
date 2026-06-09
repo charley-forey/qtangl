@@ -106,9 +106,17 @@ const trustSections = [
     title: "Dogfood verification",
     body: (
       <>
-        Qtangl signs its own scan reports and publishes verification steps at{" "}
+        Qtangl signs its own scan reports. Verify spec:{" "}
+        <Link href="/docs/verify-spec" className="text-white underline underline-offset-4">
+          /docs/verify-spec
+        </Link>
+        ; public verifier:{" "}
         <Link href="/verify" className="text-white underline underline-offset-4">
           /verify
+        </Link>
+        . Readiness Index governance: opt-in cohort only (k-anonymity ≥ 10) — see{" "}
+        <Link href="/resources/readiness-index" className="text-white underline underline-offset-4">
+          Readiness Index
         </Link>
         . We recommend customers verify a sample report before production rollout.
       </>

@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import RemediationCopilotDrawer from "@/components/dashboard/RemediationCopilotDrawer";
-import { postTenantJson } from "@/lib/tenant-api";
+import { fetchTenantJson, postTenantJson } from "@/lib/tenant-api";
 
 type RemediationItem = {
   id: string;
@@ -30,7 +30,7 @@ type VerifyResult = {
 
 const STATUSES = ["open", "in_progress", "done", "accepted_risk"] as const;
 
-const PLAYBOOK = [
+const DEFAULT_PLAYBOOK = [
   "Inventory affected endpoints and key lineage.",
   "Select PQC algorithm (ML-KEM / ML-DSA) per vendor guidance.",
   "Stage rollout with canary and interoperability testing.",
@@ -95,6 +95,18 @@ export default function RemediationBoard({
   const [verifyingId, setVerifyingId] = useState<string | null>(null);
   const [pushMessage, setPushMessage] = useState<string | null>(null);
   const [expandedPlaybook, setExpandedPlaybook] = useState<string | null>(null);
+  const [playbooks, setPlaybooks] = useState<Record<string, string[]>>({});
+
+  useEffect(() => {
+    if (!scanId) return;
+    fetchTenantJson<{ playbooks?: Record<string, string[]> }>(
+      `/tenant/scans/${encodeURIComponent(scanId)}/remediation/intelligence`
+    )
+      .then((data) => {
+        if (data.playbooks) setPlaybooks(data.playbooks);
+      })
+      .catch(() => {});
+  }, [scanId]);
 
   const done = items.filter(
     (item) => statuses[item.id] === "done" || statuses[item.id] === "accepted_risk"
@@ -214,7 +226,7 @@ export default function RemediationBoard({
               </button>
               {expandedPlaybook === item.id ? (
                 <ol className="mt-2 list-decimal pl-4 text-xs text-[var(--color-gray-400)]">
-                  {PLAYBOOK.map((step) => (
+                  {(playbooks[item.id] ?? DEFAULT_PLAYBOOK).map((step) => (
                     <li key={step}>{step}</li>
                   ))}
                 </ol>

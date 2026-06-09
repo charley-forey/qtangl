@@ -1,0 +1,15 @@
+{
+  "generatedAt": "2026-06-08T00:00:00Z",
+  "methodology": "Opt-in tenant readiness scores; k-anonymity threshold 10; no PII",
+  "available": false,
+  "reason": "insufficient_cohort",
+  "industries": {
+    "financial": {
+      "sampleSize": 0,
+      "median": null,
+      "p25": null,
+      "p75": null
+    }
+  },
+  "note": "Run backend/scripts/generate_readiness_index.py after recruiting 10+ opt-in design partners."
+}

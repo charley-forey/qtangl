@@ -67,7 +67,7 @@ export default function CloudIntegrationPanel({
           : provider === "azure"
             ? { vaultName: azureVaultName }
             : { projectId: gcpProjectId };
-      await postTenantJson(`/tenant/integrations/${provider}`, apiKey, body);
+      await postTenantJson(`/tenant/integrations/cloud/${provider}`, apiKey, body);
       onMessage?.(`${provider.toUpperCase()} integration saved.`);
       await loadIntegrations();
     } catch (error) {
@@ -81,7 +81,7 @@ export default function CloudIntegrationPanel({
     setBusy(`test-${provider}`);
     try {
       const result = await postTenantJson<{ ok?: boolean; previewCount?: number; message?: string }>(
-        `/tenant/integrations/${provider}/test`,
+        `/tenant/integrations/cloud/${provider}/test`,
         apiKey,
         {}
       );

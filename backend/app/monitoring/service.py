@@ -224,10 +224,10 @@ def enqueue_due_scans() -> int:
 
 
 def enqueue_due_cloud_pulls() -> int:
-    """Pull cloud CBOM inventory for due cloud_pull schedules (FR-I11)."""
+    """Pull CBOM inventory for due cloud_pull schedules (cloud, k8s, CLM, Keyfactor)."""
     if not scheduler_enabled():
         return 0
-    from app.integrations.cloud import pull_cloud_inventory
+    from app.integrations.pull import pull_inventory
     from app.cbom.service import ingest_cbom_document, post_ingest_cbom_hooks
 
     enqueued = 0
@@ -238,7 +238,7 @@ def enqueue_due_cloud_pulls() -> int:
         tenant_id = schedule["tenantId"]
         if not provider:
             continue
-        pull = pull_cloud_inventory(tenant_id=tenant_id, provider=provider)
+        pull = pull_inventory(tenant_id=tenant_id, provider=provider)
         if not pull.get("ok"):
             mark_run(schedule["id"], scan_id=f"cloud-pull-failed-{provider}")
             _log_schedule_run(

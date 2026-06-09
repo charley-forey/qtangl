@@ -2,7 +2,9 @@
 
 from __future__ import annotations
 
+import json
 from typing import Any
+from urllib.request import urlopen
 
 
 def get_oidc_config(*, tenant_id: str) -> dict[str, Any] | None:
@@ -61,8 +63,36 @@ def upsert_oidc_config(
         return {"tenantId": tenant_id, "enabled": enabled, "issuerUrl": issuer_url}
 
 
+def _fetch_jwks(issuer_url: str) -> dict[str, Any]:
+    well_known = issuer_url.rstrip("/") + "/.well-known/openid-configuration"
+    with urlopen(well_known, timeout=15) as resp:
+        config = json.loads(resp.read().decode("utf-8"))
+    jwks_uri = config.get("jwks_uri")
+    if not jwks_uri:
+        return {}
+    with urlopen(jwks_uri, timeout=15) as resp:
+        return json.loads(resp.read().decode("utf-8"))
+
+
 def validate_oidc_token(*, issuer_url: str, token: str) -> dict[str, Any]:
-    """Validate OIDC bearer token (stub — wire to issuer JWKS in production)."""
+    """Validate OIDC bearer token via issuer JWKS (JWT signature check when cryptography available)."""
     if not token:
         return {"valid": False, "reason": "missing_token"}
-    return {"valid": True, "issuer": issuer_url, "note": "JWKS validation required in production"}
+    try:
+        import jwt
+        from jwt import PyJWKClient
+
+        jwks = _fetch_jwks(issuer_url)
+        if not jwks.get("keys"):
+            return {"valid": False, "reason": "jwks_unavailable", "issuer": issuer_url}
+        client = PyJWKClient(issuer_url.rstrip("/") + "/.well-known/openid-configuration")
+        signing_key = client.get_signing_key_from_jwt(token)
+        payload = jwt.decode(token, signing_key.key, algorithms=["RS256", "ES256"], issuer=issuer_url)
+        return {"valid": True, "issuer": issuer_url, "sub": payload.get("sub"), "claims": payload}
+    except ImportError:
+        parts = token.split(".")
+        if len(parts) != 3:
+            return {"valid": False, "reason": "malformed_jwt"}
+        return {"valid": True, "issuer": issuer_url, "note": "structural_only_install_PyJWT_for_full_verify"}
+    except Exception as exc:
+        return {"valid": False, "reason": str(exc), "issuer": issuer_url}

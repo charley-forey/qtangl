@@ -80,6 +80,42 @@ class RemediationVerifyRequest(BaseModel):
     verifyScanId: str
 
 
+class OidcConfigRequest(BaseModel):
+    issuerUrl: str
+    clientId: str
+    clientSecret: str = ""
+    enabled: bool = False
+
+
+class KeyfactorIntegrationRequest(BaseModel):
+    baseUrl: str
+    apiToken: str
+    collectionId: str | None = None
+    writeBackEnabled: bool = False
+
+
+class ClmIntegrationRequest(BaseModel):
+    apiKey: str | None = None
+    host: str | None = None
+    token: str | None = None
+    tenant: str | None = None
+
+
+class CloudIntegrationRequest(BaseModel):
+    region: str | None = None
+    vaultName: str | None = None
+    roleArn: str | None = None
+    externalId: str | None = None
+    projectId: str | None = None
+    credentialsJson: str | None = None
+    kubeconfigJson: str | None = None
+    namespace: str | None = None
+    context: str | None = None
+    tenantId: str | None = None
+    clientId: str | None = None
+    clientSecret: str | None = None
+
+
 class EmailReportRequest(BaseModel):
     email: str
 
@@ -397,6 +433,25 @@ def tenant_audit(
         cursor=cursor,
     )
     return {"status": "success", "entries": entries, "nextCursor": next_cursor}
+
+
+@router.get("/audit/export")
+def tenant_audit_export(
+    auth: AuthContext = Depends(require_auth_admin),
+    limit: int = Query(default=500, ge=1, le=5000),
+    since: str | None = None,
+) -> Response:
+    import json
+    from datetime import datetime
+
+    from app.audit.service import list_audit
+
+    since_dt = None
+    if since:
+        since_dt = datetime.fromisoformat(since.replace("Z", "+00:00"))
+    entries, _ = list_audit(tenant_id=auth.tenant_id, limit=limit, since=since_dt)
+    ndjson = "\n".join(json.dumps(entry, default=str) for entry in entries) + "\n"
+    return Response(content=ndjson, media_type="application/x-ndjson")
 
 
 @router.post("/scans/{scan_id}/remediation/verify")
@@ -797,15 +852,15 @@ def tenant_code_scan(body: dict[str, Any], auth: AuthContext = Depends(require_a
 
 @router.get("/coverage/cloud/{provider}")
 def tenant_cloud_pull(provider: str, auth: AuthContext = Depends(require_auth_readonly)) -> dict:
-    from app.coverage import cloud_pull
+    from app.integrations.cloud import test_cloud_connection
 
-    if provider == "aws":
-        return {"status": "success", **cloud_pull.pull_aws_acm()}
-    if provider == "azure":
-        return {"status": "success", **cloud_pull.pull_azure_keyvault(vault_name="default")}
-    if provider == "gcp":
-        return {"status": "success", **cloud_pull.pull_gcp_certificate_manager(project_id="default")}
-    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Unknown cloud provider.")
+    result = test_cloud_connection(tenant_id=auth.tenant_id, provider=provider.lower())
+    if not result.get("ok"):
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail=result.get("reason", "cloud_pull_failed"),
+        )
+    return {"status": "success", "provider": provider, "previewCount": result.get("previewCount", 0)}
 
 
 @router.post("/ai/explain")
@@ -844,8 +899,11 @@ def tenant_forecast(auth: AuthContext = Depends(require_auth_readonly)) -> dict:
 
 @router.get("/benchmarks")
 def tenant_benchmarks(auth: AuthContext = Depends(require_auth_readonly)) -> dict:
-    from app.data.benchmarks import readiness_index_snapshot
+    from app.data.benchmarks import compare_to_benchmark, readiness_index_snapshot
+    from app.tenant.settings import get_tenant_settings_raw
 
+    settings = get_tenant_settings_raw(tenant_id=auth.tenant_id)
+    industry = str(settings.get("industry") or "financial")
     latest = next(
         (
             float(s["readinessScore"])
@@ -854,13 +912,72 @@ def tenant_benchmarks(auth: AuthContext = Depends(require_auth_readonly)) -> dic
         ),
         None,
     )
-    bench = readiness_index_snapshot()
-    comparison = None
-    if latest is not None:
-        from app.data.benchmarks import compare_to_benchmark
+    bench = readiness_index_snapshot(industry=industry)
+    comparison = compare_to_benchmark(score=latest, industry=industry) if latest is not None else None
+    return {
+        "status": "success",
+        "index": bench,
+        "comparison": comparison,
+        "benchmarkOptIn": bool(settings.get("benchmarkOptIn")),
+    }
 
-        comparison = compare_to_benchmark(score=latest)
-    return {"status": "success", "index": bench, "comparison": comparison}
+
+@router.get("/drift-intel")
+def tenant_drift_intel(auth: AuthContext = Depends(require_auth_readonly)) -> dict:
+    from app.tenant.settings import get_tenant_settings_raw
+
+    settings = get_tenant_settings_raw(tenant_id=auth.tenant_id)
+    if not settings.get("benchmarkOptIn"):
+        return {"status": "success", "available": False, "reason": "opt_in_required"}
+    industry = str(settings.get("industry") or "financial")
+    try:
+        from app.db.engine import db_session
+        from app.db.models import DriftAggregate
+        import json
+
+        with db_session() as session:
+            row = (
+                session.query(DriftAggregate)
+                .filter(DriftAggregate.industry == industry)
+                .order_by(DriftAggregate.created_at.desc())
+                .first()
+            )
+            if row is None:
+                return {"status": "success", "available": False, "reason": "insufficient_cohort"}
+            return {
+                "status": "success",
+                "available": True,
+                "industry": industry,
+                "patternType": row.pattern_type,
+                "sampleSize": row.sample_size,
+                "metrics": json.loads(row.metric_json or "{}"),
+                "asOf": row.as_of,
+            }
+    except Exception:
+        return {"status": "success", "available": False, "reason": "unavailable"}
+
+
+@router.get("/oidc")
+def tenant_oidc_get(auth: AuthContext = Depends(require_auth_admin)) -> dict:
+    from app.auth.oidc import get_oidc_config
+
+    config = get_oidc_config(tenant_id=auth.tenant_id)
+    return {"status": "success", "oidc": config}
+
+
+@router.put("/oidc")
+def tenant_oidc_put(body: OidcConfigRequest, auth: AuthContext = Depends(require_auth_admin)) -> dict:
+    from app.auth.oidc import upsert_oidc_config
+
+    saved = upsert_oidc_config(
+        tenant_id=auth.tenant_id,
+        issuer_url=body.issuerUrl,
+        client_id=body.clientId,
+        client_secret=body.clientSecret,
+        enabled=body.enabled,
+    )
+    log_action(tenant_id=auth.tenant_id, action="oidc.update")
+    return {"status": "success", "oidc": saved}
 
 
 @router.get("/compliance/posture")
@@ -953,13 +1070,6 @@ def _scan_lifecycle_state(job_status: str, has_bundle: bool, has_error: bool) ->
     return "initialized"
 
 
-class CloudIntegrationRequest(BaseModel):
-    region: str | None = None
-    vaultName: str | None = None
-    roleArn: str | None = None
-    externalId: str | None = None
-
-
 @router.get("/evidence")
 def tenant_evidence_vault(auth: AuthContext = Depends(require_auth_readonly)) -> dict:
     from app.evidence.vault import vault_summary
@@ -995,7 +1105,7 @@ def tenant_cloud_integrations(auth: AuthContext = Depends(require_auth_readonly)
     return {"status": "success", "integrations": list_cloud_integrations(tenant_id=auth.tenant_id)}
 
 
-@router.post("/integrations/{provider}")
+@router.post("/integrations/cloud/{provider}")
 def tenant_upsert_cloud_integration(
     provider: str,
     body: CloudIntegrationRequest,
@@ -1013,8 +1123,64 @@ def tenant_upsert_cloud_integration(
     return {"status": "success", "integration": row}
 
 
-@router.post("/integrations/{provider}/test")
+@router.post("/integrations/cloud/{provider}/test")
 def tenant_test_cloud_integration(provider: str, auth: AuthContext = Depends(require_auth)) -> dict:
     from app.integrations.cloud import test_cloud_connection
 
     return {"status": "success", **test_cloud_connection(tenant_id=auth.tenant_id, provider=provider.lower())}
+
+
+@router.post("/integrations/keyfactor")
+def tenant_upsert_keyfactor(body: KeyfactorIntegrationRequest, auth: AuthContext = Depends(require_auth)) -> dict:
+    from app.integrations.service import upsert_integration
+
+    integration = upsert_integration(
+        tenant_id=auth.tenant_id,
+        provider="keyfactor",
+        config=body.model_dump(exclude_none=True),
+    )
+    return {"status": "success", "integration": integration}
+
+
+@router.post("/integrations/keyfactor/test")
+def tenant_test_keyfactor(auth: AuthContext = Depends(require_auth)) -> dict:
+    from app.integrations.keyfactor import pull_keyfactor_inventory
+    from app.integrations.pull import _load_integration_config
+
+    config = _load_integration_config(tenant_id=auth.tenant_id, provider="keyfactor") or {}
+    result = pull_keyfactor_inventory(
+        base_url=str(config.get("baseUrl") or ""),
+        api_token=str(config.get("apiToken") or ""),
+        collection_id=str(config.get("collectionId") or ""),
+    )
+    ok = result.get("status") == "ok"
+    return {"status": "success", "ok": ok, "previewCount": result.get("count", 0), "message": result.get("message")}
+
+
+@router.post("/integrations/clm/{clm_provider}")
+def tenant_upsert_clm(
+    clm_provider: str,
+    body: ClmIntegrationRequest,
+    auth: AuthContext = Depends(require_auth),
+) -> dict:
+    from app.integrations.service import upsert_integration
+
+    provider = f"clm-{clm_provider.lower()}"
+    integration = upsert_integration(
+        tenant_id=auth.tenant_id,
+        provider=provider,
+        config=body.model_dump(exclude_none=True),
+    )
+    return {"status": "success", "integration": integration}
+
+
+@router.post("/integrations/clm/{clm_provider}/test")
+def tenant_test_clm(clm_provider: str, auth: AuthContext = Depends(require_auth)) -> dict:
+    from app.integrations.clm import pull_clm
+    from app.integrations.pull import _load_integration_config
+
+    provider = f"clm-{clm_provider.lower()}"
+    config = _load_integration_config(tenant_id=auth.tenant_id, provider=provider) or {}
+    result = pull_clm(clm_provider.lower(), **config)
+    ok = result.get("status") in {"ok", "stub"}
+    return {"status": "success", "ok": ok, "previewCount": result.get("count", 0), "message": result.get("message")}

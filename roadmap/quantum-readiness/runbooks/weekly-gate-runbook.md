@@ -48,6 +48,35 @@ Update [demo-15-min-readiness.md](./demo-15-min-readiness.md) weekly gate log wi
 
 ---
 
+## Post-Moat completion checklist
+
+Run after Moat Deepening (`72163b9`) activation:
+
+| Workstream | Check | Command / URL |
+|------------|-------|---------------|
+| WS0 | Cloud routes split (`/integrations/cloud/*` vs GRC) | `pytest tests/test_tenant_cloud_routes.py` |
+| WS1 | Migrations through **009** on Railway API + worker | `alembic current` → `009_moat_phase7` |
+| WS1 | Transparency log live + inclusion | `verify_production_rollout.py --full` exit 0 |
+| WS2 | Dual signing in prod OR documented Ed25519 fallback | Report JSON `signatures[]` length ≥ 1 |
+| WS3 | Git witness + TSA configured | Trust page Git link; `reconstruct_log_from_anchors.py` |
+| WS4 | Stripe Monitor + SMTP | `conversion_smoke.py --gtm` exit 0 |
+| WS5 | Peer panel + index page live | Dashboard peer band; `GET /pqc/index` |
+| WS6 | K8s + CLM + Keyfactor pulls | `pytest tests/test_pull_integrations.py` |
+| WS7 | PyPI verifier published | `pip install qtangl-verify` |
+| WS8 | Dynamic playbooks + Report drawer | Dashboard Remediation + Reports |
+| WS9 | DR scripts + OIDC JWKS | `backup_evidence_log.py`; `GET /tenant/audit/export` |
+| WS10 | Drift intel UI | `GET /tenant/drift-intel`; CohortDriftPanel |
+| WS12 | Terms + privacy live | `/terms`, `/privacy` |
+| WS13 | Cosign workflow | `.github/workflows/supply-chain-sign.yml` on tag |
+| WS14 | Runbooks synced | This checklist + [evidence-layer-rollout.md](./evidence-layer-rollout.md) |
+
+```bash
+python backend/scripts/conversion_smoke.py --gtm
+python backend/scripts/verify_production_rollout.py --gtm
+```
+
+---
+
 ## Escalation
 
 | Failure | Action |

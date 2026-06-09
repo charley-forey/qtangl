@@ -85,6 +85,8 @@ def _enrich_completed_scan(scan_id: str, bundle: ScanBundle, *, tenant_id: str) 
             peer = compare_to_benchmark(score=bundle.report.readiness_score, industry=industry)
             if peer.get("available"):
                 json_payload["peerComparison"] = peer
+                if bundle.report.executive_summary is not None:
+                    bundle.report.executive_summary["peerComparison"] = peer
         except Exception:
             logger.debug("peerComparison skipped for scan_id=%s", scan_id)
 

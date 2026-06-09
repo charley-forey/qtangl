@@ -47,12 +47,21 @@ def fingerprint_for_public_key(public_key: bytes) -> str:
 
 
 def load_stable_ed25519_private_bytes() -> bytes | None:
-    """Return stable Ed25519 private key bytes from env or persisted file."""
+    """Return stable Ed25519 private key bytes from env, KMS envelope, or persisted file."""
     try:
         from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
         from cryptography.hazmat.primitives.serialization import Encoding, NoEncryption, PrivateFormat
     except ImportError:
         return None
+
+    try:
+        from app.pqc.kms_signer import decrypt_envelope_key
+
+        envelope = decrypt_envelope_key()
+        if envelope and len(envelope) == 32:
+            return envelope
+    except Exception:
+        pass
 
     raw = os.environ.get(_SIGNING_KEY_ENV)
     if raw:

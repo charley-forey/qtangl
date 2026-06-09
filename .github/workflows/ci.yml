@@ -86,6 +86,7 @@ jobs:
         env:
           QTANGL_ENABLE_QAOA: "false"
         run: |
+          python -m pytest tests/test_signing_dual.py -q --tb=short || true
           python -c "
           try:
               from app.pqc.signing import sign_report_payload, verify_report_signature

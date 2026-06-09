@@ -8,13 +8,27 @@ inputs:
     description: Qtangl API base URL for inclusion check
     required: false
     default: ""
+  qtangl-verify-version:
+    description: PyPI package version pin (optional)
+    required: false
+    default: "1.1.0"
 runs:
   using: composite
   steps:
+    - uses: actions/setup-python@v5
+      with:
+        python-version: "3.13"
+
+    - name: Install qtangl-verify
+      shell: bash
+      run: |
+        pip install "qtangl-verify==${{ inputs.qtangl-verify-version }}" || \
+          pip install ./backend/verifier
+
     - name: Verify report
       shell: bash
       run: |
-        python backend/scripts/qtangl_verify.py "${{ inputs.report-path }}" \
+        qtangl-verify "${{ inputs.report-path }}" \
           ${API_BASE:+--api-base "$API_BASE"} --json
       env:
         API_BASE: ${{ inputs.api-base }}

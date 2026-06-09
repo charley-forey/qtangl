@@ -12,7 +12,7 @@ from app.db.models import TenantIntegration as IntegrationRow
 
 logger = logging.getLogger(__name__)
 
-SUPPORTED_PROVIDERS = {"jira", "servicenow", "linear"}
+SUPPORTED_PROVIDERS = {"jira", "servicenow", "linear", "keyfactor", "clm-digicert", "clm-appviewx", "clm-entrust"}
 
 
 def list_integrations(*, tenant_id: str) -> list[dict[str, Any]]:
@@ -29,7 +29,7 @@ def upsert_integration(
     provider: str,
     config: dict[str, Any],
 ) -> dict[str, Any]:
-    if provider not in SUPPORTED_PROVIDERS:
+    if provider not in SUPPORTED_PROVIDERS and not provider.startswith("clm-"):
         raise ValueError(f"Unsupported provider: {provider}")
     if not persistence_enabled():
         return {"provider": provider, "configured": True}

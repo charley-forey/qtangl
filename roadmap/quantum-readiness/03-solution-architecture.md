@@ -94,7 +94,11 @@ flowchart TB
 | Board / auditor / executive exports | `done` | report.py `report_to_*` |
 | Readiness passport (`/verify`) | `done` | [web/app/verify/VerifyPageClient.tsx](../../web/app/verify/VerifyPageClient.tsx) |
 | Offline verify CLI | `done` | [backend/scripts/qtangl_verify.py](../../backend/scripts/qtangl_verify.py) |
-| Trust page | `pilot` | [web/app/trust/page.tsx](../../web/app/trust/page.tsx) |
+| Trust page (live transparency) | `done` | [web/app/trust/page.tsx](../../web/app/trust/page.tsx) |
+| PyPI `qtangl-verify` package | `done` | [backend/verifier/](../../backend/verifier/) |
+| Readiness Index (public API) | `done` | [backend/app/data/index_pipeline.py](../../backend/app/data/index_pipeline.py) |
+| Peer comparison (dashboard) | `done` | [web/components/pqc/PeerComparisonPanel.tsx](../../web/components/pqc/PeerComparisonPanel.tsx) |
+| Cohort drift intelligence | `done` | [backend/app/monitoring/drift_intel.py](../../backend/app/monitoring/drift_intel.py) |
 
 ### Ingestion & CBOM aggregation — in progress
 
@@ -106,7 +110,9 @@ flowchart TB
 | CBOM normalize + merge with scan | `done` | [backend/app/cbom/](../../backend/app/cbom/) | Dedupe + source tags |
 | Multi-source inventory UI | `done` | DashboardClient.tsx | Import count widget |
 | Cloud inventory upload | `pilot` | `parse_cloud_inventory` via upload-bundle | — |
-| AWS/Azure scheduled pull | `pilot` | [backend/app/integrations/cloud.py](../../backend/app/integrations/cloud.py) | Read-only pull + CBOM merge |
+| AWS/Azure/GCP scheduled pull | `done` | [backend/app/integrations/cloud.py](../../backend/app/integrations/cloud.py) | Tenant-configured |
+| Kubernetes cert-manager pull | `done` | [backend/app/coverage/k8s_pull.py](../../backend/app/coverage/k8s_pull.py) | Dashboard panel |
+| Keyfactor / DigiCert CLM pull | `done` | [backend/app/integrations/pull.py](../../backend/app/integrations/pull.py) | Scheduled via worker |
 
 ### Monitor & drift — in progress
 

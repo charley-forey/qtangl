@@ -85,6 +85,16 @@ def test_cloud_connection(*, tenant_id: str, provider: str) -> dict[str, Any]:
         )
         ok = result.get("status") == "ok"
         preview_count = int(result.get("count") or 0)
+    elif provider == "kubernetes":
+        from app.coverage.k8s_pull import pull_k8s_certificates
+
+        result = pull_k8s_certificates(
+            kubeconfig_json=str(config.get("kubeconfigJson") or ""),
+            namespace=str(config.get("namespace") or ""),
+            context=str(config.get("context") or ""),
+        )
+        ok = result.get("status") == "ok"
+        preview_count = int(result.get("count") or 0)
     else:
         return {"ok": False, "reason": "unsupported_provider"}
     _mark_test(tenant_id=tenant_id, provider=provider, status="ok" if ok else "failed")
@@ -161,6 +171,29 @@ def pull_cloud_inventory(*, tenant_id: str, provider: str) -> dict[str, Any]:
                 "algorithm": "RSA",
                 "label": cert.get("domain") or cert.get("name", "GCP cert"),
                 "source": "gcp-certificate-manager",
+            }
+            for cert in result.get("certificates", [])
+        ]
+        pull_status = "ok"
+    elif provider == "kubernetes":
+        from app.coverage.k8s_pull import pull_k8s_certificates
+
+        result = pull_k8s_certificates(
+            kubeconfig_json=str(config.get("kubeconfigJson") or ""),
+            namespace=str(config.get("namespace") or ""),
+            context=str(config.get("context") or ""),
+        )
+        if result.get("status") != "ok":
+            _mark_pull(tenant_id=tenant_id, provider=provider, status=str(result.get("status", "error")))
+            return {"ok": False, "reason": result.get("message") or result.get("status")}
+        rows = [
+            {
+                "host": cert.get("name", "k8s-cert"),
+                "port": 443,
+                "kind": "tls",
+                "algorithm": "RSA",
+                "label": f"{cert.get('namespace', '')}/{cert.get('name', 'cert')}",
+                "source": "kubernetes",
             }
             for cert in result.get("certificates", [])
         ]

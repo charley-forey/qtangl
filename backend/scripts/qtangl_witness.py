@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-"""Reference third-party witness — poll root, verify consistency, co-sign."""
+"""Reference third-party witness — poll root, verify consistency, co-sign with Ed25519."""
 
 from __future__ import annotations
 
 import argparse
 import base64
-import hashlib
 import json
+import os
 import sys
 from urllib.request import Request, urlopen
 
@@ -25,14 +25,32 @@ def main() -> int:
     seq = int(log.get("seq") or 0)
 
     message = f"{root_hash}:{seq}".encode("utf-8")
-    sig = hashlib.sha256(message).digest()
+    try:
+        from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
+        from cryptography.hazmat.primitives.serialization import Encoding, PrivateFormat, NoEncryption, PublicFormat
+
+        key_b64 = os.getenv("QTANGL_WITNESS_SIGNING_KEY_B64", "")
+        if key_b64:
+            private_key = Ed25519PrivateKey.from_private_bytes(base64.b64decode(key_b64))
+        else:
+            private_key = Ed25519PrivateKey.generate()
+        signature = private_key.sign(message)
+        public_bytes = private_key.public_key().public_bytes(Encoding.Raw, PublicFormat.Raw)
+        alg = "Ed25519"
+    except ImportError:
+        import hashlib
+
+        signature = hashlib.sha256(message).digest()
+        public_bytes = b"reference"
+        alg = "reference-sha256"
+
     body = {
         "witnessId": args.witness_id,
         "rootHash": root_hash,
         "seq": seq,
-        "alg": "reference-sha256",
-        "signatureB64": base64.b64encode(sig).decode("ascii"),
-        "publicKeyB64": base64.b64encode(b"reference").decode("ascii"),
+        "alg": alg,
+        "signatureB64": base64.b64encode(signature).decode("ascii"),
+        "publicKeyB64": base64.b64encode(public_bytes).decode("ascii"),
     }
     submit_url = f"{args.api_base.rstrip('/')}/pqc/transparency/witness"
     req = Request(

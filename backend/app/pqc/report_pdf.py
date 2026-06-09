@@ -550,6 +550,20 @@ def _cover_section(
     ]
     if report.readiness_summary:
         items.append(Paragraph(report.readiness_summary, body))
+    peer = (report.executive_summary or {}).get("peerComparison") if report.executive_summary else None
+    if isinstance(peer, dict) and peer.get("available"):
+        band = peer.get("band") or "—"
+        median = peer.get("median")
+        sample = peer.get("sampleSize")
+        items.append(Spacer(1, 0.15 * inch))
+        items.append(Paragraph("<b>Peer comparison</b>", body))
+        items.append(
+            Paragraph(
+                f"Your readiness is <b>{band}</b> peers in {peer.get('industry', 'your industry')} "
+                f"(median {median}, n={sample}).",
+                muted,
+            )
+        )
     return items
 
 

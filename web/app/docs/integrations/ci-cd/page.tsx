@@ -33,6 +33,24 @@ export default function CiCdIntegrationPage() {
       </Card>
 
       <Card tone="panel">
+        <h2 className="text-lg font-medium text-white">Verify signed reports in CI</h2>
+        <p className="mt-2 text-sm text-[var(--muted)]">
+          After a scan exports a signed JSON report, verify integrity with the published{" "}
+          <code className="text-white">qtangl-verify</code> package or the composite action.
+        </p>
+        <pre className="mt-3 overflow-x-auto rounded-lg bg-black p-4 text-xs text-[var(--color-gray-300)]">
+{`- uses: qtangl/qtangl/.github/actions/verify@main
+  with:
+    report-path: artifacts/report.json
+    api-base: https://api.qtangl.com
+
+# Or install directly:
+# pip install qtangl-verify
+# qtangl-verify artifacts/report.json --api-base https://api.qtangl.com --json`}
+        </pre>
+      </Card>
+
+      <Card tone="panel">
         <h2 className="text-lg font-medium text-white">Fail on regression</h2>
         <p className="mt-2 text-sm text-[var(--muted)]">
           Set <code className="text-white">baseline-scan-id</code> to a golden scan. The action compares new

@@ -6,7 +6,7 @@ Enterprise compliance track for Monitor upmarket deals (Phase 7 E9).
 
 - OIDC SSO (`app/auth/oidc.py`)
 - RBAC: admin / write / readonly roles
-- Audit log export via `GET /tenant/audit`
+- Audit log export via `GET /tenant/audit` and SIEM streaming via `GET /tenant/audit/export` (NDJSON)
 - SIEM webhook stream (existing webhook events)
 
 ## Evidence mapping

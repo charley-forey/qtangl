@@ -13,6 +13,12 @@ import InventoryHeatmap from "@/components/pqc/InventoryHeatmap";
 import CbomImportPanel from "@/components/pqc/CbomImportPanel";
 import CbomDriftWidget from "@/components/pqc/CbomDriftWidget";
 import CloudIntegrationPanel from "@/components/pqc/CloudIntegrationPanel";
+import ClmIntegrationPanel from "@/components/pqc/ClmIntegrationPanel";
+import CohortDriftPanel from "@/components/pqc/CohortDriftPanel";
+import KeyfactorIntegrationPanel from "@/components/pqc/KeyfactorIntegrationPanel";
+import K8sIntegrationPanel from "@/components/pqc/K8sIntegrationPanel";
+import PeerComparisonPanel from "@/components/pqc/PeerComparisonPanel";
+import ReportDrawer from "@/components/pqc/ReportDrawer";
 import EvidenceVaultPanel from "@/components/pqc/EvidenceVaultPanel";
 import MergeConflictPanel, { type MergeConflict } from "@/components/pqc/MergeConflictPanel";
 import MultiSourceInventoryWidget from "@/components/pqc/MultiSourceInventoryWidget";
@@ -23,7 +29,7 @@ import AuditLogPanel from "@/components/dashboard/AuditLogPanel";
 import DashboardOnboarding, { DashboardSection } from "@/components/dashboard/DashboardOnboarding";
 import IntegrationSettings from "@/components/dashboard/IntegrationSettings";
 import ScheduleManager from "@/components/dashboard/ScheduleManager";
-import type { CompliancePack, ComplianceSummary, CryptoAsset } from "@/lib/pqc";
+import type { CompliancePack, ComplianceSummary, CryptoAsset, PqcScanResponse } from "@/lib/pqc";
 import {
   fetchTenantJson,
   getStoredTenantApiKey,
@@ -54,7 +60,11 @@ export default function DashboardClient() {
   const [scheduleTarget, setScheduleTarget] = useState("");
   const [scheduleEmail, setScheduleEmail] = useState("");
   const [scheduleCloudPull, setScheduleCloudPull] = useState(false);
-  const [scheduleCloudProvider, setScheduleCloudProvider] = useState<"aws" | "azure">("aws");
+  const [scheduleCloudProvider, setScheduleCloudProvider] = useState<
+    "aws" | "azure" | "gcp" | "kubernetes" | "keyfactor" | "clm-digicert"
+  >("aws");
+  const [reportDrawerOpen, setReportDrawerOpen] = useState(false);
+  const [reportDrawerScan, setReportDrawerScan] = useState<PqcScanResponse | null>(null);
   const [actionMessage, setActionMessage] = useState<string | null>(null);
   const [expandedScanId, setExpandedScanId] = useState<string | null>(null);
   const [remediationScan, setRemediationScan] = useState<{
@@ -638,6 +648,26 @@ export default function DashboardClient() {
                                 >
                                   Diff
                                 </button>
+                                <button
+                                  type="button"
+                                  className="text-white underline underline-offset-4"
+                                  onClick={async () => {
+                                    try {
+                                      const detail = await fetchTenantJson<PqcScanResponse>(
+                                        `/tenant/scans/${scan.scanId}`,
+                                        savedKey
+                                      );
+                                      setReportDrawerScan(detail);
+                                      setReportDrawerOpen(true);
+                                    } catch (loadError) {
+                                      setActionMessage(
+                                        loadError instanceof Error ? loadError.message : "Failed to load report."
+                                      );
+                                    }
+                                  }}
+                                >
+                                  Reports
+                                </button>
                                 <PassportPanel
                                   scanId={scan.scanId}
                                   apiKey={savedKey}
@@ -701,6 +731,9 @@ export default function DashboardClient() {
                       scanId={remediationScan.scanId}
                       items={remediationScan.items}
                     />
+                    <div className="mt-6">
+                      <PeerComparisonPanel apiKey={savedKey} />
+                    </div>
                   </div>
                 ) : null}
               </Card>
@@ -731,6 +764,24 @@ export default function DashboardClient() {
                   <Eyebrow>Cloud inventory pull</Eyebrow>
                   <div className="mt-4">
                     <CloudIntegrationPanel apiKey={savedKey} onMessage={setActionMessage} />
+                  </div>
+                </Card>
+                <Card tone="panel">
+                  <Eyebrow>Kubernetes cert-manager</Eyebrow>
+                  <div className="mt-4">
+                    <K8sIntegrationPanel apiKey={savedKey} onMessage={setActionMessage} />
+                  </div>
+                </Card>
+                <Card tone="panel">
+                  <Eyebrow>Keyfactor</Eyebrow>
+                  <div className="mt-4">
+                    <KeyfactorIntegrationPanel apiKey={savedKey} onMessage={setActionMessage} />
+                  </div>
+                </Card>
+                <Card tone="panel">
+                  <Eyebrow>Certificate lifecycle (CLM)</Eyebrow>
+                  <div className="mt-4">
+                    <ClmIntegrationPanel apiKey={savedKey} onMessage={setActionMessage} />
                   </div>
                 </Card>
                 <Card tone="panel">
@@ -846,7 +897,7 @@ export default function DashboardClient() {
                 </div>
               </Card>
             ) : null}
-            {analytics.forecast || analytics.anomalyAlerts.length > 0 ? (
+            {analytics.forecast || analytics.anomalyAlerts.length > 0 || savedKey ? (
               <Card tone="panel">
                 <Eyebrow>Intelligence</Eyebrow>
                 <div className="mt-3 grid gap-4 sm:grid-cols-2 text-sm text-[var(--color-gray-300)]">
@@ -864,6 +915,7 @@ export default function DashboardClient() {
                       <p className="mt-1">{analytics.anomalyAlerts[0]?.message}</p>
                     </div>
                   ) : null}
+                  {savedKey ? <CohortDriftPanel apiKey={savedKey} /> : null}
                 </div>
               </Card>
             ) : null}
@@ -1010,12 +1062,18 @@ export default function DashboardClient() {
                     <select
                       value={scheduleCloudProvider}
                       onChange={(event) =>
-                        setScheduleCloudProvider(event.target.value as "aws" | "azure")
+                        setScheduleCloudProvider(
+                          event.target.value as typeof scheduleCloudProvider
+                        )
                       }
                       className="rounded-full border border-[var(--border-strong)] bg-black px-4 py-2 text-sm text-white"
                     >
                       <option value="aws">AWS ACM</option>
                       <option value="azure">Azure Key Vault</option>
+                      <option value="gcp">GCP Certificate Manager</option>
+                      <option value="kubernetes">Kubernetes cert-manager</option>
+                      <option value="keyfactor">Keyfactor</option>
+                      <option value="clm-digicert">DigiCert CLM</option>
                     </select>
                   ) : null}
                   <button
@@ -1058,6 +1116,19 @@ export default function DashboardClient() {
           </DashboardSection>
         </>
       ) : null}
+      <ReportDrawer
+        open={reportDrawerOpen}
+        onClose={() => setReportDrawerOpen(false)}
+        scan={reportDrawerScan}
+        reportStatus={
+          reportDrawerScan?.reportAvailable === false
+            ? "unavailable"
+            : reportDrawerScan
+              ? "ready"
+              : "checking"
+        }
+        missingReason={reportDrawerScan?.missingReason ?? null}
+      />
     </div>
   );
 }

@@ -8,10 +8,10 @@ Operational guide for enabling the transparency log, signing key registry, and v
 
 | Requirement | Check |
 |-------------|-------|
-| Postgres `DATABASE_URL` set | Persistence required for log tables |
-| Alembic at `004_evidence_layer` or later | `alembic current` shows `004_evidence_layer` |
+| Postgres `DATABASE_URL` set | Persistence required for log tables — **API and worker** |
+| Alembic at **`009_moat_phase7`** or later | `alembic current` shows `009_moat_phase7` (after `008_moat_deepening_core`, `004_evidence_layer`) |
 | Stable signing key provisioned | See env vars below — **never** rely on ephemeral per-process keys in prod |
-| CI green | `test_transparency_log.py`, `test_pqc_hardening.py` signing tests |
+| CI green | `test_transparency_log.py`, `test_signing_dual.py`, `test_merkle.py`, `test_anchor_git.py` |
 
 ---
 
@@ -31,6 +31,22 @@ Operational guide for enabling the transparency log, signing key registry, and v
 | `QTANGL_ANCHOR_INTERVAL` | Optional | `100` | Anchor every N log entries |
 | `QTANGL_ANCHOR_EVERY_ENTRY` | Optional | `false` | Force anchor on every append (dev only) |
 | `QTANGL_PQC_DATA_DIR` | Optional | `backend/data` | Base path for signing keys and anchors |
+| `QTANGL_RUN_MIGRATIONS_ON_START` | Recommended (Railway) | `true` | Run Alembic on API/worker boot |
+| `QTANGL_DB_AUTO_MIGRATE` | Recommended (prod) | `false` | Prefer Alembic over auto-create |
+| `QTANGL_ANCHOR_SCHEDULE_HOURS` | Optional | `24` | Scheduled Git/TSA anchor + drift check |
+| `QTANGL_ANCHOR_GIT_REPO` | Optional | — | Public witness repo (e.g. `org/qtangl-transparency-anchors`) |
+| `QTANGL_ANCHOR_GIT_TOKEN` | With Git repo | — | Fine-grained PAT with contents:write |
+| `QTANGL_ANCHOR_GIT_BRANCH` | Optional | `main` | Branch for `anchors/latest.json` + `anchors/log.jsonl` |
+| `QTANGL_ANCHOR_TSA_URL` | Optional | — | RFC 3161 TSA endpoint (e.g. freeTSA) |
+| `QTANGL_ANCHOR_TSA_CERT` | Recommended with TSA | — | PEM path for token verification |
+| `QTANGL_SIGNING_ALGS` | Optional | `ml-dsa-65,ed25519` | Dual signing algorithm order |
+| `QTANGL_VERIFY_POLICY` | Optional | `any` | `any` \| `all` for multi-signature verify |
+| `QTANGL_SIGNING_KMS_PROVIDER` | Optional | `none` | `none` \| `aws` \| `azure` for envelope key custody |
+| `QTANGL_SIGNING_KMS_KEY_ID` | With KMS | — | KMS key id / Azure Key Vault URI |
+| `QTANGL_SIGNING_KEY_ENC_B64` | With KMS | — | Envelope-encrypted Ed25519 key |
+| `QTANGL_INDEX_ENABLED` | Optional | `true` | Readiness Index pipeline |
+| `QTANGL_INDEX_MIN_COHORT` | Optional | `10` | k-anonymity threshold for index/drift |
+| `QTANGL_EVIDENCE_BACKUP_BUCKET` | Optional | — | S3/GCS for encrypted evidence backups |
 
 **Security:** Store signing keys in platform secrets (Railway, etc.) — never commit. Rotate via key registry retirement + new fingerprint (document in trust center).
 
@@ -70,7 +86,7 @@ export DATABASE_URL=postgresql+psycopg://...
 alembic upgrade head
 ```
 
-Creates: `signing_keys`, `evidence_log`, `evidence_anchors` ([004_evidence_layer.py](../../../backend/alembic/versions/004_evidence_layer.py)).
+Creates: `signing_keys`, `evidence_log`, `evidence_anchors` ([004_evidence_layer.py](../../../backend/alembic/versions/004_evidence_layer.py)); Moat tables via [008_moat_deepening_core.py](../../../backend/alembic/versions/008_moat_deepening_core.py) (`witness_cosignatures`, extended anchors); [009_moat_phase7.py](../../../backend/alembic/versions/009_moat_phase7.py) (`drift_aggregates`, index snapshots).
 
 **3. Deploy with log disabled**
 
@@ -109,7 +125,9 @@ python scripts/backfill_transparency_log.py             # execute
 - [ ] Signing key backed up in secrets manager
 - [ ] `QTANGL_ENABLE_TRANSPARENCY_LOG=true` on API **and** worker
 - [ ] Backfill completed; `entryCount` matches signed report count ± skipped
-- [ ] Trust center updated with transparency root URL
+- [ ] Trust center updated with transparency root URL + Git/TSA anchor links
+- [ ] External anchor: `anchors/latest.json` in Git matches `GET /pqc/transparency/root` Merkle root
+- [ ] `python scripts/reconstruct_log_from_anchors.py` exit 0 (hash chain + anchor drift)
 - [ ] Dogfood scan in CI produces log inclusion ([pqc-dogfood.yml](../../../.github/workflows/pqc-dogfood.yml))
 - [ ] Rollback plan: set flag `false` — verify still works; log append stops (non-breaking)
 
@@ -157,6 +175,21 @@ Use when rotating Ed25519 or ML-DSA keys without breaking verify for historical 
 ### Rollback
 
 Re-enable previous key in env; re-register fingerprint if retired in error. Do not delete log entries.
+
+---
+
+## Railway production checklist (Post-Moat)
+
+| Step | Action |
+|------|--------|
+| DB | Set `DATABASE_URL` on **API + worker** (private network URL) |
+| Migrations | `alembic upgrade head` through **009**; set `QTANGL_RUN_MIGRATIONS_ON_START=true`, `QTANGL_DB_AUTO_MIGRATE=false` |
+| Keys | Generate Ed25519 + optional ML-DSA once; set `QTANGL_REPORT_SIGNING_KEY_B64` (never ephemeral file keys) |
+| Transparency | Deploy with log OFF → smoke → enable `QTANGL_ENABLE_TRANSPARENCY_LOG=true` on API **and** worker → backfill → `verify_production_rollout.py --full` |
+| Anchors | Configure Git witness repo + TSA URL; confirm worker `anchor_tick` runs on schedule |
+| Index | Set `QTANGL_INDEX_ENABLED=true`; recruit opt-in cohort (`benchmarkOptIn`) before publishing peer bands |
+
+Reference: [backend/docs/RAILWAY_DEPLOY.md](../../../backend/docs/RAILWAY_DEPLOY.md), [backend/.env.example](../../../backend/.env.example).
 
 ---
 

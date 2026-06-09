@@ -14,10 +14,10 @@ Update weekly alongside [optimization_OLD_FUTURE/backlog/epics.md](../optimizati
 | ID | Epic | Status | Effort | Depends on |
 |----|------|--------|--------|------------|
 | K1 | Strategy & brand lock | `not-started` | S | — |
-| K2 | Website transformation | `not-started` | M | K1 |
+| K2 | Website transformation | `in-progress` | M | K1 |
 | K3 | Content & SEO engine | `not-started` | M | K1, K2 |
 | K4 | Product journey UX polish | `not-started` | M | B3, B4, K2 |
-| K5 | Lead magnets & self-serve funnel | `not-started` | M | K2, H5 |
+| K5 | Lead magnets & self-serve funnel | `in-progress` | M | K2, H5 |
 | K6 | GTM execution (readiness-first) | `in-progress` | M | K2, B6 |
 | K7 | Partner program (Convert delivery) | `not-started` | M | K6 |
 | K8 | Public roadmap & docs sync | `not-started` | S | K2 |

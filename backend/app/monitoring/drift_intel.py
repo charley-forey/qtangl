@@ -78,3 +78,36 @@ def run_drift_intel_pipeline() -> dict[str, Any]:
             persist_drift_aggregate(agg)
             published += 1
     return {"status": "ok", "published": published}
+
+
+def latest_drift_snapshot(*, industry: str) -> dict[str, Any]:
+    """Return latest cohort drift aggregate or unavailable reason."""
+    try:
+        from app.db.engine import db_session
+        from app.db.models import DriftAggregate
+    except Exception:
+        return {"available": False, "reason": "persistence_unavailable"}
+
+    try:
+        with db_session() as session:
+            row = (
+                session.query(DriftAggregate)
+                .filter(DriftAggregate.industry == industry)
+                .order_by(DriftAggregate.created_at.desc())
+                .first()
+            )
+            if row is None:
+                return {"available": False, "reason": "insufficient_cohort"}
+            if row.sample_size < _min_cohort():
+                return {"available": False, "reason": "insufficient_cohort", "sampleSize": row.sample_size}
+            metric = json.loads(row.metric_json or "{}")
+            return {
+                "available": True,
+                "industry": row.industry,
+                "sampleSize": row.sample_size,
+                "patternType": row.pattern_type,
+                "asOf": row.as_of,
+                **metric,
+            }
+    except RuntimeError:
+        return {"available": False, "reason": "persistence_unavailable"}

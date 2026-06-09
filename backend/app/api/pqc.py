@@ -693,6 +693,17 @@ def readiness_index(request: Request, industry: str = "financial") -> dict:
     return {"status": "success", "index": snapshot}
 
 
+@router.get("/index/drift")
+def readiness_index_drift(request: Request, industry: str = "financial") -> dict:
+    """Public k-anonymized drift aggregate for opted-in cohort (no PII)."""
+    from app.api.public_rate_limit import enforce_public_rate_limit
+    from app.monitoring.drift_intel import latest_drift_snapshot
+
+    enforce_public_rate_limit(request)
+    snapshot = latest_drift_snapshot(industry=industry)
+    return {"status": "success", "drift": snapshot}
+
+
 @router.get("/transparency/consistency")
 def transparency_consistency(request: Request, from_seq: int = 0, to_seq: int = 0) -> dict:
     from app.api.public_rate_limit import enforce_public_rate_limit
@@ -922,11 +933,11 @@ def cbom_diff(auth: AuthContext = Depends(require_auth_readonly)) -> dict:
 
 @router.post("/cbom/pull/{provider}", responses={401: {"model": ErrorResponse}, 422: {"model": ErrorResponse}})
 def cbom_cloud_pull(provider: str, auth: AuthContext = Depends(require_auth)) -> dict:
-    from app.integrations.cloud import pull_cloud_inventory
+    from app.integrations.pull import pull_inventory
     from app.cbom.service import ingest_cbom_document
     from app.telemetry.events import track_event
 
-    pull = pull_cloud_inventory(tenant_id=auth.tenant_id, provider=provider.lower())
+    pull = pull_inventory(tenant_id=auth.tenant_id, provider=provider.lower())
     if not pull.get("ok"):
         raise HTTPException(
             status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
