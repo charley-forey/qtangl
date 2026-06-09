@@ -36,7 +36,7 @@ export default function DocsShell({
     <DocsProvider pathname={pathname}>
       <main className="docs-layout flex-1 print:block">
         <div className="mx-auto grid w-full max-w-[var(--container-wide)] gap-8 px-5 py-10 sm:px-6 md:px-8 lg:grid-cols-[280px_minmax(0,1fr)] lg:gap-10 lg:px-10 lg:py-16 xl:grid-cols-[280px_minmax(0,1fr)_220px] xl:px-12">
-          <aside className="docs-sidebar-col print:hidden lg:sticky lg:top-24 lg:h-[calc(100vh-7rem)] lg:overflow-y-auto">
+          <aside className="docs-sidebar-col print:hidden lg:sticky lg:top-24 lg:h-[calc(100dvh-7rem)] lg:overflow-y-auto">
             <div className="space-y-4 lg:hidden">
               <button
                 type="button"
@@ -88,8 +88,14 @@ export default function DocsShell({
         </div>
       </main>
 
-      <Modal open={mobileNavOpen} onClose={() => setMobileNavOpen(false)} title="Documentation">
-        <div className="max-h-[70vh] overflow-y-auto">
+      <Modal
+        open={mobileNavOpen}
+        onClose={() => setMobileNavOpen(false)}
+        title="Documentation"
+        eyebrow="Developer portal"
+        size="lg"
+      >
+        <div className="max-h-[70dvh] overflow-y-auto">
           <DocsSidebar onNavigate={() => setMobileNavOpen(false)} />
         </div>
       </Modal>

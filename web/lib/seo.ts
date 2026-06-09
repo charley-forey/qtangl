@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 
 import { accessPageCopy } from "@/lib/copy/access";
 import { siteMetadata } from "@/lib/copy/product";
@@ -79,6 +79,15 @@ export function buildPageMetadata(options: PageMetadataOptions): Metadata {
           },
         }
       : {}),
+  };
+}
+
+export function buildSiteViewport(): Viewport {
+  return {
+    width: "device-width",
+    initialScale: 1,
+    viewportFit: "cover",
+    themeColor: "#020202",
   };
 }
 

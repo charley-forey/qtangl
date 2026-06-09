@@ -17,5 +17,23 @@ export default defineConfig({
       QTANGL_ACCESS_ALLOW_CONSOLE_FALLBACK: "true",
     },
   },
-  projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }],
+  projects: [
+    { name: "chromium", use: { ...devices["Desktop Chrome"] } },
+    {
+      name: "mobile-iphone-se",
+      use: { ...devices["iPhone SE"], browserName: "chromium" },
+    },
+    {
+      name: "mobile-iphone-14",
+      use: { ...devices["iPhone 14"], browserName: "chromium" },
+    },
+    {
+      name: "mobile-pixel-7",
+      use: { ...devices["Pixel 7"], browserName: "chromium" },
+    },
+    {
+      name: "tablet-ipad",
+      use: { ...devices["iPad (gen 7)"], browserName: "chromium" },
+    },
+  ],
 });

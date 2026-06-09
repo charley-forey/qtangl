@@ -53,12 +53,12 @@ export default function Footer() {
 
         <div className="space-y-4 text-sm text-[var(--color-gray-300)]">
           <p className="text-label">{footerCopy.primaryHeading}</p>
-          <div className="space-y-3">
+          <div className="space-y-2">
             {nav.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
-                className="block transition hover:text-white"
+                className="touch-target flex items-center transition hover:text-white"
               >
                 {item.name}
               </Link>
@@ -68,12 +68,12 @@ export default function Footer() {
 
         <div className="space-y-4 text-sm text-[var(--color-gray-300)]">
           <p className="text-label">{footerCopy.secondaryHeading}</p>
-          <div className="space-y-3">
+          <div className="space-y-2">
             {footerNav.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
-                className="block transition hover:text-white"
+                className="touch-target flex items-center transition hover:text-white"
               >
                 {item.name}
               </Link>
@@ -83,12 +83,12 @@ export default function Footer() {
 
         <div className="space-y-4 text-sm text-[var(--color-gray-300)]">
           <p className="text-label">{footerCopy.legalHeading}</p>
-          <div className="space-y-3">
+          <div className="space-y-2">
             {legalNav.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
-                className="block transition hover:text-white"
+                className="touch-target flex items-center transition hover:text-white"
               >
                 {item.name}
               </Link>

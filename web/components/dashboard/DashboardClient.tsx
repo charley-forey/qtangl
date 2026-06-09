@@ -1,35 +1,91 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 
 import Card from "@/components/ui/Card";
 import Eyebrow from "@/components/ui/Eyebrow";
 import RemediationBoard from "@/components/pqc/RemediationBoard";
-import RemediationWhatIf from "@/components/pqc/RemediationWhatIf";
 import ReadinessTrend from "@/components/pqc/ReadinessTrend";
 import ScanDiffPanel, { type ScanDiff } from "@/components/pqc/ScanDiffPanel";
-import CompliancePanel from "@/components/pqc/CompliancePanel";
-import InventoryHeatmap from "@/components/pqc/InventoryHeatmap";
-import CbomImportPanel from "@/components/pqc/CbomImportPanel";
-import CbomDriftWidget from "@/components/pqc/CbomDriftWidget";
-import CloudIntegrationPanel from "@/components/pqc/CloudIntegrationPanel";
-import ClmIntegrationPanel from "@/components/pqc/ClmIntegrationPanel";
-import CohortDriftPanel from "@/components/pqc/CohortDriftPanel";
-import KeyfactorIntegrationPanel from "@/components/pqc/KeyfactorIntegrationPanel";
-import K8sIntegrationPanel from "@/components/pqc/K8sIntegrationPanel";
-import PeerComparisonPanel from "@/components/pqc/PeerComparisonPanel";
-import ReportDrawer from "@/components/pqc/ReportDrawer";
-import EvidenceVaultPanel from "@/components/pqc/EvidenceVaultPanel";
-import MergeConflictPanel, { type MergeConflict } from "@/components/pqc/MergeConflictPanel";
-import MultiSourceInventoryWidget from "@/components/pqc/MultiSourceInventoryWidget";
-import PassportListPanel from "@/components/pqc/PassportListPanel";
-import PassportPanel from "@/components/pqc/PassportPanel";
-import AlertSettings from "@/components/dashboard/AlertSettings";
-import AuditLogPanel from "@/components/dashboard/AuditLogPanel";
 import DashboardOnboarding, { DashboardSection } from "@/components/dashboard/DashboardOnboarding";
-import IntegrationSettings from "@/components/dashboard/IntegrationSettings";
-import ScheduleManager from "@/components/dashboard/ScheduleManager";
+import type { MergeConflict } from "@/components/pqc/MergeConflictPanel";
+
+function PanelFallback() {
+  return (
+    <div
+      className="surface-panel card-size-md h-48 animate-pulse rounded-[var(--radius-xl)]"
+      aria-hidden
+    />
+  );
+}
+
+const RemediationWhatIf = dynamic(() => import("@/components/pqc/RemediationWhatIf"), {
+  loading: PanelFallback,
+});
+const CompliancePanel = dynamic(() => import("@/components/pqc/CompliancePanel"), {
+  loading: PanelFallback,
+});
+const InventoryHeatmap = dynamic(() => import("@/components/pqc/InventoryHeatmap"), {
+  loading: PanelFallback,
+});
+const CbomImportPanel = dynamic(() => import("@/components/pqc/CbomImportPanel"), {
+  loading: PanelFallback,
+});
+const CbomDriftWidget = dynamic(() => import("@/components/pqc/CbomDriftWidget"), {
+  loading: PanelFallback,
+});
+const CloudIntegrationPanel = dynamic(() => import("@/components/pqc/CloudIntegrationPanel"), {
+  loading: PanelFallback,
+});
+const ClmIntegrationPanel = dynamic(() => import("@/components/pqc/ClmIntegrationPanel"), {
+  loading: PanelFallback,
+});
+const CohortDriftPanel = dynamic(() => import("@/components/pqc/CohortDriftPanel"), {
+  loading: PanelFallback,
+});
+const KeyfactorIntegrationPanel = dynamic(
+  () => import("@/components/pqc/KeyfactorIntegrationPanel"),
+  { loading: PanelFallback }
+);
+const K8sIntegrationPanel = dynamic(() => import("@/components/pqc/K8sIntegrationPanel"), {
+  loading: PanelFallback,
+});
+const PeerComparisonPanel = dynamic(() => import("@/components/pqc/PeerComparisonPanel"), {
+  loading: PanelFallback,
+});
+const ReportDrawer = dynamic(() => import("@/components/pqc/ReportDrawer"), {
+  loading: () => null,
+});
+const EvidenceVaultPanel = dynamic(() => import("@/components/pqc/EvidenceVaultPanel"), {
+  loading: PanelFallback,
+});
+const MergeConflictPanel = dynamic(() => import("@/components/pqc/MergeConflictPanel"), {
+  loading: PanelFallback,
+});
+const MultiSourceInventoryWidget = dynamic(
+  () => import("@/components/pqc/MultiSourceInventoryWidget"),
+  { loading: PanelFallback }
+);
+const PassportListPanel = dynamic(() => import("@/components/pqc/PassportListPanel"), {
+  loading: PanelFallback,
+});
+const PassportPanel = dynamic(() => import("@/components/pqc/PassportPanel"), {
+  loading: PanelFallback,
+});
+const AlertSettings = dynamic(() => import("@/components/dashboard/AlertSettings"), {
+  loading: PanelFallback,
+});
+const AuditLogPanel = dynamic(() => import("@/components/dashboard/AuditLogPanel"), {
+  loading: PanelFallback,
+});
+const IntegrationSettings = dynamic(() => import("@/components/dashboard/IntegrationSettings"), {
+  loading: PanelFallback,
+});
+const ScheduleManager = dynamic(() => import("@/components/dashboard/ScheduleManager"), {
+  loading: PanelFallback,
+});
 import type { CompliancePack, ComplianceSummary, CryptoAsset, PqcScanResponse } from "@/lib/pqc";
 import {
   fetchTenantJson,

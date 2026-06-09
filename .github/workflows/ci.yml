@@ -163,6 +163,46 @@ jobs:
           QTANGL_API_BASE_URL: http://127.0.0.1:8000
         run: npx playwright test tests/e2e/dashboard.spec.ts
 
+      - name: E2E mobile responsive
+        env:
+          QTANGL_API_BASE_URL: http://127.0.0.1:8000
+        run: npx playwright test tests/e2e/mobile-responsive.spec.ts --project=mobile-iphone-14
+
+      - name: E2E mobile accessibility
+        env:
+          QTANGL_API_BASE_URL: http://127.0.0.1:8000
+        run: npx playwright test tests/e2e/a11y-mobile.spec.ts --project=mobile-iphone-14
+
+  lighthouse:
+    name: Web (Lighthouse mobile)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: web
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        env:
+          NEXT_TELEMETRY_DISABLED: "1"
+        run: npm run build
+
+      - name: Run Lighthouse CI
+        run: npx @lhci/cli@0.14.0 autorun
+
   codeql:
     name: CodeQL (Python + JavaScript)
     runs-on: ubuntu-latest

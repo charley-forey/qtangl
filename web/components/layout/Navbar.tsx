@@ -76,6 +76,22 @@ export default function Navbar() {
     };
   }, []);
 
+  useEffect(() => {
+    if (!open) {
+      return;
+    }
+
+    const mq = window.matchMedia("(min-width: 1024px)");
+    const handle = () => {
+      if (mq.matches) {
+        setOpen(false);
+      }
+    };
+
+    mq.addEventListener("change", handle);
+    return () => mq.removeEventListener("change", handle);
+  }, [open]);
+
   return (
     <>
       <header className="header-shell header-hairline fixed inset-x-0 top-0 z-50">
@@ -139,7 +155,7 @@ export default function Navbar() {
             </Link>
             <button
               type="button"
-              className="touch-target inline-flex h-11 w-11 items-center justify-center rounded-full border border-[var(--border)] bg-white/[0.02] text-white transition hover:border-[var(--border-strong)] hover:bg-white/[0.06] lg:hidden"
+              className="touch-target inline-flex h-12 w-12 items-center justify-center rounded-full border border-[var(--border)] bg-white/[0.02] text-white transition hover:border-[var(--border-strong)] hover:bg-white/[0.06] lg:hidden"
               onClick={() => setOpen(true)}
               aria-controls="mobile-navigation"
               aria-expanded={open}
@@ -152,7 +168,13 @@ export default function Navbar() {
       </header>
       <div aria-hidden="true" className="h-16 sm:h-[4.5rem]" />
 
-      <Modal open={open} onClose={() => setOpen(false)} title={navbarCopy.mobileTitle}>
+      <Modal
+        open={open}
+        onClose={() => setOpen(false)}
+        title={navbarCopy.mobileTitle}
+        eyebrow="Navigation"
+        size="md"
+      >
         <div id="mobile-navigation" className="space-y-5">
           <div className="space-y-2">
             {nav.map((item) => {

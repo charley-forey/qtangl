@@ -2,11 +2,21 @@
 
 import { KeyboardEvent, ReactNode, useEffect, useId, useRef } from "react";
 
+type ModalSize = "sm" | "md" | "lg";
+
 type ModalProps = {
   open: boolean;
   title?: string;
+  eyebrow?: string;
   onClose: () => void;
   children: ReactNode;
+  size?: ModalSize;
+};
+
+const sizeClass: Record<ModalSize, string> = {
+  sm: "max-w-sm",
+  md: "max-w-lg",
+  lg: "max-w-2xl",
 };
 
 function getFocusableElements(container: HTMLElement) {
@@ -20,7 +30,14 @@ function getFocusableElements(container: HTMLElement) {
   );
 }
 
-export default function Modal({ open, title, onClose, children }: ModalProps) {
+export default function Modal({
+  open,
+  title,
+  eyebrow = "Navigation",
+  onClose,
+  children,
+  size = "md",
+}: ModalProps) {
   const dialogRef = useRef<HTMLDivElement>(null);
   const previousFocusRef = useRef<HTMLElement | null>(null);
   const titleId = useId();
@@ -111,7 +128,7 @@ export default function Modal({ open, title, onClose, children }: ModalProps) {
 
   return (
     <div
-      className="fixed inset-0 z-[60] flex items-start justify-stretch bg-black/80 p-3 backdrop-blur-[2px] md:hidden"
+      className="fixed inset-0 z-[60] flex items-start justify-center overflow-y-auto overscroll-contain bg-black/80 px-3 py-[max(0.75rem,env(safe-area-inset-top))] backdrop-blur-[2px] sm:items-center"
       onMouseDown={(event) => {
         if (event.target === event.currentTarget) {
           onClose();
@@ -126,11 +143,11 @@ export default function Modal({ open, title, onClose, children }: ModalProps) {
         aria-label={title ? undefined : "Dialog"}
         tabIndex={-1}
         onKeyDown={handleKeyDown}
-        className="surface-panel-strong relative z-10 w-full rounded-[1.5rem] p-5 shadow-[0_18px_60px_rgba(0,0,0,0.45)]"
+        className={`surface-panel-strong relative z-10 flex max-h-[calc(100dvh-1.5rem)] w-full ${sizeClass[size]} flex-col overflow-hidden rounded-[1.5rem] shadow-[0_18px_60px_rgba(0,0,0,0.45)]`}
       >
-        <div className="flex items-center justify-between gap-4 border-b border-[var(--border)] pb-4">
+        <div className="flex flex-none items-center justify-between gap-4 border-b border-[var(--border)] p-5 pb-4">
           <div>
-            <p className="text-label">Navigation</p>
+            {eyebrow ? <p className="text-label">{eyebrow}</p> : null}
             {title ? (
               <h2 id={titleId} className="mt-2 text-lg font-semibold text-white">
                 {title}
@@ -139,13 +156,15 @@ export default function Modal({ open, title, onClose, children }: ModalProps) {
           </div>
           <button
             type="button"
-            className="rounded-full border border-[var(--border)] px-3 py-1.5 text-sm text-[var(--color-gray-300)] transition hover:border-[var(--border-strong)] hover:text-white"
+            className="touch-target rounded-full border border-[var(--border)] px-3 py-1.5 text-sm text-[var(--color-gray-300)] transition hover:border-[var(--border-strong)] hover:text-white"
             onClick={onClose}
           >
             Close
           </button>
         </div>
-        <div className="mt-4">{children}</div>
+        <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain p-5 [-webkit-overflow-scrolling:touch]">
+          {children}
+        </div>
       </div>
     </div>
   );

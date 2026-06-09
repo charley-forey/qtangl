@@ -87,7 +87,13 @@ export default function DocsSearch({ index }: DocsSearchProps) {
         </kbd>
       </button>
 
-      <Modal open={open} onClose={() => setOpen(false)} title="Search documentation">
+      <Modal
+        open={open}
+        onClose={() => setOpen(false)}
+        title="Search documentation"
+        eyebrow="Documentation"
+        size="lg"
+      >
         <div className="space-y-4">
           <input
             type="search"
@@ -98,7 +104,7 @@ export default function DocsSearch({ index }: DocsSearchProps) {
             className="input-field"
             autoFocus
           />
-          <ul className="max-h-[50vh] space-y-1 overflow-y-auto">
+          <ul className="max-h-[50dvh] space-y-1 overflow-y-auto">
             {results.length === 0 ? (
               <li className="px-2 py-3 text-sm text-[var(--color-gray-500)]">
                 No matches. Try API, schedule, or authentication.

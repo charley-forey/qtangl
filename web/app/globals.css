@@ -46,6 +46,7 @@ html {
 body {
   margin: 0;
   min-height: 100vh;
+  min-height: 100dvh;
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-inter), Arial, Helvetica, sans-serif;
@@ -176,6 +177,24 @@ a:not([class]) {
   .learn-print-area table,
   .learn-print-area pre {
     break-inside: avoid;
+  }
+}
+
+@media (prefers-reduced-data: reduce) {
+  .quantum-shell::before,
+  .quantum-shell::after,
+  .section-shell::before,
+  .hero-orb,
+  .gradient-text {
+    background: none !important;
+    animation: none !important;
+    filter: none !important;
+    opacity: 0 !important;
+  }
+
+  .header-shell {
+    backdrop-filter: none !important;
+    background: rgba(0, 0, 0, 0.92) !important;
   }
 }
 
