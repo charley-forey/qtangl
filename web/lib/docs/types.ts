@@ -44,12 +44,14 @@ export type DocsEndpointExample = {
 
 export type DocsEndpoint = {
   id: string;
-  method: "GET" | "POST";
+  method: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
   path: string;
   status: DocsFeatureStatus;
   title: string;
   summary: string;
   auth: boolean;
+  /** Required RBAC role(s) when auth is true. */
+  role?: string;
   rateLimit?: string;
   requestFields?: DocsFieldRow[];
   responseFields?: DocsFieldRow[];
@@ -57,6 +59,14 @@ export type DocsEndpoint = {
   errors?: number[];
   examples: DocsEndpointExample[];
   notes?: string[];
+  /** Primary response content type when not application/json. */
+  contentType?: string;
+  /** Whether Idempotency-Key header is supported. */
+  idempotency?: boolean;
+  /** Pagination model description. */
+  pagination?: string;
+  /** Per-format response notes (e.g. report format matrix). */
+  formatMatrix?: DocsFieldRow[];
 };
 
 export type DocsSearchEntry = {
@@ -71,4 +81,6 @@ export type DocsTocItem = {
   id: string;
   title: string;
   level: 2 | 3;
+  /** Document order for stable TOC sorting. */
+  order?: number;
 };

@@ -37,6 +37,21 @@ export default function ConceptsPage() {
         pathname="/docs/concepts"
         searchIndex={docsSearchIndex}
       >
+        <p className="text-xs text-[var(--color-gray-500)]">Last updated: 2026-06-09</p>
+
+        <DocsSection>
+          <DocsHeading>Assess → Monitor → Convert</DocsHeading>
+          <DocsCallout variant="info">
+            Qtangl&apos;s primary product is post-quantum readiness: baseline cryptographic inventory (Assess),
+            scheduled re-scans with drift alerts (Monitor), and remediation playbooks with re-verification
+            (Convert). Every assessment exports signed evidence verifiable at{" "}
+            <Link href="/verify" className="text-white underline underline-offset-4">
+              /verify
+            </Link>
+            .
+          </DocsCallout>
+        </DocsSection>
+
         <DocsSection>
           <DocsHeading>{conceptsPage.sections[0].title}</DocsHeading>
           <Card className="rounded-2xl">

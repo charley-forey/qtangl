@@ -3,6 +3,7 @@
 import { useState } from "react";
 
 import { qtanglApiBaseUrl } from "@/lib/api";
+import { trackEvent } from "@/lib/analytics";
 
 export default function MonitorSignupForm() {
   const [email, setEmail] = useState("");
@@ -25,11 +26,14 @@ export default function MonitorSignupForm() {
         throw new Error(payload.detail ?? "Signup failed.");
       }
       if (payload.status === "success" && payload.checkoutUrl) {
+        trackEvent("monitor_checkout_started", { company });
         window.location.href = payload.checkoutUrl;
         return;
       }
+      trackEvent("monitor_signup_contact", { company, status: payload.status });
       setMessage(payload.message ?? "Contact hello@qtangl.com to start a Monitor pilot.");
     } catch (error) {
+      trackEvent("monitor_signup_error", { company });
       setMessage(error instanceof Error ? error.message : "Signup failed.");
     } finally {
       setLoading(false);

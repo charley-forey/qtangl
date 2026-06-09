@@ -248,6 +248,13 @@ def recommend_remediation_plan(item: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def _severity_uplift_weights() -> dict[str, float]:
+    """Map risk.py severity weights (0–100) to readiness score uplift points."""
+    base = {"critical": 100, "high": 75, "medium": 50, "low": 25, "info": 10}
+    scale = 2.8 / 100.0
+    return {level: round(weight * scale, 2) for level, weight in base.items()}
+
+
 def simulate_post_migration_readiness(
     *,
     report: dict[str, Any],
@@ -256,7 +263,7 @@ def simulate_post_migration_readiness(
     current = float(report.get("readinessScore", 0))
     backlog = report.get("remediationBacklog") or []
     selected = [row for row in backlog if row.get("id") in set(selected_remediation_ids)]
-    severity_weight = {"critical": 2.8, "high": 2.0, "medium": 1.2, "low": 0.6}
+    severity_weight = _severity_uplift_weights()
     uplift = sum(severity_weight.get(str(row.get("severity", "medium")).lower(), 1.0) for row in selected)
     projected = min(100.0, round(current + uplift, 1))
     return {
@@ -267,6 +274,7 @@ def simulate_post_migration_readiness(
         "assumptions": [
             "Each selected item is fully implemented and verified.",
             "No new high-severity assets are introduced during migration.",
+            "Uplift per item uses risk.py severity weights (critical≈2.8, high≈2.1, medium≈1.4, low≈0.7).",
         ],
     }
 

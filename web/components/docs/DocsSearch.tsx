@@ -94,6 +94,7 @@ export default function DocsSearch({ index }: DocsSearchProps) {
             value={query}
             onChange={(event) => setQuery(event.target.value)}
             placeholder="Search pages and headings…"
+            aria-label="Search documentation"
             className="input-field"
             autoFocus
           />

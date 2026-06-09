@@ -25,26 +25,21 @@ export const roadmapBands: RoadmapBand[] = [
       {
         title: "PQ-signed verifiable evidence",
         description: "ML-DSA-65 / Ed25519 signed reports, public /verify, stable signing key registry.",
+        status: "ga",
+      },
+      {
+        title: "Transparency log",
+        description: "Append-only hash chain, inclusion proofs, witness co-signing, key retirement.",
         status: "pilot",
       },
       {
-        title: "Transparency log MVP",
-        description: "Append-only hash chain for report content hashes; inclusion proofs on verify.",
-        status: "pilot",
+        title: "Monitor tier — schedules & webhooks",
+        description: "Scheduled re-scans, drift alerts, SIEM v2 webhooks with HMAC and DLQ replay.",
+        status: "ga",
       },
       {
-        title: "Scheduled scans & drift",
-        description: "Monitor tier cadence, scan diff alerts, regression webhooks.",
-        status: "pilot",
-      },
-      {
-        title: "CBOM import & merge",
-        description: "Neutral aggregator: ingest third-party CycloneDX CBOMs with provenance labeling and conflict queue.",
-        status: "pilot",
-      },
-      {
-        title: "Developer docs platform",
-        description: "Search, schemas, per-endpoint reference, verify spec, and operations guides.",
+        title: "Enterprise documentation",
+        description: "Full Tenant API reference, RBAC matrix, OpenAPI artifact, CI coverage gate.",
         status: "ga",
       },
     ],
@@ -54,19 +49,19 @@ export const roadmapBands: RoadmapBand[] = [
     label: "Next",
     items: [
       {
-        title: "Readiness Passport",
-        description: "Revocable share links for auditors and MSSPs with verify + log inclusion.",
-        status: "pilot",
+        title: "Official TypeScript & Python SDKs",
+        description: "Typed clients with idempotency, verify helpers, and retry policies.",
+        status: "coming-soon",
       },
       {
         title: "Cloud / KMS import GA",
-        description: "Read-only credential model for AWS KMS, Azure Key Vault inventory.",
+        description: "Read-only credential model for AWS KMS, Azure Key Vault, Keyfactor inventory.",
         status: "pilot",
       },
       {
-        title: "Schedule optimization (GA)",
-        description: "CP-SAT baseline on every job; hybrid QAOA on bounded research candidates.",
-        status: "ga",
+        title: "SOC 2 Type I observation",
+        description: "Control evidence collection in progress — no certification claim until complete.",
+        status: "pilot",
       },
     ],
   },
@@ -75,23 +70,18 @@ export const roadmapBands: RoadmapBand[] = [
     label: "Later",
     items: [
       {
-        title: "Open verify spec + offline CLI",
-        description: "Published verify-spec.md; third-party verification without dashboard login.",
+        title: "EU data residency region",
+        description: "Dedicated EU deployment for regulated tenants by enterprise agreement.",
+        status: "coming-soon",
+      },
+      {
+        title: "Product SBOM publication",
+        description: "Public CycloneDX SBOM for Qtangl platform components (dogfood CBOM).",
         status: "pilot",
       },
       {
-        title: "SIEM & webhook integrations",
-        description: "Export verify events and drift alerts to enterprise observability stacks.",
-        status: "coming-soon",
-      },
-      {
-        title: "SOC 2 readiness",
-        description: "Security questionnaire pack and retention controls for production tenants.",
-        status: "coming-soon",
-      },
-      {
         title: "Routing & allocation solvers",
-        description: "Expansion motion for hybrid optimization demos — secondary to readiness.",
+        description: "Labs expansion motion for hybrid optimization demos — secondary to readiness.",
         status: "research",
       },
     ],

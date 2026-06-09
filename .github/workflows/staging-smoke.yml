@@ -1,0 +1,31 @@
+name: Staging smoke
+
+on:
+  schedule:
+    - cron: "0 16 * * 1-5"
+  workflow_dispatch:
+    inputs:
+      api_base:
+        description: "Staging API base URL"
+        required: false
+        default: ""
+
+jobs:
+  conversion-smoke:
+    name: GTM conversion smoke
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Run conversion smoke
+        env:
+          QTANGL_API_BASE: ${{ github.event.inputs.api_base || secrets.QTANGL_STAGING_API_BASE || 'https://api.qtangl.com' }}
+        run: python scripts/conversion_smoke.py

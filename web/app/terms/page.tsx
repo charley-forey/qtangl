@@ -39,7 +39,7 @@ export default function TermsPage() {
         },
         {
           heading: "7. Privacy",
-          body: "Processing of personal data is described in our Privacy Policy and, where applicable, the Data Processing Addendum.",
+          body: "Processing of personal data is described in our Privacy Policy, the Trust Center (/trust), and — where applicable — the Data Processing Addendum.",
         },
         {
           heading: "8. Disclaimers",

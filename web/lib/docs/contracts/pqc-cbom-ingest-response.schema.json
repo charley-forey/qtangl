@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "PqcCbomIngestResponse",
+  "type": "object",
+  "required": ["status", "ok"],
+  "properties": {
+    "status": { "type": "string", "enum": ["success"] },
+    "ok": { "type": "boolean" },
+    "idempotent": { "type": "boolean" },
+    "ingestJobId": { "type": "string" },
+    "sourceId": { "type": "string" },
+    "componentCount": { "type": "integer" },
+    "newComponents": { "type": "integer" },
+    "dedupedCount": { "type": "integer" },
+    "conflictCount": { "type": "integer" }
+  }
+}

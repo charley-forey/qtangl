@@ -1,0 +1,942 @@
+{
+  "info": {
+    "name": "Qtangl API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "GET /optimize",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/optimize",
+        "description": "Liveness probe for uptime monitors and deployment readiness checks."
+      }
+    },
+    {
+      "name": "GET /hospital/roster",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/hospital/roster",
+        "description": "List available call-out scenarios for the hospital demo."
+      }
+    },
+    {
+      "name": "GET /hospital/callout",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/hospital/callout",
+        "description": "Return cached QPU trace metadata for hybrid audit storytelling in the demo."
+      }
+    },
+    {
+      "name": "POST /hospital/upload-roster",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/hospital/upload-roster",
+        "description": "Run the hospital re-staffing pipeline: classical baseline, hybrid audit, scoreboard, and timeline."
+      }
+    },
+    {
+      "name": "GET /airline/network",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/airline/network",
+        "description": "List disruption scenarios for the OCC recovery demo."
+      }
+    },
+    {
+      "name": "GET /airline/disruption",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/airline/disruption",
+        "description": "Cached QPU sampling trace for hybrid micro-window replay."
+      }
+    },
+    {
+      "name": "POST /airline/upload-crew",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/airline/upload-crew",
+        "description": "Run OCC recovery: tail routing, CP-SAT crew assignment, hybrid alternates, scoreboard, audit packs."
+      }
+    },
+    {
+      "name": "GET /ev-fleet/depot",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/ev-fleet/depot",
+        "description": "List EV fleet charging scenarios."
+      }
+    },
+    {
+      "name": "GET /ev-fleet/window",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/ev-fleet/window",
+        "description": "Cached QPU trace for charger-queue hybrid replay."
+      }
+    },
+    {
+      "name": "POST /ev-fleet/upload-fleet",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/ev-fleet/upload-fleet",
+        "description": "Upload stops.csv; returns a 24-hour session id."
+      }
+    },
+    {
+      "name": "GET /pqc/inventory",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/pqc/inventory",
+        "description": "List PQC scan scenarios (bank, gov contractor, healthcare)."
+      }
+    },
+    {
+      "name": "GET /pqc/target",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/pqc/target",
+        "description": "Cached ML-KEM hybrid handshake trace for demo replay."
+      }
+    },
+    {
+      "name": "POST /pqc/standards",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/pqc/standards",
+        "description": "Upload PEM cert bundle or CSV endpoint list; returns 24h session id."
+      }
+    },
+    {
+      "name": "GET /pqc/scan",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/pqc/scan",
+        "description": "Poll live scan job status and timeline."
+      }
+    },
+    {
+      "name": "GET /pqc/handshake/prove",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/pqc/handshake/prove",
+        "description": "Download migration report as json, csv, cbom, or pdf."
+      }
+    },
+    {
+      "name": "POST /pqc/transparency/root",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/pqc/transparency/root",
+        "description": "Ingest CycloneDX 1.6/1.7 CBOM from third-party tools; normalize, provenance-tag, and merge into tenant aggregate."
+      }
+    },
+    {
+      "name": "GET /tenant/scans/{scanId}/share",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/scans/example/share",
+        "description": "List retained signed bundles in the tenant evidence vault with retention metadata."
+      }
+    },
+    {
+      "name": "POST /tenant/evidence/{scanId}/retain",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/evidence/example/retain",
+        "description": "Configure read-only cloud CBOM pull for AWS ACM or Azure Key Vault."
+      }
+    },
+    {
+      "name": "POST /pqc/cbom/pull/{provider}",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/pqc/cbom/pull/example",
+        "description": "Run VRP routing, CP-SAT charger queue, hybrid stagger, scoreboard, and audit packs."
+      }
+    },
+    {
+      "name": "GET /tenant/me",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/me",
+        "description": "List recent tenant scans with lifecycle status and report availability."
+      }
+    },
+    {
+      "name": "DELETE /tenant/scans/{scan_id}",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/scans/example",
+        "description": "Delete a tenant-owned scan and remove associated report artifacts."
+      }
+    },
+    {
+      "name": "POST /tenant/scans/{scan_id}/report",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/scans/example/report",
+        "description": "Email a scan report link to a recipient mailbox."
+      }
+    },
+    {
+      "name": "GET /tenant/export",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/export",
+        "description": "Compute tenant reliability and report-availability service level metrics."
+      }
+    },
+    {
+      "name": "POST /tenant/scans/{scan_id}/remediation",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/scans/example/remediation",
+        "description": "Create or update remediation ownership, status, notes, and target date."
+      }
+    },
+    {
+      "name": "POST /tenant/scans/{scan_id}/remediation/automate",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/scans/example/remediation/automate",
+        "description": "Verify that a remediation item is fixed by comparing baseline and verification scans."
+      }
+    },
+    {
+      "name": "POST /tenant/scans/{scan_id}/remediation/intelligence",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/scans/example/remediation/intelligence",
+        "description": "Simulate post-remediation readiness projection for selected remediation ids."
+      }
+    },
+    {
+      "name": "POST /tenant/schedules",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/schedules",
+        "description": "Create recurring scan or cloud-pull schedule with notifications."
+      }
+    },
+    {
+      "name": "GET /tenant/schedules/{schedule_id}",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/schedules/example",
+        "description": "Load tenant-level monitoring, retention, and benchmark settings."
+      }
+    },
+    {
+      "name": "GET /tenant/settings",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/settings",
+        "description": "List tenant audit entries with optional action/since filters and cursor pagination."
+      }
+    },
+    {
+      "name": "POST /tenant/audit/export",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/audit/export",
+        "description": "Create expiring share links for report, bundle, or passport access."
+      }
+    },
+    {
+      "name": "GET /tenant/scans/{scan_id}/share",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/scans/example/share",
+        "description": "List active tenant share/passport links, optionally filtered by scan id."
+      }
+    },
+    {
+      "name": "GET /tenant/share/{link_id}",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/share/example",
+        "description": "List tracked portfolio targets and readiness rollup."
+      }
+    },
+    {
+      "name": "GET /tenant/portfolio",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/portfolio",
+        "description": "Return command-center aggregates and weekly executive digest for portfolio monitoring."
+      }
+    },
+    {
+      "name": "POST /tenant/partner/children",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/partner/children",
+        "description": "Link a child tenant to the current partner tenant."
+      }
+    },
+    {
+      "name": "POST /tenant/webhooks",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/webhooks",
+        "description": "Create a tenant webhook subscription endpoint."
+      }
+    },
+    {
+      "name": "GET /tenant/webhooks/{webhook_id}",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/webhooks/example",
+        "description": "List webhook dead-letter queue entries for failed deliveries."
+      }
+    },
+    {
+      "name": "GET /tenant/webhooks/replay",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/webhooks/replay",
+        "description": "List generic integration configurations for the tenant."
+      }
+    },
+    {
+      "name": "POST /tenant/integrations/{provider}",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/integrations/example",
+        "description": "Push a remediation item to an external ticketing integration."
+      }
+    },
+    {
+      "name": "POST /tenant/integrations/pull",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/integrations/pull",
+        "description": "Parse cloud inventory payload (JSON/CSV) into normalized rows for upload workflows."
+      }
+    },
+    {
+      "name": "POST /tenant/integrations/cloud",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/integrations/cloud",
+        "description": "Create or update cloud integration credentials and connection settings."
+      }
+    },
+    {
+      "name": "POST /tenant/integrations/cloud/{provider}/test",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/integrations/cloud/example/test",
+        "description": "Create or update Keyfactor integration credentials and collection scope."
+      }
+    },
+    {
+      "name": "POST /tenant/integrations/keyfactor/test",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/integrations/keyfactor/test",
+        "description": "Create or update CLM integration credentials for the selected CLM provider."
+      }
+    },
+    {
+      "name": "GET /tenant/integrations/clm/{clm_provider}/test",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/integrations/clm/example/test",
+        "description": "Detect anomalies in readiness score trends using recent scan history."
+      }
+    },
+    {
+      "name": "GET /tenant/analytics/forecast",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/analytics/forecast",
+        "description": "Compare tenant readiness against industry benchmark cohorts."
+      }
+    },
+    {
+      "name": "GET /tenant/drift-intel",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/drift-intel",
+        "description": "Map scan findings to compliance frameworks for posture reporting."
+      }
+    },
+    {
+      "name": "POST /tenant/evidence",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/evidence",
+        "description": "Retain a scan's evidence package in the tenant evidence vault."
+      }
+    },
+    {
+      "name": "GET /tenant/billing/portal",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/billing/portal",
+        "description": "Get current tenant OIDC SSO configuration."
+      }
+    },
+    {
+      "name": "DELETE /tenant/oidc",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/oidc",
+        "description": "Delete all tenant data for retention/offboarding workflows."
+      }
+    },
+    {
+      "name": "POST /tenant/offboard",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/offboard",
+        "description": "Scan source snippets or GitHub repositories for crypto-coverage findings."
+      }
+    },
+    {
+      "name": "GET tls/client.ts",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}tls/client.ts",
+        "description": "Run cloud coverage preview for provider and return preview object count."
+      }
+    },
+    {
+      "name": "GET /pqc/scan/{scan_id}/persist",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/pqc/scan/example/persist",
+        "description": "Check which report formats are currently available for a completed scan."
+      }
+    },
+    {
+      "name": "POST /pqc/verify/{scan_id}",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/pqc/verify/example",
+        "description": "Public verification endpoint accepting proof payloads directly."
+      }
+    },
+    {
+      "name": "GET /pqc/index",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/pqc/index",
+        "description": "Public drift summary comparing current index state to prior snapshots."
+      }
+    },
+    {
+      "name": "GET /pqc/transparency/consistency",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/pqc/transparency/consistency",
+        "description": "Public list of witness identities and recent signatures."
+      }
+    },
+    {
+      "name": "GET /pqc/transparency/witness",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/pqc/transparency/witness",
+        "description": "Public latest root checkpoint for the PQC transparency log."
+      }
+    },
+    {
+      "name": "GET /pqc/transparency/keys",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/pqc/transparency/keys",
+        "description": "Public inclusion proof lookup for a report content hash."
+      }
+    },
+    {
+      "name": "GET /pqc/transparency/keys/retire",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/pqc/transparency/keys/retire",
+        "description": "List currently configured CBOM source systems and pull status."
+      }
+    },
+    {
+      "name": "GET /pqc/cbom/aggregate",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/pqc/cbom/aggregate",
+        "description": "List unresolved CBOM merge conflicts requiring operator adjudication."
+      }
+    },
+    {
+      "name": "GET /pqc/cbom/conflicts/{conflict_id}",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/pqc/cbom/conflicts/example",
+        "description": "Compare two CBOM snapshots to surface cryptographic drift and net changes."
+      }
+    },
+    {
+      "name": "POST /admin/tenants",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/admin/tenants",
+        "description": "Issue a new API key for a tenant with scoped role and optional expiry."
+      }
+    },
+    {
+      "name": "DELETE /admin/tenants/{tenant_id}/keys",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/admin/tenants/example/keys",
+        "description": "Revoke an API key immediately and invalidate future requests."
+      }
+    },
+    {
+      "name": "POST /public/monitor-signup",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/public/monitor-signup",
+        "description": "Provision a starter monitor profile from a validated signup."
+      }
+    },
+    {
+      "name": "POST /public/lead-capture",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/public/lead-capture",
+        "description": "Unsubscribe an email address from monitor and GTM mailing flows."
+      }
+    },
+    {
+      "name": "POST /public/onboarding-key/{token}",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/public/onboarding-key/example",
+        "description": "Receive Stripe webhook events for billing lifecycle synchronization."
+      }
+    },
+    {
+      "name": "GET /health",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/health",
+        "description": "Readiness probe validating service dependencies before traffic routing."
+      }
+    },
+    {
+      "name": "GET /metrics",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/metrics",
+        "description": "Read public share metadata and high-level scan readiness overview."
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://api.qtangl.com"
+    },
+    {
+      "key": "QTANGL_API_KEY",
+      "value": "your-api-key"
+    }
+  ]
+}

@@ -7,6 +7,7 @@ import PageHero from "@/components/layout/PageHero";
 import PageShell from "@/components/layout/PageShell";
 import Section from "@/components/layout/Section";
 import { qtanglApiBaseUrl } from "@/lib/api";
+import { trackEvent } from "@/lib/analytics";
 
 type VerifyResult = {
   valid?: boolean;
@@ -85,6 +86,7 @@ export default function VerifyPageClient() {
         }
         const payload = await response.json();
         setResult(payload.verification ?? null);
+        trackEvent("verify_scan_lookup", { scanId, valid: payload.verification?.valid });
       })
       .catch((fetchError) => {
         setError(fetchError instanceof Error ? fetchError.message : "Verification failed.");
@@ -107,6 +109,7 @@ export default function VerifyPageClient() {
       }
       const payload = await response.json();
       setResult(payload.verification ?? null);
+      trackEvent("verify_paste_json", { valid: payload.verification?.valid });
     } catch (verifyError) {
       setError(verifyError instanceof Error ? verifyError.message : "Invalid JSON or verification failed.");
     } finally {
@@ -123,6 +126,22 @@ export default function VerifyPageClient() {
       />
       <Section>
         <div className="max-w-2xl space-y-6 text-sm text-[var(--color-gray-300)]">
+          <div className="rounded-xl border border-[var(--border-subtle)] p-4">
+            <p className="text-xs uppercase tracking-[0.14em] text-[var(--color-gray-500)]">
+              Offline verification (recommended)
+            </p>
+            <pre className="mt-3 overflow-x-auto rounded-lg bg-black p-3 text-xs text-[var(--color-gray-300)]">
+              {`pip install qtangl-verify
+qtangl-verify report.json --api-base ${qtanglApiBaseUrl} --json`}
+            </pre>
+            <p className="mt-3 text-xs text-[var(--color-gray-500)]">
+              Full spec:{" "}
+              <a href="/docs/verify-spec" className="text-white underline underline-offset-4">
+                /docs/verify-spec
+              </a>
+            </p>
+          </div>
+
           {!scanId ? (
             <p>
               Paste a scan ID in the URL: <code className="text-white">/verify?scanId=scan-…</code>

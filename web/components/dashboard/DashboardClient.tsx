@@ -1,5 +1,6 @@
 "use client";
 
+import { useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 
 import Card from "@/components/ui/Card";
@@ -50,6 +51,8 @@ type TenantMe = {
 };
 
 export default function DashboardClient() {
+  const searchParams = useSearchParams();
+  const onboardingToken = searchParams.get("onboarding") ?? "";
   const [apiKey, setApiKey] = useState("");
   const [savedKey, setSavedKey] = useState<string | null>(null);
   const [me, setMe] = useState<TenantMe | null>(null);
@@ -345,6 +348,49 @@ export default function DashboardClient() {
     }
   }, []);
 
+  useEffect(() => {
+    if (!onboardingToken) {
+      return;
+    }
+    let cancelled = false;
+    async function redeemOnboardingKey() {
+      setLoading(true);
+      setError(null);
+      try {
+        const response = await fetch(
+          `${qtanglApiBaseUrl}/public/onboarding-key/${encodeURIComponent(onboardingToken)}`
+        );
+        if (!response.ok) {
+          throw new Error("Onboarding link invalid, expired, or already used.");
+        }
+        const payload = (await response.json()) as { apiKey?: string };
+        if (cancelled || !payload.apiKey) {
+          return;
+        }
+        setStoredTenantApiKey(payload.apiKey);
+        setApiKey(payload.apiKey);
+        window.dispatchEvent(new Event("qtangl-api-key-updated"));
+        setActionMessage("Monitor API key retrieved. Connecting dashboard…");
+        await loadDashboard(payload.apiKey);
+        const url = new URL(window.location.href);
+        url.searchParams.delete("onboarding");
+        window.history.replaceState({}, "", `${url.pathname}${url.search}`);
+      } catch (redeemError) {
+        if (!cancelled) {
+          setError(redeemError instanceof Error ? redeemError.message : "Onboarding link failed.");
+        }
+      } finally {
+        if (!cancelled) {
+          setLoading(false);
+        }
+      }
+    }
+    void redeemOnboardingKey();
+    return () => {
+      cancelled = true;
+    };
+  }, [onboardingToken, loadDashboard]);
+
   const apiKeyCard = (
     <Card tone="strong" className="rounded-[var(--radius-xl)]" id="connect-key">
       <Eyebrow>Tenant API key</Eyebrow>
@@ -396,9 +442,8 @@ export default function DashboardClient() {
 
       {me ? (
         <>
-          <DashboardSection title="Overview">
-            {apiKeyCard}
-            {latestScan ? (
+          {latestScan ? (
+            <DashboardSection title="Readiness">
               <Card tone="feature" size="lg" className="rounded-[var(--radius-feature)]">
                 <Eyebrow>Readiness at a glance</Eyebrow>
                 <p className="mt-4 text-4xl font-semibold tracking-tight text-white">
@@ -413,7 +458,32 @@ export default function DashboardClient() {
                   Latest scan {latestScan.scanId} · {formatUtcDateTime(latestScan.createdAt)}
                 </p>
               </Card>
-            ) : null}
+            </DashboardSection>
+          ) : null}
+
+          <DashboardSection title="Scan drift">
+            <Card tone="feature" size="lg" className="rounded-[var(--radius-feature)]">
+              <Eyebrow>
+                {latestScan ? `Scan diff — ${latestScan.scanId}` : "Scan diff"}
+              </Eyebrow>
+              <p className="mt-2 text-sm text-[var(--color-gray-400)]">
+                Compare against the prior scan on the same target to surface cryptographic drift.
+              </p>
+              <div className="mt-4">
+                {scanDiff ? (
+                  <ScanDiffPanel diff={scanDiff} />
+                ) : (
+                  <p className="text-sm text-[var(--color-gray-500)]">
+                    {latestScan
+                      ? "No prior scan to compare. Run a second scan on the same target to see drift."
+                      : "Run a scan to enable drift tracking."}
+                  </p>
+                )}
+              </div>
+            </Card>
+          </DashboardSection>
+
+          <DashboardSection title="Overview">
             <Card tone="panel">
               <Eyebrow>Tenant overview</Eyebrow>
               <dl className="mt-4 grid gap-4 sm:grid-cols-2">
@@ -455,27 +525,8 @@ export default function DashboardClient() {
                 </a>
               )}
             </Card>
+            {apiKeyCard}
           </DashboardSection>
-
-          {latestScan ? (
-            <DashboardSection title="Scan drift">
-              <Card tone="feature" size="lg" className="rounded-[var(--radius-feature)]">
-                <Eyebrow>Scan diff — {latestScan.scanId}</Eyebrow>
-                <p className="mt-2 text-sm text-[var(--color-gray-400)]">
-                  Compare against the prior scan on the same target to surface cryptographic drift.
-                </p>
-                <div className="mt-4">
-                  {scanDiff ? (
-                    <ScanDiffPanel diff={scanDiff} />
-                  ) : (
-                    <p className="text-sm text-[var(--color-gray-500)]">
-                      No prior scan to compare. Run a second scan on the same target to see drift.
-                    </p>
-                  )}
-                </div>
-              </Card>
-            </DashboardSection>
-          ) : null}
 
           <DashboardSection title="Remediation">
             {savedKey && remediationScan ? (
@@ -744,76 +795,6 @@ export default function DashboardClient() {
             ) : null}
           </DashboardSection>
 
-          <DashboardSection title="CBOM aggregation">
-            {savedKey ? (
-              <>
-                <Card tone="panel">
-                  <Eyebrow>Multi-source inventory</Eyebrow>
-                  <div className="mt-3">
-                    <MultiSourceInventoryWidget
-                      componentCount={cbomAggregate?.componentCount ?? 0}
-                      readiness={cbomAggregate?.readiness ?? null}
-                      openConflicts={cbomAggregate?.openConflicts ?? 0}
-                    />
-                  </div>
-                </Card>
-                <Card tone="panel">
-                  <CbomDriftWidget drift={cbomDrift} />
-                </Card>
-                <Card tone="panel">
-                  <Eyebrow>Cloud inventory pull</Eyebrow>
-                  <div className="mt-4">
-                    <CloudIntegrationPanel apiKey={savedKey} onMessage={setActionMessage} />
-                  </div>
-                </Card>
-                <Card tone="panel">
-                  <Eyebrow>Kubernetes cert-manager</Eyebrow>
-                  <div className="mt-4">
-                    <K8sIntegrationPanel apiKey={savedKey} onMessage={setActionMessage} />
-                  </div>
-                </Card>
-                <Card tone="panel">
-                  <Eyebrow>Keyfactor</Eyebrow>
-                  <div className="mt-4">
-                    <KeyfactorIntegrationPanel apiKey={savedKey} onMessage={setActionMessage} />
-                  </div>
-                </Card>
-                <Card tone="panel">
-                  <Eyebrow>Certificate lifecycle (CLM)</Eyebrow>
-                  <div className="mt-4">
-                    <ClmIntegrationPanel apiKey={savedKey} onMessage={setActionMessage} />
-                  </div>
-                </Card>
-                <Card tone="panel">
-                  <CbomImportPanel
-                    apiKey={savedKey}
-                    onImported={() => {
-                      if (savedKey) {
-                        void loadDashboard(savedKey);
-                      }
-                    }}
-                  />
-                </Card>
-                {cbomConflicts.length > 0 ? (
-                  <Card tone="panel">
-                    <Eyebrow>Merge conflicts</Eyebrow>
-                    <div className="mt-3">
-                      <MergeConflictPanel
-                        apiKey={savedKey}
-                        conflicts={cbomConflicts}
-                        onResolved={() => {
-                          if (savedKey) {
-                            void loadDashboard(savedKey);
-                          }
-                        }}
-                      />
-                    </div>
-                  </Card>
-                ) : null}
-              </>
-            ) : null}
-          </DashboardSection>
-
           <DashboardSection title="Trend & drift">
             {trendPoints.length >= 2 ? (
               <Card tone="panel">
@@ -997,15 +978,6 @@ export default function DashboardClient() {
               </Card>
             ) : null}
 
-            {savedKey && me.persistenceEnabled ? (
-              <Card tone="panel">
-                <Eyebrow>Integrations</Eyebrow>
-                <div className="mt-4">
-                  <IntegrationSettings apiKey={savedKey} onMessage={setActionMessage} />
-                </div>
-              </Card>
-            ) : null}
-
             {savedKey && me.persistenceEnabled && me.role === "admin" ? (
               <Card tone="panel">
                 <Eyebrow>Audit log (admin)</Eyebrow>
@@ -1112,6 +1084,84 @@ export default function DashboardClient() {
                   />
                 </div>
               </Card>
+            ) : null}
+          </DashboardSection>
+
+          <DashboardSection title="Integrations">
+            {savedKey ? (
+              <>
+                {me.persistenceEnabled ? (
+                  <Card tone="panel">
+                    <Eyebrow>Webhook &amp; ticketing</Eyebrow>
+                    <div className="mt-4">
+                      <IntegrationSettings apiKey={savedKey} onMessage={setActionMessage} />
+                    </div>
+                  </Card>
+                ) : null}
+                <Card tone="panel">
+                  <Eyebrow>Multi-source inventory</Eyebrow>
+                  <div className="mt-3">
+                    <MultiSourceInventoryWidget
+                      componentCount={cbomAggregate?.componentCount ?? 0}
+                      readiness={cbomAggregate?.readiness ?? null}
+                      openConflicts={cbomAggregate?.openConflicts ?? 0}
+                    />
+                  </div>
+                </Card>
+                <Card tone="panel">
+                  <CbomDriftWidget drift={cbomDrift} />
+                </Card>
+                <Card tone="panel">
+                  <Eyebrow>Cloud inventory pull</Eyebrow>
+                  <div className="mt-4">
+                    <CloudIntegrationPanel apiKey={savedKey} onMessage={setActionMessage} />
+                  </div>
+                </Card>
+                <Card tone="panel">
+                  <Eyebrow>Kubernetes cert-manager</Eyebrow>
+                  <div className="mt-4">
+                    <K8sIntegrationPanel apiKey={savedKey} onMessage={setActionMessage} />
+                  </div>
+                </Card>
+                <Card tone="panel">
+                  <Eyebrow>Keyfactor</Eyebrow>
+                  <div className="mt-4">
+                    <KeyfactorIntegrationPanel apiKey={savedKey} onMessage={setActionMessage} />
+                  </div>
+                </Card>
+                <Card tone="panel">
+                  <Eyebrow>Certificate lifecycle (CLM)</Eyebrow>
+                  <div className="mt-4">
+                    <ClmIntegrationPanel apiKey={savedKey} onMessage={setActionMessage} />
+                  </div>
+                </Card>
+                <Card tone="panel">
+                  <CbomImportPanel
+                    apiKey={savedKey}
+                    onImported={() => {
+                      if (savedKey) {
+                        void loadDashboard(savedKey);
+                      }
+                    }}
+                  />
+                </Card>
+                {cbomConflicts.length > 0 ? (
+                  <Card tone="panel">
+                    <Eyebrow>Merge conflicts</Eyebrow>
+                    <div className="mt-3">
+                      <MergeConflictPanel
+                        apiKey={savedKey}
+                        conflicts={cbomConflicts}
+                        onResolved={() => {
+                          if (savedKey) {
+                            void loadDashboard(savedKey);
+                          }
+                        }}
+                      />
+                    </div>
+                  </Card>
+                ) : null}
+              </>
             ) : null}
           </DashboardSection>
         </>

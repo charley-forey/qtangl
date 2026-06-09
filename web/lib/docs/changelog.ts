@@ -1,12 +1,46 @@
+import type { DocsFeatureStatus } from "@/lib/docs/types";
+
 export type ChangelogEntry = {
   version: string;
   date: string;
   title: string;
+  tags?: string[];
   items: string[];
-  tags?: ("ga" | "pilot" | "fix" | "docs")[];
 };
 
+export const tagToStatus: Record<string, DocsFeatureStatus> = {
+  ga: "ga",
+  pilot: "pilot",
+  docs: "ga",
+  breaking: "deprecated",
+};
 export const changelog: ChangelogEntry[] = [
+  {
+    version: "0.9.1-docs",
+    date: "2026-06-09",
+    title: "Enterprise documentation overhaul",
+    tags: ["docs", "ga"],
+    items: [
+      "Full Tenant API reference (56 endpoints) with RBAC matrix and dynamic reference pages.",
+      "PQC verify, transparency, CBOM, and Readiness Index reference coverage.",
+      "Re-anchored Quickstart, Authentication, and API guide to PQC Assess → Monitor → Convert.",
+      "Trust Center expansion: compliance status, data residency, incident response, sub-processors.",
+      "Published OpenAPI artifact, Postman collection, and CI docs coverage gate.",
+    ],
+  },
+  {
+    version: "0.9.0",
+    date: "2026-06-08",
+    title: "Enterprise readiness release",
+    tags: ["ga"],
+    items: [
+      "Multi-tenant Postgres with RLS, audit log export, and admin API for key lifecycle.",
+      "Stripe Monitor self-serve with one-time onboarding tokens — no plaintext API keys in email.",
+      "Evidence vault retention, OIDC SSO config, transparency log, and qtangl-verify offline CLI.",
+      "Webhooks with HMAC signing, DLQ, and replay; SIEM v2 schema for scan.complete events.",
+      "Compliance kickoff checklists (SOC 2, legal, pen-test scope) and staging conversion smoke in CI.",
+    ],
+  },
   {
     version: "0.2.0-pilot",
     date: "2026-05-28",
@@ -15,7 +49,7 @@ export const changelog: ChangelogEntry[] = [
     items: [
       "PQC migration endpoints under /pqc/* with fixture and live scan modes.",
       "Mosca HNDL risk scoring, CycloneDX CBOM export, and ML-KEM handshake proof.",
-      "Interactive /demo/pqc command center and API reference docs.",
+      "Interactive /assess command center and initial API reference docs.",
     ],
   },
   {
@@ -24,30 +58,9 @@ export const changelog: ChangelogEntry[] = [
     title: "Enterprise docs surface",
     tags: ["docs"],
     items: [
-      "Full-platform documentation with grouped navigation, search, and per-endpoint reference.",
+      "Documentation platform with grouped navigation, search, and per-endpoint reference.",
       "JSON Schema viewer sourced from backend contracts.",
       "Roadmap and changelog pages for operational honesty.",
-    ],
-  },
-  {
-    version: "0.1.0-pilot",
-    date: "2026-05-26",
-    title: "Hospital demo API",
-    tags: ["pilot"],
-    items: [
-      "Hospital re-staffing endpoints under /hospital/* with classical + hybrid audit flow.",
-      "CSV roster upload with 24-hour session storage.",
-    ],
-  },
-  {
-    version: "0.1.0-pilot",
-    date: "2026-05-25",
-    title: "Schedule optimizer GA",
-    tags: ["ga"],
-    items: [
-      "POST /optimize live for schedule problems with CP-SAT baseline.",
-      "Bounded QAOA research path with classical fallback.",
-      "Bearer and x-api-key authentication; 120 req/min default rate limit.",
     ],
   },
 ];

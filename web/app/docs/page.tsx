@@ -35,6 +35,8 @@ export default function DocsPage() {
         pathname="/docs"
         searchIndex={docsSearchIndex}
       >
+        <p className="text-xs text-[var(--color-gray-500)]">Last updated: 2026-06-09</p>
+
         <DocsCallout variant="honesty">
           Inventory aid, not formal audit. Quantum-vulnerable algorithms are not broken today — Qtangl
           quantifies exposure and exports signed evidence with independent verify links.

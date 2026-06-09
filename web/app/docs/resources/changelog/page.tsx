@@ -15,7 +15,7 @@ import { buildPageMetadata } from "@/lib/seo";
 export const metadata: Metadata = buildPageMetadata({
   path: "/docs/resources/changelog",
   title: "Changelog",
-  description: "Version history for the Qtangl API and documentation.",
+  description: "Version history for the Qtangl API and documentation. Latest: 0.9.0 enterprise readiness.",
 });
 
 const tagToStatus: Record<string, DocsFeatureStatus> = {

@@ -94,6 +94,10 @@ export default function RemediationBoard({
   });
   const [verifyingId, setVerifyingId] = useState<string | null>(null);
   const [pushMessage, setPushMessage] = useState<string | null>(null);
+  const [automatingId, setAutomatingId] = useState<string | null>(null);
+  const [automationResults, setAutomationResults] = useState<
+    Record<string, { status: string; message?: string; prUrl?: string; orderUrl?: string }>
+  >({});
   const [expandedPlaybook, setExpandedPlaybook] = useState<string | null>(null);
   const [playbooks, setPlaybooks] = useState<Record<string, string[]>>({});
 
@@ -149,6 +153,51 @@ export default function RemediationBoard({
       setPushMessage(result.sent ? "Ticket created in Jira." : `Push failed: ${result.reason ?? "unknown"}`);
     } catch (error) {
       setPushMessage(error instanceof Error ? error.message : "Push failed.");
+    }
+  }
+
+  async function runAutomation(remediationId: string, action: "acme" | "github_pr" | "venafi") {
+    setAutomatingId(remediationId);
+    setPushMessage(null);
+    try {
+      const payload = await postTenantJson<{
+        result?: {
+          status?: string;
+          message?: string;
+          prUrl?: string;
+          orderUrl?: string;
+        };
+      }>(`/tenant/scans/${scanId}/remediation/automate`, apiKey, {
+        remediationId,
+        action,
+      });
+      const result = payload.result ?? {};
+      setAutomationResults((prev) => ({
+        ...prev,
+        [remediationId]: {
+          status: result.status ?? "unknown",
+          message: result.message,
+          prUrl: result.prUrl,
+          orderUrl: result.orderUrl,
+        },
+      }));
+      if (result.status === "ok") {
+        setPushMessage(
+          action === "github_pr" && result.prUrl
+            ? `PR opened: ${result.prUrl}`
+            : action === "acme" && result.orderUrl
+              ? `ACME order ready: ${result.orderUrl}`
+              : `${action} automation completed.`
+        );
+      } else if (result.status === "stub") {
+        setPushMessage(result.message ?? `${action} connector not configured — see backend env.`);
+      } else {
+        setPushMessage(result.message ?? `${action} automation failed.`);
+      }
+    } catch (error) {
+      setPushMessage(error instanceof Error ? error.message : "Automation failed.");
+    } finally {
+      setAutomatingId(null);
     }
   }
 
@@ -234,6 +283,30 @@ export default function RemediationBoard({
               ) : null}
             </div>
             <div className="flex flex-wrap items-center gap-2">
+              <button
+                type="button"
+                disabled={automatingId === item.id}
+                className="text-xs text-sky-300 underline underline-offset-4 disabled:opacity-50"
+                onClick={() => runAutomation(item.id, "acme")}
+              >
+                {automatingId === item.id ? "Running…" : "ACME reissue"}
+              </button>
+              <button
+                type="button"
+                disabled={automatingId === item.id}
+                className="text-xs text-sky-300 underline underline-offset-4 disabled:opacity-50"
+                onClick={() => runAutomation(item.id, "github_pr")}
+              >
+                Hybrid TLS PR
+              </button>
+              <button
+                type="button"
+                disabled={automatingId === item.id}
+                className="text-xs text-sky-300 underline underline-offset-4 disabled:opacity-50"
+                onClick={() => runAutomation(item.id, "venafi")}
+              >
+                Venafi check
+              </button>
               {jiraConfigured ? (
                 <button
                   type="button"
@@ -285,11 +358,44 @@ export default function RemediationBoard({
               className="rounded-full border border-[var(--border-subtle)] bg-black px-3 py-1 text-xs text-white"
             />
           </div>
+          {automationResults[item.id] ? (
+            <AutomationEvidence result={automationResults[item.id]!} />
+          ) : null}
           {verifyResults[item.id] ? (
             <VerificationEvidence result={verifyResults[item.id]!} />
           ) : null}
         </div>
       ))}
+    </div>
+  );
+}
+
+function AutomationEvidence({
+  result,
+}: {
+  result: { status: string; message?: string; prUrl?: string; orderUrl?: string };
+}) {
+  const tone =
+    result.status === "ok"
+      ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-200"
+      : result.status === "stub"
+        ? "border-amber-500/30 bg-amber-500/10 text-amber-200"
+        : "border-red-500/30 bg-red-500/10 text-red-200";
+
+  return (
+    <div className={`rounded-lg border px-3 py-2 text-xs ${tone}`}>
+      <span className="font-semibold capitalize">{result.status}</span>
+      {result.message ? <span className="ml-2">{result.message}</span> : null}
+      {result.prUrl ? (
+        <a href={result.prUrl} target="_blank" rel="noreferrer" className="ml-2 underline">
+          View PR
+        </a>
+      ) : null}
+      {result.orderUrl ? (
+        <a href={result.orderUrl} target="_blank" rel="noreferrer" className="ml-2 underline">
+          ACME order
+        </a>
+      ) : null}
     </div>
   );
 }

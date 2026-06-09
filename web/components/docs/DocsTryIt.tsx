@@ -7,7 +7,7 @@ import { fetchQtanglJson, qtanglSandboxApiKey } from "@/lib/api";
 
 type DocsTryItProps = {
   path?: string;
-  method?: "GET" | "POST";
+  method?: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
   body?: Record<string, unknown>;
   fallbackResponse: object;
   label?: string;

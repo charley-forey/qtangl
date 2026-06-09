@@ -1,0 +1,873 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Qtangl PQC Readiness API",
+    "version": "0.9.0",
+    "description": "Post-quantum readiness platform: Assess, Monitor, Convert with signed evidence."
+  },
+  "servers": [
+    {
+      "url": "https://api.qtangl.com"
+    }
+  ],
+  "paths": {
+    "/optimize": {
+      "get": {
+        "summary": "Liveness probe for uptime monitors and deployment readiness checks.",
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/hospital/roster": {
+      "get": {
+        "summary": "List available call-out scenarios for the hospital demo.",
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/hospital/callout": {
+      "get": {
+        "summary": "Return cached QPU trace metadata for hybrid audit storytelling in the demo.",
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/hospital/upload-roster": {
+      "post": {
+        "summary": "Run the hospital re-staffing pipeline: classical baseline, hybrid audit, scoreboard, and timeline.",
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/airline/network": {
+      "get": {
+        "summary": "List disruption scenarios for the OCC recovery demo.",
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/airline/disruption": {
+      "get": {
+        "summary": "Cached QPU sampling trace for hybrid micro-window replay.",
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/airline/upload-crew": {
+      "post": {
+        "summary": "Run OCC recovery: tail routing, CP-SAT crew assignment, hybrid alternates, scoreboard, audit packs.",
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/ev-fleet/depot": {
+      "get": {
+        "summary": "List EV fleet charging scenarios.",
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/ev-fleet/window": {
+      "get": {
+        "summary": "Cached QPU trace for charger-queue hybrid replay.",
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/ev-fleet/upload-fleet": {
+      "post": {
+        "summary": "Upload stops.csv; returns a 24-hour session id.",
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/pqc/inventory": {
+      "get": {
+        "summary": "List PQC scan scenarios (bank, gov contractor, healthcare).",
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/pqc/target": {
+      "get": {
+        "summary": "Cached ML-KEM hybrid handshake trace for demo replay.",
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/pqc/standards": {
+      "post": {
+        "summary": "Upload PEM cert bundle or CSV endpoint list; returns 24h session id.",
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/pqc/scan": {
+      "get": {
+        "summary": "Poll live scan job status and timeline.",
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/pqc/handshake/prove": {
+      "get": {
+        "summary": "Download migration report as json, csv, cbom, or pdf.",
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/pqc/transparency/root": {
+      "post": {
+        "summary": "Ingest CycloneDX 1.6/1.7 CBOM from third-party tools; normalize, provenance-tag, and merge into tenant aggregate.",
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/tenant/scans/{scanId}/share": {
+      "get": {
+        "summary": "List retained signed bundles in the tenant evidence vault with retention metadata.",
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/tenant/evidence/{scanId}/retain": {
+      "post": {
+        "summary": "Configure read-only cloud CBOM pull for AWS ACM or Azure Key Vault.",
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/pqc/cbom/pull/{provider}": {
+      "post": {
+        "summary": "Run VRP routing, CP-SAT charger queue, hybrid stagger, scoreboard, and audit packs.",
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/tenant/me": {
+      "get": {
+        "summary": "List recent tenant scans with lifecycle status and report availability.",
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/tenant/scans/{scan_id}": {
+      "delete": {
+        "summary": "Delete a tenant-owned scan and remove associated report artifacts.",
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/tenant/scans/{scan_id}/report": {
+      "post": {
+        "summary": "Email a scan report link to a recipient mailbox.",
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/tenant/export": {
+      "get": {
+        "summary": "Compute tenant reliability and report-availability service level metrics.",
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/tenant/scans/{scan_id}/remediation": {
+      "post": {
+        "summary": "Create or update remediation ownership, status, notes, and target date.",
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/tenant/scans/{scan_id}/remediation/automate": {
+      "post": {
+        "summary": "Verify that a remediation item is fixed by comparing baseline and verification scans.",
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/tenant/scans/{scan_id}/remediation/intelligence": {
+      "post": {
+        "summary": "Simulate post-remediation readiness projection for selected remediation ids.",
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/tenant/schedules": {
+      "post": {
+        "summary": "Create recurring scan or cloud-pull schedule with notifications.",
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/tenant/schedules/{schedule_id}": {
+      "get": {
+        "summary": "Load tenant-level monitoring, retention, and benchmark settings.",
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/tenant/settings": {
+      "get": {
+        "summary": "List tenant audit entries with optional action/since filters and cursor pagination.",
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/tenant/audit/export": {
+      "post": {
+        "summary": "Create expiring share links for report, bundle, or passport access.",
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/tenant/scans/{scan_id}/share": {
+      "get": {
+        "summary": "List active tenant share/passport links, optionally filtered by scan id.",
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/tenant/share/{link_id}": {
+      "get": {
+        "summary": "List tracked portfolio targets and readiness rollup.",
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/tenant/portfolio": {
+      "get": {
+        "summary": "Return command-center aggregates and weekly executive digest for portfolio monitoring.",
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/tenant/partner/children": {
+      "post": {
+        "summary": "Link a child tenant to the current partner tenant.",
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/tenant/webhooks": {
+      "post": {
+        "summary": "Create a tenant webhook subscription endpoint.",
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/tenant/webhooks/{webhook_id}": {
+      "get": {
+        "summary": "List webhook dead-letter queue entries for failed deliveries.",
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/tenant/webhooks/replay": {
+      "get": {
+        "summary": "List generic integration configurations for the tenant.",
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/tenant/integrations/{provider}": {
+      "post": {
+        "summary": "Push a remediation item to an external ticketing integration.",
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/tenant/integrations/pull": {
+      "post": {
+        "summary": "Parse cloud inventory payload (JSON/CSV) into normalized rows for upload workflows.",
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/tenant/integrations/cloud": {
+      "post": {
+        "summary": "Create or update cloud integration credentials and connection settings.",
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/tenant/integrations/cloud/{provider}/test": {
+      "post": {
+        "summary": "Create or update Keyfactor integration credentials and collection scope.",
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/tenant/integrations/keyfactor/test": {
+      "post": {
+        "summary": "Create or update CLM integration credentials for the selected CLM provider.",
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/tenant/integrations/clm/{clm_provider}/test": {
+      "get": {
+        "summary": "Detect anomalies in readiness score trends using recent scan history.",
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/tenant/analytics/forecast": {
+      "get": {
+        "summary": "Compare tenant readiness against industry benchmark cohorts.",
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/tenant/drift-intel": {
+      "get": {
+        "summary": "Map scan findings to compliance frameworks for posture reporting.",
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/tenant/evidence": {
+      "post": {
+        "summary": "Retain a scan's evidence package in the tenant evidence vault.",
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/tenant/billing/portal": {
+      "get": {
+        "summary": "Get current tenant OIDC SSO configuration.",
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/tenant/oidc": {
+      "delete": {
+        "summary": "Delete all tenant data for retention/offboarding workflows.",
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/tenant/offboard": {
+      "post": {
+        "summary": "Scan source snippets or GitHub repositories for crypto-coverage findings.",
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "tls/client.ts": {
+      "get": {
+        "summary": "Run cloud coverage preview for provider and return preview object count.",
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/pqc/scan/{scan_id}/persist": {
+      "get": {
+        "summary": "Check which report formats are currently available for a completed scan.",
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/pqc/verify/{scan_id}": {
+      "post": {
+        "summary": "Public verification endpoint accepting proof payloads directly.",
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/pqc/index": {
+      "get": {
+        "summary": "Public drift summary comparing current index state to prior snapshots.",
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/pqc/transparency/consistency": {
+      "get": {
+        "summary": "Public list of witness identities and recent signatures.",
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/pqc/transparency/witness": {
+      "get": {
+        "summary": "Public latest root checkpoint for the PQC transparency log.",
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/pqc/transparency/keys": {
+      "get": {
+        "summary": "Public inclusion proof lookup for a report content hash.",
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/pqc/transparency/keys/retire": {
+      "get": {
+        "summary": "List currently configured CBOM source systems and pull status.",
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/pqc/cbom/aggregate": {
+      "get": {
+        "summary": "List unresolved CBOM merge conflicts requiring operator adjudication.",
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/pqc/cbom/conflicts/{conflict_id}": {
+      "get": {
+        "summary": "Compare two CBOM snapshots to surface cryptographic drift and net changes.",
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/admin/tenants": {
+      "post": {
+        "summary": "Issue a new API key for a tenant with scoped role and optional expiry.",
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/admin/tenants/{tenant_id}/keys": {
+      "delete": {
+        "summary": "Revoke an API key immediately and invalidate future requests.",
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/public/monitor-signup": {
+      "post": {
+        "summary": "Provision a starter monitor profile from a validated signup.",
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/public/lead-capture": {
+      "post": {
+        "summary": "Unsubscribe an email address from monitor and GTM mailing flows.",
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/public/onboarding-key/{token}": {
+      "post": {
+        "summary": "Receive Stripe webhook events for billing lifecycle synchronization.",
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/health": {
+      "get": {
+        "summary": "Readiness probe validating service dependencies before traffic routing.",
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/metrics": {
+      "get": {
+        "summary": "Read public share metadata and high-level scan readiness overview.",
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    }
+  }
+}

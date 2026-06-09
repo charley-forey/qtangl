@@ -102,6 +102,12 @@ ${frameworkLinks}
 
 ${docsLinks}
 
+## OpenAPI & tooling
+
+- OpenAPI JSON: ${siteMetadata.url}/openapi.json
+- Postman collection: ${siteMetadata.url}/postman/qtangl-api.json
+- Verify spec: ${siteMetadata.url}/docs/verify-spec
+
 ## Learn library (${entries.length} entries)
 
 ${libraryLinks}

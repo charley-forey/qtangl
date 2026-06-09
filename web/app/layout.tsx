@@ -6,6 +6,7 @@ import Footer from "@/components/layout/Footer";
 import Navbar from "@/components/layout/Navbar";
 import { MAIN_CONTENT_ID } from "@/components/layout/PageShell";
 import GoogleAnalytics from "@/components/seo/GoogleAnalytics";
+import PostHogAnalytics from "@/components/seo/PostHogAnalytics";
 import { buildSiteMetadata } from "@/lib/seo";
 
 const inter = Inter({
@@ -32,6 +33,7 @@ export default function RootLayout({
     >
       <body className="min-h-full bg-black text-white">
         <GoogleAnalytics />
+        <PostHogAnalytics />
         <div className="quantum-shell relative flex min-h-screen flex-col overflow-x-hidden">
           <a
             href={`#${MAIN_CONTENT_ID}`}

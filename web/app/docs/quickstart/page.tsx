@@ -7,50 +7,65 @@ import DocsHeading from "@/components/docs/DocsHeading";
 import DocsJsonLd from "@/components/docs/DocsJsonLd";
 import DocsSection from "@/components/docs/DocsSection";
 import DocsShell from "@/components/docs/DocsShell";
-import DocsTryIt from "@/components/docs/DocsTryIt";
 import { MAIN_CONTENT_ID } from "@/components/layout/PageShell";
 import Card from "@/components/ui/Card";
 import { qtanglApiBaseUrl, qtanglSandboxApiKey } from "@/lib/api";
-import { docsQuickstartRequest, docsQuickstartResponse } from "@/lib/constants";
-import { docsGuideCopy } from "@/lib/copy/docs";
 import {
-  curlOptimize,
+  curlPqcScan,
   javascriptFetch,
+  pollScanStatus,
   pythonRequests,
-  typescriptFetch,
 } from "@/lib/docs/code-samples";
 import { docsSearchIndex } from "@/lib/docs/search-index-export";
 import { buildPageMetadata } from "@/lib/seo";
+
+const pqcScanRequest = { scenarioId: "bank-tls-inventory", useFixture: true, depth: "standard" };
+const pqcScanResponse = {
+  status: "success",
+  scanId: "scan-abc123",
+  readinessBand: "At risk",
+  reportAvailable: true,
+};
+const pqcPollResponse = { status: "success", scanId: "scan-abc123", jobStatus: "completed" };
 
 export const metadata: Metadata = buildPageMetadata({
   path: "/docs/quickstart",
   title: "Quickstart",
   description:
-    "Send your first planning job and inspect the ranked plan, measurements, and method details Qtangl returns.",
+    "Run your first PQC scan, download a signed report, and verify evidence independently.",
 });
 
 export default function QuickstartPage() {
-  const tabs = [
-    { id: "curl" as const, label: "curl", code: curlOptimize(docsQuickstartRequest) },
+  const pqcTabs = [
+    { id: "curl" as const, label: "curl", code: curlPqcScan(pqcScanRequest) },
     {
       id: "javascript" as const,
       label: "JavaScript",
-      code: javascriptFetch("/optimize", "POST", docsQuickstartRequest),
+      code: javascriptFetch("/pqc/scan", "POST", pqcScanRequest),
     },
     {
       id: "python" as const,
       label: "Python",
-      code: pythonRequests("/optimize", "POST", docsQuickstartRequest),
+      code: pythonRequests("/pqc/scan", "POST", pqcScanRequest),
     },
+    { id: "response" as const, label: "Response", code: pqcScanResponse },
+  ];
+
+  const pollTabs = [
+    { id: "curl" as const, label: "Poll status", code: pollScanStatus("scan-abc123") },
+    { id: "response" as const, label: "Completed", code: pqcPollResponse },
+  ];
+
+  const verifyTabs = [
     {
-      id: "typescript" as const,
-      label: "TypeScript",
-      code: typescriptFetch("/optimize", "POST", docsQuickstartRequest),
+      id: "curl" as const,
+      label: "Public verify",
+      code: `curl "${qtanglApiBaseUrl}/pqc/verify/scan-abc123"`,
     },
     {
       id: "response" as const,
-      label: "Response",
-      code: docsQuickstartResponse,
+      label: "Verification",
+      code: { status: "success", verification: { valid: true, algorithm: "ML-DSA-65" } },
     },
   ];
 
@@ -58,15 +73,17 @@ export default function QuickstartPage() {
     <div id={MAIN_CONTENT_ID} className="scroll-mt-24 sm:scroll-mt-28">
       <DocsJsonLd
         pathname="/docs/quickstart"
-        title={docsGuideCopy.quickstart.title}
-        description={docsGuideCopy.quickstart.description}
+        title="Quickstart"
+        description="Run your first PQC scan and verify signed evidence."
       />
       <DocsShell
-        title={docsGuideCopy.quickstart.title}
-        description={docsGuideCopy.quickstart.description}
+        title="Quickstart — PQC assessment"
+        description="Assess post-quantum readiness in four steps: scan, poll, report, verify."
         pathname="/docs/quickstart"
         searchIndex={docsSearchIndex}
       >
+        <p className="text-xs text-[var(--color-gray-500)]">Last updated: 2026-06-09</p>
+
         <DocsSection>
           <DocsHeading>0. Get an API key</DocsHeading>
           <p className="text-sm leading-8 text-[var(--color-gray-300)]">
@@ -74,95 +91,84 @@ export default function QuickstartPage() {
             <Link href="/access" className="text-white underline underline-offset-4">
               /access
             </Link>
-            . For local development, set{" "}
-            <code className="font-mono text-white">NEXT_PUBLIC_QTANGL_SANDBOX_API_KEY</code>.
-          </p>
-        </DocsSection>
-
-        <DocsSection>
-          <DocsHeading>1. Pick your base URL</DocsHeading>
-          <Card className="rounded-2xl">
-            <p className="text-label">{docsGuideCopy.quickstart.submit.eyebrow}</p>
-            <h2 className="text-2xl font-semibold text-white">
-              {docsGuideCopy.quickstart.submit.title}
-            </h2>
-            <p className="mt-4 text-sm leading-8 text-[var(--color-gray-300)]">
-              {docsGuideCopy.quickstart.submit.description}
-            </p>
-            <div className="mt-5 space-y-2 font-mono text-sm text-[var(--color-gray-400)]">
-              <p>Base URL: {qtanglApiBaseUrl}</p>
-              <p>Pilot key: {qtanglSandboxApiKey}</p>
-            </div>
-            <Link
-              href="/sandbox"
-              className="mt-5 inline-block text-sm font-medium text-white underline-offset-4 hover:underline"
-            >
-              Try it in the API sandbox →
-            </Link>
-          </Card>
-        </DocsSection>
-
-        <DocsSection>
-          <DocsHeading>2. Send the request</DocsHeading>
-          <DocsCodeTabs tabs={tabs} />
-          <DocsTryIt
-            body={docsQuickstartRequest as Record<string, unknown>}
-            fallbackResponse={docsQuickstartResponse}
-          />
-        </DocsSection>
-
-        <DocsSection>
-          <DocsHeading>3. Read the response</DocsHeading>
-          <Card strong className="rounded-2xl">
-            <p className="text-label">{docsGuideCopy.quickstart.inspect.eyebrow}</p>
-            <h2 className="text-2xl font-semibold text-white">
-              {docsGuideCopy.quickstart.inspect.title}
-            </h2>
-            <p className="mt-4 text-sm leading-8 text-[var(--color-gray-300)]">
-              {docsGuideCopy.quickstart.inspect.description}
-            </p>
-            <ul className="mt-4 space-y-2 text-sm leading-7 text-[var(--color-gray-400)]">
-              <li>
-                <strong className="text-white">summary</strong> — plain-English outcome
-              </li>
-              <li>
-                <strong className="text-white">solution</strong> — executable plan
-              </li>
-              <li>
-                <strong className="text-white">metrics</strong> — violations and savings
-              </li>
-              <li>
-                <strong className="text-white">method</strong> — classical or hybrid label
-              </li>
-            </ul>
-          </Card>
-        </DocsSection>
-
-        <DocsSection>
-          <DocsHeading>4. Handle errors</DocsHeading>
-          <p className="text-sm leading-8 text-[var(--color-gray-300)]">
-            401 means fix your key. 422 means adjust constraints or problem shape. 429 means slow
-            down. See{" "}
-            <Link href="/docs/errors" className="text-white underline underline-offset-4">
-              Errors & status codes
+            . Monitor tier self-serve returns a one-time onboarding token — see{" "}
+            <Link href="/docs/guides/billing-onboarding" className="text-white underline underline-offset-4">
+              Billing & onboarding
             </Link>
             .
           </p>
         </DocsSection>
 
         <DocsSection>
-          <DocsHeading>5. Next steps</DocsHeading>
+          <DocsHeading>1. Pick your base URL</DocsHeading>
+          <Card className="rounded-2xl">
+            <div className="space-y-2 font-mono text-sm text-[var(--color-gray-400)]">
+              <p>Base URL: {qtanglApiBaseUrl}</p>
+              <p>Sandbox key: {qtanglSandboxApiKey}</p>
+            </div>
+            <Link href="/assess" className="mt-5 inline-block text-sm font-medium text-white underline-offset-4 hover:underline">
+              Try the live scanner →
+            </Link>
+          </Card>
+        </DocsSection>
+
+        <DocsSection>
+          <DocsHeading>2. Run a scan</DocsHeading>
+          <DocsCodeTabs tabs={pqcTabs} storageKey="qtangl-quickstart-pqc" />
+          <DocsCallout variant="tip">
+            Send <code className="font-mono text-white">Idempotency-Key</code> on{" "}
+            <code className="font-mono text-white">POST /pqc/scan</code> to safely retry without duplicate jobs.
+          </DocsCallout>
+        </DocsSection>
+
+        <DocsSection>
+          <DocsHeading>3. Poll until complete</DocsHeading>
+          <DocsCodeTabs tabs={pollTabs} storageKey="qtangl-quickstart-poll" />
+        </DocsSection>
+
+        <DocsSection>
+          <DocsHeading>4. Download report & verify</DocsHeading>
+          <p className="text-sm leading-8 text-[var(--color-gray-300)]">
+            Download JSON or PDF via{" "}
+            <code className="font-mono text-white">GET /pqc/report/{"{scanId}"}?format=pdf</code>. Verify
+            independently — no API key required:
+          </p>
+          <DocsCodeTabs tabs={verifyTabs} storageKey="qtangl-quickstart-verify" />
+          <Link href="/verify" className="mt-4 inline-block text-sm text-white underline underline-offset-4">
+            Open the public verifier →
+          </Link>
+        </DocsSection>
+
+        <DocsSection>
+          <DocsHeading>Alternate: Labs optimization</DocsHeading>
+          <p className="text-sm leading-8 text-[var(--color-gray-300)]">
+            For hybrid scheduling demos, see{" "}
+            <Link href="/docs/reference/optimize" className="text-white underline underline-offset-4">
+              POST /optimize
+            </Link>{" "}
+            and the{" "}
+            <Link href="/labs" className="text-white underline underline-offset-4">
+              Labs
+            </Link>{" "}
+            section.
+          </p>
+        </DocsSection>
+
+        <DocsSection>
+          <DocsHeading>Next steps</DocsHeading>
           <DocsCallout variant="tip">
             <ul className="list-disc space-y-2 pl-5">
               <li>
-                <Link href="/docs/data-formats">Data formats</Link> — field reference per problem
-                type
+                <Link href="/docs/guides/assess">Assess workflow</Link> — end-to-end assessment guide
               </li>
               <li>
-                <Link href="/docs/reference/optimize">POST /optimize</Link> — full API reference
+                <Link href="/docs/guides/monitor-workflow">Monitor workflow</Link> — scheduled scans and drift
               </li>
               <li>
-                <Link href="/docs/concepts">Concepts</Link> — hybrid execution and method honesty
+                <Link href="/docs/authentication">Authentication & RBAC</Link> — roles and key lifecycle
+              </li>
+              <li>
+                <Link href="/docs/verify-spec">Verify specification</Link> — independent evidence verification
               </li>
             </ul>
           </DocsCallout>

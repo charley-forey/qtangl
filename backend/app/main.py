@@ -77,8 +77,19 @@ def cors_headers_for_request(request: Request) -> dict[str, str]:
 
 app = FastAPI(
     title="Qtangl PQC Readiness API",
-    version="0.1.0",
+    version="0.9.0",
     summary="Post-quantum readiness platform: Assess, Monitor, Convert with signed evidence.",
+    description=(
+        "Tenant-scoped Monitor APIs, public verify/transparency endpoints, and PQC scan lifecycle. "
+        "See https://www.qtangl.com/docs for authentication, RBAC, and error conventions."
+    ),
+    openapi_tags=[
+        {"name": "pqc", "description": "Scan, report, verify, transparency, and CBOM lifecycle."},
+        {"name": "tenant", "description": "Authenticated tenant APIs — scans, schedules, webhooks, integrations."},
+        {"name": "admin", "description": "Platform admin key — tenant provisioning and API key lifecycle."},
+        {"name": "public", "description": "Unauthenticated signup, billing webhooks, and lead capture."},
+        {"name": "health", "description": "Liveness, readiness, and metrics."},
+    ],
     lifespan=lifespan,
 )
 

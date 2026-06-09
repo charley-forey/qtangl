@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
-import DocsBadge from "@/components/docs/DocsBadge";
 import DocsCallout from "@/components/docs/DocsCallout";
 import DocsCodeTabs from "@/components/docs/DocsCodeTabs";
 import DocsHeading from "@/components/docs/DocsHeading";
@@ -10,55 +9,60 @@ import DocsSection from "@/components/docs/DocsSection";
 import DocsShell from "@/components/docs/DocsShell";
 import { MAIN_CONTENT_ID } from "@/components/layout/PageShell";
 import Card from "@/components/ui/Card";
-import { docsQuickstartRequest } from "@/lib/constants";
+import DocsBadge from "@/components/docs/DocsBadge";
 import {
-  curlOptimize,
+  curlPqcScan,
   javascriptFetch,
   pythonRequests,
-  typescriptFetch,
 } from "@/lib/docs/code-samples";
-import { docsSearchIndex } from "@/lib/docs/search-index-export";
+import { qtanglApiBaseUrl } from "@/lib/api";
 import { buildPageMetadata } from "@/lib/seo";
+import { docsSearchIndex } from "@/lib/docs/search-index-export";
 
 export const metadata: Metadata = buildPageMetadata({
   path: "/docs/sdks",
-  title: "SDKs & integrations",
-  description: "HTTP client recipes today; official TypeScript and Python SDKs coming soon.",
+  title: "SDKs, CLI & OpenAPI",
+  description: "HTTP client recipes, qtangl-verify CLI, OpenAPI artifact, and Postman collection.",
 });
 
 export default function SdksPage() {
   const tabs = [
-    { id: "curl" as const, label: "curl", code: curlOptimize(docsQuickstartRequest) },
+    { id: "curl" as const, label: "PQC scan", code: curlPqcScan({ scenarioId: "bank-tls-inventory", useFixture: true }) },
     {
       id: "javascript" as const,
-      label: "fetch",
-      code: javascriptFetch("/optimize", "POST", docsQuickstartRequest),
+      label: "Poll status",
+      code: javascriptFetch("/pqc/scan/scan-abc123", "GET"),
     },
     {
       id: "python" as const,
-      label: "requests",
-      code: pythonRequests("/optimize", "POST", docsQuickstartRequest),
+      label: "Tenant scans",
+      code: pythonRequests("/tenant/scans", "GET"),
     },
     {
       id: "typescript" as const,
-      label: "TypeScript",
-      code: typescriptFetch("/optimize", "POST", docsQuickstartRequest),
+      label: "Public verify",
+      code: `curl "${qtanglApiBaseUrl}/pqc/verify/scan-abc123"`,
     },
   ];
 
+  const cliSnippet = `# Offline verification (no dashboard login)
+pip install qtangl-verify
+qtangl-verify scan-abc123 --api ${process.env.NEXT_PUBLIC_QTANGL_API_BASE_URL ?? "https://api.qtangl.com"}
+
+# Verify pasted report JSON
+qtangl-verify --json report.json`;
+
   return (
     <div id={MAIN_CONTENT_ID} className="scroll-mt-24 sm:scroll-mt-28">
-      <DocsJsonLd
-        pathname="/docs/sdks"
-        title="SDKs & integrations"
-        description="Integrate Qtangl with HTTP clients today."
-      />
+      <DocsJsonLd pathname="/docs/sdks" title="SDKs, CLI & OpenAPI" description="Integration tooling." />
       <DocsShell
-        title="SDKs & integrations"
+        title="SDKs, CLI & OpenAPI"
         description="Use any HTTP client against the JSON API today. Official typed SDKs are on the roadmap."
         pathname="/docs/sdks"
         searchIndex={docsSearchIndex}
       >
+        <p className="text-xs text-[var(--color-gray-500)]">Last updated: 2026-06-09</p>
+
         <DocsSection>
           <DocsHeading>Official SDKs</DocsHeading>
           <div className="grid gap-4 sm:grid-cols-2">
@@ -68,7 +72,7 @@ export default function SdksPage() {
                 <DocsBadge status="coming-soon" />
               </div>
               <p className="mt-3 text-sm text-[var(--color-gray-300)]">
-                Typed models, retries, and method-honesty helpers.
+                Typed models, retries, idempotency helpers, and verify utilities.
               </p>
             </Card>
             <Card className="rounded-2xl">
@@ -84,30 +88,58 @@ export default function SdksPage() {
         </DocsSection>
 
         <DocsSection>
-          <DocsHeading>HTTP recipes (today)</DocsHeading>
-          <DocsCodeTabs tabs={tabs} />
+          <DocsHeading>qtangl-verify CLI</DocsHeading>
+          <DocsCallout variant="info">
+            Shipped in v0.9.0 — recompute content hashes, verify ML-DSA-65 signatures, and check
+            transparency log inclusion offline.
+          </DocsCallout>
+          <pre className="overflow-x-auto rounded-2xl border border-[var(--border)] bg-black/40 p-4 text-sm text-[var(--color-gray-300)]">
+            {cliSnippet}
+          </pre>
+          <Link href="/docs/verify-spec" className="mt-4 inline-block text-sm text-white underline underline-offset-4">
+            Verify specification →
+          </Link>
         </DocsSection>
 
         <DocsSection>
-          <DocsHeading>OpenAPI</DocsHeading>
+          <DocsHeading>HTTP recipes (today)</DocsHeading>
+          <DocsCodeTabs tabs={tabs} storageKey="qtangl-sdks-tab" />
+        </DocsSection>
+
+        <DocsSection>
+          <DocsHeading>OpenAPI & Postman</DocsHeading>
           <DocsCallout variant="info">
-            FastAPI serves interactive docs at <code className="font-mono">/docs</code> on your
-            deployed backend. A published OpenAPI artifact and Postman collection are planned —
-            see the{" "}
-            <Link href="/docs/resources/roadmap" className="text-white underline underline-offset-4">
-              roadmap
-            </Link>
-            .
+            <ul className="list-disc space-y-2 pl-5">
+              <li>
+                Interactive OpenAPI:{" "}
+                <a href="/openapi.json" className="text-white underline underline-offset-4">
+                  /openapi.json
+                </a>{" "}
+                (also at <code className="font-mono">/docs</code> on deployed backend)
+              </li>
+              <li>
+                Postman collection:{" "}
+                <a href="/postman/qtangl-api.json" className="text-white underline underline-offset-4">
+                  /postman/qtangl-api.json
+                </a>
+              </li>
+              <li>
+                Machine-readable index:{" "}
+                <a href="/llms.txt" className="text-white underline underline-offset-4">
+                  /llms.txt
+                </a>
+              </li>
+            </ul>
           </DocsCallout>
         </DocsSection>
 
         <DocsSection>
           <DocsHeading>Integration tips</DocsHeading>
           <ul className="list-disc space-y-2 pl-5 text-sm leading-7 text-[var(--color-gray-300)]">
-            <li>Read summary before solution — operators trust the narrative first.</li>
-            <li>Persist details.diagnostics for audit and method comparisons.</li>
-            <li>Handle 422 as a planning signal, not a transport failure.</li>
-            <li>Use idempotent retries only on 5xx and network errors, not on 422.</li>
+            <li>Poll <code className="font-mono text-white">GET /pqc/scan/{"{id}"}</code> until job completes.</li>
+            <li>Send <code className="font-mono text-white">Idempotency-Key</code> on scan POST for safe retries.</li>
+            <li>Verify reports publicly — auditors need no API key.</li>
+            <li>Handle 402 for entitlement-gated Monitor features.</li>
           </ul>
         </DocsSection>
       </DocsShell>

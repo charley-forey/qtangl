@@ -11,12 +11,6 @@ import { MAIN_CONTENT_ID } from "@/components/layout/PageShell";
 import Card from "@/components/ui/Card";
 import FeatureCard from "@/components/marketing/FeatureCard";
 import { qtanglApiBaseUrl } from "@/lib/api";
-import {
-  apiErrors,
-  apiReferenceRequest,
-  apiReferenceResponse,
-} from "@/lib/constants";
-import { apiReferencePageCopy, docsGuideCopy } from "@/lib/copy/docs";
 import { docsEndpoints } from "@/lib/docs/endpoints";
 import { endpointDocsHref } from "@/lib/docs/endpoint-paths";
 import { docsSearchIndex } from "@/lib/docs/search-index-export";
@@ -26,34 +20,42 @@ export const metadata: Metadata = buildPageMetadata({
   path: "/docs/api",
   title: "API Guide",
   description:
-    "Understand the `/optimize` flow, method honesty, and returned measurements so you can integrate quickly.",
+    "PQC scan lifecycle, tenant Monitor APIs, verify & transparency, and signed evidence workflows.",
 });
 
-const referenceLinks = [
-  { id: "optimize", label: "POST /optimize" },
+const coreLinks = [
+  { id: "pqc-scan", label: "POST /pqc/scan" },
+  { id: "pqc-scan-status", label: "GET /pqc/scan/{scanId}" },
+  { id: "pqc-report", label: "GET /pqc/report/{scanId}" },
+  { id: "pqc-verify-get", label: "GET /pqc/verify/{scanId}" },
+  { id: "tenant-me", label: "GET /tenant/me" },
+  { id: "tenant-scans", label: "GET /tenant/scans" },
+  { id: "tenant-schedules-create", label: "POST /tenant/schedules" },
   { id: "health", label: "GET /health" },
-  { id: "hospital-roster", label: "Hospital roster" },
-  { id: "hospital-callout-solve", label: "Hospital solve" },
 ] as const;
+
+const pqcFlow = `1. POST /pqc/scan (Idempotency-Key optional)
+2. GET  /pqc/scan/{scanId} until status=success
+3. GET  /pqc/report/{scanId}?format=pdf|json|cbom|bundle
+4. GET  /pqc/verify/{scanId} (public, no API key)
+5. POST /tenant/scans/{scanId}/share for auditor passport`;
 
 export default function DocsApiPage() {
   return (
     <div id={MAIN_CONTENT_ID} className="scroll-mt-24 sm:scroll-mt-28">
-      <DocsJsonLd
-        pathname="/docs/api"
-        title={docsGuideCopy.api.title}
-        description={docsGuideCopy.api.description}
-      />
+      <DocsJsonLd pathname="/docs/api" title="API Guide" description="PQC and tenant API guide." />
       <DocsShell
-        title={docsGuideCopy.api.title}
-        description={docsGuideCopy.api.description}
+        title="API Guide — PQC Readiness"
+        description="Assess cryptographic inventory, monitor drift on a schedule, and export independently verifiable evidence."
         pathname="/docs/api"
         searchIndex={docsSearchIndex}
       >
+        <p className="text-xs text-[var(--color-gray-500)]">Last updated: 2026-06-09</p>
+
         <DocsSection>
-          <DocsHeading>Endpoint map</DocsHeading>
+          <DocsHeading>Core endpoints</DocsHeading>
           <div className="grid gap-4 sm:grid-cols-2">
-            {referenceLinks.map((link) => (
+            {coreLinks.map((link) => (
               <FeatureCard
                 key={link.id}
                 title={link.label}
@@ -62,128 +64,60 @@ export default function DocsApiPage() {
               />
             ))}
             <FeatureCard
-              title="Errors & status codes"
-              description="401, 422, 429, 500, 501 with fixes."
-              href="/docs/errors"
+              title="RBAC & scopes"
+              description="Viewer, operator, and admin role matrix."
+              href="/docs/reference/rbac"
             />
             <FeatureCard
-              title="JSON schemas"
-              description="Canonical request and response contracts."
-              href="/docs/reference/schemas"
+              title="Errors & status codes"
+              description="401, 402, 403, 404, 413, 422, 429, 500, 503."
+              href="/docs/errors"
             />
           </div>
         </DocsSection>
 
         <DocsSection>
-          <DocsHeading>POST /optimize</DocsHeading>
-          <Card className="rounded-2xl">
-            <p className="mt-4 text-sm leading-8 text-[var(--color-gray-300)]">
-              {docsGuideCopy.api.conciseEndpoint.description}
-            </p>
-            <Link
-              href="/docs/reference/optimize"
-              className="touch-target mt-6 inline-flex items-center rounded-full border border-[var(--border)] px-4 py-2 text-sm text-white transition hover:border-[var(--border-strong)] hover:bg-white/[0.04]"
-            >
-              Full /optimize reference
+          <DocsHeading>Assess flow</DocsHeading>
+          <Card tone="strong" className="rounded-2xl">
+            <CodeBlock title="Typical integration" code={pqcFlow} />
+            <Link href="/docs/guides/assess" className="mt-4 inline-block text-sm text-white underline underline-offset-4">
+              Full Assess workflow →
             </Link>
           </Card>
-          <div className="grid min-w-0 grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-6">
-            <CodeBlock title="Request schema" code={apiReferenceRequest} />
-            <CodeBlock title="Response schema" code={apiReferenceResponse} />
-          </div>
         </DocsSection>
 
         <DocsSection>
-          <DocsHeading>What you get back</DocsHeading>
-          <Card className="rounded-2xl">
-            <div className="space-y-3 text-sm leading-7 text-[var(--color-gray-300)]">
-              {docsGuideCopy.api.whatYouGetBack.items.map((item) => (
-                <p key={item}>{item}</p>
-              ))}
-            </div>
-          </Card>
-        </DocsSection>
-
-        <DocsSection>
-          <DocsHeading>Execution flow</DocsHeading>
-          <Card tone="strong" className="rounded-2xl">
-            <ol className="space-y-3 text-sm leading-7 text-[var(--color-gray-300)]">
-              {apiReferencePageCopy.executionFlow.steps.map((step, index) => (
-                <li key={step}>
-                  {index + 1}. {step}
-                </li>
-              ))}
-            </ol>
-          </Card>
+          <DocsHeading>Monitor tier</DocsHeading>
+          <p className="text-sm leading-8 text-[var(--color-gray-300)]">
+            Scheduled scans via <code className="font-mono text-white">POST /tenant/schedules</code>, drift
+            alerts via tenant settings, and SIEM export via signed webhooks (
+            <Link href="/docs/integrations/webhooks" className="text-white underline underline-offset-4">
+              webhooks guide
+            </Link>
+            ).
+          </p>
         </DocsSection>
 
         <DocsSection>
           <DocsHeading>Pilot endpoint</DocsHeading>
           <Card className="rounded-2xl">
             <p className="text-sm leading-8 text-[var(--color-gray-300)]">
-              {docsGuideCopy.api.pilotEndpoint.description}{" "}
-              <span className="font-mono text-white">{qtanglApiBaseUrl}</span>.
+              Base URL: <span className="font-mono text-white">{qtanglApiBaseUrl}</span>
             </p>
-            <Link
-              href="/docs/operations/environments"
-              className="mt-4 inline-block text-sm text-white underline underline-offset-4"
-            >
+            <Link href="/docs/operations/environments" className="mt-4 inline-block text-sm text-white underline underline-offset-4">
               Environments guide →
             </Link>
           </Card>
         </DocsSection>
 
-        <div className="grid gap-6 md:grid-cols-2">
-          <DocsSection>
-            <DocsHeading>Authentication</DocsHeading>
-            <Card className="rounded-2xl">
-              <p className="text-sm leading-8 text-[var(--color-gray-300)]">
-                {docsGuideCopy.api.auth.description}
-              </p>
-              <Link
-                href="/docs/authentication"
-                className="mt-4 inline-block text-sm text-white underline underline-offset-4"
-              >
-                Authentication guide →
-              </Link>
-            </Card>
-          </DocsSection>
-
-          <DocsSection>
-            <DocsHeading>Rate limits</DocsHeading>
-            <Card strong className="rounded-2xl">
-              <p className="text-sm leading-8 text-[var(--color-gray-300)]">
-                {docsGuideCopy.api.rateLimits.description}
-              </p>
-              <Link
-                href="/docs/operations/rate-limits"
-                className="mt-4 inline-block text-sm text-white underline underline-offset-4"
-              >
-                Rate limits guide →
-              </Link>
-            </Card>
-          </DocsSection>
-        </div>
-
         <DocsSection>
-          <DocsHeading>Method honesty</DocsHeading>
-          <DocsCallout variant="honesty">
-            {docsGuideCopy.api.methodHonesty.description}
+          <DocsHeading>Labs / optimization</DocsHeading>
+          <DocsCallout variant="info">
+            <code className="font-mono text-xs">POST /optimize</code> and domain demos (hospital, airline,
+            ev-fleet) remain available under{" "}
+            <Link href="/docs/reference/optimize">Labs reference</Link>. Primary product documentation
+            focuses on Q-Day readiness.
           </DocsCallout>
-        </DocsSection>
-
-        <DocsSection>
-          <DocsHeading>Error handling</DocsHeading>
-          <Card className="rounded-2xl">
-            <ul className="space-y-3 text-sm leading-7 text-[var(--color-gray-300)]">
-              {apiErrors.map((error) => (
-                <li key={error}>{error}</li>
-              ))}
-            </ul>
-            <p className="mt-5 text-sm text-[var(--color-gray-400)]">
-              {apiReferencePageCopy.errorCases.note}
-            </p>
-          </Card>
         </DocsSection>
       </DocsShell>
     </div>

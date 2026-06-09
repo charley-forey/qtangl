@@ -38,6 +38,11 @@ export const resourcesPageCopy = {
       href: "/resources/faq",
     },
     {
+      title: "Readiness Index",
+      description: "K-anonymized industry benchmarks — compare your posture to anonymized cohorts.",
+      href: "/resources/readiness-index",
+    },
+    {
       title: "Customer journey",
       description: "Maturity model from first inventory to proof of fix.",
       href: "/journey",

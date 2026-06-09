@@ -54,12 +54,37 @@ class AppViewXClmAdapter:
         self.token = token
 
     def list_certificates(self) -> dict[str, Any]:
-        return {
-            "provider": self.provider,
-            "status": "stub",
-            "certificates": [],
-            "message": "Configure AppViewX API credentials; interface ready for integration.",
-        }
+        if not self.host or not self.token:
+            return {
+                "provider": self.provider,
+                "status": "error",
+                "certificates": [],
+                "message": "host and token required",
+            }
+        try:
+            import httpx
+
+            resp = httpx.get(
+                f"{self.host}/avxapi/certificate",
+                headers={"Authorization": f"Bearer {self.token}", "Accept": "application/json"},
+                params={"limit": 200},
+                timeout=30,
+            )
+            resp.raise_for_status()
+            data = resp.json()
+            items = data if isinstance(data, list) else data.get("certificates") or data.get("data") or []
+            certs = [
+                {
+                    "id": c.get("id") or c.get("certificateId"),
+                    "commonName": c.get("commonName") or c.get("common_name") or c.get("subject"),
+                    "status": c.get("status"),
+                    "validTo": c.get("validTo") or c.get("valid_to") or c.get("expiryDate"),
+                }
+                for c in items[:200]
+            ]
+            return {"provider": self.provider, "status": "ok", "count": len(certs), "certificates": certs}
+        except Exception as exc:
+            return {"provider": self.provider, "status": "error", "certificates": [], "message": str(exc)}
 
 
 class EntrustClmAdapter:
@@ -70,12 +95,38 @@ class EntrustClmAdapter:
         self.tenant = tenant
 
     def list_certificates(self) -> dict[str, Any]:
-        return {
-            "provider": self.provider,
-            "status": "stub",
-            "certificates": [],
-            "message": "Configure Entrust CLM credentials; interface ready for integration.",
-        }
+        if not self.api_key or not self.tenant:
+            return {
+                "provider": self.provider,
+                "status": "error",
+                "certificates": [],
+                "message": "api_key and tenant required",
+            }
+        try:
+            import httpx
+
+            base = f"https://api.entrust.net/certificate-management/v2/tenants/{self.tenant}"
+            resp = httpx.get(
+                f"{base}/certificates",
+                headers={"Authorization": f"Bearer {self.api_key}", "Accept": "application/json"},
+                params={"limit": 200},
+                timeout=30,
+            )
+            resp.raise_for_status()
+            data = resp.json()
+            items = data if isinstance(data, list) else data.get("certificates") or data.get("items") or []
+            certs = [
+                {
+                    "id": c.get("id"),
+                    "commonName": c.get("commonName") or c.get("subject") or c.get("cn"),
+                    "status": c.get("status"),
+                    "validTo": c.get("validTo") or c.get("notAfter"),
+                }
+                for c in items[:200]
+            ]
+            return {"provider": self.provider, "status": "ok", "count": len(certs), "certificates": certs}
+        except Exception as exc:
+            return {"provider": self.provider, "status": "error", "certificates": [], "message": str(exc)}
 
 
 def pull_clm(provider: str, **credentials: Any) -> dict[str, Any]:

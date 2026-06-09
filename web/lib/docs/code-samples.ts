@@ -71,3 +71,25 @@ export function curlGet(path: string) {
   return `curl "${qtanglApiBaseUrl}${path}" \\
   -H "Authorization: Bearer ${qtanglSandboxApiKey}"`;
 }
+
+export function curlPost(path: string, body: object) {
+  const json = JSON.stringify(body, null, 2);
+  return `curl -X POST "${qtanglApiBaseUrl}${path}" \\
+  -H "Authorization: Bearer ${qtanglSandboxApiKey}" \\
+  -H "Content-Type: application/json" \\
+  -d '${json.replace(/'/g, "'\\''")}'`;
+}
+
+export function curlPqcScan(body: object) {
+  const json = JSON.stringify(body, null, 2);
+  return `curl -X POST "${qtanglApiBaseUrl}/pqc/scan" \\
+  -H "Authorization: Bearer ${qtanglSandboxApiKey}" \\
+  -H "Content-Type: application/json" \\
+  -H "Idempotency-Key: scan-$(uuidgen)" \\
+  -d '${json.replace(/'/g, "'\\''")}'`;
+}
+
+export function pollScanStatus(scanId: string) {
+  return `curl "${qtanglApiBaseUrl}/pqc/scan/${scanId}" \\
+  -H "Authorization: Bearer ${qtanglSandboxApiKey}"`;
+}

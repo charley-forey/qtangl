@@ -6,7 +6,7 @@ import time
 import unittest
 from unittest.mock import patch
 
-from app.pqc.safety import ScanSafetyError, assert_scannable, live_scan_enabled, scan_timeout_seconds
+from app.pqc.safety import ScanSafetyError, assert_scannable, live_scan_enabled, resolve_scannable, scan_timeout_seconds
 from app.pqc.scanner import scan_tls_endpoint
 
 
@@ -62,7 +62,10 @@ class PqcSafetyTest(unittest.TestCase):
                 assert_scannable("example.com", port=443)
 
     def test_scan_tls_honors_timeout_budget(self) -> None:
+        from app.pqc.safety import ScannableTarget
+
         timeout = 2.0
+        target = ScannableTarget(host="scan.example.com", ip="93.184.216.34", port=443)
 
         def slow_connect(*args, **kwargs):  # noqa: ANN002, ANN003
             time.sleep(timeout + 3)
@@ -70,8 +73,8 @@ class PqcSafetyTest(unittest.TestCase):
 
         env = {"QTANGL_PQC_ENABLE_LIVE_SCAN": "true", "QTANGL_PQC_SCAN_TIMEOUT": str(int(timeout))}
         with patch.dict(os.environ, env, clear=False):
-            with patch("app.pqc.scanner.assert_scannable", return_value="scan.example.com"):
-                with patch("app.pqc.scanner.socket.create_connection", side_effect=slow_connect) as mock_connect:
+            with patch("app.pqc.scanner.resolve_scannable", return_value=target):
+                with patch("app.pqc.scanner.safe_create_connection", side_effect=slow_connect) as mock_connect:
                     started = time.perf_counter()
                     asset, coverage = scan_tls_endpoint("scan.example.com", 443)
                     elapsed = time.perf_counter() - started
@@ -82,6 +85,18 @@ class PqcSafetyTest(unittest.TestCase):
         self.assertLess(elapsed, timeout + 5.0)
         mock_connect.assert_called_once()
         self.assertEqual(mock_connect.call_args.kwargs.get("timeout"), timeout)
+
+    def test_resolve_scannable_pins_public_ip(self) -> None:
+        env = {"QTANGL_PQC_ENABLE_LIVE_SCAN": "true"}
+        with patch.dict(os.environ, env, clear=False):
+            with patch(
+                "app.pqc.safety._validated_ips",
+                return_value=["93.184.216.34"],
+            ):
+                target = resolve_scannable("example.com", port=443)
+        self.assertEqual(target.host, "example.com")
+        self.assertEqual(target.ip, "93.184.216.34")
+        self.assertEqual(target.port, 443)
 
 
 if __name__ == "__main__":

@@ -34,7 +34,16 @@ export const navbarCopy = {
   mobileTitle: "Qtangl navigation",
 } as const;
 
+export const legalNav = [
+  { name: "Privacy", href: "/privacy" },
+  { name: "Terms", href: "/terms" },
+  { name: "Trust", href: "/trust" },
+  { name: "Security", href: "/trust/security" },
+  { name: "Sub-processors", href: "/trust/subprocessors" },
+] as const;
+
 export const footerCopy = {
   primaryHeading: "Platform",
   secondaryHeading: "More",
+  legalHeading: "Legal",
 } as const;

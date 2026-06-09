@@ -80,6 +80,16 @@ class RemediationVerifyRequest(BaseModel):
     verifyScanId: str
 
 
+class RemediationAutomateRequest(BaseModel):
+    remediationId: str
+    action: str = Field(pattern="^(acme|github_pr|venafi)$")
+    domain: str | None = None
+    repo: str | None = None
+    branch: str | None = None
+    title: str | None = None
+    policyId: str | None = None
+
+
 class OidcConfigRequest(BaseModel):
     issuerUrl: str
     clientId: str
@@ -452,6 +462,59 @@ def tenant_audit_export(
     entries, _ = list_audit(tenant_id=auth.tenant_id, limit=limit, since=since_dt)
     ndjson = "\n".join(json.dumps(entry, default=str) for entry in entries) + "\n"
     return Response(content=ndjson, media_type="application/x-ndjson")
+
+
+@router.post("/scans/{scan_id}/remediation/automate")
+def tenant_remediation_automate(
+    scan_id: str,
+    body: RemediationAutomateRequest,
+    auth: AuthContext = Depends(require_auth_write),
+) -> dict:
+    from app.billing.entitlements import check_convert_feature
+    from app.remediation.automation import open_hybrid_tls_pr, request_acme_reissue, venafi_policy_check
+
+    tier_error = check_convert_feature(tenant_id=auth.tenant_id)
+    if tier_error:
+        from app.telemetry.events import track_event
+
+        track_event("tier_upgrade_clicked", tenant_id=auth.tenant_id, properties=tier_error)
+        raise HTTPException(status_code=status.HTTP_402_PAYMENT_REQUIRED, detail=tier_error)
+
+    bundle_dict = load_scan_bundle(scan_id, tenant_id=auth.tenant_id)
+    if bundle_dict is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Scan not found.")
+    backlog = bundle_dict.get("remediationBacklog") or []
+    item = next((row for row in backlog if row.get("id") == body.remediationId), None)
+    if item is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Remediation item not found.")
+
+    report = bundle_dict.get("report") or {}
+    if body.action == "acme":
+        domain = body.domain or report.get("targetDomain") or str(item.get("asset_id") or item.get("assetId") or "example.com")
+        result = request_acme_reissue(domain=domain, pqc_preferred=True)
+    elif body.action == "github_pr":
+        repo = body.repo or os.environ.get("QTANGL_REMEDIATION_GITHUB_REPO", "")
+        if not repo:
+            raise HTTPException(
+                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                detail="repo required (body.repo or QTANGL_REMEDIATION_GITHUB_REPO).",
+            )
+        result = open_hybrid_tls_pr(
+            repo=repo,
+            branch=body.branch or f"qtangl/remediation-{body.remediationId[:8]}",
+            title=body.title or f"Hybrid TLS: {item.get('title', body.remediationId)}",
+        )
+    else:
+        policy_id = body.policyId or str(item.get("id") or body.remediationId)
+        result = venafi_policy_check(policy_id=policy_id)
+
+    log_action(
+        tenant_id=auth.tenant_id,
+        action="remediation.automate",
+        resource_id=body.remediationId,
+        detail={"action": body.action, "status": result.get("status")},
+    )
+    return {"status": "success", "scanId": scan_id, "remediationId": body.remediationId, "result": result}
 
 
 @router.post("/scans/{scan_id}/remediation/verify")
@@ -959,7 +1022,7 @@ def tenant_drift_intel(auth: AuthContext = Depends(require_auth_readonly)) -> di
 
 @router.get("/oidc")
 def tenant_oidc_get(auth: AuthContext = Depends(require_auth_admin)) -> dict:
-    from app.auth.oidc import get_oidc_config
+    from app.auth_oidc import get_oidc_config
 
     config = get_oidc_config(tenant_id=auth.tenant_id)
     return {"status": "success", "oidc": config}
@@ -967,7 +1030,7 @@ def tenant_oidc_get(auth: AuthContext = Depends(require_auth_admin)) -> dict:
 
 @router.put("/oidc")
 def tenant_oidc_put(body: OidcConfigRequest, auth: AuthContext = Depends(require_auth_admin)) -> dict:
-    from app.auth.oidc import upsert_oidc_config
+    from app.auth_oidc import upsert_oidc_config
 
     saved = upsert_oidc_config(
         tenant_id=auth.tenant_id,

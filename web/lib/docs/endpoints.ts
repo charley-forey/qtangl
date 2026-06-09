@@ -4,6 +4,14 @@ import {
   docsQuickstartRequest,
   docsQuickstartResponse,
 } from "@/lib/copy/api-examples";
+import {
+  adminEndpoints,
+  healthEndpoints,
+  publicEndpoints,
+  sharingEndpoints,
+} from "@/lib/docs/endpoints/admin-public-health";
+import { pqcExtendedEndpoints } from "@/lib/docs/endpoints/pqc-extended";
+import { tenantEndpoints } from "@/lib/docs/endpoints/tenant";
 
 import type { DocsEndpoint } from "@/lib/docs/types";
 
@@ -108,7 +116,7 @@ const optimizeResponseFields = [
   },
 ] as const;
 
-export const docsEndpoints: Record<string, DocsEndpoint> = {
+const coreDocsEndpoints: Record<string, DocsEndpoint> = {
   optimize: {
     id: "optimize",
     method: "POST",
@@ -978,6 +986,16 @@ export const docsEndpoints: Record<string, DocsEndpoint> = {
       },
     ],
   },
+};
+
+export const docsEndpoints: Record<string, DocsEndpoint> = {
+  ...coreDocsEndpoints,
+  ...tenantEndpoints,
+  ...pqcExtendedEndpoints,
+  ...adminEndpoints,
+  ...publicEndpoints,
+  ...healthEndpoints,
+  ...sharingEndpoints,
 };
 
 export function getEndpoint(id: string): DocsEndpoint | undefined {

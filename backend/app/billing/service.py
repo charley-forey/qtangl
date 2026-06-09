@@ -6,11 +6,44 @@ import os
 import urllib.error
 import urllib.parse
 import urllib.request
+import uuid
 from typing import Any
 
 from app.tenants.service import create_tenant, issue_api_key
 
 logger = logging.getLogger(__name__)
+
+STRIPE_WEBHOOK_TOLERANCE_SEC = 300
+
+TIER_FROM_PRODUCT = {
+    "pqc-monitor": "monitor",
+    "pqc-convert": "convert",
+    "pqc-enterprise": "enterprise",
+}
+
+
+def tier_from_stripe_price_id(price_id: str | None) -> str:
+    if not price_id:
+        return "monitor"
+    price_map = {
+        os.environ.get("QTANGL_STRIPE_MONITOR_PRICE_ID"): "monitor",
+        os.environ.get("QTANGL_STRIPE_CONVERT_PRICE_ID"): "convert",
+        os.environ.get("QTANGL_STRIPE_ENTERPRISE_PRICE_ID"): "enterprise",
+    }
+    return price_map.get(price_id, "monitor")
+
+
+def tier_from_stripe_metadata(metadata: dict[str, Any]) -> str:
+    product = str(metadata.get("product") or "")
+    return TIER_FROM_PRODUCT.get(product, "monitor")
+
+
+def _slug_tenant_id(company: str) -> str:
+    import re
+
+    slug = re.sub(r"[^a-z0-9-]", "", company.lower().replace(" ", "-").replace("_", "-"))
+    slug = slug.strip("-")[:40] or "monitor"
+    return slug
 
 
 def stripe_configured() -> bool:
@@ -64,22 +97,42 @@ def create_monitor_checkout_session(
 
 def provision_monitor_tenant(*, email: str, company: str) -> dict[str, Any]:
     """Create tenant + API key after successful payment (or manual admin trigger)."""
-    tenant_id = company.lower().replace(" ", "-")[:48] or None
+    base_id = _slug_tenant_id(company)
+    tenant_id = base_id
+    from app.db.config import persistence_enabled
+    from app.db.engine import db_session
+    from app.db.models import Tenant
+
+    if persistence_enabled():
+        with db_session() as session:
+            if session.get(Tenant, tenant_id) is not None:
+                tenant_id = f"{base_id}-{uuid.uuid4().hex[:8]}"
     tenant = create_tenant(tenant_id=tenant_id, name=company)
     key = issue_api_key(tenant_id=tenant["tenantId"], label="monitor-primary")
+    from app.billing.onboarding_tokens import create_onboarding_token
     from app.notifications.email import send_report_email
 
     base = os.environ.get("QTANGL_PUBLIC_URL", "https://www.qtangl.com")
+    token_info = create_onboarding_token(
+        tenant_id=tenant["tenantId"],
+        api_key=key["apiKey"],
+        email=email,
+    )
+    retrieve_url = f"{base}/dashboard?onboarding={token_info['token']}"
     send_report_email(
         to_email=email,
         scan_id="onboarding",
         target_domain=company,
-        report_url=f"{base}/dashboard",
+        report_url=retrieve_url,
         readiness_band="Monitor tier activated",
         subject_prefix="[Qtangl Welcome]",
-        body_extra=f"Your tenant API key: {key['apiKey']} — store securely.",
+        body_extra=(
+            "Your Monitor workspace is ready. Open the secure link below once to retrieve your "
+            "tenant API key (expires in 24 hours). Store it in a password manager — we cannot resend it.\n\n"
+            f"{retrieve_url}"
+        ),
     )
-    return {"tenantId": tenant["tenantId"], "apiKey": key["apiKey"]}
+    return {"tenantId": tenant["tenantId"], "onboardingTokenExpiresAt": token_info["expiresAt"]}
 
 
 def verify_stripe_webhook(payload: bytes, signature_header: str) -> dict[str, Any] | None:
@@ -90,10 +143,19 @@ def verify_stripe_webhook(payload: bytes, signature_header: str) -> dict[str, An
     try:
         import hmac
         import hashlib
+        import time
 
         parts = dict(item.split("=", 1) for item in signature_header.split(",") if "=" in item)
         timestamp = parts.get("t", "")
         sig = parts.get("v1", "")
+        if not timestamp or not sig:
+            return None
+        try:
+            ts_int = int(timestamp)
+        except ValueError:
+            return None
+        if abs(int(time.time()) - ts_int) > STRIPE_WEBHOOK_TOLERANCE_SEC:
+            return None
         signed = f"{timestamp}.{payload.decode('utf-8')}".encode()
         expected = hmac.new(secret.encode(), signed, hashlib.sha256).hexdigest()
         if not hmac.compare_digest(expected, sig):
@@ -113,11 +175,10 @@ def handle_checkout_completed(session: dict[str, Any]) -> dict[str, Any]:
     if not email:
         return {"provisioned": False, "reason": "missing_email"}
     result = provision_monitor_tenant(email=email, company=company)
-    tier = metadata.get("product", "pqc-monitor")
-    tier_map = {"pqc-monitor": "monitor", "pqc-convert": "convert", "pqc-enterprise": "enterprise"}
+    tier = tier_from_stripe_metadata(metadata)
     upsert_subscription(
         tenant_id=result["tenantId"],
-        tier=tier_map.get(tier, "monitor"),
+        tier=tier,
         stripe_customer_id=session.get("customer"),
         stripe_subscription_id=session.get("subscription"),
         status="active",
@@ -143,7 +204,16 @@ def handle_subscription_updated(subscription: dict[str, Any]) -> dict[str, Any]:
     tenant_id = _tenant_id_for_stripe_customer(customer_id)
     if not tenant_id:
         return {"updated": False, "reason": "tenant_not_found"}
-    tier = "monitor" if mapped == "active" else "free"
+    price_id = None
+    items = subscription.get("items") or {}
+    data = items.get("data") if isinstance(items, dict) else None
+    if data:
+        price_id = (data[0].get("price") or {}).get("id")
+    metadata = subscription.get("metadata") or {}
+    if mapped == "active":
+        tier = tier_from_stripe_metadata(metadata) if metadata.get("product") else tier_from_stripe_price_id(price_id)
+    else:
+        tier = "free"
     upsert_subscription(
         tenant_id=tenant_id,
         tier=tier,

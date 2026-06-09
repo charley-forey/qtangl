@@ -7,15 +7,20 @@ import DocsJsonLd from "@/components/docs/DocsJsonLd";
 import DocsSection from "@/components/docs/DocsSection";
 import DocsShell from "@/components/docs/DocsShell";
 import { MAIN_CONTENT_ID } from "@/components/layout/PageShell";
-import { docsQuickstartRequest } from "@/lib/constants";
-import { javascriptFetch, pythonRequests } from "@/lib/docs/code-samples";
+import Card from "@/components/ui/Card";
+import {
+  curlGet,
+  curlPqcScan,
+  pythonRequests,
+} from "@/lib/docs/code-samples";
 import { docsSearchIndex } from "@/lib/docs/search-index-export";
 import { buildPageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildPageMetadata({
   path: "/docs/authentication",
-  title: "Authentication",
-  description: "API keys, bearer tokens, and header schemes for the Qtangl pilot API.",
+  title: "Authentication & RBAC",
+  description:
+    "Per-tenant API keys, viewer/operator/admin roles, bearer and header schemes, OIDC SSO, and key lifecycle.",
 });
 
 export default function AuthenticationPage() {
@@ -23,10 +28,7 @@ export default function AuthenticationPage() {
     {
       id: "curl" as const,
       label: "Bearer (curl)",
-      code: `curl -X POST "…/optimize" \\
-  -H "Authorization: Bearer YOUR_API_KEY" \\
-  -H "Content-Type: application/json" \\
-  -d '…'`,
+      code: curlPqcScan({ scenarioId: "bank-tls-inventory", useFixture: true }),
     },
     {
       id: "javascript" as const,
@@ -35,18 +37,19 @@ export default function AuthenticationPage() {
   headers: {
     "x-api-key": "YOUR_API_KEY",
     "Content-Type": "application/json",
+    "X-Request-Id": crypto.randomUUID(),
   },
 });`,
     },
     {
       id: "python" as const,
-      label: "Python",
-      code: pythonRequests("/optimize", "POST", docsQuickstartRequest),
+      label: "Query param",
+      code: pythonRequests("/tenant/me?api_key=YOUR_API_KEY", "GET"),
     },
     {
       id: "typescript" as const,
-      label: "Full example",
-      code: javascriptFetch("/optimize", "POST", docsQuickstartRequest),
+      label: "Read-only GET",
+      code: curlGet("/tenant/scans"),
     },
   ];
 
@@ -54,27 +57,64 @@ export default function AuthenticationPage() {
     <div id={MAIN_CONTENT_ID} className="scroll-mt-24 sm:scroll-mt-28">
       <DocsJsonLd
         pathname="/docs/authentication"
-        title="Authentication"
-        description="API keys and header schemes for Qtangl."
+        title="Authentication & RBAC"
+        description="API keys, roles, and header schemes for Qtangl."
       />
       <DocsShell
-        title="Authentication"
-        description="Send a bearer token or x-api-key header on every protected route. The pilot defaults to a single shared key per deployment."
+        title="Authentication & RBAC"
+        description="Each tenant receives scoped API keys with viewer, operator, or admin roles. Platform admin routes use a separate key."
         pathname="/docs/authentication"
         searchIndex={docsSearchIndex}
       >
+        <p className="text-xs text-[var(--color-gray-500)]">Last updated: 2026-06-09</p>
+
         <DocsSection>
           <DocsHeading>Supported headers</DocsHeading>
           <ul className="space-y-3 text-sm leading-7 text-[var(--color-gray-300)]">
             <li>
-              <code className="font-mono text-white">Authorization: Bearer &lt;key&gt;</code> —
-              preferred for server-side integrations
+              <code className="font-mono text-white">Authorization: Bearer &lt;key&gt;</code> — preferred
+              for server-side integrations
             </li>
             <li>
-              <code className="font-mono text-white">x-api-key: &lt;key&gt;</code> — convenient for
-              tools and proxies
+              <code className="font-mono text-white">x-api-key: &lt;key&gt;</code> — convenient for tools
+              and proxies
+            </li>
+            <li>
+              <code className="font-mono text-white">?api_key=&lt;key&gt;</code> — read-only catalog
+              endpoints only
+            </li>
+            <li>
+              <code className="font-mono text-white">X-Request-Id</code> — optional; echoed on every
+              response for support correlation
+            </li>
+            <li>
+              <code className="font-mono text-white">Idempotency-Key</code> — supported on{" "}
+              <code className="font-mono text-white">POST /pqc/scan</code>
             </li>
           </ul>
+        </DocsSection>
+
+        <DocsSection>
+          <DocsHeading>RBAC roles</DocsHeading>
+          <Card className="rounded-2xl">
+            <ul className="list-disc space-y-2 pl-5 text-sm leading-7 text-[var(--color-gray-300)]">
+              <li>
+                <strong className="text-white">viewer</strong> — read scans, reports, portfolio,
+                analytics; cannot create schedules or modify remediation
+              </li>
+              <li>
+                <strong className="text-white">operator</strong> — default for new keys; scans,
+                schedules, remediation writes, integrations
+              </li>
+              <li>
+                <strong className="text-white">admin</strong> — audit log, settings, offboarding,
+                billing portal, OIDC config, partner children
+              </li>
+            </ul>
+            <Link href="/docs/reference/rbac" className="mt-4 inline-block text-sm text-white underline underline-offset-4">
+              Full RBAC matrix →
+            </Link>
+          </Card>
         </DocsSection>
 
         <DocsSection>
@@ -83,35 +123,48 @@ export default function AuthenticationPage() {
         </DocsSection>
 
         <DocsSection>
-          <DocsHeading>Pilot vs production keys</DocsHeading>
+          <DocsHeading>Platform admin key</DocsHeading>
           <p className="text-sm leading-8 text-[var(--color-gray-300)]">
-            Pilot keys are suitable for sandbox, staging, and integration tests. Request production
-            credentials via{" "}
-            <Link href="/access" className="text-white underline underline-offset-4">
-              /access
+            Routes under <code className="font-mono text-white">/admin/*</code> require{" "}
+            <code className="font-mono text-white">QTANGL_ADMIN_API_KEY</code> — not a tenant role. Used
+            for tenant provisioning and key lifecycle. See{" "}
+            <Link href="/docs/guides/admin-keys" className="text-white underline underline-offset-4">
+              Admin & key lifecycle
             </Link>
-            . Never commit keys to source control — use environment variables (
-            <code className="font-mono text-white">QTANGL_API_KEY</code> on the server,{" "}
-            <code className="font-mono text-white">NEXT_PUBLIC_QTANGL_SANDBOX_API_KEY</code> in the
-            browser sandbox only).
+            .
+          </p>
+        </DocsSection>
+
+        <DocsSection>
+          <DocsHeading>Dashboard SSO (OIDC)</DocsHeading>
+          <p className="text-sm leading-8 text-[var(--color-gray-300)]">
+            Dashboard login supports OIDC SSO configured via{" "}
+            <code className="font-mono text-white">PUT /tenant/oidc</code> (admin role). API keys remain
+            required for programmatic access. See{" "}
+            <Link href="/docs/guides/sso-setup" className="text-white underline underline-offset-4">
+              Dashboard SSO setup
+            </Link>
+            .
           </p>
         </DocsSection>
 
         <DocsSection>
           <DocsHeading>Key rotation</DocsHeading>
           <ol className="list-decimal space-y-2 pl-5 text-sm leading-7 text-[var(--color-gray-300)]">
-            <li>Issue a new key in your deployment environment.</li>
+            <li>Issue a new key via admin API or deployment environment.</li>
             <li>Update clients to send the new header value.</li>
-            <li>Revoke the old key after traffic drains.</li>
+            <li>Revoke the old key after traffic drains — keys stored as SHA-256 hashes; plaintext shown once.</li>
           </ol>
         </DocsSection>
 
         <DocsSection>
           <DocsHeading>Public routes</DocsHeading>
           <p className="text-sm leading-8 text-[var(--color-gray-300)]">
-            <code className="font-mono text-white">GET /health</code> does not require
-            authentication. All <code className="font-mono text-white">/optimize</code> and{" "}
-            <code className="font-mono text-white">/hospital/*</code> routes require a valid key.
+            <code className="font-mono text-white">GET /health</code>,{" "}
+            <code className="font-mono text-white">GET /pqc/verify/{"{scanId}"}</code>, transparency log
+            endpoints, and Readiness Index are public (rate-limited). All{" "}
+            <code className="font-mono text-white">/tenant/*</code> and mutating{" "}
+            <code className="font-mono text-white">/pqc/*</code> routes require a valid tenant key.
           </p>
         </DocsSection>
       </DocsShell>

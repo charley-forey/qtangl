@@ -1,13 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
 
-import { footerCopy, footerNav, nav } from "@/lib/copy/nav";
+import { footerCopy, footerNav, legalNav, nav } from "@/lib/copy/nav";
 import { footerBlurb, footerContact, siteMetadata } from "@/lib/copy/product";
 
 export default function Footer() {
   return (
     <footer className="border-t border-[var(--border)] bg-black">
-      <div className="mx-auto grid w-full max-w-[var(--container-wide)] gap-10 px-[var(--gutter-mobile)] py-14 md:px-[var(--gutter-tablet)] lg:grid-cols-[1.2fr_0.8fr_0.8fr] lg:px-[var(--gutter-desktop)] lg:py-16">
+      <div className="mx-auto grid w-full max-w-[var(--container-wide)] gap-10 px-[var(--gutter-mobile)] py-14 md:px-[var(--gutter-tablet)] lg:grid-cols-[1.2fr_0.8fr_0.8fr_0.7fr] lg:px-[var(--gutter-desktop)] lg:py-16">
         <div className="max-w-2xl">
           <div className="flex items-center gap-3">
             <Image
@@ -80,10 +80,30 @@ export default function Footer() {
             ))}
           </div>
         </div>
+
+        <div className="space-y-4 text-sm text-[var(--color-gray-300)]">
+          <p className="text-label">{footerCopy.legalHeading}</p>
+          <div className="space-y-3">
+            {legalNav.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="block transition hover:text-white"
+              >
+                {item.name}
+              </Link>
+            ))}
+          </div>
+        </div>
       </div>
       <div className="border-t border-[var(--border)]">
-        <div className="mx-auto w-full max-w-[var(--container-wide)] px-[var(--gutter-mobile)] py-4 text-center text-xs text-[var(--color-gray-500)] md:px-[var(--gutter-tablet)] lg:px-[var(--gutter-desktop)]">
-          © {new Date().getFullYear()} Qtangl. All rights reserved.
+        <div className="mx-auto flex w-full max-w-[var(--container-wide)] flex-wrap items-center justify-center gap-x-4 gap-y-2 px-[var(--gutter-mobile)] py-4 text-xs text-[var(--color-gray-500)] md:px-[var(--gutter-tablet)] lg:px-[var(--gutter-desktop)]">
+          <span>© {new Date().getFullYear()} Qtangl. All rights reserved.</span>
+          {legalNav.map((item) => (
+            <Link key={item.href} href={item.href} className="transition hover:text-white">
+              {item.name}
+            </Link>
+          ))}
         </div>
       </div>
     </footer>

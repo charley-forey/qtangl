@@ -2,6 +2,8 @@
 
 import { useRef, useState } from "react";
 
+import Link from "next/link";
+
 import Button from "@/components/ui/Button";
 import { trackEvent } from "@/lib/analytics";
 
@@ -41,11 +43,17 @@ export default function VideoEmbed({ src }: VideoEmbedProps) {
       {expanded ? (
         <div className="mt-6 overflow-hidden rounded-[var(--radius-xl)] border border-[var(--border)] bg-black">
           {videoError ? (
-            <div className="flex aspect-video flex-col items-center justify-center gap-2 px-6 text-center">
-              <p className="text-sm font-medium text-white">Video coming soon</p>
+            <div className="flex aspect-video flex-col items-center justify-center gap-3 px-6 text-center">
+              <p className="text-sm font-medium text-white">Recorded demo</p>
               <p className="max-w-sm text-sm text-[var(--color-gray-400)]">
-                Use the workflow below to run the live demo.
+                Run the live Q-Day assessment workflow — same inventory and signed report flow.
               </p>
+              <Link
+                href="/assess"
+                className="rounded-full border border-[var(--border-strong)] bg-white px-5 py-2 text-sm font-medium text-black"
+              >
+                Open live assessment
+              </Link>
             </div>
           ) : (
             <video

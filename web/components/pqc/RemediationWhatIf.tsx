@@ -81,9 +81,13 @@ export default function RemediationWhatIf({
 
   return (
     <Card tone="panel" className="mt-6 rounded-[var(--radius-xl)]">
-      <Eyebrow>What-if projection</Eyebrow>
+      <Eyebrow>What-if estimate</Eyebrow>
       <p className="mt-2 text-sm text-[var(--color-gray-400)]">
-        Select backlog items to estimate readiness after remediation. Assumes successful implementation and re-scan.
+        <span className="rounded-full border border-amber-500/40 bg-amber-500/10 px-2 py-0.5 text-xs text-amber-200">
+          Estimate only
+        </span>{" "}
+        Select backlog items to project readiness after remediation. Uplift weights derive from{" "}
+        <code className="text-[var(--color-gray-300)]">risk.py</code> severity scoring — not a guarantee.
       </p>
 
       {projection ? (

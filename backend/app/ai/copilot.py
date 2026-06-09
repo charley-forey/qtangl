@@ -7,14 +7,25 @@ from typing import Any
 
 
 def explain_finding(*, finding: dict[str, Any], context: str = "") -> dict[str, Any]:
+    from app.remediation.service import recommend_remediation_plan
+
+    plan = recommend_remediation_plan(finding)
+    plan_context = (
+        f"Owner: {plan.get('ownerTeam')}, sprint: {plan.get('recommendedSprint')}, "
+        f"ETA: {plan.get('etaWeeks')} week(s). Playbook: {'; '.join(plan.get('playbook') or [])}"
+    )
+    enriched_context = f"{context}\n{plan_context}".strip() if context else plan_context
+
     api_key = os.environ.get("OPENAI_API_KEY")
     if not api_key:
         return {
             "explanation": (
                 f"Finding '{finding.get('title', 'item')}' requires migration to "
-                f"{finding.get('pqcAlgorithm', 'ML-KEM / ML-DSA')} per NIST PQC standards."
+                f"{finding.get('pqcAlgorithm', 'ML-KEM / ML-DSA')} per NIST PQC standards. "
+                f"{plan_context}"
             ),
             "source": "rules",
+            "remediationPlan": plan,
         }
     try:
         import json
@@ -30,7 +41,7 @@ def explain_finding(*, finding: dict[str, Any], context: str = "") -> dict[str, 
                     },
                     {
                         "role": "user",
-                        "content": f"Explain remediation for: {json.dumps(finding)}\nContext: {context}",
+                        "content": f"Explain remediation for: {json.dumps(finding)}\nContext: {enriched_context}",
                     },
                 ],
                 "max_tokens": 300,
@@ -45,6 +56,6 @@ def explain_finding(*, finding: dict[str, Any], context: str = "") -> dict[str, 
         with urllib.request.urlopen(request, timeout=30) as response:
             data = json.loads(response.read().decode())
             text = data["choices"][0]["message"]["content"]
-            return {"explanation": text, "source": "openai"}
+            return {"explanation": text, "source": "openai", "remediationPlan": plan}
     except Exception as exc:
-        return {"explanation": str(exc), "source": "error"}
+        return {"explanation": str(exc), "source": "error", "remediationPlan": plan}

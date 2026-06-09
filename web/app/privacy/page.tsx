@@ -31,7 +31,7 @@ export default function PrivacyPage() {
         },
         {
           heading: "5. Subprocessors",
-          body: "Infrastructure providers (hosting, email, payments) are listed on the Trust Center. Enterprise DPAs cover additional subprocessors on request.",
+          body: "Infrastructure providers (hosting, email, payments) are listed on the Trust Center at /trust/subprocessors. Enterprise DPAs cover additional subprocessors on request.",
         },
         {
           heading: "6. Retention",

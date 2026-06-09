@@ -5,6 +5,7 @@ import {
   useCallback,
   useContext,
   useMemo,
+  useRef,
   useState,
   type ReactNode,
 } from "react";
@@ -27,18 +28,17 @@ export function DocsProvider({
   pathname: string;
 }) {
   const [toc, setToc] = useState<DocsTocItem[]>([]);
+  const orderRef = useRef(0);
 
   const registerHeading = useCallback((item: DocsTocItem) => {
     setToc((current) => {
       if (current.some((entry) => entry.id === item.id)) {
         return current;
       }
-      const next = [...current, item].sort((a, b) => {
-        if (a.level !== b.level) {
-          return a.level - b.level;
-        }
-        return 0;
-      });
+      const order = item.order ?? orderRef.current++;
+      const next = [...current, { ...item, order }].sort(
+        (a, b) => (a.order ?? 0) - (b.order ?? 0),
+      );
       return next;
     });
   }, []);

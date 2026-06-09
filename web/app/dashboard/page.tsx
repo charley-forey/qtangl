@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 
 import DashboardAuthGate from "@/components/dashboard/DashboardAuthGate";
 import DashboardClient from "@/components/dashboard/DashboardClient";
@@ -42,7 +43,9 @@ export default function DashboardPage() {
           </Button>
         </div>
         <DashboardAuthGate ssoConfigured={oidcConfigured()} requireSso={dashboardRequireSso()}>
-          <DashboardClient />
+          <Suspense fallback={<p className="text-sm text-[var(--color-gray-500)]">Loading dashboard…</p>}>
+            <DashboardClient />
+          </Suspense>
         </DashboardAuthGate>
       </Section>
     </PageShell>

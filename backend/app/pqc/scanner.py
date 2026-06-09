@@ -14,16 +14,21 @@ from __future__ import annotations
 from dataclasses import replace
 import hashlib
 import json
-import socket
 import ssl
-import urllib.error
 import urllib.request
 from datetime import datetime, timezone
 from typing import Any, Callable
 
 from app.pqc.data import _build_asset
 from app.pqc.models import CryptoAsset, PqcDataset, ScanCoverageEntry, ScanScenario, TimelineEvent
-from app.pqc.safety import assert_scannable, max_endpoints, scan_timeout_seconds
+from app.pqc.safety import (
+    max_endpoints,
+    resolve_scannable,
+    safe_create_connection,
+    safe_json_from_url,
+    safe_urlopen,
+    scan_timeout_seconds,
+)
 from app.pqc.vulnerability import classify_algorithm, classify_from_cert_fields
 
 try:
@@ -207,9 +212,8 @@ def _probe_hsts(host: str, port: int) -> list[str]:
     findings: list[str] = []
     try:
         url = f"https://{host}:{port}/" if port != 443 else f"https://{host}/"
-        request = urllib.request.Request(url, method="HEAD")
-        with urllib.request.urlopen(request, timeout=scan_timeout_seconds()) as response:
-            headers = {k.lower(): v for k, v in response.headers.items()}
+        with safe_urlopen(url, timeout=scan_timeout_seconds()) as response:
+            headers = response.headers
             if "strict-transport-security" not in headers:
                 findings.append("Missing HSTS (Strict-Transport-Security) header")
     except Exception:
@@ -223,17 +227,17 @@ def scan_db_tls(host: str, port: int = 5432) -> ScanResult:
 
 
 def scan_vpn_banner(host: str, port: int = 500) -> ScanResult:
-    safe_host = assert_scannable(host, port=port)
+    target = resolve_scannable(host, port=port)
     try:
-        with socket.create_connection((safe_host, port), timeout=scan_timeout_seconds()) as sock:
+        with safe_create_connection(target, timeout=scan_timeout_seconds()) as sock:
             banner = sock.recv(256).decode("utf-8", errors="replace")
         if "IKE" in banner.upper() or "VPN" in banner.upper() or banner.strip():
             vuln = classify_algorithm("IKE/ESP", context="tls")
             return (
                 CryptoAsset(
-                    id=_asset_id("vpn", safe_host, port),
+                    id=_asset_id("vpn", target.host, port),
                     kind="vpn",
-                    host=safe_host,
+                    host=target.host,
                     port=port,
                     label=f"VPN/IKE endpoint ({port})",
                     algorithm="IKE/ESP",
@@ -253,17 +257,17 @@ def scan_vpn_banner(host: str, port: int = 500) -> ScanResult:
                 None,
             )
     except Exception as exc:
-        return None, _coverage_entry(safe_host, port, "vpn", status="unreachable", detail=str(exc))
+        return None, _coverage_entry(target.host, port, "vpn", status="unreachable", detail=str(exc))
     return None, None
 
 
 def scan_tls_endpoint(host: str, port: int) -> ScanResult:
-    safe_host = assert_scannable(host, port=port)
+    target = resolve_scannable(host, port=port)
     timeout = scan_timeout_seconds()
     context = ssl.create_default_context()
     try:
-        with socket.create_connection((safe_host, port), timeout=timeout) as sock:
-            with context.wrap_socket(sock, server_hostname=safe_host) as tls_sock:
+        with safe_create_connection(target, timeout=timeout) as sock:
+            with context.wrap_socket(sock, server_hostname=target.host) as tls_sock:
                 cert_der = tls_sock.getpeercert(binary_form=True)
                 negotiated = {
                     "cipher": tls_sock.cipher()[0] if tls_sock.cipher() else None,
@@ -273,21 +277,21 @@ def scan_tls_endpoint(host: str, port: int) -> ScanResult:
                 }
         if not cert_der:
             return None, _coverage_entry(
-                safe_host,
+                target.host,
                 port,
                 "tls",
                 status="error",
                 detail="No peer certificate returned",
             )
         asset = _parse_cert_asset(
-            host=safe_host,
+            host=target.host,
             port=port,
             cert_der=cert_der,
             negotiated=negotiated,
-            label=f"TLS {safe_host}:{port}",
+            label=f"TLS {target.host}:{port}",
         )
         hygiene = list(asset.metadata.get("tlsHygiene", []))
-        hygiene.extend(_probe_hsts(safe_host, port))
+        hygiene.extend(_probe_hsts(target.host, port))
         meta = dict(asset.metadata)
         meta["tlsHygiene"] = hygiene
         from dataclasses import replace
@@ -295,7 +299,7 @@ def scan_tls_endpoint(host: str, port: int) -> ScanResult:
         return replace(asset, metadata=meta), None
     except Exception as exc:
         return None, _coverage_entry(
-            safe_host,
+            target.host,
             port,
             "tls",
             status="unreachable",
@@ -304,16 +308,14 @@ def scan_tls_endpoint(host: str, port: int) -> ScanResult:
 
 
 def scan_jwks(host: str, port: int = 443) -> ScanResult:
-    safe_host = assert_scannable(host, port=port)
-    url = f"https://{safe_host}/.well-known/openid-configuration"
+    target = resolve_scannable(host, port=port)
+    url = f"https://{target.host}/.well-known/openid-configuration"
     try:
-        with urllib.request.urlopen(url, timeout=scan_timeout_seconds()) as response:
-            config = json.loads(response.read().decode("utf-8"))
+        config = safe_json_from_url(url, timeout=scan_timeout_seconds())
         jwks_uri = config.get("jwks_uri")
         if not jwks_uri:
             return None, None
-        with urllib.request.urlopen(jwks_uri, timeout=scan_timeout_seconds()) as jwks_response:
-            jwks = json.loads(jwks_response.read().decode("utf-8"))
+        jwks = safe_json_from_url(str(jwks_uri), timeout=scan_timeout_seconds())
         keys = jwks.get("keys", [])
         if not keys:
             return None, None
@@ -322,9 +324,9 @@ def scan_jwks(host: str, port: int = 443) -> ScanResult:
         vuln = classify_algorithm(alg, context="jwks")
         return (
             CryptoAsset(
-                id=_asset_id("jwks", safe_host, port),
+                id=_asset_id("jwks", target.host, port),
                 kind="jwks",
-                host=safe_host,
+                host=target.host,
                 port=port,
                 label=f"OIDC JWKS ({alg})",
                 algorithm=alg,
@@ -343,22 +345,22 @@ def scan_jwks(host: str, port: int = 443) -> ScanResult:
             ),
             None,
         )
-    except (urllib.error.URLError, json.JSONDecodeError, TimeoutError):
+    except (json.JSONDecodeError, TimeoutError, OSError):
         return None, None
 
 
 def scan_ssh_banner(host: str, port: int = 22) -> ScanResult:
-    safe_host = assert_scannable(host, port=port)
+    target = resolve_scannable(host, port=port)
     try:
-        with socket.create_connection((safe_host, port), timeout=scan_timeout_seconds()) as sock:
+        with safe_create_connection(target, timeout=scan_timeout_seconds()) as sock:
             banner = sock.recv(256).decode("utf-8", errors="replace")
         algo = "ssh-rsa" if "ssh-rsa" in banner.lower() else "ssh-ed25519"
         vuln = classify_algorithm(algo, key_size=3072 if "rsa" in algo else None, context="ssh")
         return (
             CryptoAsset(
-                id=_asset_id("ssh", safe_host, port),
+                id=_asset_id("ssh", target.host, port),
                 kind="ssh",
-                host=safe_host,
+                host=target.host,
                 port=port,
                 label=f"SSH host key ({algo})",
                 algorithm=algo,
@@ -379,7 +381,7 @@ def scan_ssh_banner(host: str, port: int = 22) -> ScanResult:
         )
     except Exception as exc:
         return None, _coverage_entry(
-            safe_host,
+            target.host,
             port,
             "ssh",
             status="unreachable",
@@ -388,10 +390,10 @@ def scan_ssh_banner(host: str, port: int = 22) -> ScanResult:
 
 
 def fetch_mta_sts_policy(domain: str) -> dict[str, Any] | None:
-    safe_host = assert_scannable(domain)
-    url = f"https://mta-sts.{safe_host}/.well-known/mta-sts.txt"
+    target = resolve_scannable(domain)
+    url = f"https://mta-sts.{target.host}/.well-known/mta-sts.txt"
     try:
-        with urllib.request.urlopen(url, timeout=scan_timeout_seconds()) as response:
+        with safe_urlopen(url, timeout=scan_timeout_seconds()) as response:
             text = response.read().decode("utf-8", errors="replace")
         return {"policyUrl": url, "excerpt": text[:240]}
     except Exception:
@@ -399,9 +401,9 @@ def fetch_mta_sts_policy(domain: str) -> dict[str, Any] | None:
 
 
 def scan_email_starttls(host: str, port: int) -> ScanResult:
-    safe_host = assert_scannable(host, port=port)
+    target = resolve_scannable(host, port=port)
     try:
-        with socket.create_connection((safe_host, port), timeout=scan_timeout_seconds()) as sock:
+        with safe_create_connection(target, timeout=scan_timeout_seconds()) as sock:
             sock.sendall(b"EHLO qtangl-scan.local\r\n")
             banner = sock.recv(512).decode("utf-8", errors="replace")
             if port in {25, 587}:
@@ -409,19 +411,19 @@ def scan_email_starttls(host: str, port: int) -> ScanResult:
                 reply = sock.recv(512).decode("utf-8", errors="replace")
                 if "220" not in reply:
                     return None, _coverage_entry(
-                        safe_host,
+                        target.host,
                         port,
                         "email",
                         status="error",
                         detail=reply.strip() or "STARTTLS rejected",
                     )
                 context = ssl.create_default_context()
-                tls_sock = context.wrap_socket(sock, server_hostname=safe_host)
+                tls_sock = context.wrap_socket(sock, server_hostname=target.host)
                 cert_der = tls_sock.getpeercert(binary_form=True)
                 if cert_der:
                     return (
                         _parse_cert_asset(
-                            host=safe_host,
+                            host=target.host,
                             port=port,
                             cert_der=cert_der,
                             negotiated={
@@ -430,19 +432,19 @@ def scan_email_starttls(host: str, port: int) -> ScanResult:
                                 "group": _negotiated_group(tls_sock),
                                 "chainLength": _chain_length(tls_sock),
                             },
-                            label=f"SMTP STARTTLS {safe_host}:{port}",
+                            label=f"SMTP STARTTLS {target.host}:{port}",
                             kind="email",
                         ),
                         None,
                     )
             elif port == 993:
                 context = ssl.create_default_context()
-                tls_sock = context.wrap_socket(sock, server_hostname=safe_host)
+                tls_sock = context.wrap_socket(sock, server_hostname=target.host)
                 cert_der = tls_sock.getpeercert(binary_form=True)
                 if cert_der:
                     return (
                         _parse_cert_asset(
-                            host=safe_host,
+                            host=target.host,
                             port=port,
                             cert_der=cert_der,
                             negotiated={
@@ -451,13 +453,13 @@ def scan_email_starttls(host: str, port: int) -> ScanResult:
                                 "group": _negotiated_group(tls_sock),
                                 "chainLength": _chain_length(tls_sock),
                             },
-                            label=f"IMAPS {safe_host}:{port}",
+                            label=f"IMAPS {target.host}:{port}",
                             kind="email",
                         ),
                         None,
                     )
         return None, _coverage_entry(
-            safe_host,
+            target.host,
             port,
             "email",
             status="unreachable",
@@ -465,7 +467,7 @@ def scan_email_starttls(host: str, port: int) -> ScanResult:
         )
     except Exception as exc:
         return None, _coverage_entry(
-            safe_host,
+            target.host,
             port,
             "email",
             status="unreachable",
@@ -474,8 +476,8 @@ def scan_email_starttls(host: str, port: int) -> ScanResult:
 
 
 def discover_ct_subdomains(domain: str) -> list[str]:
-    safe_host = assert_scannable(domain)
-    url = f"https://crt.sh/?q=%25.{safe_host}&output=json"
+    target = resolve_scannable(domain)
+    url = f"https://crt.sh/?q=%25.{target.host}&output=json"
     try:
         with urllib.request.urlopen(url, timeout=scan_timeout_seconds()) as response:
             payload = json.loads(response.read().decode("utf-8"))
@@ -484,7 +486,7 @@ def discover_ct_subdomains(domain: str) -> list[str]:
             name_value = entry.get("name_value", "")
             for name in name_value.split("\n"):
                 cleaned = name.strip().lower()
-                if cleaned.endswith(safe_host) and cleaned != safe_host:
+                if cleaned.endswith(target.host) and cleaned != target.host:
                     names.add(cleaned)
         return sorted(names)[: max_endpoints()]
     except Exception:

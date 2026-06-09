@@ -41,6 +41,20 @@ def check_scan_quota(*, tenant_id: str) -> dict[str, Any] | None:
     return None
 
 
+def check_convert_feature(*, tenant_id: str) -> dict[str, Any] | None:
+    """Return error payload if tenant lacks Convert-tier remediation automation."""
+    ent = tenant_entitlements(tenant_id=tenant_id)
+    features = list(ent.get("features") or [])
+    if "convert" not in features:
+        return {
+            "code": "convert_tier_required",
+            "tier": ent.get("tier"),
+            "feature": "convert",
+            "upgradeUrl": "/pricing",
+        }
+    return None
+
+
 def check_schedule_quota(*, tenant_id: str) -> dict[str, Any] | None:
     ent = tenant_entitlements(tenant_id=tenant_id)
     max_schedules = int(ent.get("maxSchedules", 10))

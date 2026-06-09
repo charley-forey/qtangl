@@ -90,6 +90,25 @@ def public_unsubscribe(body: UnsubscribeRequest) -> dict:
     return {"status": "success" if ok else "not_found", "unsubscribed": ok}
 
 
+@router.get("/onboarding-key/{token}")
+def public_redeem_onboarding_key(token: str) -> dict:
+    """One-time retrieval of tenant API key after Monitor checkout (24h TTL)."""
+    from app.billing.onboarding_tokens import redeem_onboarding_token
+
+    result = redeem_onboarding_token(token)
+    if result is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Onboarding link invalid, expired, or already used.",
+        )
+    return {
+        "status": "success",
+        "tenantId": result["tenantId"],
+        "apiKey": result["apiKey"],
+        "dashboardUrl": f"{os.environ.get('QTANGL_PUBLIC_URL', 'https://www.qtangl.com')}/dashboard",
+    }
+
+
 @router.post("/stripe-webhook")
 async def stripe_webhook(request: Request) -> dict:
     """Stripe lifecycle events → provision or update Monitor tenant."""

@@ -9,8 +9,11 @@ import { MAIN_CONTENT_ID } from "@/components/layout/PageShell";
 import {
   optimizeRequestJsonSchema,
   optimizeResponseJsonSchema,
+  pqcCbomIngestRequestJsonSchema,
+  pqcCbomIngestResponseJsonSchema,
   pqcScanRequestJsonSchema,
   pqcScanResponseJsonSchema,
+  pqcVerifyResponseJsonSchema,
 } from "@/lib/docs/schemas";
 import { docsSearchIndex } from "@/lib/docs/search-index-export";
 import { buildPageMetadata } from "@/lib/seo";
@@ -53,6 +56,18 @@ export default function SchemasPage() {
         <DocsSection>
           <DocsHeading id="pqc-scan-response">PQC scan response</DocsHeading>
           <DocsSchemaViewer schema={pqcScanResponseJsonSchema} title="pqc-scan-response.schema.json" />
+        </DocsSection>
+        <DocsSection>
+          <DocsHeading id="pqc-cbom-ingest-request">CBOM ingest request</DocsHeading>
+          <DocsSchemaViewer schema={pqcCbomIngestRequestJsonSchema} title="pqc-cbom-ingest-request.schema.json" />
+        </DocsSection>
+        <DocsSection>
+          <DocsHeading id="pqc-cbom-ingest-response">CBOM ingest response</DocsHeading>
+          <DocsSchemaViewer schema={pqcCbomIngestResponseJsonSchema} title="pqc-cbom-ingest-response.schema.json" />
+        </DocsSection>
+        <DocsSection>
+          <DocsHeading id="pqc-verify-response">Verify response</DocsHeading>
+          <DocsSchemaViewer schema={pqcVerifyResponseJsonSchema} title="pqc-verify-response.schema.json" />
         </DocsSection>
       </DocsShell>
     </div>

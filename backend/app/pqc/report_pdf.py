@@ -527,6 +527,12 @@ def _page_header_footer(canvas: Any, doc: Any, scan_id: str = "") -> None:
     if scan_id:
         footer = f"{scan_id} | Page {doc.page}"
     canvas.drawCentredString(width / 2, 0.45 * inch, footer)
+    canvas.setFont("Helvetica", 7)
+    canvas.drawCentredString(
+        width / 2,
+        0.28 * inch,
+        "Verify offline: pip install qtangl-verify  |  qtangl-verify report.json --api-base https://api.qtangl.com",
+    )
     canvas.restoreState()
 
 
