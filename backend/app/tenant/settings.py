@@ -18,7 +18,24 @@ DEFAULT_SETTINGS: dict[str, Any] = {
     "evidenceRetentionMonths": 12,
     "benchmarkOptIn": False,
     "industry": "financial",
+    "discovery": {
+        "hostSensor": False,
+        "codeScan": False,
+        "binaryScan": False,
+    },
+    "discoveryRetentionDays": 90,
 }
+
+
+def discovery_feature_enabled(*, tenant_id: str, feature: str) -> bool:
+    """Check tenant discovery feature flag (hostSensor, codeScan, binaryScan)."""
+    import os
+
+    if os.environ.get("QTANGL_DISCOVERY_ENABLE_ALL", "").lower() in ("1", "true", "yes"):
+        return True
+    settings = get_tenant_settings_raw(tenant_id=tenant_id)
+    discovery = settings.get("discovery") or {}
+    return bool(discovery.get(feature))
 
 
 def get_tenant_settings(*, tenant_id: str) -> dict[str, Any]:

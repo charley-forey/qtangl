@@ -2,7 +2,7 @@
 
 Detailed competitor teardowns, analyst landscape, positioning map, and a repeatable win/loss framework for the post-quantum readiness market.
 
-> **Last validated: 2026-06-06** against live sources (vendor sites/docs, AWS/Azure Marketplace, PKI Consortium PQCCM, NIST NCCoE, Microsoft Security blog, KuppingerCole).
+> **Last validated: 2026-06-09** against live sources (vendor sites/docs, AWS/Azure Marketplace, PKI Consortium PQCCM, NIST NCCoE, Microsoft Security blog, KuppingerCole). Qtangl host/code discovery updated to **partial** per ADR-009 ship gate G1/G2.
 >
 > **Public mirror:** [https://www.qtangl.com/compare](https://www.qtangl.com/compare) — feature matrix, positioning map, per-vendor pages, and gated PDF guide.
 >
@@ -35,8 +35,8 @@ The single most useful lens on this market (and the industry consensus per NIST 
 | Discovery method | How it works | Representative vendors | Qtangl |
 |------------------|--------------|------------------------|--------|
 | **Agentless external scan** | Probe TLS, JWKS, SSH, email STARTTLS, CT logs, live traffic | **Qtangl**, Qinsight, ExeQuantum, QuSecure R3, Palo Alto | ✅ Core |
-| **Host / endpoint agents** | Sensors or existing EDR (CrowdStrike, Tanium) read keystores/memory | Keyfactor (InfoSec Global), SandboxAQ | ❌ None |
-| **Source-code / binary** | Static analysis of repos/binaries; reachability | IBM, Encryption Consulting, OSS (CryptoScan) | ❌ None |
+| **Host / endpoint agents** | Sensors or existing EDR (CrowdStrike, Tanium) read keystores/memory | Keyfactor (InfoSec Global), SandboxAQ | ⚠️ **Partial** — Qtangl Unified Sensor (cert stores, libs, listeners; fleet enrollment live) |
+| **Source-code / binary** | Static analysis of repos/binaries; reachability | IBM, Encryption Consulting, OSS (CryptoScan) | ⚠️ **Partial** — OSS orchestration (CryptoScan/CryptoDeps/theia), GitHub Action, source/runtime diff |
 | **Key / KMS-centric** | Read-only scan of KMS, HSM, key/secret stores | Fortanix, Entrust | 🟡 Cloud import (pilot) |
 | **Certificate / CLM** | Certificate lifecycle inventory + issuance | DigiCert, AppViewX, Entrust, CyberArk/Venafi | 🟡 Reads certs |
 
@@ -180,8 +180,8 @@ Legend: Yes / Partial / No / `?` (unverified). Validated 2026-06-06 from public 
 | Capability | Qtangl | SandboxAQ | Keyfactor (+ISG) | QuSecure R3 | IBM Q-Safe | Fortanix | Palo Alto | Qinsight | ExeQuantum |
 |------------|--------|-----------|------------------|-------------|------------|----------|-----------|----------|------------|
 | Agentless external scan | Yes | Partial | Partial | Yes | No | Partial | Yes | Yes | Yes |
-| Host / endpoint discovery | No | Yes | Yes | Partial | Partial | Partial | Partial | Partial | Partial |
-| Source-code / binary scan | No | Partial | Partial | No | Yes | No | No | No | Partial |
+| Host / endpoint discovery | Partial | Yes | Yes | Partial | Partial | Partial | Partial | Partial | Partial |
+| Source-code / binary scan | Partial | Partial | Partial | No | Yes | No | No | No | Partial |
 | Mosca HNDL scoring | Yes | Partial | Partial | Partial | Partial | Partial | Partial | Partial | Partial |
 | CycloneDX CBOM | Yes | Yes | Yes | Partial | Yes (owns) | Partial | Yes | Yes | Yes |
 | **Signed + public verify** | **Yes** | No | No | No | No | No | No | No | No |

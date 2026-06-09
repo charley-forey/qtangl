@@ -1,0 +1,27 @@
+---
+- name: Install qtangl-sensor binary
+  copy:
+    src: qtangl-sensor
+    dest: /usr/local/bin/qtangl-sensor
+    mode: "0755"
+
+- name: Enroll agent
+  command: >
+    qtangl-sensor --enroll {{ qtangl_enrollment_token }}
+    --api {{ qtangl_api_url }}
+    --hostname {{ ansible_hostname }}
+  register: enroll_out
+  changed_when: false
+
+- name: Install systemd unit
+  template:
+    src: qtangl-sensor.service.j2
+    dest: /etc/systemd/system/qtangl-sensor.service
+  notify: restart sensor
+
+- name: Enable sensor service
+  systemd:
+    name: qtangl-sensor
+    enabled: true
+    state: started
+    daemon_reload: true

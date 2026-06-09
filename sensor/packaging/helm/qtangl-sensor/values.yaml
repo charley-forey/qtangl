@@ -1,0 +1,8 @@
+image:
+  repository: qtangl/sensor
+  tag: "0.1.0"
+apiUrl: https://api.qtangl.com
+resources:
+  limits:
+    cpu: 200m
+    memory: 256Mi

@@ -1,0 +1,15 @@
+[Unit]
+Description=Qtangl Unified Sensor
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/qtangl-sensor --push
+Environment=QTANGL_API_URL=https://api.qtangl.com
+EnvironmentFile=-/etc/qtangl/sensor.env
+User=root
+Nice=10
+
+[Install]
+WantedBy=multi-user.target

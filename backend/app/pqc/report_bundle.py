@@ -75,7 +75,33 @@ def build_evidence_bundle(
             archive.writestr("signature.json", json.dumps(report.signature, indent=2))
         if log_inclusion and log_inclusion.get("included"):
             archive.writestr("log-inclusion.json", json.dumps(log_inclusion, indent=2))
+        archive.writestr(
+            "discovery-provenance.json",
+            json.dumps(_discovery_provenance_manifest(), indent=2),
+        )
     return buffer.getvalue()
+
+
+def _discovery_provenance_manifest() -> dict[str, Any]:
+    from pathlib import Path
+
+    versions: dict[str, str] = {}
+    lock = Path(__file__).resolve().parents[2] / "scanner-versions.lock"
+    if lock.exists():
+        try:
+            versions = json.loads(lock.read_text(encoding="utf-8"))
+        except json.JSONDecodeError:
+            pass
+    return {
+        "sensorAttestation": "Qtangl Unified Sensor v0.1.0",
+        "scannerEngines": versions,
+        "sourceMethods": [
+            "qtangl:agentless-scan",
+            "qtangl:host-sensor",
+            "qtangl:code-scan",
+            "qtangl:binary-scan",
+        ],
+    }
 
 
 def _methodology_markdown() -> str:

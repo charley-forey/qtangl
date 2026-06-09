@@ -1,0 +1,32 @@
+name: Sensor build
+
+on:
+  push:
+    paths:
+      - "sensor/**"
+  pull_request:
+    paths:
+      - "sensor/**"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        goos: [linux, windows, darwin]
+        goarch: [amd64]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: "1.22"
+      - name: Build qtangl-sensor
+        working-directory: sensor
+        env:
+          GOOS: ${{ matrix.goos }}
+          GOARCH: ${{ matrix.goarch }}
+        run: go build -o qtangl-sensor ./cmd/qtangl-sensor
+      - name: Unit tests (linux only)
+        if: matrix.goos == 'linux'
+        working-directory: sensor
+        run: go test ./...

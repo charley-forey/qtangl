@@ -1,0 +1,21 @@
+{
+  "name": "Qtangl Host Crypto Scan",
+  "description": "Trigger Qtangl Unified Sensor scan on selected endpoints via CrowdStrike Fusion",
+  "workflow": [
+    {
+      "action": "DeviceQuery",
+      "params": { "device_status": "normal" }
+    },
+    {
+      "action": "RunScript",
+      "params": {
+        "script": "qtangl-sensor --push",
+        "env": {
+          "QTANGL_API_URL": "https://api.qtangl.com",
+          "QTANGL_AGENT_ID": "{{ agent_id }}",
+          "QTANGL_TENANT_ID": "{{ tenant_id }}"
+        }
+      }
+    }
+  ]
+}

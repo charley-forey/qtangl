@@ -8,7 +8,7 @@ import type {
   RadarScores,
 } from "@/lib/competitors-types";
 
-const LAST_VALIDATED = "2026-06-06";
+const LAST_VALIDATED = "2026-06-09";
 
 const DEFAULT_SOURCES: CompetitorSource[] = [
   { label: "Qtangl competitive intelligence (internal)", url: "https://www.qtangl.com/compare" },
@@ -20,8 +20,8 @@ export const qtanglBaseline: QtanglBaseline = {
   product: "Post-Quantum Readiness Platform",
   capabilities: {
     agentlessExternalScan: "yes",
-    hostEndpointDiscovery: "no",
-    sourceCodeBinaryScan: "no",
+    hostEndpointDiscovery: "partial",
+    sourceCodeBinaryScan: "partial",
     moscaHndlScoring: "yes",
     cycloneDxCbom: "yes",
     signedPublicVerify: "yes",
@@ -34,7 +34,7 @@ export const qtanglBaseline: QtanglBaseline = {
   radar: {
     speed: 5,
     evidence: 5,
-    discoveryDepth: 2,
+    discoveryDepth: 3,
     breadth: 4,
     affordability: 4,
     selfServe: 5,
@@ -42,8 +42,8 @@ export const qtanglBaseline: QtanglBaseline = {
   quadrant: { x: 0.62, y: 0.82 },
   discoveryCoverage: {
     agentless: "yes",
-    host: "no",
-    code: "no",
+    host: "partial",
+    code: "partial",
     kms: "partial",
     certClm: "partial",
   },

@@ -40,6 +40,9 @@ jobs:
           alembic upgrade head
           alembic check || true
 
+      - name: Verify scanner-versions.lock
+        run: python scripts/verify_scanner_versions.py
+
       - name: Run tests
         env:
           QTANGL_ENABLE_QAOA: "false"

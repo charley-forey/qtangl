@@ -197,6 +197,16 @@ def pull_cloud_inventory(*, tenant_id: str, provider: str) -> dict[str, Any]:
             }
             for cert in result.get("certificates", [])
         ]
+        try:
+            from app.discovery.k8s_images import enqueue_workload_image_scans, images_from_k8s_pull_result
+            from app.tenant.settings import discovery_feature_enabled
+
+            if discovery_feature_enabled(tenant_id=tenant_id, feature="binaryScan"):
+                images = images_from_k8s_pull_result(result)
+                if images:
+                    enqueue_workload_image_scans(tenant_id=tenant_id, images=images)
+        except Exception:
+            pass
         pull_status = "ok"
     else:
         return {"ok": False, "reason": "unsupported_provider"}

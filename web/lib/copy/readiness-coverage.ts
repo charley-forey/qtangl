@@ -30,9 +30,9 @@ export const coveragePageCopy = {
     },
     {
       name: "GitHub code & dependencies",
-      status: "beta" as const,
-      description: "Snippet upload or PAT repository tree scan via POST /tenant/coverage/code-scan.",
-      href: "/docs/integrations/ci-cd",
+      status: "live" as const,
+      description: "Async code scan via CryptoScan/CryptoDeps orchestration — POST /tenant/coverage/code-scan.",
+      href: "/docs/guides/code-scan-ci",
     },
     {
       name: "AWS ACM / Azure / GCP pull",
@@ -41,10 +41,16 @@ export const coveragePageCopy = {
       href: "/docs/guides/monitor-setup",
     },
     {
-      name: "Kubernetes / internal agent",
-      status: "roadmap" as const,
-      description: "In-cluster and behind-firewall discovery.",
-      href: "/access",
+      name: "Host sensor fleet",
+      status: "live" as const,
+      description: "Qtangl Unified Sensor — cert stores, libraries, listeners; Helm and offline upload.",
+      href: "/docs/guides/host-sensor-deploy",
+    },
+    {
+      name: "Container / binary scan",
+      status: "beta" as const,
+      description: "CBOMkit-theia image scan via POST /tenant/discovery/binary-scan.",
+      href: "/docs/guides/code-scan-ci",
     },
   ],
 };

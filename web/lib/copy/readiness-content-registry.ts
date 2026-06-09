@@ -218,6 +218,20 @@ export const readinessBlogRegistry: readonly ReadinessBlogRegistryEntry[] = [
     hndl: true,
   },
   {
+    slug: "qtangl-native-discovery-depth-2026",
+    kind: "blog",
+    markdownFile: "blog/qtangl-native-discovery-depth-2026.md",
+    title: "Qtangl native discovery depth — host sensor + code/binary orchestration",
+    description:
+      "Unified Sensor fleet and OSS scanner pipeline into CBOM merge — partial gate G1/G2 with path to enterprise Yes.",
+    category: "Q-Day readiness",
+    coverImage: "/qtangl-pqc-deadlines-cover.svg",
+    coverAlt: "Qtangl discovery depth expansion diagram.",
+    excerpt: "Host agents, code/binary OSS orchestration, and why evidence remains the moat.",
+    readiness: true,
+    featured: true,
+  },
+  {
     slug: "pqc-readiness-vendors-compared-2026",
     kind: "blog",
     markdownFile: "blog/pqc-readiness-vendors-compared-2026.md",

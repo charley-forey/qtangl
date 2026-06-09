@@ -15,6 +15,13 @@ AssetKind = Literal[
     "db_tls",
     "mtls",
     "smime",
+    "host_cert",
+    "host_library",
+    "host_listener",
+    "host_config",
+    "source_code",
+    "binary_artifact",
+    "runtime_crypto",
     "error",
 ]
 VulnStatus = Literal["broken", "at-risk", "safe", "unknown"]

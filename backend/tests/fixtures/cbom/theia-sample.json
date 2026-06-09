@@ -1,0 +1,12 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.6",
+  "components": [
+    {
+      "type": "cryptographic-asset",
+      "bom-ref": "theia:openssl-3",
+      "name": "OpenSSL 3.0",
+      "version": "RSA-2048"
+    }
+  ]
+}

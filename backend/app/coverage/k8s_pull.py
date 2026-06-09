@@ -75,9 +75,21 @@ def pull_k8s_certificates(
         except Exception:
             pass
 
+        workloads: list[dict[str, Any]] = []
+        try:
+            apps = client.AppsV1Api()
+            deploys = apps.list_deployment_for_all_namespaces() if not ns else apps.list_namespaced_deployment(ns)
+            for dep in deploys.items:
+                for container in dep.spec.template.spec.containers:
+                    if container.image:
+                        workloads.append({"image": container.image, "name": dep.metadata.name})
+        except Exception:
+            pass
+
         return {
             "provider": "kubernetes",
             "status": "ok",
+            "workloads": workloads,
             "count": len(certs),
             "certificates": certs[:200],
         }

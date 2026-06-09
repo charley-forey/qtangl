@@ -37,6 +37,7 @@ import ReferencesPanel from "./ReferencesPanel";
 import ScanResultsGuide from "./ScanResultsGuide";
 import ScanCoverage from "./ScanCoverage";
 import ScanLog from "./ScanLog";
+import DiscoveryScopeStep, { type DiscoveryScope } from "./DiscoveryScopeStep";
 import ScanTargetCard from "./ScanTargetCard";
 import ScenarioPicker from "./ScenarioPicker";
 import SeverityDonut from "./SeverityDonut";
@@ -69,6 +70,12 @@ export default function QDayCommandCenter({
   const [activeScenarioId, setActiveScenarioId] = useState(defaultScenarioId);
   const [useFixture, setUseFixture] = useState(true);
   const [authorized, setAuthorized] = useState(false);
+  const [discoveryScope, setDiscoveryScope] = useState<DiscoveryScope>({
+    external: true,
+    hostFleet: false,
+    codeRepos: false,
+    containerImages: false,
+  });
   const [customDomain, setCustomDomain] = useState("");
   const [bundleSessionId, setBundleSessionId] = useState<string | null>(null);
   const [scanResponse, setScanResponse] = useState<PqcScanResponse | null>(null);
@@ -250,6 +257,14 @@ export default function QDayCommandCenter({
           customDomain={customDomain}
           onCustomDomainChange={setCustomDomain}
         />
+      </PqcSection>
+      <PqcSection title="Discovery scope">
+        <DiscoveryScopeStep scope={discoveryScope} onChange={setDiscoveryScope} />
+        {(discoveryScope.hostFleet || discoveryScope.codeRepos || discoveryScope.containerImages) && (
+          <p className="mt-2 text-xs text-[var(--color-gray-500)]">
+            Extended discovery runs via Dashboard → Integrations after this external baseline scan.
+          </p>
+        )}
       </PqcSection>
       <div className="pqc-print-hide flex flex-wrap items-center gap-3">
         <label className="flex items-center gap-2 text-xs text-[var(--color-gray-400)]">

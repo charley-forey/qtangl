@@ -68,6 +68,10 @@ const MultiSourceInventoryWidget = dynamic(
   () => import("@/components/pqc/MultiSourceInventoryWidget"),
   { loading: PanelFallback }
 );
+const DiscoveryInventoryTabs = dynamic(
+  () => import("@/components/discovery/DiscoveryInventoryTabs"),
+  { loading: PanelFallback }
+);
 const PassportListPanel = dynamic(() => import("@/components/pqc/PassportListPanel"), {
   loading: PanelFallback,
 });
@@ -1161,6 +1165,15 @@ export default function DashboardClient() {
                       componentCount={cbomAggregate?.componentCount ?? 0}
                       readiness={cbomAggregate?.readiness ?? null}
                       openConflicts={cbomAggregate?.openConflicts ?? 0}
+                    />
+                  </div>
+                </Card>
+                <Card tone="panel">
+                  <Eyebrow>Discovery depth — hosts, code, images</Eyebrow>
+                  <div className="mt-4">
+                    <DiscoveryInventoryTabs
+                      apiKey={savedKey}
+                      externalCount={cbomAggregate?.componentCount ?? 0}
                     />
                   </div>
                 </Card>

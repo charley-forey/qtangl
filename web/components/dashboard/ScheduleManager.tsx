@@ -95,7 +95,13 @@ export default function ScheduleManager({
               <p className="font-medium text-white">
                 {schedule.jobType === "cloud_pull"
                   ? `Cloud CBOM · ${schedule.integrationProvider ?? "cloud"}`
-                  : schedule.target || schedule.scenarioId}
+                  : schedule.jobType === "host_fleet_scan"
+                    ? `Host fleet · ${schedule.target ?? "all"}`
+                    : schedule.jobType === "code_scan"
+                      ? `Code scan · ${schedule.target ?? "repo"}`
+                      : schedule.jobType === "binary_scan"
+                        ? `Image scan · ${schedule.target ?? "image"}`
+                        : schedule.target || schedule.scenarioId}
               </p>
               <p className="text-xs text-[var(--muted)]">
                 Every {schedule.cadenceHours}h · next{" "}

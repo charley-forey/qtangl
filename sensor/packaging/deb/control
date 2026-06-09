@@ -1,0 +1,8 @@
+Package: qtangl-sensor
+Version: 0.1.0
+Section: utils
+Priority: optional
+Architecture: amd64
+Maintainer: Qtangl <support@qtangl.com>
+Description: Qtangl Unified Sensor — host crypto discovery
+ Qtangl host/endpoint discovery agent for certificates, libraries, and TLS listeners.

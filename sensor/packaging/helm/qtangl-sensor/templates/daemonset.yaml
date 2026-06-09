@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: {{ .Release.Name }}-sensor
+spec:
+  selector:
+    matchLabels:
+      app: qtangl-sensor
+  template:
+    metadata:
+      labels:
+        app: qtangl-sensor
+    spec:
+      hostPID: true
+      containers:
+        - name: sensor
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          command: ["/usr/local/bin/qtangl-sensor", "--push"]
+          env:
+            - name: QTANGL_API_URL
+              value: {{ .Values.apiUrl | quote }}
+            - name: QTANGL_AGENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Release.Name }}-agent
+                  key: agentId
+            - name: QTANGL_TENANT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Release.Name }}-agent
+                  key: tenantId
+          resources:
+            limits:
+              cpu: {{ .Values.resources.limits.cpu }}
+              memory: {{ .Values.resources.limits.memory }}
+          securityContext:
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true

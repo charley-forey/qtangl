@@ -447,6 +447,101 @@ class CbomComponent(Base):
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_utcnow, onupdate=_utcnow)
 
 
+class DiscoveryFleet(Base):
+    __tablename__ = "discovery_fleets"
+
+    id: Mapped[str] = mapped_column(String(80), primary_key=True)
+    tenant_id: Mapped[str] = mapped_column(String(64), ForeignKey("tenants.id"), index=True)
+    name: Mapped[str] = mapped_column(String(255), nullable=False)
+    enrollment_token_hash: Mapped[str] = mapped_column(String(128), index=True)
+    token_expires_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), index=True)
+    token_max_uses: Mapped[int] = mapped_column(default=100)
+    token_uses: Mapped[int] = mapped_column(default=0)
+    policy_json: Mapped[str] = mapped_column(Text, default="{}")
+    active: Mapped[bool] = mapped_column(default=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_utcnow)
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_utcnow, onupdate=_utcnow)
+
+
+class HostAgent(Base):
+    __tablename__ = "host_agents"
+    __table_args__ = (Index("ix_host_agents_tenant_fleet", "tenant_id", "fleet_id"),)
+
+    id: Mapped[str] = mapped_column(String(80), primary_key=True)
+    tenant_id: Mapped[str] = mapped_column(String(64), ForeignKey("tenants.id"), index=True)
+    fleet_id: Mapped[str] = mapped_column(String(80), ForeignKey("discovery_fleets.id"), index=True)
+    hostname: Mapped[str] = mapped_column(String(255), nullable=False)
+    os: Mapped[str] = mapped_column(String(16), default="linux")
+    sensor_version: Mapped[str] = mapped_column(String(32), default="0.1.0")
+    status: Mapped[str] = mapped_column(String(16), default="online")
+    last_seen_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True, index=True)
+    last_scan_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    findings_count: Mapped[int] = mapped_column(default=0)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_utcnow)
+
+
+class HostFinding(Base):
+    __tablename__ = "host_findings"
+    __table_args__ = (
+        UniqueConstraint("tenant_id", "finding_id", name="uq_host_findings_tenant_finding"),
+        Index("ix_host_findings_agent", "agent_id"),
+    )
+
+    id: Mapped[str] = mapped_column(String(80), primary_key=True)
+    tenant_id: Mapped[str] = mapped_column(String(64), ForeignKey("tenants.id"), index=True)
+    agent_id: Mapped[str] = mapped_column(String(80), ForeignKey("host_agents.id"), index=True)
+    finding_id: Mapped[str] = mapped_column(String(128), nullable=False)
+    finding_type: Mapped[str] = mapped_column(String(32), default="certificate")
+    component_key: Mapped[str | None] = mapped_column(String(64), nullable=True, index=True)
+    raw_json: Mapped[str] = mapped_column(Text, nullable=False)
+    ingested_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_utcnow)
+
+
+class CodeScanTarget(Base):
+    __tablename__ = "code_scan_targets"
+
+    id: Mapped[str] = mapped_column(String(80), primary_key=True)
+    tenant_id: Mapped[str] = mapped_column(String(64), ForeignKey("tenants.id"), index=True)
+    provider: Mapped[str] = mapped_column(String(32), default="github")
+    owner: Mapped[str] = mapped_column(String(255), nullable=False)
+    repo: Mapped[str] = mapped_column(String(255), nullable=False)
+    default_ref: Mapped[str] = mapped_column(String(128), default="HEAD")
+    integration_id: Mapped[str | None] = mapped_column(String(80), nullable=True)
+    active: Mapped[bool] = mapped_column(default=True)
+    last_scan_job_id: Mapped[str | None] = mapped_column(String(80), nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_utcnow)
+
+
+class ImageScanTarget(Base):
+    __tablename__ = "image_scan_targets"
+
+    id: Mapped[str] = mapped_column(String(80), primary_key=True)
+    tenant_id: Mapped[str] = mapped_column(String(64), ForeignKey("tenants.id"), index=True)
+    registry: Mapped[str] = mapped_column(String(32), default="ecr")
+    image_ref: Mapped[str] = mapped_column(String(512), nullable=False)
+    integration_id: Mapped[str | None] = mapped_column(String(80), nullable=True)
+    active: Mapped[bool] = mapped_column(default=True)
+    last_scan_job_id: Mapped[str | None] = mapped_column(String(80), nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_utcnow)
+
+
+class DiscoveryJob(Base):
+    __tablename__ = "discovery_jobs"
+    __table_args__ = (Index("ix_discovery_jobs_tenant_status", "tenant_id", "status"),)
+
+    id: Mapped[str] = mapped_column(String(80), primary_key=True)
+    tenant_id: Mapped[str] = mapped_column(String(64), ForeignKey("tenants.id"), index=True)
+    job_type: Mapped[str] = mapped_column(String(32), index=True)
+    status: Mapped[str] = mapped_column(String(16), default="running")
+    target_id: Mapped[str | None] = mapped_column(String(80), nullable=True)
+    payload_json: Mapped[str] = mapped_column(Text, default="{}")
+    result_json: Mapped[str | None] = mapped_column(Text, nullable=True)
+    error: Mapped[str | None] = mapped_column(Text, nullable=True)
+    timeline_json: Mapped[str] = mapped_column(Text, default="[]")
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_utcnow)
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_utcnow, onupdate=_utcnow)
+
+
 class MergeConflict(Base):
     __tablename__ = "cbom_merge_conflicts"
     __table_args__ = (Index("ix_cbom_conflicts_tenant_status", "tenant_id", "status"),)

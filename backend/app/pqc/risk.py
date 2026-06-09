@@ -71,6 +71,27 @@ def classified_assets(assets: list[CryptoAsset]) -> list[CryptoAsset]:
     return [asset for asset in assets if asset.kind != "error"]
 
 
+def coverage_confidence_for_assets(assets: list[CryptoAsset]) -> dict[str, Any]:
+    """Method-weighted coverage confidence v2 for scan-time risk reporting."""
+    from app.cbom.coverage import compute_coverage_confidence
+
+    inventory = classified_assets(assets)
+    sources: list[dict[str, Any]] = []
+    for asset in inventory:
+        method = str(asset.metadata.get("sourceMethod") or asset.metadata.get("source") or "live_scan")
+        sources.append({"sourceType": method})
+    components = [
+        {
+            "kind": asset.kind,
+            "verified": asset.metadata.get("verificationStatus") != "unverified-source",
+            "verificationStatus": asset.metadata.get("verificationStatus", "verified"),
+            "sourceType": asset.metadata.get("sourceMethod") or "live_scan",
+        }
+        for asset in inventory
+    ]
+    return compute_coverage_confidence(components=components, sources=sources)
+
+
 def readiness_assessment(assets: list[CryptoAsset]) -> dict[str, Any]:
     inventory = classified_assets(assets)
     if not inventory:
@@ -114,12 +135,15 @@ def readiness_assessment(assets: list[CryptoAsset]) -> dict[str, Any]:
         f"{at_risk + broken} asset(s) require migration under NIST IR 8547 timelines. "
         "Coverage is endpoint-scoped, not a formal audit."
     )
+    coverage = coverage_confidence_for_assets(assets)
     return {
         "score": score,
         "band": band,
         "summary": summary,
         "pqcReadyCount": pqc_ready_count,
         "classifiedCount": total,
+        "coverageConfidence": coverage.get("score", 0.0),
+        "coverageBand": coverage.get("band", "unknown"),
     }
 
 
@@ -145,8 +169,10 @@ def asset_mosca_priority(
     broken_boost = 30 if asset.vulnerability.status == "broken" else 0
     too_late_boost = 50 if asset.already_too_late else 0
     kind_weight = float(remediation_weights.get("kindWeights", {}).get(asset.kind, 1.0))
+    reachability = str(asset.metadata.get("reachability") or "").lower()
+    reachability_boost = {"confirmed": 1.35, "reachable": 1.15, "available": 1.0}.get(reachability, 1.0)
 
-    base = (severity_weight + hndl_boost + broken_boost + too_late_boost) * kind_weight
+    base = (severity_weight + hndl_boost + broken_boost + too_late_boost) * kind_weight * reachability_boost
     if mosca.inequality_holds and asset.vulnerability.hndl_exposed:
         base *= 1.25
     if asset.pqc_ready:

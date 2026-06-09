@@ -152,13 +152,20 @@ def parse_cyclonedx_document(
     return results
 
 
-def normalized_from_crypto_asset(asset_dict: dict[str, Any], *, source_id: str, scan_id: str) -> NormalizedComponent:
+def normalized_from_crypto_asset(
+    asset_dict: dict[str, Any],
+    *,
+    source_id: str,
+    scan_id: str,
+    source_method: str = "qtangl:agentless-scan",
+    source_label: str = "Qtangl scan",
+) -> NormalizedComponent:
     vuln = asset_dict.get("vulnerability") or {}
     provenance = Provenance(
         source_id=source_id,
         source_type="qtangl-scan",
-        source_label="Qtangl agentless scan",
-        source_method="qtangl-scan",
+        source_label=source_label,
+        source_method=source_method,
         ingested_at=utc_now_iso(),
         verification_status="verified",
     )

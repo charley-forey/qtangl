@@ -100,6 +100,7 @@ ${frameworkLinks}
 - Comparison guide (PDF): ${siteMetadata.url}/downloads/qtangl-pqc-vendor-comparison.pdf
 - Printable guide: ${siteMetadata.url}/compare/guide
 - Vendor roundup blog: ${siteMetadata.url}/blog/pqc-readiness-vendors-compared-2026
+- Native discovery depth: ${siteMetadata.url}/blog/qtangl-native-discovery-depth-2026
 
 ${compareLinks}
 

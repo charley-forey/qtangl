@@ -54,10 +54,27 @@ def compute_coverage_confidence(
 
     method_weights = {
         "live_scan": 1.0,
+        "qtangl-scan": 1.0,
+        "host_sensor": 0.95,
+        "code_scan": 0.9,
+        "binary_scan": 0.9,
         "cloud_pull": 0.85,
         "third-party": 0.7,
         "upload": 0.6,
     }
+    host_kinds = {"host_cert", "host_library", "host_listener", "host_config", "runtime_crypto"}
+    code_kinds = {"source_code"}
+    binary_kinds = {"binary_artifact"}
+    host_count = sum(1 for c in components if str(getattr(c, "kind", "") or _component_field(c, "kind")) in host_kinds)
+    code_count = sum(1 for c in components if str(getattr(c, "kind", "") or _component_field(c, "kind")) in code_kinds)
+    binary_count = sum(1 for c in components if str(getattr(c, "kind", "") or _component_field(c, "kind")) in binary_kinds)
+    method_boost = 0.0
+    if host_count > 0:
+        method_boost += 0.15
+    if code_count > 0:
+        method_boost += 0.1
+    if binary_count > 0:
+        method_boost += 0.1
     weighted = 0.0
     weight_sum = 0.0
     for c in components:
@@ -68,7 +85,9 @@ def compute_coverage_confidence(
     method_factor = weighted / weight_sum if weight_sum else 0.5
 
     penalty = min(0.3, unverified * 0.02)
-    raw = (verified_share * 0.5 + method_factor * 0.3 + min(1.0, diversity / 4) * 0.2) - penalty
+    raw = (verified_share * 0.5 + method_factor * 0.3 + min(1.0, diversity / 4) * 0.2 + method_boost) - penalty
+    if diversity == 1 and unverified == total:
+        raw = min(raw, 0.6)
     score = round(max(0.0, min(100.0, raw * 100)), 1)
 
     if score >= 75:
@@ -95,4 +114,9 @@ def compute_coverage_confidence(
         "methodWeights": method_weights,
         "unverifiedCount": unverified,
         "notes": notes,
+        "discoveryMethods": {
+            "hostFindings": host_count,
+            "codeFindings": code_count,
+            "binaryFindings": binary_count,
+        },
     }

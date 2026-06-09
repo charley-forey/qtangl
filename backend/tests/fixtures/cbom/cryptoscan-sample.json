@@ -1,0 +1,12 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.6",
+  "components": [
+    {
+      "type": "cryptographic-asset",
+      "bom-ref": "cryptoscan:rsa-2048",
+      "name": "RSA-2048 in auth.py",
+      "version": "RSA-2048"
+    }
+  ]
+}

@@ -45,7 +45,7 @@ class ScheduleCreateRequest(BaseModel):
     cadenceHours: int = Field(default=168, ge=1, le=8760)
     notifyEmail: str | None = None
     cloudImportPayload: str | None = None
-    jobType: str = Field(default="scan", pattern="^(scan|cloud_pull)$")
+    jobType: str = Field(default="scan", pattern="^(scan|cloud_pull|host_fleet_scan|code_scan|binary_scan)$")
     integrationProvider: str | None = None
 
 
@@ -895,22 +895,6 @@ def tenant_offboard(auth: AuthContext = Depends(require_auth_admin)) -> dict:
     return {"status": "success", **counts}
 
 
-@router.post("/coverage/code-scan")
-def tenant_code_scan(body: dict[str, Any], auth: AuthContext = Depends(require_auth_readonly)) -> dict:
-    from app.coverage.code_deps import scan_github_repository, scan_source_snippet
-
-    if body.get("githubOwner") and body.get("githubRepo") and body.get("githubToken"):
-        result = scan_github_repository(
-            owner=str(body["githubOwner"]),
-            repo=str(body["githubRepo"]),
-            token=str(body["githubToken"]),
-            ref=str(body.get("ref", "HEAD")),
-        )
-        return {"status": "success", **result}
-
-    content = str(body.get("content", ""))
-    path = str(body.get("path", "upload"))
-    return {"status": "success", "findings": scan_source_snippet(content=content, path=path)}
 
 
 @router.get("/coverage/cloud/{provider}")

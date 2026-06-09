@@ -214,7 +214,7 @@ def report_to_cbom(report: MigrationReport) -> dict[str, Any]:
             "description": asset.vulnerability.summary,
             "properties": properties,
         }
-        if asset.kind == "tls":
+        if asset.kind in ("tls", "host_cert"):
             component["cryptoProperties"] = {
                 "assetType": "certificate",
                 "certificateProperties": {
@@ -223,6 +223,22 @@ def report_to_cbom(report: MigrationReport) -> dict[str, Any]:
                     "certificateFormat": "X.509",
                 },
             }
+        elif asset.kind in ("host_library", "binary_artifact"):
+            component["cryptoProperties"] = {
+                "assetType": "related-crypto-material",
+                "relatedCryptoMaterialProperties": {
+                    "algorithm": asset.algorithm,
+                    "materialType": asset.kind,
+                },
+            }
+        elif asset.kind == "source_code":
+            meta = asset.metadata or {}
+            component["properties"].extend(
+                [
+                    {"name": "qtangl:sourcePath", "value": str(meta.get("sourcePath", asset.label))},
+                    {"name": "qtangl:reachability", "value": str(meta.get("reachability", "confirmed"))},
+                ]
+            )
         components.append(component)
 
     scan_uuid = report.scan_id.removeprefix("scan-")

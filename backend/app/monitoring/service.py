@@ -54,7 +54,9 @@ def create_schedule(
             next_run_at=next_run,
             notify_email=notify_email,
             import_payload_json=import_payload_json,
-            job_type=job_type if job_type in {"scan", "cloud_pull"} else "scan",
+            job_type=job_type
+            if job_type in {"scan", "cloud_pull", "host_fleet_scan", "code_scan", "binary_scan"}
+            else "scan",
             integration_provider=integration_provider,
             active=True,
         )
@@ -179,13 +181,46 @@ def mark_run(
         row.updated_at = datetime.now(timezone.utc)
 
 
+def enqueue_due_discovery_scans() -> int:
+    """Enqueue due host/code/binary discovery schedules."""
+    if not scheduler_enabled():
+        return 0
+    from app.discovery.jobs import create_discovery_job
+
+    enqueued = 0
+    for schedule in due_schedules():
+        job_type = schedule.get("jobType") or "scan"
+        if job_type not in {"host_fleet_scan", "code_scan", "binary_scan"}:
+            continue
+        payload: dict[str, Any] = {"tenantId": schedule["tenantId"], "scheduleId": schedule["id"]}
+        if schedule.get("target"):
+            if job_type == "binary_scan":
+                payload["imageRef"] = schedule["target"]
+            elif job_type == "code_scan":
+                parts = str(schedule["target"]).split("/", 1)
+                if len(parts) == 2:
+                    payload["githubOwner"], payload["githubRepo"] = parts[0], parts[1]
+            else:
+                payload["fleetId"] = schedule["target"]
+        job_id = create_discovery_job(
+            tenant_id=schedule["tenantId"],
+            job_type=job_type,
+            payload=payload,
+            target_id=schedule.get("target"),
+        )
+        mark_run(schedule["id"], scan_id=job_id)
+        _log_schedule_run(schedule_id=schedule["id"], tenant_id=schedule["tenantId"], scan_id=job_id)
+        enqueued += 1
+    return enqueued
+
+
 def enqueue_due_scans() -> int:
     """Enqueue due scheduled scans. Returns count enqueued."""
     if not scheduler_enabled():
         return 0
-    enqueued = 0
+    enqueued = enqueue_due_discovery_scans()
     for schedule in due_schedules():
-        if schedule.get("jobType") == "cloud_pull":
+        if schedule.get("jobType") in {"cloud_pull", "host_fleet_scan", "code_scan", "binary_scan"}:
             continue
         payload: dict[str, Any] = {
             "scenarioId": schedule["scenarioId"],

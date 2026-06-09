@@ -283,6 +283,51 @@ def _ingest_memory(
     }
 
 
+def ingest_scan_assets(*, tenant_id: str, assets: list[Any], source_method: str) -> int:
+    """Upsert discovery assets (host/code/binary) into tenant CBOM aggregate."""
+    from app.pqc.report import _asset_dict
+
+    source_id = f"discovery-{source_method.replace(':', '-')}"
+    label_map = {
+        "qtangl:host-sensor": "Qtangl host sensor",
+        "qtangl:code-scan": "Qtangl code scan",
+        "qtangl:binary-scan": "Qtangl binary scan",
+    }
+    count = 0
+    for asset in assets:
+        if hasattr(asset, "kind"):
+            asset_dict = _asset_dict(asset)
+        elif isinstance(asset, dict):
+            asset_dict = asset
+        else:
+            continue
+        if asset_dict.get("kind") == "error":
+            continue
+        comp = normalized_from_crypto_asset(
+            asset_dict,
+            source_id=source_id,
+            scan_id=source_id,
+            source_method=source_method,
+            source_label=label_map.get(source_method, "Qtangl discovery"),
+        )
+        if persistence_enabled():
+            _upsert_component_persisted(
+                tenant_id=tenant_id,
+                comp=comp,
+                source_id=source_id,
+                ingest_job_id=f"disc-{uuid.uuid4().hex[:8]}",
+            )
+        else:
+            _upsert_component_memory(
+                tenant_id=tenant_id,
+                comp=comp,
+                source_id=source_id,
+                ingest_job_id=f"disc-{uuid.uuid4().hex[:8]}",
+            )
+        count += 1
+    return count
+
+
 def sync_scan_to_aggregate(*, tenant_id: str, scan_id: str | None = None) -> int:
     """Upsert latest (or specified) scan assets as verified qtangl-scan components."""
     scan_id = scan_id or _latest_scan_id(tenant_id)

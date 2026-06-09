@@ -92,7 +92,60 @@ def _run_scan_once(
         raise
 
 
+def process_discovery_job(queue_name: str) -> bool:
+    job_id = dequeue_blocking(queue_name, timeout_seconds=1)
+    if not job_id:
+        return False
+    payload = load_job_payload(job_id)
+    if not payload:
+        payload = {}
+    tenant_id = str(payload.get("tenantId", "sandbox"))
+    job_type = str(payload.get("jobType", queue_name.replace("discovery_", "") + "_scan")
+
+    def on_progress(event: TimelineEvent) -> None:
+        from app.discovery.jobs import append_timeline
+
+        append_timeline(
+            job_id=job_id,
+            tenant_id=tenant_id,
+            event={"phase": event.phase, "detail": event.detail, "at": event.at},
+        )
+
+    try:
+        from app.discovery.orchestrator import run_discovery_job
+
+        run_discovery_job(
+            job_id=job_id,
+            tenant_id=tenant_id,
+            job_type=job_type,
+            payload=payload,
+            on_progress=on_progress,
+        )
+    except Exception as exc:
+        from app.discovery.jobs import fail_discovery_job, retry_discovery_job
+
+        attempts = int(payload.get("attempt", 1))
+        if attempts < 3 and retry_discovery_job(
+            job_id=job_id,
+            tenant_id=tenant_id,
+            payload=payload,
+            queue_name=queue_name,
+            error=str(exc),
+        ):
+            logger.warning("Discovery job %s failed (attempt %d), requeued", job_id, attempts)
+        else:
+            fail_discovery_job(job_id=job_id, tenant_id=tenant_id, error=str(exc))
+            from app.observability.metrics import increment
+
+            increment("discovery_job_dlq")
+            logger.exception("Discovery job %s failed permanently", job_id)
+    return True
+
+
 def process_next_job() -> bool:
+    for queue in ("discovery_host", "discovery_code", "discovery_binary"):
+        if process_discovery_job(queue):
+            return True
     job_id = dequeue_blocking("pqc_scan", timeout_seconds=2)
     if not job_id:
         return False
@@ -144,6 +197,14 @@ def main() -> None:
 
                 enqueued = enqueue_due_scans()
                 cloud_enqueued = enqueue_due_cloud_pulls()
+                try:
+                    from app.discovery.stale_agents import mark_stale_agents
+
+                    revoked = mark_stale_agents()
+                    if revoked:
+                        logger.info("Revoked %d stale host agent(s)", revoked)
+                except Exception:
+                    pass
                 from app.monitoring.scheduler_state import record_scheduler_tick
 
                 record_scheduler_tick(enqueued=enqueued + cloud_enqueued)
@@ -171,6 +232,10 @@ def main() -> None:
                     sweep_expired_upload_sessions()
                     purge_replayed_webhook_dlq()
                     purge_old_schedule_run_logs()
+                    from app.discovery.retention import purge_stale_clone_artifacts, purge_stale_host_findings
+
+                    purge_stale_host_findings()
+                    purge_stale_clone_artifacts()
                 except Exception:
                     logger.debug("lifecycle sweep skipped", exc_info=True)
                 try:

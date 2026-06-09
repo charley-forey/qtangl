@@ -193,6 +193,30 @@ def remediation_action_for_asset(asset: CryptoAsset) -> tuple[str, str]:
             "during dual-sign overlap for artifact verification.",
         )
 
+    if kind == "host_cert":
+        return (
+            "Rotate or re-issue host certificate with PQC-capable algorithm",
+            "Inventory certificate location, plan renewal via PQC-capable CA, and validate service restart procedures.",
+        )
+
+    if kind == "host_library":
+        return (
+            "Upgrade crypto library to quantum-safe or hybrid-ready version",
+            "Patch OpenSSL/BoringSSL/JCA provider to a version supporting ML-KEM and ML-DSA; test in staging.",
+        )
+
+    if kind == "source_code":
+        return (
+            "Refactor application crypto to NIST PQC algorithms (ML-KEM, ML-DSA, SLH-DSA)",
+            "Replace quantum-vulnerable API usage at identified source paths; add CI crypto scan gate.",
+        )
+
+    if kind == "binary_artifact":
+        return (
+            "Rebuild container/image with PQC-ready dependencies",
+            "Update base image and crypto libraries; re-scan image after rebuild to verify runtime posture.",
+        )
+
     return (
         asset.vulnerability.pqc_replacement or "Review NIST SP 800-208 / FIPS 203-205 guidance",
         asset.hndl_verdict or "Manual review required for this asset class.",

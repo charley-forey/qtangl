@@ -2,7 +2,7 @@
 
 | Field | Value |
 |-------|-------|
-| **Status** | Accepted |
+| **Status** | Accepted (discovery depth partially superseded by [ADR-009](./ADR-009-native-discovery-depth.md)) |
 | **Date** | 2026-06-06 |
 | **Deciders** | Product, GTM, Engineering |
 | **Epic** | K4, K11 |

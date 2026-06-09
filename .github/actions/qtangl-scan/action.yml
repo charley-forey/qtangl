@@ -18,6 +18,26 @@ inputs:
     description: Optional prior scan ID to compare readiness delta against
     required: false
     default: ""
+  mode:
+    description: "Scan mode: external, code, or binary"
+    required: false
+    default: "external"
+  github-owner:
+    description: GitHub owner (code mode)
+    required: false
+    default: ""
+  github-repo:
+    description: GitHub repo (code mode)
+    required: false
+    default: ""
+  image-ref:
+    description: Container image ref (binary mode)
+    required: false
+    default: ""
+  sarif-output:
+    description: Path to write SARIF results (code/binary modes)
+    required: false
+    default: ""
 runs:
   using: composite
   steps:
@@ -29,13 +49,34 @@ runs:
         QTANGL_TARGET: ${{ inputs.target }}
         FAIL_REGRESSION: ${{ inputs.fail-on-new-quantum-vulnerable }}
         BASELINE_SCAN_ID: ${{ inputs.baseline-scan-id }}
+        QTANGL_MODE: ${{ inputs.mode }}
+        GITHUB_OWNER: ${{ inputs.github-owner }}
+        GITHUB_REPO: ${{ inputs.github-repo }}
+        IMAGE_REF: ${{ inputs.image-ref }}
+        SARIF_OUTPUT: ${{ inputs.sarif-output }}
       run: |
         python3 << 'PY'
         import json, os, sys, urllib.request
-        target = os.environ["QTANGL_TARGET"]
-        body = json.dumps({"target": target, "scenarioId": "bank-tls-inventory", "useFixture": True}).encode()
+        mode = os.environ.get("QTANGL_MODE", "external")
+        base = os.environ["QTANGL_API_URL"].rstrip("/")
+        headers = {"Authorization": "Bearer " + os.environ["QTANGL_API_KEY"], "Content-Type": "application/json"}
+        if mode == "code":
+          body = json.dumps({
+            "githubOwner": os.environ.get("GITHUB_OWNER", ""),
+            "githubRepo": os.environ.get("GITHUB_REPO", ""),
+            "githubToken": os.environ.get("GITHUB_TOKEN", os.environ["QTANGL_API_KEY"]),
+            "async": False,
+          }).encode()
+          path = "/tenant/coverage/code-scan"
+        elif mode == "binary":
+          body = json.dumps({"imageRef": os.environ.get("IMAGE_REF", ""), "async": True}).encode()
+          path = "/tenant/discovery/binary-scan"
+        else:
+          target = os.environ["QTANGL_TARGET"]
+          body = json.dumps({"target": target, "scenarioId": "bank-tls-inventory", "useFixture": True}).encode()
+          path = "/pqc/scan"
         req = urllib.request.Request(
-          os.environ["QTANGL_API_URL"].rstrip("/") + "/pqc/scan",
+          base + path,
           data=body,
           headers={"Authorization": "Bearer " + os.environ["QTANGL_API_KEY"], "Content-Type": "application/json"},
           method="POST",
@@ -43,6 +84,24 @@ runs:
         with urllib.request.urlopen(req, timeout=120) as r:
           out = json.loads(r.read().decode())
         print(json.dumps(out, indent=2))
+        sarif_path = os.environ.get("SARIF_OUTPUT", "").strip()
+        if sarif_path and mode in ("code", "binary"):
+          findings = out.get("findings") or (out.get("result") or {}).get("findings") or []
+          runs = [{
+            "tool": {"driver": {"name": "qtangl-discovery", "version": "0.1.0"}},
+            "results": [
+              {
+                "ruleId": "quantum-vulnerable-crypto",
+                "message": {"text": str(f.get("algorithm", "unknown"))},
+                "locations": [{"physicalLocation": {"artifactLocation": {"uri": str(f.get("location", "."))}}}],
+              }
+              for f in findings if isinstance(f, dict)
+            ],
+          }]
+          sarif = {"version": "2.1.0", "$schema": "https://json.schemastore.org/sarif-2.1.0.json", "runs": runs}
+          with open(sarif_path, "w", encoding="utf-8") as sf:
+            json.dump(sarif, sf, indent=2)
+          print(f"Wrote SARIF to {sarif_path}")
         report = out.get("report") or {}
         diff = report.get("scanDiff") or out.get("scanDiff")
         baseline = os.environ.get("BASELINE_SCAN_ID", "").strip()
