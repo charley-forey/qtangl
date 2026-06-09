@@ -15,6 +15,7 @@ export const footerNav = [
   { name: "Access", href: "/access" },
   { name: "Journey", href: "/journey" },
   { name: "Resources", href: "/resources" },
+  { name: "Compare", href: "/compare" },
   { name: "Mini-assessment", href: "/assess/mini" },
   { name: "Q-Day hub", href: "/q-day" },
   { name: "Solutions", href: "/solutions" },

@@ -76,5 +76,7 @@ export const platformPageCopy = {
     title: "Built for security teams, not quantum researchers",
     description:
       "Consulting firms sell decks. Scanner vendors sell point-in-time PDFs. Qtangl sells continuous evidence.",
+    compareHref: "/compare",
+    compareLabel: "See how we compare to other PQC vendors →",
   },
 } as const;

@@ -20,6 +20,9 @@ export const pricingPageCopy = {
     title: "Packages for every stage of Q-Day readiness",
     description:
       "Assessment lands the baseline. Monitor builds recurring value. Convert delivers the migration program.",
+    compareNote:
+      "Evaluating alternatives? See transparent mid-market packaging in our vendor comparison.",
+    compareHref: "/compare",
   },
   tiers: [
     {

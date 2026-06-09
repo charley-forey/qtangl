@@ -74,6 +74,16 @@ export default function PlatformPage() {
           <p className="mt-4 max-w-3xl text-base leading-8 text-[var(--color-gray-300)]">
             {whyQtangl.description}
           </p>
+          {"compareHref" in whyQtangl && whyQtangl.compareHref ? (
+            <p className="mt-4">
+              <a
+                href={whyQtangl.compareHref}
+                className="text-sm text-white underline underline-offset-4"
+              >
+                {whyQtangl.compareLabel}
+              </a>
+            </p>
+          ) : null}
         </div>
         <div className="mt-8 grid gap-4 md:grid-cols-2">
           {whyQtanglDifferentiators.map((item) => (

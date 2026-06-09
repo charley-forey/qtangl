@@ -4,7 +4,7 @@ Quick-reference competitive cards for sales conversations. Pair with [11-competi
 
 **Golden rule:** Never disparage. Acknowledge competitor strength, then pivot to our differentiated value (speed + **signed, publicly-verifiable evidence** + drift + mid-market price + honest framing).
 
-> Refreshed 2026-06-06. Interactive matrix: the Cursor canvas `qtangl-competitive-landscape.canvas.tsx` (open beside chat in Cursor).
+> Refreshed 2026-06-06. **Public comparison hub:** [https://www.qtangl.com/compare](https://www.qtangl.com/compare). Interactive matrix: Cursor canvas `qtangl-competitive-landscape.canvas.tsx`.
 
 ---
 
@@ -164,4 +164,5 @@ Quick-reference competitive cards for sales conversations. Pair with [11-competi
 - Full teardowns: [11-competitive-intelligence.md](../11-competitive-intelligence.md)
 - Objections: [objection-handling.md](./objection-handling.md)
 - Discovery + demo: [discovery-and-demo.md](./discovery-and-demo.md)
+- Public hub: [11-competitive-intelligence.md](../11-competitive-intelligence.md) → `/compare`
 - Interactive matrix: Cursor canvas `qtangl-competitive-landscape.canvas.tsx`

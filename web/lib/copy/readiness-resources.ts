@@ -33,6 +33,11 @@ export const resourcesPageCopy = {
       href: "/resources/roi",
     },
     {
+      title: "Vendor comparison",
+      description: "PQC readiness landscape — feature matrix, positioning map, and Qtangl vs each competitor.",
+      href: "/compare",
+    },
+    {
       title: "FAQ",
       description: "Honest answers on timing, accuracy, competition, and procurement.",
       href: "/resources/faq",
@@ -138,7 +143,7 @@ export const readinessFaq: readonly FaqItem[] = [
     category: "competition",
     question: "We're evaluating SandboxAQ / Big 4 consultants.",
     answer:
-      "Strong options for enterprise programs. If you need a fast, verifiable baseline this quarter at mid-market price — with continuous drift — that's Qtangl. We partner with consultants for migration labor.",
+      "Strong options for enterprise programs. If you need a fast, verifiable baseline this quarter at mid-market price — with continuous drift — that's Qtangl. See the full vendor comparison at /compare. We partner with consultants for migration labor.",
   },
   {
     category: "trust",

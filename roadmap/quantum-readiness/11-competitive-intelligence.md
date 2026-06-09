@@ -2,7 +2,11 @@
 
 Detailed competitor teardowns, analyst landscape, positioning map, and a repeatable win/loss framework for the post-quantum readiness market.
 
-> **Last validated: 2026-06-06** against live sources (vendor sites/docs, AWS/Azure Marketplace, PKI Consortium PQCCM, NIST NCCoE, Microsoft Security blog, KuppingerCole). Interactive version: the Cursor canvas `qtangl-competitive-landscape.canvas.tsx` (open beside chat in Cursor).
+> **Last validated: 2026-06-06** against live sources (vendor sites/docs, AWS/Azure Marketplace, PKI Consortium PQCCM, NIST NCCoE, Microsoft Security blog, KuppingerCole).
+>
+> **Public mirror:** [https://www.qtangl.com/compare](https://www.qtangl.com/compare) — feature matrix, positioning map, per-vendor pages, and gated PDF guide.
+>
+> **Interactive (internal):** Cursor canvas `qtangl-competitive-landscape.canvas.tsx` (open beside chat in Cursor).
 
 ---
 
@@ -216,7 +220,7 @@ quadrantChart
   OSS: [0.24, 0.72]
 ```
 
-**Our whitespace:** Broad-enough platform (Assess → Monitor → Convert) delivered at mid-market, self-serve-capable price with **signed, publicly-verifiable evidence** — a quadrant the incumbents largely vacate. Full interactive/sortable version: the Cursor canvas `qtangl-competitive-landscape.canvas.tsx`.
+**Our whitespace:** Broad-enough platform (Assess → Monitor → Convert) delivered at mid-market, self-serve-capable price with **signed, publicly-verifiable evidence** — a quadrant the incumbents largely vacate. Public: `/compare`. Internal: Cursor canvas `qtangl-competitive-landscape.canvas.tsx`.
 
 ---
 

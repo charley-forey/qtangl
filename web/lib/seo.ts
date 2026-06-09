@@ -300,6 +300,85 @@ export function buildFrameworkJsonLd(guide: {
   };
 }
 
+export function buildComparisonJsonLd(options: {
+  slug: string;
+  title: string;
+  description: string;
+  competitorName: string;
+}) {
+  const url = absoluteUrl(`/compare/qtangl-vs-${options.slug}`);
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "TechArticle",
+        headline: options.title,
+        description: options.description,
+        url,
+        about: { "@type": "Thing", name: `Qtangl vs ${options.competitorName}` },
+        isPartOf: { "@id": `${siteMetadata.url}/#website` },
+        publisher: {
+          "@type": "Organization",
+          name: siteMetadata.name,
+          url: siteMetadata.url,
+        },
+      },
+      {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Home", item: siteMetadata.url },
+          { "@type": "ListItem", position: 2, name: "Compare", item: absoluteUrl("/compare") },
+          {
+            "@type": "ListItem",
+            position: 3,
+            name: `Qtangl vs ${options.competitorName}`,
+            item: url,
+          },
+        ],
+      },
+    ],
+  };
+}
+
+export function buildComparisonHubJsonLd(
+  items: ReadonlyArray<{ slug: string; name: string }>,
+) {
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "CollectionPage",
+        name: "PQC readiness vendor comparison",
+        description:
+          "Compare post-quantum readiness vendors — feature matrix, positioning, and Qtangl vs individual competitors.",
+        url: absoluteUrl("/compare"),
+        isPartOf: { "@id": `${siteMetadata.url}/#website` },
+        publisher: {
+          "@type": "Organization",
+          name: siteMetadata.name,
+          url: siteMetadata.url,
+        },
+        mainEntity: {
+          "@type": "ItemList",
+          itemListElement: items.map((item, index) => ({
+            "@type": "ListItem",
+            position: index + 1,
+            name: `Qtangl vs ${item.name}`,
+            url: absoluteUrl(`/compare/qtangl-vs-${item.slug}`),
+          })),
+        },
+      },
+      {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Home", item: siteMetadata.url },
+          { "@type": "ListItem", position: 2, name: "Compare", item: absoluteUrl("/compare") },
+        ],
+      },
+    ],
+  };
+}
+
 export function buildFaqJsonLd(items: ReadonlyArray<{ question: string; answer: string }>) {
   return {
     "@context": "https://schema.org",

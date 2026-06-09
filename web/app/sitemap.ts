@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 
 import { blogPosts } from "@/lib/copy/marketing";
+import { competitorCompareHref, competitorSlugs } from "@/lib/copy/competitors";
 import { frameworkGuideList } from "@/lib/copy/readiness-frameworks";
 import { qDayArticles } from "@/lib/copy/readiness-qday-hub";
 import { libraryRecipes } from "@/lib/copy/library-recipes";
@@ -40,6 +41,9 @@ const readinessRoutes = [
   "/resources",
   "/resources/roi",
   "/resources/faq",
+  "/compare",
+  "/compare/guide",
+  ...competitorSlugs.map((slug) => competitorCompareHref(slug)),
 ];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
@@ -96,7 +100,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
             route === "/convert" ||
             route === "/pricing" ||
             route.startsWith("/q-day/frameworks/") ||
-            route.startsWith("/blog/")
+            route.startsWith("/blog/") ||
+            route.startsWith("/compare")
           ? 0.9
           : route === "/demo/hospital" ||
               route === "/demo/airline" ||

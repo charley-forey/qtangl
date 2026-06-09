@@ -1,4 +1,5 @@
 import { getLibraryIndex } from "@/lib/library";
+import { publishedCompetitors, competitorCompareHref } from "@/lib/copy/competitors";
 import { readinessMetadata, siteMetadata } from "@/lib/copy/product";
 import { frameworkGuideList } from "@/lib/copy/readiness-frameworks";
 import { qDayArticles } from "@/lib/copy/readiness-qday-hub";
@@ -19,6 +20,9 @@ export async function GET() {
     .join("\n");
   const frameworkLinks = frameworkGuideList
     .map((guide) => `- ${guide.metadata.title}: ${siteMetadata.url}/q-day/frameworks/${guide.slug}`)
+    .join("\n");
+  const compareLinks = publishedCompetitors()
+    .map((c) => `- Qtangl vs ${c.name}: ${siteMetadata.url}${competitorCompareHref(c.slug)}`)
     .join("\n");
 
   const content = `# Qtangl
@@ -89,6 +93,15 @@ ${frameworkLinks}
 - API sandbox: ${siteMetadata.url}/sandbox
 - Hospital re-staffing demo: ${siteMetadata.url}/demo/hospital
 - Airline crew recovery demo: ${siteMetadata.url}/demo/airline
+
+## Competitive comparisons
+
+- Comparison hub: ${siteMetadata.url}/compare
+- Comparison guide (PDF): ${siteMetadata.url}/downloads/qtangl-pqc-vendor-comparison.pdf
+- Printable guide: ${siteMetadata.url}/compare/guide
+- Vendor roundup blog: ${siteMetadata.url}/blog/pqc-readiness-vendors-compared-2026
+
+${compareLinks}
 
 ## Blog & learn
 

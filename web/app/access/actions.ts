@@ -13,10 +13,10 @@ import {
 import { qtanglApiBaseUrl } from "@/lib/api";
 import { accessFormMessages } from "@/lib/copy/access";
 
-async function triggerMiniAssessmentDrip(payload: {
+async function triggerLeadCaptureDrip(payload: {
   email: string;
   source: string;
-  scenario: string;
+  scenario?: string;
 }) {
   try {
     await fetch(`${qtanglApiBaseUrl}/public/lead-capture`, {
@@ -25,7 +25,7 @@ async function triggerMiniAssessmentDrip(payload: {
       body: JSON.stringify({
         email: payload.email,
         source: payload.source,
-        scenario: payload.scenario,
+        scenario: payload.scenario ?? payload.source,
       }),
     });
   } catch {
@@ -64,11 +64,16 @@ export async function requestAccess(
         submittedAt: new Date().toISOString(),
       });
 
-      if (payload.source.startsWith("mini-assessment")) {
-        await triggerMiniAssessmentDrip({
+      if (
+        payload.source.startsWith("mini-assessment") ||
+        payload.source === "comparison-guide"
+      ) {
+        await triggerLeadCaptureDrip({
           email: payload.email,
           source: payload.source,
-          scenario: payload.source.replace("mini-assessment-", "") || "default",
+          scenario: payload.source.startsWith("mini-assessment")
+            ? payload.source.replace("mini-assessment-", "") || "default"
+            : undefined,
         });
       }
 
@@ -96,11 +101,16 @@ export async function requestAccess(
     };
   }
 
-  if (payload.source.startsWith("mini-assessment")) {
-    await triggerMiniAssessmentDrip({
+  if (
+    payload.source.startsWith("mini-assessment") ||
+    payload.source === "comparison-guide"
+  ) {
+    await triggerLeadCaptureDrip({
       email: payload.email,
       source: payload.source,
-      scenario: payload.source.replace("mini-assessment-", "") || "default",
+      scenario: payload.source.startsWith("mini-assessment")
+        ? payload.source.replace("mini-assessment-", "") || "default"
+        : undefined,
     });
   }
 

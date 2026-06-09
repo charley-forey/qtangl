@@ -23,7 +23,21 @@ export default function PricingPage() {
 
   return (
     <PageShell>
-      <PageHero eyebrow={hero.eyebrow} title={hero.title} description={hero.description} />
+      <PageHero
+        eyebrow={hero.eyebrow}
+        title={hero.title}
+        description={hero.description}
+        actionsSlot={
+          "compareHref" in hero && hero.compareHref ? (
+            <Link
+              href={hero.compareHref}
+              className="text-sm text-[var(--color-gray-400)] underline-offset-4 hover:text-white hover:underline"
+            >
+              {hero.compareNote}
+            </Link>
+          ) : undefined
+        }
+      />
 
       <Section gap="tight" className="pb-0">
         <div className="grid gap-6 lg:grid-cols-2">
