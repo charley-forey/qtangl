@@ -4,6 +4,7 @@ import { usePathname } from "next/navigation";
 import { ReactNode, useState } from "react";
 
 import DocsBreadcrumbs from "@/components/docs/DocsBreadcrumbs";
+import DocsPageActions from "@/components/docs/DocsPageActions";
 import DocsPager from "@/components/docs/DocsPager";
 import DocsSearch from "@/components/docs/DocsSearch";
 import DocsSidebar from "@/components/docs/DocsSidebar";
@@ -19,6 +20,7 @@ type DocsShellProps = {
   children: ReactNode;
   pathname?: string;
   searchIndex?: DocsSearchEntry[];
+  lastUpdated?: string;
 };
 
 export default function DocsShell({
@@ -27,6 +29,7 @@ export default function DocsShell({
   children,
   pathname: pathnameProp,
   searchIndex = [],
+  lastUpdated,
 }: DocsShellProps) {
   const pathnameHook = usePathname();
   const pathname = pathnameProp ?? pathnameHook;
@@ -64,8 +67,16 @@ export default function DocsShell({
             <p className="text-body-lg mt-5 max-w-3xl text-[var(--color-gray-300)]">
               {description}
             </p>
+            <DocsPageActions
+              title={title}
+              description={description}
+              pathname={pathname}
+              lastUpdated={lastUpdated}
+            />
             <DocsTocMobile />
-            <div className="docs-content mt-10 space-y-8">{children}</div>
+            <div className="docs-content mt-10 space-y-8" data-docs-export-root>
+              {children}
+            </div>
             <DocsPager pathname={pathname} />
             <p className="docs-edit-link mt-8 text-xs text-[var(--color-gray-600)] print:hidden">
               Found an issue?{" "}

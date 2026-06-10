@@ -120,6 +120,8 @@ ${docsLinks}
 
 - OpenAPI JSON: ${siteMetadata.url}/openapi.json
 - Postman collection: ${siteMetadata.url}/postman/qtangl-api.json
+- Documentation corpus (markdown): ${siteMetadata.url}/downloads/docs-corpus.md
+- Agent bundle (zip): ${siteMetadata.url}/downloads/qtangl-agent-bundle.zip
 - Verify spec: ${siteMetadata.url}/docs/verify-spec
 
 ## Learn library (${entries.length} entries)

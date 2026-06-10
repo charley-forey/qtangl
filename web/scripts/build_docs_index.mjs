@@ -97,6 +97,7 @@ const pageDescriptions = {
   "/docs/authentication": "API keys, RBAC roles, bearer tokens, and header schemes.",
   "/docs/sdks": "HTTP clients, qtangl-verify CLI, OpenAPI, and Postman collection.",
   "/docs/concepts": "Post-quantum readiness, Mosca HNDL, CBOM, and signed evidence.",
+  "/docs/data-formats": "PQC scan payloads, CycloneDX CBOM exports, ingest shapes, and webhook fields.",
   "/docs/api": "API guide for PQC scan, tenant, and verify endpoints.",
   "/docs/errors": "HTTP status codes and error handling.",
   "/docs/verify-spec": "Independent verification of signed PQC assessment reports.",

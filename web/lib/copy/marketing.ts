@@ -151,7 +151,7 @@ export const pqcDocsCards = [
 export const docsCards = [
   {
     title: "Data formats",
-    description: "Fields that shape the planning state before you call the API.",
+    description: "PQC scan payloads, CycloneDX CBOM exports, ingest shapes, and webhook fields.",
     href: "/docs/data-formats",
   },
   {
@@ -161,7 +161,7 @@ export const docsCards = [
   },
   {
     title: "Core concepts",
-    description: "Scheduling, routing, allocation, and hybrid execution — with honest method labels.",
+    description: "Assess, Monitor, Convert, HNDL, CBOM, signed evidence, and method honesty.",
     href: "/docs/concepts",
   },
   {

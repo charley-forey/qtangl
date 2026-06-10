@@ -7,11 +7,7 @@ import DocsJsonLd from "@/components/docs/DocsJsonLd";
 import DocsSection from "@/components/docs/DocsSection";
 import DocsShell from "@/components/docs/DocsShell";
 import { MAIN_CONTENT_ID } from "@/components/layout/PageShell";
-import ProbabilityGrid from "@/components/quantum/ProbabilityGrid";
 import Card from "@/components/ui/Card";
-import HybridStackDiagram from "@/components/visualization/quantum/HybridStackDiagram";
-import MethodComparison from "@/components/visualization/quantum/MethodComparison";
-import PipelineDiagram from "@/components/visualization/quantum/PipelineDiagram";
 import { conceptsPage } from "@/lib/copy/docs";
 import { docsSearchIndex } from "@/lib/docs/search-index-export";
 import { buildPageMetadata } from "@/lib/seo";
@@ -19,8 +15,7 @@ import { buildPageMetadata } from "@/lib/seo";
 export const metadata: Metadata = buildPageMetadata({
   path: "/docs/concepts",
   title: "Concepts",
-  description:
-    "Understand Qtangl's quantum-forward vocabulary, constraint model, and hybrid execution path.",
+  description: conceptsPage.description,
 });
 
 export default function ConceptsPage() {
@@ -36,95 +31,97 @@ export default function ConceptsPage() {
         description={conceptsPage.description}
         pathname="/docs/concepts"
         searchIndex={docsSearchIndex}
+        lastUpdated={conceptsPage.lastUpdated}
       >
-        <p className="text-xs text-[var(--color-gray-500)]">Last updated: 2026-06-09</p>
+        <p className="text-xs text-[var(--color-gray-500)]">
+          Last updated: {conceptsPage.lastUpdated}
+        </p>
 
         <DocsSection>
-          <DocsHeading>Assess → Monitor → Convert</DocsHeading>
-          <DocsCallout variant="info">
-            Qtangl&apos;s primary product is post-quantum readiness: baseline cryptographic inventory (Assess),
-            scheduled re-scans with drift alerts (Monitor), and remediation playbooks with re-verification
-            (Convert). Every assessment exports signed evidence verifiable at{" "}
-            <Link href="/verify" className="text-white underline underline-offset-4">
-              /verify
-            </Link>
-            .
-          </DocsCallout>
+          <DocsHeading>{conceptsPage.journey.title}</DocsHeading>
+          <DocsCallout variant="info">{conceptsPage.journey.description}</DocsCallout>
+          <div className="mt-6 grid gap-4 md:grid-cols-3">
+            {conceptsPage.tiers.map((tier) => (
+              <Card key={tier.label} className="rounded-2xl">
+                <p className="text-label">{tier.label}</p>
+                <p className="mt-3 text-sm leading-7 text-[var(--color-gray-300)]">
+                  {tier.summary}
+                </p>
+              </Card>
+            ))}
+          </div>
+          <ul className="mt-6 list-disc space-y-2 pl-5 text-sm leading-7 text-[var(--color-gray-300)]">
+            <li>
+              <Link href="/docs/guides/assess" className="text-white underline underline-offset-4">
+                Assess workflow guide
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/docs/guides/monitor-workflow"
+                className="text-white underline underline-offset-4"
+              >
+                Monitor workflow guide
+              </Link>
+            </li>
+            <li>
+              <Link href="/docs/guides/convert" className="text-white underline underline-offset-4">
+                Convert workflow guide
+              </Link>
+            </li>
+          </ul>
         </DocsSection>
 
-        <DocsSection>
-          <DocsHeading>{conceptsPage.sections[0].title}</DocsHeading>
-          <Card className="rounded-2xl">
-            <p className="text-label">{conceptsPage.sections[0].eyebrow}</p>
-            <p className="mt-4 text-sm leading-8 text-[var(--color-gray-300)]">
-              {conceptsPage.sections[0].description}
-            </p>
-            <p className="mt-4 text-sm leading-7 text-[var(--color-gray-400)]">
-              Scheduling, routing, and allocation share the same contract: entities, hard
-              constraints, and objectives in — ranked executable plan out.
-            </p>
-          </Card>
-        </DocsSection>
-
-        <DocsSection>
-          <DocsHeading>Hard vs soft constraints</DocsHeading>
-          <p className="text-sm leading-8 text-[var(--color-gray-300)]">
-            Hard constraints cannot break in the returned plan (precedence, capacity, windows).
-            Soft constraints influence ranking and objective scores but may trade off when
-            infeasible combinations appear.
-          </p>
-        </DocsSection>
-
-        <DocsSection>
-          <DocsHeading>Objectives</DocsHeading>
-          <p className="text-sm leading-8 text-[var(--color-gray-300)]">
-            Objectives encode what your team optimizes for: duration, cost, overtime, miles, or
-            coverage. The API returns metrics that map to those objectives so operators and
-            engineers read the same story.
-          </p>
-        </DocsSection>
-
-        <DocsSection>
-          <DocsHeading>{conceptsPage.sections[1].title}</DocsHeading>
-          <Card strong className="rounded-2xl">
-            <p className="text-label">{conceptsPage.sections[1].eyebrow}</p>
-            <p className="mt-4 text-sm leading-8 text-[var(--color-gray-300)]">
-              {conceptsPage.sections[1].description}
-            </p>
-          </Card>
-        </DocsSection>
-
-        <DocsSection>
-          <DocsHeading>{conceptsPage.sections[2].title}</DocsHeading>
-          <Card className="relative overflow-hidden rounded-2xl">
-            <ProbabilityGrid className="opacity-70" />
-            <div className="relative">
-              <p className="text-label">{conceptsPage.sections[2].eyebrow}</p>
+        {conceptsPage.sections.map((section) => (
+          <DocsSection key={section.title}>
+            <DocsHeading>{section.title}</DocsHeading>
+            <Card className="rounded-2xl">
+              <p className="text-label">{section.eyebrow}</p>
               <p className="mt-4 text-sm leading-8 text-[var(--color-gray-300)]">
-                {conceptsPage.sections[2].description}
+                {section.description}
               </p>
-              <HybridStackDiagram className="mt-6" />
-            </div>
-          </Card>
+            </Card>
+          </DocsSection>
+        ))}
+
+        <DocsSection>
+          <DocsHeading>Evidence pipeline</DocsHeading>
+          <ol className="list-decimal space-y-2 pl-5 text-sm leading-7 text-[var(--color-gray-300)]">
+            <li>
+              Scan with <code className="font-mono text-white">POST /pqc/scan</code> — live TLS
+              inventory or fixture mode for demos.
+            </li>
+            <li>
+              Export CBOM or PDF via{" "}
+              <code className="font-mono text-white">GET /pqc/report/{"{scan_id}"}</code>.
+            </li>
+            <li>
+              Verify signatures at{" "}
+              <Link href="/verify" className="text-white underline underline-offset-4">
+                /verify
+              </Link>{" "}
+              or with the{" "}
+              <Link href="/docs/sdks" className="text-white underline underline-offset-4">
+                qtangl-verify CLI
+              </Link>
+              .
+            </li>
+            <li>
+              Optional transparency log inclusion — see the{" "}
+              <Link
+                href="/docs/guides/transparency"
+                className="text-white underline underline-offset-4"
+              >
+                transparency guide
+              </Link>
+              .
+            </li>
+          </ol>
         </DocsSection>
 
         <DocsSection>
-          <DocsHeading>Method selection rules</DocsHeading>
-          <DocsCallout variant="honesty">
-            CP-SAT runs on every schedule job. QAOA is attempted only when the candidate is
-            small enough and enabled in the environment. The response method field reflects what
-            actually won — not what was attempted.
-          </DocsCallout>
-        </DocsSection>
-
-        <DocsSection>
-          <DocsHeading>Pipeline</DocsHeading>
-          <PipelineDiagram />
-        </DocsSection>
-
-        <DocsSection>
-          <DocsHeading>Classical vs hybrid</DocsHeading>
-          <MethodComparison />
+          <DocsHeading>Method honesty</DocsHeading>
+          <DocsCallout variant="honesty">{conceptsPage.methodHonesty}</DocsCallout>
         </DocsSection>
 
         <DocsSection>
@@ -154,21 +151,40 @@ export default function ConceptsPage() {
 
         <Card strong className="rounded-2xl">
           <p className="text-label">Go deeper</p>
-          <p className="mt-4 text-sm leading-8 text-[var(--color-gray-300)]">
-            Explore the{" "}
-            <Link href="/learn" className="text-white underline underline-offset-4">
-              Learn section
-            </Link>{" "}
-            or the{" "}
-            <Link
-              href="/learn/topics/start-writing-quantum-code"
-              className="text-white underline underline-offset-4"
-            >
-              newcomer guide
-            </Link>
-            .
-          </p>
+          <ul className="mt-4 list-disc space-y-2 pl-5 text-sm leading-7 text-[var(--color-gray-300)]">
+            <li>
+              <Link href="/q-day/hndl" className="text-white underline underline-offset-4">
+                HNDL education hub
+              </Link>
+            </li>
+            <li>
+              <Link href="/docs/guides/cbom" className="text-white underline underline-offset-4">
+                CBOM export guide
+              </Link>
+            </li>
+            <li>
+              <Link href="/docs/verify-spec" className="text-white underline underline-offset-4">
+                Verify specification
+              </Link>
+            </li>
+            <li>
+              <Link href="/docs/guides/pqc-demo" className="text-white underline underline-offset-4">
+                PQC demo walkthrough
+              </Link>
+            </li>
+          </ul>
         </Card>
+
+        <DocsCallout variant="info" title="Labs / optimization">
+          {conceptsPage.labsNote}{" "}
+          <Link href="/technology" className="text-white underline underline-offset-4">
+            Technology →
+          </Link>{" "}
+          ·{" "}
+          <Link href="/docs/guides/schedule" className="text-white underline underline-offset-4">
+            Schedule guide
+          </Link>
+        </DocsCallout>
       </DocsShell>
     </div>
   );

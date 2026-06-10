@@ -1,44 +1,82 @@
+import { readinessLexicon } from "@/lib/copy/readiness";
 import { quantumLexicon } from "@/lib/copy/voice";
 
 const {
-  amplitude,
   measurement,
   phase,
-  superposition,
 } = quantumLexicon;
 
 export const conceptsPage = {
   title: "Core concepts",
   description:
-    "Scheduling, routing, and allocation — with quantum vocabulary on the surface and honest hybrid execution underneath.",
+    "Post-quantum readiness vocabulary — Assess, Monitor, Convert, and the signed evidence layer your auditors can verify.",
+  lastUpdated: "2026-06-10",
+  journey: {
+    title: "Assess → Monitor → Convert",
+    description:
+      "Qtangl's primary product is cryptographic posture management: baseline inventory (Assess), scheduled re-scans with drift alerts (Monitor), and remediation playbooks with re-verification (Convert).",
+  },
+  tiers: [
+    {
+      label: "Assess",
+      summary: "Baseline scan, Mosca HNDL scoring, CycloneDX CBOM, signed PDF evidence.",
+    },
+    {
+      label: "Monitor",
+      summary: "Scheduled re-scans, diff alerts, SIEM webhooks, remediation board.",
+    },
+    {
+      label: "Convert",
+      summary: "Prioritized playbooks, workshops, automate remediation, re-scan verification.",
+    },
+  ],
   sections: [
     {
-      eyebrow: superposition.label,
-      title: "Three problem families",
+      eyebrow: readinessLexicon.hndl.label,
+      title: "HNDL and the Mosca timeline",
       description:
-        "Scheduling, routing, allocation. Entities, constraints, and objectives in — executable plan out.",
+        "Harvest now, decrypt later (HNDL) means adversaries store ciphertext today to break with future quantum computers. Mosca's inequality — data shelf-life plus migration time must exceed time-to-Q-Day — is why inventory starts before algorithms break.",
     },
     {
-      eyebrow: amplitude.label,
-      title: "QUBO, lightly",
+      eyebrow: "CBOM",
+      title: "Cryptographic inventory & CBOM",
       description:
-        "Hard planning decisions expressed as QUBO so solver backends can rank candidates systematically.",
+        "A Cryptography Bill of Materials lists algorithms, keys, and protocols in production. Qtangl exports CycloneDX CBOM from live TLS scans so procurement, GRC, and engineering share one artifact — not a one-time spreadsheet.",
     },
     {
-      eyebrow: phase.label,
-      title: "Hybrid execution",
+      eyebrow: readinessLexicon.evidence.label,
+      title: "Signed evidence & verify",
       description:
-        "Classical preprocess → bounded quantum search → classical postprocess. Practical beats theoretical.",
+        "Every assessment produces a content hash, ML-DSA-65 signature, and public verify link. Auditors recompute the hash offline — no dashboard login required. Optional transparency log inclusion adds append-only witness co-signing.",
+    },
+    {
+      eyebrow: readinessLexicon.drift.label,
+      title: "Drift & readiness index",
+      description:
+        "One scan is a snapshot; Monitor compares successive scans and surfaces new RSA, ECC, or weak TLS configurations. The readiness index aggregates exposure, drift velocity, and remediation progress for board and regulator reporting.",
     },
   ],
-  glossaryTitle: "Quantum terms in product language",
+  methodHonesty:
+    "Inventory aid, not formal audit. Quantum-vulnerable algorithms are not broken today — Qtangl quantifies exposure, maps standards (NSM-10, CNSA 2.0, NIST IR 8547), and exports signed evidence. We do not claim certification on your behalf.",
+  glossaryTitle: "Readiness terms in product language",
   glossary: [
-    quantumLexicon.superposition,
-    quantumLexicon.interference,
-    quantumLexicon.coherence,
-    quantumLexicon.collapse,
-    quantumLexicon.measurement,
+    readinessLexicon.exposure,
+    readinessLexicon.drift,
+    readinessLexicon.evidence,
+    readinessLexicon.convert,
+    readinessLexicon.agility,
+    readinessLexicon.hndl,
+    {
+      label: "CBOM",
+      meaning: "Cryptography Bill of Materials — CycloneDX export of algorithms and keys in scope",
+    },
+    {
+      label: "Verify",
+      meaning: "Independent signature and content-hash check at /verify or via qtangl-verify CLI",
+    },
   ],
+  labsNote:
+    "Hybrid scheduling, routing, and allocation APIs remain available for pilot customers under Labs / optimization. See /technology for quantum solver vocabulary.",
 } as const;
 
 export const docsGuideCopy = {
@@ -108,8 +146,8 @@ export const docsGuideCopy = {
   dataFormats: {
     title: "Data formats",
     description:
-      "Fields for schedules, routes, and staffing — before you hit the live API.",
-    csvTitle: `${measurement.label} template columns`,
+      "PQC scan payloads, CycloneDX CBOM exports, ingest shapes, and webhook fields — before you integrate Assess, Monitor, and Convert.",
+    csvTitle: "Report CSV columns",
   },
 } as const;
 

@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { readFileSync, statSync } from "node:fs";
+import { join } from "node:path";
 
 import DocsCallout from "@/components/docs/DocsCallout";
 import DocsCodeTabs from "@/components/docs/DocsCodeTabs";
@@ -25,7 +27,34 @@ export const metadata: Metadata = buildPageMetadata({
   description: "HTTP client recipes, qtangl-verify CLI, OpenAPI artifact, and Postman collection.",
 });
 
+const downloadButtonClass =
+  "inline-flex items-center gap-2 rounded-xl border border-[var(--border)] bg-black/30 px-4 py-2.5 text-sm text-white transition hover:border-[var(--border-strong)] hover:bg-white/[0.06]";
+
+function formatBytes(bytes: number) {
+  if (bytes < 1024) return `${bytes} B`;
+  return `${Math.round(bytes / 1024)} KB`;
+}
+
+function readArtifactMeta(relativePath: string) {
+  try {
+    const absolutePath = join(process.cwd(), "public", relativePath);
+    const stat = statSync(absolutePath);
+    return { bytes: stat.size, label: formatBytes(stat.size), missing: false };
+  } catch {
+    return { bytes: 0, label: "—", missing: true };
+  }
+}
+
 export default function SdksPage() {
+  const openapiMeta = readArtifactMeta("openapi.json");
+  const openapi = JSON.parse(readFileSync(join(process.cwd(), "public/openapi.json"), "utf8")) as {
+    info?: { version?: string; title?: string };
+  };
+  const postmanMeta = readArtifactMeta("postman/qtangl-api.json");
+  const corpusMeta = readArtifactMeta("downloads/docs-corpus.md");
+  const bundleMeta = readArtifactMeta("downloads/qtangl-agent-bundle.zip");
+  const apiVersion = openapi.info?.version ?? "0.9.0";
+
   const tabs = [
     { id: "curl" as const, label: "PQC scan", code: curlPqcScan({ scenarioId: "bank-tls-inventory", useFixture: true }) },
     {
@@ -52,6 +81,37 @@ qtangl-verify scan-abc123 --api ${process.env.NEXT_PUBLIC_QTANGL_API_BASE_URL ??
 # Verify pasted report JSON
 qtangl-verify --json report.json`;
 
+  const downloads = [
+    {
+      href: "/openapi.json",
+      download: "qtangl-openapi.json",
+      title: "openapi.json",
+      description: `${openapi.info?.title ?? "Qtangl API"} v${apiVersion}`,
+      size: openapiMeta.label,
+    },
+    {
+      href: "/postman/qtangl-api.json",
+      download: "qtangl-api.postman.json",
+      title: "Postman collection",
+      description: "Import into Postman or Insomnia",
+      size: postmanMeta.label,
+    },
+    {
+      href: "/downloads/docs-corpus.md",
+      download: "qtangl-docs-corpus.md",
+      title: "docs-corpus.md",
+      description: "Full markdown corpus for LLM and agent context",
+      size: corpusMeta.label,
+    },
+    {
+      href: "/downloads/qtangl-agent-bundle.zip",
+      download: "qtangl-agent-bundle.zip",
+      title: "Agent bundle (.zip)",
+      description: "AGENTS.md, schemas, OpenAPI, verify spec, sample CBOM",
+      size: bundleMeta.label,
+    },
+  ];
+
   return (
     <div id={MAIN_CONTENT_ID} className="scroll-mt-24 sm:scroll-mt-28">
       <DocsJsonLd pathname="/docs/sdks" title="SDKs, CLI & OpenAPI" description="Integration tooling." />
@@ -60,8 +120,9 @@ qtangl-verify --json report.json`;
         description="Use any HTTP client against the JSON API today. Official typed SDKs are on the roadmap."
         pathname="/docs/sdks"
         searchIndex={docsSearchIndex}
+        lastUpdated="2026-06-10"
       >
-        <p className="text-xs text-[var(--color-gray-500)]">Last updated: 2026-06-09</p>
+        <p className="text-xs text-[var(--color-gray-500)]">Last updated: 2026-06-10</p>
 
         <DocsSection>
           <DocsHeading>Official SDKs</DocsHeading>
@@ -107,24 +168,42 @@ qtangl-verify --json report.json`;
         </DocsSection>
 
         <DocsSection>
-          <DocsHeading>OpenAPI & Postman</DocsHeading>
-          <DocsCallout variant="info">
+          <DocsHeading>Downloads</DocsHeading>
+          <p className="text-sm leading-8 text-[var(--color-gray-300)]">
+            Machine-readable artifacts for codegen, Postman, and agentic systems. Regenerated on each
+            release build.
+          </p>
+          <div className="mt-6 grid gap-4 sm:grid-cols-2">
+            {downloads.map((item) => (
+              <Card key={item.href} className="rounded-2xl">
+                <div className="flex flex-wrap items-start justify-between gap-3">
+                  <div>
+                    <p className="font-semibold text-white">{item.title}</p>
+                    <p className="mt-2 text-sm text-[var(--color-gray-400)]">{item.description}</p>
+                  </div>
+                  <span className="text-xs text-[var(--color-gray-500)]">{item.size}</span>
+                </div>
+                <a
+                  href={item.href}
+                  download={item.download}
+                  className={`${downloadButtonClass} mt-4`}
+                >
+                  Download {item.title}
+                </a>
+              </Card>
+            ))}
+          </div>
+          <DocsCallout variant="tip">
             <ul className="list-disc space-y-2 pl-5">
               <li>
-                Interactive OpenAPI:{" "}
+                Browse OpenAPI inline:{" "}
                 <a href="/openapi.json" className="text-white underline underline-offset-4">
                   /openapi.json
                 </a>{" "}
-                (also at <code className="font-mono">/docs</code> on deployed backend)
+                (Swagger UI at <code className="font-mono">/docs</code> on the API host)
               </li>
               <li>
-                Postman collection:{" "}
-                <a href="/postman/qtangl-api.json" className="text-white underline underline-offset-4">
-                  /postman/qtangl-api.json
-                </a>
-              </li>
-              <li>
-                Machine-readable index:{" "}
+                URL index for crawlers:{" "}
                 <a href="/llms.txt" className="text-white underline underline-offset-4">
                   /llms.txt
                 </a>
@@ -140,6 +219,10 @@ qtangl-verify --json report.json`;
             <li>Send <code className="font-mono text-white">Idempotency-Key</code> on scan POST for safe retries.</li>
             <li>Verify reports publicly — auditors need no API key.</li>
             <li>Handle 402 for entitlement-gated Monitor features.</li>
+            <li>
+              Load <code className="font-mono text-white">AGENTS.md</code> from the agent bundle into Cursor,
+              Claude Projects, or internal copilots.
+            </li>
           </ul>
         </DocsSection>
       </DocsShell>
