@@ -1,9 +1,11 @@
 import type { DocsEndpoint, DocsFeatureStatus } from "@/lib/docs/types";
 
-type EndpointInput = Omit<DocsEndpoint, "id" | "status" | "title" | "auth"> & {
+type EndpointInput = Omit<DocsEndpoint, "id" | "status" | "title" | "auth" | "examples" | "errors"> & {
   status?: DocsFeatureStatus;
   title?: string;
   auth?: boolean;
+  examples?: DocsEndpoint["examples"];
+  errors?: DocsEndpoint["errors"];
 };
 
 /** Build a DocsEndpoint with sensible defaults for API reference pages. */
