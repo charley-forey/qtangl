@@ -11,15 +11,22 @@ type KmsRow = {
   source: string;
 };
 
+type KmsPullResponse = {
+  document?: {
+    components?: Array<{
+      name?: string;
+      properties?: Array<{ name: string; value: string }>;
+    }>;
+  };
+};
+
 export default function KmsInventoryPanel({ apiKey }: { apiKey: string }) {
   const [rows, setRows] = useState<KmsRow[]>([]);
   const [message, setMessage] = useState("");
 
   const load = useCallback(async () => {
     try {
-      const res = await postTenantJson<{
-        document?: { components?: Array<{ name?: string; properties?: Array<{ name: string; value: string }> }> } };
-      }>("/pqc/cbom/pull/kms-aws", apiKey, {});
+      const res = await postTenantJson<KmsPullResponse>("/pqc/cbom/pull/kms-aws", apiKey, {});
       const components = res.document?.components ?? [];
       setRows(
         components.map((c) => ({

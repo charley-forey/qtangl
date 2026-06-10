@@ -1,8 +1,15 @@
 ---
 title: "Crypto flip orchestration: prove the change in your CLM and KMS"
 description: "Qtangl now orchestrates overlay, CLM, and KMS flips with dry-run, approval, and signed before/after evidence — without operating a PQ overlay appliance."
-date: "2026-06-09"
-tags: ["convert", "crypto-flip", "pqc"]
+keyword: "crypto flip orchestration"
+journeyStage: "convert"
+hubLink: "/docs/guides/crypto-flip"
+hubLabel: "Crypto flip guide"
+ctaPrimary: "Explore crypto flip"
+datePublished: "2026-06-09"
+eyebrow: "Convert"
+intro: "Qtangl orchestrates PQC changes in your CLM, KMS, and infra — then proves posture improved with signed before/after evidence."
+sourceIds: ["qtangl-crypto-flip-2026"]
 ---
 
 # Crypto flip orchestration
