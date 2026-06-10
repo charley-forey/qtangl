@@ -103,6 +103,13 @@
     "headings": []
   },
   {
+    "href": "/docs/guides/code-scan-ci",
+    "title": "Code scan CI",
+    "section": "Discovery depth",
+    "description": "",
+    "headings": []
+  },
+  {
     "href": "/docs/guides/convert",
     "title": "Convert workflow",
     "section": "Core Workflow",
@@ -134,6 +141,13 @@
     "href": "/docs/guides/hospital-demo",
     "title": "Hospital demo guide",
     "section": "Labs / optimization (expansion)",
+    "description": "",
+    "headings": []
+  },
+  {
+    "href": "/docs/guides/host-sensor-deploy",
+    "title": "Host sensor deploy",
+    "section": "Discovery depth",
     "description": "",
     "headings": []
   },
@@ -348,6 +362,41 @@
     "href": "/docs/reference/airline/upload-crew",
     "title": "POST /airline/upload-crew",
     "section": "Labs / optimization (expansion)",
+    "description": "",
+    "headings": []
+  },
+  {
+    "href": "/docs/reference/discovery/agents",
+    "title": "GET /tenant/discovery/agents",
+    "section": "Discovery depth",
+    "description": "",
+    "headings": []
+  },
+  {
+    "href": "/docs/reference/discovery/binary-scan",
+    "title": "POST /tenant/discovery/binary-scan",
+    "section": "Discovery depth",
+    "description": "",
+    "headings": []
+  },
+  {
+    "href": "/docs/reference/discovery/code-scan",
+    "title": "POST /tenant/coverage/code-scan",
+    "section": "Discovery depth",
+    "description": "",
+    "headings": []
+  },
+  {
+    "href": "/docs/reference/discovery/fleets-create",
+    "title": "POST /tenant/discovery/fleets",
+    "section": "Discovery depth",
+    "description": "",
+    "headings": []
+  },
+  {
+    "href": "/docs/reference/discovery/jobs",
+    "title": "GET /tenant/discovery/jobs/{job_id}",
+    "section": "Discovery depth",
     "description": "",
     "headings": []
   },

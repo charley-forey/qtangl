@@ -30,7 +30,7 @@ export default function CodeScanCiGuidePage() {
         pathname="/docs/guides/code-scan-ci"
         searchIndex={docsSearchIndex}
       >
-        <DocsBadge status="beta" />
+        <DocsBadge status="pilot" />
         <DocsSection>
           <DocsHeading>GitHub Action</DocsHeading>
           <pre className="overflow-x-auto rounded-lg bg-black p-4 text-xs text-[var(--color-gray-300)]">

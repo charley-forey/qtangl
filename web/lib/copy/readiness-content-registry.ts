@@ -232,6 +232,20 @@ export const readinessBlogRegistry: readonly ReadinessBlogRegistryEntry[] = [
     featured: true,
   },
   {
+    slug: "qtangl-full-stack-cpm-2026",
+    kind: "blog",
+    markdownFile: "blog/qtangl-full-stack-cpm-2026.md",
+    title: "Qtangl full-stack cryptographic posture management",
+    description:
+      "Host sensor, code scan, and binary CBOM discovery ship as enterprise Yes — internally validated at scale.",
+    category: "Q-Day readiness",
+    coverImage: "/qtangl-pqc-scanner-cover.svg",
+    coverAlt: "Full-stack cryptographic posture management overview.",
+    excerpt: "Discovery depth across host, code, and binary — one signed evidence pipeline.",
+    readiness: true,
+    featured: true,
+  },
+  {
     slug: "pqc-readiness-vendors-compared-2026",
     kind: "blog",
     markdownFile: "blog/pqc-readiness-vendors-compared-2026.md",

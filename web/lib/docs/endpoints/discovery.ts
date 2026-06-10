@@ -5,7 +5,7 @@ export const discoveryEndpoints: Record<string, DocsEndpoint> = {
   "discovery-fleets-list": defineEndpoint("discovery-fleets-list", {
     method: "GET",
     path: "/tenant/discovery/fleets",
-    status: "beta",
+    status: "pilot",
     summary: "List discovery fleets for the tenant.",
     auth: true,
     role: ROLE_ANY,
@@ -18,7 +18,7 @@ export const discoveryEndpoints: Record<string, DocsEndpoint> = {
   "discovery-fleets-create": defineEndpoint("discovery-fleets-create", {
     method: "POST",
     path: "/tenant/discovery/fleets",
-    status: "beta",
+    status: "pilot",
     summary: "Create a fleet and return a one-time enrollment token.",
     auth: true,
     role: ROLE_WRITE,
@@ -39,7 +39,7 @@ export const discoveryEndpoints: Record<string, DocsEndpoint> = {
   "discovery-agents": defineEndpoint("discovery-agents", {
     method: "GET",
     path: "/tenant/discovery/agents",
-    status: "beta",
+    status: "pilot",
     summary: "List enrolled host agents with heartbeat and findings counts.",
     auth: true,
     role: ROLE_ANY,
@@ -52,7 +52,7 @@ export const discoveryEndpoints: Record<string, DocsEndpoint> = {
   "discovery-code-scan": defineEndpoint("discovery-code-scan", {
     method: "POST",
     path: "/tenant/coverage/code-scan",
-    status: "beta",
+    status: "pilot",
     summary: "Enqueue or run a code scan (CryptoScan + CryptoDeps).",
     auth: true,
     role: ROLE_ANY,
@@ -70,7 +70,7 @@ export const discoveryEndpoints: Record<string, DocsEndpoint> = {
   "discovery-binary-scan": defineEndpoint("discovery-binary-scan", {
     method: "POST",
     path: "/tenant/discovery/binary-scan",
-    status: "beta",
+    status: "pilot",
     summary: "Enqueue a container/binary CBOM scan.",
     auth: true,
     role: ROLE_WRITE,
@@ -84,7 +84,7 @@ export const discoveryEndpoints: Record<string, DocsEndpoint> = {
   "discovery-jobs": defineEndpoint("discovery-jobs", {
     method: "GET",
     path: "/tenant/discovery/jobs/{job_id}",
-    status: "beta",
+    status: "pilot",
     summary: "Poll discovery job status and results.",
     auth: true,
     role: ROLE_ANY,
@@ -93,12 +93,12 @@ export const discoveryEndpoints: Record<string, DocsEndpoint> = {
       { name: "status", type: "string", required: true, description: "queued | running | done | failed." },
       { name: "result", type: "object", required: false, description: "Scan output when done." },
     ],
-    examples: [{ label: "Job status", response: { status: "success", jobId: "job-1", status: "done", result: { findingsCount: 12 } } }],
+    examples: [{ label: "Job status", response: { status: "success", jobId: "job-1", jobStatus: "done", result: { findingsCount: 12 } } }],
   }),
   "discovery-cmdb-coverage": defineEndpoint("discovery-cmdb-coverage", {
     method: "GET",
     path: "/tenant/discovery/cmdb-coverage",
-    status: "beta",
+    status: "pilot",
     summary: "Return CMDB host coverage percentage vs enrolled agents.",
     auth: true,
     role: ROLE_ANY,
@@ -112,7 +112,7 @@ export const discoveryEndpoints: Record<string, DocsEndpoint> = {
   "discovery-registry-test": defineEndpoint("discovery-registry-test", {
     method: "POST",
     path: "/tenant/discovery/registry/test-connection",
-    status: "beta",
+    status: "pilot",
     summary: "Verify registry credentials can pull the given image reference.",
     auth: true,
     role: ROLE_WRITE,

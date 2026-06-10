@@ -30,7 +30,7 @@ export default function HostSensorDeployGuidePage() {
         pathname="/docs/guides/host-sensor-deploy"
         searchIndex={docsSearchIndex}
       >
-        <DocsBadge status="beta" />
+        <DocsBadge status="pilot" />
         <DocsSection>
           <DocsHeading>Prerequisites</DocsHeading>
           <ul className="list-disc space-y-2 pl-5 text-sm leading-8 text-[var(--color-gray-300)]">
