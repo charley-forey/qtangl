@@ -58,7 +58,7 @@ azure-keyvault-certificates>=4.8.0
 
 google-cloud-certificate-manager>=1.0.0
 
-google-auth>=2.29.0
+google-auth>=2.53.0
 
 # Optional Kubernetes cert-manager pull
 
