@@ -8,6 +8,7 @@ description = "Documentation placeholders and vendored API reference examples"
 paths = [
   '''(?i)cursor_agents_api\.md$''',
   '''web/app/docs/authentication/page\.tsx$''',
+  '''backend/tests/test_anchor_git\.py$''',
 ]
 regexes = [
   '''YOUR_API_KEY''',

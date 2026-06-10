@@ -153,6 +153,8 @@ const endpointFiles = [
   "lib/docs/endpoints/tenant.ts",
   "lib/docs/endpoints/pqc-extended.ts",
   "lib/docs/endpoints/admin-public-health.ts",
+  "lib/docs/endpoints/discovery.ts",
+  "lib/docs/endpoints/platform-extended.ts",
 ];
 const endpointsSource = endpointFiles.map((rel) => readUtf8(rel)).join("\n");
 const sections = parseNavSections(navSource);

@@ -17,7 +17,7 @@ Run cryptographic discovery in CI using the Qtangl code scan orchestrator (Crypt
 ```bash
 curl -X POST https://api.qtangl.com/tenant/coverage/code-scan \
   -H "Authorization: Bearer $QTANGL_API_KEY" \
-  -d '{"githubOwner":"org","githubRepo":"app","githubToken":"ghp_...","async":true}'
+  -d '{"githubOwner":"org","githubRepo":"app","githubToken":"YOUR_GITHUB_TOKEN","async":true}'
 ```
 
 Poll: `GET /tenant/discovery/jobs/{jobId}`

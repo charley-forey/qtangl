@@ -193,6 +193,43 @@ Hybrid scheduling/routing (`POST /optimize`) is a **Labs expansion** — mention
 
 ## JSON schemas (canonical contracts)
 
+### discovery-finding-v1.schema.json
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://qtangl.com/schemas/discovery-finding-v1.json",
+  "title": "QtanglDiscoveryFindingV1",
+  "type": "object",
+  "required": ["schemaVersion", "findingId", "findingType", "hostId", "hostname", "os", "confidence"],
+  "properties": {
+    "schemaVersion": { "type": "integer", "const": 1 },
+    "findingId": { "type": "string", "minLength": 16, "maxLength": 128 },
+    "findingType": {
+      "type": "string",
+      "enum": ["certificate", "library", "listener", "config", "runtime_crypto", "source_code", "binary_artifact"]
+    },
+    "hostId": { "type": "string", "format": "uuid" },
+    "hostname": { "type": "string", "maxLength": 255 },
+    "os": { "type": "string", "enum": ["linux", "windows", "darwin"] },
+    "location": { "type": "string", "maxLength": 1024 },
+    "algorithm": { "type": "string", "maxLength": 128 },
+    "keySize": { "type": ["integer", "null"], "minimum": 0 },
+    "expiresAt": { "type": ["string", "null"], "format": "date-time" },
+    "fingerprint": { "type": "string", "maxLength": 128 },
+    "libraryName": { "type": "string", "maxLength": 128 },
+    "libraryVersion": { "type": "string", "maxLength": 64 },
+    "port": { "type": ["integer", "null"], "minimum": 0, "maximum": 65535 },
+    "confidence": { "type": "string", "enum": ["high", "medium", "low"] },
+    "reachability": { "type": "string", "enum": ["confirmed", "reachable", "available"] },
+    "sourcePath": { "type": "string", "maxLength": 1024 },
+    "lineNumber": { "type": ["integer", "null"], "minimum": 1 },
+    "metadata": { "type": "object" }
+  },
+  "additionalProperties": false
+}
+```
+
 ### optimize-request.schema.json
 
 ```json

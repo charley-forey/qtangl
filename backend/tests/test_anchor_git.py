@@ -2,7 +2,9 @@
 
 from __future__ import annotations
 
+import json
 from unittest.mock import patch
+from urllib.error import HTTPError
 
 from app.pqc.anchor_git import publish_git_anchor
 
@@ -15,7 +17,7 @@ def test_git_anchor_skipped_without_config(monkeypatch):
 
 def test_git_anchor_success_mocked(monkeypatch):
     monkeypatch.setenv("QTANGL_ANCHOR_GIT_REPO", "org/anchors")
-    monkeypatch.setenv("QTANGL_ANCHOR_GIT_TOKEN", "ghp_test")
+    monkeypatch.setenv("QTANGL_ANCHOR_GIT_TOKEN", "test-github-token-not-a-secret")
 
     class FakeResp:
         def __init__(self, data: bytes):
@@ -30,11 +32,24 @@ def test_git_anchor_success_mocked(monkeypatch):
         def __exit__(self, *args):
             pass
 
-    import json
+    put_payload = json.dumps(
+        {"commit": {"sha": "abc123"}, "content": {"html_url": "https://github.com/org/anchors"}}
+    ).encode()
 
-    put_payload = json.dumps({"commit": {"sha": "abc123"}, "content": {"html_url": "https://github.com/org/anchors"}}).encode()
+    def urlopen_side_effect(req, timeout=30):
+        url = req.full_url
+        method = getattr(req, "method", None) or req.get_method()
+        if method == "GET" and url.endswith("/contents/anchors/latest.json"):
+            return FakeResp(b'{"sha":"old"}')
+        if method == "PUT" and url.endswith("/contents/anchors/latest.json"):
+            return FakeResp(put_payload)
+        if method == "GET" and url.endswith("/contents/anchors/log.jsonl"):
+            raise HTTPError(url, 404, "Not Found", hdrs=None, fp=None)
+        if method == "PUT" and url.endswith("/contents/anchors/log.jsonl"):
+            return FakeResp(b'{}')
+        raise AssertionError(f"unexpected request: {method} {url}")
 
-    with patch("app.pqc.anchor_git.urlopen", side_effect=[FakeResp(b'{"sha":"old"}'), FakeResp(put_payload)]):
+    with patch("app.pqc.anchor_git.urlopen", side_effect=urlopen_side_effect):
         result = publish_git_anchor({"rootHash": "b" * 64, "seq": 1})
     assert result is not None
     assert result.get("commitSha") == "abc123"

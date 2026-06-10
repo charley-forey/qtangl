@@ -15,6 +15,8 @@ function loadEndpointSources() {
     join(repoRoot, "web", "lib", "docs", "endpoints", "tenant.ts"),
     join(repoRoot, "web", "lib", "docs", "endpoints", "pqc-extended.ts"),
     join(repoRoot, "web", "lib", "docs", "endpoints", "admin-public-health.ts"),
+    join(repoRoot, "web", "lib", "docs", "endpoints", "discovery.ts"),
+    join(repoRoot, "web", "lib", "docs", "endpoints", "platform-extended.ts"),
   ];
   return files.map((f) => readFileSync(f, "utf8")).join("\n");
 }
@@ -29,6 +31,10 @@ function documentedRoutes(source) {
   const blockRe = /method:\s*"([^"]+)"[\s\S]*?path:\s*"([^"]+)"/g;
   let m;
   while ((m = blockRe.exec(source)) !== null) {
+    routes.add(normalizeRoute(m[1], m[2]));
+  }
+  const stubRe = /stub\(\s*"[^"]+"\s*,\s*"(GET|POST|PUT|PATCH|DELETE)"\s*,\s*"([^"]+)"/g;
+  while ((m = stubRe.exec(source)) !== null) {
     routes.add(normalizeRoute(m[1], m[2]));
   }
   return routes;

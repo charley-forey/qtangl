@@ -39,7 +39,7 @@
     "href": "/docs/data-formats",
     "title": "Data formats",
     "section": "Core Workflow",
-    "description": "",
+    "description": "PQC scan payloads, CycloneDX CBOM exports, ingest shapes, and webhook fields.",
     "headings": []
   },
   {

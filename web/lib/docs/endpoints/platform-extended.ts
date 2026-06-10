@@ -1,0 +1,292 @@
+import type { DocsEndpoint } from "@/lib/docs/types";
+import { defineEndpoint, ROLE_ANY, ROLE_WRITE } from "@/lib/docs/endpoint-factory";
+
+type HttpMethod = DocsEndpoint["method"];
+
+function stub(
+  id: string,
+  method: HttpMethod,
+  path: string,
+  summary: string,
+  auth = true,
+): DocsEndpoint {
+  return defineEndpoint(id, {
+    method,
+    path,
+    status: "pilot",
+    summary,
+    auth,
+    role: method === "GET" ? ROLE_ANY : ROLE_WRITE,
+  });
+}
+
+/** Routes documented for CI coverage; reference pages ship incrementally. */
+export const platformExtendedEndpoints: Record<string, DocsEndpoint> = {
+  "pqc-dogfood-latest": stub(
+    "pqc-dogfood-latest",
+    "GET",
+    "/pqc/dogfood/latest",
+    "Public latest Qtangl self-scan for the trust center dogfood tenant.",
+    false,
+  ),
+  "discovery-summary": stub(
+    "discovery-summary",
+    "GET",
+    "/tenant/discovery/summary",
+    "Discovery program summary: fleets, agents, jobs, and coverage counts.",
+  ),
+  "discovery-fleet-rotate-token": stub(
+    "discovery-fleet-rotate-token",
+    "POST",
+    "/tenant/discovery/fleets/{fleet_id}/rotate-token",
+    "Rotate fleet enrollment token and invalidate prior tokens.",
+  ),
+  "discovery-agents-revoke": stub(
+    "discovery-agents-revoke",
+    "POST",
+    "/tenant/discovery/agents/revoke",
+    "Revoke one or more host agent credentials.",
+  ),
+  "discovery-host-scan": stub(
+    "discovery-host-scan",
+    "POST",
+    "/tenant/discovery/host-scan",
+    "Trigger on-demand host sensor scan for enrolled agents.",
+  ),
+  "discovery-agent-enroll": stub(
+    "discovery-agent-enroll",
+    "POST",
+    "/discovery/agent/enroll",
+    "Enroll a host sensor with fleet enrollment token (mTLS in production).",
+    false,
+  ),
+  "discovery-agent-heartbeat": stub(
+    "discovery-agent-heartbeat",
+    "POST",
+    "/discovery/agent/heartbeat",
+    "Agent heartbeat with version and capacity metadata.",
+    false,
+  ),
+  "discovery-agent-findings": stub(
+    "discovery-agent-findings",
+    "POST",
+    "/discovery/agent/findings",
+    "Upload host discovery findings batch (discovery-finding-v1 schema).",
+    false,
+  ),
+  "discovery-agent-update": stub(
+    "discovery-agent-update",
+    "GET",
+    "/discovery/agent/update",
+    "Check for sensor package updates (version manifest).",
+    false,
+  ),
+  "discovery-host-drift": stub(
+    "discovery-host-drift",
+    "GET",
+    "/tenant/discovery/host-drift",
+    "Host-level crypto drift since prior discovery snapshot.",
+  ),
+  "discovery-code-targets-list": stub(
+    "discovery-code-targets-list",
+    "GET",
+    "/tenant/discovery/code-targets",
+    "List configured code scan targets (GitHub, GitLab, ADO).",
+  ),
+  "discovery-code-targets-create": stub(
+    "discovery-code-targets-create",
+    "POST",
+    "/tenant/discovery/code-targets",
+    "Register a repository or org for scheduled code scans.",
+  ),
+  "discovery-image-targets-list": stub(
+    "discovery-image-targets-list",
+    "GET",
+    "/tenant/discovery/image-targets",
+    "List container image scan targets.",
+  ),
+  "discovery-image-targets-create": stub(
+    "discovery-image-targets-create",
+    "POST",
+    "/tenant/discovery/image-targets",
+    "Register an OCI image reference for binary CBOM scans.",
+  ),
+  "discovery-github-webhook": stub(
+    "discovery-github-webhook",
+    "POST",
+    "/tenant/discovery/github-webhook",
+    "GitHub App webhook receiver for PR and push code scan events.",
+    false,
+  ),
+  "discovery-gitlab-webhook": stub(
+    "discovery-gitlab-webhook",
+    "POST",
+    "/tenant/discovery/gitlab-webhook",
+    "GitLab webhook receiver for merge request code scan events.",
+    false,
+  ),
+  "discovery-ado-webhook": stub(
+    "discovery-ado-webhook",
+    "POST",
+    "/tenant/discovery/ado-webhook",
+    "Azure DevOps webhook receiver for pipeline code scan events.",
+    false,
+  ),
+  "discovery-pr-comment": stub(
+    "discovery-pr-comment",
+    "POST",
+    "/tenant/discovery/pr-comment",
+    "Post or update PR comment with code scan summary.",
+  ),
+  "discovery-offline-upload": stub(
+    "discovery-offline-upload",
+    "POST",
+    "/tenant/discovery/offline-upload",
+    "Upload offline sensor bundle or air-gapped findings export.",
+  ),
+  "discovery-github-app-install": stub(
+    "discovery-github-app-install",
+    "GET",
+    "/tenant/discovery/github-app/install",
+    "Begin GitHub App installation OAuth flow.",
+  ),
+  "discovery-github-app-callback": stub(
+    "discovery-github-app-callback",
+    "POST",
+    "/tenant/discovery/github-app/callback",
+    "Complete GitHub App installation and store credentials.",
+  ),
+  "discovery-source-runtime-diff": stub(
+    "discovery-source-runtime-diff",
+    "POST",
+    "/tenant/discovery/source-runtime-diff",
+    "Compare code scan findings vs live TLS/host inventory for a scope.",
+  ),
+  "drift-summary": stub(
+    "drift-summary",
+    "GET",
+    "/tenant/drift/summary",
+    "Tenant-wide drift summary across sources and scopes.",
+  ),
+  "drift-scope": stub(
+    "drift-scope",
+    "GET",
+    "/tenant/drift/{source_type}/{scope_key}",
+    "Latest drift delta for a source type and scope key.",
+  ),
+  "drift-history": stub(
+    "drift-history",
+    "GET",
+    "/tenant/drift/history",
+    "Historical drift events for analytics and audit.",
+  ),
+  "remediation-program-list": stub(
+    "remediation-program-list",
+    "GET",
+    "/tenant/remediation/program",
+    "List remediation program items with priority and status.",
+  ),
+  "remediation-program-create": stub(
+    "remediation-program-create",
+    "POST",
+    "/tenant/remediation/program",
+    "Create or bulk-import remediation program items.",
+  ),
+  "remediation-program-velocity": stub(
+    "remediation-program-velocity",
+    "GET",
+    "/tenant/remediation/program/velocity",
+    "Remediation velocity metrics for executive reporting.",
+  ),
+  "remediation-program-simulate": stub(
+    "remediation-program-simulate",
+    "POST",
+    "/tenant/remediation/program/simulate",
+    "Simulate remediation outcomes without applying changes.",
+  ),
+  "remediation-program-migrate-legacy": stub(
+    "remediation-program-migrate-legacy",
+    "POST",
+    "/tenant/remediation/program/migrate-legacy",
+    "Migrate legacy remediation backlog into program items.",
+  ),
+  "remediation-program-update": stub(
+    "remediation-program-update",
+    "PUT",
+    "/tenant/remediation/program/{item_id}",
+    "Update remediation program item fields and ownership.",
+  ),
+  "remediation-program-recommendations": stub(
+    "remediation-program-recommendations",
+    "GET",
+    "/tenant/remediation/program/recommendations",
+    "ML-assisted remediation recommendations for open items.",
+  ),
+  "remediation-program-playbook": stub(
+    "remediation-program-playbook",
+    "GET",
+    "/tenant/remediation/program/{item_id}/playbook",
+    "Fetch playbook steps for a program item.",
+  ),
+  "remediation-program-verify": stub(
+    "remediation-program-verify",
+    "POST",
+    "/tenant/remediation/program/{item_id}/verify",
+    "Re-scan and verify remediation for a program item.",
+  ),
+  "remediation-flip-dry-run": stub(
+    "remediation-flip-dry-run",
+    "POST",
+    "/tenant/remediation/program/{program_item_id}/flip/dry-run",
+    "Simulate crypto flip overlay without applying production changes.",
+  ),
+  "remediation-flip-execute": stub(
+    "remediation-flip-execute",
+    "POST",
+    "/tenant/remediation/program/{program_item_id}/flip",
+    "Execute orchestrated crypto flip for a program item.",
+  ),
+  "crypto-flips-list": stub(
+    "crypto-flips-list",
+    "GET",
+    "/tenant/flips",
+    "List crypto flip jobs with status and approval state.",
+  ),
+  "crypto-flips-get": stub(
+    "crypto-flips-get",
+    "GET",
+    "/tenant/flips/{job_id}",
+    "Fetch crypto flip job detail and audit trail.",
+  ),
+  "crypto-flips-approve": stub(
+    "crypto-flips-approve",
+    "POST",
+    "/tenant/flips/{job_id}/approve",
+    "Approve a pending crypto flip job (dual-control when configured).",
+  ),
+  "crypto-flips-cancel": stub(
+    "crypto-flips-cancel",
+    "POST",
+    "/tenant/flips/{job_id}/cancel",
+    "Cancel an in-flight or pending crypto flip job.",
+  ),
+  "crypto-flips-retry": stub(
+    "crypto-flips-retry",
+    "POST",
+    "/tenant/flips/{job_id}/retry",
+    "Retry a failed crypto flip job step.",
+  ),
+  "crypto-flips-poll": stub(
+    "crypto-flips-poll",
+    "GET",
+    "/tenant/flips/{job_id}/poll",
+    "Poll flip job progress until terminal state.",
+  ),
+  "integrations-jira-webhook": stub(
+    "integrations-jira-webhook",
+    "POST",
+    "/integrations/jira/webhook",
+    "Inbound Jira webhook for remediation status sync.",
+    false,
+  ),
+};
