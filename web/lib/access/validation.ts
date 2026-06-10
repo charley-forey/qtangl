@@ -75,10 +75,37 @@ export function validateAccessForm(
 }
 
 export function isDeliveryConfigured(): boolean {
-  return Boolean(
-    (process.env.RESEND_API_KEY && process.env.QTANGL_ACCESS_TO_EMAIL) ||
-      process.env.FORMSPREE_ENDPOINT
-  );
+  // RESEND_API_KEY alone is enough: delivery always notifies the founder inbox
+  // (defaultEmail), so QTANGL_ACCESS_TO_EMAIL is optional.
+  return Boolean(process.env.RESEND_API_KEY || process.env.FORMSPREE_ENDPOINT);
+}
+
+/**
+ * Resolves who receives the internal "new lead" notification.
+ *
+ * `defaultEmail` (the founder inbox) is always included first so a missing or
+ * misconfigured `QTANGL_ACCESS_TO_EMAIL` can never silently drop a lead.
+ * Extra recipients are read from a comma-separated env value and de-duplicated
+ * case-insensitively while preserving order.
+ */
+export function resolveNotifyRecipients(
+  defaultEmail: string,
+  configuredRaw: string | undefined = process.env.QTANGL_ACCESS_TO_EMAIL
+): string[] {
+  const configured = (configuredRaw ?? "")
+    .split(",")
+    .map((entry) => entry.trim())
+    .filter(Boolean);
+
+  const seen = new Set<string>();
+  return [defaultEmail, ...configured].filter((email) => {
+    const key = email.toLowerCase();
+    if (seen.has(key)) {
+      return false;
+    }
+    seen.add(key);
+    return true;
+  });
 }
 
 export function allowConsoleFallback(): boolean {

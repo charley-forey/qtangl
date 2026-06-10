@@ -1,3 +1,4 @@
+import { resolveNotifyRecipients } from "@/lib/access/validation";
 import type { AccessPayload } from "@/lib/access/validation";
 import { siteMetadata } from "@/lib/copy/product";
 
@@ -73,13 +74,13 @@ export async function deliverAccessRequest(
   const submittedAt = new Date().toISOString();
   const enrichedPayload = { ...payload, submittedAt };
 
-  if (process.env.RESEND_API_KEY && process.env.QTANGL_ACCESS_TO_EMAIL) {
+  if (process.env.RESEND_API_KEY) {
     const from = process.env.QTANGL_FROM_EMAIL ?? "Qtangl Access <access@qtangl.com>";
     const subject = buildSubjectLine(payload);
     const internalOk = await sendResendEmail({
       apiKey: process.env.RESEND_API_KEY,
       from,
-      to: [process.env.QTANGL_ACCESS_TO_EMAIL],
+      to: resolveNotifyRecipients(siteMetadata.contactEmail),
       subject,
       text: buildInternalEmailText(enrichedPayload),
     });

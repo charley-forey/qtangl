@@ -2,9 +2,11 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import {
+  isDeliveryConfigured,
   isHoneypotTripped,
   isSubmittedTooFast,
   parseAccessForm,
+  resolveNotifyRecipients,
   validateAccessForm,
 } from "../lib/access/validation.ts";
 
@@ -58,4 +60,57 @@ test("isSubmittedTooFast flags instant submissions", () => {
   assert.equal(isSubmittedTooFast({ formStartedAt: Date.now() - 500 }), true);
   assert.equal(isSubmittedTooFast({ formStartedAt: Date.now() - 5000 }), false);
   assert.equal(isSubmittedTooFast({ formStartedAt: 0 }), false);
+});
+
+test("resolveNotifyRecipients always includes the founder inbox", () => {
+  assert.deepEqual(resolveNotifyRecipients("charley@qtangl.com", ""), [
+    "charley@qtangl.com",
+  ]);
+  assert.deepEqual(resolveNotifyRecipients("charley@qtangl.com", undefined), [
+    "charley@qtangl.com",
+  ]);
+});
+
+test("resolveNotifyRecipients appends and de-dupes configured recipients", () => {
+  assert.deepEqual(
+    resolveNotifyRecipients("charley@qtangl.com", "sales@qtangl.com, ops@qtangl.com"),
+    ["charley@qtangl.com", "sales@qtangl.com", "ops@qtangl.com"]
+  );
+
+  // Founder inbox is not duplicated even if also listed (case-insensitive).
+  assert.deepEqual(
+    resolveNotifyRecipients("charley@qtangl.com", "Charley@qtangl.com, sales@qtangl.com"),
+    ["charley@qtangl.com", "sales@qtangl.com"]
+  );
+});
+
+test("isDeliveryConfigured is true whenever Resend or Formspree is set", () => {
+  const previous = {
+    RESEND_API_KEY: process.env.RESEND_API_KEY,
+    QTANGL_ACCESS_TO_EMAIL: process.env.QTANGL_ACCESS_TO_EMAIL,
+    FORMSPREE_ENDPOINT: process.env.FORMSPREE_ENDPOINT,
+  };
+
+  try {
+    delete process.env.RESEND_API_KEY;
+    delete process.env.QTANGL_ACCESS_TO_EMAIL;
+    delete process.env.FORMSPREE_ENDPOINT;
+    assert.equal(isDeliveryConfigured(), false);
+
+    // Resend key alone is enough — QTANGL_ACCESS_TO_EMAIL is optional now.
+    process.env.RESEND_API_KEY = "re_test";
+    assert.equal(isDeliveryConfigured(), true);
+
+    delete process.env.RESEND_API_KEY;
+    process.env.FORMSPREE_ENDPOINT = "https://formspree.io/f/test";
+    assert.equal(isDeliveryConfigured(), true);
+  } finally {
+    for (const [key, value] of Object.entries(previous)) {
+      if (value === undefined) {
+        delete process.env[key];
+      } else {
+        process.env[key] = value;
+      }
+    }
+  }
 });
