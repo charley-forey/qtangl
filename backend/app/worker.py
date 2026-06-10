@@ -100,7 +100,7 @@ def process_discovery_job(queue_name: str) -> bool:
     if not payload:
         payload = {}
     tenant_id = str(payload.get("tenantId", "sandbox"))
-    job_type = str(payload.get("jobType", queue_name.replace("discovery_", "") + "_scan")
+    job_type = str(payload.get("jobType", queue_name.replace("discovery_", "") + "_scan"))
 
     def on_progress(event: TimelineEvent) -> None:
         from app.discovery.jobs import append_timeline
