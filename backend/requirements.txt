@@ -38,7 +38,7 @@ rfc3161ng>=0.1.0
 
 # Optional: OIDC JWT validation (JWKS)
 
-PyJWT[crypto]>=2.8.0
+PyJWT[crypto]>=2.13.0
 
 sqlalchemy>=2.0.30
 
