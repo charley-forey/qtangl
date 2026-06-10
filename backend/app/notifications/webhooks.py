@@ -141,6 +141,29 @@ def notify_scan_complete_v2(
     ]
 
 
+def notify_drift_v2(
+    *,
+    url: str,
+    tenant_id: str,
+    drift_delta: dict[str, Any],
+    alerts: list[dict[str, Any]] | None = None,
+    job_id: str | None = None,
+    scan_id: str | None = None,
+    signing_secret: str = "",
+) -> dict[str, Any]:
+    payload = {
+        "schemaVersion": "qtangl-webhook-v2",
+        "event": "drift.detected",
+        "tenantId": tenant_id,
+        "jobId": job_id,
+        "scanId": scan_id,
+        "driftDelta": drift_delta,
+        "alerts": alerts or [],
+        "message": (alerts[0]["message"] if alerts else "Drift detected"),
+    }
+    return deliver_webhook(url, payload, signing_secret=signing_secret, tenant_id=tenant_id)
+
+
 def notify_tenant_event(
     *,
     webhooks: list[str],

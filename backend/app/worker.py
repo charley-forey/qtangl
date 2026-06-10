@@ -243,8 +243,22 @@ def main() -> None:
 
                     purge_stale_host_findings()
                     purge_stale_clone_artifacts()
+                    from app.monitoring.drift_snapshots import prune_drift_snapshots
+
+                    pruned = prune_drift_snapshots()
+                    if pruned:
+                        logger.info("Pruned %d drift snapshot(s)", pruned)
                 except Exception:
                     logger.debug("lifecycle sweep skipped", exc_info=True)
+                try:
+                    from app.integrations.sync_worker import itsm_sync_enabled, poll_open_sync_rows
+
+                    if itsm_sync_enabled():
+                        sync_result = poll_open_sync_rows()
+                        if sync_result.get("updated"):
+                            logger.info("ITSM sync updated %d row(s)", sync_result["updated"])
+                except Exception:
+                    logger.debug("itsm sync tick skipped", exc_info=True)
                 try:
                     from app.pqc.anchoring import anchor_tick
 

@@ -168,6 +168,7 @@ def mark_run(
     *,
     scan_id: str,
     cadence_hours: int | None = None,
+    drift_snapshot_id: str | None = None,
 ) -> None:
     from datetime import timedelta
 
@@ -177,6 +178,8 @@ def mark_run(
             return
         hours = cadence_hours or row.cadence_hours
         row.last_run_scan_id = scan_id
+        if drift_snapshot_id:
+            row.last_drift_snapshot_id = drift_snapshot_id
         row.next_run_at = datetime.now(timezone.utc) + timedelta(hours=hours)
         row.updated_at = datetime.now(timezone.utc)
 
@@ -312,6 +315,7 @@ def _row_to_dict(row: ScheduledScanRow) -> dict[str, Any]:
         "cadenceHours": row.cadence_hours,
         "nextRunAt": row.next_run_at.isoformat() if row.next_run_at else None,
         "lastRunScanId": row.last_run_scan_id,
+        "lastDriftSnapshotId": getattr(row, "last_drift_snapshot_id", None),
         "notifyEmail": row.notify_email,
         "hasCloudImport": bool(row.import_payload_json),
         "jobType": getattr(row, "job_type", None) or "scan",

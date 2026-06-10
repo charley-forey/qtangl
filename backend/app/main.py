@@ -21,6 +21,9 @@ from app.api.optimize import router as optimize_router
 from app.api.pqc import router as pqc_router
 from app.api.tenant import router as tenant_router
 from app.api.discovery import router as discovery_router
+from app.api.drift import router as drift_router
+from app.api.remediation_program import router as remediation_program_router
+from app.api.integrations_webhook import router as integrations_webhook_router
 from app.db.config import inline_jobs, persistence_enabled, redis_enabled, use_worker_queue
 from app.db.engine import init_db, ping_db
 from app.pqc.report import report_to_json
@@ -134,6 +137,9 @@ app.include_router(ev_fleet_router)
 app.include_router(pqc_router)
 app.include_router(tenant_router)
 app.include_router(discovery_router)
+app.include_router(drift_router)
+app.include_router(remediation_program_router)
+app.include_router(integrations_webhook_router)
 app.include_router(admin_router)
 app.include_router(public_router)
 

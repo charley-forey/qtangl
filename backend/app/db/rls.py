@@ -25,6 +25,9 @@ _TENANT_TABLES = (
     "remediation_external_sync",
     "tenant_subscriptions",
     "partner_child_tenants",
+    "drift_snapshots",
+    "remediation_program_items",
+    "verification_proofs",
 )
 
 

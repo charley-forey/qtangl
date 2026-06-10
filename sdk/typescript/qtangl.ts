@@ -77,6 +77,19 @@ export class QtanglClient {
     return this.post(`/tenant/scans/${scanId}/remediation`, body);
   }
 
+  async getDriftSummary(sinceDays = 7): Promise<Record<string, unknown>> {
+    return this.get(`/tenant/drift/summary?since_days=${sinceDays}`);
+  }
+
+  async getDriftScope(sourceType: string, scopeKey: string): Promise<Record<string, unknown>> {
+    return this.get(`/tenant/drift/${encodeURIComponent(sourceType)}/${encodeURIComponent(scopeKey)}`);
+  }
+
+  async listRemediationProgram(status?: string): Promise<Record<string, unknown>> {
+    const q = status ? `?status=${encodeURIComponent(status)}` : "";
+    return this.get(`/tenant/remediation/program${q}`);
+  }
+
   async verifyRemediation(
     scanId: string,
     body: { remediationId: string; verifyScanId: string }

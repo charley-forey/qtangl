@@ -8,7 +8,7 @@ import type {
   RadarScores,
 } from "@/lib/competitors-types";
 
-const LAST_VALIDATED = "2026-06-10";
+const LAST_VALIDATED = "2026-06-09";
 
 const DEFAULT_SOURCES: CompetitorSource[] = [
   { label: "Qtangl competitive intelligence (internal)", url: "https://www.qtangl.com/compare" },
@@ -25,8 +25,8 @@ export const qtanglBaseline: QtanglBaseline = {
     moscaHndlScoring: "yes",
     cycloneDxCbom: "yes",
     signedPublicVerify: "yes",
-    driftRescanDiff: "partial",
-    remediationWorkflow: "partial",
+    driftRescanDiff: "yes",
+    remediationWorkflow: "yes",
     flipsCrypto: "no",
     midMarketSelfServe: "yes",
     transparentPricing: "yes",

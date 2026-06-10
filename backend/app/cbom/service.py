@@ -567,6 +567,20 @@ def post_ingest_cbom_hooks(*, tenant_id: str, ingest_result: dict[str, Any]) -> 
     from app.tenant.settings import get_tenant_settings_raw
 
     drift = get_cbom_drift(tenant_id=tenant_id)
+    try:
+        from app.monitoring.drift_snapshots import build_cbom_snapshot_payload, record_drift_snapshot
+
+        aggregate = get_aggregate(tenant_id=tenant_id)
+        components = aggregate.get("components") or []
+        record_drift_snapshot(
+            tenant_id=tenant_id,
+            source_type="cbom",
+            scope_key=tenant_id,
+            payload=build_cbom_snapshot_payload(components),
+            job_id=str(ingest_result.get("ingestJobId") or ""),
+        )
+    except Exception:
+        pass
     alerts = evaluate_cbom_alerts(drift) if drift.get("available") else []
     settings = get_tenant_settings_raw(tenant_id=tenant_id)
     signing_secret = str(settings.get("webhookSigningSecret") or "")

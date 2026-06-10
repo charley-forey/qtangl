@@ -112,12 +112,12 @@ Components: ScanDiffPanel, ScanLog, DashboardClient ([03-solution-architecture.m
 
 ## Acceptance criteria
 
-- [ ] Scheduled scan runs without manual trigger (B3)
-- [ ] Diff report shows delta from previous scan
-- [ ] Alert fires on new `quantum_vulnerable` asset
-- [ ] Cert-expiry within 30 days surfaced
-- [ ] Readiness trend visible on dashboard
-- [ ] Webhook payload documented for SIEM ingestion
+- [x] Scheduled scan runs without manual trigger (B3)
+- [x] Diff report shows delta from previous scan
+- [x] Alert fires on new `quantum_vulnerable` asset
+- [x] Cert-expiry within 30 days surfaced
+- [x] Readiness trend visible on dashboard
+- [x] Webhook payload documented for SIEM ingestion
 
 ---
 

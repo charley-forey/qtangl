@@ -76,6 +76,7 @@ class ScheduledScan(Base):
     cadence_hours: Mapped[int] = mapped_column(default=168)
     next_run_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), index=True)
     last_run_scan_id: Mapped[str | None] = mapped_column(String(80), nullable=True)
+    last_drift_snapshot_id: Mapped[str | None] = mapped_column(String(80), nullable=True)
     notify_email: Mapped[str | None] = mapped_column(String(255), nullable=True)
     import_payload_json: Mapped[str | None] = mapped_column(Text, nullable=True)
     job_type: Mapped[str] = mapped_column(String(32), default="scan")
@@ -250,6 +251,46 @@ class ScheduleRunLog(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_utcnow)
 
 
+class RemediationProgramItem(Base):
+    __tablename__ = "remediation_program_items"
+    __table_args__ = (
+        Index("ix_remediation_program_tenant_status", "tenant_id", "status"),
+        Index("ix_remediation_program_tenant_source", "tenant_id", "source_type", "source_ref", unique=True),
+    )
+
+    id: Mapped[str] = mapped_column(String(80), primary_key=True)
+    tenant_id: Mapped[str] = mapped_column(String(64), ForeignKey("tenants.id"), index=True)
+    source_type: Mapped[str] = mapped_column(String(32), nullable=False)
+    source_ref: Mapped[str] = mapped_column(String(128), nullable=False)
+    scan_id: Mapped[str | None] = mapped_column(String(80), nullable=True)
+    remediation_id: Mapped[str | None] = mapped_column(String(80), nullable=True)
+    asset_id: Mapped[str | None] = mapped_column(String(80), nullable=True)
+    title: Mapped[str] = mapped_column(String(512), default="")
+    status: Mapped[str] = mapped_column(String(32), default="open")
+    owner: Mapped[str | None] = mapped_column(String(255), nullable=True)
+    notes: Mapped[str | None] = mapped_column(Text, nullable=True)
+    target_date: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    verify_job_id: Mapped[str | None] = mapped_column(String(80), nullable=True)
+    external_sync_id: Mapped[str | None] = mapped_column(String(80), nullable=True)
+    deep_link: Mapped[str | None] = mapped_column(String(512), nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_utcnow)
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_utcnow, onupdate=_utcnow)
+
+
+class VerificationProof(Base):
+    __tablename__ = "verification_proofs"
+
+    id: Mapped[str] = mapped_column(String(80), primary_key=True)
+    tenant_id: Mapped[str] = mapped_column(String(64), ForeignKey("tenants.id"), index=True)
+    program_item_id: Mapped[str] = mapped_column(String(80), ForeignKey("remediation_program_items.id"), index=True)
+    verify_job_id: Mapped[str | None] = mapped_column(String(80), nullable=True)
+    verify_scan_id: Mapped[str | None] = mapped_column(String(80), nullable=True)
+    evidence_hash: Mapped[str] = mapped_column(String(64), default="")
+    verify_url: Mapped[str | None] = mapped_column(String(512), nullable=True)
+    confirmed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_utcnow)
+
+
 class RemediationExternalSync(Base):
     __tablename__ = "remediation_external_sync"
 
@@ -260,6 +301,10 @@ class RemediationExternalSync(Base):
     external_ref: Mapped[str] = mapped_column(String(128), nullable=False)
     external_status: Mapped[str | None] = mapped_column(String(64), nullable=True)
     scan_id: Mapped[str | None] = mapped_column(String(80), nullable=True)
+    program_item_id: Mapped[str | None] = mapped_column(String(80), nullable=True)
+    synced_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    sync_error: Mapped[str | None] = mapped_column(Text, nullable=True)
+    retry_count: Mapped[int] = mapped_column(default=0)
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_utcnow, onupdate=_utcnow)
 
 
@@ -537,6 +582,25 @@ class ImageScanTarget(Base):
     integration_id: Mapped[str | None] = mapped_column(String(80), nullable=True)
     active: Mapped[bool] = mapped_column(default=True)
     last_scan_job_id: Mapped[str | None] = mapped_column(String(80), nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_utcnow)
+
+
+class DriftSnapshot(Base):
+    __tablename__ = "drift_snapshots"
+    __table_args__ = (
+        Index("ix_drift_snapshots_tenant_source_scope", "tenant_id", "source_type", "scope_key", "captured_at"),
+        Index("ix_drift_snapshots_tenant_captured", "tenant_id", "captured_at"),
+    )
+
+    id: Mapped[str] = mapped_column(String(80), primary_key=True)
+    tenant_id: Mapped[str] = mapped_column(String(64), ForeignKey("tenants.id"), index=True)
+    source_type: Mapped[str] = mapped_column(String(32), nullable=False)
+    scope_key: Mapped[str] = mapped_column(String(512), nullable=False)
+    snapshot_hash: Mapped[str] = mapped_column(String(64), nullable=False)
+    payload_json: Mapped[str] = mapped_column(Text, nullable=False)
+    job_id: Mapped[str | None] = mapped_column(String(80), nullable=True)
+    scan_id: Mapped[str | None] = mapped_column(String(80), nullable=True)
+    captured_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_utcnow)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_utcnow)
 
 

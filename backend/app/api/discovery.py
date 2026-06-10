@@ -223,11 +223,14 @@ def get_job_status(job_id: str, auth: AuthContext = Depends(require_auth_readonl
 
 
 @router.get("/tenant/discovery/host-drift")
-def get_host_drift(auth: AuthContext = Depends(require_auth_readonly)) -> dict:
-    current = current_finding_ids_for_tenant(tenant_id=auth.tenant_id)
-    baseline = set(str(x) for x in (auth.tenant_id,))  # placeholder; clients pass baseline via POST
-    diff = diff_host_findings(tenant_id=auth.tenant_id, previous_finding_ids=set(), current_finding_ids=current)
-    return {"status": "success", "currentCount": len(current), **diff}
+def get_host_drift(
+    scope_key: str = "fleet",
+    auth: AuthContext = Depends(require_auth_readonly),
+) -> dict:
+    from app.discovery.host_drift import host_drift_for_tenant
+
+    drift = host_drift_for_tenant(tenant_id=auth.tenant_id, scope_key=scope_key)
+    return {"status": "success", **drift}
 
 
 @router.get("/discovery/agent/update")

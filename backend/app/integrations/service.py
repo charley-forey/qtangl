@@ -99,6 +99,7 @@ def push_remediation_ticket(
             external_ref=str(result.get("externalRef", "")),
             scan_id=scan_id,
             external_status="open",
+            program_item_id=item.get("programItemId"),
         )
     return result
 

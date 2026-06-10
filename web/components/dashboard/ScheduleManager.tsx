@@ -106,6 +106,9 @@ export default function ScheduleManager({
               <p className="text-xs text-[var(--muted)]">
                 Every {schedule.cadenceHours}h · next{" "}
                 {schedule.nextRunAt ? formatUtcDateTime(schedule.nextRunAt) : "—"}
+                {schedule.lastDriftSnapshotId ? (
+                  <> · drift snap {schedule.lastDriftSnapshotId.slice(0, 12)}…</>
+                ) : null}
               </p>
             </div>
             <div className="flex gap-3">

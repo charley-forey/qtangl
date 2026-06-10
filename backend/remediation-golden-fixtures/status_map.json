@@ -1,0 +1,4 @@
+{
+  "jira": {"Done": "done", "In Progress": "in_progress"},
+  "servicenow": {"Closed": "done", "Work in Progress": "in_progress"}
+}

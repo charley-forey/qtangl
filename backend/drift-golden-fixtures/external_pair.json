@@ -1,0 +1,5 @@
+{
+  "previous": {"findingIds": ["a:443:tls:RSA"], "assetCount": 1, "quantumVulnerableCount": 1},
+  "current": {"findingIds": ["a:443:tls:RSA", "b:443:tls:RSA"], "assetCount": 2, "quantumVulnerableCount": 2},
+  "expected": {"addedCount": 1, "removedCount": 0}
+}

@@ -95,6 +95,46 @@ def _enrich_completed_scan(scan_id: str, bundle: ScanBundle, *, tenant_id: str) 
 
     safe_append_after_sign(json_payload, bundle.report.signature or {}, tenant_id=tenant_id)
 
+    try:
+        from app.monitoring.drift_hooks import _dispatch_drift_alerts, record_external_drift_snapshot
+        from app.monitoring.alerts import evaluate_drift_alerts
+        from app.monitoring.unified_diff import UnifiedDiffService
+
+        record_external_drift_snapshot(
+            tenant_id=tenant_id,
+            scan_id=scan_id,
+            target_domain=target,
+            report_dict=json_payload,
+        )
+        delta = UnifiedDiffService.compute_delta(
+            tenant_id=tenant_id, source_type="external", scope_key=target
+        )
+        drift_alerts = evaluate_drift_alerts(delta=delta, source_type="external", settings=settings)
+        if drift_alerts:
+            _dispatch_drift_alerts(
+                tenant_id=tenant_id,
+                alerts=drift_alerts,
+                delta=delta,
+                scan_id=scan_id,
+            )
+    except Exception:
+        logger.debug("external drift snapshot skipped for scan_id=%s", scan_id)
+
+    try:
+        from app.remediation.program import ingest_from_scan_bundle
+
+        backlog = [
+            {
+                "id": item.id,
+                "title": item.title,
+                "assetId": item.asset_id,
+            }
+            for item in bundle.report.remediation_backlog
+        ]
+        ingest_from_scan_bundle(tenant_id=tenant_id, scan_id=scan_id, backlog=backlog)
+    except Exception:
+        logger.debug("program ingest skipped for scan_id=%s", scan_id)
+
     alerts = evaluate_scan_alerts(
         scan_diff=scan_diff,
         readiness_score=bundle.report.readiness_score,

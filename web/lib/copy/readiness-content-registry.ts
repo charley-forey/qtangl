@@ -91,6 +91,18 @@ export const readinessBlogRegistry: readonly ReadinessBlogRegistryEntry[] = [
     readiness: true,
   },
   {
+    slug: "crypto-drift-monitoring-2026",
+    kind: "blog",
+    markdownFile: "blog/crypto-drift-monitoring-2026.md",
+    title: "Unified crypto drift monitoring in 2026",
+    description: "Snapshots across external, host, code, and CBOM sources with SIEM-ready webhooks.",
+    category: "Monitor",
+    coverImage: "/qtangl-pqc-scanner-cover.svg",
+    coverAlt: "Unified crypto drift monitoring dashboard.",
+    excerpt: "Drift is not just TLS scan diff — unified snapshots across discovery sources.",
+    readiness: true,
+  },
+  {
     slug: "crypto-drift-one-scan-not-enough",
     kind: "blog",
     markdownFile: "blog/crypto-drift-one-scan-not-enough.md",

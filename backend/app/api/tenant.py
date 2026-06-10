@@ -823,6 +823,15 @@ def tenant_export_data(auth: AuthContext = Depends(require_auth_readonly)) -> di
 
     scans = list_jobs_for_tenant(tenant_id=auth.tenant_id, limit=500)
     velocity = remediation_velocity(tenant_id=auth.tenant_id)
+    program_velocity_data: dict[str, object] = {}
+    program_items: list[dict] = []
+    try:
+        from app.remediation.program import list_program_items, program_velocity as program_vel
+
+        program_items, _ = list_program_items(tenant_id=auth.tenant_id, limit=500)
+        program_velocity_data = program_vel(tenant_id=auth.tenant_id)
+    except Exception:
+        pass
     remediation_by_scan: dict[str, list] = {}
     for scan in scans:
         if scan.get("status") == "done" and scan.get("scanId"):
@@ -836,6 +845,8 @@ def tenant_export_data(auth: AuthContext = Depends(require_auth_readonly)) -> di
         "scans": scans,
         "remediationByScan": remediation_by_scan,
         "remediationVelocity": velocity,
+        "remediationProgramItems": program_items,
+        "remediationProgramVelocity": program_velocity_data,
     }
 
 

@@ -24,7 +24,29 @@ DEFAULT_SETTINGS: dict[str, Any] = {
         "binaryScan": False,
     },
     "discoveryRetentionDays": 90,
+    "driftUnifiedEnabled": True,
+    "driftSnapshotRetentionDays": 365,
+    "alertMode": "per_event",
+    "remediationProgramEnabled": True,
 }
+
+
+def drift_unified_enabled(*, tenant_id: str) -> bool:
+    import os
+
+    if os.environ.get("DRIFT_UNIFIED_ENABLED", "true").lower() in ("0", "false", "no"):
+        return False
+    settings = get_tenant_settings_raw(tenant_id=tenant_id)
+    return bool(settings.get("driftUnifiedEnabled", True))
+
+
+def remediation_program_enabled(*, tenant_id: str) -> bool:
+    import os
+
+    if os.environ.get("REMEDIATION_PROGRAM_ENABLED", "true").lower() in ("0", "false", "no"):
+        return False
+    settings = get_tenant_settings_raw(tenant_id=tenant_id)
+    return bool(settings.get("remediationProgramEnabled", True))
 
 
 def discovery_feature_enabled(*, tenant_id: str, feature: str) -> bool:

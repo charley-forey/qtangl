@@ -17,6 +17,7 @@ def upsert_sync(
     external_ref: str,
     scan_id: str | None = None,
     external_status: str | None = None,
+    program_item_id: str | None = None,
 ) -> dict[str, Any]:
     if not persistence_enabled():
         return {
@@ -45,6 +46,8 @@ def upsert_sync(
                 external_ref=external_ref,
                 external_status=external_status,
                 scan_id=scan_id,
+                program_item_id=program_item_id,
+                synced_at=now,
                 updated_at=now,
             )
             session.add(row)
@@ -52,6 +55,9 @@ def upsert_sync(
             row.external_ref = external_ref
             row.external_status = external_status or row.external_status
             row.scan_id = scan_id or row.scan_id
+            if program_item_id:
+                row.program_item_id = program_item_id
+            row.synced_at = now
             row.updated_at = now
         session.flush()
         return _row_to_dict(row)
@@ -77,5 +83,9 @@ def _row_to_dict(row: SyncRow) -> dict[str, Any]:
         "externalRef": row.external_ref,
         "status": row.external_status,
         "scanId": row.scan_id,
+        "programItemId": row.program_item_id,
+        "syncedAt": row.synced_at.isoformat() if row.synced_at else None,
+        "syncError": row.sync_error,
+        "retryCount": row.retry_count,
         "updatedAt": row.updated_at.isoformat() if row.updated_at else None,
     }

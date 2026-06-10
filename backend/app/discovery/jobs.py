@@ -78,6 +78,20 @@ def complete_discovery_job(*, job_id: str, tenant_id: str, result: dict[str, Any
         row.result_json = json.dumps(result)
         row.updated_at = _utcnow()
         session.flush()
+        job_type = row.job_type
+        target_id = row.target_id
+    try:
+        from app.monitoring.drift_hooks import on_discovery_job_complete
+
+        on_discovery_job_complete(
+            job_id=job_id,
+            tenant_id=tenant_id,
+            job_type=job_type,
+            result=result,
+            target_id=target_id,
+        )
+    except Exception:
+        pass
 
 
 def fail_discovery_job(*, job_id: str, tenant_id: str, error: str) -> None:

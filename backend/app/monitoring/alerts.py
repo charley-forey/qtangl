@@ -148,5 +148,86 @@ def evaluate_cbom_alerts(drift: dict[str, Any]) -> list[dict[str, Any]]:
     return alerts
 
 
+def evaluate_drift_alerts(
+    *,
+    delta: dict[str, Any],
+    source_type: str,
+    settings: dict[str, Any] | None = None,
+) -> list[dict[str, Any]]:
+    """Return triggered alerts for unified drift deltas."""
+    if not delta.get("hasBaseline"):
+        return []
+
+    cfg = dict(DEFAULT_SETTINGS)
+    if settings:
+        cfg.update(settings)
+
+    alerts: list[dict[str, Any]] = []
+    added = int(delta.get("addedCount", 0))
+    qv_delta = int(delta.get("quantumVulnerableDelta", 0))
+
+    rule_map = {
+        "host": "drift_host",
+        "code": "drift_code",
+        "binary": "drift_code",
+        "cbom": "drift_cbom",
+        "external": "drift_external",
+    }
+    rule = rule_map.get(source_type, "drift_generic")
+
+    if added > 0:
+        alerts.append(
+            {
+                "rule": rule,
+                "severity": "high" if source_type in {"host", "external"} else "medium",
+                "message": f"{added} new finding(s) in {source_type} drift since last snapshot.",
+                "count": added,
+                "sourceType": source_type,
+            }
+        )
+
+    if qv_delta > 0 and cfg.get("alertOnNewQuantumVulnerable", True):
+        alerts.append(
+            {
+                "rule": "new_quantum_vulnerable",
+                "severity": "critical",
+                "message": f"{qv_delta} new quantum-vulnerable asset(s) in {source_type} drift.",
+                "count": qv_delta,
+                "sourceType": source_type,
+            }
+        )
+
+    sr = delta.get("sourceRuntimeDrift") or {}
+    runtime_added = sr.get("runtimeOnlyAdded") or []
+    source_added = sr.get("sourceOnlyAdded") or []
+    if runtime_added or source_added:
+        alerts.append(
+            {
+                "rule": "discovery_source_runtime_drift",
+                "severity": "high",
+                "message": (
+                    f"Source/runtime mismatch: {len(runtime_added)} runtime-only, "
+                    f"{len(source_added)} source-only changes."
+                ),
+                "runtimeOnlyAdded": runtime_added[:10],
+                "sourceOnlyAdded": source_added[:10],
+            }
+        )
+
+    removed = int(delta.get("removedCount", 0))
+    if removed > 0 and not alerts:
+        alerts.append(
+            {
+                "rule": rule,
+                "severity": "info",
+                "message": f"{removed} finding(s) removed in {source_type} drift.",
+                "count": removed,
+                "sourceType": source_type,
+            }
+        )
+
+    return alerts
+
+
 def should_send_regression_email(alerts: list[dict[str, Any]]) -> bool:
     return any(alert.get("severity") in {"high", "critical"} for alert in alerts)

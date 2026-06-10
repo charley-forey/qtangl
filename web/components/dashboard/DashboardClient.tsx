@@ -90,6 +90,16 @@ const IntegrationSettings = dynamic(() => import("@/components/dashboard/Integra
 const ScheduleManager = dynamic(() => import("@/components/dashboard/ScheduleManager"), {
   loading: PanelFallback,
 });
+const DriftPortfolioPanel = dynamic(() => import("@/components/drift/DriftPortfolioPanel"), {
+  loading: PanelFallback,
+});
+const HostDriftWidget = dynamic(() => import("@/components/drift/HostDriftWidget"), {
+  loading: PanelFallback,
+});
+const RemediationProgramBoard = dynamic(
+  () => import("@/components/pqc/RemediationProgramBoard"),
+  { loading: PanelFallback }
+);
 import type { CompliancePack, ComplianceSummary, CryptoAsset, PqcScanResponse } from "@/lib/pqc";
 import {
   fetchTenantJson,
@@ -1179,6 +1189,18 @@ export default function DashboardClient() {
                 </Card>
                 <Card tone="panel">
                   <CbomDriftWidget drift={cbomDrift} />
+                </Card>
+                <Card tone="panel">
+                  <DriftPortfolioPanel apiKey={savedKey} />
+                </Card>
+                <Card tone="panel">
+                  <HostDriftWidget apiKey={savedKey} />
+                </Card>
+                <Card tone="panel">
+                  <Eyebrow>Remediation program</Eyebrow>
+                  <div className="mt-4">
+                    <RemediationProgramBoard apiKey={savedKey} />
+                  </div>
                 </Card>
                 <Card tone="panel">
                   <Eyebrow>Cloud inventory pull</Eyebrow>

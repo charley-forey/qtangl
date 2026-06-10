@@ -21,6 +21,7 @@ export type ScheduledScan = {
   cadenceHours: number;
   nextRunAt: string | null;
   lastRunScanId: string | null;
+  lastDriftSnapshotId?: string | null;
   notifyEmail: string | null;
   jobType?: string;
   integrationProvider?: string | null;
