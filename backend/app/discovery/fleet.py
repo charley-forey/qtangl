@@ -7,9 +7,12 @@ import uuid
 from datetime import datetime, timedelta, timezone
 from typing import Any
 
+import bcrypt
+
 from app.db.config import persistence_enabled
 from app.db.engine import db_session
 from app.db.models import DiscoveryFleet, HostAgent, HostFinding
+from app.discovery.agent_certs import issue_agent_certificate, revoke_agent_certificate
 from app.discovery.host_normalize import finding_dedupe_key, findings_to_assets
 from app.discovery.schema import validate_finding
 
@@ -21,18 +24,33 @@ def _utcnow() -> datetime:
 
 
 def _hash_token(token: str) -> str:
-    return hashlib.sha256(token.encode()).hexdigest()
+    return bcrypt.hashpw(token.encode(), bcrypt.gensalt()).decode()
+
+
+def _verify_token(token: str, stored_hash: str) -> bool:
+    if stored_hash.startswith("$2"):
+        try:
+            return bcrypt.checkpw(token.encode(), stored_hash.encode())
+        except ValueError:
+            return False
+    return hashlib.sha256(token.encode()).hexdigest() == stored_hash
+
+
+def _new_nonce() -> str:
+    return secrets.token_urlsafe(16)
 
 
 def create_fleet(*, tenant_id: str, name: str, policy: dict[str, Any] | None = None) -> dict[str, Any]:
     fleet_id = f"fleet-{uuid.uuid4().hex[:12]}"
     token = secrets.token_urlsafe(32)
+    nonce = _new_nonce()
     expires = _utcnow() + timedelta(hours=TOKEN_TTL_HOURS)
     if not persistence_enabled():
         return {
             "fleetId": fleet_id,
             "name": name,
             "enrollmentToken": token,
+            "enrollmentNonce": nonce,
             "expiresAt": expires.isoformat(),
         }
     with db_session() as session:
@@ -41,6 +59,7 @@ def create_fleet(*, tenant_id: str, name: str, policy: dict[str, Any] | None = N
             tenant_id=tenant_id,
             name=name,
             enrollment_token_hash=_hash_token(token),
+            enrollment_nonce=nonce,
             token_expires_at=expires,
             policy_json=json.dumps(policy or {}),
         )
@@ -50,6 +69,7 @@ def create_fleet(*, tenant_id: str, name: str, policy: dict[str, Any] | None = N
         "fleetId": fleet_id,
         "name": name,
         "enrollmentToken": token,
+        "enrollmentNonce": nonce,
         "expiresAt": expires.isoformat(),
     }
 
@@ -76,6 +96,7 @@ def list_fleets(*, tenant_id: str) -> list[dict[str, Any]]:
 def enroll_agent(
     *,
     enrollment_token: str,
+    enrollment_nonce: str | None = None,
     hostname: str,
     os_name: str,
     sensor_version: str,
@@ -84,22 +105,23 @@ def enroll_agent(
         return None
     if not persistence_enabled():
         agent_id = f"agent-{uuid.uuid4().hex[:12]}"
-        return {"agentId": agent_id, "tenantId": "sandbox", "fleetId": "fleet-demo", "apiKey": "demo"}
-    token_hash = _hash_token(enrollment_token)
+        cert = issue_agent_certificate(agent_id=agent_id, tenant_id="sandbox")
+        return {
+            "agentId": agent_id,
+            "tenantId": "sandbox",
+            "fleetId": "fleet-demo",
+            **cert,
+        }
     with db_session() as session:
-        fleet = (
-            session.query(DiscoveryFleet)
-            .filter(
-                DiscoveryFleet.enrollment_token_hash == token_hash,
-                DiscoveryFleet.active.is_(True),
-            )
-            .first()
-        )
+        fleets = session.query(DiscoveryFleet).filter(DiscoveryFleet.active.is_(True)).all()
+        fleet = next((f for f in fleets if _verify_token(enrollment_token, f.enrollment_token_hash)), None)
         if fleet is None:
             return None
         if fleet.token_expires_at < _utcnow():
             return None
         if fleet.token_uses >= fleet.token_max_uses:
+            return None
+        if enrollment_nonce and fleet.enrollment_nonce and enrollment_nonce != fleet.enrollment_nonce:
             return None
         agent_id = f"agent-{uuid.uuid4().hex[:12]}"
         agent = HostAgent(
@@ -114,11 +136,14 @@ def enroll_agent(
         )
         session.add(agent)
         fleet.token_uses += 1
+        fleet.enrollment_nonce = _new_nonce()
         session.flush()
+        cert = issue_agent_certificate(agent_id=agent_id, tenant_id=fleet.tenant_id)
         return {
             "agentId": agent_id,
             "tenantId": fleet.tenant_id,
             "fleetId": fleet.id,
+            **cert,
         }
 
 
@@ -214,17 +239,24 @@ def rotate_fleet_token(*, tenant_id: str, fleet_id: str) -> dict[str, Any] | Non
     if not persistence_enabled():
         return None
     token = secrets.token_urlsafe(32)
+    nonce = _new_nonce()
     expires = _utcnow() + timedelta(hours=TOKEN_TTL_HOURS)
     with db_session() as session:
         fleet = session.get(DiscoveryFleet, fleet_id)
         if fleet is None or fleet.tenant_id != tenant_id:
             return None
         fleet.enrollment_token_hash = _hash_token(token)
+        fleet.enrollment_nonce = nonce
         fleet.token_expires_at = expires
         fleet.token_uses = 0
         fleet.updated_at = _utcnow()
         session.flush()
-    return {"fleetId": fleet_id, "enrollmentToken": token, "expiresAt": expires.isoformat()}
+    return {
+        "fleetId": fleet_id,
+        "enrollmentToken": token,
+        "enrollmentNonce": nonce,
+        "expiresAt": expires.isoformat(),
+    }
 
 
 def revoke_agents(*, tenant_id: str, agent_ids: list[str]) -> int:
@@ -237,6 +269,7 @@ def revoke_agents(*, tenant_id: str, agent_ids: list[str]) -> int:
             if agent is None or agent.tenant_id != tenant_id:
                 continue
             agent.status = "revoked"
+            revoke_agent_certificate(agent_id=agent_id, tenant_id=tenant_id)
             count += 1
         session.flush()
         return count

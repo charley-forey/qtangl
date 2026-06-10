@@ -1,11 +1,21 @@
-# SOC 2 control mapping — Qtangl Unified Sensor
+# SOC 2 — sensor controls evidence pack
 
-| Control | Implementation |
-|---------|----------------|
-| CC6.1 Logical access | Fleet enrollment tokens; tenant-scoped agent IDs |
-| CC6.6 Encryption | TLS 1.2+ for agent telemetry; no key exfiltration |
-| CC7.2 System monitoring | Heartbeat SLOs; stale agent revocation |
-| CC8.1 Change management | cosign-signed sensor releases; version lock file |
-| CC9.2 Risk mitigation | Pen-test scope in ADR-009 security appendix |
+## CC6.1 Logical access
 
-Audit trail: `discovery.fleet_created`, `discovery.agent.enroll` in tenant audit log.
+- mTLS agent certificates with 90-day TTL and revocation on agent revoke
+- bcrypt-hashed enrollment tokens with nonce rotation
+
+## CC7.2 System monitoring
+
+- Discovery SLO metrics: ingest latency, queue depth, heartbeat lag, DLQ rate
+- PagerDuty alerts per `discovery-slos.md`
+
+## CC8.1 Change management
+
+- cosign-signed sensor releases (sensor-build workflow)
+- Scanner version lock + golden CBOM contract tests in CI
+
+## Evidence artifacts
+
+- `discovery-provenance.json` in evidence vault bundles
+- Pen test report (external) — required before customer pilot case study

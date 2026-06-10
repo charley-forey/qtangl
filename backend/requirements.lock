@@ -32,6 +32,7 @@ colorama==0.4.6
     # via
     #   click
     #   uvicorn
+bcrypt==5.0.0
 cryptography==48.0.0
     # via
     #   -r requirements.txt

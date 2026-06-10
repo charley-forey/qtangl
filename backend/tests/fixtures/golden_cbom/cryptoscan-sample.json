@@ -1,0 +1,10 @@
+{
+  "engine": "cryptoscan@0.1.0",
+  "components": [
+    {
+      "bom-ref": "pkg:pypi/cryptography@42.0.0",
+      "name": "cryptography",
+      "version": "42.0.0"
+    }
+  ]
+}

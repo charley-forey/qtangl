@@ -1,0 +1,7 @@
+[
+  {
+    "findingType": "certificate_store",
+    "algorithm": "NSS",
+    "confidence": "medium"
+  }
+]

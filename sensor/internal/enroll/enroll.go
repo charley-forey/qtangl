@@ -8,9 +8,15 @@ import (
 )
 
 type Result struct {
-	AgentID  string `json:"agentId"`
-	TenantID string `json:"tenantId"`
-	FleetID  string `json:"fleetId"`
+	AgentID      string `json:"agentId"`
+	TenantID     string `json:"tenantId"`
+	FleetID      string `json:"fleetId"`
+	CertPEM      string `json:"certPem"`
+	KeyPEM       string `json:"keyPem"`
+	CAChainPEM   string `json:"caChainPem"`
+	Serial       string `json:"serial"`
+	Fingerprint  string `json:"fingerprint"`
+	ExpiresAt    string `json:"expiresAt"`
 }
 
 func Enroll(apiURL, token, hostname, osName, version string) (*Result, error) {

@@ -1,0 +1,42 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: qtangl-scanner-sandbox
+spec:
+  activeDeadlineSeconds: 1800
+  backoffLimit: 1
+  template:
+    spec:
+      restartPolicy: Never
+      serviceAccountName: qtangl-scanner
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 999
+        fsGroup: 999
+      containers:
+        - name: scanner
+          image: qtangl/discovery-scanner:latest
+          securityContext:
+            readOnlyRootFilesystem: true
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
+          resources:
+            limits:
+              cpu: "2"
+              memory: 4Gi
+          env:
+            - name: QTANGL_SCANNER_SANDBOX
+              value: "1"
+            - name: QTANGL_SCANNER_NO_NETWORK
+              value: "0"
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+            - name: work
+              mountPath: /work
+      volumes:
+        - name: tmp
+          emptyDir: {}
+        - name: work
+          emptyDir: {}

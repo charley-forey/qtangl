@@ -42,6 +42,9 @@ export function endpointDocsHref(endpointId: string): string {
   if (endpointId.startsWith("public-")) {
     return `/docs/reference/public/${endpointId.replace("public-", "")}`;
   }
+  if (endpointId.startsWith("discovery-")) {
+    return `/docs/reference/discovery/${endpointId.replace("discovery-", "")}`;
+  }
   return `/docs/reference/${endpointId}`;
 }
 
@@ -65,6 +68,10 @@ export function endpointIdFromHealthSlug(slug: string): string {
 
 export function endpointIdFromSharingSlug(slug: string): string {
   return `sharing-${slug}`;
+}
+
+export function endpointIdFromDiscoverySlug(slug: string): string {
+  return `discovery-${slug}`;
 }
 
 export function endpointIdFromPqcSlug(slug: string): string {

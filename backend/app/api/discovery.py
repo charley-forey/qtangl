@@ -6,6 +6,7 @@ from fastapi import APIRouter, Depends, Header, HTTPException, status
 
 from app.auth import AuthContext, require_auth_readonly, require_auth_write
 from app.audit.service import log_action
+from app.discovery.agent_mtls import agent_cert_header, require_agent_identity
 from app.discovery.constants import DISCOVERY_SCHEMA_HEADER, FINDINGS_RATE_LIMIT_PER_MIN
 from app.discovery.fleet import (
     create_fleet,
@@ -120,6 +121,7 @@ def agent_enroll(body: dict[str, Any]) -> dict:
     sensor_version = str(body.get("sensorVersion") or "0.1.0")
     result = enroll_agent(
         enrollment_token=token,
+        enrollment_nonce=str(body.get("enrollmentNonce") or "") or None,
         hostname=hostname,
         os_name=os_name,
         sensor_version=sensor_version,
@@ -130,9 +132,13 @@ def agent_enroll(body: dict[str, Any]) -> dict:
 
 
 @router.post("/discovery/agent/heartbeat")
-def agent_heartbeat(body: dict[str, Any]) -> dict:
+def agent_heartbeat(
+    body: dict[str, Any],
+    x_qtangl_agent_cert: str | None = Depends(agent_cert_header),
+) -> dict:
     agent_id = str(body.get("agentId") or "")
     tenant_id = str(body.get("tenantId") or "")
+    require_agent_identity(agent_id=agent_id, tenant_id=tenant_id, x_qtangl_agent_cert=x_qtangl_agent_cert)
     if not record_heartbeat(
         agent_id=agent_id,
         tenant_id=tenant_id,
@@ -146,6 +152,7 @@ def agent_heartbeat(body: dict[str, Any]) -> dict:
 def agent_findings(
     body: dict[str, Any],
     x_qtangl_discovery_schema: str | None = Header(default=None, alias=DISCOVERY_SCHEMA_HEADER),
+    x_qtangl_agent_cert: str | None = Depends(agent_cert_header),
 ) -> dict:
     try:
         negotiate_schema(x_qtangl_discovery_schema)
@@ -153,16 +160,19 @@ def agent_findings(
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc)) from exc
     agent_id = str(body.get("agentId") or "")
     tenant_id = str(body.get("tenantId") or "")
+    require_agent_identity(agent_id=agent_id, tenant_id=tenant_id, x_qtangl_agent_cert=x_qtangl_agent_cert)
     findings = body.get("findings") or []
     if not isinstance(findings, list):
         raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail="findings must be array")
     rate_key = f"findings:{tenant_id}:{agent_id}"
     if not rate_limit_check(rate_key, limit=FINDINGS_RATE_LIMIT_PER_MIN):
         raise HTTPException(status_code=status.HTTP_429_TOO_MANY_REQUESTS, detail="Rate limit exceeded")
-    from app.observability.metrics import increment
+    from app.observability.metrics import increment, record_latency, time_operation
 
+    start = time_operation("discovery_ingest")
     increment("discovery_findings_ingested", value=len(findings))
     result = ingest_findings(agent_id=agent_id, tenant_id=tenant_id, findings=findings)
+    record_latency("discovery_ingest", start)
     if result.get("error"):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=result["error"])
     if result.get("accepted", 0) == 0 and result.get("rejected", 0) > 0:
@@ -319,13 +329,64 @@ def trigger_binary_scan(body: dict[str, Any], auth: AuthContext = Depends(requir
     return {"status": "success", "jobId": job_id}
 
 
+def _reject_zip_traversal(path: str) -> None:
+    normalized = path.replace("\\", "/")
+    if ".." in normalized.split("/") or normalized.startswith("/"):
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid archive path")
+
+
 @router.post("/tenant/discovery/offline-upload")
 def offline_sensor_upload(body: dict[str, Any], auth: AuthContext = Depends(require_auth_write)) -> dict:
     _require_host_sensor(auth)
+    archive_path = str(body.get("archivePath") or body.get("zipPath") or "")
+    if archive_path:
+        _reject_zip_traversal(archive_path)
+    manifest_sig = str(body.get("manifestSignature") or "")
+    if manifest_sig and not manifest_sig.startswith("sha256:"):
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid manifest signature format")
     findings = body.get("findings") or []
+    if not isinstance(findings, list):
+        raise HTTPException(status_code=422, detail="findings must be array")
     agent_id = str(body.get("agentId") or f"offline-{auth.tenant_id}")
     result = ingest_findings(agent_id=agent_id, tenant_id=auth.tenant_id, findings=findings)
     return {"status": "success", **result}
+
+
+@router.get("/tenant/discovery/cmdb-coverage")
+def get_cmdb_coverage(auth: AuthContext = Depends(require_auth_readonly)) -> dict:
+    from app.discovery.cmdb import cmdb_coverage_summary
+
+    return {"status": "success", **cmdb_coverage_summary(tenant_id=auth.tenant_id)}
+
+
+@router.post("/tenant/discovery/registry/test-connection")
+def test_registry_connection(body: dict[str, Any], auth: AuthContext = Depends(require_auth_write)) -> dict:
+    from app.discovery.registry import test_registry_pull
+
+    integration_id = str(body.get("integrationId") or "")
+    image_ref = str(body.get("imageRef") or "")
+    if not integration_id or not image_ref:
+        raise HTTPException(status_code=422, detail="integrationId and imageRef required")
+    ok, message = test_registry_pull(tenant_id=auth.tenant_id, integration_id=integration_id, image_ref=image_ref)
+    return {"status": "success", "ok": ok, "message": message}
+
+
+@router.get("/tenant/discovery/github-app/install")
+def github_app_install_url(auth: AuthContext = Depends(require_auth_readonly)) -> dict:
+    from app.discovery.github_app import github_install_url
+
+    return {"status": "success", "url": github_install_url(tenant_id=auth.tenant_id)}
+
+
+@router.post("/tenant/discovery/github-app/callback")
+def github_app_callback(body: dict[str, Any], auth: AuthContext = Depends(require_auth_write)) -> dict:
+    from app.discovery.github_app import store_github_installation
+
+    installation_id = int(body.get("installationId") or 0)
+    if installation_id <= 0:
+        raise HTTPException(status_code=422, detail="installationId required")
+    store_github_installation(tenant_id=auth.tenant_id, installation_id=installation_id)
+    return {"status": "success", "installationId": installation_id}
 
 
 @router.post("/tenant/discovery/source-runtime-diff")

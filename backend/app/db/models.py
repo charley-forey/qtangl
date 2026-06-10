@@ -454,6 +454,7 @@ class DiscoveryFleet(Base):
     tenant_id: Mapped[str] = mapped_column(String(64), ForeignKey("tenants.id"), index=True)
     name: Mapped[str] = mapped_column(String(255), nullable=False)
     enrollment_token_hash: Mapped[str] = mapped_column(String(128), index=True)
+    enrollment_nonce: Mapped[str] = mapped_column(String(64), default="")
     token_expires_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), index=True)
     token_max_uses: Mapped[int] = mapped_column(default=100)
     token_uses: Mapped[int] = mapped_column(default=0)
@@ -461,6 +462,20 @@ class DiscoveryFleet(Base):
     active: Mapped[bool] = mapped_column(default=True)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_utcnow)
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_utcnow, onupdate=_utcnow)
+
+
+class AgentCertificate(Base):
+    __tablename__ = "agent_certificates"
+    __table_args__ = (Index("ix_agent_certs_tenant_agent", "tenant_id", "agent_id"),)
+
+    id: Mapped[str] = mapped_column(String(80), primary_key=True)
+    agent_id: Mapped[str] = mapped_column(String(80), ForeignKey("host_agents.id"), index=True)
+    tenant_id: Mapped[str] = mapped_column(String(64), ForeignKey("tenants.id"), index=True)
+    serial: Mapped[str] = mapped_column(String(64), index=True)
+    fingerprint: Mapped[str] = mapped_column(String(128), index=True)
+    expires_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    revoked_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_utcnow)
 
 
 class HostAgent(Base):

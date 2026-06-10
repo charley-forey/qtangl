@@ -1,11 +1,14 @@
 from __future__ import annotations
 
 import json
+import os
 import shutil
 import subprocess
 import uuid
 from pathlib import Path
 from typing import Any
+
+IS_PRODUCTION = os.environ.get("QTANGL_ENV", "development").lower() == "production"
 
 from app.discovery.constants import SOURCE_METHODS
 from app.discovery.host_normalize import finding_to_crypto_asset
@@ -20,10 +23,21 @@ def _load_versions() -> dict[str, str]:
     return {"theia": "0.1.0"}
 
 
-def run_binary_scan(*, image_ref: str, base_cbom: dict[str, Any] | None = None) -> dict[str, Any]:
+def run_binary_scan(
+    *,
+    image_ref: str,
+    base_cbom: dict[str, Any] | None = None,
+    tenant_id: str | None = None,
+    integration_id: str | None = None,
+) -> dict[str, Any]:
     versions = _load_versions()
     engines: list[str] = []
     findings: list[dict[str, Any]] = []
+
+    if tenant_id and integration_id:
+        from app.discovery.registry import pull_image_to_dir
+
+        pull_image_to_dir(tenant_id=tenant_id, integration_id=integration_id, image_ref=image_ref)
 
     theia = shutil.which("cbomkit-theia") or shutil.which("theia")
     if theia:
@@ -65,6 +79,13 @@ def run_binary_scan(*, image_ref: str, base_cbom: dict[str, Any] | None = None) 
             pass
 
     if not findings:
+        if IS_PRODUCTION:
+            return {
+                "status": "error",
+                "message": "cbomkit-theia required in production",
+                "findings": [],
+                "engines": engines,
+            }
         findings.append(
             {
                 "schemaVersion": 1,

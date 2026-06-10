@@ -126,13 +126,15 @@ Quick-reference competitive cards for sales conversations. Pair with [11-competi
 
 ---
 
-## Qtangl native discovery (2026-06 partial gate)
+## Qtangl native discovery (2026-06 enterprise Yes)
 
 | Surface | Status | Talk track |
 |---------|--------|------------|
-| **Unified Sensor** | Partial (MVP) | "We now ship a lightweight host agent for cert stores, crypto libraries, and TLS listeners — same CBOM merge and signed evidence as external scan." |
-| **Code / binary** | Partial (OSS orchestration) | "CryptoScan + CBOMkit-theia run in our pipeline; you get reachability tiers and source-vs-runtime diff, not another siloed dashboard." |
-| **vs Keyfactor / SandboxAQ** | Depth catching up | "They still lead on fleet scale and CLM adjacency; we lead on minutes-to-baseline, mid-market packaging, and auditor-verifiable proof." |
+| **Unified Sensor** | Yes (internally validated at scale) | "mTLS-enrolled host agent for cert stores, crypto libraries, and TLS listeners — same CBOM merge and signed evidence as external scan." |
+| **Code / binary** | Yes | "CryptoScan + CryptoDeps + CBOMkit-theia in our worker; SARIF in CI; bom-ref source/runtime diff in reports." |
+| **vs Keyfactor / SandboxAQ** | Parity on scoped CPM | "We match depth on host + code + image CBOM for mid-market programs; we lead on minutes-to-baseline, transparent pricing, and auditor-verifiable proof." |
+
+Footnote until customer case study ships: say **internally validated at scale**, not Fortune 500 deployed scale.
 
 Pilot checklist: [discovery-pilot-playbook.md](./discovery-pilot-playbook.md) · Deploy: [host-sensor-deploy.md](../../../docs/guides/host-sensor-deploy.md)
 

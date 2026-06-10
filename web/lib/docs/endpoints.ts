@@ -11,6 +11,7 @@ import {
   sharingEndpoints,
 } from "@/lib/docs/endpoints/admin-public-health";
 import { pqcExtendedEndpoints } from "@/lib/docs/endpoints/pqc-extended";
+import { discoveryEndpoints } from "@/lib/docs/endpoints/discovery";
 import { tenantEndpoints } from "@/lib/docs/endpoints/tenant";
 
 import type { DocsEndpoint } from "@/lib/docs/types";
@@ -990,6 +991,7 @@ const coreDocsEndpoints: Record<string, DocsEndpoint> = {
 
 export const docsEndpoints: Record<string, DocsEndpoint> = {
   ...coreDocsEndpoints,
+  ...discoveryEndpoints,
   ...tenantEndpoints,
   ...pqcExtendedEndpoints,
   ...adminEndpoints,

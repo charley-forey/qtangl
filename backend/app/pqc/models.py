@@ -197,6 +197,7 @@ class MigrationReport:
     compliance_pack: dict[str, Any] = field(default_factory=dict)
     handshake_proof: HandshakeProof | None = None
     scan_coverage: list[dict[str, Any]] = field(default_factory=list)
+    source_runtime_diff: dict[str, Any] = field(default_factory=dict)
     readiness_band: str = ""
     readiness_summary: str = ""
     scoreboard_summary: dict[str, Any] = field(default_factory=dict)

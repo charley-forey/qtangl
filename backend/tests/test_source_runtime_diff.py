@@ -13,4 +13,7 @@ def test_runtime_only_crypto_surfaced():
     )
     assert diff["sourceCount"] == 1
     assert diff["runtimeCount"] == 2
-    assert "aes-256-gcm" in diff["runtimeOnly"]
+    runtime_refs = [
+        (item.get("bomRef") if isinstance(item, dict) else item) for item in diff["runtimeOnly"]
+    ]
+    assert "aes-256-gcm" in runtime_refs

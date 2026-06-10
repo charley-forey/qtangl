@@ -1,33 +1,31 @@
-# Discovery depth — enterprise pilot playbook
+# Discovery depth — customer pilot playbook (500+ agents)
 
-## Scope
+## Preconditions
 
-500+ agent rollout or 10+ critical repos with code/binary scan.
+- G3/G4/G5 engineering gates checked in [discovery-g3-g5-checklist.md](../ops/discovery-g3-g5-checklist.md)
+- Tenant on Enterprise tier with all discovery flags enabled
+- MSA + DPA sensor addendum executed
 
-## Week 1
+## Week 1–2: Deploy
 
-- Enable feature flags: `hostSensor`, `codeScan`, `binaryScan`
-- Create fleet; deploy sensor to 50-host canary via Helm or Ansible
-- Connect GitHub App for top 3 repos
+1. Create production fleet; distribute MSI/Helm/deb packages
+2. Target 500+ agents across Linux + Windows (+ macOS if in scope)
+3. Verify mTLS enroll success rate >95%
 
-## Week 2
+## Week 3–6: Steady state
 
-- Validate findings → CBOM merge; resolve merge conflicts
-- CMDB correlation (ServiceNow read-only pull)
-- Coverage confidence target: >50%
+| Metric | Target |
+|--------|--------|
+| Stale agents (7d no heartbeat) | <5% |
+| Findings in merged CBOM | >0 per active host |
+| CMDB coverage | >80% if ServiceNow wired |
 
-## Week 4
+## Week 7–8: Case study
 
-- Scale to 500+ agents
-- Enable Monitor schedules: `host_fleet_scan`, `repo_scheduled_scan`
-- Executive readout: coverage confidence + signed evidence export
+- Named metrics (agents, findings, readiness delta)
+- Publish blog + battlecard footnote removal
+- Optional: bump `discoveryDepth` radar to 5
 
-## Success criteria
+## Rollback
 
-- Agent install → first findings <15 min
-- <2% cert false positive rate on pilot sample
-- Code scan median <5 min for 1k-file repo
-
-## Escalation
-
-See [discovery-runbooks.md](../ops/discovery-runbooks.md).
+If pilot fails SLOs: revert public copy to partial; disable Ring 3 flags; publish errata.

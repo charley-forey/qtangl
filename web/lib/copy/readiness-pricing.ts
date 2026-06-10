@@ -52,7 +52,7 @@ export const pricingPageCopy = {
       ],
       cta: { label: "Request pilot", href: "/access" },
       featured: true,
-      liveToday: ["Schedules + worker", "Webhook v2 + DLQ", "Dashboard alert thresholds"],
+      liveToday: ["Schedules + worker", "Webhook v2 + DLQ", "Code scan CI (beta flag)", "Host sensor fleet (beta flag)"],
     },
     {
       name: "Q-Day Convert",
@@ -80,7 +80,12 @@ export const pricingPageCopy = {
         "Custom SLA + MSSP options",
       ],
       cta: { label: "Request enterprise", href: "/access" },
-      liveToday: ["Portfolio command center", "Audit log API", "Partner child tenants (beta)"],
+      liveToday: [
+        "Portfolio command center",
+        "Full discovery depth (host + code + binary)",
+        "CMDB coverage widget + mTLS sensor",
+        "Audit log API",
+      ],
     },
   ] satisfies PricingTier[],
   footnote:

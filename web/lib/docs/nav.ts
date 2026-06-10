@@ -76,6 +76,19 @@ export const docsSections: DocsNavSection[] = [
     ],
   },
   {
+    id: "discovery",
+    title: "Discovery depth",
+    items: [
+      { name: "Host sensor deploy", href: "/docs/guides/host-sensor-deploy", status: "beta" },
+      { name: "Code scan CI", href: "/docs/guides/code-scan-ci", status: "beta" },
+      { name: "POST /tenant/discovery/fleets", href: "/docs/reference/discovery/fleets-create", status: "beta" },
+      { name: "GET /tenant/discovery/agents", href: "/docs/reference/discovery/agents", status: "beta" },
+      { name: "POST /tenant/coverage/code-scan", href: "/docs/reference/discovery/code-scan", status: "beta" },
+      { name: "POST /tenant/discovery/binary-scan", href: "/docs/reference/discovery/binary-scan", status: "beta" },
+      { name: "GET /tenant/discovery/jobs/{job_id}", href: "/docs/reference/discovery/jobs", status: "beta" },
+    ],
+  },
+  {
     id: "integrations",
     title: "Integrations",
     items: [

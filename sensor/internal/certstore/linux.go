@@ -21,6 +21,7 @@ var linuxCertDirs = []string{
 
 func scanLinux(hostname string) []types.Finding {
 	var findings []types.Finding
+	findings = append(findings, scanNSSAndJava(hostname)...)
 	for _, dir := range linuxCertDirs {
 		_ = filepath.Walk(dir, func(path string, info os.FileInfo, err error) error {
 			if err != nil || info == nil || info.IsDir() {

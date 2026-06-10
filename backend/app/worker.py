@@ -93,6 +93,13 @@ def _run_scan_once(
 
 
 def process_discovery_job(queue_name: str) -> bool:
+    from app.observability.discovery_metrics import record_queue_depth
+    from app.queue.redis_queue import queue_depth, total_discovery_queue_depth
+
+    depth = queue_depth(queue_name)
+    record_queue_depth(total_discovery_queue_depth())
+    if depth > 500:
+        time.sleep(1.0)
     job_id = dequeue_blocking(queue_name, timeout_seconds=1)
     if not job_id:
         return False

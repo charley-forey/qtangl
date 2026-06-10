@@ -4,8 +4,23 @@
 
 1. Verify fleet token not expired (`token_expires_at`)
 2. Check `token_uses < token_max_uses`
-3. Confirm `discovery.hostSensor` feature flag enabled
-4. Review API logs for `discovery/agent/enroll` 401
+3. Confirm enrollment nonce matches fleet (`enrollmentNonce` in create/rotate response)
+4. Confirm `discovery.hostSensor` feature flag enabled
+5. Review API logs for `discovery/agent/enroll` 401
+
+## mTLS / agent certificate failures
+
+1. Confirm `DISCOVERY_MTLS_REQUIRED` matches deployment policy
+2. Re-enroll agent to obtain fresh `certPem` / `keyPem` / `caChainPem`
+3. Sensor must send `X-Qtangl-Agent-Cert` on heartbeat and findings
+4. Revoked agents: rotate fleet token and redeploy
+
+## CA rotation
+
+1. Generate new CA (`DISCOVERY_CA_KEY_PEM`, `DISCOVERY_CA_CERT_PEM`)
+2. Deploy API + worker with new material
+3. Revoke all `agent_certificates` rows for affected tenants
+4. Force fleet token rotation and mass re-enrollment
 
 ## Scanner OOM
 

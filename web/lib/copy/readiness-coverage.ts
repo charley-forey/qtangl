@@ -31,7 +31,8 @@ export const coveragePageCopy = {
     {
       name: "GitHub code & dependencies",
       status: "live" as const,
-      description: "Async code scan via CryptoScan/CryptoDeps orchestration — POST /tenant/coverage/code-scan.",
+      description:
+        "Async code scan via CryptoScan/CryptoDeps orchestration — POST /tenant/coverage/code-scan. Internally validated at scale.",
       href: "/docs/guides/code-scan-ci",
     },
     {
@@ -43,13 +44,14 @@ export const coveragePageCopy = {
     {
       name: "Host sensor fleet",
       status: "live" as const,
-      description: "Qtangl Unified Sensor — cert stores, libraries, listeners; Helm and offline upload.",
+      description:
+        "Qtangl Unified Sensor — cert stores, libraries, listeners; mTLS enroll; Helm and offline upload.",
       href: "/docs/guides/host-sensor-deploy",
     },
     {
       name: "Container / binary scan",
-      status: "beta" as const,
-      description: "CBOMkit-theia image scan via POST /tenant/discovery/binary-scan.",
+      status: "live" as const,
+      description: "CBOMkit-theia image scan via POST /tenant/discovery/binary-scan with registry creds.",
       href: "/docs/guides/code-scan-ci",
     },
   ],

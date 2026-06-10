@@ -24,6 +24,8 @@ qiskit-ibm-runtime
 
 cryptography
 
+bcrypt>=4.1.0
+
 reportlab
 
 # Optional: ML-DSA-65 / SLH-DSA signing via liboqs (Ed25519 fallback always available)

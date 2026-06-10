@@ -20,9 +20,14 @@ test.describe("Discovery depth", () => {
     await expect(page.getByText(/Container images/i)).toBeVisible();
   });
 
-  test("compare matrix shows Qtangl partial discovery", async ({ page }) => {
-    await page.goto("/compare/qtangl");
-    await expect(page.getByRole("heading").first()).toBeVisible();
+  test("host sensor deploy docs page is live", async ({ page }) => {
+    await page.goto("/docs/guides/host-sensor-deploy");
+    await expect(page.getByRole("heading", { name: /Host sensor deployment/i })).toBeVisible();
+  });
+
+  test("code scan CI docs page is live", async ({ page }) => {
+    await page.goto("/docs/guides/code-scan-ci");
+    await expect(page.getByRole("heading", { name: /Code scan CI/i })).toBeVisible();
   });
 
   test("blog post on native discovery depth is published", async ({ page }) => {

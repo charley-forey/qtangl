@@ -43,12 +43,27 @@ jobs:
       - name: Verify scanner-versions.lock
         run: python scripts/verify_scanner_versions.py
 
+      - name: Golden CBOM contract check
+        run: python scripts/detect_scanner_breaking_changes.py
+
+      - name: Discovery enterprise tests
+        env:
+          DATABASE_URL: sqlite:///./ci_test.db
+        run: python -m pytest tests/test_discovery_enterprise.py tests/test_discovery_chaos.py -q --tb=short
+
       - name: Run tests
         env:
           QTANGL_ENABLE_QAOA: "false"
           QTANGL_ENABLE_TRANSPARENCY_LOG: "true"
           DATABASE_URL: sqlite:///./ci_test.db
         run: python -m pytest tests/ -q --tb=short
+
+      - name: Discovery release train artifacts
+        run: |
+          test -f docker/discovery-worker.Dockerfile
+          test -f docker/scanner-sandbox.Dockerfile
+          test -f k8s/scanner-sandbox-job.yaml
+          test -f benchmarks/discovery_soak.py
 
       - name: Export OpenAPI artifact
         run: python scripts/export_openapi.py

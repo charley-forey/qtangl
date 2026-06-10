@@ -1,6 +1,7 @@
 import { docsEndpoints } from "@/lib/docs/endpoints";
 import {
   endpointIdFromAdminSlug,
+  endpointIdFromDiscoverySlug,
   endpointIdFromHealthSlug,
   endpointIdFromPqcSlug,
   endpointIdFromPublicSlug,
@@ -61,4 +62,12 @@ export function listDynamicPqcSlugs(): string[] {
 
 export function getPqcEndpoint(slug: string): DocsEndpoint | undefined {
   return docsEndpoints[endpointIdFromPqcSlug(slug)];
+}
+
+export function listDiscoverySlugs(): string[] {
+  return listEndpointSlugs("discovery");
+}
+
+export function getDiscoveryEndpoint(slug: string): DocsEndpoint | undefined {
+  return docsEndpoints[endpointIdFromDiscoverySlug(slug)];
 }

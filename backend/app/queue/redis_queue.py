@@ -37,6 +37,20 @@ def enqueue(queue_name: str, job_id: str) -> None:
     client.lpush(f"qtangl:queue:{queue_name}", job_id)
 
 
+def queue_depth(queue_name: str) -> int:
+    client = _get_client()
+    if client is None:
+        return 0
+    try:
+        return int(client.llen(f"qtangl:queue:{queue_name}"))
+    except Exception:
+        return 0
+
+
+def total_discovery_queue_depth() -> int:
+    return sum(queue_depth(q) for q in ("discovery_host", "discovery_code", "discovery_binary"))
+
+
 def dequeue_blocking(queue_name: str, *, timeout_seconds: int = 5) -> str | None:
     client = _get_client()
     if client is None:

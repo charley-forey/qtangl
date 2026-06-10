@@ -1,56 +1,58 @@
-"""Load soak harness for discovery ingest + heartbeats (dev/staging only)."""
+#!/usr/bin/env python3
+"""10k agent findings ingest soak benchmark."""
 
 from __future__ import annotations
 
 import argparse
+import json
+import statistics
 import time
-import uuid
+import urllib.request
 
-from app.discovery.fleet import ingest_findings, record_heartbeat
+
+def synthetic_findings(n: int) -> list[dict]:
+    return [
+        {
+            "schemaVersion": 1,
+            "findingId": f"soak-{i}",
+            "findingType": "certificate",
+            "hostId": "host-1",
+            "hostname": "soak-host",
+            "os": "linux",
+            "algorithm": "RSA-2048",
+            "confidence": "high",
+        }
+        for i in range(n)
+    ]
+
+
+def post_batch(base: str, agent_id: str, tenant_id: str, findings: list[dict]) -> float:
+    body = json.dumps({"agentId": agent_id, "tenantId": tenant_id, "findings": findings}).encode()
+    req = urllib.request.Request(
+        f"{base.rstrip('/')}/discovery/agent/findings",
+        data=body,
+        headers={"Content-Type": "application/json"},
+        method="POST",
+    )
+    start = time.perf_counter()
+    with urllib.request.urlopen(req, timeout=30) as resp:
+        resp.read()
+    return time.perf_counter() - start
 
 
 def main() -> None:
     parser = argparse.ArgumentParser()
+    parser.add_argument("--base", default="http://localhost:8000")
     parser.add_argument("--agents", type=int, default=100)
-    parser.add_argument("--findings-per-agent", type=int, default=10)
-    parser.add_argument("--heartbeats", action="store_true", help="Also record heartbeats per agent")
+    parser.add_argument("--batch", type=int, default=100)
     args = parser.parse_args()
-
-    start = time.perf_counter()
-    total = 0
-    hb = 0
-    for i in range(args.agents):
-        agent_id = f"soak-agent-{i}"
-        tenant_id = "sandbox"
-        if args.heartbeats:
-            if record_heartbeat(agent_id=agent_id, tenant_id=tenant_id, sensor_version="0.1.0-soak"):
-                hb += 1
-        findings = [
-            {
-                "schemaVersion": 1,
-                "findingId": f"soak-{uuid.uuid4().hex}",
-                "findingType": "certificate",
-                "hostId": str(uuid.uuid4()),
-                "hostname": f"host-{i}",
-                "os": "linux",
-                "algorithm": "RSA-2048",
-                "confidence": "high",
-                "location": f"/etc/ssl/cert-{j}.pem",
-            }
-            for j in range(args.findings_per_agent)
-        ]
-        ingest_findings(agent_id=agent_id, tenant_id=tenant_id, findings=findings)
-        total += len(findings)
-    elapsed = time.perf_counter() - start
-    p99_budget_ms = 2000
-    rate = total / elapsed if elapsed else 0
-    print(
-        f"Ingested {total} findings from {args.agents} agents in {elapsed:.2f}s "
-        f"({rate:.0f} findings/s, heartbeats={hb})"
-    )
-    if args.agents >= 1000 and elapsed > 0:
-        est_p99 = (elapsed / max(1, args.agents)) * 1000 * 3
-        print(f"Estimated p99 ingest budget check: {est_p99:.0f}ms (target <{p99_budget_ms}ms)")
+    latencies: list[float] = []
+    for agent in range(args.agents):
+        latencies.append(
+            post_batch(args.base, f"agent-soak-{agent}", "sandbox", synthetic_findings(args.batch))
+        )
+    p99 = statistics.quantiles(latencies, n=100)[98] if len(latencies) >= 100 else max(latencies)
+    print(json.dumps({"agents": args.agents, "batch": args.batch, "p99Sec": p99, "maxSec": max(latencies)}))
 
 
 if __name__ == "__main__":

@@ -119,7 +119,14 @@ def _run_binary_scan_job(
     if not image_ref:
         raise DiscoveryError("missing_image", "imageRef required")
     _emit(on_progress, "binary", f"Scanning image {image_ref}")
-    result = run_binary_scan(image_ref=image_ref, base_cbom=payload.get("baseCbom"))
+    result = run_binary_scan(
+        image_ref=image_ref,
+        base_cbom=payload.get("baseCbom"),
+        tenant_id=tenant_id,
+        integration_id=payload.get("integrationId"),
+    )
+    if result.get("status") == "error":
+        raise DiscoveryError("binary_scan_failed", str(result.get("message")))
     _merge_assets_to_cbom(tenant_id=tenant_id, assets=result.get("assets") or [], source_method=SOURCE_METHODS["binary_scan"])
     return {k: v for k, v in result.items() if k != "assets"}
 
@@ -135,6 +142,29 @@ def _merge_assets_to_cbom(*, tenant_id: str, assets: list[Any], source_method: s
         pass
     except Exception:
         pass
+
+
+def run_sandbox_cli() -> None:
+    """K8s Job entrypoint for isolated code scans."""
+    import json
+    import os
+    import sys
+
+    if os.environ.get("QTANGL_SCANNER_SANDBOX") != "1":
+        print("Refusing to run outside sandbox", file=sys.stderr)
+        sys.exit(1)
+    payload = json.loads(os.environ.get("QTANGL_SCAN_PAYLOAD", "{}"))
+    result = run_code_scan(
+        owner=payload.get("githubOwner"),
+        repo=payload.get("githubRepo"),
+        token=payload.get("githubToken"),
+        ref=str(payload.get("ref", "HEAD")),
+        content=payload.get("content"),
+        path=str(payload.get("path", "snippet")),
+    )
+    print(json.dumps(result))
+    if result.get("status") == "error":
+        sys.exit(1)
 
 
 def ingest_host_findings_batch(

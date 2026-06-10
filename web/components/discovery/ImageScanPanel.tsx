@@ -3,7 +3,13 @@
 import { useCallback, useEffect, useState } from "react";
 
 import SourceRuntimeDiff from "@/components/discovery/SourceRuntimeDiff";
-import { getDiscoveryJob, getSourceRuntimeDiff, listImageTargets, triggerBinaryScan } from "@/lib/discovery";
+import {
+  getDiscoveryJob,
+  getSourceRuntimeDiff,
+  listImageTargets,
+  testRegistryConnection,
+  triggerBinaryScan,
+} from "@/lib/discovery";
 
 type ImageScanPanelProps = {
   apiKey: string;
@@ -20,6 +26,8 @@ export default function ImageScanPanel({ apiKey }: ImageScanPanelProps) {
     runtimeOnly: string[];
   } | null>(null);
   const [loading, setLoading] = useState(false);
+  const [integrationId, setIntegrationId] = useState("");
+  const [testMessage, setTestMessage] = useState<string | null>(null);
 
   const loadTargets = useCallback(async () => {
     try {
@@ -78,6 +86,25 @@ export default function ImageScanPanel({ apiKey }: ImageScanPanelProps) {
         </ul>
       )}
       <input className="input w-full" value={imageRef} onChange={(e) => setImageRef(e.target.value)} />
+      <input
+        className="input w-full"
+        placeholder="Registry integration id (optional)"
+        value={integrationId}
+        onChange={(e) => setIntegrationId(e.target.value)}
+      />
+      {integrationId && (
+        <button
+          type="button"
+          className="btn btn-secondary text-sm"
+          onClick={async () => {
+            const res = await testRegistryConnection(apiKey, integrationId, imageRef);
+            setTestMessage(res.ok ? "Registry pull OK" : String(res.message ?? "Pull failed"));
+          }}
+        >
+          Test connection
+        </button>
+      )}
+      {testMessage && <p className="text-xs text-[var(--muted)]">{testMessage}</p>}
       <button type="button" className="btn btn-primary" disabled={loading} onClick={() => handleScan()}>
         {loading ? "Scanning…" : "Scan image"}
       </button>

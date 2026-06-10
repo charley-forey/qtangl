@@ -66,6 +66,18 @@ class QtanglClient:
     def verify(self, scan_id: str) -> dict[str, Any]:
         return self._get(f"/pqc/verify/{scan_id}")
 
+    def create_fleet(self, name: str = "Default fleet") -> dict[str, Any]:
+        return self._post("/tenant/discovery/fleets", {"name": name})
+
+    def trigger_code_scan(self, *, owner: str, repo: str, async_: bool = True) -> dict[str, Any]:
+        return self._post(
+            "/tenant/coverage/code-scan",
+            {"githubOwner": owner, "githubRepo": repo, "async": async_},
+        )
+
+    def get_discovery_job(self, job_id: str) -> dict[str, Any]:
+        return self._get(f"/tenant/discovery/jobs/{job_id}")
+
     def list_remediation(self, scan_id: str) -> dict[str, Any]:
         return self._get(f"/tenant/scans/{scan_id}/remediation")
 

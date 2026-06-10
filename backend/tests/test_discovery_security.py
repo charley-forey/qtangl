@@ -48,3 +48,12 @@ def test_offline_upload_requires_auth(client: TestClient):
         json={"findings": []},
     )
     assert res.status_code in {401, 403}
+
+
+def test_offline_upload_rejects_path_traversal(client: TestClient):
+    res = client.post(
+        "/tenant/discovery/offline-upload",
+        json={"zipPath": "../../../etc/passwd", "findings": []},
+        headers={"Authorization": "Bearer qtangl-demo-key"},
+    )
+    assert res.status_code in {400, 401, 403}

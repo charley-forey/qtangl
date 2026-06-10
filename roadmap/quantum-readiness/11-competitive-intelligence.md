@@ -2,7 +2,7 @@
 
 Detailed competitor teardowns, analyst landscape, positioning map, and a repeatable win/loss framework for the post-quantum readiness market.
 
-> **Last validated: 2026-06-09** against live sources (vendor sites/docs, AWS/Azure Marketplace, PKI Consortium PQCCM, NIST NCCoE, Microsoft Security blog, KuppingerCole). Qtangl host/code discovery updated to **partial** per ADR-009 ship gate G1/G2.
+> **Last validated: 2026-06-10** against live sources (vendor sites/docs, AWS/Azure Marketplace, PKI Consortium PQCCM, NIST NCCoE, Microsoft Security blog, KuppingerCole). Qtangl host/code discovery updated to **yes** (enterprise engineering gates; customer pilot case study pending).
 >
 > **Public mirror:** [https://www.qtangl.com/compare](https://www.qtangl.com/compare) — feature matrix, positioning map, per-vendor pages, and gated PDF guide.
 >

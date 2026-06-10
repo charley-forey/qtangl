@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 
 import AgentFleetTable from "@/components/discovery/AgentFleetTable";
+import CmdbCoverageWidget from "@/components/discovery/CmdbCoverageWidget";
 import CodeScanPanel from "@/components/discovery/CodeScanPanel";
 import FleetEnrollmentPanel from "@/components/discovery/FleetEnrollmentPanel";
 import HostInventoryHeatmap from "@/components/discovery/HostInventoryHeatmap";
@@ -82,6 +83,7 @@ export default function DiscoveryInventoryTabs({ apiKey, externalCount = 0 }: Di
       )}
       {tab === "hosts" && (
         <>
+          <CmdbCoverageWidget apiKey={apiKey} />
           <FleetEnrollmentPanel apiKey={apiKey} />
           <OfflineUploadPanel apiKey={apiKey} />
           <HostInventoryHeatmap agents={agents} onSelectHost={setSelectedHost} />

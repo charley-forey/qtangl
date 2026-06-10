@@ -3,7 +3,7 @@
 type SourceRuntimeDiffProps = {
   sourceCount: number;
   runtimeCount: number;
-  runtimeOnly: string[];
+  runtimeOnly: Array<string | { bomRef?: string; algorithm?: string; location?: string }>;
 };
 
 export default function SourceRuntimeDiff({
@@ -22,8 +22,10 @@ export default function SourceRuntimeDiff({
       </p>
       {runtimeOnly.length > 0 && (
         <ul className="list-disc pl-5 text-[var(--muted)]">
-          {runtimeOnly.slice(0, 10).map((item) => (
-            <li key={item}>{item}</li>
+          {runtimeOnly.slice(0, 10).map((item, i) => (
+            <li key={typeof item === "string" ? item : item.bomRef ?? `item-${i}`}>
+              {typeof item === "string" ? item : item.bomRef ?? item.algorithm ?? item.location}
+            </li>
           ))}
         </ul>
       )}
