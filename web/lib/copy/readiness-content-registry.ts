@@ -91,6 +91,18 @@ export const readinessBlogRegistry: readonly ReadinessBlogRegistryEntry[] = [
     readiness: true,
   },
   {
+    slug: "crypto-flip-orchestration-2026",
+    kind: "blog",
+    markdownFile: "blog/crypto-flip-orchestration-2026.md",
+    title: "Crypto flip orchestration: prove the change in your CLM and KMS",
+    description: "Orchestrate overlay, CLM, and KMS flips with dry-run, approval, and signed before/after evidence.",
+    category: "Convert",
+    coverImage: "/qtangl-pqc-scanner-cover.svg",
+    coverAlt: "Crypto flip orchestration workflow.",
+    excerpt: "Qtangl orchestrates the flip in your systems and proves it — without a PQ overlay appliance.",
+    readiness: true,
+  },
+  {
     slug: "crypto-drift-monitoring-2026",
     kind: "blog",
     markdownFile: "blog/crypto-drift-monitoring-2026.md",

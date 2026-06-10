@@ -23,6 +23,7 @@ from app.api.tenant import router as tenant_router
 from app.api.discovery import router as discovery_router
 from app.api.drift import router as drift_router
 from app.api.remediation_program import router as remediation_program_router
+from app.api.crypto_flip import router as crypto_flip_router
 from app.api.integrations_webhook import router as integrations_webhook_router
 from app.db.config import inline_jobs, persistence_enabled, redis_enabled, use_worker_queue
 from app.db.engine import init_db, ping_db
@@ -139,6 +140,7 @@ app.include_router(tenant_router)
 app.include_router(discovery_router)
 app.include_router(drift_router)
 app.include_router(remediation_program_router)
+app.include_router(crypto_flip_router)
 app.include_router(integrations_webhook_router)
 app.include_router(admin_router)
 app.include_router(public_router)

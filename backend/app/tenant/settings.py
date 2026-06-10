@@ -28,6 +28,12 @@ DEFAULT_SETTINGS: dict[str, Any] = {
     "driftSnapshotRetentionDays": 365,
     "alertMode": "per_event",
     "remediationProgramEnabled": True,
+    "cryptoFlipEnabled": False,
+    "cryptoFlip": {
+        "overlay": False,
+        "clm": False,
+        "kms": False,
+    },
 }
 
 
@@ -38,6 +44,20 @@ def drift_unified_enabled(*, tenant_id: str) -> bool:
         return False
     settings = get_tenant_settings_raw(tenant_id=tenant_id)
     return bool(settings.get("driftUnifiedEnabled", True))
+
+
+def crypto_flip_enabled(*, tenant_id: str, surface: str | None = None) -> bool:
+    import os
+
+    if os.environ.get("CRYPTO_FLIP_ENABLED", "false").lower() not in ("1", "true", "yes"):
+        return False
+    settings = get_tenant_settings_raw(tenant_id=tenant_id)
+    if not bool(settings.get("cryptoFlipEnabled", False)):
+        return False
+    if surface is None:
+        return True
+    flip_cfg = settings.get("cryptoFlip") or {}
+    return bool(flip_cfg.get(surface, False))
 
 
 def remediation_program_enabled(*, tenant_id: str) -> bool:

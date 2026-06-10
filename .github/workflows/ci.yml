@@ -46,6 +46,14 @@ jobs:
       - name: Golden CBOM contract check
         run: python scripts/detect_scanner_breaking_changes.py
 
+      - name: Flip contract tests
+        env:
+          DATABASE_URL: sqlite:///./ci_test.db
+          CRYPTO_FLIP_ENABLED: "true"
+        run: |
+          python -m pytest tests/test_crypto_flip.py tests/test_clm_flip_wiremock.py tests/test_kms_flip_wiremock.py tests/test_flip_rls.py -q --tb=short
+          test -f tests/fixtures/flip-golden-fixtures/dry-run-overlay.json
+
       - name: Discovery enterprise tests
         env:
           DATABASE_URL: sqlite:///./ci_test.db

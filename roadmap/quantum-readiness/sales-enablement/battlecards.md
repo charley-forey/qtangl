@@ -4,7 +4,7 @@ Quick-reference competitive cards for sales conversations. Pair with [11-competi
 
 **Golden rule:** Never disparage. Acknowledge competitor strength, then pivot to our differentiated value (speed + **signed, publicly-verifiable evidence** + drift + mid-market price + honest framing).
 
-> Refreshed 2026-06-09. **Drift + remediation = Yes** on comparison matrix. **Public comparison hub:** [https://www.qtangl.com/compare](https://www.qtangl.com/compare).
+> Refreshed 2026-06-09. **Drift + remediation + crypto flip = Yes** on comparison matrix. **Public comparison hub:** [https://www.qtangl.com/compare](https://www.qtangl.com/compare).
 
 ---
 
@@ -45,7 +45,8 @@ Quick-reference competitive cards for sales conversations. Pair with [11-competi
 | **They're strong at** | PQ orchestration overlay + **R3 Reconnaissance discovery** + active mitigation; gov traction (MDA), Accenture/Dell/Cisco channel |
 | **Where we win** | Assessment + verifiable evidence first; lighter to start; mid-market; transparent pricing; honest "baseline" framing |
 | **Heads-up** | R3 now does discovery too — don't claim they're "overlay only" |
-| **Land the point** | "Get an independently-verifiable baseline before committing to a full overlay + mitigation rollout." |
+| **Land the point** | "We orchestrate the flip in your CLM/KMS and prove it — we don't ship a network overlay appliance. Get verifiable baseline + governed flip closure." |
+| **Footnote** | Qtangl crypto flip = orchestration via customer infra, not QuSecure-style inline appliance |
 
 ## vs IBM Quantum Safe
 

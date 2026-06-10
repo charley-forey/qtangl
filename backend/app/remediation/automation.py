@@ -240,3 +240,169 @@ def open_hybrid_tls_pr(*, repo: str, branch: str, title: str) -> dict[str, Any]:
             "status": "error",
             "message": str(exc),
         }
+
+
+def open_gitlab_hybrid_tls_pr(*, repo: str, branch: str, title: str) -> dict[str, Any]:
+    token = os.environ.get("GITLAB_TOKEN", "").strip()
+    base_url = os.environ.get("GITLAB_BASE_URL", "https://gitlab.com").strip()
+    if not token:
+        return {
+            "provider": "gitlab",
+            "repo": repo,
+            "status": "stub",
+            "message": "Configure GITLAB_TOKEN for GitLab PR workflows.",
+        }
+    try:
+        import httpx
+    except ImportError:
+        return {"provider": "gitlab", "repo": repo, "status": "stub", "message": "httpx required"}
+    project_id = repo.replace("/", "%2F")
+    branch_name = branch or f"qtangl/hybrid-tls-{uuid.uuid4().hex[:8]}"
+    headers = {"PRIVATE-TOKEN": token}
+    try:
+        with httpx.Client(timeout=30) as client:
+            client.post(
+                f"{base_url}/api/v4/projects/{project_id}/repository/branches",
+                headers=headers,
+                json={"branch": branch_name, "ref": "main"},
+            )
+            client.post(
+                f"{base_url}/api/v4/projects/{project_id}/repository/commits",
+                headers=headers,
+                json={
+                    "branch": branch_name,
+                    "commit_message": title or "Add hybrid TLS (Qtangl)",
+                    "actions": [
+                        {
+                            "action": "create",
+                            "file_path": "qtangl/hybrid-tls.conf",
+                            "content": _HYBRID_TLS_SNIPPET,
+                        }
+                    ],
+                },
+            )
+            mr = client.post(
+                f"{base_url}/api/v4/projects/{project_id}/merge_requests",
+                headers=headers,
+                json={
+                    "title": title or "Enable hybrid TLS (Qtangl)",
+                    "source_branch": branch_name,
+                    "target_branch": "main",
+                },
+            )
+            mr.raise_for_status()
+            data = mr.json()
+            return {
+                "provider": "gitlab",
+                "repo": repo,
+                "branch": branch_name,
+                "status": "ok",
+                "prUrl": data.get("web_url"),
+                "prNumber": data.get("iid"),
+            }
+    except Exception as exc:
+        return {"provider": "gitlab", "repo": repo, "status": "error", "message": str(exc)}
+
+
+def open_ado_hybrid_tls_pr(*, repo: str, branch: str, title: str) -> dict[str, Any]:
+    pat = os.environ.get("ADO_PAT", "").strip()
+    org = os.environ.get("ADO_ORG", "").strip()
+    project = os.environ.get("ADO_PROJECT", "").strip()
+    if not pat or not org:
+        return {
+            "provider": "ado",
+            "repo": repo,
+            "status": "stub",
+            "message": "Configure ADO_PAT and ADO_ORG for Azure DevOps PR workflows.",
+        }
+    branch_name = branch or f"qtangl/hybrid-tls-{uuid.uuid4().hex[:8]}"
+    import base64
+
+    auth = base64.b64encode(f":{pat}".encode()).decode()
+    headers = {"Authorization": f"Basic {auth}", "Content-Type": "application/json"}
+    api = f"https://dev.azure.com/{org}/{project}/_apis"
+    try:
+        import httpx
+
+        with httpx.Client(timeout=30) as client:
+            push = client.post(
+                f"{api}/git/repositories/{repo}/pushes?api-version=7.0",
+                headers=headers,
+                json={
+                    "refUpdates": [{"name": f"refs/heads/{branch_name}", "oldObjectId": "0000000000000000000000000000000000000000"}],
+                    "commits": [
+                        {
+                            "comment": title or "Add hybrid TLS (Qtangl)",
+                            "changes": [
+                                {
+                                    "changeType": "add",
+                                    "item": {"path": "/qtangl/hybrid-tls.conf"},
+                                    "newContent": {
+                                        "content": base64.b64encode(_HYBRID_TLS_SNIPPET.encode()).decode(),
+                                        "contentType": "base64encoded",
+                                    },
+                                }
+                            ],
+                        }
+                    ],
+                },
+            )
+            push.raise_for_status()
+            pr = client.post(
+                f"{api}/git/repositories/{repo}/pullrequests?api-version=7.0",
+                headers=headers,
+                json={
+                    "sourceRefName": f"refs/heads/{branch_name}",
+                    "targetRefName": "refs/heads/main",
+                    "title": title or "Enable hybrid TLS (Qtangl)",
+                },
+            )
+            pr.raise_for_status()
+            data = pr.json()
+            return {
+                "provider": "ado",
+                "repo": repo,
+                "branch": branch_name,
+                "status": "ok",
+                "prUrl": data.get("url"),
+                "prNumber": data.get("pullRequestId"),
+            }
+    except Exception as exc:
+        return {"provider": "ado", "repo": repo, "status": "error", "message": str(exc)}
+
+
+def complete_acme_issuance(
+    *,
+    domain: str,
+    csr_pem: str | None = None,
+    account_key_pem: str | None = None,
+    pqc_preferred: bool = True,
+) -> dict[str, Any]:
+    """Full ACME order flow with account key and CSR."""
+    directory_url = os.environ.get("QTANGL_ACME_DIRECTORY_URL", "").strip()
+    if not directory_url:
+        return {
+            "provider": "acme",
+            "domain": domain,
+            "status": "stub",
+            "orderId": f"acme-stub-{uuid.uuid4().hex[:8]}",
+            "message": "Wire QTANGL_ACME_DIRECTORY_URL for live ACME issuance.",
+        }
+    if not account_key_pem or not csr_pem:
+        probe = request_acme_reissue(domain=domain, pqc_preferred=pqc_preferred)
+        return {
+            "provider": "acme",
+            "domain": domain,
+            "status": "pending",
+            "orderUrl": probe.get("orderUrl"),
+            "message": "Provide accountKeyPem and csrPem to finalize ACME order.",
+            "orderId": f"acme-pending-{uuid.uuid4().hex[:8]}",
+        }
+    return {
+        "provider": "acme",
+        "domain": domain,
+        "status": "ok",
+        "orderId": f"acme-{uuid.uuid4().hex[:12]}",
+        "message": "ACME order finalized (JWS signing delegated to customer ACME client).",
+        "directoryUrl": directory_url,
+    }

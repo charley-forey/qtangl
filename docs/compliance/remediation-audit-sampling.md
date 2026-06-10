@@ -10,3 +10,10 @@
 ## Evidence
 
 Export via `GET /tenant/audit?action=remediation.status_changed`.
+
+## Crypto flip extension
+
+1. Monthly sample 15 `flip_approved` and `flip_completed` audit events per Convert tenant.
+2. Verify prod flips have matching `flip_approvals` row with `approval_note`.
+3. Confirm `before_snapshot_id` and `after_snapshot_id` populated on succeeded jobs.
+4. Enterprise KMS prod: assert approver ≠ submitter in audit `detail_json`.

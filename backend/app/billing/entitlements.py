@@ -55,6 +55,37 @@ def check_convert_feature(*, tenant_id: str) -> dict[str, Any] | None:
     return None
 
 
+def check_crypto_flip_feature(
+    *,
+    tenant_id: str,
+    surface: str | None = None,
+    target_env: str = "staging",
+) -> dict[str, Any] | None:
+    """Return error payload if tenant cannot execute crypto flip."""
+    blocked = check_convert_feature(tenant_id=tenant_id)
+    if blocked:
+        return blocked
+    from app.tenant.settings import crypto_flip_enabled
+
+    if not crypto_flip_enabled(tenant_id=tenant_id, surface=surface):
+        return {
+            "code": "crypto_flip_disabled",
+            "tier": tenant_entitlements(tenant_id=tenant_id).get("tier"),
+            "surface": surface,
+            "upgradeUrl": "/pricing",
+        }
+    if surface == "kms" and target_env == "prod":
+        ent = tenant_entitlements(tenant_id=tenant_id)
+        if ent.get("tier") != "enterprise":
+            return {
+                "code": "enterprise_tier_required",
+                "tier": ent.get("tier"),
+                "feature": "kms_prod_flip",
+                "upgradeUrl": "/pricing",
+            }
+    return None
+
+
 def check_schedule_quota(*, tenant_id: str) -> dict[str, Any] | None:
     ent = tenant_entitlements(tenant_id=tenant_id)
     max_schedules = int(ent.get("maxSchedules", 10))

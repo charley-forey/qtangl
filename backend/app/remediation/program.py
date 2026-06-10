@@ -34,6 +34,7 @@ def _row_to_dict(row: RemediationProgramItem) -> dict[str, Any]:
         "verifyJobId": row.verify_job_id,
         "externalSyncId": row.external_sync_id,
         "deepLink": row.deep_link,
+        "flipJobId": row.flip_job_id,
         "updatedAt": row.updated_at.isoformat() if row.updated_at else None,
     }
 

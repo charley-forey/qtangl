@@ -273,8 +273,54 @@ class RemediationProgramItem(Base):
     verify_job_id: Mapped[str | None] = mapped_column(String(80), nullable=True)
     external_sync_id: Mapped[str | None] = mapped_column(String(80), nullable=True)
     deep_link: Mapped[str | None] = mapped_column(String(512), nullable=True)
+    flip_job_id: Mapped[str | None] = mapped_column(String(80), nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_utcnow)
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_utcnow, onupdate=_utcnow)
+
+
+class CryptoFlipJob(Base):
+    __tablename__ = "crypto_flip_jobs"
+    __table_args__ = (
+        Index("ix_crypto_flip_jobs_tenant_status", "tenant_id", "status"),
+        Index("ix_crypto_flip_jobs_program_item", "program_item_id"),
+    )
+
+    id: Mapped[str] = mapped_column(String(80), primary_key=True)
+    tenant_id: Mapped[str] = mapped_column(String(64), ForeignKey("tenants.id"), index=True)
+    program_item_id: Mapped[str | None] = mapped_column(String(80), ForeignKey("remediation_program_items.id"), nullable=True)
+    flip_surface: Mapped[str] = mapped_column(String(16), nullable=False)
+    provider: Mapped[str] = mapped_column(String(32), nullable=False)
+    action: Mapped[str] = mapped_column(String(64), default="flip")
+    target_env: Mapped[str] = mapped_column(String(16), default="staging")
+    status: Mapped[str] = mapped_column(String(32), default="draft")
+    dry_run_result_json: Mapped[str | None] = mapped_column(Text, nullable=True)
+    request_json: Mapped[str | None] = mapped_column(Text, nullable=True)
+    result_json: Mapped[str | None] = mapped_column(Text, nullable=True)
+    external_ref: Mapped[str | None] = mapped_column(String(256), nullable=True)
+    submitted_by: Mapped[str | None] = mapped_column(String(255), nullable=True)
+    approval_actor: Mapped[str | None] = mapped_column(String(255), nullable=True)
+    approval_note: Mapped[str | None] = mapped_column(Text, nullable=True)
+    approved_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    before_snapshot_id: Mapped[str | None] = mapped_column(String(80), nullable=True)
+    after_snapshot_id: Mapped[str | None] = mapped_column(String(80), nullable=True)
+    proof_id: Mapped[str | None] = mapped_column(String(80), nullable=True)
+    error: Mapped[str | None] = mapped_column(Text, nullable=True)
+    retry_count: Mapped[int] = mapped_column(default=0)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_utcnow)
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_utcnow, onupdate=_utcnow)
+
+
+class FlipApproval(Base):
+    __tablename__ = "flip_approvals"
+    __table_args__ = (Index("ix_flip_approvals_job", "flip_job_id"),)
+
+    id: Mapped[str] = mapped_column(String(80), primary_key=True)
+    tenant_id: Mapped[str] = mapped_column(String(64), ForeignKey("tenants.id"), index=True)
+    flip_job_id: Mapped[str] = mapped_column(String(80), ForeignKey("crypto_flip_jobs.id"), index=True)
+    actor: Mapped[str] = mapped_column(String(255), nullable=False)
+    action: Mapped[str] = mapped_column(String(32), nullable=False)
+    note: Mapped[str | None] = mapped_column(Text, nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_utcnow)
 
 
 class VerificationProof(Base):
@@ -288,6 +334,7 @@ class VerificationProof(Base):
     evidence_hash: Mapped[str] = mapped_column(String(64), default="")
     verify_url: Mapped[str | None] = mapped_column(String(512), nullable=True)
     confirmed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    flip_job_id: Mapped[str | None] = mapped_column(String(80), nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_utcnow)
 
 

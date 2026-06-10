@@ -295,6 +295,19 @@ def enqueue_due_cloud_pulls() -> int:
             actor="scheduler",
         )
         post_ingest_cbom_hooks(tenant_id=tenant_id, ingest_result=ingest)
+        if str(provider).startswith("kms-"):
+            try:
+                from app.monitoring.drift_snapshots import record_drift_snapshot
+
+                record_drift_snapshot(
+                    tenant_id=tenant_id,
+                    source_type="cbom",
+                    scope_key=f"kms-pull-{provider}",
+                    payload={"provider": provider, "componentCount": pull.get("componentCount", 0)},
+                    job_id=str(ingest.get("ingestJobId", "")),
+                )
+            except Exception:
+                pass
         mark_run(schedule["id"], scan_id=ingest.get("ingestJobId", "cloud-pull"))
         _log_schedule_run(
             schedule_id=schedule["id"],

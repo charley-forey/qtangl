@@ -185,9 +185,9 @@ Legend: Yes / Partial / No / `?` (unverified). Validated 2026-06-06 from public 
 | Mosca HNDL scoring | Yes | Partial | Partial | Partial | Partial | Partial | Partial | Partial | Partial |
 | CycloneDX CBOM | Yes | Yes | Yes | Partial | Yes (owns) | Partial | Yes | Yes | Yes |
 | **Signed + public verify** | **Yes** | No | No | No | No | No | No | No | No |
-| Drift / re-scan diff | Partial | Partial | Yes | Yes | Partial | Yes | Yes | Yes | Yes |
-| Remediation workflow | Partial | Yes | Yes | Yes | Yes | Yes | Partial | Partial | Partial |
-| Flips crypto (overlay/CLM/KMS) | No | Yes | Yes | Yes | Yes | Yes | Partial | No | Partial |
+| Drift / re-scan diff | Yes | Partial | Yes | Yes | Partial | Yes | Yes | Yes | Yes |
+| Remediation workflow | Yes | Yes | Yes | Yes | Yes | Yes | Partial | Partial | Partial |
+| Flips crypto (overlay/CLM/KMS) | Yes (orchestrated) | Yes | Yes | Yes | Yes | Yes | Partial | No | Partial |
 | **Mid-market self-serve** | **Yes** | No | No | No | No | No | No | Partial | Partial |
 | **Transparent pricing** | **Yes** | No | No | No | No | No | No | `?` | `?` |
 

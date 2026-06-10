@@ -2,6 +2,8 @@
 
 import { useCallback, useEffect, useState } from "react";
 
+import CryptoFlipPanel from "@/components/flip/CryptoFlipPanel";
+import FlipJobProgress from "@/components/flip/FlipJobProgress";
 import { fetchTenantJson, postTenantJson, putTenantJson } from "@/lib/tenant-api";
 
 type ProgramItem = {
@@ -26,6 +28,8 @@ export default function RemediationProgramBoard({ apiKey }: { apiKey: string }) 
   const [velocity, setVelocity] = useState<Velocity | null>(null);
   const [playbook, setPlaybook] = useState<string[] | null>(null);
   const [message, setMessage] = useState("");
+  const [flipItemId, setFlipItemId] = useState<string | null>(null);
+  const [activeFlipJobId, setActiveFlipJobId] = useState<string | null>(null);
 
   const load = useCallback(async () => {
     const list = await fetchTenantJson<{ items: ProgramItem[] }>("/tenant/remediation/program", apiKey);
@@ -110,10 +114,28 @@ export default function RemediationProgramBoard({ apiKey }: { apiKey: string }) 
               <button type="button" className="text-xs underline text-white" onClick={() => verify(item.id)}>
                 Verify
               </button>
+              <button
+                type="button"
+                className="text-xs underline text-emerald-400"
+                onClick={() => {
+                  setFlipItemId(item.id);
+                  setActiveFlipJobId(null);
+                }}
+              >
+                Flip
+              </button>
             </div>
           </div>
         ))}
       </div>
+      {flipItemId && (
+        <CryptoFlipPanel
+          apiKey={apiKey}
+          programItemId={flipItemId}
+          onJobStarted={(jobId) => setActiveFlipJobId(jobId)}
+        />
+      )}
+      {activeFlipJobId && <FlipJobProgress apiKey={apiKey} jobId={activeFlipJobId} />}
       {playbook && (
         <div className="rounded-xl border border-emerald-800/50 bg-emerald-950/20 p-4">
           <p className="mb-2 font-medium text-white">Playbook</p>

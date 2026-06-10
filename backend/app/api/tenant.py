@@ -514,7 +514,15 @@ def tenant_remediation_automate(
         resource_id=body.remediationId,
         detail={"action": body.action, "status": result.get("status")},
     )
-    return {"status": "success", "scanId": scan_id, "remediationId": body.remediationId, "result": result}
+    payload = {"status": "success", "scanId": scan_id, "remediationId": body.remediationId, "result": result}
+    return JSONResponse(
+        content=payload,
+        headers={
+            "Deprecation": "true",
+            "Link": '</docs/reference/crypto-flip-api>; rel="successor-version"',
+            "Sunset": "Sat, 07 Sep 2026 00:00:00 GMT",
+        },
+    )
 
 
 @router.post("/scans/{scan_id}/remediation/verify")

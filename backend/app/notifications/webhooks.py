@@ -184,6 +184,47 @@ def notify_tenant_event(
     ]
 
 
+def notify_flip_completed(
+    *,
+    webhooks: list[str],
+    tenant_id: str,
+    job: dict[str, Any],
+    result: dict[str, Any],
+    signing_secret: str = "",
+) -> list[dict[str, Any]]:
+    before_id = job.get("beforeSnapshotId")
+    after_id = job.get("afterSnapshotId")
+    payload = {
+        "schemaVersion": "qtangl-webhook-v2",
+        "event": "crypto.flip.completed",
+        "tenantId": tenant_id,
+        "jobId": job.get("id"),
+        "programItemId": job.get("programItemId"),
+        "flipSurface": job.get("flipSurface"),
+        "provider": job.get("provider"),
+        "targetEnv": job.get("targetEnv"),
+        "status": job.get("status"),
+        "externalRef": job.get("externalRef"),
+        "beforeSnapshotId": before_id,
+        "afterSnapshotId": after_id,
+        "proofId": job.get("proofId"),
+        "driftDelta": {
+            "beforeSnapshotId": before_id,
+            "afterSnapshotId": after_id,
+            "resultSummary": {
+                k: result.get(k)
+                for k in ("status", "provider", "message", "prUrl", "orderId", "keyId")
+                if result.get(k) is not None
+            },
+        },
+        "message": f"Crypto flip {job.get('status')} for {job.get('flipSurface')}/{job.get('provider')}",
+    }
+    return [
+        deliver_webhook(url, payload, signing_secret=signing_secret, tenant_id=tenant_id)
+        for url in webhooks
+    ]
+
+
 def replay_dead_letter(*, tenant_id: str, dead_letter_id: str, signing_secret: str = "") -> dict[str, Any]:
     row = get_dead_letter(tenant_id=tenant_id, dead_letter_id=dead_letter_id)
     if row is None:

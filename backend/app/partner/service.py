@@ -35,6 +35,13 @@ def link_child_tenant(*, parent_tenant_id: str, child_tenant_id: str, label: str
         return _row_to_dict(row)
 
 
+def partner_can_manage_tenant(*, parent_tenant_id: str, child_tenant_id: str) -> bool:
+    if parent_tenant_id == child_tenant_id:
+        return True
+    children = {c["childTenantId"] for c in list_child_tenants(parent_tenant_id=parent_tenant_id)}
+    return child_tenant_id in children
+
+
 def _row_to_dict(row: PartnerRow) -> dict[str, Any]:
     return {
         "id": row.id,

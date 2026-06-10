@@ -100,6 +100,12 @@ const RemediationProgramBoard = dynamic(
   () => import("@/components/pqc/RemediationProgramBoard"),
   { loading: PanelFallback }
 );
+const KmsInventoryPanel = dynamic(() => import("@/components/flip/KmsInventoryPanel"), {
+  loading: PanelFallback,
+});
+const FlipApprovalQueue = dynamic(() => import("@/components/flip/FlipApprovalQueue"), {
+  loading: PanelFallback,
+});
 import type { CompliancePack, ComplianceSummary, CryptoAsset, PqcScanResponse } from "@/lib/pqc";
 import {
   fetchTenantJson,
@@ -1200,6 +1206,18 @@ export default function DashboardClient() {
                   <Eyebrow>Remediation program</Eyebrow>
                   <div className="mt-4">
                     <RemediationProgramBoard apiKey={savedKey} />
+                  </div>
+                </Card>
+                <Card tone="panel">
+                  <Eyebrow>Flip approvals</Eyebrow>
+                  <div className="mt-4">
+                    <FlipApprovalQueue apiKey={savedKey} />
+                  </div>
+                </Card>
+                <Card tone="panel">
+                  <Eyebrow>KMS inventory</Eyebrow>
+                  <div className="mt-4">
+                    <KmsInventoryPanel apiKey={savedKey} />
                   </div>
                 </Card>
                 <Card tone="panel">

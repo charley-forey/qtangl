@@ -19,7 +19,34 @@ def pull_inventory(*, tenant_id: str, provider: str) -> dict[str, Any]:
         return _pull_clm(tenant_id=tenant_id, clm_provider=provider.removeprefix("clm-"))
     if provider in {"digicert", "appviewx", "entrust"}:
         return _pull_clm(tenant_id=tenant_id, clm_provider=provider)
+    if provider in {"kms-aws", "kms-azure", "kms-gcp"}:
+        return _pull_kms(tenant_id=tenant_id, kms_provider=provider)
     return {"ok": False, "reason": f"unsupported_provider:{provider}"}
+
+
+def _pull_kms(*, tenant_id: str, kms_provider: str) -> dict[str, Any]:
+    from app.integrations.kms_pull import kms_rows_to_cbom, pull_aws_kms, pull_azure_keyvault_keys, pull_gcp_cloud_kms
+
+    cloud_provider = kms_provider.removeprefix("kms-")
+    config = _load_integration_config(tenant_id=tenant_id, provider=cloud_provider) or {}
+    if kms_provider == "kms-aws":
+        result = pull_aws_kms(role_arn=str(config.get("roleArn") or ""), region=str(config.get("region") or "us-east-1"))
+    elif kms_provider == "kms-azure":
+        result = pull_azure_keyvault_keys(
+            vault_url=str(config.get("vaultUrl") or config.get("keyVaultUrl") or ""),
+            tenant_id=str(config.get("tenantId") or ""),
+            client_id=str(config.get("clientId") or ""),
+            client_secret=str(config.get("clientSecret") or ""),
+        )
+    else:
+        result = pull_gcp_cloud_kms(
+            project_id=str(config.get("projectId") or ""),
+            location=str(config.get("location") or "global"),
+        )
+    if result.get("status") not in {"ok", "stub"}:
+        return {"ok": False, "reason": result.get("message") or result.get("status")}
+    rows = kms_rows_to_cbom(result)
+    return _rows_to_pull_result(provider=kms_provider, rows=rows, partial=result.get("status") == "stub")
 
 
 def _load_integration_config(*, tenant_id: str, provider: str) -> dict[str, Any] | None:

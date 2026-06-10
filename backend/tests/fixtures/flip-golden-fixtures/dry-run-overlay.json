@@ -1,0 +1,12 @@
+{
+  "input": {
+    "flipSurface": "overlay",
+    "provider": "github",
+    "targetEnv": "staging",
+    "request": { "repo": "org/repo", "snippetKey": "nginx" }
+  },
+  "expectedDryRun": {
+    "status": "dry_run",
+    "provider": "github"
+  }
+}

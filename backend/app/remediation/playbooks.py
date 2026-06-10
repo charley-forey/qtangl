@@ -54,6 +54,54 @@ PLAYBOOKS: dict[str, dict[str, Any]] = {
         ],
         "prerequisites": ["Host sensor deployed", "JVM restart window"],
     },
+    "clm_venafi": {
+        "title": "Venafi certificate flip",
+        "steps": [
+            "Dry-run flip to preview PQC template and policy binding.",
+            "Submit flip job; obtain approval for prod targets.",
+            "Qtangl requests certificate via Venafi API.",
+            "Install to application target when writeBackEnabled.",
+            "Poll request status; trigger verify re-scan.",
+        ],
+        "prerequisites": ["Venafi API credentials", "PQC-capable policy template"],
+        "flipProvider": "venafi",
+        "flipSurface": "clm",
+    },
+    "clm_digicert": {
+        "title": "DigiCert MPKI order flip",
+        "steps": [
+            "Link program item to DigiCert inventory via CLM pull.",
+            "Dry-run order with hybrid/PQC profile ID.",
+            "Approve and submit flip job.",
+            "Poll order until issued; verify TLS scan.",
+        ],
+        "prerequisites": ["DigiCert MPKI API key", "Hybrid profile configured"],
+        "flipProvider": "digicert",
+        "flipSurface": "clm",
+    },
+    "clm_appviewx": {
+        "title": "AppViewX workflow flip",
+        "steps": [
+            "Trigger PQC assessment → issuance workflow.",
+            "Poll workflow completion via flip job.",
+            "Verify certificate posture via external scan.",
+        ],
+        "prerequisites": ["AppViewX API token", "Workflow ID"],
+        "flipProvider": "appviewx",
+        "flipSurface": "clm",
+    },
+    "kms_aws": {
+        "title": "AWS KMS alias migration",
+        "steps": [
+            "Confirm KMS metadata in CBOM via scheduled pull.",
+            "Dry-run alias update plan (no decrypt calls).",
+            "Two-person approval for prod; execute flip.",
+            "Update application to new alias; verify via code/config scan.",
+        ],
+        "prerequisites": ["AWS flip IAM role", "Enterprise tier for prod"],
+        "flipProvider": "kms-aws",
+        "flipSurface": "kms",
+    },
 }
 
 
@@ -68,6 +116,14 @@ def playbook_for_item(item: dict[str, Any]) -> dict[str, Any]:
         key = "jwks_rotation"
     elif source in {"code_finding", "binary_finding"}:
         key = "code_signing"
+    elif "venafi" in title or item.get("flipJobId"):
+        key = "clm_venafi"
+    elif "digicert" in title:
+        key = "clm_digicert"
+    elif "appviewx" in title:
+        key = "clm_appviewx"
+    elif "kms" in title or "key vault" in title:
+        key = "kms_aws"
     else:
         key = "tls_hybrid_kex"
     pb = PLAYBOOKS[key]

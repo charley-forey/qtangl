@@ -28,6 +28,8 @@ _TENANT_TABLES = (
     "drift_snapshots",
     "remediation_program_items",
     "verification_proofs",
+    "crypto_flip_jobs",
+    "flip_approvals",
 )
 
 

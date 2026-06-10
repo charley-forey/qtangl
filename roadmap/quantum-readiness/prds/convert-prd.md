@@ -116,9 +116,10 @@ Components: RemediationBacklog, what-if widget, ReportDrawer. Logic: [remediatio
 | Qtangl owns | Out of scope |
 |-------------|--------------|
 | Prioritization, playbooks, tracking, what-if | HSM provisioning |
-| Re-scan verification + signed proof | Cert re-issuance at CA |
-| Program reporting | Load balancer / network changes |
-| Partner orchestration | Pen testing, formal attestation |
+| Re-scan verification + signed proof | Operating a public CA |
+| Orchestrated crypto flip via customer CLM/KMS/infra ([ADR-010](../adrs/ADR-010-orchestrated-crypto-flip.md)) | Native PQ network overlay appliance |
+| Program reporting | Pen testing, formal attestation |
+| Partner orchestration | Private key export |
 
 ---
 

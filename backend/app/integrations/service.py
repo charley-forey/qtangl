@@ -12,7 +12,16 @@ from app.db.models import TenantIntegration as IntegrationRow
 
 logger = logging.getLogger(__name__)
 
-SUPPORTED_PROVIDERS = {"jira", "servicenow", "linear", "keyfactor", "clm-digicert", "clm-appviewx", "clm-entrust"}
+SUPPORTED_PROVIDERS = {
+    "jira",
+    "servicenow",
+    "linear",
+    "keyfactor",
+    "clm-digicert",
+    "clm-appviewx",
+    "clm-entrust",
+    "clm-venafi",
+}
 
 
 def list_integrations(*, tenant_id: str) -> list[dict[str, Any]]:
@@ -278,6 +287,29 @@ def _http_json(url: str, payload: dict[str, Any], headers: dict[str, str]) -> di
     except Exception as exc:
         logger.warning("Integration push failed: %s", exc)
         return {"sent": False, "reason": str(exc)}
+
+
+def push_flip_job(
+    *,
+    tenant_id: str,
+    provider: str,
+    flip_surface: str,
+    program_item_id: str,
+    request: dict[str, Any] | None = None,
+    target_env: str = "staging",
+) -> dict[str, Any]:
+    """Dispatch CLM flip job via integration registry (parallel to ITSM push)."""
+    from app.remediation.flip import submit
+
+    return submit(
+        tenant_id=tenant_id,
+        program_item_id=program_item_id,
+        flip_surface=flip_surface,
+        provider=provider,
+        target_env=target_env,
+        request=request or {},
+        actor=f"integration:{provider}",
+    )
 
 
 def _row_to_dict(row: IntegrationRow) -> dict[str, Any]:

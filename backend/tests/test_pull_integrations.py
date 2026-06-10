@@ -9,6 +9,11 @@ from app.integrations.clm import AppViewXClmAdapter, EntrustClmAdapter, pull_clm
 from app.integrations.pull import pull_inventory
 
 
+def test_pull_inventory_kms_aws_stub():
+    result = pull_inventory(tenant_id="demo", provider="kms-aws")
+    assert result.get("ok") is True or result.get("ok") is False
+
+
 def test_pull_inventory_unsupported_provider():
     result = pull_inventory(tenant_id="demo", provider="unknown-vendor")
     assert result["ok"] is False

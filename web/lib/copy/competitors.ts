@@ -27,7 +27,7 @@ export const qtanglBaseline: QtanglBaseline = {
     signedPublicVerify: "yes",
     driftRescanDiff: "yes",
     remediationWorkflow: "yes",
-    flipsCrypto: "no",
+    flipsCrypto: "yes",
     midMarketSelfServe: "yes",
     transparentPricing: "yes",
   },
@@ -44,8 +44,8 @@ export const qtanglBaseline: QtanglBaseline = {
     agentless: "yes",
     host: "yes",
     code: "yes",
-    kms: "partial",
-    certClm: "partial",
+    kms: "yes",
+    certClm: "yes",
   },
 };
 

@@ -90,6 +90,28 @@ export class QtanglClient {
     return this.get(`/tenant/remediation/program${q}`);
   }
 
+  async dryRunFlip(
+    programItemId: string,
+    body: { flipSurface: string; provider: string; targetEnv?: string; request?: Record<string, unknown> }
+  ): Promise<Record<string, unknown>> {
+    return this.post(`/tenant/remediation/program/${programItemId}/flip/dry-run`, body);
+  }
+
+  async submitFlip(
+    programItemId: string,
+    body: { flipSurface: string; provider: string; targetEnv?: string; request?: Record<string, unknown>; skipApproval?: boolean }
+  ): Promise<Record<string, unknown>> {
+    return this.post(`/tenant/remediation/program/${programItemId}/flip`, body);
+  }
+
+  async approveFlip(jobId: string, body: { approvalNote?: string; childTenantId?: string } = {}): Promise<Record<string, unknown>> {
+    return this.post(`/tenant/flips/${jobId}/approve`, body);
+  }
+
+  async getFlipJob(jobId: string): Promise<Record<string, unknown>> {
+    return this.get(`/tenant/flips/${jobId}`);
+  }
+
   async verifyRemediation(
     scanId: string,
     body: { remediationId: string; verifyScanId: string }
