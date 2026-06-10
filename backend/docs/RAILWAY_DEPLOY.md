@@ -66,6 +66,26 @@ After migrations 004–006 apply and smoke tests pass:
 
 See [evidence-layer-rollout.md](../quantum-readiness/runbooks/evidence-layer-rollout.md).
 
+## Live dogfood self-scan (trust center G7)
+
+Public trust widget reads `GET /pqc/dogfood/latest`. Configure on **API + worker**:
+
+```
+QTANGL_PQC_ENABLE_LIVE_SCAN=true
+QTANGL_PQC_SCAN_ALLOWLIST=qtangl.com,www.qtangl.com,api.qtangl.com
+QTANGL_ENABLE_TRANSPARENCY_LOG=true
+QTANGL_DOGFOOD_TENANT_ID=dogfood
+```
+
+Operational steps:
+
+1. Create a dedicated **dogfood** tenant (Monitor tier) — do not reuse the public sandbox key.
+2. Issue an API key for that tenant; store as GitHub secret `QTANGL_DOGFOOD_API_KEY`.
+3. Run a manual live scan against `www.qtangl.com` to seed the first bundle.
+4. Verify: `GET /pqc/dogfood/latest` returns `verification.valid: true`.
+5. Run `python scripts/verify_production_rollout.py --full` with the dogfood key after env is set.
+6. Enable daily `pqc-dogfood.yml` live job and `dogfood-freshness.yml` monitor.
+
 ## Smoke test
 
 ```bash

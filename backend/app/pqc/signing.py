@@ -285,8 +285,7 @@ def verify_report_signature(
 ) -> dict[str, Any]:
     content_hash = _content_hash(report_payload)
     expected = signature_block.get("contentHash", "")
-    if content_hash != expected:
-        return {"valid": False, "reason": "Content hash mismatch", "contentHash": content_hash}
+    embedded_hash_mismatch = bool(expected and content_hash != expected)
 
     blocks: list[dict[str, Any]] = list(signature_block.get("signatures") or [])
     if not blocks:
@@ -298,6 +297,9 @@ def verify_report_signature(
         valid = all(r.get("valid") for r in per_signature)
     else:
         valid = any(r.get("valid") for r in per_signature)
+
+    if not valid and embedded_hash_mismatch:
+        return {"valid": False, "reason": "Content hash mismatch", "contentHash": content_hash}
 
     primary = next((r for r in per_signature if r.get("valid")), per_signature[0] if per_signature else {})
     result = {
@@ -317,4 +319,6 @@ def verify_report_signature(
         )
     if not valid:
         result["reason"] = primary.get("reason") or "Signature verification failed"
+    elif embedded_hash_mismatch:
+        result["embeddedContentHashMismatch"] = True
     return result

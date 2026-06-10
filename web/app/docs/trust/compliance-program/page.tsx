@@ -30,6 +30,36 @@ const programArtifacts = [
     repoPath: "docs/compliance/legal-review-checklist.md",
   },
   {
+    title: "Remediation audit sampling",
+    summary: "Sampling methodology for remediation evidence during SOC 2 observation.",
+    repoPath: "docs/compliance/remediation-audit-sampling.md",
+  },
+  {
+    title: "SOC 2 sensor controls",
+    summary: "Host sensor control mapping for enterprise discovery pilots.",
+    repoPath: "docs/compliance/soc2-sensor-controls.md",
+  },
+  {
+    title: "Discovery pen test scope",
+    summary: "Optional sensor/binary discovery scope for external testers.",
+    repoPath: "docs/compliance/discovery-pen-test-scope.md",
+  },
+  {
+    title: "Employee security policy",
+    summary: "v0.1 founder-signed policy for SOC 2 observation prep.",
+    repoPath: "docs/compliance/employee-security-policy.md",
+  },
+  {
+    title: "Platform backup runbook",
+    summary: "Postgres backup, evidence retention, and quarterly restore drill checklist.",
+    repoPath: "docs/ops/platform-backup-restore-runbook.md",
+  },
+  {
+    title: "Questionnaire drafts",
+    summary: "CAIQ Lite, SIG Lite, and top-20 FAQ for enterprise turnaround.",
+    repoPath: "docs/compliance/questionnaires/security-questionnaire-faq.md",
+  },
+  {
     title: "Contracts & insurance checklist",
     summary: "Cyber insurance, vendor DPAs, and procurement artifacts required for regulated customers.",
     repoPath: "docs/compliance/contracts-insurance-checklist.md",

@@ -28,6 +28,7 @@ from app.pqc.jobs import (
     get_job,
     load_scan_bundle,
     load_scan_bundle_for_public_verify,
+    latest_dogfood_scan_id,
     run_job_async,
     save_scan_bundle,
     scan_storage_diagnosis,
@@ -613,15 +614,14 @@ def verify_report(scan_id: str, request: Request) -> dict:
     if payload is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Scan not found.")
 
-    from app.pqc.bundle_codec import bundle_from_api_dict
     from app.pqc.signing import verify_report_signature
     from app.pqc.transparency import log_inclusion_block
     from app.telemetry.events import track_event
 
-    bundle = bundle_from_api_dict(payload)
-    report_json = report_to_json(bundle.report)
-    signature = report_json.get("signature") or bundle.report.signature or {}
-    result = verify_report_signature(report_json, signature)
+    report_json = dict(payload.get("report") or {})
+    signature = report_json.get("signature") or {}
+    verify_payload = {k: v for k, v in report_json.items() if k != "signature"}
+    result = verify_report_signature(verify_payload, signature)
     content_hash = result.get("contentHash") or signature.get("contentHash")
     log_inclusion = log_inclusion_block(str(content_hash)) if content_hash else None
     if log_inclusion:
@@ -633,16 +633,16 @@ def verify_report(scan_id: str, request: Request) -> dict:
     _dispatch_verify_webhook(
         scan_id=scan_id,
         valid=bool(result.get("valid")),
-        readiness_band=bundle.report.readiness_band,
-        target_domain=bundle.report.target_domain,
+        readiness_band=str(report_json.get("readinessBand") or ""),
+        target_domain=str(report_json.get("targetDomain") or ""),
     )
     return {
         "status": "success",
         "scanId": scan_id,
         "verifySpecVersion": result.get("verifySpecVersion"),
         "verification": result,
-        "readinessBand": bundle.report.readiness_band,
-        "targetDomain": bundle.report.target_domain,
+        "readinessBand": report_json.get("readinessBand"),
+        "targetDomain": report_json.get("targetDomain"),
     }
 
 
@@ -680,6 +680,47 @@ def verify_report_json(body: VerifyReportRequest, request: Request) -> dict:
             target_domain=str(report_json.get("targetDomain") or ""),
         )
     return {"status": "success", "verifySpecVersion": result.get("verifySpecVersion"), "verification": result}
+
+
+@router.get("/dogfood/latest", responses={404: {"model": ErrorResponse}})
+def dogfood_latest(request: Request) -> dict:
+    """Public latest Qtangl self-scan for trust center (dogfood tenant)."""
+    from app.api.public_rate_limit import enforce_public_rate_limit
+    from app.pqc.signing import verify_report_signature
+    from app.pqc.transparency import log_inclusion_block
+
+    enforce_public_rate_limit(request)
+
+    scan_id = latest_dogfood_scan_id()
+    if not scan_id:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No dogfood scan available.")
+
+    payload = load_scan_bundle_for_public_verify(scan_id)
+    if payload is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Dogfood scan bundle not found.")
+
+    report_json = dict(payload.get("report") or {})
+    signature = report_json.get("signature") or {}
+    verify_payload = {k: v for k, v in report_json.items() if k != "signature"}
+    result = verify_report_signature(verify_payload, signature)
+    content_hash = result.get("contentHash") or signature.get("contentHash")
+    log_inclusion = log_inclusion_block(str(content_hash)) if content_hash else None
+    if log_inclusion:
+        result["logInclusion"] = log_inclusion
+
+    public_base = os.getenv("QTANGL_PUBLIC_URL", "https://www.qtangl.com").rstrip("/")
+    scanned_at_str = report_json.get("generatedAt") or None
+
+    return {
+        "status": "success",
+        "scanId": scan_id,
+        "targetDomain": report_json.get("targetDomain"),
+        "readinessBand": report_json.get("readinessBand"),
+        "readinessScore": report_json.get("readinessScore"),
+        "scannedAt": scanned_at_str,
+        "verifyUrl": f"{public_base}/verify?scanId={scan_id}",
+        "verification": result,
+    }
 
 
 @router.get("/index")

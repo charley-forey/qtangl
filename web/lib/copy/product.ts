@@ -1,13 +1,14 @@
 import { quantumLexicon } from "@/lib/copy/voice";
 
-const { coherence, interference, measurement, phase } = quantumLexicon;
+const { interference, measurement, phase } = quantumLexicon;
 
 export const readinessMetadata = {
-  title: "Qtangl | Post-Quantum Readiness Platform",
+  title: "Qtangl | Cryptographic Posture Management",
   description:
-    "Assess quantum-vulnerable cryptography, monitor crypto drift, and convert your stack with signed evidence auditors can verify.",
+    "Cryptographic visibility and quantum readiness platform — discover RSA and ECC usage, export CycloneDX CBOM, monitor crypto drift, and prove PQC migration with signed evidence.",
   tagline: "Assess. Monitor. Convert.",
-  oneLiner: "Post-quantum readiness with evidence your auditors can verify.",
+  oneLiner: "Cryptographic posture management with evidence your auditors can verify.",
+  category: "Cryptographic Posture Management (CPM)",
 } as const;
 
 export const optimizationMetadata = {
@@ -24,48 +25,6 @@ export const siteMetadata = {
   ...readinessMetadata,
   url: "https://qtangl.com",
   contactEmail: "charley@qtangl.com",
-} as const;
-
-export const aboutContent = {
-  eyebrow: "About Qtangl",
-  title: "Planning infrastructure with a quantum lens.",
-  intro:
-    "Qtangl turns scheduling, routing, and staffing constraints into ranked plans operations teams can run — with outputs honest enough for engineers and clear enough for the floor.",
-  missionEyebrow: "Mission",
-  missionTitle: "Coherent plans that survive interference.",
-  principles: [
-    {
-      title: coherence.label,
-      description:
-        "Describe jobs, resources, windows, and dependencies in the language your team already uses.",
-    },
-    {
-      title: `${phase.label} discipline`,
-      description:
-        "Solver work only counts when it returns plans teams can review, compare, and execute.",
-    },
-    {
-      title: measurement.label,
-      description:
-        "Every surface shows the plan, why it won, and the business signal behind the decision.",
-    },
-  ],
-  cards: [
-    {
-      eyebrow: coherence.label,
-      description:
-        "Monochrome by design — structure and motion carry coherence, not decorative color.",
-    },
-    {
-      eyebrow: `${phase.label} discipline`,
-      description:
-        "Site and API today; dashboards and deeper tooling next — same planning narrative throughout.",
-    },
-    {
-      eyebrow: measurement.label,
-      description: "Plan · reason · metric — always together, always auditable.",
-    },
-  ],
 } as const;
 
 export const readinessDocsIndex = {

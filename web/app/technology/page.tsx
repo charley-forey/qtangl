@@ -234,7 +234,7 @@ export default function TechnologyPage() {
       <JsonLd
         data={buildSoftwareApplicationJsonLd({
           path: "/technology",
-          name: "Qtangl Quantum Planning API",
+          name: "Qtangl Cryptographic Visibility / Quantum Readiness",
           description: technologyDescription,
         })}
       />

@@ -40,11 +40,11 @@ Use this order on every readiness surface (homepage, `/assess`, sales deck, cold
 
 ### Retire as company headline
 
-| Current | Location |
-|---------|----------|
-| "Quantum Planning API" | [web/lib/copy/nav.ts](../../web/lib/copy/nav.ts) `navbarCopy.subtitle` |
-| "Every possibility ranked. One future your team runs." | [web/lib/copy/product.ts](../../web/lib/copy/product.ts) `siteMetadata.tagline` |
-| "Find Quantum" | [web/lib/copy/home.ts](../../web/lib/copy/home.ts) `homeHero.primaryCta` |
+| Current | Location | Status |
+|---------|----------|--------|
+| "Quantum Planning API" | [web/lib/copy/nav.ts](../../web/lib/copy/nav.ts) `navbarCopy.subtitle` | **Updated** → "Cryptographic Posture" |
+| "Every possibility ranked. One future your team runs." | [web/lib/copy/product.ts](../../web/lib/copy/product.ts) `siteMetadata.tagline` | **Updated** → readiness tagline on site; optimization scoped to `optimizationMetadata` |
+| "Find Quantum" | [web/lib/copy/home.ts](../../web/lib/copy/home.ts) `homeHero.primaryCta` | **Removed** — homepage uses [readiness-home.ts](../../web/lib/copy/readiness-home.ts) |
 
 ### Proposed company taglines (pick one in Phase 0)
 

@@ -131,6 +131,43 @@ jobs:
       - name: Dependency audit (pip-audit)
         run: pip install pip-audit && pip-audit -r requirements.lock || true
 
+  security-audit:
+    name: Security audit (dependencies + SSRF)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: pip
+          cache-dependency-path: backend/requirements.lock
+
+      - name: pip-audit (blocking critical/high)
+        working-directory: backend
+        run: |
+          python -m pip install --upgrade pip
+          pip install pip-audit
+          pip-audit -r requirements.lock --desc on
+
+      - name: SSRF safety regression
+        working-directory: backend
+        run: |
+          pip install -r requirements.lock -r requirements-dev.lock
+          python -m pytest tests/test_pqc_safety.py -q --tb=short
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+
+      - name: npm audit (blocking high+ production)
+        working-directory: web
+        run: |
+          npm ci
+          npm audit --audit-level=high --production
+
   web:
     name: Web (lint + build)
     runs-on: ubuntu-latest
@@ -267,6 +304,19 @@ jobs:
 
       - name: Verify tier liveToday vs coverage matrix
         run: node scripts/alignment-check.mjs
+
+  trust-copy:
+    name: Trust copy gate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Trust contact and SLA consistency
+        run: node scripts/trust-copy-check.mjs
 
   benchmarks:
     name: Benchmarks (BM-001, BM-003, BM-006)

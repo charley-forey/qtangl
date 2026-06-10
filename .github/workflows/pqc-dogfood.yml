@@ -2,11 +2,74 @@ name: PQC dogfood scan
 
 on:
   schedule:
-    - cron: "0 14 * * 1"
+    - cron: "0 14 * * *"
+    - cron: "0 15 * * 1"
   workflow_dispatch:
+    inputs:
+      live:
+        description: Run live-dogfood job (requires QTANGL_DOGFOOD_API_KEY)
+        type: boolean
+        default: false
+      fixture:
+        description: Run fixture-regression job (BM-006 local smoke)
+        type: boolean
+        default: true
 
 jobs:
-  dogfood:
+  live-dogfood:
+    if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.live)
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        target: [www.qtangl.com, qtangl.com, api.qtangl.com]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Live scan ${{ matrix.target }}
+        id: scan
+        uses: ./.github/actions/qtangl-scan
+        with:
+          api-key: ${{ secrets.QTANGL_DOGFOOD_API_KEY }}
+          api-url: ${{ secrets.QTANGL_PROD_API_BASE || 'https://api.qtangl.com' }}
+          target: ${{ matrix.target }}
+          use-fixture: "false"
+          fail-on-new-quantum-vulnerable: "true"
+
+      - name: Verify signature and transparency log
+        env:
+          QTANGL_API_BASE: ${{ secrets.QTANGL_PROD_API_BASE || 'https://api.qtangl.com' }}
+          SCAN_ID: ${{ steps.scan.outputs.scan-id }}
+        run: |
+          python3 << 'PY'
+          import json, os, sys, urllib.request
+          base = os.environ["QTANGL_API_BASE"].rstrip("/")
+          scan_id = os.environ.get("SCAN_ID", "").strip()
+          if not scan_id:
+              print("::error::Scan step did not return scan-id")
+              sys.exit(1)
+          verify = json.loads(urllib.request.urlopen(f"{base}/pqc/verify/{scan_id}", timeout=60).read().decode())
+          verification = verify.get("verification") or {}
+          if not verification.get("valid"):
+              print(f"::error::Verify invalid for {scan_id}")
+              sys.exit(1)
+          inclusion = verification.get("logInclusion") or {}
+          if not inclusion.get("included"):
+              print(f"::warning::Transparency log inclusion absent for {scan_id}")
+          with open(f"dogfood-{scan_id}.json", "w", encoding="utf-8") as fh:
+              json.dump(verify, fh, indent=2)
+          print(f"Live dogfood OK: {scan_id}")
+          PY
+
+      - name: Upload live dogfood artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: live-dogfood-${{ matrix.target }}
+          path: dogfood-*.json
+          if-no-files-found: ignore
+
+  fixture-regression:
+    if: github.event.schedule == '0 15 * * 1' || (github.event_name == 'workflow_dispatch' && inputs.fixture)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -20,7 +83,7 @@ jobs:
           cd backend
           pip install -r requirements.lock
 
-      - name: Fixture PQC scan (qtangl.com scenario)
+      - name: Fixture PQC scan (BM-006 regression — not production domains)
         run: |
           cd backend
           python -m benchmarks.run_benchmark BM-006 --write
@@ -31,28 +94,7 @@ jobs:
           name: pqc-dogfood-bm-006
           path: backend/benchmarks/results/BM-006-pqc-scan.json
 
-      - name: Generate readiness badge
-        run: |
-          cd backend
-          python - <<'PY'
-          import json
-          from pathlib import Path
-          p = Path("benchmarks/results/BM-006-pqc-scan.json")
-          data = json.loads(p.read_text())
-          band = (data.get("report") or {}).get("readinessBand") or "unknown"
-          score = (data.get("report") or {}).get("readinessScore") or 0
-          badge = f"![Qtangl readiness](https://img.shields.io/badge/Qtangl%20readiness-{band}-{score:.0f}?style=flat-square)"
-          Path("benchmarks/results/readiness-badge.md").write_text(badge + "\n", encoding="utf-8")
-          print(badge)
-          PY
-
-      - name: Upload readiness badge
-        uses: actions/upload-artifact@v4
-        with:
-          name: pqc-readiness-badge
-          path: backend/benchmarks/results/readiness-badge.md
-
-      - name: Sign + verify + transparency smoke
+      - name: Sign + verify + transparency smoke (local SQLite)
         env:
           QTANGL_ENABLE_TRANSPARENCY_LOG: "true"
           DATABASE_URL: sqlite:///./dogfood_evidence.db
@@ -68,7 +110,7 @@ jobs:
           p = Path("benchmarks/results/BM-006-pqc-scan.json")
           data = json.loads(p.read_text())
           report = data.get("report") or {}
-          report["scanId"] = report.get("scanId") or "dogfood-bm-006"
+          report["scanId"] = report.get("scanId") or "dogfood-bm-006-fixture"
           sig = sign_report_payload(report)
           report["signature"] = sig
           safe_append_after_sign(content_hash=sig["contentHash"], signature=sig, tenant_id="dogfood")
@@ -76,15 +118,15 @@ jobs:
           inclusion = log_inclusion_block(sig["contentHash"])
           assert result.get("valid"), result
           assert inclusion and inclusion.get("included"), inclusion
-          Path("benchmarks/results/dogfood-verify.json").write_text(
+          Path("benchmarks/results/dogfood-verify-fixture.json").write_text(
               json.dumps({"valid": True, "logIncluded": True, "seq": inclusion.get("seq")}, indent=2),
               encoding="utf-8",
           )
-          print("dogfood verify + log inclusion OK")
+          print("fixture verify + log inclusion OK")
           PY
 
-      - name: Upload dogfood verify artifact
+      - name: Upload fixture verify artifact
         uses: actions/upload-artifact@v4
         with:
-          name: pqc-dogfood-verify
-          path: backend/benchmarks/results/dogfood-verify.json
+          name: pqc-dogfood-fixture-verify
+          path: backend/benchmarks/results/dogfood-verify-fixture.json

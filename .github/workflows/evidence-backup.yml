@@ -1,0 +1,42 @@
+name: Evidence backup
+
+on:
+  schedule:
+    - cron: "0 3 * * *"
+  workflow_dispatch:
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install backend deps
+        run: pip install -r requirements.lock
+
+      - name: Backup evidence log tables
+        env:
+          DATABASE_URL: ${{ secrets.PROD_DATABASE_URL }}
+          QTANGL_EVIDENCE_BACKUP_BUCKET: ${{ secrets.QTANGL_EVIDENCE_BACKUP_BUCKET }}
+        run: |
+          if [ -z "$DATABASE_URL" ]; then
+            python scripts/backup_evidence_log.py --dry-run
+            echo "::warning::PROD_DATABASE_URL not configured — dry-run only"
+            exit 0
+          fi
+          python scripts/backup_evidence_log.py --output evidence-backup.sql
+
+      - name: Upload backup artifact
+        if: env.DATABASE_URL != ''
+        uses: actions/upload-artifact@v4
+        with:
+          name: evidence-backup-${{ github.run_id }}
+          path: backend/evidence-backup.sql
+          retention-days: 30

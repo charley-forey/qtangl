@@ -3,10 +3,10 @@ import { readinessLexicon } from "@/lib/copy/readiness";
 const { evidence, exposure, hndl } = readinessLexicon;
 
 export const readinessHero = {
-  eyebrow: "Post-quantum readiness",
+  eyebrow: "Cryptographic posture management",
   title: "Assess. Monitor. Convert.",
   subhead:
-    "Inventory quantum-vulnerable crypto in minutes. Monitor drift until Q-Day. Prove remediation with signed evidence.",
+    "Discover quantum-vulnerable cryptography across your estate, build a CycloneDX CBOM inventory, and prove migration progress with signed evidence auditors verify independently.",
   primaryCta: { label: "Run Q-Day scan", href: "/assess" },
   secondaryCta: { label: "Verify a report", href: "/verify?token=sample-token" },
 } as const;

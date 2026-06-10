@@ -4,7 +4,6 @@ import Eyebrow from "@/components/ui/Eyebrow";
 import Glow from "@/components/ui/Glow";
 import ParticleField from "@/components/quantum/ParticleField";
 import StateTransition from "@/components/quantum/StateTransition";
-import { homeHero } from "@/lib/copy/home";
 import { readinessHero } from "@/lib/copy/readiness-home";
 
 type HeroCopy = {

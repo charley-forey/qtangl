@@ -5,7 +5,7 @@ import TechnologyBlock from "@/components/technology/TechnologyBlock";
 import Eyebrow from "@/components/ui/Eyebrow";
 import PlanVisualization from "@/components/visualization/PlanVisualization";
 import { TryScenario, tryScenarios } from "@/lib/demo-data";
-import { homeProductPreview } from "@/lib/copy/home";
+import { optimizationProductPreview } from "@/lib/copy/home";
 import { homeAmplitudeBars } from "@/lib/copy/visualization";
 
 type ProductPreviewProps = {
@@ -17,9 +17,9 @@ type ProductPreviewProps = {
 };
 
 export default function ProductPreview({
-  eyebrow = homeProductPreview.eyebrow,
-  title = homeProductPreview.title,
-  description = homeProductPreview.description,
+  eyebrow = optimizationProductPreview.eyebrow,
+  title = optimizationProductPreview.title,
+  description = optimizationProductPreview.description,
   scenario,
   layout = "stacked",
 }: ProductPreviewProps) {

@@ -1,0 +1,62 @@
+name: Production smoke
+
+on:
+  schedule:
+    - cron: "0 6 * * *"
+  workflow_dispatch:
+    inputs:
+      full:
+        description: Run full scan + verify checks
+        type: boolean
+        default: false
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install backend deps
+        run: pip install -r requirements.lock
+
+      - name: Production rollout smoke
+        env:
+          QTANGL_API_BASE: ${{ secrets.QTANGL_PROD_API_BASE || 'https://api.qtangl.com' }}
+          QTANGL_API_KEY: ${{ secrets.QTANGL_DOGFOOD_API_KEY || secrets.QTANGL_PROD_API_KEY }}
+        run: |
+          ARGS=""
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ inputs.full }}" = "true" ]; then
+            ARGS="--full"
+          fi
+          python scripts/verify_production_rollout.py $ARGS
+
+      - name: Dogfood latest endpoint
+        env:
+          QTANGL_API_BASE: ${{ secrets.QTANGL_PROD_API_BASE || 'https://api.qtangl.com' }}
+        run: |
+          python3 << 'PY'
+          import json, os, sys, urllib.request
+          base = os.environ["QTANGL_API_BASE"].rstrip("/")
+          try:
+              with urllib.request.urlopen(f"{base}/pqc/dogfood/latest", timeout=60) as response:
+                  if response.status != 200:
+                      print(f"::warning::dogfood/latest HTTP {response.status} (may not be configured yet)")
+                      sys.exit(0)
+                  data = json.loads(response.read().decode())
+          except urllib.error.HTTPError as exc:
+              if exc.code == 404:
+                  print("::warning::dogfood/latest 404 — live dogfood not configured yet")
+                  sys.exit(0)
+              raise
+          if not (data.get("verification") or {}).get("valid"):
+              print("::error::dogfood/latest signature invalid")
+              sys.exit(1)
+          print(f"dogfood/latest OK scanId={data.get('scanId')}")
+          PY

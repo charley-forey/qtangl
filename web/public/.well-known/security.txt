@@ -1,13 +1,13 @@
-Contact: mailto:security@qtangl.com
+Contact: mailto:charley@qtangl.com
 Contact: https://www.qtangl.com/access
 Expires: 2027-06-01T00:00:00.000Z
 Preferred-Languages: en
 Canonical: https://www.qtangl.com/.well-known/security.txt
-Policy: https://www.qtangl.com/trust
+Policy: https://www.qtangl.com/trust/disclosure
 Acknowledgments: https://www.qtangl.com/trust/security
 Hiring: https://www.qtangl.com/access
 
-# Qtangl security disclosure (Phase 5)
-# Report vulnerabilities responsibly via security@qtangl.com.
-# Include reproduction steps, impact assessment, and preferred contact method.
-# We aim to acknowledge reports within 3 business days.
+# Qtangl security disclosure
+# Email charley@qtangl.com with subject [SECURITY]
+# Full policy: https://www.qtangl.com/trust/disclosure
+# We aim to acknowledge reports within 2 business days.

@@ -36,7 +36,7 @@ const frameworkMapping: DocsFieldRow[] = [
   },
   {
     name: "CAIQ/SIG responses",
-    type: "available by request",
+    type: "available under NDA",
     required: true,
     description: "Questionnaire responses can be shared during enterprise diligence under appropriate agreements.",
   },

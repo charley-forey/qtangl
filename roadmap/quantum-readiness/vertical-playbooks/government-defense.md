@@ -93,8 +93,23 @@ Position as "CMMC-ready evidence," never "FedRAMP authorized" ([17-legal-regulat
 
 ---
 
+## Federal funding path
+
+Non-dilutive SBIR and federal contracts validate the gov vertical while funding discovery + evidence development.
+
+| Priority | Program | Action |
+|----------|---------|--------|
+| 1 | NSF SBIR Project Pitch | Submit first — lowest friction |
+| 2 | NIST NCCoE PQC COI | Join for credibility |
+| 3 | AFWERX Open Topic | DoD pilot via DSIP |
+
+**Full playbook:** [24-federal-funding-and-grants.md](../24-federal-funding-and-grants.md) · [federal-funding/](../federal-funding/README.md)
+
+---
+
 ## Related
 
+- Federal funding: [24-federal-funding-and-grants.md](../24-federal-funding-and-grants.md)
 - Legal/export: [17-legal-regulatory-and-compliance.md](../17-legal-regulatory-and-compliance.md)
 - Partnerships (SI/GovCon): [15-partnerships-and-ecosystem.md](../15-partnerships-and-ecosystem.md)
 - Solutions page spec: [04-website-transformation.md](../04-website-transformation.md) (`/solutions/government`)

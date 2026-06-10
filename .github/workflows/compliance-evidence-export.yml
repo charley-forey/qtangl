@@ -1,0 +1,60 @@
+name: Compliance evidence export
+
+on:
+  schedule:
+    - cron: "0 8 1 * *"
+  workflow_dispatch:
+
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install backend deps
+        run: |
+          cd backend
+          pip install -r requirements.lock
+
+      - name: Run security evidence test suite
+        run: |
+          cd backend
+          mkdir -p ../docs/compliance/evidence/$(date -u +%Y-%m)
+          pytest tests/test_pqc_safety.py tests/test_g3_d2_h.py -q --junitxml=../docs/compliance/evidence/$(date -u +%Y-%m)/junit-security.xml
+
+      - name: Collect CI metadata
+        run: |
+          MONTH=$(date -u +%Y-%m)
+          OUT="docs/compliance/evidence/${MONTH}/ci-summary.json"
+          mkdir -p "docs/compliance/evidence/${MONTH}"
+          python3 << PY
+          import json, os
+          from datetime import datetime, timezone
+          summary = {
+              "exportedAt": datetime.now(timezone.utc).isoformat(),
+              "repository": os.environ.get("GITHUB_REPOSITORY", ""),
+              "workflowRunId": os.environ.get("GITHUB_RUN_ID", ""),
+              "workflowRunUrl": os.environ.get("GITHUB_SERVER_URL", "https://github.com")
+                  + "/"
+                  + os.environ.get("GITHUB_REPOSITORY", "")
+                  + "/actions/runs/"
+                  + os.environ.get("GITHUB_RUN_ID", ""),
+              "notes": "Upload bundle to Vanta/Drata during SOC 2 observation.",
+          }
+          with open("${OUT}", "w", encoding="utf-8") as fh:
+              json.dump(summary, fh, indent=2)
+          print(json.dumps(summary, indent=2))
+          PY
+        env:
+          OUT_PATH: docs/compliance/evidence
+
+      - name: Upload evidence bundle
+        uses: actions/upload-artifact@v4
+        with:
+          name: compliance-evidence-${{ github.run_id }}
+          path: docs/compliance/evidence/
+          retention-days: 400

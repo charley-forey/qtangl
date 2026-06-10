@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import LegalPage from "@/components/legal/LegalPage";
+import { primaryContactEmail, privacyContactEmail } from "@/lib/copy/trust";
 
 export const metadata: Metadata = {
   title: "Privacy Policy | Qtangl",
@@ -43,11 +44,11 @@ export default function PrivacyPage() {
         },
         {
           heading: "8. Your rights",
-          body: "Contact privacy@qtangl.com for access, correction, or deletion requests. EU/UK requests processed within applicable statutory timelines.",
+          body: `Contact ${privacyContactEmail} (subject [PRIVACY]) for access, correction, or deletion requests. EU/UK requests processed within applicable statutory timelines.`,
         },
         {
           heading: "9. Contact",
-          body: "privacy@qtangl.com · Qtangl, Inc.",
+          body: `${primaryContactEmail} · Qtangl, Inc.`,
         },
       ]}
     />

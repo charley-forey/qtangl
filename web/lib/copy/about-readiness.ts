@@ -4,9 +4,9 @@ const { evidence, exposure, convert } = readinessLexicon;
 
 export const aboutReadinessContent = {
   eyebrow: "About Qtangl",
-  title: "Post-quantum readiness with evidence you can verify.",
+  title: "Cryptographic posture management for the Q-Day migration.",
   intro:
-    "Qtangl helps regulated teams inventory quantum-vulnerable cryptography, monitor drift until Q-Day, and prove remediation with signed reports auditors check independently.",
+    "Qtangl is a cryptographic posture management (CPM) platform for regulated teams and federal-adjacent operators — discover quantum-vulnerable cryptography, monitor drift until Q-Day, and prove remediation with signed reports auditors check independently.",
   missionEyebrow: "Mission",
   missionTitle: "Assess. Monitor. Convert.",
   principles: [

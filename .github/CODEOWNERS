@@ -1,0 +1,10 @@
+# Trust posture — require review on security-sensitive paths
+/backend/app/pqc/           @charley-qtangl
+/backend/app/db/rls.py      @charley-qtangl
+/backend/app/auth.py        @charley-qtangl
+/.github/workflows/         @charley-qtangl
+/.github/actions/           @charley-qtangl
+/web/app/trust/             @charley-qtangl
+/web/lib/copy/trust.ts      @charley-qtangl
+/docs/compliance/           @charley-qtangl
+web/public/.well-known/     @charley-qtangl

@@ -5,10 +5,10 @@ export const platformPageCopy = {
       "Assess quantum-vulnerable cryptography, monitor crypto drift, and convert your stack with signed evidence.",
   },
   hero: {
-    eyebrow: "Qtangl Readiness",
+    eyebrow: "Cryptographic posture management",
     title: "Assess. Monitor. Convert.",
     description:
-      "One platform from first Q-Day inventory to ongoing drift monitoring and remediation proof your auditors can verify.",
+      "Cryptographic visibility from first inventory to ongoing drift monitoring — CycloneDX CBOM, Mosca HNDL scoring, and remediation proof your auditors can verify.",
     actions: [
       { href: "/assess", label: "Run Q-Day scan" },
       { href: "/assess", label: "Explore Assess", variant: "secondary" as const },

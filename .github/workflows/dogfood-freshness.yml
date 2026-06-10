@@ -1,0 +1,81 @@
+name: Dogfood freshness
+
+on:
+  schedule:
+    - cron: "0 15 * * *"
+  workflow_dispatch:
+
+jobs:
+  freshness:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check latest dogfood scan
+        env:
+          QTANGL_API_BASE: ${{ secrets.QTANGL_PROD_API_BASE || 'https://api.qtangl.com' }}
+          MAX_AGE_DAYS: "8"
+        run: |
+          python3 << 'PY'
+          import json, os, sys, urllib.request
+          from datetime import datetime, timezone
+
+          base = os.environ["QTANGL_API_BASE"].rstrip("/")
+          max_age_days = int(os.environ.get("MAX_AGE_DAYS", "8"))
+          url = f"{base}/pqc/dogfood/latest"
+
+          try:
+              with urllib.request.urlopen(url, timeout=60) as response:
+                  if response.status != 200:
+                      print(f"::error::dogfood/latest returned HTTP {response.status}")
+                      sys.exit(1)
+                  data = json.loads(response.read().decode())
+          except urllib.error.HTTPError as exc:
+              print(f"::error::dogfood/latest HTTP {exc.code}: {exc.reason}")
+              sys.exit(1)
+          except Exception as exc:
+              print(f"::error::Failed to fetch dogfood/latest: {exc}")
+              sys.exit(1)
+
+          verification = data.get("verification") or {}
+          if not verification.get("valid"):
+              print("::error::Latest dogfood scan signature is invalid")
+              sys.exit(1)
+
+          scanned_at = data.get("scannedAt")
+          if scanned_at:
+              try:
+                  scanned = datetime.fromisoformat(scanned_at.replace("Z", "+00:00"))
+                  if scanned.tzinfo is None:
+                      scanned = scanned.replace(tzinfo=timezone.utc)
+                  age_days = (datetime.now(timezone.utc) - scanned).total_seconds() / 86400
+                  if age_days > max_age_days:
+                      print(f"::error::Dogfood scan is {age_days:.1f} days old (max {max_age_days})")
+                      sys.exit(1)
+                  print(f"Dogfood scan age OK: {age_days:.1f} days")
+              except ValueError:
+                  print(f"::warning::Could not parse scannedAt: {scanned_at}")
+
+          print(f"scanId={data.get('scanId')} band={data.get('readinessBand')} target={data.get('targetDomain')}")
+          PY
+
+      - name: Open issue on failure
+        if: failure() && github.event_name == 'schedule'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const title = 'dogfood-stale: latest self-scan failed freshness check';
+            const body = 'Automated dogfood-freshness workflow failed. Check live-dogfood CI and Railway production scan config.';
+            const issues = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              labels: 'dogfood-stale',
+            });
+            if (issues.data.length === 0) {
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title,
+                body,
+                labels: ['dogfood-stale', 'security'],
+              });
+            }

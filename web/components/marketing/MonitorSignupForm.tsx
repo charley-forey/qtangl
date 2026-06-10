@@ -4,6 +4,7 @@ import { useState } from "react";
 
 import { qtanglApiBaseUrl } from "@/lib/api";
 import { trackEvent } from "@/lib/analytics";
+import { generalContactEmail } from "@/lib/copy/trust";
 
 export default function MonitorSignupForm() {
   const [email, setEmail] = useState("");
@@ -31,7 +32,7 @@ export default function MonitorSignupForm() {
         return;
       }
       trackEvent("monitor_signup_contact", { company, status: payload.status });
-      setMessage(payload.message ?? "Contact hello@qtangl.com to start a Monitor pilot.");
+      setMessage(payload.message ?? `Contact ${generalContactEmail} to start a Monitor pilot.`);
     } catch (error) {
       trackEvent("monitor_signup_error", { company });
       setMessage(error instanceof Error ? error.message : "Signup failed.");

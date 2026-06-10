@@ -7,6 +7,7 @@ import DocsSection from "@/components/docs/DocsSection";
 import GuidePageLayout from "@/components/docs/GuidePageLayout";
 import type { DocsFieldRow } from "@/lib/docs/types";
 import { buildPageMetadata } from "@/lib/seo";
+import { disclosureAckSlaBusinessDays, mailtoSecurityReport, securityContactEmail } from "@/lib/copy/trust";
 
 export const metadata: Metadata = buildPageMetadata({
   path: "/docs/trust/incident-response",
@@ -104,11 +105,16 @@ export default function IncidentResponseDocsPage() {
         <DocsHeading>Vulnerability disclosure</DocsHeading>
         <p className="text-sm leading-8 text-[var(--color-gray-300)]">
           Report suspected vulnerabilities to{" "}
-          <a href="mailto:security@qtangl.com" className="text-white underline underline-offset-4">
-            security@qtangl.com
+          <a href={mailtoSecurityReport()} className="text-white underline underline-offset-4">
+            {securityContactEmail}
           </a>
-          . Include reproduction steps, affected endpoints, and impact assessment. We acknowledge reports within two
-          business days and coordinate disclosure timelines with reporters for validated findings.
+          . Include reproduction steps, affected endpoints, and impact assessment. We acknowledge reports within{" "}
+          {disclosureAckSlaBusinessDays} business days and coordinate disclosure timelines with reporters for validated
+          findings. See{" "}
+          <a href="/trust/disclosure" className="text-white underline underline-offset-4">
+            /trust/disclosure
+          </a>
+          .
         </p>
         <DocsCallout variant="info">
           Do not scan production tenants without authorization. Coordinated testing agreements are available for

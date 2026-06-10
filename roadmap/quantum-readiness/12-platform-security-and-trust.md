@@ -10,13 +10,14 @@ We sell security **to** security teams. Our own posture is a product feature. Th
 
 | Layer | Now | 6 months | 12 months |
 |-------|-----|----------|-----------|
-| Secrets hygiene | `in-progress` (G1) | gitleaks CI, rotation policy | Secrets manager |
+| Secrets hygiene | `done` (gitleaks CI + pre-commit) | rotation policy | Secrets manager |
 | Tenant isolation | `done` (G3) | Audit log per tenant | Row-level + tested |
 | Threat model | `done` (G2) | Pen test scoped | Pen test executed |
-| SOC 2 | `not-started` | Type I observation started | Type I report; Type II window |
+| SOC 2 | `kickoff` | Type I observation started | Type I report; Type II window |
 | ISO 27001 | `not-started` | Gap assessment | Stage 1 audit (if EU demand) |
-| Dogfood PQC | `not-started` (G7) | Self-scan in CI | Hybrid PQ TLS on our endpoints |
-| Vuln disclosure | `not-started` (G8) | security.txt + policy | Triage SLA published |
+| Dogfood PQC | `in-progress` (fixture + API; live CI pending prod secrets) | Daily live scans in CI | Hybrid PQ TLS on our endpoints |
+| Vuln disclosure | `partial` (security.txt + `/trust/disclosure`) | Triage SLA published | Acknowledgments live |
+| Trust center | `pilot` | Security overview + questionnaires | SOC 2 report under NDA |
 
 Builds on [11-track-G-security-trust-compliance.md](../optimization_OLD_FUTURE/11-track-G-security-trust-compliance.md). This doc is the **readiness-go-to-market view** of that program.
 
@@ -48,10 +49,10 @@ Enterprise deals stall on questionnaires (CAIQ, SIG, custom). Pre-build answers.
 
 | Artifact | Status | Owner |
 |----------|--------|-------|
-| CAIQ (Cloud Security Alliance) self-assessment | `not-started` | Security lead |
-| SIG Lite responses | `not-started` | Security lead |
-| Standard "security overview" PDF | `coming-soon` | Founder |
-| Data flow diagrams | `coming-soon` | Eng |
+| CAIQ (Cloud Security Alliance) self-assessment | `draft` | Security lead |
+| SIG Lite responses | `draft` | Security lead |
+| Standard "security overview" PDF | `draft` | Founder |
+| Data flow diagrams | `draft` | Eng |
 | Pen test executive summary | `not-started` | After pen test |
 | SOC 2 Type I report (under NDA) | `not-started` | After audit |
 
@@ -97,6 +98,8 @@ flowchart LR
 - [ ] Public "We scanned ourselves" report with live `/verify` link
 - [ ] Readiness score badge on `/trust` and footer
 
+**Federal alignment:** See [federal-funding/checklist-and-tracker.md](./federal-funding/checklist-and-tracker.md) trust section and [trust-program-tracker.md](../../docs/compliance/trust-program-tracker.md).
+
 **Marketing value:** "We hold ourselves to the standard we sell" — directly counters L-TRUST losses.
 
 ---
@@ -107,9 +110,9 @@ flowchart LR
 |----------|----------------|--------|
 | SSRF protection on scanner | [backend/app/pqc/safety.py](../../backend/app/pqc/safety.py) `assert_scannable` | `done` |
 | Scan rate limits / caps | `QTANGL_PQC_MAX_ENDPOINTS`, `QTANGL_PQC_SCAN_TIMEOUT` | `done` |
-| Dependency scanning | pip-audit / npm audit in CI (Track I) | `in-progress` |
-| Secret scanning | gitleaks in CI | `in-progress` |
-| SAST | CodeQL or Semgrep on PRs | `coming-soon` |
+| Dependency scanning | pip-audit / npm audit in CI (blocking) | `done` |
+| Secret scanning | gitleaks in CI + pre-commit | `done` |
+| SAST | CodeQL on PRs | `in-progress` |
 | Signed reports | Ed25519 [signing.py](../../backend/app/pqc/signing.py) | `done` |
 | Input validation | Pydantic models, upload size/format limits | `pilot` |
 | PII/PHI redaction in logs | G9 safe logging | `not-started` |

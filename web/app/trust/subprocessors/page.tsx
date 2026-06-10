@@ -13,7 +13,13 @@ export const metadata: Metadata = buildPageMetadata({
 });
 
 const subprocessors = [
-  { name: "Railway", purpose: "Application hosting", data: "Scan metadata, configs", region: "US", dpa: "DPA available" },
+  {
+    name: "Railway",
+    purpose: "Application hosting",
+    data: "Scan metadata, configs",
+    region: "US",
+    dpa: "SOC 2 Type II (NDA); HIPAA BAA (Enterprise); DPA",
+  },
   { name: "Vercel", purpose: "Web frontend CDN", data: "Static assets, analytics cookies", region: "Global", dpa: "DPA available" },
   { name: "Postgres (managed)", purpose: "Primary database", data: "Tenant scans, remediation, audit", region: "US (EU by agreement)", dpa: "DPA available" },
   { name: "Redis (managed)", purpose: "Job queue", data: "Job payloads (ephemeral)", region: "Contractual", dpa: "DPA available" },
@@ -29,7 +35,7 @@ export default function TrustSubprocessorsPage() {
       <PageHero
         eyebrow="Trust Center"
         title="Sub-processors"
-        description="Current register for enterprise review. Last updated 2026-06-09. We notify customers 30 days before adding a new sub-processor."
+        description="Current register for enterprise review. Last updated 2026-06-10. We notify customers 30 days before adding a new sub-processor."
       />
 
       <Section gap="tight">
@@ -58,7 +64,8 @@ export default function TrustSubprocessorsPage() {
           </table>
         </div>
         <p className="mt-6 text-sm text-[var(--muted)]">
-          Request a DPA via{" "}
+          Primary hosting provider maintains SOC 2 Type II; report available under NDA on document request. Request
+          artifacts via{" "}
           <Link href="/access" className="text-white underline">
             Contact sales
           </Link>

@@ -1,12 +1,15 @@
-import { homeHero } from "@/lib/copy/home";
 import ParticleField from "@/components/quantum/ParticleField";
+
+const readinessVisualLabels = ["Assess", "Monitor", "Convert"] as const;
 
 type EntanglementFieldProps = {
   className?: string;
+  labels?: readonly string[];
 };
 
 export default function EntanglementField({
   className = "",
+  labels = readinessVisualLabels,
 }: EntanglementFieldProps) {
   return (
     <div
@@ -21,7 +24,7 @@ export default function EntanglementField({
         <ParticleField />
       </div>
       <div className="relative z-10 mt-6 flex flex-col items-start gap-2 text-xs uppercase tracking-[0.28em] text-[var(--color-gray-400)] sm:flex-row sm:items-center sm:justify-between sm:gap-4">
-        {homeHero.visualLabels.map((label) => (
+        {labels.map((label) => (
           <span key={label}>{label}</span>
         ))}
       </div>

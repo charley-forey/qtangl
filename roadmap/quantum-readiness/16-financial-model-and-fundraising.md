@@ -226,8 +226,26 @@ Sensitivity: a 20% Monitor price change holds margin >95% but shifts customer co
 
 ---
 
+## Non-dilutive federal funding (parallel path)
+
+SBIR/STTR and federal contracts can fund product validation without dilution — often strengthening the venture narrative.
+
+| Vehicle | Phase I target | Phase II target |
+|---------|----------------|-----------------|
+| NSF SBIR | ~$275K | ~$1M+ |
+| AFWERX Open Topic | $75K | up to $1.25M |
+| DHS SBIR | up to $150K | up to $1M |
+| STRATFI/TACFI (post-Phase II) | — | $3M–$15M |
+
+**Full playbook:** [24-federal-funding-and-grants.md](./24-federal-funding-and-grants.md) · [federal-funding/](./federal-funding/README.md)
+
+Non-dilutive awards can extend runway and de-risk seed milestones (e.g., federal pilot = traction proof for Series A).
+
+---
+
 ## Related docs
 
+- Federal funding playbook: [24-federal-funding-and-grants.md](./24-federal-funding-and-grants.md)
 - Original financial model: [17-financial-model.md](../optimization_OLD_FUTURE/17-financial-model.md)
 - Pricing/packaging: [06-gtm-and-pricing.md](./06-gtm-and-pricing.md)
 - Metrics: [10-metrics-and-risks.md](./10-metrics-and-risks.md)

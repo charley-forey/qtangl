@@ -370,8 +370,6 @@ def report_to_auditor(report: MigrationReport) -> dict[str, Any]:
 
 
 def _report_provenance(report: MigrationReport) -> dict[str, Any]:
-    signature = report.signature or {}
-    signing_key_id = signature.get("keyFingerprint", "")
     payload_for_hash = {
         "scenarioId": report.scenario_id,
         "targetDomain": report.target_domain,
@@ -381,7 +379,6 @@ def _report_provenance(report: MigrationReport) -> dict[str, Any]:
     }
     config_hash = hashlib.sha256(json.dumps(payload_for_hash, sort_keys=True).encode("utf-8")).hexdigest()[:20]
     return {
-        "signingKeyId": signing_key_id,
         "generatedAt": report.generated_at,
         "scanConfigHash": config_hash,
         "environment": os.getenv("RAILWAY_ENVIRONMENT", "unknown"),

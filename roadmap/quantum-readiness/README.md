@@ -25,7 +25,8 @@ This folder is the **transformation playbook**: strategy, brand, customer journe
 | **Engineering** | [03-solution-architecture.md](./03-solution-architecture.md) | [13](./13-product-requirements.md) → [19](./19-engineering-operating-model.md) → [09](./09-epics-and-backlog.md) → [06-track-B](../optimization_OLD_FUTURE/06-track-B-pqc-product.md) |
 | **Security / compliance buyer-facing** | [12-platform-security-and-trust.md](./12-platform-security-and-trust.md) | [17](./17-legal-regulatory-and-compliance.md) → [21](./21-data-and-threat-intelligence.md) |
 | **Customer success** | [14-customer-success-and-retention.md](./14-customer-success-and-retention.md) | [02](./02-customer-journey.md) → [10](./10-metrics-and-risks.md) |
-| **Investor / board** | [00-transformation-thesis.md](./00-transformation-thesis.md) | [16](./16-financial-model-and-fundraising.md) → [07](./07-scaling.md) → [10](./10-metrics-and-risks.md) → [11](./11-competitive-intelligence.md) |
+| **Investor / board** | [00-transformation-thesis.md](./00-transformation-thesis.md) | [16](./16-financial-model-and-fundraising.md) → [24](./24-federal-funding-and-grants.md) → [07](./07-scaling.md) → [10](./10-metrics-and-risks.md) → [11](./11-competitive-intelligence.md) |
+| **Federal funding / SBIR** | [24-federal-funding-and-grants.md](./24-federal-funding-and-grants.md) | [federal-funding/](./federal-funding/README.md) → [checklist](./federal-funding/checklist-and-tracker.md) → [templates](./federal-funding/templates/nsf-project-pitch.md) |
 | **New team member** | [23-glossary-and-references.md](./23-glossary-and-references.md) | [00](./00-transformation-thesis.md) → [02](./02-customer-journey.md) |
 
 **Weekly cadence:** Track K epics in [09-epics-and-backlog.md](./09-epics-and-backlog.md). Cross-check [optimization_OLD_FUTURE/backlog/epics.md](../optimization_OLD_FUTURE/backlog/epics.md) for Tracks B, E, H when implementation starts.
@@ -85,6 +86,8 @@ The roadmap is organized in seven thematic layers. Docs 00–10 are the core str
 | [14-customer-success-and-retention.md](./14-customer-success-and-retention.md) | Onboarding, health scores, QBRs, renewal, churn, SLAs |
 | [15-partnerships-and-ecosystem.md](./15-partnerships-and-ecosystem.md) | Tech alliances, MSSP channel, marketplaces, integrations |
 | [16-financial-model-and-fundraising.md](./16-financial-model-and-fundraising.md) | Unit economics, CAC/LTV/NRR, scenarios, fundraising, data room |
+| [24-federal-funding-and-grants.md](./24-federal-funding-and-grants.md) | SBIR/STTR, federal contracts, NIST COI, 30/60/90 roadmap |
+| [federal-funding/](./federal-funding/README.md) | Checklists, registration guide, link directory, proposal templates |
 | [sales-enablement/](./sales-enablement/battlecards.md) | Battlecards, discovery + demo, ROI calculator, objection handling |
 | [vertical-playbooks/](./vertical-playbooks/banking.md) | Banking, government/defense, healthcare playbooks |
 
@@ -153,4 +156,4 @@ flowchart LR
 
 ---
 
-*Last updated: 2026-05-31. Initiative: Track K — Readiness Transformation.*
+*Last updated: 2026-06-10. Initiative: Track K — Readiness Transformation.*

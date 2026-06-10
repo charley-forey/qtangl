@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import os
 import time
 import uuid
 from dataclasses import asdict, replace
@@ -333,6 +334,51 @@ def load_scan_bundle_for_public_verify(scan_id: str) -> dict[str, Any] | None:
         if job is None or not job.bundle:
             return None
         return serialize_bundle(job.bundle)
+
+
+def dogfood_tenant_id() -> str:
+    return os.getenv("QTANGL_DOGFOOD_TENANT_ID", "dogfood").strip() or "dogfood"
+
+
+def latest_dogfood_scan_id(*, preferred_target: str = "www.qtangl.com") -> str | None:
+    """Latest completed dogfood tenant scan with a persisted bundle."""
+    tenant_id = dogfood_tenant_id()
+    candidates: list[tuple[str, str | None, str]] = []
+
+    if persistence_enabled():
+        from sqlalchemy import select
+
+        with scan_db_session() as session:
+            rows = (
+                session.execute(
+                    select(ScanJobRow)
+                    .where(ScanJobRow.tenant_id == tenant_id, ScanJobRow.status == "done")
+                    .order_by(ScanJobRow.created_at.desc())
+                    .limit(20)
+                )
+                .scalars()
+                .all()
+            )
+            for row in rows:
+                if not _bundle_json_from_row(row):
+                    continue
+                candidates.append((row.id, row.target_domain, row.created_at.isoformat()))
+    else:
+        with _job_lock:
+            for job in _memory_jobs.values():
+                if job.tenant_id != tenant_id or job.status != "done" or not job.bundle:
+                    continue
+                report = job.bundle.report
+                target = report.target_domain if report else None
+                created = datetime.fromtimestamp(job.created_at, tz=timezone.utc).isoformat()
+                candidates.append((job.scan_id, target, created))
+
+    if not candidates:
+        return None
+    for scan_id, target, _ in candidates:
+        if target == preferred_target:
+            return scan_id
+    return candidates[0][0]
 
 
 def get_scan_tenant_id(scan_id: str) -> str | None:

@@ -15,9 +15,9 @@ export const accessPageCopy = {
     "Request pilot access for Q-Day assessment, Monitor, Convert, or enterprise post-quantum readiness programs.",
   audienceEyebrow: "Good fit for",
   audienceItems: [
-    "CISO and GRC teams with a board mandate for PQC by 2027/2030.",
+    "CISO and GRC teams with a board or federal mandate for PQC inventory by 2027/2030.",
     "Engineering leads inventorying TLS, code signing, and HSM crypto.",
-    "MSSPs and audit partners evaluating white-label Monitor programs.",
+    "MSSPs, audit partners, and gov contractors evaluating Monitor or CMMC-ready evidence.",
   ],
   timelineEyebrow: "What happens next",
   timeline: [
@@ -67,6 +67,7 @@ export const accessFormCopy = {
         "Q-Day Assessment (one-time)",
         "Q-Day Monitor (annual)",
         "Enterprise PQC program",
+        "Security diligence (DPA / SOC 2 / questionnaires)",
         "MSSP / partner inquiry",
         "Optimization pilot",
       ],

@@ -5,6 +5,12 @@ import PageHero from "@/components/layout/PageHero";
 import PageShell from "@/components/layout/PageShell";
 import Section from "@/components/layout/Section";
 import Card from "@/components/ui/Card";
+import {
+  disclosureAckSlaBusinessDays,
+  mailtoSecurityReport,
+  primaryContactEmail,
+  securityContactEmail,
+} from "@/lib/copy/trust";
 import { buildPageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildPageMetadata({
@@ -30,6 +36,12 @@ export default function TrustSecurityPage() {
             workers execute discovery, persist bundles in Postgres per tenant, and run post-complete
             diff/alert/webhook pipelines.
           </p>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/trust/data-flow.svg"
+            alt="Qtangl data flow diagram"
+            className="mt-4 max-w-full rounded-lg border border-[var(--border-subtle)]"
+          />
         </Card>
         <Card tone="panel" className="p-6">
           <h2 className="text-lg font-medium text-white">Encryption</h2>
@@ -53,15 +65,15 @@ export default function TrustSecurityPage() {
           <h2 className="text-lg font-medium text-white">Vulnerability disclosure</h2>
           <p className="mt-3">
             Report security issues responsibly to{" "}
-            <a href="mailto:security@qtangl.com" className="text-white underline">
-              security@qtangl.com
+            <a href={mailtoSecurityReport()} className="text-white underline">
+              {securityContactEmail}
             </a>{" "}
-            or via our{" "}
-            <Link href="/access" className="text-white underline">
-              access form
+            (subject <code className="text-white">[SECURITY]</code>) or see our{" "}
+            <Link href="/trust/disclosure" className="text-white underline">
+              disclosure policy
             </Link>
             . Include reproduction steps, impact assessment, and your preferred contact method. We aim to
-            acknowledge reports within 3 business days.
+            acknowledge reports within {disclosureAckSlaBusinessDays} business days.
           </p>
           <p className="mt-3 text-xs text-[var(--color-gray-500)]">
             Canonical policy:{" "}
@@ -73,6 +85,24 @@ export default function TrustSecurityPage() {
             >
               /.well-known/security.txt
             </a>
+          </p>
+        </Card>
+        <Card tone="panel" className="p-6">
+          <h2 className="text-lg font-medium text-white">Penetration testing</h2>
+          <p className="mt-3">
+            Independent penetration testing is scoped in our internal pen-test scope document. Executive summary
+            available under NDA on document request. Last pen test: not yet executed — scheduled before first
+            regulated pilot.
+          </p>
+        </Card>
+        <Card tone="panel" className="p-6">
+          <h2 className="text-lg font-medium text-white">Security overview</h2>
+          <p className="mt-3">
+            Download the{" "}
+            <Link href="/downloads/qtangl-security-overview.md" className="text-white underline">
+              security overview
+            </Link>{" "}
+            for architecture, encryption, sub-processors, and honest SOC 2 status.
           </p>
         </Card>
         <Card tone="panel" className="p-6">
@@ -89,13 +119,13 @@ export default function TrustSecurityPage() {
           <dl className="mt-4 grid gap-2 text-xs text-[var(--color-gray-500)]">
             <div>
               <dt className="uppercase tracking-[0.14em]">Contact</dt>
-              <dd className="mt-1 text-[var(--color-gray-300)]">security@qtangl.com</dd>
+              <dd className="mt-1 text-[var(--color-gray-300)]">{primaryContactEmail}</dd>
             </div>
             <div>
               <dt className="uppercase tracking-[0.14em]">Policy</dt>
               <dd className="mt-1">
-                <Link href="/trust" className="text-white underline">
-                  Trust center
+                <Link href="/trust/disclosure" className="text-white underline">
+                  Disclosure policy
                 </Link>
               </dd>
             </div>

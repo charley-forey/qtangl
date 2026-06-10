@@ -11,6 +11,13 @@ import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
 import Eyebrow from "@/components/ui/Eyebrow";
 import { valueProofItems } from "@/lib/copy/readiness-value";
+import {
+  dogfoodCopy,
+  federalTrustBlurb,
+  infrastructureAssuranceBlurb,
+  soc2ObservationTarget,
+  soc2StatusSafe,
+} from "@/lib/copy/trust";
 import { statusPageHref } from "@/lib/siteConfig";
 import { buildPageMetadata } from "@/lib/seo";
 
@@ -81,8 +88,11 @@ const trustSections = [
     title: "Sub-processors",
     body: (
       <>
-        Production deploys may use Railway (hosting), Postgres (data), Redis (queue), Stripe (billing), and optional
-        email delivery. Enterprise customers receive a current sub-processor list during contract review.
+        See our public register at{" "}
+        <Link href="/trust/subprocessors" className="text-white underline underline-offset-4">
+          /trust/subprocessors
+        </Link>
+        . {infrastructureAssuranceBlurb}
       </>
     ),
   },
@@ -90,8 +100,8 @@ const trustSections = [
     title: "SOC 2 & compliance",
     body: (
       <>
-        SOC 2 Type I scope is documented internally; we do not claim certification on marketing pages until complete.
-        GRC framework mappings (NIST CSF, EU PQC guidance) are provided as readiness aids via the compliance posture API.
+        {soc2StatusSafe} {soc2ObservationTarget} GRC framework mappings (NIST CSF, EU PQC guidance) are readiness aids
+        via the compliance posture API — not attestations.
       </>
     ),
   },
@@ -108,10 +118,14 @@ const trustSections = [
     ),
   },
   {
+    title: "Federal alignment",
+    body: <>{federalTrustBlurb}</>,
+  },
+  {
     title: "Dogfood verification",
     body: (
       <>
-        Qtangl signs its own scan reports. Verify spec:{" "}
+        {dogfoodCopy} Verify spec:{" "}
         <Link href="/docs/verify-spec" className="text-white underline underline-offset-4">
           /docs/verify-spec
         </Link>
@@ -137,13 +151,13 @@ export default function TrustPage() {
         title="Security, privacy, and report integrity"
         description="How Qtangl handles scan data, signs reports, and supports enterprise retention controls."
         actions={[
+          { label: "Verify our scan", href: "/verify" },
+          { label: "Security overview", href: "/downloads/qtangl-security-overview.md" },
           { label: "Security architecture", href: "/trust/security" },
+          { label: "Disclosure policy", href: "/trust/disclosure" },
           { label: "Sub-processors", href: "/trust/subprocessors" },
-          { href: statusPageHref, label: "System status" },
-          { href: "/verify", label: "Verify a report" },
+          { href: statusPageHref, label: "System status", variant: "secondary" },
           { href: "/docs/trust/compliance-status", label: "Compliance status", variant: "secondary" },
-          { href: "/docs/operations/security", label: "Security docs", variant: "secondary" },
-          { href: "/docs/operations/data-retention", label: "Data retention", variant: "secondary" },
         ]}
       />
 
@@ -152,6 +166,7 @@ export default function TrustPage() {
           <Eyebrow>Trust Center index</Eyebrow>
           <div className="mt-4 grid gap-3 sm:grid-cols-2">
             {[
+              { href: "/trust/disclosure", label: "Vulnerability disclosure" },
               { href: "/trust/security", label: "Security architecture" },
               { href: "/trust/subprocessors", label: "Sub-processors" },
               { href: "/docs/trust/compliance-status", label: "Compliance status" },
@@ -193,16 +208,8 @@ export default function TrustPage() {
           <TrustDogfoodSelfScan />
           <Card tone="ghost" className="rounded-[var(--radius-xl)] border border-[var(--border-subtle)]">
             <p className="text-sm font-semibold text-white">SOC 2 status (honest)</p>
-            <p className="mt-2 text-sm leading-7 text-[var(--color-gray-400)]">
-              We have <strong className="font-medium text-white">not</strong> completed SOC 2 Type I certification
-              yet. Internal controls and scope documentation are in progress; we do not claim certification on
-              marketing pages until an auditor report is available. Enterprise customers can request our current
-              security overview and roadmap during contract review.
-            </p>
-            <p className="mt-2 text-xs text-[var(--color-gray-500)]">
-              Target: Type I observation started → Type I report → Type II window. GRC mappings (NIST CSF, EU PQC
-              guidance) are readiness aids via the compliance posture API — not attestations.
-            </p>
+            <p className="mt-2 text-sm leading-7 text-[var(--color-gray-400)]">{soc2StatusSafe}</p>
+            <p className="mt-2 text-xs text-[var(--color-gray-500)]">{soc2ObservationTarget}</p>
           </Card>
           <TrustTransparencyLive />
           <p className="text-sm text-[var(--color-gray-400)]">

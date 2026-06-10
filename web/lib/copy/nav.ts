@@ -28,7 +28,7 @@ export const footerNav = [
 ] as const;
 
 export const navbarCopy = {
-  subtitle: "Q-Day Readiness",
+  subtitle: "Cryptographic Posture",
   subtitleHref: "/platform",
   primaryCtaLabel: "Get access",
   mobileMenuLabel: "Open menu",

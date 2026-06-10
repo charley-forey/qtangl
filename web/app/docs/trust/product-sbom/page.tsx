@@ -21,15 +21,15 @@ export default function ProductSbomPage() {
       description="Qtangl publishes a CycloneDX SBOM for platform components — we dogfood our own CBOM workflow."
     >
       <DocsSection>
-        <DocsHeading>Status</DocsHeading>
-        <DocsCallout variant="honesty">
-          Product SBOM generation is in progress. Enterprise customers may request a point-in-time CycloneDX export
-          during security review. Customer-facing CBOM ingest/aggregate APIs are GA — see{" "}
-          <Link href="/docs/guides/cbom" className="text-white underline underline-offset-4">
-            CBOM aggregator guide
+        <DocsHeading>Download</DocsHeading>
+        <p className="text-sm leading-8 text-[var(--color-gray-300)]">
+          Platform SBOM (CycloneDX 1.6):{" "}
+          <Link href="/downloads/qtangl-platform.cdx.json" className="text-white underline underline-offset-4">
+            qtangl-platform.cdx.json
           </Link>
-          .
-        </DocsCallout>
+          . Regenerated via <code className="text-white">scripts/generate-platform-sbom.mjs</code> and CI supply-chain
+          workflows.
+        </p>
       </DocsSection>
 
       <DocsSection>
@@ -44,9 +44,12 @@ export default function ProductSbomPage() {
 
       <DocsSection>
         <DocsHeading>Request access</DocsHeading>
+        <DocsCallout variant="honesty">
+          Point-in-time exports for a specific release tag are available during enterprise security review.
+        </DocsCallout>
         <p className="text-sm leading-8 text-[var(--color-gray-300)]">
-          Contact enterprise sales via{" "}
-          <Link href="/access" className="text-white underline underline-offset-4">
+          Contact via{" "}
+          <Link href="/access?interest=Security%20diligence%20(DPA%20/%20SOC%202%20/%20questionnaires)" className="text-white underline underline-offset-4">
             /access
           </Link>{" "}
           with your security questionnaire reference.

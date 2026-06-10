@@ -24,7 +24,7 @@ import { buildOrganizationJsonLd, buildPageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildPageMetadata({
   path: "",
-  title: "Post-Quantum Readiness Platform",
+  title: "Cryptographic Posture Management",
   description: siteMetadata.description,
 });
 
