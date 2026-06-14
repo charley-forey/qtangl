@@ -18,6 +18,20 @@ from app.store.scan_jobs import find_previous_scan, load_scan_bundle
 logger = logging.getLogger(__name__)
 
 
+def _sign_report_for_storage(bundle: ScanBundle) -> dict[str, Any]:
+    """Sign the report body that will actually be persisted.
+
+    The build step may already have attached a signature; clearing it first ensures the
+    signed payload has no ``signature`` key, exactly matching what public verification
+    reconstructs (stored report minus ``signature``). Returns the signed canonical payload
+    for transparency-log anchoring.
+    """
+    bundle.report.signature = None
+    json_payload = report_to_json(bundle.report)
+    bundle.report.signature = sign_report_payload(json_payload)
+    return json_payload
+
+
 def enrich_completed_scan(scan_id: str, bundle: ScanBundle, *, tenant_id: str) -> ScanBundle:
     """Attach scan diff, re-sign report, and dispatch alerts/webhooks."""
     try:
@@ -28,8 +42,7 @@ def enrich_completed_scan(scan_id: str, bundle: ScanBundle, *, tenant_id: str) -
             scan_id,
             tenant_id,
         )
-        json_payload = report_to_json(bundle.report)
-        bundle.report.signature = sign_report_payload(json_payload)
+        json_payload = _sign_report_for_storage(bundle)
         from app.pqc.transparency import safe_append_after_sign
 
         safe_append_after_sign(json_payload, bundle.report.signature or {}, tenant_id=tenant_id)
@@ -59,12 +72,14 @@ def _enrich_completed_scan(scan_id: str, bundle: ScanBundle, *, tenant_id: str) 
             bundle.report.previous_scan_id = previous_id
             bundle.report.scan_diff = scan_diff
 
-    json_payload = report_to_json(bundle.report)
     try:
         from app.cbom.service import get_aggregate
 
         aggregate = get_aggregate(tenant_id=tenant_id, sync_scan=True)
-        json_payload["aggregatedCbomSummary"] = {
+        # Supplementary aggregate kept in the bundle envelope (details), NOT the signed
+        # report body — otherwise the signed payload would diverge from the stored
+        # report and public verification would fail with a content-hash mismatch.
+        bundle.details["aggregatedCbomSummary"] = {
             "componentCount": aggregate.get("componentCount"),
             "totalStored": aggregate.get("totalStored"),
             "verifiedPct": (aggregate.get("readiness") or {}).get("verifiedPct"),
@@ -83,14 +98,16 @@ def _enrich_completed_scan(scan_id: str, bundle: ScanBundle, *, tenant_id: str) 
 
             industry = str(settings.get("industry") or "financial")
             peer = compare_to_benchmark(score=bundle.report.readiness_score, industry=industry)
-            if peer.get("available"):
-                json_payload["peerComparison"] = peer
-                if bundle.report.executive_summary is not None:
-                    bundle.report.executive_summary["peerComparison"] = peer
+            if peer.get("available") and bundle.report.executive_summary is not None:
+                # Folded into the report model so it is part of both the signed and
+                # the persisted payload.
+                bundle.report.executive_summary["peerComparison"] = peer
         except Exception:
             logger.debug("peerComparison skipped for scan_id=%s", scan_id)
 
-    bundle.report.signature = sign_report_payload(json_payload)
+    # Sign the exact payload that gets persisted, so public verify recomputes an
+    # identical content hash (report_to_json(report) is the single source of truth).
+    json_payload = _sign_report_for_storage(bundle)
     from app.pqc.transparency import safe_append_after_sign
 
     safe_append_after_sign(json_payload, bundle.report.signature or {}, tenant_id=tenant_id)
