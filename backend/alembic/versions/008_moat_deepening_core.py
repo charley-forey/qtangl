@@ -5,6 +5,8 @@ from __future__ import annotations
 from alembic import op
 import sqlalchemy as sa
 
+from app.db.migration_compat import add_column_if_absent, create_index_if_absent, create_table_if_absent
+
 revision = "008_moat_deepening_core"
 down_revision = "007_cloud_pull_drip"
 branch_labels = None
@@ -12,13 +14,13 @@ depends_on = None
 
 
 def upgrade() -> None:
-    op.add_column("evidence_anchors", sa.Column("git_commit_sha", sa.String(64), nullable=True))
-    op.add_column("evidence_anchors", sa.Column("git_url", sa.String(512), nullable=True))
-    op.add_column("evidence_anchors", sa.Column("tsa_token_b64", sa.Text(), nullable=True))
-    op.add_column("evidence_anchors", sa.Column("tsa_time", sa.DateTime(timezone=True), nullable=True))
-    op.add_column("evidence_anchors", sa.Column("merkle_root", sa.String(64), nullable=True))
+    add_column_if_absent("evidence_anchors", sa.Column("git_commit_sha", sa.String(64), nullable=True))
+    add_column_if_absent("evidence_anchors", sa.Column("git_url", sa.String(512), nullable=True))
+    add_column_if_absent("evidence_anchors", sa.Column("tsa_token_b64", sa.Text(), nullable=True))
+    add_column_if_absent("evidence_anchors", sa.Column("tsa_time", sa.DateTime(timezone=True), nullable=True))
+    add_column_if_absent("evidence_anchors", sa.Column("merkle_root", sa.String(64), nullable=True))
 
-    op.create_table(
+    create_table_if_absent(
         "benchmark_aggregates",
         sa.Column("id", sa.String(80), primary_key=True),
         sa.Column("industry", sa.String(64), nullable=False),
@@ -30,10 +32,10 @@ def upgrade() -> None:
         sa.Column("as_of", sa.String(32), nullable=False),
         sa.Column("created_at", sa.DateTime(timezone=True), nullable=False),
     )
-    op.create_index("ix_benchmark_aggregates_cohort", "benchmark_aggregates", ["industry", "cohort_key"])
+    create_index_if_absent("ix_benchmark_aggregates_cohort", "benchmark_aggregates", ["industry", "cohort_key"])
 
-    op.add_column("signing_keys", sa.Column("kms_provider", sa.String(32), nullable=True))
-    op.add_column("signing_keys", sa.Column("kms_key_id", sa.String(512), nullable=True))
+    add_column_if_absent("signing_keys", sa.Column("kms_provider", sa.String(32), nullable=True))
+    add_column_if_absent("signing_keys", sa.Column("kms_key_id", sa.String(512), nullable=True))
 
 
 def downgrade() -> None:

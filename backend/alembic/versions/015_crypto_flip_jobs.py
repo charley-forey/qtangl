@@ -5,6 +5,8 @@ from __future__ import annotations
 from alembic import op
 import sqlalchemy as sa
 
+from app.db.migration_compat import add_column_if_absent, create_index_if_absent, create_table_if_absent
+
 revision = "015_crypto_flip_jobs"
 down_revision = "014_remediation_program"
 branch_labels = None
@@ -12,7 +14,7 @@ depends_on = None
 
 
 def upgrade() -> None:
-    op.create_table(
+    create_table_if_absent(
         "crypto_flip_jobs",
         sa.Column("id", sa.String(80), primary_key=True),
         sa.Column("tenant_id", sa.String(64), sa.ForeignKey("tenants.id"), nullable=False),
@@ -38,9 +40,9 @@ def upgrade() -> None:
         sa.Column("created_at", sa.DateTime(timezone=True), nullable=False),
         sa.Column("updated_at", sa.DateTime(timezone=True), nullable=False),
     )
-    op.create_index("ix_crypto_flip_jobs_tenant_status", "crypto_flip_jobs", ["tenant_id", "status"])
-    op.create_index("ix_crypto_flip_jobs_program_item", "crypto_flip_jobs", ["program_item_id"])
-    op.create_table(
+    create_index_if_absent("ix_crypto_flip_jobs_tenant_status", "crypto_flip_jobs", ["tenant_id", "status"])
+    create_index_if_absent("ix_crypto_flip_jobs_program_item", "crypto_flip_jobs", ["program_item_id"])
+    create_table_if_absent(
         "flip_approvals",
         sa.Column("id", sa.String(80), primary_key=True),
         sa.Column("tenant_id", sa.String(64), sa.ForeignKey("tenants.id"), nullable=False),
@@ -50,12 +52,12 @@ def upgrade() -> None:
         sa.Column("note", sa.Text(), nullable=True),
         sa.Column("created_at", sa.DateTime(timezone=True), nullable=False),
     )
-    op.create_index("ix_flip_approvals_job", "flip_approvals", ["flip_job_id"])
-    op.add_column(
+    create_index_if_absent("ix_flip_approvals_job", "flip_approvals", ["flip_job_id"])
+    add_column_if_absent(
         "remediation_program_items",
         sa.Column("flip_job_id", sa.String(80), nullable=True),
     )
-    op.add_column(
+    add_column_if_absent(
         "verification_proofs",
         sa.Column("flip_job_id", sa.String(80), nullable=True),
     )

@@ -5,6 +5,8 @@ from __future__ import annotations
 from alembic import op
 import sqlalchemy as sa
 
+from app.db.migration_compat import add_column_if_absent, create_index_if_absent, create_table_if_absent
+
 revision = "011_discovery_depth"
 down_revision = "010_onboarding_key_tokens"
 branch_labels = None
@@ -12,7 +14,7 @@ depends_on = None
 
 
 def upgrade() -> None:
-    op.create_table(
+    create_table_if_absent(
         "discovery_fleets",
         sa.Column("id", sa.String(80), primary_key=True),
         sa.Column("tenant_id", sa.String(64), sa.ForeignKey("tenants.id"), nullable=False, index=True),
@@ -26,7 +28,7 @@ def upgrade() -> None:
         sa.Column("created_at", sa.DateTime(timezone=True), nullable=False),
         sa.Column("updated_at", sa.DateTime(timezone=True), nullable=False),
     )
-    op.create_table(
+    create_table_if_absent(
         "host_agents",
         sa.Column("id", sa.String(80), primary_key=True),
         sa.Column("tenant_id", sa.String(64), sa.ForeignKey("tenants.id"), nullable=False, index=True),
@@ -40,8 +42,8 @@ def upgrade() -> None:
         sa.Column("findings_count", sa.Integer(), nullable=False, server_default="0"),
         sa.Column("created_at", sa.DateTime(timezone=True), nullable=False),
     )
-    op.create_index("ix_host_agents_tenant_fleet", "host_agents", ["tenant_id", "fleet_id"])
-    op.create_table(
+    create_index_if_absent("ix_host_agents_tenant_fleet", "host_agents", ["tenant_id", "fleet_id"])
+    create_table_if_absent(
         "host_findings",
         sa.Column("id", sa.String(80), primary_key=True),
         sa.Column("tenant_id", sa.String(64), sa.ForeignKey("tenants.id"), nullable=False, index=True),
@@ -53,7 +55,7 @@ def upgrade() -> None:
         sa.Column("ingested_at", sa.DateTime(timezone=True), nullable=False),
         sa.UniqueConstraint("tenant_id", "finding_id", name="uq_host_findings_tenant_finding"),
     )
-    op.create_table(
+    create_table_if_absent(
         "code_scan_targets",
         sa.Column("id", sa.String(80), primary_key=True),
         sa.Column("tenant_id", sa.String(64), sa.ForeignKey("tenants.id"), nullable=False, index=True),
@@ -66,7 +68,7 @@ def upgrade() -> None:
         sa.Column("last_scan_job_id", sa.String(80), nullable=True),
         sa.Column("created_at", sa.DateTime(timezone=True), nullable=False),
     )
-    op.create_table(
+    create_table_if_absent(
         "image_scan_targets",
         sa.Column("id", sa.String(80), primary_key=True),
         sa.Column("tenant_id", sa.String(64), sa.ForeignKey("tenants.id"), nullable=False, index=True),
@@ -77,7 +79,7 @@ def upgrade() -> None:
         sa.Column("last_scan_job_id", sa.String(80), nullable=True),
         sa.Column("created_at", sa.DateTime(timezone=True), nullable=False),
     )
-    op.create_table(
+    create_table_if_absent(
         "discovery_jobs",
         sa.Column("id", sa.String(80), primary_key=True),
         sa.Column("tenant_id", sa.String(64), sa.ForeignKey("tenants.id"), nullable=False, index=True),
@@ -91,7 +93,7 @@ def upgrade() -> None:
         sa.Column("created_at", sa.DateTime(timezone=True), nullable=False),
         sa.Column("updated_at", sa.DateTime(timezone=True), nullable=False),
     )
-    op.create_index("ix_discovery_jobs_tenant_status", "discovery_jobs", ["tenant_id", "status"])
+    create_index_if_absent("ix_discovery_jobs_tenant_status", "discovery_jobs", ["tenant_id", "status"])
 
 
 def downgrade() -> None:

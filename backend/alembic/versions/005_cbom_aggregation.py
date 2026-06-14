@@ -5,6 +5,8 @@ from __future__ import annotations
 from alembic import op
 import sqlalchemy as sa
 
+from app.db.migration_compat import add_column_if_absent, create_index_if_absent, create_table_if_absent
+
 revision = "005_cbom_aggregation"
 down_revision = "004_evidence_layer"
 branch_labels = None
@@ -12,7 +14,7 @@ depends_on = None
 
 
 def upgrade() -> None:
-    op.create_table(
+    create_table_if_absent(
         "cbom_sources",
         sa.Column("id", sa.String(80), primary_key=True),
         sa.Column("tenant_id", sa.String(64), sa.ForeignKey("tenants.id"), nullable=False),
@@ -22,9 +24,9 @@ def upgrade() -> None:
         sa.Column("last_ingested_at", sa.DateTime(timezone=True), nullable=True),
         sa.Column("created_at", sa.DateTime(timezone=True), nullable=False),
     )
-    op.create_index("ix_cbom_sources_tenant_id", "cbom_sources", ["tenant_id"])
+    create_index_if_absent("ix_cbom_sources_tenant_id", "cbom_sources", ["tenant_id"])
 
-    op.create_table(
+    create_table_if_absent(
         "cbom_ingest_jobs",
         sa.Column("id", sa.String(80), primary_key=True),
         sa.Column("tenant_id", sa.String(64), sa.ForeignKey("tenants.id"), nullable=False),
@@ -36,10 +38,10 @@ def upgrade() -> None:
         sa.Column("created_at", sa.DateTime(timezone=True), nullable=False),
         sa.UniqueConstraint("tenant_id", "source_id", "content_hash", name="uq_cbom_ingest_idempotent"),
     )
-    op.create_index("ix_cbom_ingest_jobs_tenant_id", "cbom_ingest_jobs", ["tenant_id"])
-    op.create_index("ix_cbom_ingest_jobs_source_id", "cbom_ingest_jobs", ["source_id"])
+    create_index_if_absent("ix_cbom_ingest_jobs_tenant_id", "cbom_ingest_jobs", ["tenant_id"])
+    create_index_if_absent("ix_cbom_ingest_jobs_source_id", "cbom_ingest_jobs", ["source_id"])
 
-    op.create_table(
+    create_table_if_absent(
         "cbom_components",
         sa.Column("id", sa.String(80), primary_key=True),
         sa.Column("tenant_id", sa.String(64), sa.ForeignKey("tenants.id"), nullable=False),
@@ -63,11 +65,11 @@ def upgrade() -> None:
         sa.Column("created_at", sa.DateTime(timezone=True), nullable=False),
         sa.Column("updated_at", sa.DateTime(timezone=True), nullable=False),
     )
-    op.create_index("ix_cbom_components_tenant_id", "cbom_components", ["tenant_id"])
-    op.create_index("ix_cbom_components_component_key", "cbom_components", ["component_key"])
-    op.create_index("ix_cbom_components_tenant_key", "cbom_components", ["tenant_id", "component_key"])
+    create_index_if_absent("ix_cbom_components_tenant_id", "cbom_components", ["tenant_id"])
+    create_index_if_absent("ix_cbom_components_component_key", "cbom_components", ["component_key"])
+    create_index_if_absent("ix_cbom_components_tenant_key", "cbom_components", ["tenant_id", "component_key"])
 
-    op.create_table(
+    create_table_if_absent(
         "cbom_merge_conflicts",
         sa.Column("id", sa.String(80), primary_key=True),
         sa.Column("tenant_id", sa.String(64), sa.ForeignKey("tenants.id"), nullable=False),
@@ -82,8 +84,8 @@ def upgrade() -> None:
         sa.Column("resolved_at", sa.DateTime(timezone=True), nullable=True),
         sa.Column("created_at", sa.DateTime(timezone=True), nullable=False),
     )
-    op.create_index("ix_cbom_merge_conflicts_tenant_id", "cbom_merge_conflicts", ["tenant_id"])
-    op.create_index("ix_cbom_conflicts_tenant_status", "cbom_merge_conflicts", ["tenant_id", "status"])
+    create_index_if_absent("ix_cbom_merge_conflicts_tenant_id", "cbom_merge_conflicts", ["tenant_id"])
+    create_index_if_absent("ix_cbom_conflicts_tenant_status", "cbom_merge_conflicts", ["tenant_id", "status"])
 
 
 def downgrade() -> None:

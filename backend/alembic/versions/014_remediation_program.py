@@ -5,6 +5,8 @@ from __future__ import annotations
 from alembic import op
 import sqlalchemy as sa
 
+from app.db.migration_compat import add_column_if_absent, create_index_if_absent, create_table_if_absent
+
 revision = "014_remediation_program"
 down_revision = "013_drift_snapshots"
 branch_labels = None
@@ -12,7 +14,7 @@ depends_on = None
 
 
 def upgrade() -> None:
-    op.create_table(
+    create_table_if_absent(
         "remediation_program_items",
         sa.Column("id", sa.String(80), primary_key=True),
         sa.Column("tenant_id", sa.String(64), sa.ForeignKey("tenants.id"), nullable=False),
@@ -32,18 +34,18 @@ def upgrade() -> None:
         sa.Column("created_at", sa.DateTime(timezone=True), nullable=False),
         sa.Column("updated_at", sa.DateTime(timezone=True), nullable=False),
     )
-    op.create_index(
+    create_index_if_absent(
         "ix_remediation_program_tenant_status",
         "remediation_program_items",
         ["tenant_id", "status"],
     )
-    op.create_index(
+    create_index_if_absent(
         "ix_remediation_program_tenant_source",
         "remediation_program_items",
         ["tenant_id", "source_type", "source_ref"],
         unique=True,
     )
-    op.create_table(
+    create_table_if_absent(
         "verification_proofs",
         sa.Column("id", sa.String(80), primary_key=True),
         sa.Column("tenant_id", sa.String(64), sa.ForeignKey("tenants.id"), nullable=False),
@@ -55,19 +57,19 @@ def upgrade() -> None:
         sa.Column("confirmed_at", sa.DateTime(timezone=True), nullable=True),
         sa.Column("created_at", sa.DateTime(timezone=True), nullable=False),
     )
-    op.add_column(
+    add_column_if_absent(
         "remediation_external_sync",
         sa.Column("program_item_id", sa.String(80), nullable=True),
     )
-    op.add_column(
+    add_column_if_absent(
         "remediation_external_sync",
         sa.Column("synced_at", sa.DateTime(timezone=True), nullable=True),
     )
-    op.add_column(
+    add_column_if_absent(
         "remediation_external_sync",
         sa.Column("sync_error", sa.Text(), nullable=True),
     )
-    op.add_column(
+    add_column_if_absent(
         "remediation_external_sync",
         sa.Column("retry_count", sa.Integer(), nullable=False, server_default="0"),
     )

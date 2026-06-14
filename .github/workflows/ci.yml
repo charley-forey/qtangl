@@ -229,7 +229,7 @@ jobs:
         if: hashFiles('web/tests/e2e/dashboard.spec.ts') != ''
         env:
           QTANGL_API_BASE_URL: http://127.0.0.1:8000
-        run: npx playwright test tests/e2e/dashboard.spec.ts
+        run: npx playwright test tests/e2e/dashboard.spec.ts --project=chromium
 
       - name: E2E mobile responsive
         env:

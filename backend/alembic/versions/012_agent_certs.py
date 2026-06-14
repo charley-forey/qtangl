@@ -5,6 +5,8 @@ from __future__ import annotations
 from alembic import op
 import sqlalchemy as sa
 
+from app.db.migration_compat import add_column_if_absent, create_index_if_absent, create_table_if_absent
+
 revision = "012_agent_certs"
 down_revision = "011_discovery_depth"
 branch_labels = None
@@ -12,11 +14,11 @@ depends_on = None
 
 
 def upgrade() -> None:
-    op.add_column(
+    add_column_if_absent(
         "discovery_fleets",
         sa.Column("enrollment_nonce", sa.String(64), nullable=False, server_default=""),
     )
-    op.create_table(
+    create_table_if_absent(
         "agent_certificates",
         sa.Column("id", sa.String(80), primary_key=True),
         sa.Column("agent_id", sa.String(80), sa.ForeignKey("host_agents.id"), nullable=False, index=True),
@@ -27,7 +29,7 @@ def upgrade() -> None:
         sa.Column("revoked_at", sa.DateTime(timezone=True), nullable=True),
         sa.Column("created_at", sa.DateTime(timezone=True), nullable=False),
     )
-    op.create_index("ix_agent_certs_tenant_agent", "agent_certificates", ["tenant_id", "agent_id"])
+    create_index_if_absent("ix_agent_certs_tenant_agent", "agent_certificates", ["tenant_id", "agent_id"])
 
 
 def downgrade() -> None:

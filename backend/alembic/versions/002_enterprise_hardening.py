@@ -7,6 +7,8 @@ import logging
 from alembic import op
 import sqlalchemy as sa
 
+from app.db.migration_compat import add_column_if_absent, create_index_if_absent, create_table_if_absent
+
 revision = "002_enterprise_hardening"
 down_revision = "001_baseline"
 branch_labels = None
@@ -52,22 +54,22 @@ def upgrade() -> None:
         if "readiness_score" not in cols:
             _autocommit_ddl(
                 "scan_jobs.readiness_score",
-                lambda: op.add_column("scan_jobs", sa.Column("readiness_score", sa.Float(), nullable=True)),
+                lambda: add_column_if_absent("scan_jobs", sa.Column("readiness_score", sa.Float(), nullable=True)),
             )
         if "target_domain" not in cols:
             _autocommit_ddl(
                 "scan_jobs.target_domain",
-                lambda: op.add_column("scan_jobs", sa.Column("target_domain", sa.String(255), nullable=True)),
+                lambda: add_column_if_absent("scan_jobs", sa.Column("target_domain", sa.String(255), nullable=True)),
             )
         if "scenario_id" not in cols:
             _autocommit_ddl(
                 "scan_jobs.scenario_id",
-                lambda: op.add_column("scan_jobs", sa.Column("scenario_id", sa.String(64), nullable=True)),
+                lambda: add_column_if_absent("scan_jobs", sa.Column("scenario_id", sa.String(64), nullable=True)),
             )
         if "bundle_storage_key" not in cols:
             _autocommit_ddl(
                 "scan_jobs.bundle_storage_key",
-                lambda: op.add_column(
+                lambda: add_column_if_absent(
                     "scan_jobs", sa.Column("bundle_storage_key", sa.String(512), nullable=True)
                 ),
             )
@@ -138,7 +140,7 @@ def _create_index_if_missing(name: str, table: str, columns: list[str]) -> None:
         return
     indexes = {idx["name"] for idx in inspector.get_indexes(table)}
     if name not in indexes:
-        _autocommit_ddl(name, lambda: op.create_index(name, table, columns))
+        _autocommit_ddl(name, lambda: create_index_if_absent(name, table, columns))
 
 
 def downgrade() -> None:

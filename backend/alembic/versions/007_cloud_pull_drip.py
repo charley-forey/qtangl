@@ -5,6 +5,8 @@ from __future__ import annotations
 from alembic import op
 import sqlalchemy as sa
 
+from app.db.migration_compat import add_column_if_absent, create_index_if_absent, create_table_if_absent
+
 revision = "007_cloud_pull_drip"
 down_revision = "006_passport_evidence_vault"
 branch_labels = None
@@ -12,16 +14,16 @@ depends_on = None
 
 
 def upgrade() -> None:
-    op.add_column(
+    add_column_if_absent(
         "scheduled_scans",
         sa.Column("job_type", sa.String(32), server_default="scan", nullable=False),
     )
-    op.add_column(
+    add_column_if_absent(
         "scheduled_scans",
         sa.Column("integration_provider", sa.String(32), nullable=True),
     )
 
-    op.create_table(
+    create_table_if_absent(
         "onboarding_leads",
         sa.Column("id", sa.String(80), primary_key=True),
         sa.Column("email", sa.String(320), nullable=False),
@@ -33,7 +35,7 @@ def upgrade() -> None:
         sa.Column("created_at", sa.DateTime(timezone=True), nullable=False),
         sa.Column("updated_at", sa.DateTime(timezone=True), nullable=False),
     )
-    op.create_index("ix_onboarding_leads_email", "onboarding_leads", ["email"], unique=True)
+    create_index_if_absent("ix_onboarding_leads_email", "onboarding_leads", ["email"], unique=True)
 
 
 def downgrade() -> None:
