@@ -2,7 +2,6 @@ import { quantumLexicon } from "@/lib/copy/voice";
 import { readinessBlogPostsForIndex } from "@/lib/copy/readiness-content-registry";
 
 const {
-  amplitude,
   coherence,
   collapse,
   interference,

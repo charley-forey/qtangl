@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import time
 import uuid
+from dataclasses import asdict, is_dataclass
 from datetime import datetime, timedelta, timezone
 from threading import Lock
 from typing import Any
@@ -10,6 +11,15 @@ from typing import Any
 from app.db.config import persistence_enabled
 from app.db.engine import db_session
 from app.db.models import UploadSession as UploadSessionRow
+
+
+def _json_dumps(payload: Any) -> str:
+    def default(obj: Any) -> Any:
+        if is_dataclass(obj):
+            return asdict(obj)
+        raise TypeError(f"Object of type {type(obj).__name__} is not JSON serializable")
+
+    return json.dumps(payload, default=default)
 
 
 class MemorySessionStore:
@@ -66,7 +76,7 @@ class PostgresSessionStore:
                     id=session_id,
                     tenant_id=tenant_id,
                     namespace=self._namespace,
-                    payload_json=json.dumps(payload),
+                    payload_json=_json_dumps(payload),
                     expires_at=expires_dt,
                 )
             )

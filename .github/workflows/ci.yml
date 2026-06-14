@@ -40,6 +40,11 @@ jobs:
           python -m alembic upgrade head
           python -m alembic check || true
 
+      - name: Prepare test database schema
+        env:
+          DATABASE_URL: sqlite:///./ci_test.db
+        run: python -m alembic upgrade head
+
       - name: Verify scanner-versions.lock
         run: python scripts/verify_scanner_versions.py
 
