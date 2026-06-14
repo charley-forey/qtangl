@@ -2,7 +2,7 @@
 """GTM conversion smoke checks (Stripe signup, lead capture, golden verify).
 
 Usage:
-  QTANGL_API_BASE=https://your-api.up.railway.app python scripts/conversion_smoke.py
+  QTANGL_API_BASE=https://api.qtangl.com python scripts/conversion_smoke.py
 """
 from __future__ import annotations
 

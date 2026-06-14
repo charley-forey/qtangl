@@ -7,7 +7,7 @@ Operational checklist for balanced GTM + product motion. Run every Friday before
 ## Automated checks
 
 ```bash
-export QTANGL_API_BASE=https://your-api.up.railway.app
+export QTANGL_API_BASE=https://api.qtangl.com
 export QTANGL_API_KEY=your-tenant-key
 
 python backend/scripts/verify_production_rollout.py --full

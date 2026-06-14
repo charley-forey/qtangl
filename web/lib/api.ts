@@ -1,5 +1,4 @@
-const DEFAULT_QTANGL_API_BASE_URL =
-  "https://sparkling-vibrancy-production-1a7a.up.railway.app";
+const DEFAULT_QTANGL_API_BASE_URL = "https://api.qtangl.com";
 
 /** Ensures fetch gets an absolute URL (Vercel env is often pasted without https://). */
 export function normalizeQtanglApiBaseUrl(raw?: string): string {

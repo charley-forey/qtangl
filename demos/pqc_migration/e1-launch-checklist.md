@@ -7,7 +7,7 @@ Use this after deploying the hardened backend + web (Horizon 0).
 - [x] Railway: `DATABASE_URL`, `QTANGL_API_KEY`, `QTANGL_RATE_LIMIT_PER_MINUTE=300`, `QTANGL_ADMIN_API_KEY`
 - [ ] Railway: `QTANGL_PUBLIC_URL=https://www.qtangl.com`, stable `QTANGL_REPORT_SIGNING_KEY_B64`
 - [ ] Railway worker: Redis + `python -m app.worker` + `QTANGL_ENABLE_SCHEDULER=true`
-- [ ] Vercel: `NEXT_PUBLIC_QTANGL_API_BASE_URL` + matching `NEXT_PUBLIC_QTANGL_SANDBOX_API_KEY`
+- [ ] Vercel: `NEXT_PUBLIC_QTANGL_API_BASE_URL=https://api.qtangl.com` + matching `NEXT_PUBLIC_QTANGL_SANDBOX_API_KEY`
 - [x] Run: `python backend/scripts/production_smoke.py --health-only` (health/ready green)
 - [ ] Run full smoke with production `QTANGL_API_KEY`
 - [ ] Demo: fixture scan → PDF → `/verify?scanId=…` on https://www.qtangl.com/demo/pqc

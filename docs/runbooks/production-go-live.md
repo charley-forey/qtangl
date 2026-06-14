@@ -15,7 +15,7 @@ Set environment variables (see [`backend/.env.example`](../../backend/.env.examp
 | `QTANGL_INLINE_JOBS` | `false` |
 | `QTANGL_DB_AUTO_MIGRATE` | `true` |
 | `QTANGL_REPORT_SIGNING_KEY_B64` | Generate once; stable across deploys |
-| `QTANGL_PUBLIC_URL` | `https://www.qtangl.com` |
+| `QTANGL_PUBLIC_URL` | `https://www.qtangl.com` (web app — not the API host) |
 | `QTANGL_ADMIN_API_KEY` | Strong secret |
 | `QTANGL_SIGNUP_PROVISION_SECRET` | Strong secret |
 | `QTANGL_SMTP_*` | Report email + drip |
@@ -43,7 +43,7 @@ The worker tick runs: scheduled scans, cloud pulls, onboarding drip, lifecycle s
 
 Set variables from [`web/.env.example`](../../web/.env.example):
 
-- `NEXT_PUBLIC_QTANGL_API_BASE_URL`
+- `NEXT_PUBLIC_QTANGL_API_BASE_URL` → `https://api.qtangl.com`
 - `NEXT_PUBLIC_QTANGL_SANDBOX_API_KEY`
 - `RESEND_API_KEY`, `QTANGL_ACCESS_TO_EMAIL`, `QTANGL_FROM_EMAIL`
 - Optional: `NEXT_PUBLIC_POSTHOG_KEY`, `NEXT_PUBLIC_GA_MEASUREMENT_ID`
@@ -53,7 +53,7 @@ Do **not** set `QTANGL_ACCESS_ALLOW_CONSOLE_FALLBACK` in production.
 ## 4. Smoke sequence
 
 ```bash
-export QTANGL_API_BASE=https://your-api.up.railway.app
+export QTANGL_API_BASE=https://api.qtangl.com
 export QTANGL_API_KEY=your-tenant-or-demo-key
 
 python backend/scripts/verify_production_rollout.py --full
@@ -85,7 +85,7 @@ Expect:
 
 Register in Stripe Dashboard → Developers → Webhooks:
 
-- URL: `https://<api>/public/stripe-webhook`
+- URL: `https://api.qtangl.com/public/stripe-webhook`
 - Events: `checkout.session.completed`, `customer.subscription.updated`, `customer.subscription.deleted`, `invoice.payment_failed`
 
 ## 6. Rollback

@@ -26,12 +26,13 @@ export default function EnvironmentsPage() {
         searchIndex={docsSearchIndex}
       >
         <DocsSection>
-          <DocsHeading>Pilot API (default)</DocsHeading>
-          <p className="font-mono text-sm text-white">{qtanglApiBaseUrl}</p>
+          <DocsHeading>Production API</DocsHeading>
+          <p className="font-mono text-sm text-white">https://api.qtangl.com</p>
           <p className="mt-3 text-sm text-[var(--color-gray-300)]">
-            Override in Next.js with{" "}
+            Custom domain on Railway. Override in Next.js with{" "}
             <code className="font-mono text-white">NEXT_PUBLIC_QTANGL_API_BASE_URL</code> (include
-            https://).
+            https://). Current build resolves to{" "}
+            <code className="font-mono text-white">{qtanglApiBaseUrl}</code>.
           </p>
         </DocsSection>
         <DocsSection>

@@ -1,4 +1,4 @@
-const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "";
+import { qtanglApiBaseUrl } from "@/lib/api";
 
 async function discoveryFetch(path: string, options: RequestInit = {}, apiKey?: string) {
   const headers: Record<string, string> = {
@@ -6,7 +6,7 @@ async function discoveryFetch(path: string, options: RequestInit = {}, apiKey?: 
     ...(options.headers as Record<string, string>),
   };
   if (apiKey) headers.Authorization = `Bearer ${apiKey}`;
-  const res = await fetch(`${API_BASE}${path}`, { ...options, headers });
+  const res = await fetch(`${qtanglApiBaseUrl}${path}`, { ...options, headers });
   if (!res.ok) {
     const err = await res.json().catch(() => ({}));
     throw new Error((err as { detail?: string }).detail ?? res.statusText);

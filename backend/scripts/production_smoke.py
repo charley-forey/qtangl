@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Production smoke test: scan → PDF → verify. Usage:
-  QTANGL_API_BASE=https://your-railway.app QTANGL_API_KEY=... python scripts/production_smoke.py
+  QTANGL_API_BASE=https://api.qtangl.com QTANGL_API_KEY=... python scripts/production_smoke.py
   python scripts/production_smoke.py --health-only
 """
 from __future__ import annotations

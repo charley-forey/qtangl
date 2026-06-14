@@ -10,6 +10,28 @@
 
 Root directory: `backend/` (Dockerfile at `backend/Dockerfile`).
 
+## Custom domain (`api.qtangl.com`)
+
+Production API URL: **`https://api.qtangl.com`** (not the `*.up.railway.app` hostname).
+
+1. Railway → API service → **Settings → Networking → Custom Domain** → add `api.qtangl.com`.
+2. At your DNS host for `qtangl.com`, add:
+   - **CNAME** `api` → `ewxlpe42.up.railway.app` (Railway shows the exact target)
+   - **TXT** `_railway-verify.api` → `railway-verify=…` (one-time verification)
+3. Wait for Railway to show the domain as **Active** (TLS issued automatically).
+4. Point clients at the custom domain:
+   - **Vercel:** `NEXT_PUBLIC_QTANGL_API_BASE_URL=https://api.qtangl.com`
+   - **GitHub (optional):** `QTANGL_PROD_API_BASE=https://api.qtangl.com`
+   - **Stripe webhook:** `https://api.qtangl.com/public/stripe-webhook`
+
+**Do not** set `QTANGL_PUBLIC_URL` to `api.qtangl.com`. That variable is the **web** origin (`https://www.qtangl.com`) for verify links, emails, and dashboard URLs embedded in PDFs and notifications.
+
+Smoke after DNS is live:
+
+```bash
+curl -s https://api.qtangl.com/health/ready | python -m json.tool
+```
+
 ## Postgres / Redis: private URLs only (avoid egress warnings)
 
 Railway shows warnings on **`DATABASE_PUBLIC_URL`** and **`REDIS_PUBLIC_URL`** because those use `*.proxy.rlwy.net` (public TCP proxy). **Do not** point app services at them.
@@ -93,7 +115,7 @@ Operational steps:
 python backend/scripts/production_smoke.py --health-only
 
 # Full scan → PDF → verify → bundle (requires valid QTANGL_API_KEY)
-QTANGL_API_BASE=https://your-service.up.railway.app \
+QTANGL_API_BASE=https://api.qtangl.com \
 QTANGL_API_KEY=your-key \
 python backend/scripts/production_smoke.py
 ```
@@ -122,7 +144,7 @@ Checklist:
 ## Vercel (web)
 
 ```
-NEXT_PUBLIC_QTANGL_API_BASE_URL=https://your-service.up.railway.app
+NEXT_PUBLIC_QTANGL_API_BASE_URL=https://api.qtangl.com
 NEXT_PUBLIC_QTANGL_SANDBOX_API_KEY=<matches QTANGL_API_KEY or demo tenant key>
 ```
 
@@ -134,4 +156,4 @@ QTANGL_STRIPE_MONITOR_PRICE_ID=price_...
 QTANGL_STRIPE_WEBHOOK_SECRET=whsec_...
 ```
 
-Webhook URL: `https://your-api/public/stripe-webhook`
+Webhook URL: `https://api.qtangl.com/public/stripe-webhook`

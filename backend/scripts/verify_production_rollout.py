@@ -2,8 +2,8 @@
 """Post-deploy rollout verification for evidence layer + CBOM migrations.
 
 Usage:
-  QTANGL_API_BASE=https://your-api.up.railway.app python scripts/verify_production_rollout.py
-  QTANGL_API_BASE=... QTANGL_API_KEY=... python scripts/verify_production_rollout.py --full
+  QTANGL_API_BASE=https://api.qtangl.com python scripts/verify_production_rollout.py
+  QTANGL_API_BASE=https://api.qtangl.com QTANGL_API_KEY=... python scripts/verify_production_rollout.py --full
 """
 from __future__ import annotations
 

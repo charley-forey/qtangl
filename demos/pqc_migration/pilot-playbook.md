@@ -406,7 +406,7 @@ curl -o acme-cbom.json \
 | Live scan “not in allowlist” | Add host to `QTANGL_PQC_SCAN_ALLOWLIST` |
 | Admin API 503 | Set `QTANGL_ADMIN_API_KEY` on Railway |
 | Rate limit 429 on demo/dashboard | Set Railway `QTANGL_RATE_LIMIT_PER_MINUTE=300` (was often set to `10`; PQC polling uses many requests) |
-| Demo “backend disconnected” | Check Vercel `NEXT_PUBLIC_QTANGL_API_BASE_URL` points to Railway |
+| Demo “backend disconnected” | Check Vercel `NEXT_PUBLIC_QTANGL_API_BASE_URL=https://api.qtangl.com` |
 
 **Health check:**
 
