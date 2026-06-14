@@ -17,3 +17,11 @@ test("verify page accepts scanId query param", async ({ page }) => {
   await page.goto("/verify?scanId=golden-bank-tls-inventory");
   await expect(page.getByText(/verify|scan/i).first()).toBeVisible();
 });
+
+test("verify page navigates when scan id is pasted", async ({ page }) => {
+  await page.goto("/verify");
+  const input = page.getByPlaceholder(/scan-/i);
+  await input.fill("golden-bank-tls-inventory");
+  await page.getByRole("button", { name: "Verify" }).click();
+  await expect(page).toHaveURL(/scanId=golden-bank-tls-inventory/);
+});

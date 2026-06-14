@@ -1,7 +1,7 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 
 import PageHero from "@/components/layout/PageHero";
 import PageShell from "@/components/layout/PageShell";
@@ -67,18 +67,71 @@ function VerifyResultPanel({ result }: { result: VerifyResult }) {
   );
 }
 
+function normalizeScanIdInput(raw: string): string {
+  const trimmed = raw.trim();
+  if (!trimmed) {
+    return "";
+  }
+
+  if (trimmed.includes("scanId=")) {
+    try {
+      const href = trimmed.startsWith("http")
+        ? trimmed
+        : `https://qtangl.com${trimmed.startsWith("/") ? trimmed : `/${trimmed}`}`;
+      const scanId = new URL(href).searchParams.get("scanId")?.trim();
+      if (scanId) {
+        return scanId;
+      }
+    } catch {
+      // Fall through to treat the paste as a bare scan id.
+    }
+  }
+
+  return trimmed;
+}
+
 export default function VerifyPageClient() {
+  const router = useRouter();
   const params = useSearchParams();
   const scanId = params.get("scanId") ?? "";
   const [result, setResult] = useState<VerifyResult | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [scanIdInput, setScanIdInput] = useState("");
   const [pastedJson, setPastedJson] = useState("");
   const [pasteLoading, setPasteLoading] = useState(false);
 
-  useEffect(() => {
-    if (!scanId) {
+  function goToScanId(raw: string) {
+    const normalized = normalizeScanIdInput(raw);
+    if (!normalized || normalized === scanId) {
       return;
     }
+    trackEvent("verify_scan_id_navigate", { scanId: normalized });
+    router.push(`/verify?scanId=${encodeURIComponent(normalized)}`);
+  }
+
+  function handleScanIdSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    goToScanId(scanIdInput);
+  }
+
+  function handleScanIdPaste(value: string) {
+    const normalized = normalizeScanIdInput(value);
+    setScanIdInput(normalized);
+    goToScanId(normalized);
+  }
+
+  useEffect(() => {
+    setScanIdInput(scanId);
+  }, [scanId]);
+
+  useEffect(() => {
+    if (!scanId) {
+      setResult(null);
+      setError(null);
+      return;
+    }
+    setResult(null);
+    setError(null);
     fetch(`${qtanglApiBaseUrl}/pqc/verify/${encodeURIComponent(scanId)}`)
       .then(async (response) => {
         if (!response.ok) {
@@ -142,12 +195,35 @@ qtangl-verify report.json --api-base ${qtanglApiBaseUrl} --json`}
             </p>
           </div>
 
-          {!scanId ? (
-            <p>
-              Paste a scan ID in the URL: <code className="text-white">/verify?scanId=scan-…</code>
+          <div className="space-y-3">
+            <p className="text-xs uppercase tracking-[0.14em] text-[var(--color-gray-500)]">
+              Verify by scan ID
             </p>
-          ) : null}
-          {scanId ? <p className="font-mono text-white">{scanId}</p> : null}
+            <form onSubmit={handleScanIdSubmit} className="flex gap-3">
+              <input
+                type="text"
+                value={scanIdInput}
+                onChange={(event) => setScanIdInput(event.target.value)}
+                onPaste={(event) => {
+                  const pasted = event.clipboardData.getData("text");
+                  if (pasted.trim()) {
+                    event.preventDefault();
+                    handleScanIdPaste(pasted);
+                  }
+                }}
+                placeholder="scan-… or paste a verify link"
+                spellCheck={false}
+                className="w-full rounded-xl border border-[var(--border-strong)] bg-black px-4 py-2 font-mono text-sm text-white outline-none focus:border-white/40"
+              />
+              <button
+                type="submit"
+                disabled={!normalizeScanIdInput(scanIdInput)}
+                className="shrink-0 rounded-full border border-[var(--border-strong)] bg-white px-5 py-2 text-sm font-medium text-black disabled:opacity-50"
+              >
+                Verify
+              </button>
+            </form>
+          </div>
           {error ? <p className="text-red-300">{error}</p> : null}
           {result ? <VerifyResultPanel result={result} /> : null}
 
