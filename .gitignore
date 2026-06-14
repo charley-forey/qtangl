@@ -34,3 +34,8 @@ backend/data/
 
 # Transparency anchor artifacts (generated at runtime)
 backend/data/transparency/
+
+# Local secret/temp files (never commit)
+.admin_key
+dogfood_key.txt
+_gen_dogfood_key.py
