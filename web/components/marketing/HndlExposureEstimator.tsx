@@ -45,7 +45,7 @@ export default function HndlExposureEstimator({
 
   useEffect(() => {
     trackEvent("hndl_estimator_complete", { vertical, exposed });
-  }, [vertical]);
+  }, [vertical, exposed]);
 
   return (
     <Card tone="feature" size="lg" className="rounded-[var(--radius-feature)]">

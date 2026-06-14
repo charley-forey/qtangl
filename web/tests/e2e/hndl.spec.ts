@@ -25,12 +25,12 @@ test.describe("HNDL education hub", () => {
     await page.goto("/q-day/hndl");
     await expect(page.getByText(/Are you exposed/i)).toBeVisible();
     await expect(page.getByText(/Mosca calculator/i)).toBeVisible();
-    await expect(page.getByText(/Collection vectors/i)).toBeVisible();
+    await expect(page.getByText("Collection vectors", { exact: true })).toBeVisible();
   });
 
   test("Mosca calculator updates verdict", async ({ page }) => {
     await page.goto("/q-day/hndl");
-    const dataInput = page.getByLabel(/Data shelf-life/i).first();
+    const dataInput = page.getByRole("spinbutton", { name: "Data shelf-life in years" });
     await dataInput.fill("40");
     await expect(page.getByText(/HNDL exposure today/i).first()).toBeVisible();
   });

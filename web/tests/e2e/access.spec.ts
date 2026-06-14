@@ -5,7 +5,7 @@ test("access page shows short form and mailto fallback", async ({ page }) => {
   await expect(page.getByRole("heading", { name: /Request pilot access/i, level: 1 })).toBeVisible();
   await expect(page.getByLabel(/Work email/i)).toBeVisible();
   await expect(page.getByLabel(/Interest area/i)).toBeVisible();
-  await expect(page.getByRole("link", { name: "charley@qtangl.com" })).toBeVisible();
+  await expect(page.locator("#main-content").getByRole("link", { name: "charley@qtangl.com" })).toBeVisible();
   await expect(page.getByText(/What happens next/i)).toBeVisible();
 });
 

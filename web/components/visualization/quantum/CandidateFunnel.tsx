@@ -26,7 +26,6 @@ export function CandidateFunnelContent({ className = "" }: CandidateFunnelConten
             <button
               key={stage.label}
               type="button"
-              role="listitem"
               onClick={() => setActiveIndex(index)}
               className={[
                 "touch-target flex w-full min-h-[2.75rem] items-center gap-3 rounded-[var(--radius-lg)] border px-4 py-3 text-left transition-colors sm:gap-4",

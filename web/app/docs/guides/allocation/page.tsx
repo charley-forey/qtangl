@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 
 import DocsBadge from "@/components/docs/DocsBadge";
 import DocsCallout from "@/components/docs/DocsCallout";

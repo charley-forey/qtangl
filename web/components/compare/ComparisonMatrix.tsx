@@ -124,6 +124,7 @@ export default function ComparisonMatrix({
                 setPicker(value);
                 if (value) addSlug(value);
               }}
+              aria-label="Add a vendor to compare"
               className="w-full max-w-md rounded-2xl border border-[var(--border)] bg-black/50 px-4 py-3 text-sm text-white"
             >
               <option value="">Add a vendor…</option>

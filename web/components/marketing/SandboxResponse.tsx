@@ -21,7 +21,7 @@ type SandboxResponseProps = {
   scenarioId?: (typeof tryScenarios)[number]["id"];
 };
 
-function statusLabel(status: SandboxLiveStatus, error?: string | null) {
+function statusLabel(status: SandboxLiveStatus) {
   switch (status) {
     case "live":
       return `${sandboxPageCopy.liveLabel} from ${qtanglApiBaseUrl}`;
@@ -72,7 +72,7 @@ export default function SandboxResponse({
       </div>
 
       <p className="mt-4 text-sm leading-7 text-[var(--color-gray-400)]" aria-live="polite">
-        {isLoading ? tryPlannerCopy.status.generating : statusLabel(status, error)}
+        {isLoading ? tryPlannerCopy.status.generating : statusLabel(status)}
       </p>
 
       {status === "fallback" && error ? (

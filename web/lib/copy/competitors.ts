@@ -1,11 +1,8 @@
 import type {
-  CapabilityRow,
   CompetitorEntry,
   CompetitorFaqItem,
   CompetitorSource,
-  DiscoveryCoverage,
   QtanglBaseline,
-  RadarScores,
 } from "@/lib/competitors-types";
 
 const LAST_VALIDATED = "2026-06-09";

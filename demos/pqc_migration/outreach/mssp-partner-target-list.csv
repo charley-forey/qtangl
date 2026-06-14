@@ -1,0 +1,56 @@
+number,partner_name,domain,tier,segment,focus,region,motion,priority_wave,notes
+1,DefenseStorm,defensestorm.com,P1,mssp,bank_and_cu,Southeast US,tech_alliance_co-sell,1,200+ FIs; examiner-ready artifacts
+2,Locknet,locknetmanagedit.com,P1,mssp,bank_and_cu,Midwest,white-label_monitor,1,Community bank DNA; FFIEC examined
+3,TorchLight,torchlight.io,P1,mssp,credit_union,National,white-label_monitor,1,Former NCUA examiner on staff
+4,Think|Stack,thinkstack.co,P1,cuso,credit_union,National,white-label_monitor,1,CUSO; SIEM 360 for FFIEC
+5,Ongoing Operations,ongoingoperations.com,P1,cuso,credit_union,National,co-sell,1,CU-owned CUSO; Adlumin partner
+6,STIG,stig.net,P1,mssp,bank_and_cu,National,co-sell,2,CrowdStrike MDR; examiner docs
+7,Securafy,securafy.com,P1,mssp,bank_and_cu,Ohio/national,white-label_evidence,1,GLBA/FFIEC; works with existing MSP
+8,FCI Cyber,fcicyber.com,P1,mssp,ria_insurance,National,referral,3,400+ financial services endpoints
+9,Trace Security,tracesecurity.com,P1,mssp,bank_and_cu,South,assessment_co-sell,2,NCUA/FFIEC assessments
+10,CoNetrix,conetrix.com,P1,mssp,community_bank,Southeast,co-sell,2,Tandem compliance
+11,Safe Systems,safesystems.com,P1,mssp,bank_and_cu,Southeast,co-sell,2,Compliance Navigator
+12,CSI Corporate Security Integrators,csisolutions.com,P1,mssp,financial,National,co-sell,2,FI regulatory compliance
+13,Adlumin,adlumin.com,P1,platform,bank_and_cu,National,OEM_integration,2,SOC platform; OGO reseller
+14,BlueRadius Cyber,blueradius.io,P1,mssp,bank_cu_fintech,Multi-metro,co-sell_vCISO,2,NYDFS FFIEC regional banks
+15,Red River,redriver.com,P1,mssp,bank_cu_gov,National,co-sell,3,FFIEC-aware regulated MSS
+16,Crestline Technologies,crestline-technologies.com,P2,mssp,bank_and_cu,Tennessee,white-label,3,
+17,Pondurance,pondurance.com,P2,mssp,regulated,Midwest/Southeast,channel,3,
+18,Blumira,blumira.com,P2,mssp,smb_regulated,National,siem_addon,3,
+19,Dataprise,dataprise.com,P2,mssp,financial,Mid-Atlantic,co-sell,3,
+20,TPx,tpx.com,P2,mssp,smb_fi,National,channel,3,
+21,Rackspace Security,rackspace.com/security,P2,mssp,regulated,National,co-sell,3,
+22,Herjavec Group,herjavecgroup.com,P2,mssp,mid_market,US/Canada,channel,3,
+23,NetGain Technologies,netgainit.com,P2,mssp,bank_healthcare,Midwest,co-sell,3,
+24,IT Weapons,itweapons.com,P2,mssp,financial,Canada/US,co-sell,3,
+25,Systems Engineering,systemsengineering.com,P2,mssp,financial,New England,co-sell,3,
+26,Mainstay Technologies,mainstayit.com,P2,mssp,financial,New England,co-sell,3,
+27,Aspire Technologies,aspiretech.us,P2,mssp,community_bank,Southeast,co-sell,3,
+28,Synoptek,synoptek.com,P2,mssp,financial,National,si_mssp,3,
+29,InterVision,intervision.com,P2,mssp,financial,National,co-sell,3,
+30,Mission Secure,missionsecure.com,P2,mssp,critical_infra_fi,Virginia,co-sell,3,
+31,Agio,agio.com,P2,mssp,asset_managers,NYC,adjacent,3,
+32,Eze Castle Integration,ecisolutions.com,P2,si,hedge_fund_am,Boston,adjacent,3,
+33,Sikich,sikich.com,P2,cpa_cyber,financial,National,referral,3,
+34,Withum,withum.com,P2,cpa_cyber,financial,Northeast,referral,3,
+35,Arctic Wolf,arcticwolf.com,P3,mssp,financial,National,channel_program,4,100% channel-led
+36,Deepwatch,deepwatch.com,P3,mssp,financial,National,xcelerate_channel,4,Channel-only MDR
+37,Expel,expel.io,P3,mssp,financial,National,msp_partner,4,
+38,Rapid7 MDR,rapid7.com,P3,mssp,banking,National,partner_network,4,
+39,Trustwave,trustwave.com,P3,mssp,financial,National,partner,4,
+40,Nuspire,nuspire.com,P3,mssp,regulated,National,channel,4,
+41,Huntress,huntress.com,P3,mssp,smb_cu,National,msp_program,4,Down-market CU
+42,Blackpoint Cyber,blackpointcyber.com,P3,mssp,smb_fi,National,msp_snap,4,
+43,Sophos MTR,sophos.com,P3,mssp,broad,National,partner,4,
+44,CrowdStrike Falcon Complete,crowdstrike.com,P3,platform,bank_msp,National,partner,4,Via STIG-style partners
+45,eSentire,esentire.com,P3,mssp,financial,National,channel,4,
+46,ReliaQuest,reliaquest.com,P3,mssp,enterprise_bank,National,channel,4,
+47,CUSO Inc / CU*Answers,cusoinc.com,P2,cuso,credit_union,National,intros,2,Ecosystem intros
+48,Finalyse,finalyse.com,P2,consulting,credit_union,National,referral,3,
+49,Compass IT Compliance,compassitc.com,P2,consulting,bank_and_cu,National,assessment,3,
+50,KirkpatrickPrice,kirkpatrickprice.com,P2,audit_vCISO,smb_fi,National,referral,3,
+51,Schellman,schellman.com,Audit,audit,soc_pci,National,passport_referral,3,Not MSSP
+52,A-LIGN,a-lign.com,Audit,audit,soc2,National,referral,3,
+53,BARR Advisory,barradvisory.com,Audit,audit,fintech,National,referral,3,
+54,FS-ISAC,fsisac.com,Audit,community,banks,National,credibility,2,Not reseller
+55,SecurityMetrics,securitymetrics.com,P2,mssp,pci_processors,National,pci_co-sell,3,Processor PCI

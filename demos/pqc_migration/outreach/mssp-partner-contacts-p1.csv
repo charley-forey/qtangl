@@ -1,0 +1,16 @@
+number,partner,parent_company,primary_contact,primary_title,alt_contact,alt_title,linkedin_url,confidence,outreach_role,notes
+1,DefenseStorm,,Gina Hortatsos,Chief Growth Officer,Keith Joseph,SVP Sales,https://linkedin.com/in/ginahortatsos,verified,growth_commercial,CGO owns community GTM; Keith Joseph ex-channel GTM
+2,Locknet,EO Johnson,Kris Kilgard,Locknet Division President,Peter Durnil,VP Operations,https://linkedin.com/in/kriskilgard,verified,ceo_division_president,No public VP Channel; banking MSSP
+3,TorchLight,,Nolan Garrett,CEO,,,https://linkedin.com/in/nolangarrett,verified,ceo_founder,CU-only; no channel program
+4,Think Stack,Network Coverage,Chris Sachse,CEO Network Coverage and Think Stack,Cal Bowman,VP Client Strategy and Innovation,https://linkedin.com/in/christopher-sachse,verified,ceo_client_strategy,Merged with NetCov Nov 2024
+5,Ongoing Operations,Optiri / Trellance,Shane Butcher,Executive Director Optiri,Tom Davis,President and CEO Trellance,https://linkedin.com/in/butchershane,verified,vp_managed_services,OGO absorbed into Optiri brand
+6,STIG,,Paul Cucurullo,Managing Partner BizDev Strategy Investments,Dominic Genzano,CEO,https://linkedin.com/in/paul-cucurullo-77800b33,verified,channel_alliances,Explicit partnerships remit
+7,Securafy,,Randy Hall,CEO and Founder,Ric Hall,Chief Revenue Officer,https://linkedin.com/in/hall-randy,verified,ceo_cro,Referral and co-managed tiers
+8,FCI Cyber,,Vincent Guyaux,Business Advisor BD,Brian Edelman,CEO and Founder,https://linkedin.com/in/vincentguyaux,verified,vp_sales_bd,MSP Partner Program
+9,Trace Security,,Brent Williams,Chief Revenue Officer,Peter B. Stewart,Chairman and Managing Director,https://linkedin.com/in/brent-williams-ab9a1765,verified,svp_sales_cro,Stewart nurtures strategic alliances
+10,CoNetrix,,Kyle Andersen,SVP Sales,Russ Horn,President,https://linkedin.com/in/kylestevenandersen,likely,svp_sales,Bank IT plus Tandem compliance
+11,Safe Systems,UFS,Scott Galvin,VP Client Relationship Management UFS,Darren Bridges,President Safe Systems,https://linkedin.com/in/scottrgalvin,verified,vp_bd_sales,Acquired by UFS Aug 2024
+12,CSI,Computer Services Inc,Linda Fischer,Chief Commercial Officer,Michel Jacobs,Chief Strategy Officer,https://linkedin.com/in/linda-fischer-95467b96,needs_verify,cco,Confirm csiweb.com not csisolutions.com
+13,Adlumin,N-able,Robert Johnston,GM Adlumin N-able,David Weeks,VP Partner Experience N-able,https://linkedin.com/in/robertsjohnston,verified,oem_msp_channel,Two threads: OEM plus N-able partner program
+14,BlueRadius Cyber,,Jeff Sowell,Founder and CEO,,,https://linkedin.com/in/jsowell,verified,ceo_vciso,No formal channel desk
+15,Red River,,Sara Siddiqui,VP Strategic Partnerships,Greg Blattner,VP Managed Services Sales,https://linkedin.com/in/sarasidd,verified,vp_strategic_alliances,Closest classic channel title in P1

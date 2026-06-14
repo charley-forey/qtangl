@@ -4,12 +4,28 @@
 #
 #    pip-compile --constraint=requirements.lock --output-file=requirements-dev.lock --strip-extras requirements-dev.txt
 #
+alembic==1.18.4
+    # via
+    #   -c requirements.lock
+    #   -r requirements-dev.txt
 colorama==0.4.6
     # via
     #   -c requirements.lock
     #   pytest
+greenlet==3.5.1
+    # via
+    #   -c requirements.lock
+    #   sqlalchemy
 iniconfig==2.3.0
     # via pytest
+mako==1.3.12
+    # via
+    #   -c requirements.lock
+    #   alembic
+markupsafe==3.0.2
+    # via
+    #   -c requirements.lock
+    #   mako
 packaging==26.2
     # via pytest
 pluggy==1.6.0
@@ -18,3 +34,12 @@ pygments==2.20.0
     # via pytest
 pytest==8.4.2
     # via -r requirements-dev.txt
+sqlalchemy==2.0.50
+    # via
+    #   -c requirements.lock
+    #   alembic
+typing-extensions==4.15.0
+    # via
+    #   -c requirements.lock
+    #   alembic
+    #   sqlalchemy

@@ -19,12 +19,6 @@ const CELL_COLORS: Record<MatrixCell, string> = {
   unknown: "rgba(255,255,255,0.04)",
 };
 
-function coverageScore(cell: MatrixCell): number {
-  if (cell === "yes") return 1;
-  if (cell === "partial") return 0.5;
-  return 0;
-}
-
 export default function DiscoveryMethodChart({ competitors, focusSlug }: DiscoveryMethodChartProps) {
   const rows = focusSlug
     ? [
@@ -54,6 +48,7 @@ export default function DiscoveryMethodChart({ competitors, focusSlug }: Discove
         className="mt-8 overflow-x-auto"
         role="img"
         aria-label="Discovery method coverage heatmap by vendor"
+        tabIndex={0}
       >
         <div
           className="grid gap-1 text-xs"

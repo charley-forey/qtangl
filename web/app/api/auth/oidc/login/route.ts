@@ -1,7 +1,7 @@
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
-import { appBaseUrl, oidcConfigured, oidcRedirectUri } from "@/lib/auth/oidc";
+import { oidcConfigured, oidcRedirectUri } from "@/lib/auth/oidc";
 
 export async function GET() {
   if (!oidcConfigured()) {

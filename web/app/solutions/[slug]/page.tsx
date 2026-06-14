@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 
 import SolutionLandingPage from "@/components/marketing/SolutionLandingPage";
 import PageShell from "@/components/layout/PageShell";
-import { getSolutionCopy, solutionsCopy, type SolutionSlug } from "@/lib/copy/readiness-solutions";
+import { getSolutionCopy, type SolutionSlug } from "@/lib/copy/readiness-solutions";
 import { buildPageMetadata } from "@/lib/seo";
 
 type SolutionRouteProps = {
