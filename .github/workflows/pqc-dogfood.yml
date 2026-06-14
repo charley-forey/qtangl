@@ -71,22 +71,27 @@ jobs:
   fixture-regression:
     if: github.event.schedule == '0 15 * * 1' || (github.event_name == 'workflow_dispatch' && inputs.fixture)
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
     steps:
       - uses: actions/checkout@v4
 
       - uses: actions/setup-python@v5
         with:
           python-version: "3.13"
+          cache: pip
+          cache-dependency-path: |
+            backend/requirements.lock
+            backend/requirements-dev.lock
 
       - name: Install backend deps
         run: |
-          cd backend
-          pip install -r requirements.lock
+          python -m pip install --upgrade pip
+          pip install -r requirements.lock -r requirements-dev.lock
 
       - name: Fixture PQC scan (BM-006 regression — not production domains)
-        run: |
-          cd backend
-          python -m benchmarks.run_benchmark BM-006 --write
+        run: python benchmarks/run_benchmark.py BM-006 --write
 
       - name: Upload scan artifact
         uses: actions/upload-artifact@v4
@@ -99,30 +104,40 @@ jobs:
           QTANGL_ENABLE_TRANSPARENCY_LOG: "true"
           DATABASE_URL: sqlite:///./dogfood_evidence.db
         run: |
-          cd backend
           alembic upgrade head
           python - <<'PY'
           import json
           from pathlib import Path
-          from app.pqc.signing import sign_report_payload, verify_report_signature
-          from app.pqc.transparency import safe_append_after_sign, log_inclusion_block
 
-          p = Path("benchmarks/results/BM-006-pqc-scan.json")
-          data = json.loads(p.read_text())
-          report = data.get("report") or {}
-          report["scanId"] = report.get("scanId") or "dogfood-bm-006-fixture"
-          sig = sign_report_payload(report)
-          report["signature"] = sig
-          safe_append_after_sign(content_hash=sig["contentHash"], signature=sig, tenant_id="dogfood")
-          result = verify_report_signature(report, sig)
+          from app.pqc.data import load_dataset
+          from app.pqc.pipeline import run_pqc_scan
+          from app.pqc.report import report_to_json
+          from app.pqc.signing import sign_report_payload, verify_report_signature
+          from app.pqc.transparency import log_inclusion_block, safe_append_after_sign
+
+          dataset = load_dataset()
+          bundle = run_pqc_scan(dataset, scenario_id="bank-tls-inventory", use_fixture=True)
+          report = report_to_json(bundle.report)
+          verify_payload = {k: v for k, v in report.items() if k != "signature"}
+          sig = sign_report_payload(verify_payload)
+          safe_append_after_sign(verify_payload, sig, tenant_id="dogfood")
+          result = verify_report_signature(verify_payload, sig)
           inclusion = log_inclusion_block(sig["contentHash"])
           assert result.get("valid"), result
           assert inclusion and inclusion.get("included"), inclusion
           Path("benchmarks/results/dogfood-verify-fixture.json").write_text(
-              json.dumps({"valid": True, "logIncluded": True, "seq": inclusion.get("seq")}, indent=2),
+              json.dumps(
+                  {
+                      "valid": True,
+                      "logIncluded": True,
+                      "seq": inclusion.get("seq"),
+                      "scanId": bundle.scan_id,
+                  },
+                  indent=2,
+              ),
               encoding="utf-8",
           )
-          print("fixture verify + log inclusion OK")
+          print(f"fixture verify + log inclusion OK scanId={bundle.scan_id}")
           PY
 
       - name: Upload fixture verify artifact
