@@ -60,6 +60,19 @@ class PostCompleteIntegrationTest(unittest.TestCase):
         self.assertNotIn("aggregatedCbomSummary", report_json)
         self.assertIn("aggregatedCbomSummary", bundle.details)
 
+    def test_run_pqc_scan_honors_provided_scan_id(self) -> None:
+        """The async worker passes the job id into run_pqc_scan so the bundle, report,
+        persisted row, poll response, and verify link all share one id."""
+        dataset = load_dataset()
+        bundle = run_pqc_scan(
+            dataset,
+            scenario_id="bank-tls-inventory",
+            use_fixture=True,
+            scan_id="scan-fixed-test-id",
+        )
+        self.assertEqual(bundle.scan_id, "scan-fixed-test-id")
+        self.assertEqual(bundle.report.scan_id, "scan-fixed-test-id")
+
 
 if __name__ == "__main__":
     unittest.main()

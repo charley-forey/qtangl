@@ -23,11 +23,14 @@ def run_pqc_scan(
     seed: int = 1234,
     on_progress: Callable[[TimelineEvent], None] | None = None,
     depth: str = "standard",
+    scan_id: str | None = None,
 ) -> ScanBundle:
     del seed  # reserved for reproducibility hooks
     started = perf_counter()
     scenario = next(s for s in dataset.scenarios if s.id == scenario_id)
-    scan_id = f"scan-{uuid.uuid4()}"
+    # Use the caller-supplied id (e.g. the async job id) so the bundle, report,
+    # persisted row, poll response, and public verify link all share one scan id.
+    scan_id = scan_id or f"scan-{uuid.uuid4()}"
     effective_target = target_override or scenario.target.domain
     scan_coverage: list[dict[str, Any]] = []
 

@@ -71,6 +71,31 @@ class DogfoodLatestTest(unittest.TestCase):
         self.assertIn("verifyUrl", data)
         self.assertTrue(data["verification"]["valid"])
 
+    def test_dogfood_scan_verifies_end_to_end(self) -> None:
+        """Full path with the REAL enrichment + persistence: a scan saved under a fixed
+        id must be retrievable and verify as valid under that same id (regression for the
+        dogfood content-hash mismatch and scan-id divergence)."""
+        dataset = load_dataset()
+        bundle = run_pqc_scan(
+            dataset,
+            scenario_id="bank-tls-inventory",
+            use_fixture=True,
+            target_override="www.qtangl.com",
+            scan_id="scan-e2e-dogfood-id",
+        )
+        # No enrich mock here — exercises the real sign-for-storage path.
+        save_scan_bundle(bundle.scan_id, bundle, tenant_id="dogfood")
+
+        verify = self.client.get(f"/pqc/verify/{bundle.scan_id}")
+        self.assertEqual(verify.status_code, 200, msg=verify.text)
+        self.assertTrue(verify.json()["verification"]["valid"], msg=verify.text)
+
+        latest = self.client.get("/pqc/dogfood/latest")
+        self.assertEqual(latest.status_code, 200)
+        data = latest.json()
+        self.assertEqual(data["scanId"], "scan-e2e-dogfood-id")
+        self.assertTrue(data["verification"]["valid"], msg=latest.text)
+
 
 if __name__ == "__main__":
     unittest.main()
