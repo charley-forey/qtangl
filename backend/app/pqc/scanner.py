@@ -22,6 +22,7 @@ from typing import Any, Callable
 from app.pqc.data import _build_asset
 from app.pqc.models import CryptoAsset, PqcDataset, ScanCoverageEntry, ScanScenario, TimelineEvent
 from app.pqc.safety import (
+    ScanSafetyError,
     max_endpoints,
     resolve_scannable,
     safe_create_connection,
@@ -345,7 +346,9 @@ def scan_jwks(host: str, port: int = 443) -> ScanResult:
             ),
             None,
         )
-    except (json.JSONDecodeError, TimeoutError, OSError):
+    except (ScanSafetyError, json.JSONDecodeError, TimeoutError, OSError):
+        # No OIDC discovery doc (e.g. HTTP 404), unreachable, or malformed JSON:
+        # the host simply has no JWKS to inventory — not a scan failure.
         return None, None
 
 
@@ -565,32 +568,40 @@ def scan_live(
 
     for index, (host, port, kind) in enumerate(endpoints):
         emit("tls", f"Scanning {kind} {host}:{port} ({index + 1}/{len(endpoints)})")
-        if kind == "jwks":
-            asset, cov = scan_jwks(host, port)
-        elif kind == "ssh":
-            asset, cov = scan_ssh_banner(host, port)
-        elif kind == "email":
-            asset, cov = scan_email_starttls(host, port)
-        elif kind == "vpn":
-            asset, cov = scan_vpn_banner(host, port)
-        elif kind == "db_tls":
-            asset, cov = scan_db_tls(host, port)
-        elif kind in {"smime", "mtls", "code_signing", "document_signing"}:
-            asset, cov = scan_tls_endpoint(host, port)
-            if asset:
-                asset = replace(
-                    asset,
-                    kind=kind,  # type: ignore[arg-type]
-                    label=f"{kind.upper()} {asset.label}",
-                )
-        else:
-            asset, cov = scan_tls_endpoint(host, port)
+        try:
+            if kind == "jwks":
+                asset, cov = scan_jwks(host, port)
+            elif kind == "ssh":
+                asset, cov = scan_ssh_banner(host, port)
+            elif kind == "email":
+                asset, cov = scan_email_starttls(host, port)
+            elif kind == "vpn":
+                asset, cov = scan_vpn_banner(host, port)
+            elif kind == "db_tls":
+                asset, cov = scan_db_tls(host, port)
+            elif kind in {"smime", "mtls", "code_signing", "document_signing"}:
+                asset, cov = scan_tls_endpoint(host, port)
+                if asset:
+                    asset = replace(
+                        asset,
+                        kind=kind,  # type: ignore[arg-type]
+                        label=f"{kind.upper()} {asset.label}",
+                    )
+            else:
+                asset, cov = scan_tls_endpoint(host, port)
+        except Exception as exc:
+            # A single unreachable/erroring endpoint must never abort the whole scan;
+            # record it in coverage and continue inventorying the rest.
+            asset, cov = None, _coverage_entry(host, port, kind, status="error", detail=str(exc))
         if asset:
             assets.append(asset)
         if cov:
             coverage.append(cov)
 
-    jwks_asset, jwks_cov = scan_jwks(domain)
+    try:
+        jwks_asset, jwks_cov = scan_jwks(domain)
+    except Exception as exc:
+        jwks_asset, jwks_cov = None, _coverage_entry(domain, 443, "jwks", status="error", detail=str(exc))
     if jwks_asset:
         assets.append(jwks_asset)
     if jwks_cov:

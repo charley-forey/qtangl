@@ -24,6 +24,29 @@ class PqcScannerTest(unittest.TestCase):
         self.assertEqual(len(assets), len(scenario.fixture_asset_ids))
 
 
+class PqcJwksProbeTest(unittest.TestCase):
+    def test_scan_jwks_swallows_non_200_oidc(self) -> None:
+        """Regression: a host with no OIDC discovery doc (HTTP 404) must yield no
+        JWKS asset, not abort the whole scan. See dogfood scan failure on
+        /.well-known/openid-configuration."""
+        from app.pqc import scanner
+        from app.pqc.safety import ScannableTarget, ScanSafetyError
+
+        target = ScannableTarget(host="api.qtangl.com", ip="203.0.113.1", port=443)
+        with unittest.mock.patch.object(scanner, "resolve_scannable", return_value=target), \
+            unittest.mock.patch.object(
+                scanner,
+                "safe_json_from_url",
+                side_effect=ScanSafetyError(
+                    "HTTP 404 fetching https://api.qtangl.com/.well-known/openid-configuration"
+                ),
+            ):
+            asset, coverage = scanner.scan_jwks("api.qtangl.com")
+
+        self.assertIsNone(asset)
+        self.assertIsNone(coverage)
+
+
 @unittest.skipUnless(
     os.getenv("QTANGL_PQC_RUN_LIVE_INTEGRATION") == "true",
     "Set QTANGL_PQC_RUN_LIVE_INTEGRATION=true to run outbound live scan integration tests",
