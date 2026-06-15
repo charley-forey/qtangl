@@ -35,6 +35,8 @@ Important: the Next.js app lives in `web/`, so when importing the GitHub repo in
 
 - **Root Directory:** `web`
 
+`web/vercel.json` compiles the monorepo SDK packages during install (Vercel has no Python for OpenAPI codegen). Committed artifacts under `web/public/` and `web/content/` are used as-is on deploy.
+
 Everything else can stay on the default Next.js settings.
 
 ## Useful scripts

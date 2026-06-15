@@ -16,6 +16,7 @@
     "README.md"
   ],
   "scripts": {
+    "build:tsc": "tsc",
     "build": "tsc",
     "test": "npm run build && node --test tests/context.test.mjs"
   },
@@ -41,5 +42,8 @@
   },
   "publishConfig": {
     "access": "public"
+  },
+  "dependencies": {
+    "web": "file:../../web"
   }
 }

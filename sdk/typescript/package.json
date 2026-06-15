@@ -17,6 +17,7 @@
   ],
   "scripts": {
     "generate": "python ../../scripts/generate_sdk_types.py",
+    "build:tsc": "tsc",
     "build": "npm run generate && tsc",
     "test": "npm run build && node --test tests/client.test.mjs",
     "prepublishOnly": "npm test"
@@ -43,5 +44,8 @@
   "devDependencies": {
     "openapi-typescript": "^7.6.1",
     "typescript": "^5.8.2"
+  },
+  "dependencies": {
+    "web": "file:../../web"
   }
 }

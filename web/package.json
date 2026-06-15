@@ -22,7 +22,7 @@
     "generate:comparison-pdf": "node scripts/generate-comparison-guide-pdf.mjs",
     "build:sdk": "npm run build --prefix ../sdk/typescript",
     "build:sdk-react": "npm run build --prefix ../sdk/react",
-    "prebuild": "npm run generate:library && npm run generate:docs-index && npm run generate:openapi && npm run generate:docs-export && npm run generate:pwa-icons && npm run build:sdk && npm run build:sdk-react",
+    "prebuild": "node scripts/prebuild.mjs",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",

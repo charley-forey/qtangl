@@ -1,0 +1,4 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "installCommand": "npm ci && npm install --prefix ../sdk/typescript && npm run build:tsc --prefix ../sdk/typescript && npm install --prefix ../sdk/react && npm run build:tsc --prefix ../sdk/react"
+}
