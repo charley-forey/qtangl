@@ -1,6 +1,12 @@
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
 import type { NextConfig } from "next";
 
+const repoRoot = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
+
 const nextConfig: NextConfig = {
+  transpilePackages: ["@qtangl/sdk", "@qtangl/sdk-react"],
   images: {
     formats: ["image/avif", "image/webp"],
     deviceSizes: [360, 414, 640, 768, 1024, 1280, 1536, 1920],
@@ -10,7 +16,7 @@ const nextConfig: NextConfig = {
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
   turbopack: {
-    root: process.cwd(),
+    root: repoRoot,
   },
   async headers() {
     return [

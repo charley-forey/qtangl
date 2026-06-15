@@ -1,4 +1,5 @@
 import { createQtanglClient } from "@/lib/qtangl-client";
+import type { MergeConflict } from "@/components/pqc/MergeConflictPanel";
 import type { TenantScanSummary } from "@/lib/tenant-api";
 
 export type DashboardMe = {
@@ -14,19 +15,12 @@ export type CbomAggregateSummary = {
   readiness: Record<string, unknown> | null;
 };
 
-export type CbomConflictSummary = {
-  id: string;
-  field?: string;
-  values?: string[];
-  status?: string;
-};
-
 export type DashboardBootstrap = {
   me: DashboardMe;
   scans: TenantScanSummary[];
   billingPortalUrl: string | null;
   cbomAggregate: CbomAggregateSummary | null;
-  cbomConflicts: CbomConflictSummary[];
+  cbomConflicts: MergeConflict[];
   cbomDrift: Record<string, unknown> | null;
 };
 
@@ -45,7 +39,7 @@ export async function fetchDashboardBootstrap(apiKey: string): Promise<Dashboard
   }
 
   let cbomAggregate: CbomAggregateSummary | null = null;
-  let cbomConflicts: CbomConflictSummary[] = [];
+  let cbomConflicts: MergeConflict[] = [];
   let cbomDrift: Record<string, unknown> | null = null;
   try {
     const aggPayload = await client.cbom.aggregate();
@@ -56,7 +50,7 @@ export async function fetchDashboardBootstrap(apiKey: string): Promise<Dashboard
       readiness: (aggregate?.readiness as Record<string, unknown> | null) ?? null,
     };
     const conflictPayload = await client.cbom.conflicts();
-    cbomConflicts = (conflictPayload.conflicts as CbomConflictSummary[] | undefined) ?? [];
+    cbomConflicts = (conflictPayload.conflicts as MergeConflict[] | undefined) ?? [];
     const driftPayload = await client.cbom.diff();
     cbomDrift = (driftPayload.drift as Record<string, unknown> | undefined) ?? null;
   } catch {

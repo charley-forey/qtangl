@@ -315,7 +315,7 @@ export default function DashboardClient() {
           setJiraConfigured(false);
         }
       }
-      const latestDone = scansPayload.scans.find((scan) => scan.status === "done");
+      const latestDone = bootstrap.scans.find((scan) => scan.status === "done");
       if (latestDone) {
         try {
           const detail = await fetchTenantJson<{
