@@ -1,0 +1,44 @@
+[project]
+name = "qtangl"
+version = "0.9.1"
+description = "Official Qtangl PQC Readiness API client"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "Proprietary" }
+authors = [{ name = "Qtangl" }]
+keywords = ["qtangl", "pqc", "post-quantum", "cryptography", "api-client"]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Developers",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Topic :: Security :: Cryptography",
+  "Typing :: Typed",
+]
+dependencies = [
+  "httpx>=0.27.0",
+  "pydantic>=2.0.0",
+  "qtangl-verify>=1.1.0",
+]
+
+[project.urls]
+Homepage = "https://qtangl.com/docs/sdks"
+Documentation = "https://qtangl.com/docs/sdks"
+Repository = "https://github.com/qtangl/qtangl"
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0.0"]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["qtangl*"]
+
+[tool.setuptools]
+py-modules = ["qtangl_client"]

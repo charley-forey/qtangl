@@ -1,4 +1,7 @@
-import { fetchQtanglJson, qtanglApiBaseUrl, qtanglSandboxApiKey } from "@/lib/api";
+import { newIdempotencyKey } from "@qtangl/sdk";
+
+import { fetchQtanglJson } from "@/lib/api";
+import { createSandboxQtanglClient } from "@/lib/qtangl-client";
 
 export type Vulnerability = {
   algorithm: string;
@@ -254,47 +257,46 @@ export async function getPqcStandards() {
   return fetchQtanglJson<{ status: "success"; standards: Record<string, unknown> }>("/pqc/standards");
 }
 
-export async function scanPqc(input: {
-  scenarioId: string;
-  useFixture?: boolean;
-  target?: string;
-  seed?: number;
-  bundleSessionId?: string;
-  depth?: "standard" | "lite";
-}) {
-  return fetchQtanglJson<PqcScanResponse | PqcScanRunningResponse>("/pqc/scan", {
-    method: "POST",
-    body: JSON.stringify({
+export async function scanPqc(
+  input: {
+    scenarioId: string;
+    useFixture?: boolean;
+    target?: string;
+    seed?: number;
+    bundleSessionId?: string;
+    depth?: "standard" | "lite";
+  },
+  options?: { idempotencyKey?: string }
+) {
+  const client = createSandboxQtanglClient();
+  return client.scan(
+    {
       scenarioId: input.scenarioId,
       useFixture: input.useFixture ?? true,
       target: input.target ?? null,
       seed: input.seed ?? 1234,
       bundleSessionId: input.bundleSessionId ?? null,
       depth: input.depth ?? "standard",
-    }),
-  });
+    },
+    { idempotencyKey: options?.idempotencyKey ?? newIdempotencyKey() }
+  ) as Promise<PqcScanResponse | PqcScanRunningResponse>;
 }
 
 export async function pollPqcScan(scanId: string) {
-  return fetchQtanglJson<PqcScanResponse | PqcScanRunningResponse | PqcScanErrorResponse>(
-    `/pqc/scan/${encodeURIComponent(scanId)}`
-  );
+  return createSandboxQtanglClient().getScan(scanId) as Promise<
+    PqcScanResponse | PqcScanRunningResponse | PqcScanErrorResponse
+  >;
 }
 
 export async function getReportAvailability(scanId: string) {
-  return fetchQtanglJson<ReportAvailabilityResponse>(
-    `/pqc/report/${encodeURIComponent(scanId)}/availability`
-  );
+  return createSandboxQtanglClient().reports.availability(scanId) as Promise<ReportAvailabilityResponse>;
 }
 
 export async function persistPqcScanBundle(scanId: string, bundle: PqcScanResponse) {
-  return fetchQtanglJson<ReportAvailabilityResponse>(
-    `/pqc/scan/${encodeURIComponent(scanId)}/persist`,
-    {
-      method: "POST",
-      body: JSON.stringify(bundle),
-    }
-  );
+  return createSandboxQtanglClient().reports.persistScanBundle(
+    scanId,
+    bundle as Record<string, unknown>
+  ) as Promise<ReportAvailabilityResponse>;
 }
 
 /** Persist bundle server-side, then poll until reports are downloadable. */
@@ -375,11 +377,7 @@ export function pqcReportUrl(
   scanId: string,
   format: "json" | "csv" | "cbom" | "pdf" | "bundle" | "executive" | "board" | "auditor"
 ) {
-  const params = new URLSearchParams({
-    format,
-    api_key: qtanglSandboxApiKey,
-  });
-  return `${qtanglApiBaseUrl}/pqc/report/${encodeURIComponent(scanId)}?${params.toString()}`;
+  return createSandboxQtanglClient().pqcReportUrl(scanId, format);
 }
 
 export function pqcReportDownloadUrl(

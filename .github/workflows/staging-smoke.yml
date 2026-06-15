@@ -29,3 +29,27 @@ jobs:
         env:
           QTANGL_API_BASE: ${{ github.event.inputs.api_base || secrets.QTANGL_STAGING_API_BASE || 'https://api.qtangl.com' }}
         run: python scripts/conversion_smoke.py
+
+  sdk-smoke:
+    name: SDK integration smoke
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install SDK
+        run: |
+          pip install -e verifier
+          pip install -e ../sdk/python
+
+      - name: Run SDK smoke
+        env:
+          QTANGL_API_BASE: ${{ github.event.inputs.api_base || secrets.QTANGL_STAGING_API_BASE || 'https://api.qtangl.com' }}
+          QTANGL_API_KEY: ${{ secrets.QTANGL_STAGING_API_KEY || 'qtangl-demo-key' }}
+        run: python scripts/sdk_smoke.py

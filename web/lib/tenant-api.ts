@@ -1,4 +1,7 @@
+import { QtanglApiError } from "@qtangl/sdk";
+
 import { qtanglApiBaseUrl } from "@/lib/api";
+import { createQtanglClient } from "@/lib/qtangl-client";
 
 const STORAGE_KEY = "qtangl-dashboard-api-key";
 
@@ -38,21 +41,34 @@ export function setStoredTenantApiKey(key: string): void {
   window.sessionStorage.setItem(STORAGE_KEY, key);
 }
 
-export async function fetchTenantJson<T>(path: string, apiKey: string, init?: RequestInit): Promise<T> {
-  const response = await fetch(`${qtanglApiBaseUrl}${path}`, {
-    ...init,
-    headers: {
-      Authorization: `Bearer ${apiKey}`,
-      ...(init?.headers ?? {}),
-    },
-    cache: "no-store",
-  });
-  if (!response.ok) {
-    const detail = await response.text();
-    throw new Error(detail || `Request failed (${response.status})`);
+function rethrowSdkError(error: unknown): never {
+  if (error instanceof QtanglApiError) {
+    throw new Error(error.message);
   }
-  const payload = (await response.json()) as T & { status?: string };
-  return payload;
+  throw error;
+}
+
+function parseBody(body: BodyInit | null | undefined): unknown {
+  if (body == null) {
+    return undefined;
+  }
+  if (typeof body === "string") {
+    return JSON.parse(body);
+  }
+  throw new Error("Only JSON request bodies are supported via the Qtangl SDK transport.");
+}
+
+export async function fetchTenantJson<T>(path: string, apiKey: string, init?: RequestInit): Promise<T> {
+  const client = createQtanglClient(apiKey);
+  try {
+    return await client.request<T>({
+      method: (init?.method ?? "GET").toUpperCase(),
+      path,
+      body: parseBody(init?.body),
+    });
+  } catch (error) {
+    rethrowSdkError(error);
+  }
 }
 
 export async function postTenantJson<T>(
@@ -64,10 +80,6 @@ export async function postTenantJson<T>(
   return fetchTenantJson<T>(path, apiKey, {
     method: "POST",
     ...init,
-    headers: {
-      "Content-Type": "application/json",
-      ...(init?.headers ?? {}),
-    },
     body: JSON.stringify(body),
   });
 }
@@ -81,10 +93,6 @@ export async function patchTenantJson<T>(
   return fetchTenantJson<T>(path, apiKey, {
     method: "PATCH",
     ...init,
-    headers: {
-      "Content-Type": "application/json",
-      ...(init?.headers ?? {}),
-    },
     body: JSON.stringify(body),
   });
 }
@@ -98,10 +106,6 @@ export async function putTenantJson<T>(
   return fetchTenantJson<T>(path, apiKey, {
     method: "PUT",
     ...init,
-    headers: {
-      "Content-Type": "application/json",
-      ...(init?.headers ?? {}),
-    },
     body: JSON.stringify(body),
   });
 }
@@ -115,8 +119,7 @@ export function tenantReportUrl(
   apiKey: string,
   format: "pdf" | "json" | "bundle" | "executive" | "board" | "auditor" = "pdf"
 ): string {
-  const url = new URL(`${qtanglApiBaseUrl}/tenant/scans/${scanId}/report`);
-  url.searchParams.set("format", format);
-  url.searchParams.set("api_key", apiKey);
-  return url.toString();
+  return createQtanglClient(apiKey).tenantReportUrl(scanId, format);
 }
+
+export { qtanglApiBaseUrl };

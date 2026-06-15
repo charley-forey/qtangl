@@ -7,6 +7,7 @@ import PageHero from "@/components/layout/PageHero";
 import PageShell from "@/components/layout/PageShell";
 import Section from "@/components/layout/Section";
 import { qtanglApiBaseUrl } from "@/lib/api";
+import { createPublicQtanglClient } from "@/lib/qtangl-client";
 import { trackEvent } from "@/lib/analytics";
 
 type VerifyResult = {
@@ -132,14 +133,13 @@ export default function VerifyPageClient() {
     }
     setResult(null);
     setError(null);
-    fetch(`${qtanglApiBaseUrl}/pqc/verify/${encodeURIComponent(scanId)}`)
-      .then(async (response) => {
-        if (!response.ok) {
-          throw new Error("Verification lookup failed.");
-        }
-        const payload = await response.json();
-        setResult(payload.verification ?? null);
-        trackEvent("verify_scan_lookup", { scanId, valid: payload.verification?.valid });
+    const client = createPublicQtanglClient();
+    client
+      .verifyScan(scanId)
+      .then((payload) => {
+        const verification = (payload.verification ?? null) as VerifyResult | null;
+        setResult(verification);
+        trackEvent("verify_scan_lookup", { scanId, valid: verification?.valid });
       })
       .catch((fetchError) => {
         setError(fetchError instanceof Error ? fetchError.message : "Verification failed.");
@@ -152,17 +152,11 @@ export default function VerifyPageClient() {
     setResult(null);
     try {
       const reportJson = JSON.parse(pastedJson) as Record<string, unknown>;
-      const response = await fetch(`${qtanglApiBaseUrl}/pqc/verify`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ reportJson }),
-      });
-      if (!response.ok) {
-        throw new Error("Verification request failed.");
-      }
-      const payload = await response.json();
-      setResult(payload.verification ?? null);
-      trackEvent("verify_paste_json", { valid: payload.verification?.valid });
+      const client = createPublicQtanglClient();
+      const payload = await client.verifyReport(reportJson);
+      const verification = (payload.verification ?? null) as VerifyResult | null;
+      setResult(verification);
+      trackEvent("verify_paste_json", { valid: verification?.valid });
     } catch (verifyError) {
       setError(verifyError instanceof Error ? verifyError.message : "Invalid JSON or verification failed.");
     } finally {

@@ -2,15 +2,28 @@
 
 FastAPI exposes OpenAPI 3 schema automatically:
 
-- **JSON:** `GET /openapi.json`
+- **JSON:** `GET /openapi.json` (canonical artifact: `backend/docs/openapi.json`, synced to `web/public/openapi.json` in CI)
 - **Swagger UI:** `GET /docs` (disable in production if desired)
 
-## Official SDKs (v0.1)
+Regenerate committed artifacts:
 
-| Language | Path |
-|----------|------|
-| Python | [sdk/python/qtangl_client.py](../../sdk/python/qtangl_client.py) |
-| TypeScript | [sdk/typescript/qtangl.ts](../../sdk/typescript/qtangl.ts) |
+```bash
+cd backend && python scripts/export_openapi.py
+python scripts/generate_sdk_types.py
+```
+
+CI runs `python scripts/check_openapi_sync.py` to fail on drift.
+
+## Official SDKs (v0.9 alpha)
+
+| Language | Package | Path |
+|----------|---------|------|
+| Python | `qtangl` | [sdk/python/](../../sdk/python/) |
+| TypeScript | `@qtangl/sdk` | [sdk/typescript/](../../sdk/typescript/) |
+
+Scoped v0.1 alpha coverage: scan (+ poll), public verify, transparency log, tenant schedules. Includes retries, `Idempotency-Key` helpers, and offline verify via `qtangl-verify` (Python).
+
+Legacy thin clients (deprecated): `sdk/python/qtangl_client.py`, `sdk/typescript/qtangl.ts`.
 
 ## Key endpoints
 

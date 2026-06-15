@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-import { fetchTenantJson } from "@/lib/tenant-api";
+import { useQtanglClient } from "@qtangl/sdk-react";
 
 type DriftIntelPayload = {
   available: boolean;
@@ -16,7 +16,8 @@ type DriftIntelPayload = {
   asOf?: string;
 };
 
-export default function CohortDriftPanel({ apiKey }: { apiKey: string }) {
+export default function CohortDriftPanel() {
+  const client = useQtanglClient();
   const [data, setData] = useState<DriftIntelPayload | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -25,10 +26,11 @@ export default function CohortDriftPanel({ apiKey }: { apiKey: string }) {
     let cancelled = false;
     setLoading(true);
     setError(null);
-    fetchTenantJson<DriftIntelPayload>("/tenant/drift-intel", apiKey)
+    client
+      .drift.intel()
       .then((payload) => {
         if (!cancelled) {
-          setData(payload);
+          setData(payload as DriftIntelPayload);
         }
       })
       .catch((loadError) => {
@@ -44,7 +46,7 @@ export default function CohortDriftPanel({ apiKey }: { apiKey: string }) {
     return () => {
       cancelled = true;
     };
-  }, [apiKey]);
+  }, [client]);
 
   if (loading) {
     return <p className="text-sm text-[var(--color-gray-500)]">Loading cohort drift…</p>;
@@ -80,22 +82,25 @@ export default function CohortDriftPanel({ apiKey }: { apiKey: string }) {
         {dropRate != null ? (
           <div>
             <p className="text-xs text-[var(--color-gray-500)]">Drop rate</p>
-            <p className="mt-1 text-white">{Math.round(dropRate * 100)}%</p>
-            <p className="text-xs text-[var(--color-gray-500)]">
-              Share of cohort with readiness anomalies
-            </p>
+            <p className="text-lg text-white">{(dropRate * 100).toFixed(1)}%</p>
           </div>
         ) : null}
         {avgProjected != null ? (
           <div>
             <p className="text-xs text-[var(--color-gray-500)]">Avg projected readiness</p>
-            <p className="mt-1 text-white">{avgProjected}</p>
-            {data.sampleSize != null ? (
-              <p className="text-xs text-[var(--color-gray-500)]">
-                {data.industry ?? "Industry"} cohort · n={data.sampleSize}
-                {data.asOf ? ` · ${data.asOf}` : ""}
-              </p>
-            ) : null}
+            <p className="text-lg text-white">{avgProjected}</p>
+          </div>
+        ) : null}
+        {data.industry ? (
+          <div>
+            <p className="text-xs text-[var(--color-gray-500)]">Industry cohort</p>
+            <p className="text-white">{data.industry}</p>
+          </div>
+        ) : null}
+        {data.sampleSize != null ? (
+          <div>
+            <p className="text-xs text-[var(--color-gray-500)]">Sample size</p>
+            <p className="text-white">{data.sampleSize}</p>
           </div>
         ) : null}
       </div>

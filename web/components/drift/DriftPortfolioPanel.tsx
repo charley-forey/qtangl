@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-import { fetchTenantJson } from "@/lib/tenant-api";
+import { useQtanglClient } from "@qtangl/sdk-react";
 
 type DriftSummary = {
   sinceDays: number;
@@ -13,15 +13,17 @@ type DriftSummary = {
   snapshotCount: number;
 };
 
-export default function DriftPortfolioPanel({ apiKey }: { apiKey: string }) {
+export default function DriftPortfolioPanel() {
+  const client = useQtanglClient();
   const [summary, setSummary] = useState<DriftSummary | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetchTenantJson<DriftSummary & { status: string }>("/tenant/drift/summary?since_days=7", apiKey)
-      .then((data) => setSummary(data))
+    client
+      .drift.summary(7)
+      .then((data) => setSummary(data as DriftSummary))
       .catch((e) => setError(e instanceof Error ? e.message : "Failed to load drift"));
-  }, [apiKey]);
+  }, [client]);
 
   if (error) {
     return <p className="text-sm text-amber-400">{error}</p>;

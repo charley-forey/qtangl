@@ -3,6 +3,7 @@
 import dynamic from "next/dynamic";
 import { useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
+import { QtanglProvider } from "@qtangl/sdk-react";
 
 import Card from "@/components/ui/Card";
 import Eyebrow from "@/components/ui/Eyebrow";
@@ -117,6 +118,7 @@ import {
   type TenantScanSummary,
 } from "@/lib/tenant-api";
 import { qtanglApiBaseUrl } from "@/lib/api";
+import { fetchDashboardBootstrap } from "@/lib/dashboard-data";
 import { formatUtcDateTime } from "@/lib/format";
 
 type TenantMe = {
@@ -231,68 +233,21 @@ export default function DashboardClient() {
     setLoading(true);
     setError(null);
     try {
-      const mePayload = await fetchTenantJson<{
-        tenantId: string;
-        persistenceEnabled: boolean;
-        role?: string;
-        entitlements?: TenantMe["entitlements"];
-      }>("/tenant/me", key);
-      const scansPayload = await fetchTenantJson<{ scans: TenantScanSummary[] }>(
-        "/tenant/scans?limit=100",
-        key
-      );
+      const bootstrap = await fetchDashboardBootstrap(key);
       setMe({
-        tenantId: mePayload.tenantId,
-        persistenceEnabled: mePayload.persistenceEnabled,
-        role: mePayload.role,
-        entitlements: mePayload.entitlements,
+        tenantId: bootstrap.me.tenantId,
+        persistenceEnabled: bootstrap.me.persistenceEnabled,
+        role: bootstrap.me.role,
+        entitlements: bootstrap.me.entitlements as TenantMe["entitlements"],
       });
-      try {
-        const portal = await fetchTenantJson<{ portalUrl?: string | null }>("/tenant/billing/portal", key);
-        setBillingPortalUrl(portal.portalUrl ?? null);
-      } catch {
-        setBillingPortalUrl(null);
-      }
-      setScans(scansPayload.scans);
-      try {
-        const aggResponse = await fetch(`${qtanglApiBaseUrl}/pqc/cbom/aggregate`, {
-          headers: { Authorization: `Bearer ${key}` },
-          cache: "no-store",
-        });
-        if (aggResponse.ok) {
-          const aggPayload = await aggResponse.json();
-          setCbomAggregate({
-            componentCount: aggPayload.aggregate?.componentCount ?? 0,
-            openConflicts: aggPayload.aggregate?.openConflicts ?? 0,
-            readiness: aggPayload.aggregate?.readiness ?? null,
-          });
-        }
-        const conflictResponse = await fetch(`${qtanglApiBaseUrl}/pqc/cbom/conflicts`, {
-          headers: { Authorization: `Bearer ${key}` },
-          cache: "no-store",
-        });
-        if (conflictResponse.ok) {
-          const conflictPayload = await conflictResponse.json();
-          setCbomConflicts(conflictPayload.conflicts ?? []);
-        }
-        const driftResponse = await fetch(`${qtanglApiBaseUrl}/pqc/cbom/diff`, {
-          headers: { Authorization: `Bearer ${key}` },
-          cache: "no-store",
-        });
-        if (driftResponse.ok) {
-          const driftPayload = await driftResponse.json();
-          setCbomDrift(driftPayload.drift ?? null);
-        } else {
-          setCbomDrift(null);
-        }
-      } catch {
-        setCbomAggregate(null);
-        setCbomConflicts([]);
-        setCbomDrift(null);
-      }
+      setBillingPortalUrl(bootstrap.billingPortalUrl);
+      setScans(bootstrap.scans);
+      setCbomAggregate(bootstrap.cbomAggregate);
+      setCbomConflicts(bootstrap.cbomConflicts);
+      setCbomDrift(bootstrap.cbomDrift);
       setSavedKey(key);
       setStoredTenantApiKey(key);
-      if (mePayload.persistenceEnabled) {
+      if (bootstrap.me.persistenceEnabled) {
         try {
           const portfolio = await fetchTenantJson<{
             rollup: { overallReadiness: number; byBusinessUnit: Record<string, number> };
@@ -505,7 +460,7 @@ export default function DashboardClient() {
 
   const latestScan = scans.find((scan) => scan.readinessScore != null);
 
-  return (
+  const dashboard = (
     <div className="space-y-8">
       {!me ? <DashboardOnboarding /> : null}
       {!me ? apiKeyCard : null}
@@ -972,7 +927,7 @@ export default function DashboardClient() {
                       <p className="mt-1">{analytics.anomalyAlerts[0]?.message}</p>
                     </div>
                   ) : null}
-                  {savedKey ? <CohortDriftPanel apiKey={savedKey} /> : null}
+                  {savedKey ? <CohortDriftPanel /> : null}
                 </div>
               </Card>
             ) : null}
@@ -1153,7 +1108,6 @@ export default function DashboardClient() {
                 </div>
                 <div className="mt-4">
                   <ScheduleManager
-                    apiKey={savedKey}
                     schedules={schedules}
                     onRefresh={() => loadDashboard(savedKey)}
                     onMessage={setActionMessage}
@@ -1170,7 +1124,7 @@ export default function DashboardClient() {
                   <Card tone="panel">
                     <Eyebrow>Webhook &amp; ticketing</Eyebrow>
                     <div className="mt-4">
-                      <IntegrationSettings apiKey={savedKey} onMessage={setActionMessage} />
+                      <IntegrationSettings onMessage={setActionMessage} />
                     </div>
                   </Card>
                 ) : null}
@@ -1197,7 +1151,7 @@ export default function DashboardClient() {
                   <CbomDriftWidget drift={cbomDrift} />
                 </Card>
                 <Card tone="panel">
-                  <DriftPortfolioPanel apiKey={savedKey} />
+                  <DriftPortfolioPanel />
                 </Card>
                 <Card tone="panel">
                   <HostDriftWidget apiKey={savedKey} />
@@ -1205,7 +1159,7 @@ export default function DashboardClient() {
                 <Card tone="panel">
                   <Eyebrow>Remediation program</Eyebrow>
                   <div className="mt-4">
-                    <RemediationProgramBoard apiKey={savedKey} />
+                    <RemediationProgramBoard />
                   </div>
                 </Card>
                 <Card tone="panel">
@@ -1289,5 +1243,13 @@ export default function DashboardClient() {
         missingReason={reportDrawerScan?.missingReason ?? null}
       />
     </div>
+  );
+
+  return savedKey ? (
+    <QtanglProvider apiKey={savedKey} baseUrl={qtanglApiBaseUrl}>
+      {dashboard}
+    </QtanglProvider>
+  ) : (
+    dashboard
   );
 }

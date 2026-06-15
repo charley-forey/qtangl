@@ -20,13 +20,17 @@
     "test:readiness-roi": "node --experimental-strip-types --test tests/readiness-roi.test.mjs",
     "generate:pwa-icons": "node scripts/generate-pwa-icons.mjs",
     "generate:comparison-pdf": "node scripts/generate-comparison-guide-pdf.mjs",
-    "prebuild": "npm run generate:library && npm run generate:docs-index && npm run generate:openapi && npm run generate:docs-export && npm run generate:pwa-icons",
+    "build:sdk": "npm run build --prefix ../sdk/typescript",
+    "build:sdk-react": "npm run build --prefix ../sdk/react",
+    "prebuild": "npm run generate:library && npm run generate:docs-index && npm run generate:openapi && npm run generate:docs-export && npm run generate:pwa-icons && npm run build:sdk && npm run build:sdk-react",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "eslint"
   },
   "dependencies": {
+    "@qtangl/sdk": "file:../sdk/typescript",
+    "@qtangl/sdk-react": "file:../sdk/react",
     "@types/d3-force": "^3.0.10",
     "d3-force": "^3.0.0",
     "next": "16.2.6",

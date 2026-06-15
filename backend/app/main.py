@@ -43,6 +43,7 @@ CORS_ALLOW_HEADERS = [
     "Content-Type",
     "X-Api-Key",
     "X-Request-Id",
+    "Idempotency-Key",
     "Accept",
 ]
 

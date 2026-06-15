@@ -50,8 +50,8 @@ export const roadmapBands: RoadmapBand[] = [
     items: [
       {
         title: "Official TypeScript & Python SDKs",
-        description: "Typed clients with idempotency, verify helpers, and retry policies.",
-        status: "coming-soon",
+        description: "v0.9 beta — published npm/PyPI clients with idempotency, verify helpers, and retry policies.",
+        status: "pilot",
       },
       {
         title: "Cloud / KMS import GA",

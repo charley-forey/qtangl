@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-import { fetchTenantJson } from "@/lib/tenant-api";
+import { useQtanglClient } from "@qtangl/sdk-react";
 
 type DriftDelta = {
   sourceType: string;
@@ -15,23 +15,20 @@ type DriftDelta = {
 };
 
 export default function DriftScopeDetail({
-  apiKey,
   sourceType,
   scopeKey,
 }: {
-  apiKey: string;
   sourceType: string;
   scopeKey: string;
 }) {
+  const client = useQtanglClient();
   const [delta, setDelta] = useState<DriftDelta | null>(null);
 
   useEffect(() => {
-    const encoded = encodeURIComponent(scopeKey);
-    fetchTenantJson<{ delta: DriftDelta }>(
-      `/tenant/drift/${sourceType}/${encoded}`,
-      apiKey
-    ).then((r) => setDelta(r.delta));
-  }, [apiKey, sourceType, scopeKey]);
+    client
+      .drift.scope(sourceType, scopeKey)
+      .then((response) => setDelta((response as { delta: DriftDelta }).delta));
+  }, [client, sourceType, scopeKey]);
 
   if (!delta) {
     return <p className="text-sm text-[var(--muted)]">Loading scope drift…</p>;

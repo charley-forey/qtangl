@@ -117,35 +117,62 @@ qtangl-verify --json report.json`;
       <DocsJsonLd pathname="/docs/sdks" title="SDKs, CLI & OpenAPI" description="Integration tooling." />
       <DocsShell
         title="SDKs, CLI & OpenAPI"
-        description="Use any HTTP client against the JSON API today. Official typed SDKs are on the roadmap."
+        description="Official SDK packages, qtangl-verify CLI, OpenAPI artifact, and Postman collection."
         pathname="/docs/sdks"
         searchIndex={docsSearchIndex}
-        lastUpdated="2026-06-10"
+        lastUpdated="2026-06-14"
       >
-        <p className="text-xs text-[var(--color-gray-500)]">Last updated: 2026-06-10</p>
+        <p className="text-xs text-[var(--color-gray-500)]">Last updated: 2026-06-14</p>
 
         <DocsSection>
-          <DocsHeading>Official SDKs</DocsHeading>
+          <DocsHeading>Official SDKs (v0.9.1)</DocsHeading>
+          <DocsCallout variant="info">
+            Published beta packages with generated types, retries, idempotency helpers, and resource groups for
+            monitor (<code className="font-mono text-white">client.monitor</code>), CBOM (
+            <code className="font-mono text-white">client.cbom</code>), and reports (
+            <code className="font-mono text-white">client.reports</code>).
+          </DocsCallout>
           <div className="grid gap-4 sm:grid-cols-2">
             <Card className="rounded-2xl">
               <div className="flex items-center gap-2">
                 <p className="font-semibold text-white">@qtangl/sdk (TypeScript)</p>
-                <DocsBadge status="coming-soon" />
+                <DocsBadge status="pilot" />
               </div>
               <p className="mt-3 text-sm text-[var(--color-gray-300)]">
-                Typed models, retries, idempotency helpers, and verify utilities.
+                npm package — OpenAPI-generated types, retries, idempotency, public verify endpoints.
               </p>
+              <pre className="mt-4 overflow-x-auto rounded-xl border border-[var(--border)] bg-black/40 p-3 text-xs text-[var(--color-gray-300)]">
+{`npm install @qtangl/sdk
+
+import { QtanglClient, newIdempotencyKey } from "@qtangl/sdk";
+
+const client = new QtanglClient({
+  baseUrl: "${qtanglApiBaseUrl}",
+  apiKey: process.env.QTANGL_API_KEY!,
+});`}
+              </pre>
             </Card>
             <Card className="rounded-2xl">
               <div className="flex items-center gap-2">
                 <p className="font-semibold text-white">qtangl (Python)</p>
-                <DocsBadge status="coming-soon" />
+                <DocsBadge status="pilot" />
               </div>
               <p className="mt-3 text-sm text-[var(--color-gray-300)]">
-                Pydantic request/response models and CLI utilities.
+                PyPI package — Pydantic models, retries, idempotency, offline verify via qtangl-verify.
               </p>
+              <pre className="mt-4 overflow-x-auto rounded-xl border border-[var(--border)] bg-black/40 p-3 text-xs text-[var(--color-gray-300)]">
+{`pip install qtangl
+
+from qtangl import QtanglClient, new_idempotency_key
+
+client = QtanglClient(base_url="${qtanglApiBaseUrl}", api_key="your-key")`}
+              </pre>
             </Card>
           </div>
+          <p className="mt-4 text-xs text-[var(--color-gray-500)]">
+            Release tag: <code className="font-mono text-white">sdk-v0.9.1</code> publishes both packages. Examples in{" "}
+            <code className="font-mono text-white">sdk/examples/</code>.
+          </p>
         </DocsSection>
 
         <DocsSection>

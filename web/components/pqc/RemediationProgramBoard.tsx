@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 
 import CryptoFlipPanel from "@/components/flip/CryptoFlipPanel";
 import FlipJobProgress from "@/components/flip/FlipJobProgress";
-import { fetchTenantJson, postTenantJson, putTenantJson } from "@/lib/tenant-api";
+import { useQtanglApiKey, useQtanglClient } from "@qtangl/sdk-react";
 
 type ProgramItem = {
   id: string;
@@ -23,7 +23,9 @@ type Velocity = {
   itemsPerWeek: number;
 };
 
-export default function RemediationProgramBoard({ apiKey }: { apiKey: string }) {
+export default function RemediationProgramBoard() {
+  const client = useQtanglClient();
+  const apiKey = useQtanglApiKey();
   const [items, setItems] = useState<ProgramItem[]>([]);
   const [velocity, setVelocity] = useState<Velocity | null>(null);
   const [playbook, setPlaybook] = useState<string[] | null>(null);
@@ -32,35 +34,29 @@ export default function RemediationProgramBoard({ apiKey }: { apiKey: string }) 
   const [activeFlipJobId, setActiveFlipJobId] = useState<string | null>(null);
 
   const load = useCallback(async () => {
-    const list = await fetchTenantJson<{ items: ProgramItem[] }>("/tenant/remediation/program", apiKey);
-    const vel = await fetchTenantJson<Velocity & { status: string }>(
-      "/tenant/remediation/program/velocity",
-      apiKey
-    );
-    setItems(list.items);
-    setVelocity(vel);
-  }, [apiKey]);
+    const list = await client.remediation.listProgram();
+    const vel = await client.remediation.programVelocity();
+    setItems((list.items as ProgramItem[] | undefined) ?? []);
+    setVelocity(vel as Velocity);
+  }, [client]);
 
   useEffect(() => {
     load().catch((e) => setMessage(e instanceof Error ? e.message : "Load failed"));
   }, [load]);
 
   async function updateStatus(id: string, status: string) {
-    await putTenantJson(`/tenant/remediation/program/${id}`, apiKey, { status });
+    await client.remediation.updateProgram(id, { status });
     await load();
   }
 
   async function openPlaybook(id: string) {
-    const res = await fetchTenantJson<{ playbook: { steps: string[] } }>(
-      `/tenant/remediation/program/${id}/playbook`,
-      apiKey
-    );
-    setPlaybook(res.playbook.steps);
+    const res = await client.remediation.programPlaybook(id);
+    setPlaybook((res.playbook as { steps: string[] }).steps);
   }
 
   async function verify(id: string) {
     setMessage("Verification queued…");
-    await postTenantJson(`/tenant/remediation/program/${id}/verify`, apiKey, {});
+    await client.remediation.verifyProgram(id, {});
     setMessage("Verify job started.");
     await load();
   }
@@ -130,7 +126,6 @@ export default function RemediationProgramBoard({ apiKey }: { apiKey: string }) 
       </div>
       {flipItemId && (
         <CryptoFlipPanel
-          apiKey={apiKey}
           programItemId={flipItemId}
           onJobStarted={(jobId) => setActiveFlipJobId(jobId)}
         />

@@ -28,6 +28,10 @@ reference/*/
 .venv/
 backend/.venv/
 
+# SDK build artifacts
+sdk/typescript/dist/
+sdk/react/dist/
+
 # Local SQLite test databases
 *.db
 backend/data/

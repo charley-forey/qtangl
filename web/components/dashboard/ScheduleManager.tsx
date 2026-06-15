@@ -2,8 +2,9 @@
 
 import { useCallback, useEffect, useState } from "react";
 
-import { qtanglApiBaseUrl } from "@/lib/api";
-import { fetchTenantJson, patchTenantJson, type ScheduledScan } from "@/lib/tenant-api";
+import { useQtanglClient } from "@qtangl/sdk-react";
+
+import { type ScheduledScan } from "@/lib/tenant-api";
 import { formatUtcDateTime } from "@/lib/format";
 
 type ScheduleRun = {
@@ -14,16 +15,15 @@ type ScheduleRun = {
 };
 
 export default function ScheduleManager({
-  apiKey,
   schedules,
   onRefresh,
   onMessage,
 }: {
-  apiKey: string;
   schedules: ScheduledScan[];
   onRefresh: () => void;
   onMessage: (msg: string) => void;
 }) {
+  const client = useQtanglClient();
   const [runsBySchedule, setRunsBySchedule] = useState<Record<string, ScheduleRun[]>>({});
   const [editingId, setEditingId] = useState<string | null>(null);
   const [cadenceHours, setCadenceHours] = useState(168);
@@ -32,16 +32,16 @@ export default function ScheduleManager({
   const loadRuns = useCallback(
     async (scheduleId: string) => {
       try {
-        const payload = await fetchTenantJson<{ runs: ScheduleRun[] }>(
-          `/tenant/schedules/${scheduleId}/runs`,
-          apiKey
-        );
-        setRunsBySchedule((prev) => ({ ...prev, [scheduleId]: payload.runs }));
+        const payload = await client.monitor.scheduleRuns(scheduleId);
+        setRunsBySchedule((prev) => ({
+          ...prev,
+          [scheduleId]: (payload.runs as ScheduleRun[] | undefined) ?? [],
+        }));
       } catch {
         /* optional */
       }
     },
-    [apiKey]
+    [client]
   );
 
   useEffect(() => {
@@ -50,7 +50,7 @@ export default function ScheduleManager({
 
   async function savePatch(scheduleId: string) {
     try {
-      await patchTenantJson(`/tenant/schedules/${scheduleId}`, apiKey, {
+      await client.monitor.patchSchedule(scheduleId, {
         cadenceHours,
         notifyEmail: notifyEmail || null,
       });
@@ -64,14 +64,7 @@ export default function ScheduleManager({
 
   async function deleteSchedule(scheduleId: string) {
     try {
-      const response = await fetch(`${qtanglApiBaseUrl}/tenant/schedules/${scheduleId}`, {
-        method: "DELETE",
-        headers: { Authorization: `Bearer ${apiKey}` },
-      });
-      if (!response.ok) {
-        const detail = await response.text();
-        throw new Error(detail || "Delete failed.");
-      }
+      await client.monitor.deleteSchedule(scheduleId);
       onMessage("Schedule deleted.");
       onRefresh();
     } catch (error) {

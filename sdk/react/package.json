@@ -1,0 +1,45 @@
+{
+  "name": "@qtangl/sdk-react",
+  "version": "0.9.1",
+  "description": "React hooks for the Qtangl SDK",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "test": "npm run build && node --test tests/context.test.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "license": "UNLICENSED",
+  "peerDependencies": {
+    "@qtangl/sdk": "^0.9.1",
+    "react": "^18.0.0 || ^19.0.0"
+  },
+  "devDependencies": {
+    "@qtangl/sdk": "file:../typescript",
+    "@types/react": "^19",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "typescript": "^5.8.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/qtangl/qtangl.git",
+    "directory": "sdk/react"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

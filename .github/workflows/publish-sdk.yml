@@ -1,0 +1,134 @@
+name: Publish Qtangl SDKs
+
+on:
+  push:
+    tags:
+      - "sdk-v*"
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  publish-python:
+    name: PyPI (qtangl)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: sdk/python
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Build wheel
+        run: |
+          python -m pip install --upgrade pip build
+          python -m build
+
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          packages-dir: sdk/python/dist
+        continue-on-error: true
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: qtangl-wheel
+          path: sdk/python/dist/*
+
+  publish-typescript:
+    name: npm (@qtangl/sdk)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: sdk/typescript
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          registry-url: https://registry.npmjs.org
+
+      - name: Export OpenAPI + generate types
+        working-directory: ..
+        run: |
+          pip install -r backend/requirements.lock
+          python backend/scripts/export_openapi.py
+          python scripts/generate_sdk_types.py
+
+      - name: Build and test
+        run: |
+          npm install
+          npm test
+
+      - name: Publish to npm
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm publish --access public
+        continue-on-error: true
+
+  publish-react:
+    name: npm (@qtangl/sdk-react)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: sdk/react
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          registry-url: https://registry.npmjs.org
+
+      - name: Build TypeScript SDK dependency
+        working-directory: ../typescript
+        run: |
+          npm install
+          npm run build
+
+      - name: Build and test React SDK
+        run: |
+          npm install
+          npm test
+
+      - name: Publish to npm
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm publish --access public
+        continue-on-error: true
+
+  sdk-smoke:
+    name: SDK integration smoke
+    needs: [publish-python, publish-typescript, publish-react]
+    runs-on: ubuntu-latest
+    if: always()
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install SDK from workspace
+        run: |
+          pip install -e verifier
+          pip install -e ../sdk/python
+
+      - name: Run SDK smoke against staging API
+        env:
+          QTANGL_API_BASE: ${{ secrets.QTANGL_STAGING_API_BASE || 'https://api.qtangl.com' }}
+          QTANGL_API_KEY: ${{ secrets.QTANGL_STAGING_API_KEY || 'qtangl-demo-key' }}
+        run: python scripts/sdk_smoke.py

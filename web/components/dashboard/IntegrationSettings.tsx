@@ -3,8 +3,7 @@
 import { useState } from "react";
 
 import Eyebrow from "@/components/ui/Eyebrow";
-import { qtanglApiBaseUrl } from "@/lib/api";
-import { postTenantJson, fetchTenantJson } from "@/lib/tenant-api";
+import { useQtanglClient } from "@qtangl/sdk-react";
 
 type Integration = {
   id: string;
@@ -27,12 +26,11 @@ const WEBHOOK_EVENT_OPTIONS = [
 ] as const;
 
 export default function IntegrationSettings({
-  apiKey,
   onMessage,
 }: {
-  apiKey: string;
   onMessage: (message: string) => void;
 }) {
+  const client = useQtanglClient();
   const [jiraBase, setJiraBase] = useState("");
   const [jiraEmail, setJiraEmail] = useState("");
   const [jiraToken, setJiraToken] = useState("");
@@ -45,14 +43,13 @@ export default function IntegrationSettings({
 
   async function loadSettings() {
     try {
-      const intPayload = await fetchTenantJson<{ integrations: Integration[] }>(
-        "/tenant/integrations",
-        apiKey
-      );
-      const hookPayload = await fetchTenantJson<{ webhooks: Webhook[] }>("/tenant/webhooks", apiKey);
-      setIntegrations(intPayload.integrations);
-      setWebhooks(hookPayload.webhooks);
-      const jira = intPayload.integrations.find((row) => row.provider === "jira");
+      const intPayload = await client.monitor.listIntegrations();
+      const hookPayload = await client.monitor.listWebhooks();
+      const integrationsList = (intPayload.integrations as Integration[] | undefined) ?? [];
+      const webhooksList = (hookPayload.webhooks as Webhook[] | undefined) ?? [];
+      setIntegrations(integrationsList);
+      setWebhooks(webhooksList);
+      const jira = integrationsList.find((row) => row.provider === "jira");
       if (jira?.config) {
         setJiraBase(jira.config.baseUrl ?? "");
         setJiraEmail(jira.config.email ?? "");
@@ -114,13 +111,11 @@ export default function IntegrationSettings({
           type="button"
           className="mt-3 rounded-full border border-[var(--border-strong)] bg-white px-5 py-2 text-sm font-medium text-black"
           onClick={async () => {
-            await postTenantJson(`/tenant/integrations/jira`, apiKey, {
-              config: {
-                baseUrl: jiraBase,
-                email: jiraEmail,
-                apiToken: jiraToken,
-                projectKey: jiraProject,
-              },
+            await client.monitor.saveIntegration("jira", {
+              baseUrl: jiraBase,
+              email: jiraEmail,
+              apiToken: jiraToken,
+              projectKey: jiraProject,
             });
             onMessage("Jira integration saved.");
             await loadSettings();
@@ -162,9 +157,9 @@ export default function IntegrationSettings({
             type="button"
             className="rounded-full border border-[var(--border-strong)] bg-white px-5 py-2 text-sm font-medium text-black"
             onClick={async () => {
-              await postTenantJson("/tenant/webhooks", apiKey, {
+              await client.monitor.createWebhook({
                 url: webhookUrl,
-                events: webhookEvents.join(","),
+                events: webhookEvents,
               });
               onMessage("Webhook registered.");
               setWebhookUrl("");
@@ -186,16 +181,13 @@ export default function IntegrationSettings({
                   type="button"
                   className="shrink-0 text-white underline underline-offset-4"
                   onClick={async () => {
-                    const response = await fetch(`${qtanglApiBaseUrl}/tenant/webhooks/${hook.id}`, {
-                      method: "DELETE",
-                      headers: { Authorization: `Bearer ${apiKey}` },
-                    });
-                    if (!response.ok) {
+                    try {
+                      await client.monitor.deleteWebhook(hook.id);
+                      onMessage("Webhook removed.");
+                      await loadSettings();
+                    } catch {
                       onMessage("Failed to remove webhook.");
-                      return;
                     }
-                    onMessage("Webhook removed.");
-                    await loadSettings();
                   }}
                 >
                   Remove
@@ -205,7 +197,7 @@ export default function IntegrationSettings({
           </ul>
         ) : null}
       </div>
-      <DlqPanel apiKey={apiKey} onMessage={onMessage} />
+      <DlqPanel onMessage={onMessage} />
     </div>
   );
 }
@@ -219,14 +211,15 @@ type DlqItem = {
   createdAt?: string;
 };
 
-function DlqPanel({ apiKey, onMessage }: { apiKey: string; onMessage: (message: string) => void }) {
+function DlqPanel({ onMessage }: { onMessage: (message: string) => void }) {
+  const client = useQtanglClient();
   const [items, setItems] = useState<DlqItem[]>([]);
   const [loaded, setLoaded] = useState(false);
 
   async function loadDlq() {
     try {
-      const payload = await fetchTenantJson<{ items: DlqItem[] }>("/tenant/webhooks/dlq", apiKey);
-      setItems(payload.items);
+      const payload = await client.monitor.listWebhookDlq();
+      setItems((payload.items as DlqItem[] | undefined) ?? []);
       setLoaded(true);
     } catch (error) {
       onMessage(error instanceof Error ? error.message : "Failed to load DLQ.");
@@ -259,9 +252,7 @@ function DlqPanel({ apiKey, onMessage }: { apiKey: string; onMessage: (message: 
                 className="shrink-0 text-white underline"
                 onClick={async () => {
                   try {
-                    await postTenantJson("/tenant/webhooks/replay", apiKey, {
-                      deadLetterId: item.id,
-                    });
+                    await client.monitor.replayWebhook(item.id);
                     onMessage(`Replayed ${item.id}`);
                     await loadDlq();
                   } catch (error) {

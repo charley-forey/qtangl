@@ -2,10 +2,9 @@
 
 import { useState } from "react";
 
-import { postTenantJson } from "@/lib/tenant-api";
+import { useQtanglClient } from "@qtangl/sdk-react";
 
 type Props = {
-  apiKey: string;
   programItemId: string;
   onJobStarted?: (jobId: string) => void;
 };
@@ -16,7 +15,8 @@ const SURFACES = [
   { id: "kms", label: "KMS", providers: ["kms-aws", "kms-azure", "kms-gcp"] },
 ];
 
-export default function CryptoFlipPanel({ apiKey, programItemId, onJobStarted }: Props) {
+export default function CryptoFlipPanel({ programItemId, onJobStarted }: Props) {
+  const client = useQtanglClient();
   const [surface, setSurface] = useState("overlay");
   const [provider, setProvider] = useState("github");
   const [targetEnv, setTargetEnv] = useState("staging");
@@ -30,16 +30,16 @@ export default function CryptoFlipPanel({ apiKey, programItemId, onJobStarted }:
     setBusy(true);
     setMessage("");
     try {
-      const res = await postTenantJson<{
-        dryRunResult?: Record<string, unknown>;
-        policy?: Record<string, unknown>;
-      }>(`/tenant/remediation/program/${programItemId}/flip/dry-run`, apiKey, {
+      const res = await client.remediation.flipDryRun(programItemId, {
         flipSurface: surface,
         provider,
         targetEnv,
         request: {},
       });
-      setDryRunResult({ ...(res.dryRunResult ?? {}), policy: res.policy });
+      setDryRunResult({
+        ...((res.dryRunResult as Record<string, unknown> | undefined) ?? {}),
+        policy: res.policy,
+      });
       setMessage("Dry-run complete — no side effects.");
     } catch (e) {
       setMessage(e instanceof Error ? e.message : "Dry-run failed");
@@ -52,13 +52,15 @@ export default function CryptoFlipPanel({ apiKey, programItemId, onJobStarted }:
     setBusy(true);
     setMessage("");
     try {
-      const res = await postTenantJson<{ job?: { id?: string; status?: string } }>(
-        `/tenant/remediation/program/${programItemId}/flip`,
-        apiKey,
-        { flipSurface: surface, provider, targetEnv, request: {} }
-      );
-      const jobId = res.job?.id;
-      setMessage(`Flip ${res.job?.status ?? "submitted"}${jobId ? `: ${jobId}` : ""}`);
+      const res = await client.remediation.flip(programItemId, {
+        flipSurface: surface,
+        provider,
+        targetEnv,
+        request: {},
+      });
+      const job = res.job as { id?: string; status?: string } | undefined;
+      const jobId = job?.id;
+      setMessage(`Flip ${job?.status ?? "submitted"}${jobId ? `: ${jobId}` : ""}`);
       if (jobId) onJobStarted?.(jobId);
     } catch (e) {
       setMessage(e instanceof Error ? e.message : "Submit failed");
@@ -78,29 +80,45 @@ export default function CryptoFlipPanel({ apiKey, programItemId, onJobStarted }:
             </option>
           ))}
         </select>
-        <select className="rounded bg-black text-xs text-white" value={provider} onChange={(e) => setProvider(e.target.value)}>
+        <select
+          className="rounded bg-black text-xs text-white"
+          value={provider}
+          onChange={(e) => setProvider(e.target.value)}
+        >
           {providers.map((p) => (
             <option key={p} value={p}>
               {p}
             </option>
           ))}
         </select>
-        <select className="rounded bg-black text-xs text-white" value={targetEnv} onChange={(e) => setTargetEnv(e.target.value)}>
-          <option value="staging">staging</option>
-          <option value="prod">prod</option>
-        </select>
+        <input
+          className="rounded bg-black px-2 py-1 text-xs text-white"
+          value={targetEnv}
+          onChange={(e) => setTargetEnv(e.target.value)}
+          placeholder="Target env"
+        />
       </div>
-      <div className="flex flex-wrap gap-2">
-        <button type="button" disabled={busy} className="text-xs underline text-white" onClick={runDryRun}>
-          Dry-run
+      <div className="flex gap-2">
+        <button
+          type="button"
+          disabled={busy}
+          onClick={() => void runDryRun()}
+          className="rounded bg-white/10 px-3 py-1 text-xs text-white disabled:opacity-50"
+        >
+          Dry run
         </button>
-        <button type="button" disabled={busy} className="text-xs underline text-emerald-400" onClick={submitFlip}>
+        <button
+          type="button"
+          disabled={busy}
+          onClick={() => void submitFlip()}
+          className="rounded bg-emerald-600 px-3 py-1 text-xs text-white disabled:opacity-50"
+        >
           Submit flip
         </button>
       </div>
       {message && <p className="text-xs text-[var(--muted)]">{message}</p>}
       {dryRunResult && (
-        <pre className="max-h-40 overflow-auto rounded bg-black/50 p-2 text-[10px] text-[var(--color-gray-300)]">
+        <pre className="max-h-40 overflow-auto rounded bg-black/60 p-2 text-xs text-[var(--color-gray-300)]">
           {JSON.stringify(dryRunResult, null, 2)}
         </pre>
       )}
