@@ -3,14 +3,21 @@ import { test, expect } from "@playwright/test";
 test.describe("dashboard auth", () => {
   test("dashboard loads sign-in path when WorkOS enabled", async ({ page }) => {
     await page.goto("/dashboard");
-    await expect(page.getByText(/command center|dashboard session|sign in/i).first()).toBeVisible();
+    await expect(page.getByText(/command center|Sign in|workspace/i).first()).toBeVisible();
   });
 
-  test("legacy API key card hidden when legacy flag disabled", async ({ page }) => {
+  test("login page shows unavailable or redirects when WorkOS partial", async ({ page }) => {
+    await page.goto("/dashboard/login");
+    await expect(page.getByText(/sign-in|unavailable|AuthKit/i).first()).toBeVisible({ timeout: 15_000 });
+  });
+
+  test("legacy API key card hidden on main path", async ({ page }) => {
     await page.goto("/dashboard");
     const keyCard = page.getByText("Paste the tenant key");
-    if (process.env.NEXT_PUBLIC_QTANGL_DASHBOARD_AUTH_LEGACY_KEY === "false") {
-      await expect(keyCard).toHaveCount(0);
+    await expect(keyCard).toHaveCount(0);
+    const advanced = page.getByText("automation API key");
+    if (await advanced.count()) {
+      await expect(advanced).not.toBeVisible();
     }
   });
 });

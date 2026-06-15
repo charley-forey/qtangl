@@ -5,6 +5,38 @@ export function workosAuthEnabled(): boolean {
   );
 }
 
+/** All env vars AuthKit middleware needs — missing any one causes MIDDLEWARE_INVOCATION_FAILED. */
+export function workosAuthKitReady(): boolean {
+  if (!workosAuthEnabled()) {
+    return false;
+  }
+  const cookiePassword = process.env.WORKOS_COOKIE_PASSWORD ?? "";
+  if (cookiePassword.length < 32) {
+    return false;
+  }
+  return Boolean(process.env.NEXT_PUBLIC_WORKOS_REDIRECT_URI?.trim());
+}
+
+export function workosAuthKitMissing(): string[] {
+  const missing: string[] = [];
+  if (process.env.QTANGL_DASHBOARD_AUTH_WORKOS !== "true") {
+    missing.push("QTANGL_DASHBOARD_AUTH_WORKOS");
+  }
+  if (!process.env.WORKOS_API_KEY) {
+    missing.push("WORKOS_API_KEY");
+  }
+  if (!process.env.WORKOS_CLIENT_ID) {
+    missing.push("WORKOS_CLIENT_ID");
+  }
+  if ((process.env.WORKOS_COOKIE_PASSWORD ?? "").length < 32) {
+    missing.push("WORKOS_COOKIE_PASSWORD");
+  }
+  if (!process.env.NEXT_PUBLIC_WORKOS_REDIRECT_URI?.trim()) {
+    missing.push("NEXT_PUBLIC_WORKOS_REDIRECT_URI");
+  }
+  return missing;
+}
+
 export function legacyKeyAuthEnabled(): boolean {
   return process.env.QTANGL_DASHBOARD_AUTH_LEGACY_KEY !== "false";
 }

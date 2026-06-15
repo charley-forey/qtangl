@@ -2,9 +2,21 @@
 
 ## When WorkOS / SSO is unavailable
 
-1. **Automation keys still work** — long-lived `qtangl_…` API keys authenticate directly against FastAPI (`Authorization: Bearer …` or `X-Api-Key`).
-2. **Legacy key paste** — if `QTANGL_DASHBOARD_AUTH_LEGACY_KEY=true`, operators can paste a tenant API key on `/dashboard` until WorkOS is restored.
-3. **Platform admin** — use `QTANGL_ADMIN_API_KEY` + `/admin/*` to issue a new break-glass key via `POST /admin/tenants/{id}/keys`.
+1. Check **`GET /api/dashboard/auth-health`** on the web app — confirms which env vars are missing (`WORKOS_COOKIE_PASSWORD`, `NEXT_PUBLIC_WORKOS_REDIRECT_URI`, etc.).
+2. **Automation keys still work** — long-lived `qtangl_…` API keys authenticate directly against FastAPI (`Authorization: Bearer …` or `X-Api-Key`).
+3. **Legacy key paste** — if `QTANGL_DASHBOARD_AUTH_LEGACY_KEY=true`, operators can paste a tenant API key under **Settings → Advanced** on `/dashboard` until WorkOS is restored.
+4. **Platform admin** — use `QTANGL_ADMIN_API_KEY` + `/admin/*` to issue a new break-glass key via `POST /admin/tenants/{id}/keys`.
+
+## Required Vercel env (WorkOS)
+
+| Variable | Notes |
+|----------|-------|
+| `QTANGL_DASHBOARD_AUTH_WORKOS` | Server flag `true` |
+| `WORKOS_API_KEY` | From WorkOS dashboard |
+| `WORKOS_CLIENT_ID` | From WorkOS dashboard |
+| `WORKOS_COOKIE_PASSWORD` | Min 32 chars |
+| `NEXT_PUBLIC_WORKOS_REDIRECT_URI` | e.g. `https://www.qtangl.com/auth/callback` |
+| `QTANGL_BFF_SESSION_SECRET` | Must match Railway |
 
 ## Session TTL
 

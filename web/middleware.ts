@@ -1,7 +1,7 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 
-import { workosAuthEnabled } from "@/lib/auth/workos";
+import { workosAuthKitReady } from "@/lib/auth/workos";
 
 async function statusRewrite(request: NextRequest) {
   const host = request.headers.get("host")?.split(":")[0] ?? "";
@@ -13,35 +13,31 @@ async function statusRewrite(request: NextRequest) {
   return null;
 }
 
+function pathUsesAuthKit(pathname: string): boolean {
+  return (
+    pathname === "/auth/callback" ||
+    pathname.startsWith("/dashboard") ||
+    pathname.startsWith("/api/dashboard")
+  );
+}
+
 export async function middleware(request: NextRequest) {
   const rewrite = await statusRewrite(request);
   if (rewrite) {
     return rewrite;
   }
 
-  if (workosAuthEnabled()) {
+  const pathname = request.nextUrl.pathname;
+  if (workosAuthKitReady() && pathUsesAuthKit(pathname)) {
     try {
       const { authkitMiddleware } = await import("@workos-inc/authkit-nextjs");
       const handler = authkitMiddleware({
-        middlewareAuth: {
-          enabled: true,
-          unauthenticatedPaths: [
-            "/",
-            "/assess",
-            "/access",
-            "/pricing",
-            "/docs",
-            "/monitor",
-            "/convert",
-            "/verify",
-            "/auth/callback",
-            "/api/dashboard/me",
-            "/api/auth",
-          ],
-        },
+        // Session refresh only — do not force AuthKit login on marketing pages.
+        middlewareAuth: { enabled: false, unauthenticatedPaths: [] },
       });
-      return handler(request, {} as never);
-    } catch {
+      return await handler(request, {} as never);
+    } catch (error) {
+      console.error("AuthKit middleware error:", error);
       return NextResponse.next();
     }
   }

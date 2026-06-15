@@ -1,16 +1,24 @@
 from __future__ import annotations
 
+import asyncio
+import json
+from datetime import datetime, timezone
 from typing import Any
 
 from pydantic import BaseModel, Field
 from fastapi import APIRouter, Depends, HTTPException, Query, status
-from fastapi.responses import JSONResponse, Response
+from fastapi.responses import JSONResponse, Response, StreamingResponse
 
 from app.audit.service import log_action
 from app.auth import AuthContext, require_auth, require_auth_admin, require_auth_readonly, require_auth_write
 from app.db.config import persistence_enabled, redis_enabled
 import os
-from app.billing.entitlements import check_schedule_quota
+from app.billing.entitlements import (
+    check_scan_quota,
+    check_schedule_quota,
+    scans_created_this_month,
+    tenant_entitlements,
+)
 from app.monitoring.service import (
     create_schedule,
     delete_schedule,
@@ -141,9 +149,62 @@ class ShareLinkRequest(BaseModel):
     scope: str = Field(default="report", pattern="^(report|bundle|passport)$")
 
 
-@router.get("/me")
-def tenant_me(auth: AuthContext = Depends(require_auth_readonly)) -> dict:
-    from app.billing.entitlements import tenant_entitlements
+def _tenant_scan_metrics(*, tenant_id: str) -> dict[str, Any]:
+    scans = list_jobs_for_tenant(tenant_id=tenant_id, limit=500)
+    latest_done = next(
+        (scan for scan in scans if scan.get("status") == "done" and scan.get("readinessScore") is not None),
+        None,
+    )
+    latest_scan_at = latest_done.get("createdAt") if latest_done else None
+    open_critical = _open_critical_count(
+        tenant_id=tenant_id,
+        scan_id=str(latest_done["scanId"]) if latest_done else None,
+    )
+    schedule_count = len(list_schedules(tenant_id=tenant_id)) if persistence_enabled() else 0
+    return {
+        "scanCount": len(scans),
+        "scansThisMonth": _scans_this_month_count(tenant_id=tenant_id),
+        "latestReadinessScore": latest_done.get("readinessScore") if latest_done else None,
+        "latestReadinessBand": latest_done.get("readinessBand") if latest_done else None,
+        "latestScanAt": latest_scan_at,
+        "scheduleCount": schedule_count,
+        "openCriticalCount": open_critical,
+    }
+
+
+def _scans_this_month_count(*, tenant_id: str) -> int:
+    if persistence_enabled():
+        return scans_created_this_month(tenant_id=tenant_id)
+    now = datetime.now(timezone.utc)
+    month_start = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+    return sum(
+        1
+        for scan in list_jobs_for_tenant(tenant_id=tenant_id, limit=500)
+        if scan.get("createdAt")
+        and datetime.fromisoformat(str(scan["createdAt"]).replace("Z", "+00:00")) >= month_start
+    )
+
+
+def _open_critical_count(*, tenant_id: str, scan_id: str | None) -> int:
+    if not scan_id:
+        return 0
+    bundle = load_scan_bundle(scan_id, tenant_id=tenant_id)
+    if not bundle:
+        return 0
+    backlog = bundle.get("remediationBacklog") or []
+    statuses = {
+        str(row.get("remediationId")): str(row.get("status", "open"))
+        for row in list_remediation_status(tenant_id=tenant_id, scan_id=scan_id)
+    }
+    return sum(
+        1
+        for item in backlog
+        if str(item.get("severity", "")).lower() == "critical"
+        and statuses.get(str(item.get("id") or ""), "open") in {"open", "in_progress"}
+    )
+
+
+def _build_tenant_me_payload(*, auth: AuthContext) -> dict[str, Any]:
     from app.db.engine import db_session
     from app.db.models import Tenant
 
@@ -168,7 +229,156 @@ def tenant_me(auth: AuthContext = Depends(require_auth_readonly)) -> dict:
         "persistenceEnabled": persistence_enabled(),
         "schedulerEnabled": scheduler_enabled() and redis_enabled(),
         "entitlements": tenant_entitlements(tenant_id=auth.tenant_id),
+        **_tenant_scan_metrics(tenant_id=auth.tenant_id),
     }
+
+
+def _readiness_trend_points(*, tenant_id: str, limit: int = 30) -> list[dict[str, Any]]:
+    scans = list_jobs_for_tenant(tenant_id=tenant_id, limit=limit)
+    points = [
+        {
+            "date": scan.get("createdAt"),
+            "score": float(scan["readinessScore"]),
+            "scanId": scan["scanId"],
+            "band": scan.get("readinessBand"),
+        }
+        for scan in scans
+        if scan.get("readinessScore") is not None and scan.get("status") == "done"
+    ]
+    points.reverse()
+    return points
+
+
+def _dashboard_kpis(*, tenant_id: str, metrics: dict[str, Any]) -> dict[str, Any]:
+    entitlements = tenant_entitlements(tenant_id=tenant_id)
+    max_scans = int(entitlements.get("maxScansPerMonth", 100))
+    max_schedules = int(entitlements.get("maxSchedules", 10))
+    return {
+        **metrics,
+        "scanQuota": {
+            "used": metrics.get("scansThisMonth", 0),
+            "limit": max_scans,
+        },
+        "scheduleQuota": {
+            "used": metrics.get("scheduleCount", 0),
+            "limit": max_schedules,
+        },
+        "tier": entitlements.get("tier"),
+    }
+
+
+def _dashboard_alerts(*, tenant_id: str) -> list[dict[str, Any]]:
+    from app.monitoring.anomaly import detect_readiness_anomalies
+
+    alerts: list[dict[str, Any]] = []
+    scores = [
+        float(scan["readinessScore"])
+        for scan in list_jobs_for_tenant(tenant_id=tenant_id, limit=50)
+        if scan.get("readinessScore") is not None
+    ]
+    scores.reverse()
+    for anomaly in detect_readiness_anomalies(scores=scores):
+        alerts.append({"source": "anomaly", **anomaly})
+
+    scan_quota = check_scan_quota(tenant_id=tenant_id)
+    if scan_quota:
+        alerts.append({"source": "quota", "type": "scan_quota", "severity": "high", **scan_quota})
+
+    schedule_quota = check_schedule_quota(tenant_id=tenant_id)
+    if schedule_quota:
+        alerts.append({"source": "quota", "type": "schedule_quota", "severity": "medium", **schedule_quota})
+
+    return alerts
+
+
+def _schedules_summary(*, tenant_id: str) -> dict[str, Any]:
+    schedules = list_schedules(tenant_id=tenant_id) if persistence_enabled() else []
+    entitlements = tenant_entitlements(tenant_id=tenant_id)
+    return {
+        "count": len(schedules),
+        "active": len(schedules),
+        "schedulerEnabled": scheduler_enabled() and redis_enabled(),
+        "nextRunAt": schedules[0].get("nextRunAt") if schedules else None,
+        "quota": {
+            "used": len(schedules),
+            "limit": int(entitlements.get("maxSchedules", 10)),
+        },
+    }
+
+
+def _dashboard_health(*, tenant_id: str) -> dict[str, Any]:
+    scans = list_jobs_for_tenant(tenant_id=tenant_id, limit=100)
+    terminal = [scan for scan in scans if scan.get("status") in {"done", "error"}]
+    success = sum(1 for scan in terminal if scan.get("status") == "done")
+    reliability = round((100.0 * success / len(terminal)), 1) if terminal else 100.0
+    report_ready = sum(
+        1
+        for scan in terminal
+        if scan.get("status") == "done" and scan.get("readinessScore") is not None
+    )
+    report_rate = round((100.0 * report_ready / len(terminal)), 1) if terminal else 100.0
+    return {
+        "scanSuccessRatePct": reliability,
+        "reportAvailabilityPct": report_rate,
+        "sampleSize": len(terminal),
+        "persistenceEnabled": persistence_enabled(),
+        "schedulerEnabled": scheduler_enabled() and redis_enabled(),
+    }
+
+
+def _recent_scan_summaries(*, tenant_id: str, limit: int = 10) -> list[dict[str, Any]]:
+    return [
+        {
+            **scan,
+            "reportAvailable": scan.get("status") == "done" and scan.get("readinessScore") is not None,
+            "lifecycleState": _scan_lifecycle_state(
+                str(scan.get("status", "")),
+                scan.get("readinessScore") is not None,
+                bool(scan.get("error")),
+            ),
+        }
+        for scan in list_jobs_for_tenant(tenant_id=tenant_id, limit=limit)
+    ]
+
+
+async def _dashboard_events_generator(*, tenant_id: str):
+    seen: dict[str, str] = {}
+    while True:
+        for scan in list_jobs_for_tenant(tenant_id=tenant_id, limit=25):
+            scan_id = str(scan.get("scanId", ""))
+            job_status = str(scan.get("status", ""))
+            previous = seen.get(scan_id)
+            if previous is None:
+                seen[scan_id] = job_status
+                if job_status in {"queued", "running"}:
+                    payload = {
+                        "scanId": scan_id,
+                        "status": job_status,
+                        "targetDomain": scan.get("targetDomain"),
+                        "updatedAt": scan.get("updatedAt"),
+                    }
+                    yield f"event: scan\ndata: {json.dumps(payload)}\n\n"
+            elif previous != job_status:
+                seen[scan_id] = job_status
+                payload = {
+                    "scanId": scan_id,
+                    "status": job_status,
+                    "previousStatus": previous,
+                    "targetDomain": scan.get("targetDomain"),
+                    "readinessScore": scan.get("readinessScore"),
+                    "readinessBand": scan.get("readinessBand"),
+                    "updatedAt": scan.get("updatedAt"),
+                }
+                yield f"event: scan\ndata: {json.dumps(payload)}\n\n"
+
+        heartbeat = {"ts": datetime.now(timezone.utc).isoformat(), "tenantId": tenant_id}
+        yield f"event: heartbeat\ndata: {json.dumps(heartbeat)}\n\n"
+        await asyncio.sleep(30)
+
+
+@router.get("/me")
+def tenant_me(auth: AuthContext = Depends(require_auth_readonly)) -> dict:
+    return _build_tenant_me_payload(auth=auth)
 
 
 @router.get("/scans")
@@ -994,6 +1204,53 @@ def tenant_anomaly(auth: AuthContext = Depends(require_auth_readonly)) -> dict:
     ]
     scores.reverse()
     return {"status": "success", "alerts": detect_readiness_anomalies(scores=scores)}
+
+
+@router.get("/analytics/readiness-trend")
+def tenant_readiness_trend(
+    auth: AuthContext = Depends(require_auth_readonly),
+    limit: int = Query(default=30, ge=1, le=100),
+) -> dict:
+    points = _readiness_trend_points(tenant_id=auth.tenant_id, limit=limit)
+    return {
+        "status": "success",
+        "tenantId": auth.tenant_id,
+        "count": len(points),
+        "points": points,
+    }
+
+
+@router.get("/dashboard/summary")
+def tenant_dashboard_summary(auth: AuthContext = Depends(require_auth_readonly)) -> dict:
+    from app.portfolio.service import portfolio_command_center, weekly_executive_digest
+
+    metrics = _tenant_scan_metrics(tenant_id=auth.tenant_id)
+    return {
+        "status": "success",
+        "tenantId": auth.tenant_id,
+        "me": _build_tenant_me_payload(auth=auth),
+        "kpis": _dashboard_kpis(tenant_id=auth.tenant_id, metrics=metrics),
+        "trend": _readiness_trend_points(tenant_id=auth.tenant_id, limit=30),
+        "digest": weekly_executive_digest(tenant_id=auth.tenant_id),
+        "commandCenter": portfolio_command_center(tenant_id=auth.tenant_id),
+        "alerts": _dashboard_alerts(tenant_id=auth.tenant_id),
+        "recentScans": _recent_scan_summaries(tenant_id=auth.tenant_id, limit=10),
+        "schedulesSummary": _schedules_summary(tenant_id=auth.tenant_id),
+        "health": _dashboard_health(tenant_id=auth.tenant_id),
+    }
+
+
+@router.get("/dashboard/events")
+async def tenant_dashboard_events(auth: AuthContext = Depends(require_auth_readonly)) -> StreamingResponse:
+    return StreamingResponse(
+        _dashboard_events_generator(tenant_id=auth.tenant_id),
+        media_type="text/event-stream",
+        headers={
+            "Cache-Control": "no-cache",
+            "Connection": "keep-alive",
+            "X-Accel-Buffering": "no",
+        },
+    )
 
 
 @router.get("/analytics/forecast")

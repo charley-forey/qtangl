@@ -24,8 +24,8 @@ Follow this doc for Track **E1** (first PQC pilot): sell, demo, run the assessme
 | Audience | URL | Key / auth |
 |----------|-----|------------|
 | Prospect / marketing | `/assess`, `/assess?scenario=…&autorun=1` | Sandbox — fixture only |
-| Paying customer (primary) | `/dashboard?onboarding=TOKEN` | Tenant key via one-time token |
-| Paying customer (secondary) | `/assess?onboarding=TOKEN&mode=production` | Same tenant key |
+| Paying customer (primary) | `/dashboard` or `/dashboard?onboarding=TOKEN` | **WorkOS sign-in** (email / SSO); onboarding token redirects to login |
+| Paying customer (automation) | Settings → Advanced | Tenant API key for CI only |
 | Self-serve Assess (R2) | `/assess/start` → email link | Free tier tenant |
 
 **Never** send fixture autorun links to paying customers.

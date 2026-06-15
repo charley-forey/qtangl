@@ -7,6 +7,12 @@ export type DashboardMe = {
   persistenceEnabled: boolean;
   role?: string;
   entitlements?: Record<string, unknown>;
+  scanCount?: number;
+  scansThisMonth?: number;
+  latestReadinessScore?: number | null;
+  scheduleCount?: number;
+  openCriticalCount?: number;
+  schedulerEnabled?: boolean;
 };
 
 export type CbomAggregateSummary = {

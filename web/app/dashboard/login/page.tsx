@@ -1,8 +1,11 @@
 import { redirect } from "next/navigation";
 
-import { getSignInUrl } from "@workos-inc/authkit-nextjs";
-
-import { legacyKeyAuthEnabled, workosAuthEnabled } from "@/lib/auth/workos";
+import DashboardLoginUnavailable from "@/components/dashboard/DashboardLoginUnavailable";
+import {
+  legacyKeyAuthEnabled,
+  workosAuthEnabled,
+  workosAuthKitReady,
+} from "@/lib/auth/workos";
 
 export default async function DashboardLoginPage({
   searchParams,
@@ -17,6 +20,11 @@ export default async function DashboardLoginPage({
     redirect("/dashboard");
   }
 
+  if (!workosAuthKitReady()) {
+    return <DashboardLoginUnavailable />;
+  }
+
+  const { getSignInUrl } = await import("@workos-inc/authkit-nextjs");
   const returnPath = params.onboarding
     ? `/dashboard?onboarding=${encodeURIComponent(params.onboarding)}`
     : "/dashboard";

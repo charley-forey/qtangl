@@ -4,6 +4,7 @@ import "./globals.css";
 
 import Footer from "@/components/layout/Footer";
 import Navbar from "@/components/layout/Navbar";
+import { DashboardSessionProvider } from "@/components/dashboard/dashboard-session-context";
 import { MAIN_CONTENT_ID } from "@/components/layout/PageShell";
 import GoogleAnalytics from "@/components/seo/GoogleAnalytics";
 import PostHogAnalytics from "@/components/seo/PostHogAnalytics";
@@ -37,7 +38,8 @@ export default function RootLayout({
         <GoogleAnalytics />
         <PostHogAnalytics />
         <WebVitals />
-        <div className="quantum-shell relative flex min-h-dvh flex-col overflow-x-hidden">
+        <DashboardSessionProvider>
+          <div className="quantum-shell relative flex min-h-dvh flex-col overflow-x-hidden">
           <a
             href={`#${MAIN_CONTENT_ID}`}
             className="sr-only fixed left-4 top-4 z-[60] rounded-full border border-[var(--border-strong)] bg-black px-4 py-2 text-sm text-white focus:not-sr-only"
@@ -48,6 +50,7 @@ export default function RootLayout({
           <div className="relative flex flex-1 flex-col">{children}</div>
           <Footer />
         </div>
+        </DashboardSessionProvider>
       </body>
     </html>
   );

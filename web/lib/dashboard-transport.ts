@@ -1,19 +1,64 @@
-import { fetchDashboardBootstrap } from "@/lib/dashboard-data";
-import { fetchDashboardJson } from "@/lib/dashboard-bff";
 import type { DashboardBootstrap } from "@/lib/dashboard-data";
+import { fetchDashboardJson } from "@/lib/dashboard-bff";
+import type { DashboardAlert } from "@/components/dashboard/NotificationCenter";
+import type { WeeklyDigest } from "@/components/dashboard/ExecutiveDigestCard";
+
+export type DashboardSummary = {
+  me: Record<string, unknown>;
+  kpis: {
+    latestReadiness?: number | null;
+    latestBand?: string | null;
+    delta?: number | null;
+    openCritical?: number;
+    nextScheduleAt?: string | null;
+    scansThisMonth?: number;
+    quotaLimit?: number | null;
+  };
+  trend: Array<{ date: string; score: number; scanId: string; band?: string }>;
+  digest: WeeklyDigest | null;
+  commandCenter: {
+    businessUnits: Record<string, number>;
+    businessUnitDeltas?: Record<string, number | null>;
+    highRiskTargets?: Array<{ target: string; readinessScore: number }>;
+  } | null;
+  alerts: DashboardAlert[];
+  recentScans: DashboardBootstrap["scans"];
+  schedulesSummary: { active: number; nextRunAt?: string | null };
+  health: {
+    schedulerEnabled?: boolean;
+    persistenceEnabled?: boolean;
+    lastScanAt?: string | null;
+  };
+};
+
+export async function fetchDashboardSummaryViaBff(): Promise<DashboardSummary> {
+  const payload = await fetchDashboardJson<{
+    me: Record<string, unknown>;
+    kpis: DashboardSummary["kpis"];
+    trend: DashboardSummary["trend"];
+    digest: WeeklyDigest | null;
+    commandCenter: DashboardSummary["commandCenter"];
+    alerts: DashboardAlert[];
+    recentScans: DashboardBootstrap["scans"];
+    schedulesSummary: DashboardSummary["schedulesSummary"];
+    health: DashboardSummary["health"];
+  }>("/tenant/dashboard/summary");
+
+  return {
+    me: payload.me ?? {},
+    kpis: payload.kpis ?? {},
+    trend: payload.trend ?? [],
+    digest: payload.digest ?? null,
+    commandCenter: payload.commandCenter ?? null,
+    alerts: payload.alerts ?? [],
+    recentScans: payload.recentScans ?? [],
+    schedulesSummary: payload.schedulesSummary ?? { active: 0 },
+    health: payload.health ?? {},
+  };
+}
 
 export async function fetchDashboardBootstrapViaBff(): Promise<DashboardBootstrap> {
-  const mePayload = await fetchDashboardJson<{
-    tenantId: string;
-    persistenceEnabled: boolean;
-    role?: string;
-    entitlements?: Record<string, unknown>;
-  }>("/tenant/me");
-
-  const scansPayload = await fetchDashboardJson<{ scans: DashboardBootstrap["scans"] }>(
-    "/tenant/scans?limit=100"
-  );
-
+  const summary = await fetchDashboardSummaryViaBff();
   let billingPortalUrl: string | null = null;
   try {
     const portal = await fetchDashboardJson<{ portalUrl?: string }>("/tenant/billing/portal");
@@ -49,12 +94,17 @@ export async function fetchDashboardBootstrapViaBff(): Promise<DashboardBootstra
 
   return {
     me: {
-      tenantId: String(mePayload.tenantId ?? ""),
-      persistenceEnabled: Boolean(mePayload.persistenceEnabled),
-      role: typeof mePayload.role === "string" ? mePayload.role : undefined,
-      entitlements: mePayload.entitlements,
+      tenantId: String(summary.me.tenantId ?? ""),
+      persistenceEnabled: Boolean(summary.me.persistenceEnabled),
+      role: typeof summary.me.role === "string" ? summary.me.role : undefined,
+      entitlements: summary.me.entitlements as Record<string, unknown> | undefined,
+      scanCount: summary.me.scanCount as number | undefined,
+      scansThisMonth: summary.me.scansThisMonth as number | undefined,
+      latestReadinessScore: summary.me.latestReadinessScore as number | undefined,
+      scheduleCount: summary.me.scheduleCount as number | undefined,
+      openCriticalCount: summary.me.openCriticalCount as number | undefined,
     },
-    scans: scansPayload.scans ?? [],
+    scans: summary.recentScans,
     billingPortalUrl,
     cbomAggregate,
     cbomConflicts,
@@ -62,4 +112,4 @@ export async function fetchDashboardBootstrapViaBff(): Promise<DashboardBootstra
   };
 }
 
-export { fetchDashboardBootstrap };
+export { fetchDashboardBootstrap } from "@/lib/dashboard-data";

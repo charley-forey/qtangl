@@ -1,5 +1,8 @@
 "use client";
 
+import { useEffect, useState } from "react";
+import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
+
 type TrendPoint = {
   scanId: string;
   createdAt: string;
@@ -19,6 +22,36 @@ export default function ReadinessTrend({ points }: { points: TrendPoint[] }) {
   const sorted = [...points].sort(
     (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
   );
+
+  const chartData = sorted.map((point) => ({
+    label: new Date(point.createdAt).toLocaleDateString(undefined, { month: "short", day: "numeric" }),
+    score: point.readinessScore,
+    scanId: point.scanId,
+  }));
+
+  const [useChart, setUseChart] = useState(false);
+  useEffect(() => {
+    setUseChart(sorted.length >= 2 && typeof window !== "undefined" && window.innerWidth >= 640);
+  }, [sorted.length]);
+
+  if (useChart) {
+    return (
+      <div className="h-40 w-full">
+        <ResponsiveContainer width="100%" height="100%">
+          <LineChart data={chartData}>
+            <XAxis dataKey="label" tick={{ fill: "#9ca3af", fontSize: 10 }} />
+            <YAxis domain={[0, 100]} tick={{ fill: "#9ca3af", fontSize: 10 }} width={28} />
+            <Tooltip
+              contentStyle={{ background: "#111", border: "1px solid #333", fontSize: 12 }}
+              formatter={(value) => [value, "Readiness"]}
+            />
+            <Line type="monotone" dataKey="score" stroke="var(--color-accent)" strokeWidth={2} dot />
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
+    );
+  }
+
   const max = Math.max(...sorted.map((p) => p.readinessScore), 100);
 
   return (

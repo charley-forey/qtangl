@@ -12,6 +12,7 @@ type TenantSettings = {
   webhookSigningSecret: string;
   benchmarkOptIn?: boolean;
   industry?: string;
+  weeklyDigestRecipients?: string;
 };
 
 export default function AlertSettings({
@@ -23,11 +24,15 @@ export default function AlertSettings({
 }) {
   const [settings, setSettings] = useState<TenantSettings | null>(null);
   const [saving, setSaving] = useState(false);
+  const [digestPreview, setDigestPreview] = useState<string | null>(null);
 
   useEffect(() => {
     fetchTenantJson<{ settings: TenantSettings }>("/tenant/settings", apiKey)
       .then((payload) => setSettings(payload.settings))
       .catch(() => setSettings(null));
+    fetchTenantJson<{ weeklyDigest?: { headline?: string } }>("/tenant/portfolio/command-center", apiKey)
+      .then((payload) => setDigestPreview(payload.weeklyDigest?.headline ?? null))
+      .catch(() => setDigestPreview(null));
   }, [apiKey]);
 
   if (!settings) {
@@ -83,6 +88,24 @@ export default function AlertSettings({
           className="rounded-full border border-[var(--border-strong)] bg-black px-4 py-2"
         />
       </label>
+      <div className="border-t border-[var(--border-subtle)] pt-4">
+        <Eyebrow>Weekly executive digest</Eyebrow>
+        <label className="mt-3 flex flex-col gap-1 text-sm text-white">
+          Digest recipients (comma-separated emails)
+          <input
+            type="text"
+            value={settings.weeklyDigestRecipients ?? ""}
+            onChange={(e) => setSettings({ ...settings, weeklyDigestRecipients: e.target.value })}
+            placeholder="ciso@company.com, security@company.com"
+            className="rounded-full border border-[var(--border-strong)] bg-black px-4 py-2"
+          />
+        </label>
+        {digestPreview ? (
+          <p className="mt-3 text-xs text-[var(--color-gray-400)]">
+            Preview: <span className="text-white">{digestPreview}</span>
+          </p>
+        ) : null}
+      </div>
       <div className="border-t border-[var(--border-subtle)] pt-4">
         <Eyebrow>Readiness Index (peer benchmarks)</Eyebrow>
         <label className="mt-3 flex items-center gap-2 text-sm text-white">

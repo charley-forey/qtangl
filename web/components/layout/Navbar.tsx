@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import Modal from "@/components/ui/Modal";
+import NavbarAccountMenu from "@/components/dashboard/NavbarAccountMenu";
 import { footerCopy, footerNav, nav, navbarCopy } from "@/lib/copy/nav";
 import { navCta } from "@/lib/siteConfig";
 
@@ -150,6 +151,7 @@ export default function Navbar() {
           </nav>
 
           <div className="flex items-center gap-3">
+            <NavbarAccountMenu />
             <Link href={navCta.href} className={`${primaryCtaBaseClass} hidden md:inline-flex`}>
               {navCta.name}
             </Link>

@@ -12,22 +12,22 @@ import { monitorPreviewDiff, monitorPreviewTrend } from "@/lib/copy/readiness-de
 const steps = [
   {
     step: "1",
-    title: "Run production baseline",
-    description: "Use the runner below with your tenant key — upload certs or scan authorized domains.",
-    href: "#run-baseline",
-    cta: "Run baseline below",
+    title: "Sign in to your workspace",
+    description: "Use your work email or enterprise SSO. Admins can invite teammates after first login.",
+    href: "/dashboard/login",
+    cta: "Sign in",
   },
   {
     step: "2",
-    title: "Try the public demo (optional)",
-    description: "Share fixture-based demos with stakeholders — separate from your tenant data.",
-    href: "/assess",
-    cta: "Open demo assess",
+    title: "Run production baseline",
+    description: "Authorized domain or certificate scan establishes your readiness score and evidence pack.",
+    href: "#run-baseline",
+    cta: "Run baseline",
   },
   {
     step: "3",
     title: "Enable Monitor",
-    description: "Schedule re-scans, diff alerts, and remediation tracking for your domain portfolio.",
+    description: "Weekly re-scans, crypto drift alerts, and signed board reports from one command center.",
     href: "/monitor",
     cta: "Monitor overview",
   },
@@ -39,8 +39,8 @@ export default function DashboardOnboarding() {
       <Card tone="feature" size="lg" className="rounded-[var(--radius-feature)]">
         <Eyebrow>Your workspace</Eyebrow>
         <p className="mt-3 max-w-2xl text-sm leading-7 text-[var(--color-gray-300)]">
-          This is your customer home after purchase. Connect your tenant API key, run an authorized
-          production baseline, then manage drift and remediation here — not on the public demo page.
+          Sign in to access your post-quantum command center — scan history, drift monitoring, readiness
+          trends, and remediation workflow. Automation API keys live under Settings → Advanced.
         </p>
         <ol className="mt-8 grid gap-4 md:grid-cols-3">
           {steps.map((item) => (
@@ -60,12 +60,15 @@ export default function DashboardOnboarding() {
             </li>
           ))}
         </ol>
+        <Button href="/dashboard/login" className="mt-6">
+          Sign in to get started
+        </Button>
       </Card>
 
       <Card tone="panel" className="rounded-[var(--radius-xl)]">
         <Eyebrow>Preview — Monitor tier (sample data)</Eyebrow>
         <p className="mt-3 text-sm text-[var(--color-gray-400)]">
-          Illustrative drift from a weekly re-scan. Connect your key to see live tenant data.
+          Illustrative drift from a weekly re-scan. Sign in to see live tenant data.
         </p>
         <div className="mt-6 grid gap-6 lg:grid-cols-2">
           <div>
@@ -77,33 +80,6 @@ export default function DashboardOnboarding() {
           </div>
         </div>
       </Card>
-
-      <Card tone="ghost" className="border border-[var(--border-subtle)]">
-        <Eyebrow>API key vs SSO</Eyebrow>
-        <dl className="mt-4 grid gap-4 sm:grid-cols-2 text-sm leading-7 text-[var(--color-gray-300)]">
-          <div>
-            <dt className="font-medium text-white">Tenant API key</dt>
-            <dd className="mt-1 text-[var(--color-gray-400)]">
-              Self-serve dashboard access and CI/automation. Stored in this browser session only.
-            </dd>
-          </div>
-          <div>
-            <dt className="font-medium text-white">Enterprise SSO (optional)</dt>
-            <dd className="mt-1 text-[var(--color-gray-400)]">
-              Sign in with your IdP — Qtangl provisions a session-scoped key automatically. Best for
-              regulated teams with centralized access control.
-            </dd>
-          </div>
-        </dl>
-        <div className="mt-6 flex flex-wrap gap-3">
-          <Button href="/access" variant="secondary" size="sm">
-            Request pilot key
-          </Button>
-          <Button href="/docs/guides/sso-setup" variant="secondary" size="sm">
-            SSO setup guide
-          </Button>
-        </div>
-      </Card>
     </div>
   );
 }
@@ -111,12 +87,26 @@ export default function DashboardOnboarding() {
 export function DashboardSection({
   title,
   children,
+  id,
 }: {
   title: string;
   children: React.ReactNode;
+  id?: string;
 }) {
+  const sectionId =
+    id ??
+    (title === "Run baseline assessment"
+      ? "run-baseline"
+      : title === "Settings"
+        ? "dashboard-settings"
+        : title === "Scan history"
+          ? "dashboard-scans"
+          : title === "Scheduled monitoring"
+            ? "dashboard-monitor"
+            : undefined);
+
   return (
-    <section className="space-y-4" id={title === "Run baseline assessment" ? "run-baseline" : undefined}>
+    <section className="space-y-4" id={sectionId}>
       <h2 className="text-label border-b border-[var(--border-subtle)] pb-2 text-[var(--color-gray-500)]">
         {title}
       </h2>

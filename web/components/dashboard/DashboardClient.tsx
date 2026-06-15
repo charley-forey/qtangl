@@ -11,6 +11,27 @@ import RemediationBoard from "@/components/pqc/RemediationBoard";
 import ReadinessTrend from "@/components/pqc/ReadinessTrend";
 import ScanDiffPanel, { type ScanDiff } from "@/components/pqc/ScanDiffPanel";
 import DashboardOnboarding, { DashboardSection } from "@/components/dashboard/DashboardOnboarding";
+import DashboardLanding from "@/components/dashboard/DashboardLanding";
+import DashboardWorkspaceHeader from "@/components/dashboard/DashboardWorkspaceHeader";
+import DashboardKpiStrip from "@/components/dashboard/DashboardKpiStrip";
+import DashboardTrendSection from "@/components/dashboard/DashboardTrendSection";
+import ExecutiveDigestCard from "@/components/dashboard/ExecutiveDigestCard";
+import DashboardActionQueue from "@/components/dashboard/DashboardActionQueue";
+import FirstRunChecklist from "@/components/dashboard/FirstRunChecklist";
+import DashboardTabs, { type DashboardTabId } from "@/components/dashboard/DashboardTabs";
+import SystemHealthBar from "@/components/dashboard/SystemHealthBar";
+import EvidenceToolbar from "@/components/dashboard/EvidenceToolbar";
+import ComplianceFrameworkRail from "@/components/dashboard/ComplianceFrameworkRail";
+import BusinessUnitHeatmap from "@/components/dashboard/BusinessUnitHeatmap";
+import DashboardInsightsGrid from "@/components/dashboard/DashboardInsightsGrid";
+import NotificationCenter, { type DashboardAlert } from "@/components/dashboard/NotificationCenter";
+import DashboardCommandPalette from "@/components/dashboard/DashboardCommandPalette";
+import DashboardPersonaToggle, { type DashboardPersona } from "@/components/dashboard/DashboardPersonaToggle";
+import DashboardAdvancedKeyPanel from "@/components/dashboard/DashboardAdvancedKeyPanel";
+import DashboardWidgetPreferences from "@/components/dashboard/DashboardWidgetPreferences";
+import MsspPortfolioPanel from "@/components/dashboard/MsspPortfolioPanel";
+import DashboardSkeleton from "@/components/dashboard/ui/DashboardSkeleton";
+import { useDashboardSession } from "@/components/dashboard/dashboard-session-context";
 import type { MergeConflict } from "@/components/pqc/MergeConflictPanel";
 
 function PanelFallback() {
@@ -116,6 +137,7 @@ import {
   fetchTenantJson,
   getStoredTenantApiKey,
   postTenantJson,
+  putTenantJson,
   setStoredTenantApiKey,
   tenantReportUrl,
   type ScheduledScan,
@@ -127,11 +149,14 @@ import {
   fetchDashboardSession,
   legacyKeyClientEnabled,
   postDashboardJson,
+  putDashboardJson,
   workosClientAuthEnabled,
   type DashboardSession,
 } from "@/lib/dashboard-bff";
 import { qtanglApiBaseUrl } from "@/lib/api";
-import { fetchDashboardBootstrap, fetchDashboardBootstrapViaBff } from "@/lib/dashboard-transport";
+import { fetchDashboardBootstrap, fetchDashboardSummaryViaBff } from "@/lib/dashboard-transport";
+import { useDashboardEvents } from "@/lib/dashboard-events";
+import { trackDashboardEvent } from "@/lib/dashboard-analytics";
 import ApiKeysPanel from "@/components/dashboard/ApiKeysPanel";
 import TeamSettingsPanel from "@/components/dashboard/TeamSettingsPanel";
 import TenantSwitcher from "@/components/dashboard/TenantSwitcher";
@@ -142,11 +167,45 @@ type TenantMe = {
   persistenceEnabled: boolean;
   role?: string;
   entitlements?: { tier?: string; maxScansPerMonth?: number; maxSchedules?: number };
+  scanCount?: number;
+  scansThisMonth?: number;
+  latestReadinessScore?: number | null;
+  scheduleCount?: number;
+  openCriticalCount?: number;
+  schedulerEnabled?: boolean;
 };
+
+function roleCanWrite(role?: string) {
+  return role === "admin" || role === "operator";
+}
+
+function roleCanAdmin(role?: string) {
+  return role === "admin";
+}
 
 export default function DashboardClient() {
   const searchParams = useSearchParams();
   const onboardingToken = searchParams.get("onboarding") ?? "";
+  const scanIdParam = searchParams.get("scanId") ?? "";
+  const { session: contextSession } = useDashboardSession();
+  const [activeTab, setActiveTab] = useState<DashboardTabId>("overview");
+  const [persona, setPersona] = useState<DashboardPersona>("operator");
+  const [density, setDensity] = useState<"comfortable" | "compact">("comfortable");
+  const [dashboardAlerts, setDashboardAlerts] = useState<DashboardAlert[]>([]);
+  const [tenantSettings, setTenantSettings] = useState<Record<string, unknown> | null>(null);
+  const [summaryKpis, setSummaryKpis] = useState<{
+    latestReadiness?: number | null;
+    latestBand?: string | null;
+    delta?: number | null;
+    openCritical?: number;
+    nextScheduleAt?: string | null;
+    scansThisMonth?: number;
+    quotaLimit?: number | null;
+  }>({});
+  const [healthMeta, setHealthMeta] = useState<{
+    schedulerEnabled?: boolean;
+    lastScanAt?: string | null;
+  }>({});
   const [apiKey, setApiKey] = useState("");
   const [savedKey, setSavedKey] = useState<string | null>(null);
   const [me, setMe] = useState<TenantMe | null>(null);
@@ -258,28 +317,97 @@ export default function DashboardClient() {
     const fetchJson = <T,>(path: string, init?: RequestInit) =>
       viaBff ? fetchDashboardJson<T>(path, init) : fetchTenantJson<T>(path, key, init);
     try {
-      const bootstrap = viaBff
-        ? await fetchDashboardBootstrapViaBff()
-        : await fetchDashboardBootstrap(key);
-      setMe({
-        tenantId: bootstrap.me.tenantId,
-        persistenceEnabled: bootstrap.me.persistenceEnabled,
-        role: bootstrap.me.role,
-        entitlements: bootstrap.me.entitlements as TenantMe["entitlements"],
-      });
-      setBillingPortalUrl(bootstrap.billingPortalUrl);
-      setScans(bootstrap.scans);
-      setCbomAggregate(bootstrap.cbomAggregate);
-      setCbomConflicts(bootstrap.cbomConflicts);
-      setCbomDrift(bootstrap.cbomDrift);
+      let loadedScans: TenantScanSummary[] = [];
+      let persistence = false;
+
       if (viaBff) {
+        const summary = await fetchDashboardSummaryViaBff();
+        setSummaryKpis(summary.kpis);
+        setDashboardAlerts(summary.alerts);
+        setWeeklyDigest(summary.digest);
+        setCommandCenter(
+          summary.commandCenter
+            ? {
+                businessUnits: summary.commandCenter.businessUnits,
+                businessUnitDeltas: summary.commandCenter.businessUnitDeltas,
+                highRiskTargets: summary.commandCenter.highRiskTargets ?? [],
+              }
+            : null
+        );
+        setHealthMeta({
+          schedulerEnabled: summary.health.schedulerEnabled,
+          lastScanAt: summary.health.lastScanAt ?? null,
+        });
+        persistence = Boolean(summary.me.persistenceEnabled);
+        loadedScans = summary.recentScans;
+        setMe({
+          tenantId: String(summary.me.tenantId ?? ""),
+          persistenceEnabled: persistence,
+          role: typeof summary.me.role === "string" ? summary.me.role : undefined,
+          entitlements: summary.me.entitlements as TenantMe["entitlements"],
+          scanCount: Number(summary.me.scanCount ?? 0),
+          scansThisMonth: Number(summary.me.scansThisMonth ?? 0),
+          latestReadinessScore: summary.me.latestReadinessScore as number | null | undefined,
+          scheduleCount: Number(summary.me.scheduleCount ?? 0),
+          openCriticalCount: Number(summary.me.openCriticalCount ?? 0),
+          schedulerEnabled: Boolean(summary.me.schedulerEnabled),
+        });
+        setScans(loadedScans);
         setBffMode(true);
         setSavedKey("bff");
+        trackDashboardEvent("dashboard_loaded", { mode: "bff" });
       } else {
+        const bootstrap = await fetchDashboardBootstrap(key);
+        persistence = bootstrap.me.persistenceEnabled;
+        loadedScans = bootstrap.scans;
+        setMe({
+          tenantId: bootstrap.me.tenantId,
+          persistenceEnabled: bootstrap.me.persistenceEnabled,
+          role: bootstrap.me.role,
+          entitlements: bootstrap.me.entitlements as TenantMe["entitlements"],
+        });
+        setBillingPortalUrl(bootstrap.billingPortalUrl);
+        setScans(loadedScans);
+        setCbomAggregate(bootstrap.cbomAggregate);
+        setCbomConflicts(bootstrap.cbomConflicts);
+        setCbomDrift(bootstrap.cbomDrift);
         setSavedKey(key);
         setStoredTenantApiKey(key);
       }
-      if (bootstrap.me.persistenceEnabled) {
+
+      if (viaBff) {
+        try {
+          const portal = await fetchDashboardJson<{ portalUrl?: string }>("/tenant/billing/portal");
+          setBillingPortalUrl(typeof portal.portalUrl === "string" ? portal.portalUrl : null);
+        } catch {
+          setBillingPortalUrl(null);
+        }
+        try {
+          const aggPayload = await fetchDashboardJson<{ aggregate?: Record<string, unknown> }>(
+            "/tenant/cbom/aggregate"
+          );
+          const aggregate = aggPayload.aggregate;
+          setCbomAggregate({
+            componentCount: Number(aggregate?.componentCount ?? 0),
+            openConflicts: Number(aggregate?.openConflicts ?? 0),
+            readiness: (aggregate?.readiness as Record<string, unknown> | null) ?? null,
+          });
+          const conflictPayload = await fetchDashboardJson<{ conflicts?: MergeConflict[] }>(
+            "/tenant/cbom/conflicts"
+          );
+          setCbomConflicts(conflictPayload.conflicts ?? []);
+          const driftPayload = await fetchDashboardJson<{ drift?: Record<string, unknown> }>(
+            "/tenant/cbom/diff"
+          );
+          setCbomDrift(driftPayload.drift ?? null);
+        } catch {
+          setCbomAggregate(null);
+          setCbomConflicts([]);
+          setCbomDrift(null);
+        }
+      }
+
+      if (persistence) {
         try {
           const portfolio = await fetchJson<{
             rollup: { overallReadiness: number; byBusinessUnit: Record<string, number> };
@@ -315,24 +443,26 @@ export default function DashboardClient() {
         } catch {
           setSloMetrics(null);
         }
-        try {
-          const ccPayload = await fetchJson<{
-            weeklyDigest: { headline: string; wins: string[]; risks: string[]; nextWeekFocus: string[] };
-            commandCenter: {
-              businessUnits: Record<string, number>;
-              businessUnitDeltas?: Record<string, number | null>;
-              highRiskTargets: Array<{ target: string; readinessScore: number }>;
-            };
-          }>("/tenant/portfolio/command-center");
-          setWeeklyDigest(ccPayload.weeklyDigest);
-          const cc = ccPayload.commandCenter;
-          setCommandCenter({
-            businessUnits: cc.businessUnits,
-            businessUnitDeltas: cc.businessUnitDeltas,
-            highRiskTargets: cc.highRiskTargets ?? [],
-          });
-        } catch {
-          setWeeklyDigest(null);
+        if (!viaBff) {
+          try {
+            const ccPayload = await fetchJson<{
+              weeklyDigest: { headline: string; wins: string[]; risks: string[]; nextWeekFocus: string[] };
+              commandCenter: {
+                businessUnits: Record<string, number>;
+                businessUnitDeltas?: Record<string, number | null>;
+                highRiskTargets: Array<{ target: string; readinessScore: number }>;
+              };
+            }>("/tenant/portfolio/command-center");
+            setWeeklyDigest(ccPayload.weeklyDigest);
+            const cc = ccPayload.commandCenter;
+            setCommandCenter({
+              businessUnits: cc.businessUnits,
+              businessUnitDeltas: cc.businessUnitDeltas,
+              highRiskTargets: cc.highRiskTargets ?? [],
+            });
+          } catch {
+            setWeeklyDigest(null);
+          }
         }
         try {
           const intPayload = await fetchJson<{ integrations: Array<{ provider: string; configured: boolean }> }>(
@@ -342,8 +472,19 @@ export default function DashboardClient() {
         } catch {
           setJiraConfigured(false);
         }
+        try {
+          const settingsPayload = await fetchJson<{ settings: Record<string, unknown> }>("/tenant/settings");
+          setTenantSettings(settingsPayload.settings);
+          const layout = settingsPayload.settings.dashboardLayout as { persona?: DashboardPersona } | undefined;
+          if (layout?.persona) {
+            setPersona(layout.persona);
+          }
+        } catch {
+          setTenantSettings(null);
+        }
       }
-      const latestDone = bootstrap.scans.find((scan) => scan.status === "done");
+
+      const latestDone = loadedScans.find((scan) => scan.status === "done");
       if (latestDone) {
         try {
           const detail = await fetchJson<{
@@ -385,7 +526,9 @@ export default function DashboardClient() {
           setRemediationScan(null);
         }
         try {
-          const forecast = await fetchJson<{ projected?: number; current?: number }>("/tenant/analytics/forecast");
+          const forecast = await fetchJson<{ projected?: number; current?: number }>(
+            "/tenant/analytics/forecast"
+          );
           const anomaly = await fetchJson<{ alerts: Array<{ rule: string; message: string }> }>(
             "/tenant/analytics/anomaly"
           );
@@ -440,23 +583,84 @@ export default function DashboardClient() {
   );
 
   useEffect(() => {
-    if (!workosClientAuthEnabled()) {
+    if (contextSession) {
+      setDashboardSession(contextSession);
+    }
+  }, [contextSession]);
+
+  useDashboardEvents({
+    enabled: bffMode && Boolean(me),
+    onEvent: () => {
+      void reloadDashboard();
+      setActionMessage("Scan update received.");
+    },
+  });
+
+  useEffect(() => {
+    if (scanIdParam) {
+      setExpandedScanId(scanIdParam);
+      setActiveTab("scans");
+    }
+  }, [scanIdParam]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const stored = localStorage.getItem("qtangl_dashboard_density");
+    if (stored === "compact" || stored === "comfortable") {
+      setDensity(stored);
+    }
+  }, []);
+
+  const saveChecklist = useCallback(
+    async (checklist: Record<string, boolean>) => {
+      if (!savedKey) return;
+      const nextSettings = {
+        ...(tenantSettings ?? {}),
+        firstRunChecklist: checklist,
+      };
+      if (bffMode) {
+        await putDashboardJson("/tenant/settings", { settings: nextSettings });
+      } else {
+        await putTenantJson("/tenant/settings", savedKey, nextSettings);
+      }
+      setTenantSettings(nextSettings);
+      trackDashboardEvent("dashboard_checklist_step_completed");
+    },
+    [bffMode, savedKey, tenantSettings]
+  );
+
+  const savePersona = useCallback(
+    async (nextPersona: DashboardPersona) => {
+      setPersona(nextPersona);
+      trackDashboardEvent("dashboard_persona_changed", { persona: nextPersona });
+      const nextSettings = {
+        ...(tenantSettings ?? {}),
+        dashboardLayout: {
+          ...((tenantSettings?.dashboardLayout as Record<string, unknown>) ?? {}),
+          persona: nextPersona,
+        },
+      };
+      if (!savedKey) return;
+      try {
+        if (bffMode) {
+          await putDashboardJson("/tenant/settings", { settings: nextSettings });
+        } else {
+          await putTenantJson("/tenant/settings", savedKey, nextSettings);
+        }
+        setTenantSettings(nextSettings);
+      } catch {
+        /* ignore */
+      }
+    },
+    [bffMode, savedKey, tenantSettings]
+  );
+
+  useEffect(() => {
+    if (!workosClientAuthEnabled() || !contextSession) {
       return;
     }
-    let cancelled = false;
-    fetchDashboardSession()
-      .then((session) => {
-        if (cancelled || !session) {
-          return;
-        }
-        setDashboardSession(session);
-        return loadDashboard("bff", true);
-      })
-      .catch(() => undefined);
-    return () => {
-      cancelled = true;
-    };
-  }, [loadDashboard]);
+    void loadDashboard("bff", true);
+  }, [contextSession, loadDashboard]);
 
   useEffect(() => {
     if (!onboardingToken) {
@@ -531,33 +735,6 @@ export default function DashboardClient() {
     };
   }, [savedKey]);
 
-  const apiKeyCard = (
-    <Card tone="strong" className="rounded-[var(--radius-xl)]" id="connect-key">
-      <Eyebrow>Tenant API key</Eyebrow>
-      <p className="mt-3 text-sm leading-7 text-[var(--color-gray-300)]">
-        Paste the tenant key issued by Qtangl admin. It is stored in this browser session only.
-      </p>
-      <div className="mt-4 flex flex-col gap-3 sm:flex-row">
-        <input
-          type="password"
-          value={apiKey}
-          onChange={(event) => setApiKey(event.target.value)}
-          placeholder="qtangl_..."
-          className="w-full rounded-full border border-[var(--border-strong)] bg-black px-4 py-2 text-sm text-white"
-        />
-        <button
-          type="button"
-          disabled={!apiKey || loading}
-          onClick={() => loadDashboard(apiKey)}
-          className="rounded-full border border-[var(--border-strong)] bg-white px-5 py-2 text-sm font-medium text-black disabled:opacity-50"
-        >
-          {loading ? "Loading…" : "Connect"}
-        </button>
-      </div>
-      <p className="mt-3 text-xs text-[var(--color-gray-500)]">API base: {qtanglApiBaseUrl}</p>
-    </Card>
-  );
-
   const trendPoints = scans
     .filter((scan) => scan.readinessScore != null)
     .map((scan) => ({
@@ -569,45 +746,138 @@ export default function DashboardClient() {
 
   const latestScan = scans.find((scan) => scan.readinessScore != null);
 
+  const densityClass = density === "compact" ? "space-y-4" : "space-y-8";
+  const showMsspPortfolio = (dashboardSession?.memberships?.length ?? 0) > 1;
+  const canWrite = roleCanWrite(me?.role);
+  const canAdmin = roleCanAdmin(me?.role);
+
+  const commandActions = [
+    { id: "baseline", label: "Run baseline scan", href: "#run-baseline" },
+    { id: "schedule", label: "Create schedule", href: "#dashboard-monitor" },
+    { id: "invite", label: "Invite teammate", href: "#dashboard-settings" },
+    { id: "export", label: "Export board report", href: "#evidence-toolbar" },
+    { id: "sso", label: "Configure SSO", href: "#dashboard-settings" },
+  ];
+
   const dashboard = (
-    <div className="space-y-8">
-      {!me ? <DashboardOnboarding /> : null}
-      {!me && legacyKeyClientEnabled() ? apiKeyCard : null}
+    <div className={densityClass}>
+      {!me ? <DashboardLanding /> : null}
+      {loading && !me ? <DashboardSkeleton /> : null}
 
       {error ? (
         <Card tone="ghost" className="border border-red-500/40 text-red-200">
-          {error}
+          <p>{error}</p>
+          {bffMode ? (
+            <button
+              type="button"
+              className="mt-3 text-xs underline"
+              onClick={() => window.location.assign("/dashboard/login")}
+            >
+              Re-authenticate
+            </button>
+          ) : null}
         </Card>
       ) : null}
 
       {me ? (
         <>
-          {dashboardSession ? (
-            <TenantSwitcher
-              session={dashboardSession}
-              onSwitched={(next) => setDashboardSession(next)}
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <DashboardWorkspaceHeader
+              tier={me.entitlements?.tier}
+              onSessionChange={(next) => setDashboardSession(next)}
             />
-          ) : null}
-          {latestScan ? (
-            <DashboardSection title="Readiness">
-              <Card tone="feature" size="lg" className="rounded-[var(--radius-feature)]">
-                <Eyebrow>Readiness at a glance</Eyebrow>
-                <p className="mt-4 text-4xl font-semibold tracking-tight text-white">
-                  {latestScan.readinessScore}
-                  {latestScan.readinessBand ? (
-                    <span className="ml-3 text-lg font-normal text-[var(--color-gray-400)]">
-                      {latestScan.readinessBand}
-                    </span>
-                  ) : null}
-                </p>
-                <p className="mt-2 text-sm text-[var(--color-gray-400)]">
-                  Latest scan {latestScan.scanId} · {formatUtcDateTime(latestScan.createdAt)}
-                </p>
-              </Card>
-            </DashboardSection>
+            <div className="flex flex-wrap items-center gap-2">
+              <DashboardPersonaToggle value={persona} onChange={savePersona} />
+              <NotificationCenter alerts={dashboardAlerts} />
+              <DashboardCommandPalette actions={commandActions} />
+              <button
+                type="button"
+                className="rounded-full border border-[var(--border-subtle)] px-3 py-1 text-xs text-[var(--color-gray-400)]"
+                onClick={() => {
+                  const next = density === "compact" ? "comfortable" : "compact";
+                  setDensity(next);
+                  localStorage.setItem("qtangl_dashboard_density", next);
+                }}
+              >
+                {density === "compact" ? "Comfortable" : "Compact"}
+              </button>
+            </div>
+          </div>
+
+          <SystemHealthBar
+            schedulerEnabled={me.schedulerEnabled ?? healthMeta.schedulerEnabled}
+            lastScanAt={healthMeta.lastScanAt}
+            scansThisMonth={summaryKpis.scansThisMonth ?? me.scansThisMonth}
+            quotaLimit={summaryKpis.quotaLimit ?? me.entitlements?.maxScansPerMonth ?? null}
+            apiOk={!error}
+          />
+
+          <DashboardKpiStrip
+            kpis={{
+              latestReadiness: summaryKpis.latestReadiness ?? me.latestReadinessScore ?? latestScan?.readinessScore,
+              latestBand: summaryKpis.latestBand ?? latestScan?.readinessBand,
+              delta: summaryKpis.delta,
+              openCritical: summaryKpis.openCritical ?? me.openCriticalCount,
+              nextScheduleAt: summaryKpis.nextScheduleAt ?? schedules[0]?.nextRunAt ?? null,
+              scansThisMonth: summaryKpis.scansThisMonth ?? me.scansThisMonth,
+              quotaLimit: summaryKpis.quotaLimit ?? me.entitlements?.maxScansPerMonth ?? null,
+            }}
+          />
+
+          <DashboardTabs
+            active={activeTab}
+            onChange={(tab) => {
+              setActiveTab(tab);
+              trackDashboardEvent("dashboard_tab_changed", { tab });
+            }}
+            showPortfolio={showMsspPortfolio}
+            persona={persona}
+          />
+
+          {activeTab === "overview" ? (
+            <div className="space-y-4">
+              <FirstRunChecklist
+                signedIn={Boolean(dashboardSession || bffMode)}
+                hasScans={scans.length > 0}
+                hasSchedule={schedules.length > 0}
+                isAdmin={canAdmin}
+                settings={tenantSettings as { firstRunChecklist?: Record<string, boolean> } | undefined}
+                onSave={saveChecklist}
+              />
+              <DashboardTrendSection points={trendPoints} />
+              <ExecutiveDigestCard digest={weeklyDigest} />
+              <DashboardActionQueue
+                role={me.role}
+                hasScans={scans.length > 0}
+                hasSchedule={schedules.length > 0}
+                canWrite={canWrite}
+              />
+              <ComplianceFrameworkRail compliance={compliance} scanId={latestScan?.scanId ?? null} />
+              <DashboardInsightsGrid
+                remediationVelocity={remediationVelocity}
+                sloMetrics={sloMetrics}
+                anomalyAlerts={analytics.anomalyAlerts}
+                forecast={analytics.forecast}
+              />
+              {commandCenter ? (
+                <BusinessUnitHeatmap
+                  businessUnits={commandCenter.businessUnits}
+                  deltas={commandCenter.businessUnitDeltas}
+                  onSelectUnit={(unit) => {
+                    setPortfolioUnit(unit);
+                    setActiveTab("monitor");
+                  }}
+                />
+              ) : null}
+            </div>
           ) : null}
 
-          <DashboardSection title="Scan drift">
+          {activeTab === "portfolio" ? (
+            <MsspPortfolioPanel rollup={portfolioRollup} />
+          ) : null}
+
+          {(activeTab === "overview" || activeTab === "monitor") && latestScan ? (
+            <DashboardSection title="Scan drift">
             <Card tone="feature" size="lg" className="rounded-[var(--radius-feature)]">
               <Eyebrow>
                 {latestScan ? `Scan diff — ${latestScan.scanId}` : "Scan diff"}
@@ -629,52 +899,9 @@ export default function DashboardClient() {
             </Card>
           </DashboardSection>
 
-          <DashboardSection title="Overview">
-            <Card tone="panel">
-              <Eyebrow>Tenant overview</Eyebrow>
-              <dl className="mt-4 grid gap-4 sm:grid-cols-2">
-                <div>
-                  <dt className="text-xs uppercase tracking-[0.18em] text-[var(--color-gray-500)]">Tenant ID</dt>
-                  <dd className="mt-1 font-mono text-sm text-white">{me.tenantId}</dd>
-                </div>
-                <div>
-                  <dt className="text-xs uppercase tracking-[0.18em] text-[var(--color-gray-500)]">Persistence</dt>
-                  <dd className="mt-1 text-sm text-white">
-                    {me.persistenceEnabled ? "Postgres enabled" : "In-memory / demo"}
-                  </dd>
-                </div>
-                {me.entitlements?.tier ? (
-                  <div>
-                    <dt className="text-xs uppercase tracking-[0.18em] text-[var(--color-gray-500)]">Plan tier</dt>
-                    <dd className="mt-1 text-sm text-white capitalize">{me.entitlements.tier}</dd>
-                  </div>
-                ) : null}
-                {me.role ? (
-                  <div>
-                    <dt className="text-xs uppercase tracking-[0.18em] text-[var(--color-gray-500)]">API key role</dt>
-                    <dd className="mt-1 text-sm text-white">{me.role}</dd>
-                  </div>
-                ) : null}
-              </dl>
-              {billingPortalUrl ? (
-                <a
-                  href={billingPortalUrl}
-                  className="mt-4 inline-block text-sm text-white underline underline-offset-4"
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  Manage billing
-                </a>
-              ) : (
-                <a href="/pricing" className="mt-4 inline-block text-sm text-[var(--color-gray-400)] underline">
-                  View plans
-                </a>
-              )}
-            </Card>
-            {apiKeyCard}
-          </DashboardSection>
+          ) : null}
 
-          {savedKey && showBaselineRunner && me.role !== "viewer" ? (
+          {activeTab === "scans" && savedKey && showBaselineRunner && canWrite ? (
             <DashboardSection title="Run baseline assessment">
               <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
                 <p className="text-sm text-[var(--color-gray-400)]">
@@ -688,7 +915,7 @@ export default function DashboardClient() {
                   Hide runner
                 </button>
               </div>
-              {runnerConnected && me.role !== "viewer" ? (
+              {runnerConnected ? (
                 <AssessRunnerPanel
                   initialInventory={runnerInventory}
                   initialScenarios={runnerScenarios}
@@ -705,7 +932,7 @@ export default function DashboardClient() {
             </DashboardSection>
           ) : null}
 
-          {!showBaselineRunner && savedKey ? (
+          {!showBaselineRunner && savedKey && activeTab === "scans" ? (
             <button
               type="button"
               className="text-sm text-white underline"
@@ -715,8 +942,9 @@ export default function DashboardClient() {
             </button>
           ) : null}
 
-          <DashboardSection title="Remediation">
-            {savedKey && remediationScan ? (
+          {activeTab === "remediate" || activeTab === "scans" ? (
+          <DashboardSection title={activeTab === "scans" ? "Scan history" : "Remediation"} id="dashboard-scans">
+            {activeTab === "remediate" && savedKey && remediationScan ? (
               <Card tone="panel">
                 <Eyebrow>Top remediation priorities</Eyebrow>
                 <RemediationBoard
@@ -979,168 +1207,10 @@ export default function DashboardClient() {
               </Card>
             ) : null}
           </DashboardSection>
+          ) : null}
 
-          <DashboardSection title="Trend & drift">
-            {trendPoints.length >= 2 ? (
-              <Card tone="panel">
-                <Eyebrow>Readiness trend</Eyebrow>
-                <ReadinessTrend points={trendPoints} />
-              </Card>
-            ) : null}
-            {weeklyDigest ? (
-              <Card tone="panel">
-                <Eyebrow>Weekly executive digest</Eyebrow>
-                <p className="mt-2 text-sm text-white">{weeklyDigest.headline}</p>
-                {weeklyDigest.risks.length > 0 ? (
-                  <ul className="mt-3 list-disc pl-5 text-xs text-[var(--color-gray-400)]">
-                    {weeklyDigest.risks.slice(0, 3).map((risk) => (
-                      <li key={risk}>{risk}</li>
-                    ))}
-                  </ul>
-                ) : null}
-              </Card>
-            ) : null}
-            {commandCenter && Object.keys(commandCenter.businessUnits).length > 0 ? (
-              <Card tone="panel">
-                <Eyebrow>Portfolio command center</Eyebrow>
-                <div className="mt-4 overflow-x-auto">
-                  <table className="min-w-full text-left text-sm">
-                    <thead className="text-xs uppercase text-[var(--color-gray-500)]">
-                      <tr>
-                        <th className="pb-2 pr-4">Business unit</th>
-                        <th className="pb-2 pr-4">Readiness</th>
-                        <th className="pb-2 pr-4">Δ vs prior</th>
-                        <th className="pb-2">Action</th>
-                      </tr>
-                    </thead>
-                    <tbody className="text-[var(--color-gray-300)]">
-                      {Object.entries(commandCenter.businessUnits)
-                        .sort(([, a], [, b]) => a - b)
-                        .map(([unit, score]) => (
-                          <tr key={unit} className="border-t border-[var(--border-subtle)]">
-                            <td className="py-2 pr-4 text-white">{unit}</td>
-                            <td className="py-2 pr-4">{score}</td>
-                            <td className="py-2 pr-4">
-                              {commandCenter.businessUnitDeltas?.[unit] != null
-                                ? commandCenter.businessUnitDeltas[unit]
-                                : "—"}
-                            </td>
-                            <td className="py-2">
-                              {savedKey ? (
-                                <button
-                                  type="button"
-                                  className="text-white underline underline-offset-4"
-                                  onClick={() => {
-                                    setScheduleTarget("");
-                                    setPortfolioUnit(unit);
-                                    setActionMessage(`Create a weekly schedule for BU "${unit}" below.`);
-                                  }}
-                                >
-                                  Schedule monitoring
-                                </button>
-                              ) : null}
-                            </td>
-                          </tr>
-                        ))}
-                    </tbody>
-                  </table>
-                </div>
-              </Card>
-            ) : null}
-            {heatmapAssets.length > 0 ? (
-              <Card tone="panel">
-                <Eyebrow>Asset heatmap</Eyebrow>
-                <div className="mt-4">
-                  <InventoryHeatmap assets={heatmapAssets} />
-                </div>
-              </Card>
-            ) : null}
-            {compliance ? (
-              <Card tone="panel">
-                <Eyebrow>Compliance &amp; frameworks</Eyebrow>
-                <div className="mt-4">
-                  <CompliancePanel pack={compliance.pack} summary={compliance.summary} />
-                </div>
-              </Card>
-            ) : null}
-            {analytics.forecast || analytics.anomalyAlerts.length > 0 || savedKey ? (
-              <Card tone="panel">
-                <Eyebrow>Intelligence</Eyebrow>
-                <div className="mt-3 grid gap-4 sm:grid-cols-2 text-sm text-[var(--color-gray-300)]">
-                  {analytics.forecast?.projected != null ? (
-                    <div>
-                      <p className="text-xs uppercase text-[var(--color-gray-500)]">Forecast (4 scans)</p>
-                      <p className="mt-1 text-white">
-                        {analytics.forecast.current} → {analytics.forecast.projected}
-                      </p>
-                    </div>
-                  ) : null}
-                  {analytics.anomalyAlerts.length > 0 ? (
-                    <div>
-                      <p className="text-xs uppercase text-[var(--color-gray-500)]">Anomalies</p>
-                      <p className="mt-1">{analytics.anomalyAlerts[0]?.message}</p>
-                    </div>
-                  ) : null}
-                  {savedKey ? <CohortDriftPanel /> : null}
-                </div>
-              </Card>
-            ) : null}
-            {portfolioRollup ? (
-              <Card tone="panel">
-                <Eyebrow>Portfolio readiness</Eyebrow>
-                <p className="mt-2 text-2xl font-semibold text-white">{portfolioRollup.overallReadiness}</p>
-                <dl className="mt-4 grid gap-2 sm:grid-cols-2">
-                  {Object.entries(portfolioRollup.byBusinessUnit).map(([unit, score]) => (
-                    <div key={unit}>
-                      <dt className="text-xs uppercase tracking-[0.14em] text-[var(--color-gray-500)]">{unit}</dt>
-                      <dd className="text-sm text-white">{score}</dd>
-                    </div>
-                  ))}
-                </dl>
-                {savedKey ? (
-                  <div className="mt-4 flex flex-col gap-2 sm:flex-row">
-                    <input
-                      type="text"
-                      value={portfolioTargetInput}
-                      onChange={(event) => setPortfolioTargetInput(event.target.value)}
-                      placeholder="Add target domain"
-                      className="w-full rounded-full border border-[var(--border-strong)] bg-black px-4 py-2 text-sm text-white"
-                    />
-                    <input
-                      type="text"
-                      value={portfolioUnit}
-                      onChange={(event) => setPortfolioUnit(event.target.value)}
-                      placeholder="Business unit"
-                      className="w-full rounded-full border border-[var(--border-strong)] bg-black px-4 py-2 text-sm text-white sm:max-w-xs"
-                    />
-                    <button
-                      type="button"
-                      className="rounded-full border border-[var(--border-strong)] bg-white px-5 py-2 text-sm font-medium text-black"
-                      onClick={async () => {
-                        if (!portfolioTargetInput) return;
-                        try {
-                          await postTenantJson("/tenant/portfolio", savedKey, {
-                            target: portfolioTargetInput,
-                            businessUnit: portfolioUnit || "default",
-                          });
-                          setActionMessage("Portfolio target added.");
-                          await reloadDashboard();
-                        } catch (portfolioError) {
-                          setActionMessage(
-                            portfolioError instanceof Error ? portfolioError.message : "Portfolio update failed."
-                          );
-                        }
-                      }}
-                    >
-                      Add target
-                    </button>
-                  </div>
-                ) : null}
-              </Card>
-            ) : null}
-          </DashboardSection>
-
-          <DashboardSection title="Settings">
+          {activeTab === "settings" ? (
+          <DashboardSection title="Settings" id="dashboard-settings">
             {savedKey && me.persistenceEnabled ? (
               <Card tone="panel">
                 <Eyebrow>Alert settings</Eyebrow>
@@ -1163,7 +1233,7 @@ export default function DashboardClient() {
               </Card>
             ) : null}
 
-            {savedKey && me.persistenceEnabled && me.role === "admin" ? (
+            {savedKey && me.persistenceEnabled && canAdmin && !bffMode ? (
               <>
                 <TeamSettingsPanel role={me.role} />
                 <ApiKeysPanel role={me.role} />
@@ -1196,7 +1266,7 @@ export default function DashboardClient() {
               </>
             ) : null}
 
-            {savedKey && me.persistenceEnabled && me.role === "admin" ? (
+            {savedKey && me.persistenceEnabled && canAdmin ? (
               <Card tone="panel">
                 <Eyebrow>Audit log (admin)</Eyebrow>
                 <div className="mt-4">
@@ -1302,9 +1372,35 @@ export default function DashboardClient() {
                 </div>
               </Card>
             ) : null}
-          </DashboardSection>
 
-          <DashboardSection title="Integrations">
+            <DashboardAdvancedKeyPanel
+              apiKey={apiKey}
+              loading={loading}
+              hidden={bffMode}
+              onChange={setApiKey}
+              onConnect={() => loadDashboard(apiKey)}
+            />
+
+            <DashboardWidgetPreferences
+              layout={tenantSettings?.dashboardLayout as { pinned?: string[]; hidden?: string[] } | undefined}
+              onSave={async (pinned, hidden) => {
+                const nextSettings = {
+                  ...(tenantSettings ?? {}),
+                  dashboardLayout: { pinned, hidden, persona },
+                };
+                if (bffMode) {
+                  await putDashboardJson("/tenant/settings", { settings: nextSettings });
+                } else if (savedKey) {
+                  await putTenantJson("/tenant/settings", savedKey, nextSettings);
+                }
+                setTenantSettings(nextSettings);
+              }}
+            />
+          </DashboardSection>
+          ) : null}
+
+          {activeTab === "monitor" ? (
+          <DashboardSection title="Integrations" id="dashboard-monitor">
             {savedKey ? (
               <>
                 {me.persistenceEnabled ? (
@@ -1414,6 +1510,12 @@ export default function DashboardClient() {
               </>
             ) : null}
           </DashboardSection>
+          ) : null}
+
+          <EvidenceToolbar
+            scanId={latestScan?.scanId ?? null}
+            reportUrlForScan={reportUrlForScan}
+          />
         </>
       ) : null}
       <ReportDrawer
