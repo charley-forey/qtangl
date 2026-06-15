@@ -2,12 +2,15 @@
 
 import { useRef, useState } from "react";
 
-import { getStoredTenantApiKey } from "@/lib/tenant-api";
+import { ASSESS_PRODUCTION_MODE_ENABLED } from "@/lib/assess-config";
+import ProductModeBanner from "@/components/marketing/ProductModeBanner";
 import type { CryptoAsset, Scenario } from "@/lib/pqc";
+import { useQtanglApi } from "@/lib/qtangl-api-context";
 
 import AssessResultsPanel from "./AssessResultsPanel";
 import AssessWizard from "./AssessWizard";
 import InventoryHeatmap from "./InventoryHeatmap";
+import ProductionModeBanner from "./ProductionModeBanner";
 import ReportDrawer from "./ReportDrawer";
 import TenantKeyStrip from "./TenantKeyStrip";
 import { PqcSection } from "./ui";
@@ -19,6 +22,9 @@ type Props = {
   backendConnected: boolean;
   backendMessage: string | null;
   apiBaseUrl: string;
+  compact?: boolean;
+  basePath?: string;
+  syncUrlEnabled?: boolean;
 };
 
 export default function QDayCommandCenter({
@@ -26,16 +32,24 @@ export default function QDayCommandCenter({
   initialScenarios,
   backendConnected: initialBackendConnected,
   backendMessage: initialBackendMessage,
+  compact = false,
+  basePath = "/assess",
+  syncUrlEnabled = true,
 }: Props) {
   const resultsRef = useRef<HTMLDivElement>(null);
   const [reportOpen, setReportOpen] = useState(false);
-  const [tenantApiKey, setTenantApiKey] = useState<string | null>(() => getStoredTenantApiKey());
+  const { mode, apiKey, tenantApiKey, setTenantApiKey } = useQtanglApi();
+  const isProduction = mode === "production" && ASSESS_PRODUCTION_MODE_ENABLED;
 
   const scan = useAssessScan({
     initialInventory,
     initialScenarios,
     initialBackendConnected,
     initialBackendMessage,
+    assessMode: isProduction ? "production" : "demo",
+    apiKey: isProduction ? apiKey : undefined,
+    basePath,
+    syncUrlEnabled,
   });
 
   const {
@@ -51,6 +65,9 @@ export default function QDayCommandCenter({
     setAuthorized,
     customDomain,
     setCustomDomain,
+    industry,
+    setIndustry,
+    authorizedDomains,
     setBundleSession,
     scanResponse,
     isScanning,
@@ -85,7 +102,13 @@ export default function QDayCommandCenter({
 
   return (
     <div className="space-y-6">
-      <TenantKeyStrip onKeyChange={setTenantApiKey} />
+      {!compact && isProduction ? (
+        <ProductionModeBanner />
+      ) : !compact ? (
+        <ProductModeBanner mode="live" />
+      ) : null}
+
+      {!isProduction ? <TenantKeyStrip onKeyChange={setTenantApiKey} /> : null}
 
       {!backendConnected && backendMessage && (
         <div className="rounded-lg border border-amber-500/30 bg-amber-500/10 p-3 text-sm text-amber-100">
@@ -101,7 +124,7 @@ export default function QDayCommandCenter({
         </div>
       )}
 
-      {isAutorunActive && isScanning && (
+      {isAutorunActive && isScanning && !isProduction && (
         <div
           role="status"
           className="rounded-lg border border-sky-500/30 bg-sky-950/40 px-4 py-3 text-sm text-sky-100"
@@ -137,6 +160,11 @@ export default function QDayCommandCenter({
           setWizardCollapsed(false);
           setWizardStep(1);
         }}
+        assessMode={isProduction ? "production" : "demo"}
+        industry={industry}
+        onIndustryChange={setIndustry}
+        authorizedDomains={authorizedDomains}
+        uploadApiKey={isProduction ? apiKey : undefined}
       />
 
       {error && (
@@ -161,15 +189,23 @@ export default function QDayCommandCenter({
             onError={setError}
             onOpenDrawer={() => setReportOpen(true)}
             onRunComparisonScan={onRunComparisonScan}
-            tenantApiKey={tenantApiKey}
+            tenantApiKey={isProduction ? tenantApiKey : null}
+            assessMode={isProduction ? "production" : "demo"}
+            reportApiKey={isProduction ? apiKey : undefined}
           />
         </div>
       )}
 
-      {!scanResponse && inventory.length > 0 && !isScanning && (
+      {!scanResponse && inventory.length > 0 && !isScanning && !isProduction && (
         <PqcSection title="Fixture inventory preview">
           <InventoryHeatmap assets={inventory.slice(0, 4)} />
         </PqcSection>
+      )}
+
+      {!compact && !isProduction && (
+        <p className="text-center text-xs text-[var(--color-gray-500)]">
+          Production customers: check your welcome email for dashboard access.
+        </p>
       )}
 
       <ReportDrawer

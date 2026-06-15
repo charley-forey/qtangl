@@ -17,9 +17,13 @@ export const qtanglApiBaseUrl = normalizeQtanglApiBaseUrl(
 export const qtanglSandboxApiKey =
   process.env.NEXT_PUBLIC_QTANGL_SANDBOX_API_KEY ?? "<pilot-api-key>";
 
-export function getQtanglHeaders(extraHeaders?: HeadersInit, includeJson = true) {
+export function getQtanglHeaders(
+  extraHeaders?: HeadersInit,
+  includeJson = true,
+  apiKey: string = qtanglSandboxApiKey
+) {
   const headers = new Headers(extraHeaders);
-  headers.set("Authorization", `Bearer ${qtanglSandboxApiKey}`);
+  headers.set("Authorization", `Bearer ${apiKey}`);
   if (includeJson && !headers.has("Content-Type")) {
     headers.set("Content-Type", "application/json");
   }
@@ -28,12 +32,12 @@ export function getQtanglHeaders(extraHeaders?: HeadersInit, includeJson = true)
 
 export async function fetchQtanglJson<T>(
   path: string,
-  init?: RequestInit & { skipJsonContentType?: boolean }
+  init?: RequestInit & { skipJsonContentType?: boolean; apiKey?: string }
 ): Promise<T> {
-  const { skipJsonContentType = false, headers, ...rest } = init ?? {};
+  const { skipJsonContentType = false, headers, apiKey, ...rest } = init ?? {};
   const response = await fetch(`${qtanglApiBaseUrl}${path}`, {
     ...rest,
-    headers: getQtanglHeaders(headers, !skipJsonContentType),
+    headers: getQtanglHeaders(headers, !skipJsonContentType, apiKey ?? qtanglSandboxApiKey),
     cache: "no-store",
   });
 

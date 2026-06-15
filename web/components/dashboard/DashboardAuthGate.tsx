@@ -1,101 +1,85 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import Link from "next/link";
+import { useCallback, useEffect, useState } from "react";
 
 import Card from "@/components/ui/Card";
 import Eyebrow from "@/components/ui/Eyebrow";
-import { setStoredTenantApiKey } from "@/lib/tenant-api";
-
-type SessionInfo = {
-  email: string;
-  tenantId: string;
-  role: string;
-};
+import {
+  fetchDashboardSession,
+  legacyKeyClientEnabled,
+  type DashboardSession,
+  workosClientAuthEnabled,
+} from "@/lib/dashboard-bff";
 
 export default function DashboardAuthGate({
   children,
-  ssoConfigured,
   requireSso,
 }: {
   children: React.ReactNode;
-  ssoConfigured: boolean;
+  ssoConfigured?: boolean;
   requireSso: boolean;
 }) {
-  const [session, setSession] = useState<SessionInfo | null>(null);
+  const [session, setSession] = useState<DashboardSession | null>(null);
   const [checked, setChecked] = useState(false);
+  const workosEnabled = workosClientAuthEnabled();
+  const legacyEnabled = legacyKeyClientEnabled();
+
+  const refreshSession = useCallback(async () => {
+    if (!workosEnabled) {
+      const legacy = await fetch("/api/auth/session").then((r) => r.json());
+      if (legacy.authenticated && legacy.session) {
+        setSession(legacy.session as DashboardSession);
+      } else {
+        setSession(null);
+      }
+      return;
+    }
+    const payload = await fetchDashboardSession();
+    setSession(payload);
+  }, [workosEnabled]);
 
   useEffect(() => {
-    fetch("/api/auth/session")
-      .then((r) => r.json())
-      .then((payload) => {
-        if (payload.authenticated && payload.session) {
-          setSession(payload.session as SessionInfo);
-        }
-      })
-      .finally(() => setChecked(true));
-  }, []);
-
-  useEffect(() => {
-    if (!session) return;
-    fetch("/api/auth/provision-key")
-      .then((r) => r.json())
-      .then((payload) => {
-        if (payload.apiKey) {
-          setStoredTenantApiKey(payload.apiKey);
-          window.dispatchEvent(new Event("qtangl-api-key-updated"));
-        }
-      })
-      .catch(() => undefined);
-  }, [session]);
+    refreshSession().finally(() => setChecked(true));
+  }, [refreshSession]);
 
   if (!checked) {
     return <p className="text-sm text-[var(--color-gray-500)]">Checking session…</p>;
   }
 
-  if (requireSso && !session) {
+  const ssoRequired = requireSso || session?.authMode === "sso_required";
+
+  if (ssoRequired && !session && workosEnabled) {
     return (
       <Card tone="strong" className="rounded-[var(--radius-xl)]">
-        <Eyebrow>Sign in required</Eyebrow>
+        <Eyebrow>Enterprise SSO required</Eyebrow>
         <p className="mt-3 text-sm text-[var(--color-gray-300)]">
-          This deployment requires enterprise SSO for dashboard access. API keys remain available for automation
-          via the REST API.
+          This organization requires SSO for dashboard access. Automation API keys remain available via Settings
+          after an admin signs in.
         </p>
-        {ssoConfigured ? (
-          <Link
-            href="/api/auth/oidc/login"
-            className="mt-4 inline-block rounded-full bg-white px-5 py-2 text-sm font-medium text-black"
-          >
-            Sign in with SSO
-          </Link>
-        ) : (
-          <p className="mt-4 text-xs text-[var(--color-gray-500)]">
-            SSO is not configured. Set AUTH_OIDC_ISSUER, AUTH_OIDC_CLIENT_ID, and AUTH_OIDC_CLIENT_SECRET — see{" "}
-            <Link href="/docs/guides/sso-setup" className="text-white underline">
-              SSO setup guide
-            </Link>
-            .
-          </p>
-        )}
+        <a
+          href="/dashboard/login"
+          className="mt-4 inline-block rounded-full bg-white px-5 py-2 text-sm font-medium text-black"
+        >
+          Sign in with SSO
+        </a>
       </Card>
     );
   }
 
   return (
     <div className="space-y-4">
-      {ssoConfigured ? (
+      {workosEnabled || session ? (
         <Card tone="ghost" className="border border-[var(--border-subtle)]">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
               <Eyebrow>Dashboard session</Eyebrow>
               {session ? (
                 <p className="mt-2 text-sm text-[var(--color-gray-300)]">
-                  {session.email} · tenant {session.tenantId} · role {session.role}
+                  {session.email} · {session.tenantName ?? session.tenantId} · role {session.role}
                 </p>
               ) : (
                 <p className="mt-2 text-sm text-[var(--color-gray-400)]">
-                  <strong className="text-white">Two ways in:</strong> sign in with SSO (enterprise) or paste
-                  your tenant API key below (self-serve + automation). SSO auto-provisions a session key.
+                  Sign in to your workspace to access scans, schedules, and team settings.
                 </p>
               )}
             </div>
@@ -104,23 +88,44 @@ export default function DashboardAuthGate({
                 type="button"
                 className="rounded-full border border-[var(--border-strong)] px-4 py-2 text-xs text-white"
                 onClick={() => {
-                  fetch("/api/auth/session", { method: "DELETE" }).then(() => setSession(null));
+                  const signOut = workosEnabled
+                    ? () => fetch("/api/dashboard/me", { method: "DELETE" })
+                    : () => fetch("/api/auth/session", { method: "DELETE" });
+                  signOut().then(() => {
+                    setSession(null);
+                    window.location.reload();
+                  });
                 }}
               >
                 Sign out
               </button>
             ) : (
-              <Link
-                href="/api/auth/oidc/login"
+              <a
+                href="/dashboard/login"
                 className="rounded-full border border-[var(--border-strong)] bg-white px-4 py-2 text-xs font-medium text-black"
               >
-                Sign in with SSO
-              </Link>
+                Sign in
+              </a>
             )}
           </div>
         </Card>
       ) : null}
-      {children}
+      {!session && workosEnabled && !legacyEnabled ? (
+        <Card tone="strong" className="rounded-[var(--radius-xl)]">
+          <Eyebrow>Sign in required</Eyebrow>
+          <p className="mt-3 text-sm text-[var(--color-gray-300)]">
+            Connect your workspace with email magic link or enterprise SSO.
+          </p>
+          <a
+            href="/dashboard/login"
+            className="mt-4 inline-block rounded-full bg-white px-5 py-2 text-sm font-medium text-black"
+          >
+            Sign in to dashboard
+          </a>
+        </Card>
+      ) : (
+        children
+      )}
     </div>
   );
 }

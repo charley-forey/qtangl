@@ -10,18 +10,29 @@ from app.db.engine import db_session
 from app.db.models import TenantSubscription as SubscriptionRow
 
 TIER_DEFAULTS: dict[str, dict[str, Any]] = {
-    "free": {"maxSchedules": 0, "maxScansPerMonth": 5, "features": ["assess"]},
-    "monitor": {"maxSchedules": 10, "maxScansPerMonth": 100, "features": ["assess", "monitor"]},
+    "free": {"maxSchedules": 0, "maxScansPerMonth": 5, "maxApiKeys": 1, "maxTeamInvites": 0, "features": ["assess"]},
+    "monitor": {"maxSchedules": 10, "maxScansPerMonth": 100, "maxApiKeys": 5, "maxTeamInvites": 10, "features": ["assess", "monitor", "team"]},
     "convert": {
         "maxSchedules": 25,
         "maxScansPerMonth": 500,
-        "features": ["assess", "monitor", "convert", "integrations"],
+        "maxApiKeys": 10,
+        "maxTeamInvites": 25,
+        "features": ["assess", "monitor", "convert", "integrations", "team"],
     },
     "enterprise": {
         "maxSchedules": 100,
         "maxScansPerMonth": 5000,
-        "features": ["assess", "monitor", "convert", "integrations", "sso", "audit"],
+        "maxApiKeys": None,
+        "maxTeamInvites": None,
+        "features": ["assess", "monitor", "convert", "integrations", "sso", "audit", "team"],
     },
+}
+
+MAX_API_KEYS_BY_TIER: dict[str, int | None] = {
+    "free": 1,
+    "monitor": 5,
+    "convert": 10,
+    "enterprise": None,
 }
 
 
@@ -106,6 +117,96 @@ def check_schedule_quota(*, tenant_id: str) -> dict[str, Any] | None:
             "tier": ent.get("tier"),
             "limit": max_schedules,
             "used": active,
+            "upgradeUrl": "/pricing",
+        }
+    return None
+
+
+def check_sso_feature(*, tenant_id: str) -> dict[str, Any] | None:
+    ent = tenant_entitlements(tenant_id=tenant_id)
+    features = list(ent.get("features") or [])
+    if "sso" not in features:
+        return {
+            "code": "sso_tier_required",
+            "tier": ent.get("tier"),
+            "feature": "sso",
+            "upgradeUrl": "/pricing",
+        }
+    return None
+
+
+def check_team_invites_feature(*, tenant_id: str) -> dict[str, Any] | None:
+    ent = tenant_entitlements(tenant_id=tenant_id)
+    features = list(ent.get("features") or [])
+    if "team" not in features:
+        return {
+            "code": "team_tier_required",
+            "tier": ent.get("tier"),
+            "feature": "team",
+            "upgradeUrl": "/pricing",
+        }
+    return None
+
+
+def max_api_keys_for_tier(*, tenant_id: str) -> int | None:
+    ent = tenant_entitlements(tenant_id=tenant_id)
+    tier = str(ent.get("tier", "monitor"))
+    limit = ent.get("maxApiKeys")
+    if limit is not None:
+        return int(limit)
+    return MAX_API_KEYS_BY_TIER.get(tier)
+
+
+def check_api_key_quota(*, tenant_id: str) -> dict[str, Any] | None:
+    limit = max_api_keys_for_tier(tenant_id=tenant_id)
+    if limit is None:
+        return None
+    from app.db.models import ApiKey as ApiKeyRow
+
+    if not persistence_enabled():
+        return None
+    with db_session() as session:
+        active = (
+            session.query(ApiKeyRow)
+            .filter(ApiKeyRow.tenant_id == tenant_id, ApiKeyRow.revoked_at.is_(None))
+            .count()
+        )
+    if active >= limit:
+        ent = tenant_entitlements(tenant_id=tenant_id)
+        return {
+            "code": "api_key_quota_exceeded",
+            "tier": ent.get("tier"),
+            "limit": limit,
+            "used": active,
+            "upgradeUrl": "/pricing",
+        }
+    return None
+
+
+def check_team_invite_quota(*, tenant_id: str) -> dict[str, Any] | None:
+    ent = tenant_entitlements(tenant_id=tenant_id)
+    limit = ent.get("maxTeamInvites")
+    if limit is None:
+        return None
+    limit_int = int(limit)
+    if limit_int <= 0:
+        return check_team_invites_feature(tenant_id=tenant_id)
+    from app.db.models import TenantInvite as InviteRow
+
+    if not persistence_enabled():
+        return None
+    with db_session() as session:
+        pending = (
+            session.query(InviteRow)
+            .filter(InviteRow.tenant_id == tenant_id, InviteRow.status == "pending")
+            .count()
+        )
+    if pending >= limit_int:
+        return {
+            "code": "team_invite_quota_exceeded",
+            "tier": ent.get("tier"),
+            "limit": limit_int,
+            "used": pending,
             "upgradeUrl": "/pricing",
         }
     return None
@@ -206,3 +307,7 @@ def upsert_subscription(
             "maxSchedules": row.max_schedules,
             "maxScansPerMonth": row.max_scans_per_month,
         }
+
+
+def upsert_tenant_subscription(**kwargs: Any) -> dict[str, Any]:
+    return upsert_subscription(**kwargs)

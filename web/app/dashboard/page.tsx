@@ -3,7 +3,7 @@ import { Suspense } from "react";
 
 import DashboardAuthGate from "@/components/dashboard/DashboardAuthGate";
 import DashboardClient from "@/components/dashboard/DashboardClient";
-import { dashboardRequireSso, oidcConfigured } from "@/lib/auth/oidc";
+import { dashboardRequireSso } from "@/lib/auth/workos";
 import PageHero from "@/components/layout/PageHero";
 import PageShell from "@/components/layout/PageShell";
 import Section from "@/components/layout/Section";
@@ -24,7 +24,7 @@ export default function DashboardPage() {
       <PageHero
         eyebrow="Monitor + Convert"
         title="Your Q-Day command center"
-        description="Connect with your tenant API key to review scan history, drift diffs, readiness trends, scheduled monitoring, and remediation workflow."
+        description="Sign in to your workspace to review scan history, drift diffs, readiness trends, scheduled monitoring, and remediation workflow."
         actions={[
           { href: "/assess", label: "Run a scan first" },
           { href: "/access", label: "Request pilot", variant: "secondary" },
@@ -42,7 +42,7 @@ export default function DashboardPage() {
             Verify a report
           </Button>
         </div>
-        <DashboardAuthGate ssoConfigured={oidcConfigured()} requireSso={dashboardRequireSso()}>
+        <DashboardAuthGate requireSso={dashboardRequireSso()}>
           <Suspense fallback={<p className="text-sm text-[var(--color-gray-500)]">Loading dashboard…</p>}>
             <DashboardClient />
           </Suspense>

@@ -119,6 +119,17 @@ test.describe("Assess page", () => {
     await expect(page).toHaveURL(/\/assess\/mini/);
   });
 
+  test("public demo shows production customer footer", async ({ page }) => {
+    await page.goto("/assess");
+    await expect(page.getByText(/Production customers: check your welcome email/i)).toBeVisible();
+  });
+
+  test("assess start signup page renders", async ({ page }) => {
+    await page.goto("/assess/start");
+    await expect(page.getByRole("heading", { name: /authorized baseline/i })).toBeVisible();
+    await expect(page.getByRole("button", { name: /Create Assess workspace/i })).toBeVisible();
+  });
+
   test("no critical a11y violations post-scan", async ({ page }) => {
     await page.goto("/assess?scenario=bank-tls-inventory&autorun=1");
     await expect(page.getByRole("tab", { name: "Executive" })).toBeVisible({ timeout: 30_000 });

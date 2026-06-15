@@ -107,8 +107,11 @@ def provision_monitor_tenant(*, email: str, company: str) -> dict[str, Any]:
         with db_session() as session:
             if session.get(Tenant, tenant_id) is not None:
                 tenant_id = f"{base_id}-{uuid.uuid4().hex[:8]}"
-    tenant = create_tenant(tenant_id=tenant_id, name=company)
+    tenant = create_tenant(tenant_id=tenant_id, name=company, admin_email=email)
     key = issue_api_key(tenant_id=tenant["tenantId"], label="monitor-primary")
+    from app.billing.entitlements import upsert_tenant_subscription
+
+    upsert_tenant_subscription(tenant_id=tenant["tenantId"], tier="monitor")
     from app.billing.onboarding_tokens import create_onboarding_token
     from app.notifications.email import send_report_email
 
@@ -118,7 +121,23 @@ def provision_monitor_tenant(*, email: str, company: str) -> dict[str, Any]:
         api_key=key["apiKey"],
         email=email,
     )
-    retrieve_url = f"{base}/dashboard?onboarding={token_info['token']}"
+    onboarding_v2 = os.getenv("QTANGL_ONBOARDING_V2", "false").lower() in {"1", "true", "yes"}
+    retrieve_url = f"{base}/dashboard/login?onboarding={token_info['token']}"
+    assess_url = f"{base}/assess?onboarding={token_info['token']}&mode=production"
+    if onboarding_v2:
+        body_extra = (
+            "Your Monitor workspace is ready. Sign in with the secure link below (expires in 24 hours).\n\n"
+            f"Dashboard: {retrieve_url}\n"
+            f"Assess production mode: {assess_url}\n\n"
+            "Create automation API keys in Settings after your first login."
+        )
+    else:
+        body_extra = (
+            "Your Monitor workspace is ready. Open the secure link below once to retrieve your "
+            "tenant API key (expires in 24 hours). Store it in a password manager — we cannot resend it.\n\n"
+            f"Dashboard (recommended): {retrieve_url}\n"
+            f"Assess production mode: {assess_url}"
+        )
     send_report_email(
         to_email=email,
         scan_id="onboarding",
@@ -126,11 +145,7 @@ def provision_monitor_tenant(*, email: str, company: str) -> dict[str, Any]:
         report_url=retrieve_url,
         readiness_band="Monitor tier activated",
         subject_prefix="[Qtangl Welcome]",
-        body_extra=(
-            "Your Monitor workspace is ready. Open the secure link below once to retrieve your "
-            "tenant API key (expires in 24 hours). Store it in a password manager — we cannot resend it.\n\n"
-            f"{retrieve_url}"
-        ),
+        body_extra=body_extra,
     )
     return {"tenantId": tenant["tenantId"], "onboardingTokenExpiresAt": token_info["expiresAt"]}
 
@@ -297,3 +312,65 @@ def create_billing_portal_session(*, customer_id: str, return_url: str) -> dict[
             return {"ok": True, "portalUrl": session.get("url")}
     except Exception as exc:
         return {"ok": False, "reason": str(exc)}
+
+
+def provision_assess_tenant(*, email: str, company: str, domain: str | None = None) -> dict[str, Any]:
+    """Create free-tier Assess tenant with onboarding token (self-serve R2)."""
+    base_id = _slug_tenant_id(company)
+    tenant_id = base_id
+    from app.db.config import persistence_enabled
+    from app.db.engine import db_session
+    from app.db.models import Tenant
+
+    if persistence_enabled():
+        with db_session() as session:
+            if session.get(Tenant, tenant_id) is not None:
+                tenant_id = f"{base_id}-{uuid.uuid4().hex[:8]}"
+    tenant = create_tenant(tenant_id=tenant_id, name=company, admin_email=email)
+    key = issue_api_key(tenant_id=tenant["tenantId"], label="assess-primary")
+    from app.billing.entitlements import upsert_tenant_subscription
+    from app.billing.onboarding_tokens import create_onboarding_token
+    from app.notifications.email import send_report_email
+    from app.tenant.settings import set_tenant_scan_allowlist
+
+    upsert_tenant_subscription(tenant_id=tenant["tenantId"], tier="free")
+    if domain:
+        email_domain = email.split("@")[-1].lower()
+        normalized = domain.lower().strip()
+        if normalized == email_domain or normalized.endswith(f".{email_domain}"):
+            set_tenant_scan_allowlist(tenant_id=tenant["tenantId"], domains=[normalized])
+
+    base = os.environ.get("QTANGL_PUBLIC_URL", "https://www.qtangl.com")
+    token_info = create_onboarding_token(
+        tenant_id=tenant["tenantId"],
+        api_key=key["apiKey"],
+        email=email,
+    )
+    onboarding_v2 = os.getenv("QTANGL_ONBOARDING_V2", "false").lower() in {"1", "true", "yes"}
+    login_url = f"{base}/dashboard/login?onboarding={token_info['token']}"
+    assess_url = f"{base}/assess?onboarding={token_info['token']}&mode=production"
+    if onboarding_v2:
+        body_extra = (
+            "Your Assess workspace is ready. Sign in with the secure link below (expires in 24 hours).\n\n"
+            f"Sign in: {login_url}\n"
+            f"Assess production mode: {assess_url}"
+        )
+    else:
+        body_extra = (
+            "Your Assess workspace is ready. Open the secure link below once to retrieve your "
+            f"tenant API key (expires in 24 hours).\n\n{assess_url}"
+        )
+    send_report_email(
+        to_email=email,
+        scan_id="assess-signup",
+        target_domain=company,
+        report_url=login_url if onboarding_v2 else assess_url,
+        readiness_band="Assess free tier",
+        subject_prefix="[Qtangl Assess]",
+        body_extra=body_extra,
+    )
+    return {
+        "tenantId": tenant["tenantId"],
+        "onboardingTokenExpiresAt": token_info["expiresAt"],
+        "assessUrl": assess_url,
+    }

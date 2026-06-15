@@ -1,0 +1,50 @@
+"use client";
+
+import Card from "@/components/ui/Card";
+import Eyebrow from "@/components/ui/Eyebrow";
+import type { CryptoAsset, Scenario } from "@/lib/pqc";
+import { QtanglApiProvider } from "@/lib/qtangl-api-context";
+
+import QDayCommandCenter from "./QDayCommandCenter";
+
+type AssessRunnerPanelProps = {
+  initialInventory: CryptoAsset[];
+  initialScenarios: Scenario[];
+  backendConnected: boolean;
+  backendMessage: string | null;
+  apiKey: string;
+  useBff?: boolean;
+  onScanComplete?: (scanId: string) => void;
+};
+
+export default function AssessRunnerPanel({
+  initialInventory,
+  initialScenarios,
+  backendConnected,
+  backendMessage,
+  apiKey,
+  useBff = false,
+}: AssessRunnerPanelProps) {
+  return (
+    <QtanglApiProvider initialMode="production" initialTenantKey={apiKey} useBff={useBff}>
+      <Card tone="strong" className="rounded-[var(--radius-xl)] p-6">
+        <Eyebrow>Production baseline</Eyebrow>
+        <p className="mt-2 text-sm text-[var(--color-gray-400)]">
+          Run an authorized live scan or upload certificates — results save to your tenant history.
+        </p>
+        <div className="mt-6">
+          <QDayCommandCenter
+            initialInventory={initialInventory}
+            initialScenarios={initialScenarios}
+            backendConnected={backendConnected}
+            backendMessage={backendMessage}
+            apiBaseUrl=""
+            compact
+            basePath="/dashboard"
+            syncUrlEnabled={false}
+          />
+        </div>
+      </Card>
+    </QtanglApiProvider>
+  );
+}

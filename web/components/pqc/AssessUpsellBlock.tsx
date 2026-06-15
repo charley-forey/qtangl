@@ -18,6 +18,7 @@ const MONITOR_HREF = "/access?interest=Q-Day%20Monitor%20(annual)&source=assess-
 type AssessUpsellBlockProps = {
   scan: PqcScanResponse | null;
   onRunComparisonScan: () => void;
+  hidden?: boolean;
 };
 
 function resolveScanDiff(scan: PqcScanResponse | null): ScanDiff {
@@ -25,7 +26,8 @@ function resolveScanDiff(scan: PqcScanResponse | null): ScanDiff {
   return live?.previousScanId ? live : monitorPreviewDiff;
 }
 
-export default function AssessUpsellBlock({ scan, onRunComparisonScan }: AssessUpsellBlockProps) {
+export default function AssessUpsellBlock({ scan, onRunComparisonScan, hidden }: AssessUpsellBlockProps) {
+  if (hidden) return null;
   const diff = resolveScanDiff(scan);
   const usingPreview = !scan?.report?.scanDiff || !(scan.report.scanDiff as ScanDiff).previousScanId;
 

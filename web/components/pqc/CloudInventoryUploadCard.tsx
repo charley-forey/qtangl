@@ -12,9 +12,10 @@ type UploadPreview = {
 
 type CloudInventoryUploadCardProps = {
   onUploaded: (sessionId: string, preview?: UploadPreview) => void;
+  apiKey?: string;
 };
 
-export default function CloudInventoryUploadCard({ onUploaded }: CloudInventoryUploadCardProps) {
+export default function CloudInventoryUploadCard({ onUploaded, apiKey }: CloudInventoryUploadCardProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [dragging, setDragging] = useState(false);
   const [uploading, setUploading] = useState(false);
@@ -25,7 +26,7 @@ export default function CloudInventoryUploadCard({ onUploaded }: CloudInventoryU
       setUploading(true);
       setError(null);
       try {
-        const response = await uploadPqcBundle(file);
+        const response = await uploadPqcBundle(file, apiKey);
         onUploaded(response.sessionId, response.preview);
       } catch (uploadError) {
         setError(uploadError instanceof Error ? uploadError.message : "Upload failed.");
@@ -33,7 +34,7 @@ export default function CloudInventoryUploadCard({ onUploaded }: CloudInventoryU
         setUploading(false);
       }
     },
-    [onUploaded]
+    [onUploaded, apiKey]
   );
 
   async function onInputChange(event: React.ChangeEvent<HTMLInputElement>) {

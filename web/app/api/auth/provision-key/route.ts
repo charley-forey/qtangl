@@ -2,8 +2,8 @@ import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
 /**
- * Map SSO session tenant to a pre-provisioned API key (server-side only).
- * Set AUTH_OIDC_TENANT_API_KEYS='{"tenant-acme":"qtangl_..."}' in deploy env.
+ * @deprecated Use WorkOS session + /api/dashboard BFF. Env AUTH_OIDC_TENANT_API_KEYS is removed in onboarding v2.
+ * Kept for one release when QTANGL_DASHBOARD_AUTH_LEGACY_KEY=true.
  */
 export async function GET() {
   const cookieStore = await cookies();

@@ -91,6 +91,9 @@ const IntegrationSettings = dynamic(() => import("@/components/dashboard/Integra
 const ScheduleManager = dynamic(() => import("@/components/dashboard/ScheduleManager"), {
   loading: PanelFallback,
 });
+const AssessRunnerPanel = dynamic(() => import("@/components/pqc/AssessRunnerPanel"), {
+  loading: PanelFallback,
+});
 const DriftPortfolioPanel = dynamic(() => import("@/components/drift/DriftPortfolioPanel"), {
   loading: PanelFallback,
 });
@@ -107,7 +110,8 @@ const KmsInventoryPanel = dynamic(() => import("@/components/flip/KmsInventoryPa
 const FlipApprovalQueue = dynamic(() => import("@/components/flip/FlipApprovalQueue"), {
   loading: PanelFallback,
 });
-import type { CompliancePack, ComplianceSummary, CryptoAsset, PqcScanResponse } from "@/lib/pqc";
+import type { CompliancePack, ComplianceSummary, CryptoAsset, PqcScanResponse, Scenario } from "@/lib/pqc";
+import { getPqcInventory, getPqcScenarios } from "@/lib/pqc";
 import {
   fetchTenantJson,
   getStoredTenantApiKey,
@@ -117,8 +121,20 @@ import {
   type ScheduledScan,
   type TenantScanSummary,
 } from "@/lib/tenant-api";
+import {
+  dashboardReportUrl,
+  fetchDashboardJson,
+  fetchDashboardSession,
+  legacyKeyClientEnabled,
+  postDashboardJson,
+  workosClientAuthEnabled,
+  type DashboardSession,
+} from "@/lib/dashboard-bff";
 import { qtanglApiBaseUrl } from "@/lib/api";
-import { fetchDashboardBootstrap } from "@/lib/dashboard-data";
+import { fetchDashboardBootstrap, fetchDashboardBootstrapViaBff } from "@/lib/dashboard-transport";
+import ApiKeysPanel from "@/components/dashboard/ApiKeysPanel";
+import TeamSettingsPanel from "@/components/dashboard/TeamSettingsPanel";
+import TenantSwitcher from "@/components/dashboard/TenantSwitcher";
 import { formatUtcDateTime } from "@/lib/format";
 
 type TenantMe = {
@@ -147,6 +163,10 @@ export default function DashboardClient() {
   const [reportDrawerOpen, setReportDrawerOpen] = useState(false);
   const [reportDrawerScan, setReportDrawerScan] = useState<PqcScanResponse | null>(null);
   const [actionMessage, setActionMessage] = useState<string | null>(null);
+  const [showBaselineRunner, setShowBaselineRunner] = useState(true);
+  const [runnerInventory, setRunnerInventory] = useState<CryptoAsset[]>([]);
+  const [runnerScenarios, setRunnerScenarios] = useState<Scenario[]>([]);
+  const [runnerConnected, setRunnerConnected] = useState(false);
   const [expandedScanId, setExpandedScanId] = useState<string | null>(null);
   const [remediationScan, setRemediationScan] = useState<{
     scanId: string;
@@ -215,6 +235,9 @@ export default function DashboardClient() {
     removedCount?: number;
     changedCount?: number;
   } | null>(null);
+  const [bffMode, setBffMode] = useState(false);
+  const [dashboardSession, setDashboardSession] = useState<DashboardSession | null>(null);
+  const [ssoPortalUrl, setSsoPortalUrl] = useState<string | null>(null);
 
   useEffect(() => {
     const syncKey = () => {
@@ -229,11 +252,15 @@ export default function DashboardClient() {
     return () => window.removeEventListener("qtangl-api-key-updated", syncKey);
   }, []);
 
-  const loadDashboard = useCallback(async (key: string) => {
+  const loadDashboard = useCallback(async (key: string, viaBff = false) => {
     setLoading(true);
     setError(null);
+    const fetchJson = <T,>(path: string, init?: RequestInit) =>
+      viaBff ? fetchDashboardJson<T>(path, init) : fetchTenantJson<T>(path, key, init);
     try {
-      const bootstrap = await fetchDashboardBootstrap(key);
+      const bootstrap = viaBff
+        ? await fetchDashboardBootstrapViaBff()
+        : await fetchDashboardBootstrap(key);
       setMe({
         tenantId: bootstrap.me.tenantId,
         persistenceEnabled: bootstrap.me.persistenceEnabled,
@@ -245,56 +272,58 @@ export default function DashboardClient() {
       setCbomAggregate(bootstrap.cbomAggregate);
       setCbomConflicts(bootstrap.cbomConflicts);
       setCbomDrift(bootstrap.cbomDrift);
-      setSavedKey(key);
-      setStoredTenantApiKey(key);
+      if (viaBff) {
+        setBffMode(true);
+        setSavedKey("bff");
+      } else {
+        setSavedKey(key);
+        setStoredTenantApiKey(key);
+      }
       if (bootstrap.me.persistenceEnabled) {
         try {
-          const portfolio = await fetchTenantJson<{
+          const portfolio = await fetchJson<{
             rollup: { overallReadiness: number; byBusinessUnit: Record<string, number> };
-          }>("/tenant/portfolio", key);
+          }>("/tenant/portfolio");
           setPortfolioRollup(portfolio.rollup);
         } catch {
           setPortfolioRollup(null);
         }
         try {
-          const schedulesPayload = await fetchTenantJson<{ schedules: ScheduledScan[] }>(
-            "/tenant/schedules",
-            key
-          );
+          const schedulesPayload = await fetchJson<{ schedules: ScheduledScan[] }>("/tenant/schedules");
           setSchedules(schedulesPayload.schedules);
         } catch {
           setSchedules([]);
         }
         try {
-          const exportPayload = await fetchTenantJson<{
+          const exportPayload = await fetchJson<{
             remediationVelocity: { closedCount: number; openCount: number; completionRatePct: number | null };
-          }>("/tenant/export", key);
+          }>("/tenant/export");
           setRemediationVelocity(exportPayload.remediationVelocity);
         } catch {
           setRemediationVelocity(null);
         }
         try {
-          const sloPayload = await fetchTenantJson<{
+          const sloPayload = await fetchJson<{
             metrics: {
               scanSuccessRatePct: number;
               reportAvailabilityPct: number;
               sampleSize: number;
               targetSloPct: number;
             };
-          }>("/tenant/slo", key);
+          }>("/tenant/slo");
           setSloMetrics(sloPayload.metrics);
         } catch {
           setSloMetrics(null);
         }
         try {
-          const ccPayload = await fetchTenantJson<{
+          const ccPayload = await fetchJson<{
             weeklyDigest: { headline: string; wins: string[]; risks: string[]; nextWeekFocus: string[] };
             commandCenter: {
               businessUnits: Record<string, number>;
               businessUnitDeltas?: Record<string, number | null>;
               highRiskTargets: Array<{ target: string; readinessScore: number }>;
             };
-          }>("/tenant/portfolio/command-center", key);
+          }>("/tenant/portfolio/command-center");
           setWeeklyDigest(ccPayload.weeklyDigest);
           const cc = ccPayload.commandCenter;
           setCommandCenter({
@@ -306,9 +335,8 @@ export default function DashboardClient() {
           setWeeklyDigest(null);
         }
         try {
-          const intPayload = await fetchTenantJson<{ integrations: Array<{ provider: string; configured: boolean }> }>(
-            "/tenant/integrations",
-            key
+          const intPayload = await fetchJson<{ integrations: Array<{ provider: string; configured: boolean }> }>(
+            "/tenant/integrations"
           );
           setJiraConfigured(intPayload.integrations.some((row) => row.provider === "jira" && row.configured));
         } catch {
@@ -318,7 +346,7 @@ export default function DashboardClient() {
       const latestDone = bootstrap.scans.find((scan) => scan.status === "done");
       if (latestDone) {
         try {
-          const detail = await fetchTenantJson<{
+          const detail = await fetchJson<{
             report?: {
               remediationBacklog?: Array<{ id: string; title: string; severity: string }>;
               scanDiff?: ScanDiff;
@@ -326,7 +354,7 @@ export default function DashboardClient() {
               complianceSummary?: ComplianceSummary;
             };
             remediationStatus?: Array<{ remediationId: string; status: string; owner?: string | null }>;
-          }>(`/tenant/scans/${latestDone.scanId}`, key);
+          }>(`/tenant/scans/${latestDone.scanId}`);
           if (detail.report?.compliancePack || detail.report?.complianceSummary) {
             setCompliance({
               pack: detail.report?.compliancePack,
@@ -357,13 +385,9 @@ export default function DashboardClient() {
           setRemediationScan(null);
         }
         try {
-          const forecast = await fetchTenantJson<{ projected?: number; current?: number }>(
-            "/tenant/analytics/forecast",
-            key
-          );
-          const anomaly = await fetchTenantJson<{ alerts: Array<{ rule: string; message: string }> }>(
-            "/tenant/analytics/anomaly",
-            key
+          const forecast = await fetchJson<{ projected?: number; current?: number }>("/tenant/analytics/forecast");
+          const anomaly = await fetchJson<{ alerts: Array<{ rule: string; message: string }> }>(
+            "/tenant/analytics/anomaly"
           );
           setAnalytics({ forecast, anomalyAlerts: anomaly.alerts ?? [] });
         } catch {
@@ -378,6 +402,61 @@ export default function DashboardClient() {
       setLoading(false);
     }
   }, []);
+
+  const reloadDashboard = useCallback(() => {
+    if (bffMode) {
+      return loadDashboard("bff", true);
+    }
+    if (savedKey && savedKey !== "bff") {
+      return loadDashboard(savedKey);
+    }
+    return Promise.resolve();
+  }, [bffMode, loadDashboard, savedKey]);
+
+  const tenantFetch = useCallback(
+    async <T,>(path: string, init?: RequestInit): Promise<T> => {
+      if (bffMode) {
+        return fetchDashboardJson<T>(path, init);
+      }
+      if (!savedKey || savedKey === "bff") {
+        throw new Error("Connect your workspace or sign in.");
+      }
+      return fetchTenantJson<T>(path, savedKey, init);
+    },
+    [bffMode, savedKey]
+  );
+
+  const reportUrlForScan = useCallback(
+    (scanId: string, format: "pdf" | "json" | "bundle" | "executive" | "board" | "auditor" = "pdf") => {
+      if (bffMode) {
+        return dashboardReportUrl(scanId, format);
+      }
+      if (!savedKey || savedKey === "bff") {
+        return "#";
+      }
+      return tenantReportUrl(scanId, savedKey, format);
+    },
+    [bffMode, savedKey]
+  );
+
+  useEffect(() => {
+    if (!workosClientAuthEnabled()) {
+      return;
+    }
+    let cancelled = false;
+    fetchDashboardSession()
+      .then((session) => {
+        if (cancelled || !session) {
+          return;
+        }
+        setDashboardSession(session);
+        return loadDashboard("bff", true);
+      })
+      .catch(() => undefined);
+    return () => {
+      cancelled = true;
+    };
+  }, [loadDashboard]);
 
   useEffect(() => {
     if (!onboardingToken) {
@@ -394,14 +473,21 @@ export default function DashboardClient() {
         if (!response.ok) {
           throw new Error("Onboarding link invalid, expired, or already used.");
         }
-        const payload = (await response.json()) as { apiKey?: string };
-        if (cancelled || !payload.apiKey) {
+        const payload = (await response.json()) as { apiKey?: string; loginUrl?: string };
+        if (cancelled) {
+          return;
+        }
+        if (payload.loginUrl) {
+          window.location.href = payload.loginUrl;
+          return;
+        }
+        if (!payload.apiKey) {
           return;
         }
         setStoredTenantApiKey(payload.apiKey);
         setApiKey(payload.apiKey);
         window.dispatchEvent(new Event("qtangl-api-key-updated"));
-        setActionMessage("Monitor API key retrieved. Connecting dashboard…");
+        setActionMessage("Production workspace ready. Run your authorized baseline below.");
         await loadDashboard(payload.apiKey);
         const url = new URL(window.location.href);
         url.searchParams.delete("onboarding");
@@ -421,6 +507,29 @@ export default function DashboardClient() {
       cancelled = true;
     };
   }, [onboardingToken, loadDashboard]);
+
+  useEffect(() => {
+    if (!savedKey) return;
+    let cancelled = false;
+    async function loadRunnerBootstrap() {
+      try {
+        const [inv, sc] = await Promise.all([
+          getPqcInventory(bffMode ? "bff" : savedKey ?? undefined),
+          getPqcScenarios(bffMode ? "bff" : savedKey ?? undefined),
+        ]);
+        if (cancelled) return;
+        setRunnerInventory(inv.inventory);
+        setRunnerScenarios(sc.scenarios);
+        setRunnerConnected(true);
+      } catch {
+        if (!cancelled) setRunnerConnected(false);
+      }
+    }
+    void loadRunnerBootstrap();
+    return () => {
+      cancelled = true;
+    };
+  }, [savedKey]);
 
   const apiKeyCard = (
     <Card tone="strong" className="rounded-[var(--radius-xl)]" id="connect-key">
@@ -463,7 +572,7 @@ export default function DashboardClient() {
   const dashboard = (
     <div className="space-y-8">
       {!me ? <DashboardOnboarding /> : null}
-      {!me ? apiKeyCard : null}
+      {!me && legacyKeyClientEnabled() ? apiKeyCard : null}
 
       {error ? (
         <Card tone="ghost" className="border border-red-500/40 text-red-200">
@@ -473,6 +582,12 @@ export default function DashboardClient() {
 
       {me ? (
         <>
+          {dashboardSession ? (
+            <TenantSwitcher
+              session={dashboardSession}
+              onSwitched={(next) => setDashboardSession(next)}
+            />
+          ) : null}
           {latestScan ? (
             <DashboardSection title="Readiness">
               <Card tone="feature" size="lg" className="rounded-[var(--radius-feature)]">
@@ -558,6 +673,47 @@ export default function DashboardClient() {
             </Card>
             {apiKeyCard}
           </DashboardSection>
+
+          {savedKey && showBaselineRunner && me.role !== "viewer" ? (
+            <DashboardSection title="Run baseline assessment">
+              <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
+                <p className="text-sm text-[var(--color-gray-400)]">
+                  Run an authorized production baseline without leaving your workspace.
+                </p>
+                <button
+                  type="button"
+                  className="text-xs text-[var(--color-gray-500)] underline"
+                  onClick={() => setShowBaselineRunner(false)}
+                >
+                  Hide runner
+                </button>
+              </div>
+              {runnerConnected && me.role !== "viewer" ? (
+                <AssessRunnerPanel
+                  initialInventory={runnerInventory}
+                  initialScenarios={runnerScenarios}
+                  backendConnected={runnerConnected}
+                  backendMessage={null}
+                  apiKey={bffMode ? "bff" : savedKey}
+                  useBff={bffMode}
+                />
+              ) : (
+                <Card tone="ghost" className="text-sm text-[var(--color-gray-400)]">
+                  Loading assess runner…
+                </Card>
+              )}
+            </DashboardSection>
+          ) : null}
+
+          {!showBaselineRunner && savedKey ? (
+            <button
+              type="button"
+              className="text-sm text-white underline"
+              onClick={() => setShowBaselineRunner(true)}
+            >
+              Run baseline assessment
+            </button>
+          ) : null}
 
           <DashboardSection title="Remediation">
             {savedKey && remediationScan ? (
@@ -645,7 +801,7 @@ export default function DashboardClient() {
                             {scan.status === "done" ? (
                               <div className="flex flex-wrap gap-2">
                                 <a
-                                  href={tenantReportUrl(scan.scanId, savedKey, "pdf")}
+                                  href={reportUrlForScan(scan.scanId, "pdf")}
                                   className="text-white underline underline-offset-4"
                                   target="_blank"
                                   rel="noreferrer"
@@ -653,7 +809,7 @@ export default function DashboardClient() {
                                   PDF
                                 </a>
                                 <a
-                                  href={tenantReportUrl(scan.scanId, savedKey, "bundle")}
+                                  href={reportUrlForScan(scan.scanId, "bundle")}
                                   className="text-white underline underline-offset-4"
                                   target="_blank"
                                   rel="noreferrer"
@@ -661,7 +817,7 @@ export default function DashboardClient() {
                                   ZIP
                                 </a>
                                 <a
-                                  href={tenantReportUrl(scan.scanId, savedKey, "board")}
+                                  href={reportUrlForScan(scan.scanId, "board")}
                                   className="text-white underline underline-offset-4"
                                   target="_blank"
                                   rel="noreferrer"
@@ -669,7 +825,7 @@ export default function DashboardClient() {
                                   Board
                                 </a>
                                 <a
-                                  href={tenantReportUrl(scan.scanId, savedKey, "auditor")}
+                                  href={reportUrlForScan(scan.scanId, "auditor")}
                                   className="text-white underline underline-offset-4"
                                   target="_blank"
                                   rel="noreferrer"
@@ -681,7 +837,7 @@ export default function DashboardClient() {
                                   className="text-white underline underline-offset-4"
                                   onClick={async () => {
                                     try {
-                                      const detail = await fetchTenantJson<{
+                                      const detail = await tenantFetch<{
                                         remediationBacklog: Array<{ id: string; title: string; severity: string }>;
                                         remediationStatus: Array<{
                                           remediationId: string;
@@ -689,7 +845,7 @@ export default function DashboardClient() {
                                           owner?: string | null;
                                         }>;
                                         report?: { scanDiff?: ScanDiff };
-                                      }>(`/tenant/scans/${scan.scanId}`, savedKey);
+                                      }>(`/tenant/scans/${scan.scanId}`);
                                       setExpandedScanId(scan.scanId);
                                       setScanDiff(detail.report?.scanDiff ?? null);
                                       setRemediationScan({
@@ -711,9 +867,8 @@ export default function DashboardClient() {
                                   className="text-white underline underline-offset-4"
                                   onClick={async () => {
                                     try {
-                                      const detail = await fetchTenantJson<{ report?: { scanDiff?: ScanDiff } }>(
-                                        `/tenant/scans/${scan.scanId}`,
-                                        savedKey
+                                      const detail = await tenantFetch<{ report?: { scanDiff?: ScanDiff } }>(
+                                        `/tenant/scans/${scan.scanId}`
                                       );
                                       setScanDiff(detail.report?.scanDiff ?? null);
                                       setActionMessage(
@@ -735,9 +890,8 @@ export default function DashboardClient() {
                                   className="text-white underline underline-offset-4"
                                   onClick={async () => {
                                     try {
-                                      const detail = await fetchTenantJson<PqcScanResponse>(
-                                        `/tenant/scans/${scan.scanId}`,
-                                        savedKey
+                                      const detail = await tenantFetch<PqcScanResponse>(
+                                        `/tenant/scans/${scan.scanId}`
                                       );
                                       setReportDrawerScan(detail);
                                       setReportDrawerOpen(true);
@@ -970,7 +1124,7 @@ export default function DashboardClient() {
                             businessUnit: portfolioUnit || "default",
                           });
                           setActionMessage("Portfolio target added.");
-                          await loadDashboard(savedKey);
+                          await reloadDashboard();
                         } catch (portfolioError) {
                           setActionMessage(
                             portfolioError instanceof Error ? portfolioError.message : "Portfolio update failed."
@@ -1007,6 +1161,39 @@ export default function DashboardClient() {
                   />
                 </div>
               </Card>
+            ) : null}
+
+            {savedKey && me.persistenceEnabled && me.role === "admin" ? (
+              <>
+                <TeamSettingsPanel role={me.role} />
+                <ApiKeysPanel role={me.role} />
+                <Card tone="panel">
+                  <Eyebrow>Enterprise SSO</Eyebrow>
+                  <p className="mt-2 text-sm text-[var(--color-gray-400)]">
+                    Configure SAML/OIDC via the WorkOS Admin Portal (enterprise tier).
+                  </p>
+                  <button
+                    type="button"
+                    className="mt-3 rounded-full bg-white px-4 py-2 text-xs font-medium text-black"
+                    onClick={async () => {
+                      try {
+                        const payload = await postDashboardJson<{ portalUrl: string }>("/tenant/sso/portal-link", {
+                          returnUrl: `${window.location.origin}/dashboard`,
+                        });
+                        setSsoPortalUrl(payload.portalUrl);
+                        window.open(payload.portalUrl, "_blank", "noopener,noreferrer");
+                      } catch (exc) {
+                        setActionMessage(exc instanceof Error ? exc.message : "SSO portal unavailable.");
+                      }
+                    }}
+                  >
+                    Configure SSO
+                  </button>
+                  {ssoPortalUrl ? (
+                    <p className="mt-2 text-xs text-[var(--color-gray-500)]">Portal opened in a new tab.</p>
+                  ) : null}
+                </Card>
+              </>
             ) : null}
 
             {savedKey && me.persistenceEnabled && me.role === "admin" ? (
@@ -1109,7 +1296,7 @@ export default function DashboardClient() {
                 <div className="mt-4">
                   <ScheduleManager
                     schedules={schedules}
-                    onRefresh={() => loadDashboard(savedKey)}
+                    onRefresh={() => reloadDashboard()}
                     onMessage={setActionMessage}
                   />
                 </div>
@@ -1203,7 +1390,7 @@ export default function DashboardClient() {
                     apiKey={savedKey}
                     onImported={() => {
                       if (savedKey) {
-                        void loadDashboard(savedKey);
+                        void reloadDashboard();
                       }
                     }}
                   />

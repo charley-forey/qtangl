@@ -1,11 +1,13 @@
 "use client";
 
 import Button from "@/components/ui/Button";
-import { WIZARD_STEPS } from "@/lib/assess-config";
+import type { AssessApiMode } from "@/lib/qtangl-api-context";
+import { PUBLIC_DEMO_LIVE_HOSTS, WIZARD_STEPS } from "@/lib/assess-config";
 import type { Scenario } from "@/lib/pqc";
 import { trackEvent } from "@/lib/analytics";
 
 import AssessDiscoveryScope from "./AssessDiscoveryScope";
+import AuthorizedDomainsPanel from "./AuthorizedDomainsPanel";
 import CloudInventoryUploadCard from "./CloudInventoryUploadCard";
 import DemoGuideStrip from "./DemoGuideStrip";
 import ScanLog from "./ScanLog";
@@ -37,6 +39,11 @@ type AssessWizardProps = {
   onRunScan: () => void;
   collapsed: boolean;
   onExpand: () => void;
+  assessMode?: AssessApiMode;
+  industry?: string;
+  onIndustryChange?: (value: string) => void;
+  authorizedDomains?: string[];
+  uploadApiKey?: string;
 };
 
 export default function AssessWizard({
@@ -62,7 +69,20 @@ export default function AssessWizard({
   onRunScan,
   collapsed,
   onExpand,
+  assessMode = "demo",
+  industry = "financial",
+  onIndustryChange,
+  authorizedDomains = [],
+  uploadApiKey,
 }: AssessWizardProps) {
+  const isProduction = assessMode === "production";
+  const wizardSteps = isProduction
+    ? [
+        { id: 1, label: "Upload or domain" },
+        { id: 2, label: "Scope" },
+        { id: 3, label: "Run" },
+      ]
+    : WIZARD_STEPS;
   if (collapsed) {
     return (
       <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-4">
@@ -78,9 +98,9 @@ export default function AssessWizard({
 
   return (
     <div className="space-y-6 pqc-print-hide">
-      <DemoGuideStrip />
+      {!isProduction ? <DemoGuideStrip /> : null}
       <div className="flex flex-wrap gap-2">
-        {WIZARD_STEPS.map((step) => (
+        {wizardSteps.map((step) => (
           <button
             key={step.id}
             type="button"
@@ -96,7 +116,77 @@ export default function AssessWizard({
         ))}
       </div>
 
-      {wizardStep === 1 && (
+      {isProduction && wizardStep === 1 && (
+        <div className="space-y-4">
+          <p className="text-sm text-[var(--color-gray-400)]">
+            Upload certificates for air-gapped baselines, or select an authorized domain for live scan.
+          </p>
+          <CloudInventoryUploadCard
+            apiKey={uploadApiKey}
+            onUploaded={(sessionId) => {
+              onBundleUploaded(sessionId);
+              trackEvent("pqc_bundle_uploaded", { sessionId, assessMode: "production" });
+            }}
+          />
+          <AuthorizedDomainsPanel
+            domains={authorizedDomains}
+            selectedDomain={customDomain}
+            onSelectDomain={onCustomDomainChange}
+            industry={industry}
+            onIndustryChange={onIndustryChange ?? (() => {})}
+          />
+          <div className="flex justify-end">
+            <Button onClick={() => onWizardStep(2)}>Next: Scope</Button>
+          </div>
+        </div>
+      )}
+
+      {isProduction && wizardStep === 2 && (
+        <div className="space-y-4">
+          <AssessDiscoveryScope />
+          <div className="flex justify-between gap-3">
+            <Button variant="secondary" onClick={() => onWizardStep(1)}>
+              Back
+            </Button>
+            <Button onClick={() => onWizardStep(3)}>Next: Run</Button>
+          </div>
+        </div>
+      )}
+
+      {isProduction && wizardStep === 3 && (
+        <div className="space-y-4">
+          <div className="rounded-lg border border-[var(--color-border)] bg-black/20 p-4 text-sm text-[var(--color-gray-300)]">
+            <p>
+              <span className="text-white">Industry:</span> {industry}
+            </p>
+            <p className="mt-2">
+              <span className="text-white">Target:</span>{" "}
+              {customDomain || (authorizedDomains[0] ?? "Certificate bundle upload")}
+            </p>
+            <p className="mt-2">
+              <span className="text-white">Mode:</span> Production baseline
+            </p>
+          </div>
+          {isScanning && (
+            <div className="rounded-lg border border-[var(--color-border)] p-4">
+              <p className="text-sm text-white">{scanProgress ?? "Scanning…"}</p>
+              <div className="mt-3">
+                <ScanLog events={timeline as never} isRunning={isScanning} />
+              </div>
+            </div>
+          )}
+          <div className="flex flex-wrap justify-between gap-3">
+            <Button variant="secondary" onClick={() => onWizardStep(2)}>
+              Back
+            </Button>
+            <Button onClick={onRunScan} disabled={isScanning}>
+              {isScanning ? (scanProgress ?? "Scanning…") : "Run production baseline"}
+            </Button>
+          </div>
+        </div>
+      )}
+
+      {!isProduction && wizardStep === 1 && (
         <div className="space-y-4">
           <p className="text-sm text-[var(--color-gray-400)]">Pick a regulated scenario or industry baseline.</p>
           <ScenarioPicker
@@ -113,7 +203,7 @@ export default function AssessWizard({
         </div>
       )}
 
-      {wizardStep === 2 && (
+      {!isProduction && wizardStep === 2 && (
         <div className="space-y-4">
           <ScanTargetCard
             target={activeScenario.target}
@@ -124,12 +214,8 @@ export default function AssessWizard({
           />
           {!useFixture && (
             <p className="rounded-lg border border-amber-500/30 bg-amber-500/10 p-3 text-xs text-amber-100">
-              Live scan connects to real endpoints. Confirm you are authorized to scan the target domain.
-              See our{" "}
-              <a href="/terms" className="underline">
-                Terms
-              </a>{" "}
-              for acceptable use.
+              Live demo scans are limited to approved targets ({[...PUBLIC_DEMO_LIVE_HOSTS].join(", ")}).
+              Use fixture mode for the full scenario demo.
             </p>
           )}
           <div className="flex justify-between gap-3">
@@ -141,10 +227,11 @@ export default function AssessWizard({
         </div>
       )}
 
-      {wizardStep === 3 && (
+      {!isProduction && wizardStep === 3 && (
         <div className="space-y-4">
           <AssessDiscoveryScope />
           <CloudInventoryUploadCard
+            apiKey={uploadApiKey}
             onUploaded={(sessionId) => {
               onBundleUploaded(sessionId);
               trackEvent("pqc_bundle_uploaded", { sessionId });
@@ -159,7 +246,7 @@ export default function AssessWizard({
         </div>
       )}
 
-      {wizardStep === 4 && (
+      {!isProduction && wizardStep === 4 && (
         <div className="space-y-4">
           <div className="rounded-lg border border-[var(--color-border)] bg-black/20 p-4 text-sm text-[var(--color-gray-300)]">
             <p>
@@ -194,7 +281,7 @@ export default function AssessWizard({
                 />
                 Lite scan (subset of findings)
               </label>
-              <BundleUploader onUploaded={onBundleUploaded} />
+              <BundleUploader apiKey={uploadApiKey} onUploaded={onBundleUploaded} />
             </div>
           </PqcCollapsibleSection>
           {isScanning && (

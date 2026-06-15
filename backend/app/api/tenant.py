@@ -40,7 +40,7 @@ router = APIRouter(prefix="/tenant", tags=["tenant"])
 
 
 class ScheduleCreateRequest(BaseModel):
-    scenarioId: str = Field(default="bank-tls-inventory")
+    scenarioId: str = Field(default="production-baseline")
     target: str | None = None
     cadenceHours: int = Field(default=168, ge=1, le=8760)
     notifyEmail: str | None = None
@@ -58,6 +58,11 @@ class TenantSettingsRequest(BaseModel):
     evidenceRetentionMonths: int | None = Field(default=None, ge=1, le=120)
     benchmarkOptIn: bool | None = None
     industry: str | None = None
+
+
+class AuthorizedDomainsRequest(BaseModel):
+    domains: list[str] = Field(default_factory=list, max_length=50)
+    attestation: str = Field(min_length=10, max_length=4000)
 
 
 class SchedulePatchRequest(BaseModel):
@@ -139,11 +144,27 @@ class ShareLinkRequest(BaseModel):
 @router.get("/me")
 def tenant_me(auth: AuthContext = Depends(require_auth_readonly)) -> dict:
     from app.billing.entitlements import tenant_entitlements
+    from app.db.engine import db_session
+    from app.db.models import Tenant
+
+    auth_mode = "magic_link"
+    tenant_name = auth.tenant_id
+    if persistence_enabled():
+        with db_session() as session:
+            tenant = session.get(Tenant, auth.tenant_id)
+            if tenant is not None:
+                auth_mode = tenant.auth_mode
+                tenant_name = tenant.name
 
     return {
         "status": "success",
         "tenantId": auth.tenant_id,
+        "tenantName": tenant_name,
         "role": auth.role,
+        "userId": auth.user_id,
+        "email": auth.email,
+        "authMethod": auth.auth_method,
+        "authMode": auth_mode,
         "persistenceEnabled": persistence_enabled(),
         "schedulerEnabled": scheduler_enabled() and redis_enabled(),
         "entitlements": tenant_entitlements(tenant_id=auth.tenant_id),
@@ -418,6 +439,31 @@ def tenant_settings_put(
     saved = upsert_tenant_settings(tenant_id=auth.tenant_id, settings=current)
     log_action(tenant_id=auth.tenant_id, action="settings.update", detail=updates)
     return {"status": "success", "settings": saved}
+
+
+@router.get("/authorized-domains")
+def tenant_authorized_domains_get(auth: AuthContext = Depends(require_auth_readonly)) -> dict:
+    from app.tenant.settings import get_tenant_scan_allowlist
+
+    domains = get_tenant_scan_allowlist(tenant_id=auth.tenant_id)
+    return {"status": "success", "domains": domains, "tenantId": auth.tenant_id}
+
+
+@router.post("/authorized-domains")
+def tenant_authorized_domains_post(
+    body: AuthorizedDomainsRequest,
+    auth: AuthContext = Depends(require_auth_admin),
+) -> dict:
+    from app.tenant.settings import set_tenant_scan_allowlist
+
+    domains = set_tenant_scan_allowlist(tenant_id=auth.tenant_id, domains=body.domains)
+    log_action(
+        tenant_id=auth.tenant_id,
+        action="authorized_domains.update",
+        actor=auth.role,
+        detail={"domains": domains, "attestation": body.attestation[:500]},
+    )
+    return {"status": "success", "domains": domains, "tenantId": auth.tenant_id}
 
 
 @router.get("/audit")
@@ -1250,3 +1296,215 @@ def tenant_test_clm(clm_provider: str, auth: AuthContext = Depends(require_auth)
     result = pull_clm(clm_provider.lower(), **config)
     ok = result.get("status") in {"ok", "stub"}
     return {"status": "success", "ok": ok, "previewCount": result.get("count", 0), "message": result.get("message")}
+
+
+class ApiKeyCreateRequest(BaseModel):
+    label: str = Field(default="automation", max_length=64)
+    role: str = Field(default="operator", pattern="^(admin|operator|viewer)$")
+
+
+class TeamInviteRequest(BaseModel):
+    email: str = Field(min_length=3, max_length=320)
+    role: str = Field(default="operator", pattern="^(admin|operator|viewer)$")
+
+
+class SsoPortalRequest(BaseModel):
+    returnUrl: str = Field(min_length=8, max_length=2048)
+
+
+@router.get("/api-keys")
+def tenant_list_api_keys(auth: AuthContext = Depends(require_auth_admin)) -> dict:
+    from app.tenants.service import list_tenant_keys
+
+    return {"status": "success", "keys": list_tenant_keys(tenant_id=auth.tenant_id)}
+
+
+@router.post("/api-keys")
+def tenant_create_api_key(
+    body: ApiKeyCreateRequest,
+    auth: AuthContext = Depends(require_auth_admin),
+) -> dict:
+    from app.billing.entitlements import check_api_key_quota
+    from app.tenants.service import issue_api_key
+
+    blocked = check_api_key_quota(tenant_id=auth.tenant_id)
+    if blocked:
+        raise HTTPException(status_code=status.HTTP_402_PAYMENT_REQUIRED, detail=blocked)
+    key = issue_api_key(
+        tenant_id=auth.tenant_id,
+        label=body.label,
+        role=body.role,
+        created_by_user_id=auth.user_id,
+    )
+    log_action(
+        tenant_id=auth.tenant_id,
+        action="api_key.created",
+        actor=auth.email or auth.user_id or "admin",
+        resource_id=key["keyId"],
+        detail={"label": body.label, "role": body.role, "authMethod": auth.auth_method},
+    )
+    return {"status": "success", **key}
+
+
+@router.delete("/api-keys/{key_id}")
+def tenant_revoke_api_key(key_id: str, auth: AuthContext = Depends(require_auth_admin)) -> dict:
+    from app.tenants.service import revoke_api_key
+
+    try:
+        result = revoke_api_key(key_id=key_id)
+    except ValueError as exc:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(exc)) from exc
+    if result["tenantId"] != auth.tenant_id:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Key belongs to another tenant.")
+    log_action(
+        tenant_id=auth.tenant_id,
+        action="api_key.revoked",
+        actor=auth.email or auth.user_id or "admin",
+        resource_id=key_id,
+        detail={"authMethod": auth.auth_method},
+    )
+    return {"status": "success", **result}
+
+
+@router.get("/members")
+def tenant_list_members(auth: AuthContext = Depends(require_auth_admin)) -> dict:
+    from app.db.engine import db_session
+    from app.db.models import TenantMembership, User
+
+    if not persistence_enabled():
+        return {"status": "success", "members": []}
+    with db_session() as session:
+        rows = session.query(TenantMembership).filter(TenantMembership.tenant_id == auth.tenant_id).all()
+        members = []
+        for row in rows:
+            user = session.get(User, row.user_id)
+            members.append(
+                {
+                    "membershipId": row.id,
+                    "userId": row.user_id,
+                    "email": user.email if user else None,
+                    "name": user.name if user else None,
+                    "role": row.role,
+                    "joinedAt": row.created_at.isoformat(),
+                }
+            )
+    return {"status": "success", "members": members}
+
+
+@router.delete("/members/{membership_id}")
+def tenant_remove_member(membership_id: str, auth: AuthContext = Depends(require_auth_admin)) -> dict:
+    from app.db.engine import db_session
+    from app.db.models import TenantMembership
+    from app.auth_workos.session import revoke_session_keys_for_user
+
+    if not persistence_enabled():
+        raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail="Database unavailable.")
+    with db_session() as session:
+        row = session.get(TenantMembership, membership_id)
+        if row is None or row.tenant_id != auth.tenant_id:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Membership not found.")
+        if row.user_id == auth.user_id:
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Cannot remove yourself.")
+        payload = {"membershipId": row.id, "userId": row.user_id}
+        session.delete(row)
+    revoke_session_keys_for_user(tenant_id=auth.tenant_id, user_id=payload["userId"])
+    log_action(
+        tenant_id=auth.tenant_id,
+        action="member.removed",
+        actor=auth.email or auth.user_id or "admin",
+        resource_id=membership_id,
+        detail=payload,
+    )
+    return {"status": "success", **payload}
+
+
+@router.get("/invites")
+def tenant_list_invites(auth: AuthContext = Depends(require_auth_admin)) -> dict:
+    from app.db.engine import db_session
+    from app.db.models import TenantInvite
+
+    if not persistence_enabled():
+        return {"status": "success", "invites": []}
+    with db_session() as session:
+        rows = session.query(TenantInvite).filter(TenantInvite.tenant_id == auth.tenant_id).all()
+        invites = [
+            {
+                "inviteId": row.id,
+                "email": row.email,
+                "role": row.role,
+                "status": row.status,
+                "expiresAt": row.expires_at.isoformat() if row.expires_at else None,
+                "createdAt": row.created_at.isoformat(),
+            }
+            for row in rows
+        ]
+    return {"status": "success", "invites": invites}
+
+
+@router.post("/invites")
+def tenant_create_invite(body: TeamInviteRequest, auth: AuthContext = Depends(require_auth_admin)) -> dict:
+    from app.auth_workos.service import invite_user
+    from app.billing.entitlements import check_team_invite_quota, check_team_invites_feature
+
+    blocked = check_team_invites_feature(tenant_id=auth.tenant_id) or check_team_invite_quota(
+        tenant_id=auth.tenant_id
+    )
+    if blocked:
+        raise HTTPException(status_code=status.HTTP_402_PAYMENT_REQUIRED, detail=blocked)
+    invite = invite_user(
+        tenant_id=auth.tenant_id,
+        email=body.email,
+        role=body.role,
+        inviter_user_id=auth.user_id,
+    )
+    if invite is None:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="Unable to send invitation. WorkOS may not be configured.",
+        )
+    log_action(
+        tenant_id=auth.tenant_id,
+        action="invite.sent",
+        actor=auth.email or auth.user_id or "admin",
+        resource_id=invite.get("inviteId"),
+        detail={"email": body.email, "role": body.role},
+    )
+    return {"status": "success", **invite}
+
+
+@router.delete("/invites/{invite_id}")
+def tenant_revoke_invite(invite_id: str, auth: AuthContext = Depends(require_auth_admin)) -> dict:
+    from app.db.engine import db_session
+    from app.db.models import TenantInvite
+
+    if not persistence_enabled():
+        raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail="Database unavailable.")
+    with db_session() as session:
+        row = session.get(TenantInvite, invite_id)
+        if row is None or row.tenant_id != auth.tenant_id:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Invite not found.")
+        row.status = "revoked"
+    log_action(
+        tenant_id=auth.tenant_id,
+        action="invite.revoked",
+        actor=auth.email or auth.user_id or "admin",
+        resource_id=invite_id,
+    )
+    return {"status": "success", "inviteId": invite_id, "revoked": True}
+
+
+@router.post("/sso/portal-link")
+def tenant_sso_portal_link(body: SsoPortalRequest, auth: AuthContext = Depends(require_auth_admin)) -> dict:
+    from app.auth_workos.service import get_admin_portal_link
+    from app.billing.entitlements import check_sso_feature
+
+    blocked = check_sso_feature(tenant_id=auth.tenant_id)
+    if blocked:
+        raise HTTPException(status_code=status.HTTP_402_PAYMENT_REQUIRED, detail=blocked)
+    link = get_admin_portal_link(tenant_id=auth.tenant_id, return_url=body.returnUrl)
+    if not link:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="SSO portal unavailable. WorkOS org may not exist yet.",
+        )
+    return {"status": "success", "portalUrl": link}

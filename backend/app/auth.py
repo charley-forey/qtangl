@@ -1,11 +1,13 @@
 from __future__ import annotations
 
 import hashlib
+import hmac
 import os
 import time
 from collections import defaultdict, deque
 from dataclasses import dataclass
 from threading import Lock
+from typing import Annotated
 
 from fastapi import Depends, Header, HTTPException, Query, status
 
@@ -26,6 +28,9 @@ class AuthContext:
     token: str
     tenant_id: str
     role: str = "admin"
+    user_id: str | None = None
+    email: str | None = None
+    auth_method: str = "api_key"
 
 
 def get_expected_api_key() -> str:
@@ -123,10 +128,17 @@ def require_admin(
 def require_auth(
     authorization: str | None = Header(default=None),
     x_api_key: str | None = Header(default=None),
+    x_qtangl_session: Annotated[str | None, Header(alias="X-Qtangl-Session")] = None,
     api_key: str | None = Query(default=None),
     *,
     count_toward_rate_limit: bool = True,
 ) -> AuthContext:
+    session_ctx = _resolve_session_auth(x_qtangl_session, authorization)
+    if session_ctx is not None:
+        if count_toward_rate_limit:
+            _enforce_rate_limit(session_ctx.token)
+        return session_ctx
+
     token = None
 
     if authorization and authorization.lower().startswith("bearer "):
@@ -139,7 +151,7 @@ def require_auth(
     if not token:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Missing API key. Send a bearer token or x-api-key header.",
+            detail="Missing credentials. Sign in to the dashboard or send an API key.",
         )
 
     if token != get_expected_api_key():
@@ -151,6 +163,11 @@ def require_auth(
                 detail="Authentication service temporarily unavailable. Try again shortly.",
             ) from None
         if not registered:
+            session_key_ctx = _resolve_dashboard_session_key(token)
+            if session_key_ctx is not None:
+                if count_toward_rate_limit:
+                    _enforce_rate_limit(session_key_ctx.token)
+                return session_key_ctx
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="Invalid API key. Check the pilot token and try again.",
@@ -161,12 +178,13 @@ def require_auth(
     try:
         tenant_id = resolve_tenant_id(token)
         role = resolve_role(token)
+        _touch_api_key_last_used(token)
     except AuthDatabaseError:
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
             detail="Authentication service temporarily unavailable. Try again shortly.",
         ) from None
-    return AuthContext(token=token, tenant_id=tenant_id, role=role)
+    return AuthContext(token=token, tenant_id=tenant_id, role=role, auth_method="api_key")
 
 
 def require_auth_write(auth: AuthContext = Depends(require_auth)) -> AuthContext:
@@ -228,6 +246,17 @@ def require_auth_admin(auth: AuthContext = Depends(require_auth_readonly)) -> Au
     return auth
 
 
+def require_bff_secret(
+    x_qtangl_bff_secret: str | None = Header(default=None, alias="X-Qtangl-Bff-Secret"),
+) -> None:
+    secret = os.getenv("QTANGL_BFF_SESSION_SECRET")
+    if not secret or not x_qtangl_bff_secret or not hmac.compare_digest(x_qtangl_bff_secret, secret):
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Invalid BFF credentials.",
+        )
+
+
 def _token_registered(token: str) -> bool:
     if not persistence_enabled():
         return False
@@ -272,3 +301,58 @@ def _enforce_rate_limit(token: str) -> None:
             )
 
         window.append(now)
+
+
+def _resolve_session_auth(
+    x_qtangl_session: str | None,
+    authorization: str | None,
+) -> AuthContext | None:
+    header = x_qtangl_session if isinstance(x_qtangl_session, str) else None
+    if not header and authorization and isinstance(authorization, str) and authorization.lower().startswith("bff "):
+        header = authorization.split(" ", 1)[1].strip()
+    if not header:
+        return None
+    from app.auth_workos.session import verify_bff_session
+
+    claims = verify_bff_session(header)
+    if claims is None:
+        return None
+    return AuthContext(
+        token=f"bff:{claims.user_id}",
+        tenant_id=claims.tenant_id,
+        role=claims.role,
+        user_id=claims.user_id,
+        email=claims.email,
+        auth_method="bff_session",
+    )
+
+
+def _resolve_dashboard_session_key(token: str) -> AuthContext | None:
+    from app.auth_workos.session import verify_session_key
+
+    payload = verify_session_key(token)
+    if payload is None:
+        return None
+    return AuthContext(
+        token=token,
+        tenant_id=str(payload["tenantId"]),
+        role=str(payload.get("role", "viewer")),
+        user_id=str(payload.get("userId")),
+        email=str(payload.get("email") or ""),
+        auth_method="session_key",
+    )
+
+
+def _touch_api_key_last_used(token: str) -> None:
+    if token == get_expected_api_key() or not persistence_enabled():
+        return
+    from datetime import datetime, timezone
+
+    key_hash = hash_api_key(token)
+    try:
+        with db_session() as session:
+            row = session.query(ApiKey).filter(ApiKey.key_hash == key_hash, ApiKey.revoked_at.is_(None)).one_or_none()
+            if row is not None:
+                row.last_used_at = datetime.now(timezone.utc)
+    except Exception:
+        return

@@ -15,6 +15,24 @@ export const ASSESS_AI_NARRATIVE_ENABLED =
 export const ASSESS_MONITOR_CHECKOUT_ENABLED =
   process.env.NEXT_PUBLIC_ASSESS_MONITOR_CHECKOUT === "true";
 
+/** When true, production assess mode (tenant key) is enabled on /assess and dashboard. */
+export const ASSESS_PRODUCTION_MODE_ENABLED =
+  process.env.NEXT_PUBLIC_ASSESS_PRODUCTION_MODE !== "false";
+
+/** Hosts allowed for anonymous demo live scans (must match backend PUBLIC_DEMO_HOSTS). */
+export const PUBLIC_DEMO_LIVE_HOSTS = new Set([
+  "test.openquantumsafe.org",
+  "qtangl.com",
+  "www.qtangl.com",
+]);
+
+export const PRODUCTION_INDUSTRIES = [
+  { id: "financial", label: "Financial services" },
+  { id: "government", label: "Government / defense" },
+  { id: "healthcare", label: "Healthcare" },
+  { id: "other", label: "Other regulated industry" },
+] as const;
+
 export const ASSESS_RESULT_TABS = [
   "executive",
   "compliance",

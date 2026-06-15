@@ -58,6 +58,7 @@ class PqcScanRequest(BaseModel):
     seed: int = Field(default=1234)
     bundleSessionId: str | None = None
     depth: str = Field(default="standard", pattern="^(standard|lite)$")
+    industry: str | None = Field(default=None, max_length=64)
 
 
 class VerifyReportRequest(BaseModel):
@@ -260,15 +261,23 @@ def scan_pqc(
             )
 
     try:
+        from app.audit.service import log_action
+
+        scan_kwargs = {
+            "scenario_id": request.scenarioId,
+            "target_override": request.target,
+            "uploaded_rows": uploaded_rows,
+            "seed": request.seed,
+            "depth": request.depth,
+            "industry": request.industry,
+            "tenant_id": auth.tenant_id,
+        }
+
         if request.useFixture:
             bundle = run_pqc_scan(
                 dataset,
-                scenario_id=request.scenarioId,
                 use_fixture=True,
-                target_override=request.target,
-                uploaded_rows=uploaded_rows,
-                seed=request.seed,
-                depth=request.depth,
+                **scan_kwargs,
             )
             save_scan_bundle(bundle.scan_id, bundle, tenant_id=auth.tenant_id)
             if idempotency_key:
@@ -294,16 +303,25 @@ def scan_pqc(
                 ),
             )
 
+        if request.target:
+            log_action(
+                tenant_id=auth.tenant_id,
+                action="live_scan_authorized",
+                actor=auth.role,
+                resource_id=request.target,
+                detail={
+                    "domain": request.target,
+                    "industry": request.industry,
+                    "mode": "production" if auth.tenant_id != "sandbox" else "demo",
+                },
+            )
+
         def run_live(on_progress=None):
             return run_pqc_scan(
                 dataset,
-                scenario_id=request.scenarioId,
                 use_fixture=False,
-                target_override=request.target,
-                uploaded_rows=uploaded_rows,
-                seed=request.seed,
                 on_progress=on_progress,
-                depth=request.depth,
+                **scan_kwargs,
             )
 
         # Single-process deploys (Railway default: inline jobs) run synchronously so the

@@ -7,8 +7,10 @@ import { uploadPqcBundle } from "@/lib/pqc";
 
 export default function BundleUploader({
   onUploaded,
+  apiKey,
 }: {
   onUploaded: (sessionId: string, summary: string) => void;
+  apiKey?: string;
 }) {
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -22,7 +24,7 @@ export default function BundleUploader({
         onChange={async (event) => {
           const file = event.target.files?.[0];
           if (!file) return;
-          const response = await uploadPqcBundle(file);
+          const response = await uploadPqcBundle(file, apiKey);
           onUploaded(response.sessionId, response.summary);
           event.target.value = "";
         }}

@@ -19,6 +19,31 @@ Follow this doc for Track **E1** (first PQC pilot): sell, demo, run the assessme
 - Customer dashboard: https://www.qtangl.com/dashboard
 - Methodology: https://www.qtangl.com/assess/methodology
 
+### Demo URLs vs customer URLs (do not mix)
+
+| Audience | URL | Key / auth |
+|----------|-----|------------|
+| Prospect / marketing | `/assess`, `/assess?scenario=…&autorun=1` | Sandbox — fixture only |
+| Paying customer (primary) | `/dashboard?onboarding=TOKEN` | Tenant key via one-time token |
+| Paying customer (secondary) | `/assess?onboarding=TOKEN&mode=production` | Same tenant key |
+| Self-serve Assess (R2) | `/assess/start` → email link | Free tier tenant |
+
+**Never** send fixture autorun links to paying customers.
+
+### Admin: provision tenant + allowlist
+
+```bash
+python backend/scripts/provision_tenant.py \
+  --name "Acme Bank Pilot" \
+  --tenant-id acme-bank \
+  --tier monitor \
+  --domains api.acme.com,auth.acme.com
+```
+
+Or `PUT /admin/tenants/{id}/authorized-domains` with sales attestation.
+
+Customer runbook: [customer-first-baseline-runbook.md](./customer-first-baseline-runbook.md)
+
 ---
 
 ## 1. What you are selling

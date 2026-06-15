@@ -146,7 +146,7 @@ export default function MiniAssessmentClient() {
   }
 
   const assessScenario = MINI_TO_ASSESS_SCENARIO[selected.id] ?? "bank-tls-inventory";
-  const liveScanHref = `/assess?scenario=${encodeURIComponent(assessScenario)}&autorun=1`;
+  const demoScanHref = `/assess?scenario=${encodeURIComponent(assessScenario)}&autorun=1`;
 
   return (
     <div className="space-y-6">
@@ -200,8 +200,13 @@ export default function MiniAssessmentClient() {
         <Eyebrow>Keep this from drifting</Eyebrow>
         <p className="mt-3 text-sm leading-7 text-[var(--color-gray-300)]">{selected.monitorPitch}</p>
         <div className="mt-6 flex flex-wrap gap-3">
-          <Button href={upsell.primary.href}>{upsell.primary.label}</Button>
-          <Button href={liveScanHref}>Run live scan</Button>
+          <Button href="/assess/start">{upsell.primary.label}</Button>
+          <Button href="/assess/start" variant="secondary">
+            Start authorized baseline
+          </Button>
+          <Button href={demoScanHref} variant="secondary">
+            Try full demo (fixture)
+          </Button>
           <Button
             href={`/access?interest=${encodeURIComponent("Q-Day Monitor (annual)")}&source=${encodeURIComponent(formSource)}`}
             variant="secondary"

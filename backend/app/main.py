@@ -25,6 +25,7 @@ from app.api.drift import router as drift_router
 from app.api.remediation_program import router as remediation_program_router
 from app.api.crypto_flip import router as crypto_flip_router
 from app.api.integrations_webhook import router as integrations_webhook_router
+from app.api.internal_dashboard import router as internal_dashboard_router
 from app.db.config import inline_jobs, persistence_enabled, redis_enabled, use_worker_queue
 from app.db.engine import init_db, ping_db
 from app.pqc.report import report_to_json
@@ -42,6 +43,7 @@ CORS_ALLOW_HEADERS = [
     "Authorization",
     "Content-Type",
     "X-Api-Key",
+    "X-Qtangl-Session",
     "X-Request-Id",
     "Idempotency-Key",
     "Accept",
@@ -144,6 +146,7 @@ app.include_router(remediation_program_router)
 app.include_router(crypto_flip_router)
 app.include_router(integrations_webhook_router)
 app.include_router(admin_router)
+app.include_router(internal_dashboard_router)
 app.include_router(public_router)
 
 

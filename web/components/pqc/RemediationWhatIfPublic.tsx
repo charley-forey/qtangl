@@ -9,9 +9,10 @@ import { simulatePqcRemediation, type RemediationItem, type RemediationProjectio
 type RemediationWhatIfPublicProps = {
   scanId: string;
   items: RemediationItem[];
+  apiKey?: string;
 };
 
-export default function RemediationWhatIfPublic({ scanId, items }: RemediationWhatIfPublicProps) {
+export default function RemediationWhatIfPublic({ scanId, items, apiKey }: RemediationWhatIfPublicProps) {
   const [selected, setSelected] = useState<Set<string>>(() => new Set());
   const [projection, setProjection] = useState<RemediationProjection | null>(null);
   const [loading, setLoading] = useState(false);
@@ -26,7 +27,7 @@ export default function RemediationWhatIfPublic({ scanId, items }: RemediationWh
       setLoading(true);
       setError(null);
       try {
-        const payload = await simulatePqcRemediation(scanId, ids);
+        const payload = await simulatePqcRemediation(scanId, ids, apiKey);
         setProjection(payload.projection);
       } catch (simError) {
         setProjection(null);
@@ -35,7 +36,7 @@ export default function RemediationWhatIfPublic({ scanId, items }: RemediationWh
         setLoading(false);
       }
     },
-    [scanId]
+    [scanId, apiKey]
   );
 
   useEffect(() => {

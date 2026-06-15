@@ -12,17 +12,17 @@ import { monitorPreviewDiff, monitorPreviewTrend } from "@/lib/copy/readiness-de
 const steps = [
   {
     step: "1",
-    title: "Run an assessment",
-    description: "Inventory quantum-vulnerable crypto with a live or fixture scan — no account required.",
-    href: "/assess",
-    cta: "Open scanner",
+    title: "Run production baseline",
+    description: "Use the runner below with your tenant key — upload certs or scan authorized domains.",
+    href: "#run-baseline",
+    cta: "Run baseline below",
   },
   {
     step: "2",
-    title: "Connect your tenant key",
-    description: "Paste the API key from your pilot welcome email to load scan history and exports.",
-    href: "#connect-key",
-    cta: "Connect below",
+    title: "Try the public demo (optional)",
+    description: "Share fixture-based demos with stakeholders — separate from your tenant data.",
+    href: "/assess",
+    cta: "Open demo assess",
   },
   {
     step: "3",
@@ -37,10 +37,10 @@ export default function DashboardOnboarding() {
   return (
     <div className="space-y-6">
       <Card tone="feature" size="lg" className="rounded-[var(--radius-feature)]">
-        <Eyebrow>Getting started</Eyebrow>
+        <Eyebrow>Your workspace</Eyebrow>
         <p className="mt-3 max-w-2xl text-sm leading-7 text-[var(--color-gray-300)]">
-          Your Q-Day command center shows readiness trends, drift diffs, and remediation workflow once you
-          connect a tenant API key. Start with a scan, then paste your key below.
+          This is your customer home after purchase. Connect your tenant API key, run an authorized
+          production baseline, then manage drift and remediation here — not on the public demo page.
         </p>
         <ol className="mt-8 grid gap-4 md:grid-cols-3">
           {steps.map((item) => (
@@ -116,7 +116,7 @@ export function DashboardSection({
   children: React.ReactNode;
 }) {
   return (
-    <section className="space-y-4">
+    <section className="space-y-4" id={title === "Run baseline assessment" ? "run-baseline" : undefined}>
       <h2 className="text-label border-b border-[var(--border-subtle)] pb-2 text-[var(--color-gray-500)]">
         {title}
       </h2>

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import os
 
 from fastapi import APIRouter, HTTPException, Request, status
@@ -39,6 +40,24 @@ class LeadCaptureRequest(BaseModel):
 
 class UnsubscribeRequest(BaseModel):
     email: str = Field(min_length=3, max_length=320)
+
+
+class AssessSignupRequest(BaseModel):
+    email: str = Field(min_length=3, max_length=320)
+    company: str = Field(min_length=2, max_length=200)
+    domain: str | None = Field(default=None, max_length=253)
+
+
+@router.post("/assess-signup")
+def public_assess_signup(body: AssessSignupRequest) -> dict:
+    """Self-serve Assess signup — free tier tenant + onboarding token."""
+    from app.billing.service import provision_assess_tenant
+
+    try:
+        result = provision_assess_tenant(email=body.email, company=body.company, domain=body.domain)
+    except Exception as exc:
+        raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail=str(exc)) from exc
+    return {"status": "success", **result}
 
 
 @router.post("/monitor-signup")
@@ -92,7 +111,7 @@ def public_unsubscribe(body: UnsubscribeRequest) -> dict:
 
 @router.get("/onboarding-key/{token}")
 def public_redeem_onboarding_key(token: str) -> dict:
-    """One-time retrieval of tenant API key after Monitor checkout (24h TTL)."""
+    """One-time onboarding after Monitor checkout (24h TTL)."""
     from app.billing.onboarding_tokens import redeem_onboarding_token
 
     result = redeem_onboarding_token(token)
@@ -101,12 +120,48 @@ def public_redeem_onboarding_key(token: str) -> dict:
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Onboarding link invalid, expired, or already used.",
         )
+    base = os.environ.get("QTANGL_PUBLIC_URL", "https://www.qtangl.com")
+    onboarding_v2 = os.getenv("QTANGL_ONBOARDING_V2", "false").lower() in {"1", "true", "yes"}
+    if onboarding_v2:
+        return {
+            "status": "success",
+            "tenantId": result["tenantId"],
+            "loginUrl": f"{base}/dashboard/login?onboarding={token}",
+            "dashboardUrl": f"{base}/dashboard/login?onboarding={token}",
+            "email": result.get("email"),
+        }
     return {
         "status": "success",
         "tenantId": result["tenantId"],
         "apiKey": result["apiKey"],
-        "dashboardUrl": f"{os.environ.get('QTANGL_PUBLIC_URL', 'https://www.qtangl.com')}/dashboard",
+        "dashboardUrl": f"{base}/dashboard",
     }
+
+
+@router.post("/workos/webhook")
+async def workos_webhook(request: Request) -> dict:
+    from app.audit.service import log_action
+    from app.auth_workos.service import handle_webhook_event, verify_webhook_signature
+
+    payload = await request.body()
+    signature = request.headers.get("WorkOS-Signature", "")
+    if not verify_webhook_signature(payload, signature):
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid webhook signature.")
+    try:
+        event = json.loads(payload.decode("utf-8"))
+    except json.JSONDecodeError as exc:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid JSON payload.") from exc
+    result = handle_webhook_event(event)
+    membership = result.get("membership") or {}
+    tenant_id = membership.get("tenantId") or result.get("tenantId")
+    if tenant_id:
+        log_action(
+            tenant_id=str(tenant_id),
+            action=f"workos.{result.get('event', 'event')}",
+            actor=str(membership.get("email") or "workos"),
+            detail={"handled": result.get("handled"), "event": result.get("event")},
+        )
+    return {"status": "success", **result}
 
 
 @router.post("/stripe-webhook")

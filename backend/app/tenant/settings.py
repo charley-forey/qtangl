@@ -18,6 +18,9 @@ DEFAULT_SETTINGS: dict[str, Any] = {
     "evidenceRetentionMonths": 12,
     "benchmarkOptIn": False,
     "industry": "financial",
+    "scanAllowlist": [],
+    "msspParentTenantId": "",
+    "authorizationAttestations": [],
     "discovery": {
         "hostSensor": False,
         "codeScan": False,
@@ -135,3 +138,36 @@ def get_tenant_settings_raw(*, tenant_id: str) -> dict[str, Any]:
         merged = dict(DEFAULT_SETTINGS)
         merged.update(data)
         return merged
+
+
+def get_tenant_scan_allowlist(*, tenant_id: str) -> list[str]:
+    from app.pqc.safety import normalize_host
+
+    settings = get_tenant_settings_raw(tenant_id=tenant_id)
+    raw = settings.get("scanAllowlist") or []
+    if not isinstance(raw, list):
+        return []
+    normalized: list[str] = []
+    for item in raw:
+        if not item:
+            continue
+        host = normalize_host(str(item))
+        if host and host not in normalized:
+            normalized.append(host)
+    return normalized
+
+
+def set_tenant_scan_allowlist(
+    *,
+    tenant_id: str,
+    domains: list[str],
+) -> list[str]:
+    from app.pqc.safety import normalize_host
+
+    cleaned: list[str] = []
+    for item in domains:
+        host = normalize_host(str(item).strip())
+        if host and host not in cleaned:
+            cleaned.append(host)
+    upsert_tenant_settings(tenant_id=tenant_id, settings={"scanAllowlist": cleaned})
+    return cleaned

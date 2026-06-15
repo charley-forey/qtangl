@@ -40,11 +40,13 @@ class PqcSafetyTest(unittest.TestCase):
                 assert_scannable("metadata.google.internal", port=443)
 
     def test_blocks_rfc1918_private_ranges(self) -> None:
-        with patch.dict(os.environ, {"QTANGL_PQC_ENABLE_LIVE_SCAN": "true"}):
-            for host in ("10.0.0.1", "192.168.1.1", "172.16.0.1"):
-                with self.subTest(host=host):
-                    with self.assertRaises(ScanSafetyError):
-                        assert_scannable(host, port=443)
+        env = {"QTANGL_PQC_ENABLE_LIVE_SCAN": "true"}
+        with patch.dict(os.environ, env, clear=False):
+            with patch("app.pqc.safety._tenant_allowlist", return_value={"10.0.0.1", "192.168.1.1", "172.16.0.1"}):
+                for host in ("10.0.0.1", "192.168.1.1", "172.16.0.1"):
+                    with self.subTest(host=host):
+                        with self.assertRaises(ScanSafetyError):
+                            assert_scannable(host, port=443, tenant_id="test-tenant")
 
     def test_blocks_when_live_scan_disabled(self) -> None:
         with patch.dict(os.environ, {"QTANGL_PQC_ENABLE_LIVE_SCAN": "false"}, clear=False):
@@ -89,11 +91,12 @@ class PqcSafetyTest(unittest.TestCase):
     def test_resolve_scannable_pins_public_ip(self) -> None:
         env = {"QTANGL_PQC_ENABLE_LIVE_SCAN": "true"}
         with patch.dict(os.environ, env, clear=False):
-            with patch(
-                "app.pqc.safety._validated_ips",
-                return_value=["93.184.216.34"],
-            ):
-                target = resolve_scannable("example.com", port=443)
+            with patch("app.pqc.safety._tenant_allowlist", return_value={"example.com"}):
+                with patch(
+                    "app.pqc.safety._validated_ips",
+                    return_value=["93.184.216.34"],
+                ):
+                    target = resolve_scannable("example.com", port=443, tenant_id="test-tenant")
         self.assertEqual(target.host, "example.com")
         self.assertEqual(target.ip, "93.184.216.34")
         self.assertEqual(target.port, 443)

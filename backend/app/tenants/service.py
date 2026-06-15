@@ -19,22 +19,45 @@ def generate_api_key() -> str:
     return f"qtangl_{secrets.token_urlsafe(32)}"
 
 
-def create_tenant(*, tenant_id: str | None = None, name: str) -> dict[str, Any]:
+def create_tenant(
+    *,
+    tenant_id: str | None = None,
+    name: str,
+    auth_mode: str = "magic_link",
+    admin_email: str | None = None,
+) -> dict[str, Any]:
     if not persistence_enabled():
         raise RuntimeError("Tenant management requires DATABASE_URL")
     tid = tenant_id or f"tenant-{uuid.uuid4().hex[:12]}"
     with db_session() as session:
         if session.get(Tenant, tid) is not None:
             raise ValueError(f"Tenant already exists: {tid}")
-        session.add(Tenant(id=tid, name=name))
-    return {"tenantId": tid, "name": name}
+        session.add(Tenant(id=tid, name=name, auth_mode=auth_mode))
+    workos_org_id = None
+    try:
+        from app.auth_workos.service import create_organization, invite_user, workos_enabled
+
+        if workos_enabled():
+            workos_org_id = create_organization(tenant_id=tid, name=name)
+            if admin_email and workos_org_id:
+                invite_user(tenant_id=tid, email=admin_email, role="admin")
+    except Exception:
+        pass
+    return {"tenantId": tid, "name": name, "workosOrgId": workos_org_id}
 
 
-def issue_api_key(*, tenant_id: str, label: str = "default", role: str = "operator") -> dict[str, Any]:
+def issue_api_key(
+    *,
+    tenant_id: str,
+    label: str = "default",
+    role: str = "operator",
+    created_by_user_id: str | None = None,
+) -> dict[str, Any]:
     if not persistence_enabled():
         raise RuntimeError("Tenant management requires DATABASE_URL")
     raw_key = generate_api_key()
     key_id = f"key-{uuid.uuid4().hex[:12]}"
+    key_prefix = raw_key[:16] + "…"
     with db_session() as session:
         if session.get(Tenant, tenant_id) is None:
             raise ValueError(f"Unknown tenant: {tenant_id}")
@@ -45,9 +68,18 @@ def issue_api_key(*, tenant_id: str, label: str = "default", role: str = "operat
                 key_hash=hash_api_key(raw_key),
                 label=label,
                 role=role,
+                key_prefix=key_prefix,
+                created_by_user_id=created_by_user_id,
             )
         )
-    return {"keyId": key_id, "tenantId": tenant_id, "label": label, "role": role, "apiKey": raw_key}
+    return {
+        "keyId": key_id,
+        "tenantId": tenant_id,
+        "label": label,
+        "role": role,
+        "keyPrefix": key_prefix,
+        "apiKey": raw_key,
+    }
 
 
 def revoke_api_key(*, key_id: str) -> dict[str, Any]:
@@ -71,7 +103,10 @@ def list_tenant_keys(*, tenant_id: str) -> list[dict[str, Any]]:
             {
                 "keyId": row.id,
                 "label": row.label,
+                "role": row.role,
+                "keyPrefix": row.key_prefix,
                 "createdAt": row.created_at.isoformat(),
+                "lastUsedAt": row.last_used_at.isoformat() if row.last_used_at else None,
                 "revoked": row.revoked_at is not None,
             }
             for row in rows

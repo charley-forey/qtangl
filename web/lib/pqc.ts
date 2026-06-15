@@ -1,7 +1,14 @@
 import { newIdempotencyKey } from "@qtangl/sdk";
 
 import { fetchQtanglJson } from "@/lib/api";
-import { createSandboxQtanglClient } from "@/lib/qtangl-client";
+import { createBffQtanglClient, createQtanglClient, createSandboxQtanglClient } from "@/lib/qtangl-client";
+
+function resolveClient(apiKey?: string) {
+  if (apiKey === "bff") {
+    return createBffQtanglClient();
+  }
+  return apiKey ? createQtanglClient(apiKey) : createSandboxQtanglClient();
+}
 
 export type Vulnerability = {
   algorithm: string;
@@ -233,28 +240,39 @@ export type ReportAvailabilityResponse = {
   missingReason?: string | null;
 };
 
-export async function getPqcInventory() {
-  return fetchQtanglJson<{ status: "success"; summary: string; inventory: CryptoAsset[] }>(
-    "/pqc/inventory"
-  );
+export async function getPqcInventory(apiKey?: string) {
+  return resolveClient(apiKey).request<{ status: "success"; summary: string; inventory: CryptoAsset[] }>({
+    method: "GET",
+    path: "/pqc/inventory",
+  });
 }
 
-export async function getPqcScenarios() {
-  return fetchQtanglJson<{ status: "success"; scenarios: Scenario[] }>("/pqc/scenarios");
+export async function getPqcScenarios(apiKey?: string) {
+  return resolveClient(apiKey).request<{ status: "success"; scenarios: Scenario[] }>({
+    method: "GET",
+    path: "/pqc/scenarios",
+  });
 }
 
-export async function getPqcTarget(scenarioId: string) {
-  return fetchQtanglJson<{ status: "success"; target: ScanTarget; scenario: Scenario }>(
-    `/pqc/target?scenarioId=${encodeURIComponent(scenarioId)}`
-  );
+export async function getPqcTarget(scenarioId: string, apiKey?: string) {
+  return resolveClient(apiKey).request<{ status: "success"; target: ScanTarget; scenario: Scenario }>({
+    method: "GET",
+    path: `/pqc/target?scenarioId=${encodeURIComponent(scenarioId)}`,
+  });
 }
 
-export async function getPqcHandshakeTrace() {
-  return fetchQtanglJson<{ status: "success"; trace: HandshakeProof }>("/pqc/handshake-trace");
+export async function getPqcHandshakeTrace(apiKey?: string) {
+  return resolveClient(apiKey).request<{ status: "success"; trace: HandshakeProof }>({
+    method: "GET",
+    path: "/pqc/handshake-trace",
+  });
 }
 
-export async function getPqcStandards() {
-  return fetchQtanglJson<{ status: "success"; standards: Record<string, unknown> }>("/pqc/standards");
+export async function getPqcStandards(apiKey?: string) {
+  return resolveClient(apiKey).request<{ status: "success"; standards: Record<string, unknown> }>({
+    method: "GET",
+    path: "/pqc/standards",
+  });
 }
 
 export async function scanPqc(
@@ -265,10 +283,11 @@ export async function scanPqc(
     seed?: number;
     bundleSessionId?: string;
     depth?: "standard" | "lite";
+    industry?: string;
   },
-  options?: { idempotencyKey?: string }
+  options?: { idempotencyKey?: string; apiKey?: string }
 ) {
-  const client = createSandboxQtanglClient();
+  const client = resolveClient(options?.apiKey);
   return client.scan(
     {
       scenarioId: input.scenarioId,
@@ -277,32 +296,33 @@ export async function scanPqc(
       seed: input.seed ?? 1234,
       bundleSessionId: input.bundleSessionId ?? null,
       depth: input.depth ?? "standard",
+      industry: input.industry ?? null,
     },
     { idempotencyKey: options?.idempotencyKey ?? newIdempotencyKey() }
   ) as Promise<PqcScanResponse | PqcScanRunningResponse>;
 }
 
-export async function pollPqcScan(scanId: string) {
-  return createSandboxQtanglClient().getScan(scanId) as Promise<
+export async function pollPqcScan(scanId: string, apiKey?: string) {
+  return resolveClient(apiKey).getScan(scanId) as Promise<
     PqcScanResponse | PqcScanRunningResponse | PqcScanErrorResponse
   >;
 }
 
-export async function getReportAvailability(scanId: string) {
-  return createSandboxQtanglClient().reports.availability(scanId) as Promise<ReportAvailabilityResponse>;
+export async function getReportAvailability(scanId: string, apiKey?: string) {
+  return resolveClient(apiKey).reports.availability(scanId) as Promise<ReportAvailabilityResponse>;
 }
 
-export async function persistPqcScanBundle(scanId: string, bundle: PqcScanResponse) {
-  return createSandboxQtanglClient().reports.persistScanBundle(
+export async function persistPqcScanBundle(scanId: string, bundle: PqcScanResponse, apiKey?: string) {
+  return resolveClient(apiKey).reports.persistScanBundle(
     scanId,
     bundle as Record<string, unknown>
   ) as Promise<ReportAvailabilityResponse>;
 }
 
 /** Persist bundle server-side, then poll until reports are downloadable. */
-export async function syncReportAfterScan(scanId: string, bundle: PqcScanResponse) {
+export async function syncReportAfterScan(scanId: string, bundle: PqcScanResponse, apiKey?: string) {
   try {
-    const persisted = await persistPqcScanBundle(scanId, bundle);
+    const persisted = await persistPqcScanBundle(scanId, bundle, apiKey);
     if (persisted.reportAvailable) {
       return persisted;
     }
@@ -314,7 +334,7 @@ export async function syncReportAfterScan(scanId: string, bundle: PqcScanRespons
     if (attempt > 0) {
       await new Promise((resolve) => setTimeout(resolve, 1500));
     }
-    const availability = await getReportAvailability(scanId);
+    const availability = await getReportAvailability(scanId, apiKey);
     if (availability.reportAvailable) {
       return availability;
     }
@@ -328,7 +348,7 @@ export async function syncReportAfterScan(scanId: string, bundle: PqcScanRespons
     }
   }
 
-  return getReportAvailability(scanId);
+  return getReportAvailability(scanId, apiKey);
 }
 
 const LIVE_SCAN_POLL_MS = 1500;
@@ -336,11 +356,12 @@ const LIVE_SCAN_MAX_ATTEMPTS = 120;
 
 export async function waitForPqcScan(
   scanId: string,
-  onProgress?: (timeline: PqcScanRunningResponse["timeline"]) => void
+  onProgress?: (timeline: PqcScanRunningResponse["timeline"]) => void,
+  apiKey?: string
 ): Promise<PqcScanResponse> {
   for (let attempt = 0; attempt < LIVE_SCAN_MAX_ATTEMPTS; attempt += 1) {
     await new Promise((resolve) => setTimeout(resolve, LIVE_SCAN_POLL_MS));
-    const polled = await pollPqcScan(scanId);
+    const polled = await pollPqcScan(scanId, apiKey);
     if (polled.status === "success") {
       return polled;
     }
@@ -357,14 +378,15 @@ export async function waitForPqcScan(
   );
 }
 
-export async function provePqcHandshake(useFixture = true) {
+export async function provePqcHandshake(useFixture = true, apiKey?: string) {
   return fetchQtanglJson<{ status: "success"; proof: HandshakeProof }>("/pqc/handshake/prove", {
     method: "POST",
     body: JSON.stringify({ useFixture }),
+    apiKey,
   });
 }
 
-export async function uploadPqcBundle(file: File) {
+export async function uploadPqcBundle(file: File, apiKey?: string) {
   const formData = new FormData();
   formData.append("file", file);
   return fetchQtanglJson<{
@@ -373,7 +395,7 @@ export async function uploadPqcBundle(file: File) {
     summary: string;
     rowCount?: number;
     preview?: { algorithms: string[]; qVulnerable?: number };
-  }>("/pqc/upload-bundle", { method: "POST", body: formData, skipJsonContentType: true });
+  }>("/pqc/upload-bundle", { method: "POST", body: formData, skipJsonContentType: true, apiKey });
 }
 
 export type ReadinessIndexSnapshot = {
@@ -388,9 +410,10 @@ export type ReadinessIndexSnapshot = {
   disclaimer?: string;
 };
 
-export async function getPqcIndex(industry = "financial") {
+export async function getPqcIndex(industry = "financial", apiKey?: string) {
   return fetchQtanglJson<{ status: "success"; index: ReadinessIndexSnapshot }>(
-    `/pqc/index?industry=${encodeURIComponent(industry)}`
+    `/pqc/index?industry=${encodeURIComponent(industry)}`,
+    { apiKey }
   );
 }
 
@@ -402,10 +425,10 @@ export type RemediationProjection = {
   assumptions: string[];
 };
 
-export async function simulatePqcRemediation(scanId: string, remediationIds: string[]) {
+export async function simulatePqcRemediation(scanId: string, remediationIds: string[], apiKey?: string) {
   return fetchQtanglJson<{ status: "success"; projection: RemediationProjection }>(
     `/pqc/scan/${encodeURIComponent(scanId)}/remediation/simulate`,
-    { method: "POST", body: JSON.stringify({ remediationIds }) }
+    { method: "POST", body: JSON.stringify({ remediationIds }), apiKey }
   );
 }
 
@@ -430,14 +453,36 @@ export function compareToBenchmark(score: number, index: ReadinessIndexSnapshot)
 
 export function pqcReportUrl(
   scanId: string,
-  format: "json" | "csv" | "cbom" | "pdf" | "bundle" | "executive" | "board" | "auditor"
+  format: "json" | "csv" | "cbom" | "pdf" | "bundle" | "executive" | "board" | "auditor",
+  apiKey?: string
 ) {
-  return createSandboxQtanglClient().pqcReportUrl(scanId, format);
+  return resolveClient(apiKey).pqcReportUrl(scanId, format);
 }
 
 export function pqcReportDownloadUrl(
   scanId: string,
-  format: "json" | "csv" | "cbom" | "pdf" | "bundle" | "executive" | "board" | "auditor"
+  format: "json" | "csv" | "cbom" | "pdf" | "bundle" | "executive" | "board" | "auditor",
+  apiKey?: string
 ) {
-  return pqcReportUrl(scanId, format);
+  return pqcReportUrl(scanId, format, apiKey);
+}
+
+export async function getAuthorizedDomains(apiKey: string) {
+  return fetchQtanglJson<{ status: "success"; domains: string[] }>("/tenant/authorized-domains", {
+    apiKey,
+  });
+}
+
+export async function redeemOnboardingToken(token: string) {
+  const { qtanglApiBaseUrl } = await import("@/lib/api");
+  const response = await fetch(`${qtanglApiBaseUrl}/public/onboarding-key/${encodeURIComponent(token)}`);
+  if (!response.ok) {
+    throw new Error("Onboarding link invalid, expired, or already used.");
+  }
+  return response.json() as Promise<{
+    status: string;
+    tenantId: string;
+    apiKey: string;
+    dashboardUrl: string;
+  }>;
 }

@@ -12,6 +12,13 @@ from urllib.parse import urlparse
 
 DEFAULT_ALLOWED_PORTS = {22, 25, 465, 587, 993, 443, 8443, 4433}
 BLOCKED_METADATA_HOSTS = {"169.254.169.254", "metadata.google.internal"}
+PUBLIC_DEMO_HOSTS = frozenset(
+    {
+        "test.openquantumsafe.org",
+        "qtangl.com",
+        "www.qtangl.com",
+    }
+)
 
 
 class ScanSafetyError(ValueError):
@@ -71,11 +78,54 @@ def allowed_ports(extra: list[int] | None = None) -> set[int]:
     return ports
 
 
-def _allowlist() -> set[str] | None:
+def _env_allowlist() -> set[str] | None:
     raw = os.getenv("QTANGL_PQC_SCAN_ALLOWLIST", "").strip()
     if not raw:
         return None
     return {item.strip().lower() for item in raw.split(",") if item.strip()}
+
+
+def _strict_public_demo() -> bool:
+    raw = os.getenv("QTANGL_PQC_STRICT_PUBLIC_DEMO", "true").lower()
+    return raw in {"1", "true", "yes", "on"}
+
+
+def _demo_live_hosts() -> set[str]:
+    """Hosts permitted for live scans on the sandbox tenant (public demo)."""
+    env = _env_allowlist()
+    if env is None:
+        return set(PUBLIC_DEMO_HOSTS)
+    if _strict_public_demo():
+        return env & set(PUBLIC_DEMO_HOSTS)
+    return env
+
+
+def _tenant_allowlist(tenant_id: str) -> set[str]:
+    from app.tenant.settings import get_tenant_scan_allowlist
+
+    return set(get_tenant_scan_allowlist(tenant_id=tenant_id))
+
+
+def _host_allowed_for_tenant(normalized: str, tenant_id: str | None) -> None:
+    if not tenant_id or tenant_id == "sandbox":
+        demo_hosts = _demo_live_hosts()
+        if normalized not in demo_hosts:
+            raise ScanSafetyError(
+                f"Host '{normalized}' is not permitted for public demo live scans. "
+                "Use fixture mode or scan test.openquantumsafe.org."
+            )
+        return
+
+    tenant_hosts = _tenant_allowlist(tenant_id)
+    if not tenant_hosts:
+        raise ScanSafetyError(
+            f"No authorized domains configured for tenant '{tenant_id}'. "
+            "Add domains via dashboard settings or contact your Qtangl admin."
+        )
+    if normalized not in tenant_hosts:
+        raise ScanSafetyError(
+            f"Host '{normalized}' is not on your tenant authorized domain list."
+        )
 
 
 def normalize_host(target: str) -> str:
@@ -126,6 +176,7 @@ def resolve_scannable(
     *,
     port: int | None = None,
     extra_ports: list[int] | None = None,
+    tenant_id: str | None = None,
 ) -> ScannableTarget:
     if not live_scan_enabled():
         raise ScanSafetyError(
@@ -136,9 +187,12 @@ def resolve_scannable(
     if not normalized:
         raise ScanSafetyError("Target host is required.")
 
-    allowlist = _allowlist()
-    if allowlist is not None and normalized not in allowlist:
-        raise ScanSafetyError(f"Host '{normalized}' is not in QTANGL_PQC_SCAN_ALLOWLIST.")
+    if tenant_id is None:
+        from app.pqc.scan_context import current_scan_tenant_id
+
+        tenant_id = current_scan_tenant_id()
+
+    _host_allowed_for_tenant(normalized, tenant_id)
 
     if normalized in BLOCKED_METADATA_HOSTS:
         raise ScanSafetyError("Target host is blocked for safety.")
@@ -151,8 +205,14 @@ def resolve_scannable(
     return ScannableTarget(host=normalized, ip=ips[0], port=resolved_port)
 
 
-def assert_scannable(host: str, *, port: int | None = None, extra_ports: list[int] | None = None) -> str:
-    return resolve_scannable(host, port=port, extra_ports=extra_ports).host
+def assert_scannable(
+    host: str,
+    *,
+    port: int | None = None,
+    extra_ports: list[int] | None = None,
+    tenant_id: str | None = None,
+) -> str:
+    return resolve_scannable(host, port=port, extra_ports=extra_ports, tenant_id=tenant_id).host
 
 
 def safe_create_connection(target: ScannableTarget, *, timeout: float | None = None) -> socket.socket:

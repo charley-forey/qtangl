@@ -34,6 +34,7 @@
     "@qtangl/sdk": "file:../sdk/typescript",
     "@qtangl/sdk-react": "file:../sdk/react",
     "@types/d3-force": "^3.0.10",
+    "@workos-inc/authkit-nextjs": "^2.12.0",
     "d3-force": "^3.0.0",
     "next": "16.2.9",
     "react": "19.2.4",

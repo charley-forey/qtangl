@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 
+import type { AssessApiMode } from "@/lib/qtangl-api-context";
 import { ASSESS_RESULT_TABS, scenarioIndustry, type AssessResultTab } from "@/lib/assess-config";
 import type { PqcScanResponse, ReportAvailabilityResponse } from "@/lib/pqc";
 
@@ -52,6 +53,8 @@ type AssessResultsPanelProps = {
   onOpenDrawer: () => void;
   onRunComparisonScan: () => void;
   tenantApiKey: string | null;
+  assessMode?: AssessApiMode;
+  reportApiKey?: string;
 };
 
 export default function AssessResultsPanel({
@@ -66,10 +69,15 @@ export default function AssessResultsPanel({
   onOpenDrawer,
   onRunComparisonScan,
   tenantApiKey,
+  assessMode = "demo",
+  reportApiKey,
 }: AssessResultsPanelProps) {
+  const isProduction = assessMode === "production";
   const topAsset = scan.assets[0];
   const explanations = scan.report?.assetExplanations as Record<string, string> | undefined;
-  const industry = scenarioIndustry(scan.scenario?.id ?? "bank-tls-inventory");
+  const industry =
+    (scan.details?.industry as string | undefined) ??
+    scenarioIndustry(scan.scenario?.id ?? "bank-tls-inventory");
 
   const qualityIssues: string[] = [];
   if (scan.assets.length === 0) qualityIssues.push("No assets discovered.");
@@ -125,7 +133,7 @@ export default function AssessResultsPanel({
         <PqcSection title="Remediation preview">
           <RemediationBacklog items={scan.remediationBacklog} limit={8} />
         </PqcSection>
-        <AssessUpsellBlock scan={scan} onRunComparisonScan={onRunComparisonScan} />
+        <AssessUpsellBlock scan={scan} onRunComparisonScan={onRunComparisonScan} hidden={isProduction} />
       </PqcTabPanel>
 
       <PqcTabPanel id="assess-panel-compliance" active={activeTab === "compliance"} tabId="compliance" className="pqc-print-tab-compliance">
@@ -168,7 +176,11 @@ export default function AssessResultsPanel({
           <RemediationBacklog items={scan.remediationBacklog} />
         </PqcSection>
         <PqcSection title="What-if readiness projection">
-          <RemediationWhatIfPublic scanId={scan.scanId} items={scan.remediationBacklog} />
+          <RemediationWhatIfPublic
+            scanId={scan.scanId}
+            items={scan.remediationBacklog}
+            apiKey={reportApiKey}
+          />
         </PqcSection>
         <RoiCalculator quantumVulnerable={scan.scoreboard.qtangl.quantum_vulnerable} />
       </PqcTabPanel>
@@ -225,10 +237,19 @@ export default function AssessResultsPanel({
           </p>
           <AssessShareLinkButton scanId={scan.scanId} className="mt-3" />
         </PqcSection>
-        {tenantApiKey ? (
-          <PqcSection title="Tenant dashboard">
-            <Link href={`/dashboard?scanId=${encodeURIComponent(scan.scanId)}`} className="text-sm text-white underline">
-              View in dashboard →
+        {isProduction || tenantApiKey ? (
+          <PqcSection title="Your workspace">
+            <Link
+              href={`/dashboard?scanId=${encodeURIComponent(scan.scanId)}`}
+              className="inline-flex rounded-full border border-white bg-white px-5 py-2 text-sm font-medium text-black"
+            >
+              View in Dashboard
+            </Link>
+            <Link
+              href={`/dashboard?scanId=${encodeURIComponent(scan.scanId)}#schedules`}
+              className="ml-3 text-sm text-white underline"
+            >
+              Schedule weekly re-scan
             </Link>
           </PqcSection>
         ) : null}

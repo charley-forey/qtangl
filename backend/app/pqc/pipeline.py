@@ -24,6 +24,8 @@ def run_pqc_scan(
     on_progress: Callable[[TimelineEvent], None] | None = None,
     depth: str = "standard",
     scan_id: str | None = None,
+    industry: str | None = None,
+    tenant_id: str | None = None,
 ) -> ScanBundle:
     del seed  # reserved for reproducibility hooks
     started = perf_counter()
@@ -47,12 +49,15 @@ def run_pqc_scan(
                 "Live PQC scanning is disabled. Set QTANGL_PQC_ENABLE_LIVE_SCAN=true "
                 "or use fixture mode."
             )
-        assets, timeline, scan_coverage = scan_live(
-            scenario,
-            target_override=target_override,
-            uploaded_rows=uploaded_rows,
-            on_progress=on_progress,
-        )
+        from app.pqc.scan_context import scan_tenant_context
+
+        with scan_tenant_context(tenant_id):
+            assets, timeline, scan_coverage = scan_live(
+                scenario,
+                target_override=target_override,
+                uploaded_rows=uploaded_rows,
+                on_progress=on_progress,
+            )
 
     emit("risk", "Applying Mosca HNDL risk model…")
     assets = flag_key_reuse(assets)
@@ -147,5 +152,6 @@ def run_pqc_scan(
             "readinessBand": assessment["band"],
             "pqcReadyCount": assessment["pqcReadyCount"],
             "scanDepth": depth,
+            **({"industry": industry} if industry else {}),
         },
     )
