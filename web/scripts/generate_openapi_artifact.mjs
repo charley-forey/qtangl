@@ -8,6 +8,12 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const repoRoot = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
+
+if (process.env.VERCEL) {
+  console.log("Skipping OpenAPI export on Vercel (using committed web/public/openapi.json).");
+  process.exit(0);
+}
+
 const result = spawnSync("python", [join(repoRoot, "backend", "scripts", "export_openapi.py")], {
   stdio: "inherit",
   cwd: repoRoot,

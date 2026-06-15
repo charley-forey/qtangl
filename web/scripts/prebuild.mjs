@@ -7,6 +7,10 @@ import { spawnSync } from "node:child_process";
 
 const isVercel = Boolean(process.env.VERCEL);
 
+if (isVercel) {
+  console.log("Skipping web prebuild codegen on Vercel (committed artifacts + installCommand SDK compile).");
+}
+
 const steps = isVercel
   ? []
   : [
