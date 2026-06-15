@@ -50,6 +50,17 @@ const nextConfig: NextConfig = {
       },
       {
         source: "/demo/pqc",
+        has: [{ type: "query", key: "mode", value: "mini" }],
+        destination: "/assess/mini",
+        permanent: true,
+      },
+      {
+        source: "/demo/pqc/methodology",
+        destination: "/assess/methodology",
+        permanent: true,
+      },
+      {
+        source: "/demo/pqc",
         destination: "/assess",
         permanent: true,
       },

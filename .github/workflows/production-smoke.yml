@@ -60,3 +60,8 @@ jobs:
               sys.exit(1)
           print(f"dogfood/latest OK scanId={data.get('scanId')}")
           PY
+
+      - name: Assess web surface smoke
+        env:
+          QTANGL_WEB_BASE: https://www.qtangl.com
+        run: python scripts/assess_web_smoke.py

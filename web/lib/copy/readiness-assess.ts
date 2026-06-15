@@ -41,9 +41,9 @@ export const assessPageCopy = {
     title: "Try a regulated scenario",
     description: "Pre-loaded targets for banking, government, and healthcare readiness workflows.",
     items: [
-      { label: "Bank TLS inventory", href: "/assess?scenario=bank-tls-inventory" },
-      { label: "Gov contractor CMMC", href: "/assess?scenario=gov-contractor-cmmc" },
-      { label: "Healthcare HNDL", href: "/assess?scenario=healthcare-insurer-hndl" },
+      { label: "Bank TLS inventory", href: "/assess?scenario=bank-tls-inventory&autorun=1" },
+      { label: "Gov contractor CMMC", href: "/assess?scenario=gov-contractor-cmmc&autorun=1" },
+      { label: "Healthcare HNDL", href: "/assess?scenario=healthcare-insurer-hndl&autorun=1" },
     ],
   },
   cta: {

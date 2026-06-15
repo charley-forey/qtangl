@@ -59,7 +59,7 @@ Central education destination linked from homepage, nav footer, and blog.
 |-------|---------|
 | **Timeline widget** | Deadline tiers from [deadlines.json](../../demos/pqc_migration/data/deadlines.json) |
 | **Mosca calculator** | Simple X/Y/Z inputs → inequality holds? |
-| **Try it CTA** | → `/demo/pqc` |
+| **Try it CTA** | → `/assess` |
 | **Sample artifacts** | CBOM JSON, redacted PDF, verify link demo, transparency log seq screenshot |
 | **Framework grid** | Links to framework guides below |
 
@@ -94,7 +94,7 @@ Long-form guides (2,000–4,000 words) targeting compliance search intent.
 |---------|---------------|-------------|----------|
 | post-quantum cryptography readiness | High | `/`, `/platform` | P0 |
 | PQC assessment / PQC inventory | High | `/assess` | P0 |
-| quantum vulnerable TLS scan | Medium | `/demo/pqc` | P0 |
+| quantum vulnerable TLS scan | Medium | `/assess` | P0 |
 | Q-Day readiness | Medium | `/q-day` | P0 |
 | crypto agility assessment | Medium | `/platform` | P1 |
 | CycloneDX CBOM export | Low (technical) | `/q-day/cbom` | P1 |
@@ -157,7 +157,7 @@ The learn library (~90 OSS repos in [web/content/library/](../../web/content/lib
 |--------|--------|
 | **Add category** | "Post-Quantum Cryptography" filter on `/learn` |
 | **Curate PQC repos** | liboqs, oqs-provider, pqcrypto, CBOM tools — index with readiness framing |
-| **Cross-link** | Each PQC repo page links to `/demo/pqc` and relevant framework guide |
+| **Cross-link** | Each PQC repo page links to `/assess` and relevant framework guide |
 | **De-emphasize** | Quantum computing repos remain but not on homepage/learn hero |
 | **New editorial** | Add entries to [library-editorial.ts](../../web/lib/copy/library-editorial.ts) for PQC topics |
 
@@ -182,7 +182,7 @@ The learn library (~90 OSS repos in [web/content/library/](../../web/content/lib
 | **Gate** | Work email |
 | **Delivery** | Instant in-browser + PDF email |
 | **Upsell** | "Authorize live scan for full CBOM" → Assess SOW |
-| **Implementation** | `/demo/pqc` with `?mode=mini` + email capture modal; Track K5 |
+| **Implementation** | `/assess/mini` + email capture modal; Track K5 |
 
 ### 2. Sample CBOM download (ungated)
 
@@ -206,7 +206,7 @@ The learn library (~90 OSS repos in [web/content/library/](../../web/content/lib
 |-----------|--------|
 | **Format** | Markdown/PDF "20-point crypto agility checklist" |
 | **Placement** | `/q-day/checklist` |
-| **CTA** | "Automate with Qtangl" → `/demo/pqc` |
+| **CTA** | "Automate with Qtangl" → `/assess` |
 
 ---
 
@@ -216,7 +216,7 @@ Sync web content with [demos/pqc_migration/outreach/README.md](../../demos/pqc_m
 
 | Collateral | Web destination |
 |------------|-----------------|
-| Cold email demo link | `/demo/pqc` |
+| Cold email demo link | `/assess` |
 | PDF report sample | `/q-day/sample-report` (hosted redacted PDF) |
 | Scenario frameworks table | `/solutions/*` pages |
 | Objection handling | Internal sales wiki; public FAQ at `/docs/resources/faq` |

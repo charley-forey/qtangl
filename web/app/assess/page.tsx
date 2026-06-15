@@ -11,14 +11,16 @@ import Card from "@/components/ui/Card";
 import Eyebrow from "@/components/ui/Eyebrow";
 import AssessScannerLoader from "@/components/pqc/AssessScannerLoader";
 import ProductModeBanner from "@/components/marketing/ProductModeBanner";
+import TrustDogfoodSelfScan from "@/components/trust/TrustDogfoodSelfScan";
 import JsonLd from "@/components/seo/JsonLd";
 import { qtanglApiBaseUrl } from "@/lib/api";
+import { assessFaqItems, assessHowItWorks, assessTrustSignals } from "@/lib/copy/readiness-assess-faq";
 import { assessPageCopy } from "@/lib/copy/readiness-assess";
 import { sampleCbomPath } from "@/lib/copy/readiness-value";
 import { FALLBACK_SCENARIOS } from "@/lib/pqc-fallback";
 import { getPqcInventory, getPqcScenarios } from "@/lib/pqc";
 import type { CryptoAsset, Scenario } from "@/lib/pqc";
-import { absoluteUrl, buildPageMetadata, buildPqcDemoJsonLd } from "@/lib/seo";
+import { absoluteUrl, buildFaqJsonLd, buildPageMetadata, buildPqcDemoJsonLd } from "@/lib/seo";
 
 const scannerDescription =
   "Live Q-Day assessment: inventory quantum-vulnerable cryptography, Mosca HNDL risk, and signed evidence exports.";
@@ -79,6 +81,13 @@ export default async function AssessPage({
 
       <Section gap="tight" id="scanner" className="scroll-mt-28">
         <ProductModeBanner mode="live" />
+        <div className="mb-6 flex flex-wrap gap-3">
+          {assessTrustSignals.map((signal) => (
+            <Button key={signal.label} href={signal.href} variant="secondary" size="sm">
+              {signal.label}
+            </Button>
+          ))}
+        </div>
         <AssessScannerLoader
           initialInventory={inventory}
           initialScenarios={scenarioList}
@@ -86,6 +95,30 @@ export default async function AssessPage({
           backendMessage={backendMessage}
           apiBaseUrl={qtanglApiBaseUrl}
         />
+      </Section>
+
+      <Section gap="tight">
+        <div className="content-reading">
+          <Eyebrow>How it works</Eyebrow>
+          <h2 className="heading-section mt-4">Baseline in four steps</h2>
+        </div>
+        <ol className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {assessHowItWorks.map((item) => (
+            <li
+              key={item.step}
+              className="rounded-xl border border-[var(--border-subtle)] bg-black/20 px-4 py-5"
+            >
+              <p className="text-label">Step {item.step}</p>
+              <p className="mt-2 text-sm font-semibold text-white">{item.title}</p>
+              <p className="mt-2 text-xs leading-6 text-[var(--color-gray-400)]">{item.detail}</p>
+            </li>
+          ))}
+        </ol>
+        <p className="mt-6">
+          <Button href="/assess/methodology" variant="secondary" size="sm">
+            How scoring works
+          </Button>
+        </p>
       </Section>
 
       <Section gap="tight">
@@ -145,6 +178,26 @@ export default async function AssessPage({
         </div>
       </Section>
 
+      <Section gap="tight">
+        <Eyebrow>Case study</Eyebrow>
+        <TrustDogfoodSelfScan />
+      </Section>
+
+      <Section gap="tight">
+        <div className="content-reading">
+          <Eyebrow>FAQ</Eyebrow>
+          <h2 className="heading-section mt-4">Common questions</h2>
+        </div>
+        <dl className="mt-8 space-y-6">
+          {assessFaqItems.map((item) => (
+            <div key={item.question}>
+              <dt className="text-sm font-semibold text-white">{item.question}</dt>
+              <dd className="mt-2 text-sm leading-7 text-[var(--color-gray-400)]">{item.answer}</dd>
+            </div>
+          ))}
+        </dl>
+      </Section>
+
       <Section gap="tight" className="pb-0">
         <Card tone="feature" size="lg" className="rounded-[var(--radius-feature)]">
           <h2 className="heading-section">{cta.title}</h2>
@@ -160,6 +213,7 @@ export default async function AssessPage({
         </Card>
       </Section>
       <JsonLd data={buildPqcDemoJsonLd({ description: scannerDescription, url: absoluteUrl("/assess") })} />
+      <JsonLd data={buildFaqJsonLd(assessFaqItems)} />
     </PageShell>
   );
 }

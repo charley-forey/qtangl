@@ -67,7 +67,7 @@ export const solutionsCopy = {
       title: "TLS inventory your examiners expect",
       description:
         "Map external-facing crypto across APIs, portals, and email. Quantify HNDL on long-lived financial data with signed evidence.",
-      scenarioHref: "/assess?scenario=bank-tls-inventory",
+      scenarioHref: "/assess?scenario=bank-tls-inventory&autorun=1",
       scenarioLabel: "Run bank TLS scenario",
     },
     why: {
@@ -111,7 +111,7 @@ export const solutionsCopy = {
     cta: {
       title: "Start with a bank TLS assessment",
       description: "Run the pre-loaded scenario or request a pilot for your production domains.",
-      primary: { label: "Run bank scenario", href: "/assess?scenario=bank-tls-inventory" },
+      primary: { label: "Run bank scenario", href: "/assess?scenario=bank-tls-inventory&autorun=1" },
       secondary: { label: "Request pilot", href: "/access" },
     },
     hndlResources: [
@@ -132,7 +132,7 @@ export const solutionsCopy = {
       title: "CMMC-ready crypto evidence",
       description:
         "Inventory quantum-vulnerable algorithms, map to CMMC Level 2 controls, and prove migration progress with signed verify links.",
-      scenarioHref: "/assess?scenario=gov-contractor-cmmc",
+      scenarioHref: "/assess?scenario=gov-contractor-cmmc&autorun=1",
       scenarioLabel: "Run CMMC scenario",
     },
     why: {
@@ -177,7 +177,7 @@ export const solutionsCopy = {
     cta: {
       title: "Start with a CMMC inventory",
       description: "We provide crypto inventory evidence — not formal CMMC certification.",
-      primary: { label: "Run CMMC scenario", href: "/assess?scenario=gov-contractor-cmmc" },
+      primary: { label: "Run CMMC scenario", href: "/assess?scenario=gov-contractor-cmmc&autorun=1" },
       secondary: { label: "Request pilot", href: "/access" },
     },
     hndlResources: [
@@ -198,7 +198,7 @@ export const solutionsCopy = {
       title: "HNDL is the headline",
       description:
         "Health records live for decades — Mosca inequality almost always holds. Inventory TLS paths without processing PHI.",
-      scenarioHref: "/assess?scenario=healthcare-insurer-hndl",
+      scenarioHref: "/assess?scenario=healthcare-insurer-hndl&autorun=1",
       scenarioLabel: "Run healthcare scenario",
     },
     why: {
@@ -242,7 +242,7 @@ export const solutionsCopy = {
     cta: {
       title: "Start with a healthcare assessment",
       description: "PQC scans are TLS/crypto inventory only — no PHI is processed. No BAA required for inventory.",
-      primary: { label: "Run healthcare scenario", href: "/assess?scenario=healthcare-insurer-hndl" },
+      primary: { label: "Run healthcare scenario", href: "/assess?scenario=healthcare-insurer-hndl&autorun=1" },
       secondary: { label: "Request pilot", href: "/access" },
     },
     hndlResources: [

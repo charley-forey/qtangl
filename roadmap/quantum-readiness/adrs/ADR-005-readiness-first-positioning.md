@@ -27,7 +27,7 @@ Constraints:
 
 Reposition qtangl.com to readiness-first:
 
-1. **Homepage hero:** "Assess. Monitor. Convert." with primary CTA → `/demo/pqc`
+1. **Homepage hero:** "Assess. Monitor. Convert." with primary CTA → `/assess`
 2. **Primary nav:** Platform, Assess, Demo (PQC), Docs, Pricing, Access
 3. **New landing pages:** `/platform`, `/assess`, `/monitor`, `/convert`, `/pricing`, `/platform/optimize`
 4. **Education hub:** `/q-day` with HNDL, Mosca, deadlines, CBOM guides

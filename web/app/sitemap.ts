@@ -32,7 +32,7 @@ const readinessRoutes = [
   "/solutions/banking",
   "/solutions/government",
   "/solutions/healthcare",
-  "/demo/pqc/methodology",
+  "/assess/methodology",
   "/trust",
   "/status",
   "/verify",

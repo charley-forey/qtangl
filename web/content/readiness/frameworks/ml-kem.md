@@ -5,7 +5,7 @@ keyword: "ML-KEM ML-DSA migration"
 journeyStage: convert
 hubLink: "/q-day/hybrid-tls"
 hubLabel: "Hybrid TLS proof"
-ctaPrimary: "/demo/pqc"
+ctaPrimary: "/assess"
 datePublished: "2026-06-03"
 eyebrow: "FIPS 203-205"
 intro: "FIPS 203 (ML-KEM), FIPS 204 (ML-DSA), and FIPS 205 (SLH-DSA) are available now — hybrid TLS is the near-term deployment path for most enterprises."

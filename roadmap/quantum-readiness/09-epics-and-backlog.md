@@ -96,11 +96,11 @@ Execute spec in [04-website-transformation.md](./04-website-transformation.md).
 ### Acceptance criteria
 
 - [ ] Homepage hero is readiness-first
-- [ ] Nav: Platform, Assess, Demo→pqc, Pricing
+- [ ] Nav: Platform, Assess, Demo→assess, Pricing
 - [ ] `/platform`, `/assess`, `/monitor`, `/convert`, `/pricing` live
 - [ ] `/pqc` redirects to `/platform`
 - [ ] Optimization cross-link banner on `/technology`, `/demo/hospital`
-- [ ] Playwright: homepage CTA → `/demo/pqc`
+- [ ] Playwright: homepage CTA → `/assess`
 
 ---
 
@@ -152,7 +152,7 @@ Mini-assessment, Stripe Monitor, onboarding emails.
 
 ### Acceptance criteria
 
-- [ ] Mini-assessment mode on `/demo/pqc` with email gate
+- [ ] Mini-assessment mode on `/assess/mini` with email gate
 - [ ] Sample CBOM downloadable from `/assess`
 - [ ] Stripe Monitor checkout on `/access` (when H5 ready)
 - [ ] Access form interest options include Assess/Monitor/Enterprise

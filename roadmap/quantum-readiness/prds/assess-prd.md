@@ -118,12 +118,12 @@ Components: QDayCommandCenter, InventoryHeatmap, SeverityDonut, RemediationBackl
 
 ## Acceptance criteria
 
-- [ ] Live scan completes for a real domain and produces signed PDF + CBOM in one session
-- [ ] SSRF attempts blocked (metadata IP, RFC1918, loopback)
-- [ ] Mini-assessment captures email and shows top-5 findings (fixture)
-- [ ] Verify link validates signature and shows provenance
-- [ ] Framework mapping present for each in-scope asset class
-- [ ] Readout flow surfaces drift demo + Monitor proposal
+- [x] Live scan completes for a real domain and produces signed PDF + CBOM in one session
+- [x] SSRF attempts blocked (metadata IP, RFC1918, loopback)
+- [x] Mini-assessment captures email and shows top-5 findings (fixture)
+- [x] Verify link validates signature and shows provenance
+- [x] Framework mapping present for each in-scope asset class
+- [x] Readout flow surfaces drift demo + Monitor proposal
 
 ---
 

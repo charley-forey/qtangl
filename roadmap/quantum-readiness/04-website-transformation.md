@@ -10,7 +10,7 @@ Concrete specification to reposition qtangl.com from "Quantum Planning API" to p
 |-----------|--------|-------|
 | Homepage hero | "Every possibility ranked…" (optimization) | "Assess. Monitor. Convert." (readiness) |
 | Nav subtitle | Quantum Planning API | Q-Day Readiness (or Qtangl) |
-| Primary CTA | Find Quantum → `/demo` | Run assessment → `/demo/pqc` |
+| Primary CTA | Find Quantum → `/demo` | Run assessment → `/assess` |
 | Headline demo | Hospital 4:11 | PQC scan → PDF → verify |
 | Nav order | Demo, Technology, Docs | Platform, Assess, Demo, Docs, Pricing |
 | `/demo` index | Hospital first | PQC first |
@@ -29,7 +29,6 @@ flowchart TB
   Monitor["/monitor"]
   Convert["/convert"]
   Pricing["/pricing"]
-  DemoPqc["/demo/pqc"]
   DemoOpt["/demo/hospital|airline|ev-fleet"]
   Dashboard["/dashboard"]
   Verify["/verify"]
@@ -42,7 +41,6 @@ flowchart TB
   Platform --> Assess
   Platform --> Monitor
   Platform --> Convert
-  Assess --> DemoPqc
   Monitor --> Dashboard
   Convert --> Pricing
   QDayHub --> Docs
@@ -53,8 +51,8 @@ flowchart TB
 | Order | Label | Href | Notes |
 |-------|-------|------|-------|
 | 1 | Platform | `/platform` | Journey overview: Assess → Monitor → Convert |
-| 2 | Assess | `/assess` | Tier landing + CTA to demo |
-| 3 | Demo | `/demo/pqc` | Default demo route (not `/demo` index) |
+| 2 | Assess | `/assess` | Tier landing + live scanner |
+| 3 | Demo | `/assess` | Default assessment entry (legacy `/demo/pqc` redirects) |
 | 4 | Docs | `/docs` | PQC guides first in docs index |
 | 5 | Pricing | `/pricing` | Tier matrix |
 | 6 | Access | `/access` | Pilot / Monitor signup |
@@ -84,7 +82,7 @@ flowchart TB
 | Eyebrow | "Quantum Planning API" | "Post-quantum readiness" |
 | Title | "Every possibility ranked. One future your team runs." | "Assess. Monitor. Convert." |
 | Subhead | Superposition/collapse language | "Inventory quantum-vulnerable crypto in minutes. Monitor drift until Q-Day. Prove remediation with PQ-signed evidence your auditors can verify independently." |
-| Primary CTA | Find Quantum → `/demo` | Run Q-Day scan → `/demo/pqc` |
+| Primary CTA | Find Quantum → `/demo` | Run Q-Day scan → `/assess` |
 | Secondary CTA | Request access → `/access` | Verify a sample report → `/verify` (show log inclusion) |
 | Visual | Quantum state animation | Readiness score gauge + scan progress mock |
 
@@ -114,9 +112,9 @@ Replace `useCases` with vertical **readiness** scenarios:
 
 | Eyebrow | Title | Outcome | Demo href |
 |---------|-------|---------|-----------|
-| Banking | TLS inventory | NSM-10 + PCI-DSS mapping | `/demo/pqc?scenario=bank-tls-inventory` |
-| Gov contractor | CMMC crypto controls | CNSA 2.0 deadline tiers | `/demo/pqc?scenario=gov-contractor-cmmc` |
-| Healthcare | HNDL exposure | HIPAA + NIST IR 8547 | `/demo/pqc?scenario=healthcare-insurer-hndl` |
+| Banking | TLS inventory | NSM-10 + PCI-DSS mapping | `/assess?scenario=bank-tls-inventory&autorun=1` |
+| Gov contractor | CMMC crypto controls | CNSA 2.0 deadline tiers | `/assess?scenario=gov-contractor-cmmc&autorun=1` |
+| Healthcare | HNDL exposure | HIPAA + NIST IR 8547 | `/assess?scenario=healthcare-insurer-hndl&autorun=1` |
 
 Footer link: "Explore optimization demos →" → `/platform/optimize`
 
@@ -140,7 +138,7 @@ Add **evidence proof strip** below API preview:
 Update [web/components/marketing/CTA.tsx](../../web/components/marketing/CTA.tsx) copy source:
 
 - Title: "Ready for your first Q-Day assessment?"
-- Primary: `/access` or `/demo/pqc`
+- Primary: `/access` or `/assess`
 - Secondary: `/docs/guides/pqc-demo`
 
 ---
@@ -229,7 +227,7 @@ Current [access.ts](../../web/lib/copy/access.ts) targets "scheduling, routing, 
 
 **Target default next steps after submit:**
 
-1. Open Q-Day scanner → `/demo/pqc`
+1. Open Q-Day scanner → `/assess`
 2. Read PQC API guide → `/docs/guides/pqc-demo`
 3. Download sample CBOM → link to [sample-cbom](../../demos/pqc_migration/data/sample-cbom-bank-tls-inventory.json)
 
@@ -244,7 +242,7 @@ Current [access.ts](../../web/lib/copy/access.ts) targets "scheduling, routing, 
 | post-quantum cryptography readiness | `/` `/platform` |
 | PQC inventory / crypto inventory | `/assess` |
 | Q-Day readiness | `/q-day` |
-| quantum vulnerable TLS | `/demo/pqc` |
+| quantum vulnerable TLS | `/assess` |
 | CMMC PQC / NSM-10 compliance | `/solutions/government` |
 | harvest now decrypt later | `/q-day/hndl` (content) |
 
@@ -265,7 +263,8 @@ Update [web/lib/seo.ts](../../web/lib/seo.ts) `buildOrganizationJsonLd` descript
 | From | To | Type |
 |------|-----|------|
 | `/pqc` | `/platform` | 301 |
-| `/demo` | `/demo/pqc` | 302 (temporary until demo index updated) |
+| `/demo` | `/assess` | 302 (temporary until demo index updated) |
+| `/demo/pqc` | `/assess` | 301 (legacy scanner URL) |
 
 **Do not redirect** optimization demos — keep URLs for existing links.
 
@@ -273,7 +272,7 @@ Update [web/lib/seo.ts](../../web/lib/seo.ts) `buildOrganizationJsonLd` descript
 
 | Path | Priority |
 |------|----------|
-| `/`, `/platform`, `/assess`, `/demo/pqc` | 1.0 |
+| `/`, `/platform`, `/assess` | 1.0 |
 | `/monitor`, `/convert`, `/pricing`, `/q-day` | 0.9 |
 | `/solutions/*` | 0.8 |
 | `/demo/hospital`, `/technology` | 0.5 |
@@ -307,12 +306,12 @@ Update [web/lib/seo.ts](../../web/lib/seo.ts) `buildOrganizationJsonLd` descript
 - [ ] **K2-003** Update `nav.ts`, Header, Footer
 - [ ] **K2-004** Create `/platform`, `/assess`, `/monitor`, `/convert`, `/pricing` pages
 - [ ] **K2-005** Rewrite `access.ts` + access page
-- [ ] **K2-006** Reorder `/demo` index; default nav Demo → `/demo/pqc`
+- [ ] **K2-006** Reorder `/demo` index; default nav Demo → `/assess`
 - [ ] **K2-007** Update `siteMetadata`, SEO, JsonLd
 - [ ] **K2-008** Add optimization cross-link banner component
-- [ ] **K2-009** Configure redirects `/pqc` → `/platform`
+- [ ] **K2-009** Configure redirects `/pqc` → `/platform`, `/demo/pqc` → `/assess`
 - [ ] **K2-010** Update public docs roadmap bands in `roadmap.ts`
-- [ ] **K2-011** Playwright e2e: homepage CTA → `/demo/pqc`; nav links resolve
+- [ ] **K2-011** Playwright e2e: homepage CTA → `/assess`; nav links resolve
 
 ---
 

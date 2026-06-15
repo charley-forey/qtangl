@@ -37,7 +37,7 @@ export const readinessBlogCta = {
   title: "See your exposure with evidence",
   description:
     "Run a live PQC inventory scan, export a CBOM, and verify signed reports independently.",
-  primaryHref: "/demo/pqc",
+  primaryHref: "/assess",
   primaryLabel: "Try the PQC demo",
   secondaryHref: "/assess",
   secondaryLabel: "Explore Assess tier",
@@ -112,7 +112,7 @@ export const readinessArticles = {
       {
         title: "Step 1: Run the scanner",
         body: [
-          "Open the Qtangl PQC demo at /demo/pqc or authorize a live domain scan through Assess. The scanner probes TLS handshakes, certificate chains, and cipher suites — mapping each endpoint to algorithm families and key sizes.",
+          "Open the Qtangl Q-Day assessment at /assess or authorize a live domain scan through Assess. The scanner probes TLS handshakes, certificate chains, and cipher suites — mapping each endpoint to algorithm families and key sizes.",
           "Results appear in minutes: endpoint list, severity-ranked findings, framework crosswalks (NSM-10, CNSA 2.0, NIST IR 8547), and a readiness score combining exposure, coverage, and deadline pressure.",
         ],
       },

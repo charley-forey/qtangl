@@ -15,9 +15,9 @@ Follow this doc for Track **E1** (first PQC pilot): sell, demo, run the assessme
 
 **Live product**
 
-- Demo: https://www.qtangl.com/demo/pqc
+- Demo: https://www.qtangl.com/assess
 - Customer dashboard: https://www.qtangl.com/dashboard
-- Methodology: https://www.qtangl.com/demo/pqc/methodology
+- Methodology: https://www.qtangl.com/assess/methodology
 
 ---
 
@@ -44,12 +44,12 @@ Follow this doc for Track **E1** (first PQC pilot): sell, demo, run the assessme
 
 Use in this order on sales calls:
 
-1. **Live demo** — https://www.qtangl.com/demo/pqc (confirm “backend connected”)
+1. **Live demo** — https://www.qtangl.com/assess (confirm “backend connected”)
 2. **Fixture scan** — predictable results every time (best for recordings)
 3. **Sample CBOM** — attach `data/sample-cbom-bank-tls-inventory.json`
 4. **Honesty blog** — https://www.qtangl.com/blog/when-classical-wins
 5. **Production persistence** — tenant dashboard with real scan history (see §6)
-6. **Methodology** — https://www.qtangl.com/demo/pqc/methodology
+6. **Methodology** — https://www.qtangl.com/assess/methodology
 
 **Skeptic line:** *“This is an inventory and prioritization tool with honest disclaimers — not a formal audit. Here is the sample CBOM and PDF you would get on your authorized targets.”*
 
@@ -59,7 +59,7 @@ Use in this order on sales calls:
 
 | Mode | When | How |
 |------|------|-----|
-| **Fixture** | First calls, recordings, no legal paperwork | `/demo/pqc` → select scenario → check authorization → **Run scan** with fixture enabled (default) |
+| **Fixture** | First calls, recordings, no legal paperwork | `/assess` → select scenario → check authorization → **Run scan** with fixture enabled (default) |
 | **Live (public test host)** | Prove real scanning before customer signs | Railway: enable live scan + allowlist → scan `test.openquantumsafe.org` (see §4) |
 | **Live (customer)** | Paid pilot week 1 | Written authorization + allowlist their domains OR PEM/CSV bundle upload |
 | **Live (your own site)** | Dogfood / credibility | Scan `qtangl.com` (weekly CI already does this — G7) |
@@ -104,7 +104,7 @@ Follow [script.md](./script.md). Short version:
 
 | Step | Action |
 |------|--------|
-| 1 | Open `/demo/pqc` → **Regional bank TLS inventory** (or gov / healthcare scenario) |
+| 1 | Open `/assess` → **Regional bank TLS inventory** (or gov / healthcare scenario) |
 | 2 | Confirm authorization checkbox → **Run Q-Day scan** (fixture) |
 | 3 | Walk scoreboard: assets, quantum-vulnerable count, readiness score |
 | 4 | **Mosca panel:** data shelf life, migration time, years to Q-Day |
@@ -130,12 +130,12 @@ There are **three different keys**. Do not confuse them.
 | Key | Who has it | Used for |
 |-----|------------|----------|
 | **`QTANGL_ADMIN_API_KEY`** | You only (Railway secret) | Create tenants, issue/revoke customer keys (`POST /admin/*`) |
-| **`QTANGL_API_KEY`** (demo / sandbox) | Public demo, Vercel `NEXT_PUBLIC_QTANGL_SANDBOX_API_KEY` | `/demo/pqc` sandbox scans → stored under **`sandbox`** tenant |
+| **`QTANGL_API_KEY`** (demo / sandbox) | Public demo, Vercel `NEXT_PUBLIC_QTANGL_SANDBOX_API_KEY` | `/assess` sandbox scans → stored under **`sandbox`** tenant |
 | **Tenant API key** (`qtangl_…`) | Each pilot customer | Their scans only; `/dashboard` + API |
 
 ### Test the dashboard yourself (sandbox)
 
-1. Run a **fixture scan** on https://www.qtangl.com/demo/pqc
+1. Run a **fixture scan** on https://www.qtangl.com/assess
 2. Open https://www.qtangl.com/dashboard
 3. Paste your **sandbox API key** (same value as Railway `QTANGL_API_KEY` and Vercel `NEXT_PUBLIC_QTANGL_SANDBOX_API_KEY`)
 4. Click **Connect** → you should see the scan with status `done`
@@ -282,7 +282,7 @@ After any scan completes, the backend builds a **scan bundle** and stores it in 
 **Dashboard PDF link:** `GET /tenant/scans/{scanId}/report?format=pdf&api_key=<tenant-key>`  
 (The dashboard “PDF” button uses the tenant key automatically.)
 
-**Demo UI:** After scan on `/demo/pqc`, use **Download PDF report** in the results panel (or **All formats** for CBOM/JSON/CSV).
+**Demo UI:** After scan on `/assess`, use **Download PDF report** in the results panel (or **All formats** for CBOM/JSON/CSV).
 
 ### PDF contents (compliance report pack)
 

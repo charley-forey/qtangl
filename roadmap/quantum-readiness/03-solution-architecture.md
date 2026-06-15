@@ -42,7 +42,7 @@ flowchart TB
     Email["Email alerts"]
   end
   subgraph ui [Customer UI]
-    Demo["/demo/pqc"]
+    Demo["/assess"]
     Dashboard["/dashboard"]
     JourneyPages["/assess /monitor /convert"]
   end

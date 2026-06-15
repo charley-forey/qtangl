@@ -367,10 +367,65 @@ export async function provePqcHandshake(useFixture = true) {
 export async function uploadPqcBundle(file: File) {
   const formData = new FormData();
   formData.append("file", file);
-  return fetchQtanglJson<{ status: "success"; sessionId: string; summary: string }>(
-    "/pqc/upload-bundle",
-    { method: "POST", body: formData, skipJsonContentType: true }
+  return fetchQtanglJson<{
+    status: "success";
+    sessionId: string;
+    summary: string;
+    rowCount?: number;
+    preview?: { algorithms: string[]; qVulnerable?: number };
+  }>("/pqc/upload-bundle", { method: "POST", body: formData, skipJsonContentType: true });
+}
+
+export type ReadinessIndexSnapshot = {
+  available: boolean;
+  reason?: string;
+  industry?: string;
+  medianReadiness?: number;
+  p25?: number;
+  p75?: number;
+  sampleSize?: number;
+  minCohort?: number;
+  disclaimer?: string;
+};
+
+export async function getPqcIndex(industry = "financial") {
+  return fetchQtanglJson<{ status: "success"; index: ReadinessIndexSnapshot }>(
+    `/pqc/index?industry=${encodeURIComponent(industry)}`
   );
+}
+
+export type RemediationProjection = {
+  currentReadinessScore: number;
+  projectedReadinessScore: number;
+  delta: number;
+  selectedCount: number;
+  assumptions: string[];
+};
+
+export async function simulatePqcRemediation(scanId: string, remediationIds: string[]) {
+  return fetchQtanglJson<{ status: "success"; projection: RemediationProjection }>(
+    `/pqc/scan/${encodeURIComponent(scanId)}/remediation/simulate`,
+    { method: "POST", body: JSON.stringify({ remediationIds }) }
+  );
+}
+
+export function compareToBenchmark(score: number, index: ReadinessIndexSnapshot) {
+  if (!index.available || index.p25 == null || index.medianReadiness == null || index.p75 == null) {
+    return { available: false as const, reason: index.reason ?? "insufficient_cohort" };
+  }
+  let band: "above_peers" | "within_band" | "below_peers" = "within_band";
+  if (score > index.p75) band = "above_peers";
+  else if (score < index.p25) band = "below_peers";
+  return {
+    available: true as const,
+    band,
+    yourScore: score,
+    median: index.medianReadiness,
+    p25: index.p25,
+    p75: index.p75,
+    sampleSize: index.sampleSize,
+    delta: score - index.medianReadiness,
+  };
 }
 
 export function pqcReportUrl(

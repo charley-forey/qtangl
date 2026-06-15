@@ -195,10 +195,18 @@ async def upload_bundle(
         raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail=str(exc)) from exc
 
     session_id = create_session(rows, tenant_id=auth.tenant_id)
+    q_vulnerable = sum(
+        1
+        for row in rows
+        if str(row.get("status", "")).lower() in {"broken", "at-risk", "quantum_vulnerable"}
+    )
+    algorithms = sorted({str(row.get("algorithm", "unknown")) for row in rows if row.get("algorithm")})[:8]
     return {
         "status": "success",
         "sessionId": session_id,
+        "rowCount": len(rows),
         "summary": f"Validated {len(rows)} bundle entries and stored them in a 24-hour session.",
+        "preview": {"algorithms": algorithms, "qVulnerable": q_vulnerable},
     }
 
 
@@ -527,6 +535,36 @@ def persist_scan_bundle(
         "scanId": scan_id,
         **_report_meta_for_scan(scan_id, tenant_id=auth.tenant_id),
     }
+
+
+@router.post(
+    "/scan/{scan_id}/remediation/simulate",
+    responses={401: {"model": ErrorResponse}, 404: {"model": ErrorResponse}},
+)
+def pqc_remediation_simulate(
+    scan_id: str,
+    body: dict[str, Any],
+    auth: AuthContext = Depends(require_auth_readonly),
+) -> dict:
+    from app.remediation.service import simulate_post_migration_readiness
+
+    bundle_dict = load_scan_bundle(scan_id, tenant_id=auth.tenant_id)
+    if bundle_dict is None and auth.tenant_id == "sandbox":
+        bundle_dict = load_scan_bundle_for_public_verify(scan_id)
+    if bundle_dict is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Scan not found.")
+    remediation_ids = body.get("remediationIds") or []
+    if not isinstance(remediation_ids, list):
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail="remediationIds must be an array.",
+        )
+    report = bundle_dict.get("report") or {}
+    projection = simulate_post_migration_readiness(
+        report=report,
+        selected_remediation_ids=[str(rid) for rid in remediation_ids],
+    )
+    return {"status": "success", "scanId": scan_id, "projection": projection}
 
 
 @router.get("/report/{scan_id}/availability", responses={401: {"model": ErrorResponse}})

@@ -1,7 +1,7 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
 
-const mobileAuditRoutes = ["/", "/platform", "/pricing", "/compare", "/docs", "/dashboard"] as const;
+const mobileAuditRoutes = ["/", "/platform", "/pricing", "/compare", "/docs", "/dashboard", "/assess"] as const;
 
 test.describe("Mobile accessibility", () => {
   test.beforeEach(async ({ page }) => {

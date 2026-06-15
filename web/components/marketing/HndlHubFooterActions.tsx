@@ -22,10 +22,10 @@ export default function HndlHubFooterActions() {
         Free mini-assessment
       </Button>
       <Button
-        href="/demo/pqc"
+        href="/assess"
         variant="secondary"
         onClick={() =>
-          trackEvent("hndl_cta_click", { destination: "/demo/pqc", placement: "footer" })
+          trackEvent("hndl_cta_click", { destination: "/assess", placement: "footer" })
         }
       >
         Try PQC demo

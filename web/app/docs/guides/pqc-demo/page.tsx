@@ -12,8 +12,8 @@ import { buildPageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildPageMetadata({
   path: "/docs/guides/pqc-demo",
-  title: "PQC scanner demo guide",
-  description: "Drive the Q-Day readiness scanner API and export CBOM migration reports.",
+  title: "Assess scanner guide",
+  description: "Drive the Q-Day readiness scanner at /assess and export CBOM migration reports.",
 });
 
 export default function PqcDemoGuidePage() {
@@ -25,7 +25,7 @@ export default function PqcDemoGuidePage() {
         description="PQC migration pilot API workflow."
       />
       <DocsShell
-        title="PQC scanner demo guide"
+        title="Assess scanner guide"
         description="Domain scan → Mosca HNDL risk → remediation backlog → PQ handshake proof → CBOM/PDF export."
         pathname="/docs/guides/pqc-demo"
         searchIndex={docsSearchIndex}

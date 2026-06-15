@@ -19,6 +19,7 @@ All notable changes to the Qtangl platform. Public-facing release notes also app
 ### Changed
 
 - API version bumped to `0.9.0` in OpenAPI metadata
+- Primary assessment UI at `/assess` (legacy `/demo/pqc` redirects)
 - PDF report footer includes `pip install qtangl-verify` verification instructions
 - CI runs dashboard Playwright e2e when `dashboard.spec.ts` exists
 

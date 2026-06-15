@@ -70,20 +70,20 @@ export const readinessUseCases = [
     title: "TLS inventory",
     outcome: "NSM-10 and PCI-DSS mapping for external-facing crypto.",
     measurement: `${hndl.label} exposure · CBOM export · verify link`,
-    demoHref: "/assess?scenario=bank-tls-inventory",
+    demoHref: "/assess?scenario=bank-tls-inventory&autorun=1",
   },
   {
     eyebrow: "Gov contractor",
     title: "CMMC crypto controls",
     outcome: "CNSA 2.0 deadline tiers mapped to your TLS footprint.",
     measurement: "Control gaps · remediation backlog · signed report",
-    demoHref: "/assess?scenario=gov-contractor-cmmc",
+    demoHref: "/assess?scenario=gov-contractor-cmmc&autorun=1",
   },
   {
     eyebrow: "Healthcare",
     title: "HNDL exposure",
     outcome: "HIPAA-sensitive data paths with NIST IR 8547 alignment.",
     measurement: "Mosca timeline · priority queue · audit pack",
-    demoHref: "/assess?scenario=healthcare-insurer-hndl",
+    demoHref: "/assess?scenario=healthcare-insurer-hndl&autorun=1",
   },
 ] as const;

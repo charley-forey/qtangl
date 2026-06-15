@@ -55,8 +55,8 @@ Phases overlap intentionally — content and product run parallel to website.
 ### Gate — Phase 1 complete
 
 - [ ] Homepage hero is readiness-first
-- [ ] Primary nav includes Platform, Assess, Demo (→ pqc), Pricing
-- [ ] `/demo/pqc` is default demo entry
+- [ ] Primary nav includes Platform, Assess, Demo (→ `/assess`), Pricing
+- [ ] `/assess` is default assessment entry
 - [ ] Optimization accessible via `/platform/optimize` + footer
 - [ ] Zero broken links in Playwright smoke
 
@@ -321,7 +321,7 @@ If readiness repositioning hurts conversion unexpectedly:
 
 | Signal | Response |
 |--------|----------|
-| Demo starts drop >30% for 4 weeks | A/B test homepage; keep `/demo/pqc` CTA prominent |
+| Demo starts drop >30% for 4 weeks | A/B test homepage; keep `/assess` CTA prominent |
 | Wrong inbound (developers not CISOs) | Tighten SEO keywords; add persona gate on access form |
 | Optimization pipeline dies | Restore `/platform/optimize` homepage section (secondary column, not hero) |
 

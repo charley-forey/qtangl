@@ -9,7 +9,7 @@ export default function ReferencesPanel() {
         <p className="text-xs uppercase tracking-[0.18em] text-[var(--color-gray-500)]">References &amp; standards</p>
         <p className="mt-2 text-sm text-[var(--color-gray-300)]">
           Authoritative primary sources cited in this report.{" "}
-          <Link href="/demo/pqc/methodology" className="text-white underline underline-offset-4">
+          <Link href="/assess/methodology" className="text-white underline underline-offset-4">
             Full methodology
           </Link>
         </p>

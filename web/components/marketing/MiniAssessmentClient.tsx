@@ -17,6 +17,12 @@ import {
 } from "@/lib/copy/readiness-value";
 import { readMiniAssessmentFunnel } from "@/lib/hndl-funnel";
 
+const MINI_TO_ASSESS_SCENARIO: Record<string, string> = {
+  bank: "bank-tls-inventory",
+  gov: "gov-contractor-cmmc",
+  healthcare: "healthcare-insurer-hndl",
+};
+
 const SEVERITY_CLASS: Record<string, string> = {
   critical: "text-red-300",
   high: "text-amber-300",
@@ -38,7 +44,10 @@ function ScenarioPicker({
           <button
             key={scenario.id}
             type="button"
-            onClick={() => onSelect(scenario)}
+            onClick={() => {
+              onSelect(scenario);
+              trackEvent("mini_scenario_selected", { scenarioId: scenario.id });
+            }}
             aria-pressed={active}
             className={`touch-target rounded-full border px-4 py-2 text-sm transition ${
               active
@@ -77,6 +86,13 @@ export default function MiniAssessmentClient() {
       utmContent: funnel.utmContent,
     });
   }, [funnel]);
+
+  useEffect(() => {
+    if (unlocked) {
+      trackEvent("mini_assess_email_captured", { scenarioId: selected.id, source: formSource });
+      trackEvent("mini_assessment_unlock", { scenarioId: selected.id });
+    }
+  }, [unlocked, selected.id, formSource]);
 
   if (!unlocked) {
     return (
@@ -128,6 +144,9 @@ export default function MiniAssessmentClient() {
       </Card>
     );
   }
+
+  const assessScenario = MINI_TO_ASSESS_SCENARIO[selected.id] ?? "bank-tls-inventory";
+  const liveScanHref = `/assess?scenario=${encodeURIComponent(assessScenario)}&autorun=1`;
 
   return (
     <div className="space-y-6">
@@ -182,9 +201,7 @@ export default function MiniAssessmentClient() {
         <p className="mt-3 text-sm leading-7 text-[var(--color-gray-300)]">{selected.monitorPitch}</p>
         <div className="mt-6 flex flex-wrap gap-3">
           <Button href={upsell.primary.href}>{upsell.primary.label}</Button>
-          <Button href="/assess" variant="secondary">
-            Run live scan
-          </Button>
+          <Button href={liveScanHref}>Run live scan</Button>
           <Button
             href={`/access?interest=${encodeURIComponent("Q-Day Monitor (annual)")}&source=${encodeURIComponent(formSource)}`}
             variant="secondary"

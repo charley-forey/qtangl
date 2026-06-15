@@ -2,7 +2,7 @@
 
 **0:00** — "Your board wants a PQC migration plan before NSM-10 and NIST IR 8547 deadlines. Spreadsheets won't cut it."
 
-**0:25** — Open `/demo/pqc`, select **Regional bank TLS inventory**.
+**0:25** — Open `/assess?scenario=bank-tls-inventory&autorun=1` (Regional bank TLS inventory).
 
 **0:45** — Confirm authorization checkbox, run **fixture scan** for predictable recording.
 

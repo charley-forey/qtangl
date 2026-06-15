@@ -57,7 +57,7 @@ flowchart TB
 | **Trigger** | Board asks "how much RSA/ECDSA before 2030?" |
 | **Pain** | No centralized crypto inventory; spreadsheets miss JWKS, SSH, email STARTTLS |
 | **Success metric** | Readiness score trending up; audit passed; board satisfied |
-| **Qtangl entry** | `/demo/pqc` → Assessment SOW → Monitor |
+| **Qtangl entry** | `/assess` → Assessment SOW → Monitor |
 | **Objection** | "We have consultants" → speed + drift + verify links |
 
 ### Secondary: Compliance / GRC lead
@@ -243,7 +243,7 @@ Runs through all stages. This is the **moat**.
 
 | Channel | Assess | Monitor | Convert |
 |---------|--------|---------|---------|
-| **Website** | `/assess`, `/demo/pqc` | `/monitor`, `/dashboard` | `/convert`, `/pricing` |
+| **Website** | `/assess` | `/monitor`, `/dashboard` | `/convert`, `/pricing` |
 | **Email outbound** | [cold_email.md](../../demos/pqc_migration/outreach/cold_email.md) | Monitor drip after assess | Partner intro |
 | **Sales call** | Live scan on their domain | Diff demo | Remediation workshop |
 | **Self-serve** | Free mini-scan (lead magnet) | Stripe Monitor checkout | Contact sales |

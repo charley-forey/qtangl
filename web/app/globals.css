@@ -423,6 +423,16 @@ a:not([class]) {
     display: none !important;
   }
 
+  .pqc-print-area [role="tablist"],
+  .pqc-print-area [role="tabpanel"]:not(.pqc-print-tab-executive):not(.pqc-print-tab-compliance) {
+    display: none !important;
+  }
+
+  .pqc-print-tab-executive,
+  .pqc-print-tab-compliance {
+    display: block !important;
+  }
+
   .pqc-print-area {
     color: #000;
     background: #fff;

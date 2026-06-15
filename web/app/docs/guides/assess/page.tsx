@@ -81,6 +81,40 @@ export default function AssessGuidePage() {
       </DocsSection>
 
       <DocsSection>
+        <DocsHeading>Interactive UI at /assess</DocsHeading>
+        <p className="text-sm leading-8 text-[var(--color-gray-300)]">
+          The product page at{" "}
+          <Link href="/assess" className="text-white underline underline-offset-4">
+            /assess
+          </Link>{" "}
+          runs a four-step wizard (scenario → target → scope → run), then opens a tabbed readout:
+          Executive, Compliance, Inventory, Remediation, Technical, and Evidence.
+        </p>
+        <ul className="mt-4 list-disc space-y-2 pl-5 text-sm leading-7 text-[var(--color-gray-300)]">
+          <li>
+            Auto-run demos:{" "}
+            <code className="font-mono text-white">/assess?scenario=bank-tls-inventory&amp;autorun=1</code>
+          </li>
+          <li>
+            Revisit a completed scan: <code className="font-mono text-white">/assess?scanId=…</code>
+          </li>
+          <li>
+            Lead funnel: <Link href="/assess/mini" className="text-white underline">/assess/mini</Link> → full assess with autorun
+          </li>
+        </ul>
+      </DocsSection>
+
+      <DocsSection>
+        <DocsHeading>Board readout (15 minutes)</DocsHeading>
+        <ol className="list-decimal space-y-2 pl-5 text-sm leading-7 text-[var(--color-gray-300)]">
+          <li>Executive tab — readiness score, peer band, top vulnerability, Mosca timeline.</li>
+          <li>Compliance tab — framework mapping and migration roadmap.</li>
+          <li>Evidence tab — PDF + verify link for auditors.</li>
+          <li>Upsell — drift preview and Monitor proposal (fixture or live diff).</li>
+        </ol>
+      </DocsSection>
+
+      <DocsSection>
         <DocsHeading>4) Verify and share confidence</DocsHeading>
         <p className="text-sm leading-8 text-[var(--color-gray-300)]">
           Verification checks report content hash, signer identity, and optional transparency inclusion. Continue with

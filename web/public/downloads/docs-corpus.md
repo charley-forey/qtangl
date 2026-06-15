@@ -1,6 +1,6 @@
 # Qtangl Documentation Corpus
 
-> Generated 2026-06-10 | API v0.9.0 | https://qtangl.com/docs
+> Generated 2026-06-15 | API v0.9.0 | https://qtangl.com/docs
 
 # Qtangl Agent Context
 

@@ -10,7 +10,7 @@ Use this after deploying the hardened backend + web (Horizon 0).
 - [ ] Vercel: `NEXT_PUBLIC_QTANGL_API_BASE_URL=https://api.qtangl.com` + matching `NEXT_PUBLIC_QTANGL_SANDBOX_API_KEY`
 - [x] Run: `python backend/scripts/production_smoke.py --health-only` (health/ready green)
 - [ ] Run full smoke with production `QTANGL_API_KEY`
-- [ ] Demo: fixture scan → PDF → `/verify?scanId=…` on https://www.qtangl.com/demo/pqc
+- [ ] Demo: fixture scan → PDF → `/verify?scanId=…` on https://www.qtangl.com/assess
 - [ ] Revoke any leaked tenant keys via `DELETE /admin/keys/{id}`
 
 See [backend/docs/RAILWAY_DEPLOY.md](../../backend/docs/RAILWAY_DEPLOY.md) and [e1-week1-playbook.md](./e1-week1-playbook.md).

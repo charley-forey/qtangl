@@ -5,6 +5,7 @@ import Link from "next/link";
 import Card from "@/components/ui/Card";
 import Eyebrow from "@/components/ui/Eyebrow";
 import Button from "@/components/ui/Button";
+import { trackEvent } from "@/lib/analytics";
 import type { PqcScanResponse } from "@/lib/pqc";
 
 type ScanResultsGuideProps = {
@@ -77,7 +78,13 @@ export default function ScanResultsGuide({ scan }: ScanResultsGuideProps) {
         <Button href="/dashboard" variant="secondary" size="sm">
           Open dashboard
         </Button>
-        <Button href="/access?source=assess-results" size="sm">
+        <Button
+          href="/access?source=assess-results&interest=Q-Day%20Monitor%20(annual)"
+          size="sm"
+          onClick={() =>
+            trackEvent("monitor_proposed", { placement: "scan-results-guide", scanId: scan.scanId })
+          }
+        >
           Request Monitor pilot
         </Button>
       </div>

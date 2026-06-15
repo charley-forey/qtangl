@@ -705,6 +705,20 @@
       }
     },
     {
+      "name": "POST /pqc/scan/{scan_id}/remediation/simulate",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/pqc/scan/example/remediation/simulate",
+        "description": "Pqc Remediation Simulate"
+      }
+    },
+    {
       "name": "GET /pqc/scenarios",
       "request": {
         "method": "GET",

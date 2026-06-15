@@ -39,7 +39,7 @@ Current public positioning (from [web/lib/copy/home.ts](../../web/lib/copy/home.
 | Primary CTA | "Find Quantum" → `/demo` (optimization-first) |
 | Headline demo | Hospital re-staffing in 4:11 |
 
-PQC exists but is **buried**: `/demo/pqc`, `/pqc`, `/dashboard`, `/verify`, 11+ doc pages — **none in primary nav**.
+PQC exists but was **buried** (legacy `/demo/pqc`, now **`/assess`**), alongside `/pqc`, `/dashboard`, `/verify`, 11+ doc pages — **none in primary nav** at the time of this thesis.
 
 A CISO searching for Q-Day inventory lands on superposition/collapse language and hospital staffing demos. **We lose before the demo.**
 
@@ -83,7 +83,7 @@ graph TB
   Brand["Qtangl = Quantum Planning API"]
   Brand --> OptHome["Homepage: optimization hero"]
   Brand --> OptNav["Nav: Demo / Technology / Sandbox"]
-  Brand --> PqcHidden["PQC: buried in /demo/pqc"]
+  Brand --> PqcHidden["PQC: was buried; now /assess"]
   OptHome --> Hospital["Hospital demo headline"]
 ```
 

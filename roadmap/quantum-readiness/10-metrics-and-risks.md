@@ -19,7 +19,7 @@ Supporting north star: **Assess → Monitor conversion rate within 6 months** (t
 | KPI | Target (Phase 1) | Target (Phase 3) | Source |
 |-----|------------------|------------------|--------|
 | Homepage bounce rate | Baseline −15% | Baseline −25% | Analytics |
-| `/demo/pqc` starts / week | 20 | 100 | Product analytics |
+| `/assess` starts / week | 20 | 100 | Product analytics |
 | Demo start source = homepage | ≥40% | ≥60% | UTM / referrer |
 | PQC pages in top 10 landing pages | 2 pages | 5 pages | Analytics |
 | Avg time on `/platform` | >90 sec | >120 sec | Analytics |
@@ -101,7 +101,7 @@ Supporting north star: **Assess → Monitor conversion rate within 6 months** (t
 
 | ID | Risk | L | I | Trigger | Mitigation | Owner | Status |
 |----|------|---|---|---------|------------|-------|--------|
-| KR-001 | Website pivot drops total demo starts | M | H | >30% drop 4 weeks post-launch | Keep `/demo/pqc` as primary CTA; A/B test hero | Marketing | open |
+| KR-001 | Website pivot drops total demo starts | M | H | >30% drop 4 weeks post-launch | Keep `/assess` as primary CTA; A/B test hero | Marketing | open |
 | KR-002 | Wrong inbound persona (devs not CISOs) | M | M | Access form ≥60% "Developer platform" | Persona fields; tighten SEO to compliance terms | GTM | open |
 | KR-003 | Brand confusion ("what are you?") | M | H | Sales calls spend >5 min on explanation | Consistent tagline; kill "Quantum Planning API" everywhere | Brand | open |
 | KR-004 | Assessment-only trap (no Monitor upsell) | H | H | <25% assess→Monitor at 6 mo | Mandatory diff demo in readout; SOW includes Monitor option | Sales | open |
@@ -178,7 +178,7 @@ Add to [weekly-review-template.md](../optimization_OLD_FUTURE/templates/weekly-r
 
 | KPI | This week | Target |
 |-----|-----------|--------|
-| /demo/pqc starts | | |
+| /assess starts | | |
 | Outbound emails sent | | |
 | Demos completed | | |
 | Assess SOWs in pipeline | | |

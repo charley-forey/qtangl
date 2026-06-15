@@ -5,7 +5,7 @@ keyword: "ML-KEM migration"
 journeyStage: assess
 hubLink: "/q-day/frameworks/ml-kem"
 hubLabel: "ML-KEM migration guide"
-ctaPrimary: "/demo/pqc"
+ctaPrimary: "/assess"
 datePublished: "2026-06-04"
 eyebrow: "Video companion"
 intro: "NIST finalized three post-quantum standards in 2024. The near-term migration path for most teams is hybrid TLS — classical plus ML-KEM — not a big-bang algorithm swap."

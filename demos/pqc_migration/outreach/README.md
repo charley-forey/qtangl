@@ -8,7 +8,7 @@ Collateral for CISO / compliance leads — aligned with **Assess → Monitor →
 |-------|-----|
 | Q-Day scanner (live) | https://qtangl.com/assess |
 | Free mini-assessment | https://qtangl.com/assess/mini |
-| Legacy demo URL (redirects) | https://qtangl.com/demo/pqc |
+| Legacy demo URL (redirects to `/assess`) | https://qtangl.com/demo/pqc |
 | Platform overview | https://qtangl.com/platform |
 | Monitor preview | https://qtangl.com/monitor |
 | Convert preview | https://qtangl.com/convert |
@@ -25,9 +25,9 @@ Use `scenario=` or `case=` query param (both supported on `/assess`):
 
 | Scenario | URL | Frameworks |
 |----------|-----|------------|
-| `bank-tls-inventory` | https://qtangl.com/assess?scenario=bank-tls-inventory | NSM-10, PCI-DSS 4.0, NIST CSF |
-| `gov-contractor-cmmc` | https://qtangl.com/assess?scenario=gov-contractor-cmmc | CMMC L2, CNSA 2.0, SP 800-208 |
-| `healthcare-insurer-hndl` | https://qtangl.com/assess?scenario=healthcare-insurer-hndl | HIPAA, NIST IR 8547, EU CRA |
+| `bank-tls-inventory` | https://qtangl.com/assess?scenario=bank-tls-inventory&autorun=1 | NSM-10, PCI-DSS 4.0, NIST CSF |
+| `gov-contractor-cmmc` | https://qtangl.com/assess?scenario=gov-contractor-cmmc&autorun=1 | CMMC L2, CNSA 2.0, SP 800-208 |
+| `healthcare-insurer-hndl` | https://qtangl.com/assess?scenario=healthcare-insurer-hndl&autorun=1 | HIPAA, NIST IR 8547, EU CRA |
 
 ## Collateral files
 

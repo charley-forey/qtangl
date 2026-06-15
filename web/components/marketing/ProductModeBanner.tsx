@@ -8,13 +8,9 @@ export default function ProductModeBanner({
   if (mode === "live") {
     return (
       <p className="rounded-lg border border-emerald-500/30 bg-emerald-950/30 px-4 py-3 text-sm text-emerald-100">
-        <span className="font-medium">Live in product</span> — connect your tenant key on{" "}
+        <span className="font-medium">Live in product</span> — run a baseline below or connect your tenant key on{" "}
         <Link href="/dashboard" className="underline">
           Dashboard
-        </Link>{" "}
-        or run a scan on{" "}
-        <Link href="/assess" className="underline">
-          Demo
         </Link>
         .
       </p>

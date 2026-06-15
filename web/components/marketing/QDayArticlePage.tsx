@@ -164,7 +164,7 @@ export default function QDayArticlePage({ slug }: QDayArticlePageProps) {
               Free mini-assessment
             </Link>
             <Link
-              href="/demo/pqc"
+              href="/assess"
               className="touch-target relative inline-flex h-12 items-center justify-center rounded-full border border-[var(--border)] bg-white/[0.02] px-6 text-sm font-medium text-white"
             >
               Try PQC demo

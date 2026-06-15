@@ -34,7 +34,7 @@ export const frameworkGuides: Record<string, FrameworkGuide> = {
       "Monitor tier tracks drift between audit cycles",
     ],
     relatedScenarios: [
-      { label: "Gov contractor CMMC", href: "/assess?scenario=gov-contractor-cmmc" },
+      { label: "Gov contractor CMMC", href: "/assess?scenario=gov-contractor-cmmc&autorun=1" },
     ],
     relatedArticles: [
       { label: "Compliance deadlines", href: "/q-day/deadlines" },
@@ -61,7 +61,7 @@ export const frameworkGuides: Record<string, FrameworkGuide> = {
       "Re-scan verification after each migration phase",
     ],
     relatedScenarios: [
-      { label: "Gov contractor CMMC", href: "/assess?scenario=gov-contractor-cmmc" },
+      { label: "Gov contractor CMMC", href: "/assess?scenario=gov-contractor-cmmc&autorun=1" },
     ],
     relatedArticles: [
       { label: "Compliance deadlines", href: "/q-day/deadlines" },
@@ -87,8 +87,8 @@ export const frameworkGuides: Record<string, FrameworkGuide> = {
       "Readiness score tracks transition progress over time",
     ],
     relatedScenarios: [
-      { label: "Healthcare HNDL", href: "/assess?scenario=healthcare-insurer-hndl" },
-      { label: "Bank TLS inventory", href: "/assess?scenario=bank-tls-inventory" },
+      { label: "Healthcare HNDL", href: "/assess?scenario=healthcare-insurer-hndl&autorun=1" },
+      { label: "Bank TLS inventory", href: "/assess?scenario=bank-tls-inventory&autorun=1" },
     ],
     relatedArticles: [
       { label: "CycloneDX CBOM", href: "/q-day/cbom" },
@@ -114,7 +114,7 @@ export const frameworkGuides: Record<string, FrameworkGuide> = {
       "Signed report for assessor review via /verify",
     ],
     relatedScenarios: [
-      { label: "Bank TLS inventory", href: "/assess?scenario=bank-tls-inventory" },
+      { label: "Bank TLS inventory", href: "/assess?scenario=bank-tls-inventory&autorun=1" },
     ],
     relatedArticles: [
       { label: "Banking solutions", href: "/solutions/banking" },
@@ -141,7 +141,7 @@ export const frameworkGuides: Record<string, FrameworkGuide> = {
       "Monitor drift alerts between assessment cycles",
     ],
     relatedScenarios: [
-      { label: "Gov contractor CMMC", href: "/assess?scenario=gov-contractor-cmmc" },
+      { label: "Gov contractor CMMC", href: "/assess?scenario=gov-contractor-cmmc&autorun=1" },
     ],
     relatedArticles: [
       { label: "Government solutions", href: "/solutions/government" },
@@ -194,7 +194,7 @@ export const frameworkGuides: Record<string, FrameworkGuide> = {
       "Monitor drift between compliance cycles",
     ],
     relatedScenarios: [
-      { label: "Healthcare HNDL scenario", href: "/assess?scenario=healthcare-insurer-hndl" },
+      { label: "Healthcare HNDL scenario", href: "/assess?scenario=healthcare-insurer-hndl&autorun=1" },
     ],
     relatedArticles: [
       { label: "Healthcare solutions", href: "/solutions/healthcare" },
@@ -221,7 +221,7 @@ export const frameworkGuides: Record<string, FrameworkGuide> = {
       "CBOM export for GRC integration",
     ],
     relatedScenarios: [
-      { label: "Bank TLS inventory", href: "/assess?scenario=bank-tls-inventory" },
+      { label: "Bank TLS inventory", href: "/assess?scenario=bank-tls-inventory&autorun=1" },
     ],
     relatedArticles: [
       { label: "Banking solutions", href: "/solutions/banking" },
@@ -249,7 +249,7 @@ export const frameworkGuides: Record<string, FrameworkGuide> = {
       "Signed verify links for prime audit cycles",
     ],
     relatedScenarios: [
-      { label: "Gov contractor CMMC", href: "/assess?scenario=gov-contractor-cmmc" },
+      { label: "Gov contractor CMMC", href: "/assess?scenario=gov-contractor-cmmc&autorun=1" },
     ],
     relatedArticles: [
       { label: "Government solutions", href: "/solutions/government" },

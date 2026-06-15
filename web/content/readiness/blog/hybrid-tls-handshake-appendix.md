@@ -5,7 +5,7 @@ keyword: "hybrid TLS ML-KEM proof"
 journeyStage: convert
 hubLink: "/q-day/hybrid-tls"
 hubLabel: "Hybrid TLS proof guide"
-ctaPrimary: "/demo/pqc"
+ctaPrimary: "/assess"
 datePublished: "2026-06-08"
 eyebrow: "Technical"
 intro: "The Qtangl demo includes hybrid ML-KEM handshake traces — showing classical and post-quantum key exchange in a verifiable audit pack."

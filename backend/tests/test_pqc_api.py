@@ -48,6 +48,26 @@ class PqcApiTest(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertIn("sessionId", response.json())
 
+    def test_remediation_simulate_fixture_scan(self) -> None:
+        scan = self.client.post(
+            "/pqc/scan",
+            headers=self.headers,
+            json={"scenarioId": "bank-tls-inventory", "useFixture": True},
+        )
+        self.assertEqual(scan.status_code, 200)
+        scan_id = scan.json()["scanId"]
+        backlog = scan.json().get("remediationBacklog") or []
+        remediation_ids = [item["id"] for item in backlog[:2] if "id" in item]
+        response = self.client.post(
+            f"/pqc/scan/{scan_id}/remediation/simulate",
+            headers=self.headers,
+            json={"remediationIds": remediation_ids},
+        )
+        self.assertEqual(response.status_code, 200)
+        payload = response.json()
+        self.assertEqual(payload["status"], "success")
+        self.assertIn("projection", payload)
+
     def test_live_scan_rejected_when_disabled(self) -> None:
         with patch("app.api.pqc.live_scan_enabled", return_value=False):
             response = self.client.post(

@@ -11,7 +11,7 @@ Execute after production deploy is green (`python backend/scripts/production_smo
 ## Day 3–4: Demos
 
 **Demo #1 — Assessment + evidence**
-1. Fixture scan (`bank-tls-inventory`) on https://www.qtangl.com/demo/pqc
+1. Fixture scan (`bank-tls-inventory`) on https://www.qtangl.com/assess?scenario=bank-tls-inventory&autorun=1
 2. Download PDF + evidence ZIP
 3. Open `/verify?scanId=…` — show signed report
 

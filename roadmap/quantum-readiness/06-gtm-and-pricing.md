@@ -125,7 +125,7 @@ graph LR
 
 **Demo #1 — Assessment + evidence** (was already #1 in e1-week1-playbook)
 
-1. Fixture or live scan on `/demo/pqc`
+1. Fixture or live scan on `/assess`
 2. Download PDF + CBOM
 3. Open `/verify?scanId=…` — show signature valid + **transparency log seq**
 4. Optional: run `qtangl_verify.py` offline; show log root at `/pqc/transparency/root`
@@ -207,7 +207,7 @@ From [partnerships.md](../../demos/pqc_migration/partnerships.md):
 | Step | Surface | Status |
 |------|---------|--------|
 | 1. Discover | SEO → `/q-day`, `/assess` | Track K3 content |
-| 2. Try | Free mini-assessment → `/demo/pqc?mode=mini` | Track K5 |
+| 2. Try | Free mini-assessment → `/assess/mini` | Track K5 |
 | 3. Convert | Email gate → full assess interest | Track K5 |
 | 4. Buy Monitor | Stripe checkout on `/access` | Track H5 |
 | 5. Provision | `POST /public/monitor-provision` | partnerships.md |
@@ -242,7 +242,7 @@ Boards are asking for RSA/ECDSA exposure before 2030 — spreadsheets miss JWKS,
 
 Qtangl assesses quantum-vulnerable crypto, scores Mosca HNDL risk, monitors drift, and exports signed CBOM + PDF your auditors can verify.
 
-Try it: https://www.qtangl.com/demo/pqc
+Try it: https://www.qtangl.com/assess
 
 Happy to walk through a verify link on a 15-minute call.
 

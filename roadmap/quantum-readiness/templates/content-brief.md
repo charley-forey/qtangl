@@ -28,7 +28,7 @@ Use before drafting any readiness blog post, video companion, or framework pilla
 ## Qtangl proof (required CTA)
 
 - [ ] Hub link: `/q-day/...`
-- [ ] Product/demo CTA: `/assess`, `/assess/mini`, `/demo/pqc`, or `/verify`
+- [ ] Product/demo CTA: `/assess`, `/assess/mini`, or `/verify`
 - [ ] Artifact: sample CBOM, verify link, or executive briefing
 
 ## References (add to `sourceIds` in frontmatter)

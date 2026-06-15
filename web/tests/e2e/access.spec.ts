@@ -79,12 +79,15 @@ test("ROI calculator shows savings comparison", async ({ page }) => {
   await expect(page.getByText(/^With Qtangl Monitor$/i)).toBeVisible();
 });
 
-test("mini-assessment gate unlocks findings", async ({ page }) => {
+test("mini-assessment gate unlocks findings and live scan link", async ({ page }) => {
   await page.goto("/assess/mini");
   await expect(page.getByRole("heading", { level: 1, name: /Your Q-Day exposure in 60 seconds/i })).toBeVisible();
   await page.getByPlaceholder("you@company.com").fill("pilot@example.com");
   await page.getByRole("button", { name: /Show my results/i }).click();
   await expect(page.getByText(/Top 5 findings/i)).toBeVisible({ timeout: 15000 });
+  const liveScan = page.getByRole("link", { name: /Run live scan/i });
+  await expect(liveScan).toBeVisible();
+  await expect(liveScan).toHaveAttribute("href", /autorun=1/);
 });
 
 test("executive briefing gate unlocks content", async ({ page }) => {
