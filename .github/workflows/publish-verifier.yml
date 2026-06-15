@@ -34,7 +34,7 @@ jobs:
         continue-on-error: true
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: qtangl-verify-wheel
           path: backend/verifier/dist/*.whl
