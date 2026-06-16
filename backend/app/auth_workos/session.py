@@ -110,6 +110,7 @@ def mint_session_key(*, tenant_id: str, user_id: str) -> dict[str, Any] | None:
         )
         if membership is None:
             return None
+        role = membership.role
         session.add(
             DashboardSessionKey(
                 id=key_id,
@@ -123,7 +124,7 @@ def mint_session_key(*, tenant_id: str, user_id: str) -> dict[str, Any] | None:
         "sessionKey": raw,
         "sessionKeyId": key_id,
         "expiresAt": expires_at.isoformat(),
-        "role": membership.role,
+        "role": role,
     }
 
 

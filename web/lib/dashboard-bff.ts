@@ -12,8 +12,40 @@ export type DashboardSession = {
   memberships?: Array<{ tenantId: string; tenantName: string; role: string }>;
 };
 
+export type DashboardCapabilities = {
+  canAdmin: boolean;
+  canWrite: boolean;
+  canViewCompliance: boolean;
+  canManageKeys: boolean;
+  canInvite: boolean;
+};
+
+export type DashboardOnboarding = {
+  complete: boolean;
+  nextStep: "baseline" | "schedule" | "invite" | "done";
+};
+
+export type DashboardMeResponse = {
+  authenticated: boolean;
+  authMethod?: "workos" | "legacy_oidc";
+  session?: DashboardSession;
+  capabilities?: DashboardCapabilities;
+  onboarding?: DashboardOnboarding;
+  reason?: "no_membership" | "bff_secret_missing" | "database_unavailable" | "workos_user_missing";
+};
+
+let inferredWorkosAuth = false;
+
+/** Client WorkOS mode: NEXT_PUBLIC flag or inferred from successful /api/dashboard/me. */
 export function workosClientAuthEnabled(): boolean {
-  return process.env.NEXT_PUBLIC_QTANGL_DASHBOARD_AUTH_WORKOS === "true";
+  if (process.env.NEXT_PUBLIC_QTANGL_DASHBOARD_AUTH_WORKOS === "true") {
+    return true;
+  }
+  return inferredWorkosAuth;
+}
+
+export function setInferredWorkosAuth(enabled: boolean) {
+  inferredWorkosAuth = enabled;
 }
 
 export function legacyKeyClientEnabled(): boolean {
@@ -35,16 +67,24 @@ async function parseJson<T>(response: Response): Promise<T> {
   return (await response.json()) as T;
 }
 
-export async function fetchDashboardSession(): Promise<DashboardSession | null> {
+export async function fetchDashboardMe(): Promise<DashboardMeResponse> {
   const response = await fetch("/api/dashboard/me", { cache: "no-store" });
   if (!response.ok) {
-    return null;
+    return { authenticated: false, reason: "workos_user_missing" };
   }
-  const payload = await response.json();
+  const payload = (await response.json()) as DashboardMeResponse;
+  if (payload.authenticated && payload.authMethod === "workos") {
+    setInferredWorkosAuth(true);
+  }
+  return payload;
+}
+
+export async function fetchDashboardSession(): Promise<DashboardSession | null> {
+  const payload = await fetchDashboardMe();
   if (!payload.authenticated || !payload.session) {
     return null;
   }
-  return payload.session as DashboardSession;
+  return payload.session;
 }
 
 export async function fetchDashboardJson<T>(path: string, init?: RequestInit): Promise<T> {
@@ -83,6 +123,14 @@ export async function putDashboardJson<T>(path: string, body: unknown, init?: Re
   });
 }
 
+export async function patchDashboardJson<T>(path: string, body: unknown, init?: RequestInit): Promise<T> {
+  return fetchDashboardJson<T>(path, {
+    method: "PATCH",
+    ...init,
+    body: JSON.stringify(body),
+  });
+}
+
 export async function deleteDashboardJson<T>(path: string, init?: RequestInit): Promise<T> {
   return fetchDashboardJson<T>(path, { method: "DELETE", ...init });
 }
@@ -103,6 +151,6 @@ export async function switchActiveTenant(tenantId: string): Promise<DashboardSes
   if (!response.ok) {
     return null;
   }
-  const payload = await response.json();
-  return (payload.session as DashboardSession) ?? null;
+  const payload = (await response.json()) as DashboardMeResponse;
+  return payload.session ?? null;
 }

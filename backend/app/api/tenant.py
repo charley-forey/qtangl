@@ -1909,7 +1909,13 @@ class TeamInviteRequest(BaseModel):
     role: str = Field(default="operator", pattern="^(admin|operator|viewer)$")
 
 
+class MemberRoleUpdate(BaseModel):
+    role: str = Field(pattern="^(admin|operator|viewer)$")
+
+
 class SsoPortalRequest(BaseModel):
+    returnUrl: str = Field(min_length=8, max_length=2048)
+
     returnUrl: str = Field(min_length=8, max_length=2048)
 
 
@@ -2017,6 +2023,34 @@ def tenant_remove_member(membership_id: str, auth: AuthContext = Depends(require
         detail=payload,
     )
     return {"status": "success", **payload}
+
+
+@router.patch("/members/{membership_id}")
+def tenant_update_member_role(
+    membership_id: str,
+    body: MemberRoleUpdate,
+    auth: AuthContext = Depends(require_auth_admin),
+) -> dict:
+    from app.db.engine import db_session
+    from app.db.models import TenantMembership
+
+    if not persistence_enabled():
+        raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail="Database unavailable.")
+    with db_session() as session:
+        row = session.get(TenantMembership, membership_id)
+        if row is None or row.tenant_id != auth.tenant_id:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Membership not found.")
+        if row.user_id == auth.user_id:
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Cannot change your own role.")
+        row.role = body.role
+    log_action(
+        tenant_id=auth.tenant_id,
+        action="member.role_updated",
+        actor=auth.email or auth.user_id or "admin",
+        resource_id=membership_id,
+        detail={"role": body.role},
+    )
+    return {"status": "success", "membershipId": membership_id, "role": body.role}
 
 
 @router.get("/invites")

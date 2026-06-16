@@ -19,9 +19,13 @@ export default function DashboardAuthGate({
     return <p className="text-sm text-[var(--color-gray-500)]">Checking session…</p>;
   }
 
+  if (session) {
+    return <>{children}</>;
+  }
+
   const ssoRequired = requireSso || session?.authMode === "sso_required";
 
-  if (ssoRequired && !session && workosEnabled) {
+  if (ssoRequired && workosEnabled) {
     return (
       <Card tone="strong" className="rounded-[var(--radius-xl)]">
         <Eyebrow>Enterprise SSO required</Eyebrow>
@@ -38,11 +42,11 @@ export default function DashboardAuthGate({
     );
   }
 
-  if (!session && workosEnabled && !legacyKeyClientEnabled()) {
+  if (workosEnabled && !legacyKeyClientEnabled()) {
     return <DashboardLanding />;
   }
 
-  if (!session && workosEnabled) {
+  if (workosEnabled) {
     return (
       <div className="space-y-6">
         <DashboardLanding />

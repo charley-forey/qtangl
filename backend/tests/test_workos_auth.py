@@ -138,6 +138,77 @@ def test_bff_session_auth_header(client: TestClient):
     assert body["authMethod"] == "bff_session"
 
 
+def test_bootstrap_no_membership(client: TestClient):
+    response = client.get(
+        "/internal/dashboard/bootstrap",
+        params={"workos_user_id": "user_none", "email": "none@example.com"},
+        headers={"X-Qtangl-Bff-Secret": "bff-secret-test-key-32chars-min"},
+    )
+    assert response.status_code == 403
+
+
+def test_bootstrap_links_pending_invite(client: TestClient):
+    from app.db.models import TenantInvite
+
+    create_tenant(tenant_id="tenant-inv", name="Invite Co")
+    with db_session() as session:
+        session.add(
+            TenantInvite(
+                id="inv-test",
+                tenant_id="tenant-inv",
+                email="invited@example.com",
+                role="operator",
+                status="pending",
+            )
+        )
+    response = client.get(
+        "/internal/dashboard/bootstrap",
+        params={"workos_user_id": "user_inv", "email": "invited@example.com"},
+        headers={"X-Qtangl-Bff-Secret": "bff-secret-test-key-32chars-min"},
+    )
+    assert response.status_code == 200
+    body = response.json()
+    assert body["tenantId"] == "tenant-inv"
+    assert body["role"] == "operator"
+    assert body["capabilities"]["canWrite"] is True
+
+
+def test_patch_member_role(client: TestClient):
+    create_tenant(tenant_id="tenant-role", name="Role Co")
+    with db_session() as session:
+        session.add(User(id="usr-admin", workos_user_id="user_admin", email="admin@example.com"))
+        session.add(User(id="usr-view", workos_user_id="user_view", email="view@example.com"))
+        session.add(
+            TenantMembership(
+                id="mem-admin",
+                tenant_id="tenant-role",
+                user_id="usr-admin",
+                role="admin",
+            )
+        )
+        session.add(
+            TenantMembership(
+                id="mem-view",
+                tenant_id="tenant-role",
+                user_id="usr-view",
+                role="viewer",
+            )
+        )
+    admin_token = sign_bff_session(
+        tenant_id="tenant-role",
+        user_id="usr-admin",
+        role="admin",
+        email="admin@example.com",
+    )
+    response = client.patch(
+        "/tenant/members/mem-view",
+        headers={"Authorization": f"Bff {admin_token}"},
+        json={"role": "operator"},
+    )
+    assert response.status_code == 200
+    assert response.json()["role"] == "operator"
+
+
 def test_tenant_api_keys_crud(client: TestClient):
     create_tenant(tenant_id="tenant-keys", name="Keys Co")
     key = issue_api_key(tenant_id="tenant-keys", label="bootstrap", role="admin")

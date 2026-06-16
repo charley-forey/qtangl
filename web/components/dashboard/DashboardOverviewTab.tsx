@@ -15,6 +15,7 @@ import type { DashboardPersona } from "@/components/dashboard/DashboardPersonaTo
 import type { DashboardTabId } from "@/components/dashboard/DashboardTabs";
 import type { DashboardSummary } from "@/lib/dashboard-state";
 import { summaryTrendPoints } from "@/lib/dashboard-state";
+import type { RolePolicy } from "@/lib/dashboard-role-policies";
 
 const ExecutiveAiExplainCard = dynamic(() => import("@/components/dashboard/ExecutiveAiExplainCard"), {
   loading: () => null,
@@ -32,6 +33,7 @@ type Props = {
   onSaveChecklist: (checklist: Record<string, boolean>) => Promise<void>;
   onOpenComplianceReport?: () => void;
   onAction: (action: string) => void;
+  rolePolicy?: RolePolicy;
 };
 
 export default function DashboardOverviewTab({
@@ -46,6 +48,7 @@ export default function DashboardOverviewTab({
   onSaveChecklist,
   onOpenComplianceReport,
   onAction,
+  rolePolicy,
 }: Props) {
   const layout = summary.layoutDefaults;
   const detail = summary.latestScanDetail;
@@ -56,7 +59,7 @@ export default function DashboardOverviewTab({
 
   return (
     <div className="space-y-4">
-      <DashboardWidgetGate widgetId="checklist" layout={layout}>
+      <DashboardWidgetGate widgetId="checklist" layout={layout} rolePolicy={rolePolicy}>
         <FirstRunChecklist
           signedIn={signedIn}
           hasScans={summary.recentScans.length > 0}
@@ -70,15 +73,15 @@ export default function DashboardOverviewTab({
         />
       </DashboardWidgetGate>
 
-      <DashboardWidgetGate widgetId="trend" layout={layout}>
+      <DashboardWidgetGate widgetId="trend" layout={layout} rolePolicy={rolePolicy}>
         <DashboardTrendSection points={summaryTrendPoints(summary)} />
       </DashboardWidgetGate>
 
-      <DashboardWidgetGate widgetId="digest" layout={layout}>
+      <DashboardWidgetGate widgetId="digest" layout={layout} rolePolicy={rolePolicy}>
         <ExecutiveDigestCard digest={summary.digest} />
       </DashboardWidgetGate>
 
-      <DashboardWidgetGate widgetId="actions" layout={layout}>
+      <DashboardWidgetGate widgetId="actions" layout={layout} rolePolicy={rolePolicy}>
         <DashboardActionQueue
           role={typeof summary.me.role === "string" ? summary.me.role : undefined}
           hasScans={summary.recentScans.length > 0}
@@ -88,7 +91,7 @@ export default function DashboardOverviewTab({
         />
       </DashboardWidgetGate>
 
-      <DashboardWidgetGate widgetId="compliance" layout={layout}>
+      <DashboardWidgetGate widgetId="compliance" layout={layout} rolePolicy={rolePolicy}>
         <ComplianceFrameworkRail
           scanId={detail?.scanId ?? null}
           compliance={compliance}
@@ -96,17 +99,17 @@ export default function DashboardOverviewTab({
         />
       </DashboardWidgetGate>
 
-      <DashboardWidgetGate widgetId="forecast" layout={layout}>
+      <DashboardWidgetGate widgetId="forecast" layout={layout} rolePolicy={rolePolicy}>
         <ForecastCard forecast={summary.forecast} />
       </DashboardWidgetGate>
 
       {persona === "executive" ? (
-        <DashboardWidgetGate widgetId="ai-explain" layout={layout}>
+        <DashboardWidgetGate widgetId="ai-explain" layout={layout} rolePolicy={rolePolicy}>
           <ExecutiveAiExplainCard scanId={detail?.scanId ?? null} />
         </DashboardWidgetGate>
       ) : null}
 
-      <DashboardWidgetGate widgetId="insights" layout={layout}>
+      <DashboardWidgetGate widgetId="insights" layout={layout} rolePolicy={rolePolicy}>
         <DashboardInsightsGrid
           remediationVelocity={summary.remediationVelocity}
           sloMetrics={summary.sloMetrics}
@@ -116,7 +119,7 @@ export default function DashboardOverviewTab({
       </DashboardWidgetGate>
 
       {summary.commandCenter && persona !== "executive" ? (
-        <DashboardWidgetGate widgetId="heatmap" layout={layout}>
+        <DashboardWidgetGate widgetId="heatmap" layout={layout} rolePolicy={rolePolicy}>
           <BusinessUnitHeatmap
             businessUnits={summary.commandCenter.businessUnits}
             deltas={summary.commandCenter.businessUnitDeltas}

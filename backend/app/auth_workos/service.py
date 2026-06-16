@@ -339,6 +339,54 @@ def handle_webhook_event(event: dict[str, Any]) -> dict[str, Any]:
     return result
 
 
+def link_pending_invites_for_user(*, user_id: str, email: str) -> list[dict[str, Any]]:
+    """Create tenant memberships from pending invites matching the user's email."""
+    if not persistence_enabled():
+        return []
+    now = datetime.now(timezone.utc)
+    linked: list[dict[str, Any]] = []
+    with db_session() as session:
+        invites = (
+            session.query(TenantInvite)
+            .filter(TenantInvite.email == email.lower(), TenantInvite.status == "pending")
+            .all()
+        )
+        for invite in invites:
+            if invite.expires_at and invite.expires_at < now:
+                continue
+            existing = (
+                session.query(TenantMembership)
+                .filter(
+                    TenantMembership.tenant_id == invite.tenant_id,
+                    TenantMembership.user_id == user_id,
+                )
+                .one_or_none()
+            )
+            if existing is not None:
+                invite.status = "accepted"
+                continue
+            mem_id = f"mem-{uuid.uuid4().hex[:12]}"
+            session.add(
+                TenantMembership(
+                    id=mem_id,
+                    tenant_id=invite.tenant_id,
+                    user_id=user_id,
+                    role=invite.role,
+                )
+            )
+            invite.status = "accepted"
+            tenant = session.get(Tenant, invite.tenant_id)
+            linked.append(
+                {
+                    "tenantId": invite.tenant_id,
+                    "tenantName": tenant.name if tenant else invite.tenant_id,
+                    "role": invite.role,
+                    "membershipId": mem_id,
+                }
+            )
+    return linked
+
+
 def list_user_memberships(*, user_id: str) -> list[dict[str, Any]]:
     if not persistence_enabled():
         return []

@@ -42,6 +42,23 @@ DEFAULT_SETTINGS: dict[str, Any] = {
         "pinned": ["kpi", "trend", "digest"],
         "hidden": [],
     },
+    "rolePolicies": {
+        "viewer": {
+            "tabs": ["overview", "scans"],
+            "widgets": ["kpi", "trend", "digest", "compliance"],
+            "exports": ["pdf"],
+        },
+        "operator": {
+            "tabs": ["overview", "scans", "monitor", "remediate"],
+            "widgets": ["kpi", "trend", "digest", "compliance", "insights", "forecast", "heatmap", "actions"],
+            "exports": ["pdf", "board", "bundle"],
+        },
+        "admin": {
+            "tabs": ["*"],
+            "widgets": ["*"],
+            "exports": ["*"],
+        },
+    },
     "weeklyDigestEnabled": False,
     "weeklyDigestRecipients": [],
     "weeklyDigestDayOfWeek": 1,

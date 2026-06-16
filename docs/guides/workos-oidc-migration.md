@@ -11,6 +11,19 @@ The legacy `AUTH_OIDC_*` environment variables and `TenantOidcConfig` database r
 5. After validation, remove `AUTH_OIDC_ISSUER`, `AUTH_OIDC_CLIENT_ID`, `AUTH_OIDC_CLIENT_SECRET`, and `AUTH_OIDC_TENANT_MAP` from Vercel env.
 6. Deprecate `/api/auth/oidc/*` routes — use `/dashboard/login` and `/auth/callback` instead.
 
+## Membership provisioning
+
+WorkOS sign-in alone does not grant dashboard access. Each user needs a row in `tenant_memberships`:
+
+| Path | When |
+|------|------|
+| WorkOS invite accepted | Webhook `organization_membership.created` (preferred) |
+| Pending `TenantInvite` | Auto-linked on first `/internal/dashboard/bootstrap` |
+| Admin pilot provision | `POST /admin/tenants` + team invite |
+| Onboarding token | `/dashboard?onboarding=TOKEN` (future self-serve) |
+
+If bootstrap returns 403, the user sees **No workspace linked** in the dashboard UI — not the logged-out marketing page.
+
 ## Dual-run period
 
 Keep `QTANGL_DASHBOARD_AUTH_LEGACY_KEY=true` for 30 days so automation keys and key-paste still work while teams adopt sign-in.

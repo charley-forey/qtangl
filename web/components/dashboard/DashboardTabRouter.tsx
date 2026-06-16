@@ -20,6 +20,7 @@ import type {
   DashboardTabBundle,
 } from "@/lib/dashboard-state";
 import type { DashboardSession } from "@/lib/dashboard-bff";
+import type { RolePolicy } from "@/lib/dashboard-role-policies";
 
 type Props = {
   activeTab: DashboardTabId;
@@ -30,6 +31,9 @@ type Props = {
   persona: DashboardPersona;
   canWrite: boolean;
   canAdmin: boolean;
+  canManageKeys?: boolean;
+  sessionRole: string;
+  rolePolicy: RolePolicy;
   dashboardSession: DashboardSession | null;
   tenantSettings: Record<string, unknown> | null;
   welcomeInvite: boolean;
@@ -61,6 +65,9 @@ export default function DashboardTabRouter(props: Props) {
     persona,
     canWrite,
     canAdmin,
+    canManageKeys,
+    sessionRole,
+    rolePolicy,
     dashboardSession,
     tenantSettings,
     welcomeInvite,
@@ -93,6 +100,7 @@ export default function DashboardTabRouter(props: Props) {
           canWrite={canWrite}
           tenantSettings={tenantSettings}
           welcomeInvite={welcomeInvite}
+          rolePolicy={rolePolicy}
           onTabChange={onTabChange}
           onSaveChecklist={onSaveChecklist}
           onOpenComplianceReport={onOpenComplianceReport}
@@ -141,6 +149,8 @@ export default function DashboardTabRouter(props: Props) {
           savedKey={savedKey}
           bffMode={bffMode}
           canAdmin={canAdmin}
+          canManageKeys={canManageKeys ?? canAdmin}
+          sessionRole={sessionRole}
           persona={persona}
           apiKey={apiKey}
           loading={loading}
@@ -160,6 +170,7 @@ export default function DashboardTabRouter(props: Props) {
     apiKey,
     bffMode,
     canAdmin,
+    canManageKeys,
     canWrite,
     dashboardSession,
     loading,
@@ -177,8 +188,10 @@ export default function DashboardTabRouter(props: Props) {
     persona,
     remediationIdParam,
     reportUrlForScan,
+    rolePolicy,
     savedKey,
     scanIdParam,
+    sessionRole,
     summary,
     tabBundle,
     tenantSettings,

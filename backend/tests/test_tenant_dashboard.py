@@ -6,7 +6,9 @@ import unittest
 
 from fastapi.testclient import TestClient
 
-from app.db.engine import init_db
+from app.auth_workos.session import sign_bff_session
+from app.db.engine import db_session, init_db
+from app.db.models import TenantMembership, User
 from app.main import app
 from app.pqc.data import load_dataset
 from app.pqc.pipeline import run_pqc_scan
@@ -20,6 +22,7 @@ class TenantDashboardEndpointsTest(unittest.TestCase):
         self._db_path = os.path.join(self._tmpdir.name, "test.db")
         os.environ["DATABASE_URL"] = f"sqlite:///{self._db_path}"
         os.environ["QTANGL_DB_AUTO_MIGRATE"] = "true"
+        os.environ["QTANGL_BFF_SESSION_SECRET"] = "bff-secret-test-key-32chars-min"
         self._reset_engine()
         init_db()
         self.client = TestClient(app)
@@ -149,6 +152,33 @@ class TenantDashboardEndpointsTest(unittest.TestCase):
     def test_bulk_export_requires_scan_ids(self) -> None:
         response = self.client.post("/tenant/scans/bulk-export", headers=self.headers, json={})
         self.assertEqual(response.status_code, 400)
+
+    def test_dashboard_summary_with_bff_session(self) -> None:
+        self._seed_scan()
+        with db_session() as session:
+            session.add(User(id="usr-dash", workos_user_id="user_dash", email="dash@example.com"))
+            session.add(
+                TenantMembership(
+                    id="mem-dash",
+                    tenant_id="tenant-dash",
+                    user_id="usr-dash",
+                    role="admin",
+                )
+            )
+        token = sign_bff_session(
+            tenant_id="tenant-dash",
+            user_id="usr-dash",
+            role="admin",
+            email="dash@example.com",
+        )
+        response = self.client.get(
+            "/tenant/dashboard/summary",
+            headers={"Authorization": f"Bff {token}"},
+        )
+        self.assertEqual(response.status_code, 200)
+        payload = response.json()
+        self.assertIn("kpis", payload)
+        self.assertIn("recentScans", payload)
 
 
 if __name__ == "__main__":

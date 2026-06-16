@@ -7,7 +7,7 @@ import Card from "@/components/ui/Card";
 import Eyebrow from "@/components/ui/Eyebrow";
 import DashboardAdvancedKeyPanel from "@/components/dashboard/DashboardAdvancedKeyPanel";
 import DashboardWidgetPreferences from "@/components/dashboard/DashboardWidgetPreferences";
-import DashboardOnboarding, { DashboardSection } from "@/components/dashboard/DashboardOnboarding";
+import { DashboardSection } from "@/components/dashboard/DashboardOnboarding";
 import type { DashboardPersona } from "@/components/dashboard/DashboardPersonaToggle";
 import type { SettingsTabBundle } from "@/lib/dashboard-state";
 import { postDashboardJson, putDashboardJson } from "@/lib/dashboard-bff";
@@ -22,6 +22,8 @@ type Props = {
   savedKey: string;
   bffMode: boolean;
   canAdmin: boolean;
+  canManageKeys: boolean;
+  sessionRole: string;
   persona: DashboardPersona;
   apiKey: string;
   loading: boolean;
@@ -36,6 +38,8 @@ export default function DashboardSettingsTab({
   savedKey,
   bffMode,
   canAdmin,
+  canManageKeys,
+  sessionRole,
   persona,
   apiKey,
   loading,
@@ -50,6 +54,8 @@ export default function DashboardSettingsTab({
 
   return (
     <DashboardSection title="Settings" id="dashboard-settings">
+      {canManageKeys && bffMode ? <ApiKeysPanel role={sessionRole} /> : null}
+
       <Card tone="panel">
         <Eyebrow>Alert settings</Eyebrow>
         <div className="mt-4">
@@ -80,8 +86,7 @@ export default function DashboardSettingsTab({
 
       {canAdmin && bffMode ? (
         <>
-          <TeamSettingsPanel role={typeof settings.role === "string" ? settings.role : "admin"} />
-          <ApiKeysPanel role="admin" />
+          <TeamSettingsPanel role={sessionRole} />
           <Card tone="panel">
             <Eyebrow>Enterprise SSO</Eyebrow>
             <button

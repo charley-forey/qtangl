@@ -8,7 +8,6 @@ import {
   deleteDashboardJson,
   fetchDashboardJson,
   postDashboardJson,
-  type DashboardSession,
 } from "@/lib/dashboard-bff";
 
 type ApiKeyRow = {

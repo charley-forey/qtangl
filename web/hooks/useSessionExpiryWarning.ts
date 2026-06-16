@@ -1,15 +1,33 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
-export function useSessionExpiryWarning(enabled: boolean) {
+export function useSessionExpiryWarning(
+  enabled: boolean,
+  onRetry?: () => Promise<void>
+) {
   const [expiring, setExpiring] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
+  const retrying = useRef(false);
 
-  const handleUnauthorized = useCallback(() => {
-    setExpiring(true);
-    setMessage("Your session expired. Re-authenticate to continue.");
-  }, []);
+  const handleUnauthorized = useCallback(async () => {
+    if (retrying.current || !onRetry) {
+      setExpiring(true);
+      setMessage("Your session expired. Re-authenticate to continue.");
+      return;
+    }
+    retrying.current = true;
+    try {
+      await onRetry();
+      setExpiring(false);
+      setMessage(null);
+    } catch {
+      setExpiring(true);
+      setMessage("Your session expired. Re-authenticate to continue.");
+    } finally {
+      retrying.current = false;
+    }
+  }, [onRetry]);
 
   useEffect(() => {
     if (!enabled || typeof window === "undefined") return;
@@ -17,9 +35,14 @@ export function useSessionExpiryWarning(enabled: boolean) {
     const originalFetch = window.fetch;
     window.fetch = async (...args) => {
       const response = await originalFetch(...args);
-      const url = typeof args[0] === "string" ? args[0] : args[0] instanceof Request ? args[0].url : String(args[0]);
+      const url =
+        typeof args[0] === "string"
+          ? args[0]
+          : args[0] instanceof Request
+            ? args[0].url
+            : String(args[0]);
       if (url.includes("/api/dashboard/") && response.status === 401) {
-        handleUnauthorized();
+        void handleUnauthorized();
       }
       return response;
     };

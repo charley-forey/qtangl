@@ -2,11 +2,11 @@
 
 import dynamic from "next/dynamic";
 import { useSearchParams } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { QtanglProvider } from "@qtangl/sdk-react";
 
 import Card from "@/components/ui/Card";
-import DashboardLanding from "@/components/dashboard/DashboardLanding";
+import DashboardSessionError from "@/components/dashboard/DashboardSessionError";
 import DashboardShell from "@/components/dashboard/DashboardShell";
 import DashboardTabRouter from "@/components/dashboard/DashboardTabRouter";
 import DashboardSkeleton from "@/components/dashboard/ui/DashboardSkeleton";
@@ -19,7 +19,8 @@ import { useDashboardCommandActions } from "@/hooks/useDashboardCommandActions";
 import { useSessionExpiryWarning } from "@/hooks/useSessionExpiryWarning";
 import { defaultTabForPersona } from "@/lib/dashboard-state";
 import type { SettingsTabBundle } from "@/lib/dashboard-state";
-import { dashboardReportUrl, putDashboardJson, workosClientAuthEnabled, type DashboardSession } from "@/lib/dashboard-bff";
+import { dashboardReportUrl, putDashboardJson, type DashboardSession } from "@/lib/dashboard-bff";
+import { resolveRolePolicy } from "@/lib/dashboard-role-policies";
 import { useDashboardEvents } from "@/lib/dashboard-events";
 import { trackDashboardEvent } from "@/lib/dashboard-analytics";
 import { getStoredTenantApiKey, setStoredTenantApiKey, tenantReportUrl } from "@/lib/tenant-api";
@@ -32,7 +33,14 @@ export default function DashboardClient() {
   const scanIdParam = searchParams.get("scanId") ?? "";
   const remediationIdParam = searchParams.get("remediationId");
   const welcomeInvite = searchParams.get("welcome") === "invite";
-  const { session: contextSession } = useDashboardSession();
+  const {
+    session: contextSession,
+    checked,
+    sessionReason,
+    capabilities,
+    workosEnabled,
+    refreshSession,
+  } = useDashboardSession();
 
   const [activeTab, setActiveTab] = useState<DashboardTabId>("overview");
   const [persona, setPersona] = useState<DashboardPersona>("operator");
@@ -47,7 +55,13 @@ export default function DashboardClient() {
 
   const { summary, loading, error, scanProgress, loadSummary, patchScan } = useDashboardSummary();
   const { bundle: tabBundle, loadTab, invalidateTab } = useDashboardTab(activeTab);
-  const { expiring, message: sessionWarning } = useSessionExpiryWarning(bffMode);
+
+  const retrySessionAndSummary = useCallback(async () => {
+    await refreshSession();
+    await loadSummary();
+  }, [refreshSession, loadSummary]);
+
+  const { expiring, message: sessionWarning } = useSessionExpiryWarning(bffMode, retrySessionAndSummary);
 
   const connectBff = useCallback(async () => {
     setBffMode(true);
@@ -58,16 +72,19 @@ export default function DashboardClient() {
   useEffect(() => {
     if (contextSession) setDashboardSession(contextSession);
   }, [contextSession]);
+
   useEffect(() => {
-    if (workosClientAuthEnabled() && contextSession) void connectBff();
+    if (contextSession) void connectBff();
   }, [contextSession, connectBff]);
+
   useEffect(() => {
     const stored = getStoredTenantApiKey();
-    if (stored && !workosClientAuthEnabled()) {
+    if (stored && !contextSession) {
       setApiKey(stored);
       setSavedKey(stored);
     }
-  }, []);
+  }, [contextSession]);
+
   useEffect(() => {
     if (summary) {
       setPersona(summary.layoutDefaults.persona ?? "operator");
@@ -76,9 +93,11 @@ export default function DashboardClient() {
       }
     }
   }, [summary, tabBundle]);
+
   useEffect(() => {
     if (bffMode && summary) void loadTab(activeTab);
   }, [activeTab, bffMode, loadTab, summary]);
+
   useEffect(() => {
     if (scanIdParam) setActiveTab("scans");
     if (remediationIdParam) setActiveTab("remediate");
@@ -131,20 +150,72 @@ export default function DashboardClient() {
   const savePersona = useCallback(async (nextPersona: DashboardPersona) => {
     setPersona(nextPersona);
     setActiveTab(defaultTabForPersona(nextPersona));
-    const next = { ...(tenantSettings ?? {}), dashboardLayout: { ...((tenantSettings?.dashboardLayout as object) ?? {}), persona: nextPersona } };
+    const next = {
+      ...(tenantSettings ?? {}),
+      dashboardLayout: { ...((tenantSettings?.dashboardLayout as object) ?? {}), persona: nextPersona },
+    };
     await putDashboardJson("/tenant/settings", { settings: next });
     setTenantSettings(next);
   }, [tenantSettings]);
 
-  const meRole = typeof summary?.me.role === "string" ? summary.me.role : undefined;
-  const canWrite = meRole === "admin" || meRole === "operator";
-  const canAdmin = meRole === "admin";
+  const sessionRole = contextSession?.role ?? summary?.me.role;
+  const canWrite = capabilities?.canWrite ?? (sessionRole === "admin" || sessionRole === "operator");
+  const canAdmin = capabilities?.canAdmin ?? sessionRole === "admin";
+  const rolePolicy = useMemo(
+    () =>
+      resolveRolePolicy(
+        typeof sessionRole === "string" ? sessionRole : undefined,
+        tenantSettings?.rolePolicies as Record<string, import("@/lib/dashboard-role-policies").RolePolicy> | undefined
+      ),
+    [sessionRole, tenantSettings?.rolePolicies]
+  );
+
+  if (!checked) {
+    return (
+      <Card tone="ghost">
+        <p className="text-sm text-[var(--color-gray-400)]">Checking session…</p>
+        <DashboardSkeleton />
+      </Card>
+    );
+  }
+
+  if (contextSession && !summary) {
+    if (loading) {
+      return (
+        <div className="space-y-4">
+          <p className="text-sm text-[var(--color-gray-400)]">Loading your workspace…</p>
+          <DashboardSkeleton />
+        </div>
+      );
+    }
+    if (error || sessionReason) {
+      return (
+        <DashboardSessionError
+          reason={sessionReason}
+          summaryError={error}
+          workosEnabled={workosEnabled}
+        />
+      );
+    }
+    return (
+      <div className="space-y-4">
+        <p className="text-sm text-[var(--color-gray-400)]">Loading your workspace…</p>
+        <DashboardSkeleton />
+      </div>
+    );
+  }
+
+  if (!contextSession && sessionReason && workosEnabled) {
+    return <DashboardSessionError reason={sessionReason} workosEnabled={workosEnabled} />;
+  }
 
   const dashboard = (
     <div className={density === "compact" ? "space-y-4" : "space-y-8"}>
-      {!summary && !loading ? <DashboardLanding /> : null}
-      {loading && !summary ? <DashboardSkeleton /> : null}
-      {error ? <Card tone="ghost" className="border border-red-500/40 text-red-200"><p>{error}</p></Card> : null}
+      {error && summary ? (
+        <Card tone="ghost" className="border border-red-500/40 text-red-200">
+          <p>{error}</p>
+        </Card>
+      ) : null}
       {actionMessage ? <p className="text-xs text-[var(--color-gray-400)]">{actionMessage}</p> : null}
       {summary && savedKey ? (
         <DashboardShell
@@ -158,8 +229,12 @@ export default function DashboardClient() {
           scanProgress={scanProgress}
           sessionWarning={expiring ? sessionWarning : null}
           reportUrlForScan={reportUrlForScan}
+          rolePolicy={rolePolicy}
           onPersonaChange={savePersona}
-          onTabChange={(tab) => { setActiveTab(tab); trackDashboardEvent("dashboard_tab_changed", { tab }); }}
+          onTabChange={(tab) => {
+            setActiveTab(tab);
+            trackDashboardEvent("dashboard_tab_changed", { tab });
+          }}
           onDensityToggle={() => {
             const next = density === "compact" ? "comfortable" : "compact";
             setDensity(next);
@@ -167,7 +242,10 @@ export default function DashboardClient() {
           }}
           onSessionChange={setDashboardSession}
           onMarkAlertsRead={async (ids) => {
-            const next = { ...(tenantSettings ?? {}), notificationReadIds: [...((tenantSettings?.notificationReadIds as string[]) ?? []), ...ids] };
+            const next = {
+              ...(tenantSettings ?? {}),
+              notificationReadIds: [...((tenantSettings?.notificationReadIds as string[]) ?? []), ...ids],
+            };
             await putDashboardJson("/tenant/settings", { settings: next });
             setTenantSettings(next);
           }}
@@ -181,6 +259,9 @@ export default function DashboardClient() {
             persona={persona}
             canWrite={canWrite}
             canAdmin={canAdmin}
+            canManageKeys={capabilities?.canManageKeys ?? canAdmin}
+            sessionRole={typeof sessionRole === "string" ? sessionRole : "viewer"}
+            rolePolicy={rolePolicy}
             dashboardSession={dashboardSession}
             tenantSettings={tenantSettings}
             welcomeInvite={welcomeInvite}
@@ -200,17 +281,40 @@ export default function DashboardClient() {
             onMessage={setActionMessage}
             onSettingsChange={setTenantSettings}
             onApiKeyChange={setApiKey}
-            onConnect={() => { setStoredTenantApiKey(apiKey); setSavedKey(apiKey); setBffMode(false); }}
-            onOpenComplianceReport={() => { setReportDrawerOpen(true); }}
-            onOpenReport={() => { setReportDrawerOpen(true); }}
+            onConnect={() => {
+              setStoredTenantApiKey(apiKey);
+              setSavedKey(apiKey);
+              setBffMode(false);
+            }}
+            onOpenComplianceReport={() => {
+              setReportDrawerOpen(true);
+            }}
+            onOpenReport={() => {
+              setReportDrawerOpen(true);
+            }}
             onRefreshMonitor={() => void loadTab("monitor", true)}
-            onPortfolioSwitch={() => { void loadSummary(); invalidateTab("portfolio"); }}
+            onPortfolioSwitch={() => {
+              void loadSummary();
+              invalidateTab("portfolio");
+            }}
           />
         </DashboardShell>
       ) : null}
-      <ReportDrawer open={reportDrawerOpen} onClose={() => setReportDrawerOpen(false)} scan={null} reportStatus="checking" missingReason={null} />
+      <ReportDrawer
+        open={reportDrawerOpen}
+        onClose={() => setReportDrawerOpen(false)}
+        scan={null}
+        reportStatus="checking"
+        missingReason={null}
+      />
     </div>
   );
 
-  return savedKey ? <QtanglProvider apiKey={savedKey} baseUrl={qtanglApiBaseUrl}>{dashboard}</QtanglProvider> : dashboard;
+  return savedKey ? (
+    <QtanglProvider apiKey={savedKey} baseUrl={qtanglApiBaseUrl}>
+      {dashboard}
+    </QtanglProvider>
+  ) : (
+    dashboard
+  );
 }

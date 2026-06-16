@@ -19,7 +19,19 @@ type BootstrapResponse = {
   authMode: string;
   memberships: Array<{ tenantId: string; tenantName: string; role: string; authMode?: string }>;
   sessionAssertion: string | null;
+  capabilities?: {
+    canAdmin: boolean;
+    canWrite: boolean;
+    canViewCompliance: boolean;
+    canManageKeys: boolean;
+    canInvite: boolean;
+  };
+  onboarding?: { complete: boolean; nextStep: string };
 };
+
+type BootstrapResult =
+  | { ok: true; data: BootstrapResponse }
+  | { ok: false; reason: "no_membership" | "bff_secret_missing" | "database_unavailable" };
 
 async function resolveWorkosUser(): Promise<{ id: string; email: string; firstName?: string; lastName?: string } | null> {
   if (!workosAuthEnabled()) {
@@ -47,10 +59,10 @@ async function bootstrapFromBackend(
   email: string,
   name: string | undefined,
   activeTenantId: string | undefined
-): Promise<BootstrapResponse | null> {
+): Promise<BootstrapResult> {
   const secret = bffSessionSecret();
   if (!secret) {
-    return null;
+    return { ok: false, reason: "bff_secret_missing" };
   }
   const params = new URLSearchParams({
     workos_user_id: workosUserId,
@@ -69,10 +81,16 @@ async function bootstrapFromBackend(
       cache: "no-store",
     }
   );
-  if (!response.ok) {
-    return null;
+  if (response.status === 403) {
+    return { ok: false, reason: "no_membership" };
   }
-  return (await response.json()) as BootstrapResponse;
+  if (response.status === 503) {
+    return { ok: false, reason: "database_unavailable" };
+  }
+  if (!response.ok) {
+    return { ok: false, reason: "no_membership" };
+  }
+  return { ok: true, data: (await response.json()) as BootstrapResponse };
 }
 
 function applySessionCookies(response: NextResponse, bootstrap: BootstrapResponse) {
@@ -94,13 +112,42 @@ function applySessionCookies(response: NextResponse, bootstrap: BootstrapRespons
   });
 }
 
+function sessionPayload(bootstrap: BootstrapResponse) {
+  return {
+    email: bootstrap.email,
+    tenantId: bootstrap.tenantId,
+    tenantName: bootstrap.tenantName,
+    role: bootstrap.role,
+    userId: bootstrap.userId,
+    authMode: bootstrap.authMode,
+    memberships: bootstrap.memberships,
+  };
+}
+
+function capabilitiesFromRole(role: string) {
+  const canAdmin = role === "admin";
+  const canWrite = role === "admin" || role === "operator";
+  return {
+    canAdmin,
+    canWrite,
+    canViewCompliance: true,
+    canManageKeys: canAdmin,
+    canInvite: canAdmin,
+  };
+}
+
 export async function GET() {
   const cookieStore = await cookies();
   const legacyRaw = cookieStore.get("qtangl_session")?.value;
   if (legacyRaw && !workosAuthEnabled()) {
     try {
       const session = JSON.parse(legacyRaw) as { email: string; tenantId: string; role: string };
-      return NextResponse.json({ authenticated: true, session, authMethod: "legacy_oidc" });
+      return NextResponse.json({
+        authenticated: true,
+        session,
+        authMethod: "legacy_oidc",
+        capabilities: capabilitiesFromRole(session.role),
+      });
     } catch {
       /* fall through */
     }
@@ -108,30 +155,24 @@ export async function GET() {
 
   const workosUser = await resolveWorkosUser();
   if (!workosUser) {
-    return NextResponse.json({ authenticated: false });
+    return NextResponse.json({ authenticated: false, reason: "workos_user_missing" });
   }
 
   const activeTenantId = cookieStore.get(ACTIVE_TENANT_COOKIE)?.value;
   const name = [workosUser.firstName, workosUser.lastName].filter(Boolean).join(" ").trim() || undefined;
   const bootstrap = await bootstrapFromBackend(workosUser.id, workosUser.email, name, activeTenantId);
-  if (!bootstrap) {
-    return NextResponse.json({ authenticated: false, reason: "no_membership" });
+  if (!bootstrap.ok) {
+    return NextResponse.json({ authenticated: false, reason: bootstrap.reason, authMethod: "workos" });
   }
 
   const response = NextResponse.json({
     authenticated: true,
     authMethod: "workos",
-    session: {
-      email: bootstrap.email,
-      tenantId: bootstrap.tenantId,
-      tenantName: bootstrap.tenantName,
-      role: bootstrap.role,
-      userId: bootstrap.userId,
-      authMode: bootstrap.authMode,
-      memberships: bootstrap.memberships,
-    },
+    session: sessionPayload(bootstrap.data),
+    capabilities: bootstrap.data.capabilities ?? capabilitiesFromRole(bootstrap.data.role),
+    onboarding: bootstrap.data.onboarding ?? { complete: false, nextStep: "baseline" },
   });
-  applySessionCookies(response, bootstrap);
+  applySessionCookies(response, bootstrap.data);
   return response;
 }
 
@@ -143,22 +184,15 @@ export async function POST(request: NextRequest) {
   const body = (await request.json()) as { tenantId?: string };
   const name = [workosUser.firstName, workosUser.lastName].filter(Boolean).join(" ").trim() || undefined;
   const bootstrap = await bootstrapFromBackend(workosUser.id, workosUser.email, name, body.tenantId);
-  if (!bootstrap) {
-    return NextResponse.json({ error: "Unable to switch tenant." }, { status: 403 });
+  if (!bootstrap.ok) {
+    return NextResponse.json({ error: "Unable to switch tenant.", reason: bootstrap.reason }, { status: 403 });
   }
   const response = NextResponse.json({
     authenticated: true,
-    session: {
-      email: bootstrap.email,
-      tenantId: bootstrap.tenantId,
-      tenantName: bootstrap.tenantName,
-      role: bootstrap.role,
-      userId: bootstrap.userId,
-      authMode: bootstrap.authMode,
-      memberships: bootstrap.memberships,
-    },
+    session: sessionPayload(bootstrap.data),
+    capabilities: bootstrap.data.capabilities ?? capabilitiesFromRole(bootstrap.data.role),
   });
-  applySessionCookies(response, bootstrap);
+  applySessionCookies(response, bootstrap.data);
   return response;
 }
 

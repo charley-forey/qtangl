@@ -12,11 +12,24 @@
 | Variable | Notes |
 |----------|-------|
 | `QTANGL_DASHBOARD_AUTH_WORKOS` | Server flag `true` |
+| `NEXT_PUBLIC_QTANGL_DASHBOARD_AUTH_WORKOS` | Client flag `true` — required for BFF connect without inference delay |
 | `WORKOS_API_KEY` | From WorkOS dashboard |
 | `WORKOS_CLIENT_ID` | From WorkOS dashboard |
 | `WORKOS_COOKIE_PASSWORD` | Min 32 chars |
 | `NEXT_PUBLIC_WORKOS_REDIRECT_URI` | e.g. `https://www.qtangl.com/auth/callback` |
 | `QTANGL_BFF_SESSION_SECRET` | Must match Railway |
+
+## Signed in but empty dashboard
+
+1. `GET /api/dashboard/auth-health` — confirm `clientWorkosFlagSet`, `hasBffSessionSecret`, `bootstrapReachable`.
+2. DevTools → `GET /api/dashboard/me` after login:
+   - `authenticated: false` + `reason: no_membership` → user needs invite or pending invite link on bootstrap.
+   - `reason: bff_secret_missing` → set matching secret on Vercel + Railway.
+3. `GET /api/dashboard/tenant/dashboard/summary` → expect 200; if 401, sign out and sign in again (session assertion cookie).
+4. `GET /api/dashboard/session-debug` (while signed in) — `hasAssertionCookie` and `summaryOk` should be true.
+5. UI should show KPI strip or an explicit error card — never a duplicate marketing landing after sign-in.
+
+See [dashboard-auth-validation.md](../guides/dashboard-auth-validation.md) for the full release checklist.
 
 ## Session TTL
 

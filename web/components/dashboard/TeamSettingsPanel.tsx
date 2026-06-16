@@ -7,6 +7,7 @@ import Eyebrow from "@/components/ui/Eyebrow";
 import {
   deleteDashboardJson,
   fetchDashboardJson,
+  patchDashboardJson,
   postDashboardJson,
 } from "@/lib/dashboard-bff";
 
@@ -61,20 +62,34 @@ export default function TeamSettingsPanel({ role }: { role?: string }) {
       <Eyebrow>Team members</Eyebrow>
       <ul className="mt-3 space-y-2 text-sm">
         {members.map((member) => (
-          <li key={member.membershipId} className="flex justify-between gap-2 border-t border-[var(--border-subtle)] pt-2">
-            <span>
-              {member.email} · {member.role}
-            </span>
-            <button
-              type="button"
-              className="text-xs text-red-300 underline"
-              onClick={async () => {
-                await deleteDashboardJson(`/tenant/members/${member.membershipId}`);
-                await reload();
-              }}
-            >
-              Remove
-            </button>
+          <li key={member.membershipId} className="flex flex-wrap items-center justify-between gap-2 border-t border-[var(--border-subtle)] pt-2">
+            <span>{member.email}</span>
+            <div className="flex flex-wrap items-center gap-2">
+              <select
+                className="rounded border border-[var(--border-subtle)] bg-transparent px-2 py-1 text-xs"
+                value={member.role}
+                onChange={async (event) => {
+                  await patchDashboardJson(`/tenant/members/${member.membershipId}`, {
+                    role: event.target.value,
+                  });
+                  await reload();
+                }}
+              >
+                <option value="admin">admin</option>
+                <option value="operator">operator</option>
+                <option value="viewer">viewer</option>
+              </select>
+              <button
+                type="button"
+                className="text-xs text-red-300 underline"
+                onClick={async () => {
+                  await deleteDashboardJson(`/tenant/members/${member.membershipId}`);
+                  await reload();
+                }}
+              >
+                Remove
+              </button>
+            </div>
           </li>
         ))}
       </ul>

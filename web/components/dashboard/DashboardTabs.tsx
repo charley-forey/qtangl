@@ -2,6 +2,9 @@
 
 import { useEffect, useState } from "react";
 
+import type { RolePolicy } from "@/lib/dashboard-role-policies";
+import { tabAllowed } from "@/lib/dashboard-role-policies";
+
 export type DashboardTabId = "overview" | "scans" | "monitor" | "remediate" | "settings" | "portfolio";
 
 const TABS: Array<{ id: DashboardTabId; label: string }> = [
@@ -17,20 +20,26 @@ export default function DashboardTabs({
   onChange,
   showPortfolio,
   persona,
+  rolePolicy,
 }: {
   active: DashboardTabId;
   onChange: (tab: DashboardTabId) => void;
   showPortfolio?: boolean;
   persona?: string;
+  rolePolicy?: RolePolicy;
 }) {
   const tabs = showPortfolio
     ? [...TABS, { id: "portfolio" as const, label: "Portfolio" }]
     : TABS;
 
-  const visibleTabs =
+  let visibleTabs =
     persona === "executive"
       ? tabs.filter((t) => ["overview", "scans", "settings", "portfolio"].includes(t.id))
       : tabs;
+
+  if (rolePolicy) {
+    visibleTabs = visibleTabs.filter((tab) => tabAllowed(rolePolicy, tab.id));
+  }
 
   const [isMobile, setIsMobile] = useState(false);
   useEffect(() => {

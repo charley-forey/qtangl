@@ -6,7 +6,7 @@
 2. Click **Sign in** (navbar or hero).
 3. Complete WorkOS hosted sign-in (email magic link or enterprise SSO).
 
-API keys for CI/automation are under **Settings → Advanced** after sign-in.
+API keys for CI/automation are under **Settings → Automation API keys** after sign-in (admin only). Legacy key paste is hidden when WorkOS sign-in is enabled.
 
 ## First session checklist
 
@@ -56,6 +56,8 @@ When your account manages multiple customer tenants, open the **Portfolio** tab 
 ## Diagnostics
 
 - Auth config: `GET /api/dashboard/auth-health` (booleans only, no secrets)
+- Session chain: `GET /api/dashboard/me`, `GET /api/dashboard/session-debug` (when signed in)
+- Release checklist: [dashboard-auth-validation.md](./dashboard-auth-validation.md)
 - Required Vercel env: see [web/.env.example](../../web/.env.example)
 
 ## Support

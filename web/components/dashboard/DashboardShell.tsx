@@ -14,6 +14,7 @@ import DashboardKpiStrip from "@/components/dashboard/DashboardKpiStrip";
 import DashboardTabs from "@/components/dashboard/DashboardTabs";
 import EvidenceToolbar from "@/components/dashboard/EvidenceToolbar";
 import type { DashboardCommandAction } from "@/hooks/useDashboardCommandActions";
+import type { RolePolicy } from "@/lib/dashboard-role-policies";
 
 type Props = {
   summary: DashboardSummary;
@@ -26,6 +27,7 @@ type Props = {
   scanProgress: ScanProgressState | null;
   sessionWarning?: string | null;
   reportUrlForScan: (scanId: string, format?: "pdf" | "json" | "bundle" | "executive" | "board" | "auditor") => string;
+  rolePolicy?: RolePolicy;
   onPersonaChange: (persona: DashboardPersona) => void;
   onTabChange: (tab: DashboardTabId) => void;
   onDensityToggle: () => void;
@@ -51,6 +53,7 @@ export default function DashboardShell({
   onSessionChange,
   onMarkAlertsRead,
   children,
+  rolePolicy,
 }: Props) {
   const me = summary.me;
   const latestScan = summary.recentScans.find((s) => s.readinessScore != null);
@@ -110,6 +113,7 @@ export default function DashboardShell({
         onChange={onTabChange}
         showPortfolio={showPortfolio}
         persona={persona}
+        rolePolicy={rolePolicy}
       />
 
       <div role="tabpanel" aria-live="polite" aria-label={`${activeTab} tab`}>
