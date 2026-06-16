@@ -23,7 +23,7 @@ export default function DashboardAuthGate({
     return <>{children}</>;
   }
 
-  const ssoRequired = requireSso || session?.authMode === "sso_required";
+  const ssoRequired = requireSso;
 
   if (ssoRequired && workosEnabled) {
     return (
