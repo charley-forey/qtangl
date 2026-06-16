@@ -85,3 +85,81 @@ def redeem_onboarding_token(token: str) -> dict[str, Any] | None:
     entry["redeemed"] = True
     data = decrypt_json_blob(entry["payload"])
     return {"tenantId": entry["tenantId"], "apiKey": data.get("apiKey"), "email": data.get("email")}
+
+
+def resolve_onboarding_token(*, token: str, email: str) -> dict[str, Any] | None:
+    """Validate onboarding token for dashboard membership linking (does not redeem)."""
+    token_hash = hashlib.sha256(token.encode()).hexdigest()
+    now = datetime.now(timezone.utc)
+    email_l = email.lower().strip()
+
+    if persistence_enabled():
+        from app.db.models import OnboardingKeyToken as OnboardingKeyTokenRow
+
+        with db_session() as session:
+            row = (
+                session.query(OnboardingKeyTokenRow)
+                .filter(OnboardingKeyTokenRow.token_hash == token_hash)
+                .one_or_none()
+            )
+            if row is None or row.redeemed_at is not None or _as_utc_aware(row.expires_at) < now:
+                return None
+            data = decrypt_json_blob(row.payload_encrypted)
+            token_email = str(data.get("email") or "").lower().strip()
+            if token_email and token_email != email_l:
+                return None
+            return {"tenantId": row.tenant_id, "email": token_email or email_l, "tokenHash": token_hash}
+
+    entry = _memory_tokens.get(token_hash)
+    if entry is None or entry.get("redeemed") or entry["expiresAt"] < now:
+        return None
+    data = decrypt_json_blob(entry["payload"])
+    token_email = str(data.get("email") or "").lower().strip()
+    if token_email and token_email != email_l:
+        return None
+    return {"tenantId": entry["tenantId"], "email": token_email or email_l, "tokenHash": token_hash}
+
+
+def mark_onboarding_token_linked(*, token_hash: str) -> None:
+    """Mark onboarding token redeemed after dashboard membership is linked."""
+    now = datetime.now(timezone.utc)
+    if persistence_enabled():
+        from app.db.models import OnboardingKeyToken as OnboardingKeyTokenRow
+
+        with db_session() as session:
+            row = (
+                session.query(OnboardingKeyTokenRow)
+                .filter(OnboardingKeyTokenRow.token_hash == token_hash)
+                .one_or_none()
+            )
+            if row is not None and row.redeemed_at is None:
+                row.redeemed_at = now
+        return
+    entry = _memory_tokens.get(token_hash)
+    if entry is not None:
+        entry["redeemed"] = True
+
+
+def find_onboarding_tenant_for_email(*, email: str) -> str | None:
+    """Return tenant id from the newest unredeemed onboarding token for this email."""
+    if not persistence_enabled():
+        return None
+    from app.db.models import OnboardingKeyToken as OnboardingKeyTokenRow
+
+    email_l = email.lower().strip()
+    now = datetime.now(timezone.utc)
+    with db_session() as session:
+        rows = (
+            session.query(OnboardingKeyTokenRow)
+            .filter(OnboardingKeyTokenRow.redeemed_at.is_(None))
+            .order_by(OnboardingKeyTokenRow.created_at.desc())
+            .all()
+        )
+        for row in rows:
+            if _as_utc_aware(row.expires_at) < now:
+                continue
+            data = decrypt_json_blob(row.payload_encrypted)
+            token_email = str(data.get("email") or "").lower().strip()
+            if token_email == email_l:
+                return row.tenant_id
+    return None

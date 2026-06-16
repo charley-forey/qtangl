@@ -91,8 +91,32 @@ def invite_user(
         return None
     with db_session() as session:
         tenant = session.get(Tenant, tenant_id)
-        if tenant is None or not tenant.workos_org_id:
+        if tenant is None:
             return None
+        if not tenant.workos_org_id:
+            row_id = f"inv-{uuid.uuid4().hex[:12]}"
+            existing = (
+                session.query(TenantInvite)
+                .filter(
+                    TenantInvite.tenant_id == tenant_id,
+                    TenantInvite.email == email.lower(),
+                    TenantInvite.status == "pending",
+                )
+                .one_or_none()
+            )
+            if existing is None:
+                session.add(
+                    TenantInvite(
+                        id=row_id,
+                        tenant_id=tenant_id,
+                        email=email.lower(),
+                        role=role,
+                        status="pending",
+                    )
+                )
+            else:
+                row_id = existing.id
+            return {"inviteId": row_id, "workosInviteId": None, "email": email, "role": role, "localOnly": True}
         org_id = tenant.workos_org_id
     workos_role = ROLE_TO_WORKOS.get(role, "member")
     payload: dict[str, Any] = {
@@ -103,23 +127,31 @@ def invite_user(
     if inviter_user_id:
         payload["inviter_user_id"] = inviter_user_id
     result = _request("POST", "/user_management/invitations", payload)
-    if not result:
-        return None
-    invite_id = result.get("id")
-    expires_at = result.get("expires_at")
     row_id = f"inv-{uuid.uuid4().hex[:12]}"
+    invite_id = result.get("id") if result else None
+    expires_at = _parse_ts(result.get("expires_at")) if result else None
     with db_session() as session:
-        session.add(
-            TenantInvite(
-                id=row_id,
-                tenant_id=tenant_id,
-                email=email.lower(),
-                role=role,
-                workos_invite_id=str(invite_id) if invite_id else None,
-                status="pending",
-                expires_at=_parse_ts(expires_at),
-            )
+        existing = (
+            session.query(TenantInvite)
+            .filter(TenantInvite.tenant_id == tenant_id, TenantInvite.email == email.lower(), TenantInvite.status == "pending")
+            .one_or_none()
         )
+        if existing is None:
+            session.add(
+                TenantInvite(
+                    id=row_id,
+                    tenant_id=tenant_id,
+                    email=email.lower(),
+                    role=role,
+                    workos_invite_id=str(invite_id) if invite_id else None,
+                    status="pending",
+                    expires_at=expires_at,
+                )
+            )
+        else:
+            row_id = existing.id
+    if not result:
+        return {"inviteId": row_id, "workosInviteId": None, "email": email, "role": role, "localOnly": True}
     return {"inviteId": row_id, "workosInviteId": invite_id, "email": email, "role": role}
 
 
@@ -320,6 +352,7 @@ def handle_webhook_event(event: dict[str, Any]) -> dict[str, Any]:
         invite_id = data.get("id")
         email = data.get("email")
         org_id = data.get("organization_id")
+        workos_user_id = data.get("user_id")
         if invite_id and persistence_enabled():
             with db_session() as session:
                 invite = (
@@ -329,14 +362,118 @@ def handle_webhook_event(event: dict[str, Any]) -> dict[str, Any]:
                 )
                 if invite:
                     invite.status = "accepted"
-                if org_id and email:
+                tenant = None
+                if org_id:
                     tenant = session.query(Tenant).filter(Tenant.workos_org_id == org_id).one_or_none()
-                    if tenant:
-                        result["tenantId"] = tenant.id
+                if tenant is None and invite is not None:
+                    tenant = session.get(Tenant, invite.tenant_id)
+                user = None
+                if workos_user_id:
+                    user = session.query(User).filter(User.workos_user_id == str(workos_user_id)).one_or_none()
+                if user is None and email:
+                    user = session.query(User).filter(User.email == str(email).lower()).one_or_none()
+                if tenant and user:
+                    role = invite.role if invite else "operator"
+                    existing = (
+                        session.query(TenantMembership)
+                        .filter(TenantMembership.tenant_id == tenant.id, TenantMembership.user_id == user.id)
+                        .one_or_none()
+                    )
+                    if existing is None:
+                        session.add(
+                            TenantMembership(
+                                id=f"mem-{uuid.uuid4().hex[:12]}",
+                                tenant_id=tenant.id,
+                                user_id=user.id,
+                                role=role,
+                            )
+                        )
+                    result["tenantId"] = tenant.id
         result["handled"] = True
         return result
 
     return result
+
+
+def link_onboarding_for_user(
+    *,
+    user_id: str,
+    email: str,
+    onboarding_token: str | None = None,
+) -> list[dict[str, Any]]:
+    """Create admin membership from signup onboarding token or matching email token."""
+    if not persistence_enabled():
+        return []
+    from app.billing.onboarding_tokens import (
+        find_onboarding_tenant_for_email,
+        mark_onboarding_token_linked,
+        resolve_onboarding_token,
+    )
+
+    tenant_id: str | None = None
+    token_hash: str | None = None
+    if onboarding_token:
+        resolved = resolve_onboarding_token(token=onboarding_token, email=email)
+        if resolved:
+            tenant_id = resolved["tenantId"]
+            token_hash = resolved.get("tokenHash")
+    if tenant_id is None:
+        tenant_id = find_onboarding_tenant_for_email(email=email)
+
+    if tenant_id is None:
+        return []
+
+    linked: list[dict[str, Any]] = []
+    with db_session() as session:
+        existing = (
+            session.query(TenantMembership)
+            .filter(TenantMembership.tenant_id == tenant_id, TenantMembership.user_id == user_id)
+            .one_or_none()
+        )
+        if existing is not None:
+            if token_hash:
+                mark_onboarding_token_linked(token_hash=token_hash)
+            tenant = session.get(Tenant, tenant_id)
+            return [
+                {
+                    "tenantId": tenant_id,
+                    "tenantName": tenant.name if tenant else tenant_id,
+                    "role": existing.role,
+                    "membershipId": existing.id,
+                }
+            ]
+        mem_id = f"mem-{uuid.uuid4().hex[:12]}"
+        session.add(
+            TenantMembership(
+                id=mem_id,
+                tenant_id=tenant_id,
+                user_id=user_id,
+                role="admin",
+            )
+        )
+        pending_invite = (
+            session.query(TenantInvite)
+            .filter(
+                TenantInvite.tenant_id == tenant_id,
+                TenantInvite.email == email.lower(),
+                TenantInvite.status == "pending",
+            )
+            .one_or_none()
+        )
+        if pending_invite:
+            pending_invite.status = "accepted"
+        tenant = session.get(Tenant, tenant_id)
+        linked.append(
+            {
+                "tenantId": tenant_id,
+                "tenantName": tenant.name if tenant else tenant_id,
+                "role": "admin",
+                "membershipId": mem_id,
+            }
+        )
+    if token_hash:
+        mark_onboarding_token_linked(token_hash=token_hash)
+    return linked
 
 
 def link_pending_invites_for_user(*, user_id: str, email: str) -> list[dict[str, Any]]:

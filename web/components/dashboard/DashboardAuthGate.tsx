@@ -13,13 +13,17 @@ export default function DashboardAuthGate({
   children: React.ReactNode;
   requireSso: boolean;
 }) {
-  const { session, checked, workosEnabled } = useDashboardSession();
+  const { session, checked, workosEnabled, sessionReason } = useDashboardSession();
 
   if (!checked) {
     return <p className="text-sm text-[var(--color-gray-500)]">Checking session…</p>;
   }
 
   if (session) {
+    return <>{children}</>;
+  }
+
+  if (sessionReason) {
     return <>{children}</>;
   }
 

@@ -173,6 +173,30 @@ def test_bootstrap_links_pending_invite(client: TestClient):
     assert body["capabilities"]["canWrite"] is True
 
 
+def test_bootstrap_links_onboarding_token(client: TestClient):
+    from app.billing.onboarding_tokens import create_onboarding_token
+
+    create_tenant(tenant_id="tenant-ob", name="Onboard Co")
+    token_info = create_onboarding_token(
+        tenant_id="tenant-ob",
+        api_key="qtangl_test_key",
+        email="owner@example.com",
+    )
+    response = client.get(
+        "/internal/dashboard/bootstrap",
+        params={
+            "workos_user_id": "user_ob",
+            "email": "owner@example.com",
+            "onboarding_token": token_info["token"],
+        },
+        headers={"X-Qtangl-Bff-Secret": "bff-secret-test-key-32chars-min"},
+    )
+    assert response.status_code == 200
+    body = response.json()
+    assert body["tenantId"] == "tenant-ob"
+    assert body["role"] == "admin"
+
+
 def test_patch_member_role(client: TestClient):
     create_tenant(tenant_id="tenant-role", name="Role Co")
     with db_session() as session:

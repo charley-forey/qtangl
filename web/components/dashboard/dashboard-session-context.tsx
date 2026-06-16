@@ -46,6 +46,10 @@ export function DashboardSessionProvider({ children }: { children: ReactNode }) 
   const [workosEnabled, setWorkosEnabled] = useState(workosClientAuthEnabled());
 
   const refreshSession = useCallback(async (): Promise<DashboardMeResponse> => {
+    const onboardingFromUrl = searchParams.get("onboarding");
+    if (onboardingFromUrl && typeof window !== "undefined") {
+      sessionStorage.setItem("qtangl_onboarding_token", onboardingFromUrl);
+    }
     const serverWorkos = process.env.NEXT_PUBLIC_QTANGL_DASHBOARD_AUTH_WORKOS === "true";
     if (!workosClientAuthEnabled() && !serverWorkos) {
       try {
@@ -67,7 +71,7 @@ export function DashboardSessionProvider({ children }: { children: ReactNode }) 
       }
     }
 
-    const payload = await fetchDashboardMe();
+    const payload = await fetchDashboardMe(onboardingFromUrl);
     if (payload.authenticated && payload.authMethod === "workos") {
       setInferredWorkosAuth(true);
       setWorkosEnabled(true);
@@ -78,7 +82,7 @@ export function DashboardSessionProvider({ children }: { children: ReactNode }) 
     setOnboarding(payload.onboarding ?? null);
     setSessionReady(true);
     return payload;
-  }, []);
+  }, [searchParams]);
 
   const signOut = useCallback(async () => {
     if (workosEnabled || workosClientAuthEnabled()) {

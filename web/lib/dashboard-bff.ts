@@ -32,6 +32,7 @@ export type DashboardMeResponse = {
   capabilities?: DashboardCapabilities;
   onboarding?: DashboardOnboarding;
   reason?: "no_membership" | "bff_secret_missing" | "database_unavailable" | "workos_user_missing";
+  workosSignedIn?: boolean;
 };
 
 let inferredWorkosAuth = false;
@@ -67,14 +68,25 @@ async function parseJson<T>(response: Response): Promise<T> {
   return (await response.json()) as T;
 }
 
-export async function fetchDashboardMe(): Promise<DashboardMeResponse> {
-  const response = await fetch("/api/dashboard/me", { cache: "no-store" });
+export async function fetchDashboardMe(onboardingToken?: string | null): Promise<DashboardMeResponse> {
+  const params = new URLSearchParams();
+  const token =
+    onboardingToken ||
+    (typeof window !== "undefined" ? sessionStorage.getItem("qtangl_onboarding_token") : null);
+  if (token) {
+    params.set("onboarding", token);
+  }
+  const url = params.toString() ? `/api/dashboard/me?${params.toString()}` : "/api/dashboard/me";
+  const response = await fetch(url, { cache: "no-store" });
   if (!response.ok) {
     return { authenticated: false, reason: "workos_user_missing" };
   }
   const payload = (await response.json()) as DashboardMeResponse;
   if (payload.authenticated && payload.authMethod === "workos") {
     setInferredWorkosAuth(true);
+    if (typeof window !== "undefined") {
+      sessionStorage.removeItem("qtangl_onboarding_token");
+    }
   }
   return payload;
 }

@@ -54,11 +54,14 @@ async function resolveWorkosUser(): Promise<{ id: string; email: string; firstNa
   }
 }
 
+const ONBOARDING_COOKIE = "qtangl_onboarding";
+
 async function bootstrapFromBackend(
   workosUserId: string,
   email: string,
   name: string | undefined,
-  activeTenantId: string | undefined
+  activeTenantId: string | undefined,
+  onboardingToken?: string
 ): Promise<BootstrapResult> {
   const secret = bffSessionSecret();
   if (!secret) {
@@ -73,6 +76,9 @@ async function bootstrapFromBackend(
   }
   if (activeTenantId) {
     params.set("active_tenant_id", activeTenantId);
+  }
+  if (onboardingToken) {
+    params.set("onboarding_token", onboardingToken);
   }
   const response = await fetch(
     `${qtanglApiBaseUrlServer()}/internal/dashboard/bootstrap?${params.toString()}`,
@@ -136,8 +142,11 @@ function capabilitiesFromRole(role: string) {
   };
 }
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   const cookieStore = await cookies();
+  const onboardingFromQuery = request.nextUrl.searchParams.get("onboarding")?.trim();
+  const onboardingToken =
+    onboardingFromQuery || cookieStore.get(ONBOARDING_COOKIE)?.value || undefined;
   const legacyRaw = cookieStore.get("qtangl_session")?.value;
   if (legacyRaw && !workosAuthEnabled()) {
     try {
@@ -160,9 +169,20 @@ export async function GET() {
 
   const activeTenantId = cookieStore.get(ACTIVE_TENANT_COOKIE)?.value;
   const name = [workosUser.firstName, workosUser.lastName].filter(Boolean).join(" ").trim() || undefined;
-  const bootstrap = await bootstrapFromBackend(workosUser.id, workosUser.email, name, activeTenantId);
+  const bootstrap = await bootstrapFromBackend(
+    workosUser.id,
+    workosUser.email,
+    name,
+    activeTenantId,
+    onboardingToken
+  );
   if (!bootstrap.ok) {
-    return NextResponse.json({ authenticated: false, reason: bootstrap.reason, authMethod: "workos" });
+    return NextResponse.json({
+      authenticated: false,
+      reason: bootstrap.reason,
+      authMethod: "workos",
+      workosSignedIn: true,
+    });
   }
 
   const response = NextResponse.json({
@@ -173,6 +193,9 @@ export async function GET() {
     onboarding: bootstrap.data.onboarding ?? { complete: false, nextStep: "baseline" },
   });
   applySessionCookies(response, bootstrap.data);
+  if (onboardingToken) {
+    response.cookies.delete(ONBOARDING_COOKIE);
+  }
   return response;
 }
 

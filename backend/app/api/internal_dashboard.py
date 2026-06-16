@@ -6,6 +6,7 @@ from app.auth import require_bff_secret
 from app.auth_workos.capabilities import compute_dashboard_capabilities, compute_onboarding_hint
 from app.auth_workos.service import (
     get_user_by_workos_id,
+    link_onboarding_for_user,
     link_pending_invites_for_user,
     list_user_memberships,
     upsert_user,
@@ -24,11 +25,13 @@ def dashboard_bootstrap(
     email: str = Query(min_length=3),
     name: str | None = Query(default=None),
     active_tenant_id: str | None = Query(default=None),
+    onboarding_token: str | None = Query(default=None, min_length=8),
     _: None = Depends(require_bff_secret),
 ) -> dict:
     if not persistence_enabled():
         raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail="Database unavailable.")
     user_id = upsert_user(workos_user_id=workos_user_id, email=email, name=name)
+    link_onboarding_for_user(user_id=user_id, email=email, onboarding_token=onboarding_token)
     link_pending_invites_for_user(user_id=user_id, email=email)
     memberships = list_user_memberships(user_id=user_id)
     if not memberships:
