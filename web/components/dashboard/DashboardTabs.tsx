@@ -29,10 +29,8 @@ export default function DashboardTabs({
 
   const visibleTabs =
     persona === "executive"
-      ? tabs.filter((t) => ["overview", "scans", "settings"].includes(t.id))
-      : persona === "admin"
-        ? tabs.filter((t) => t.id !== "remediate" || persona !== "admin")
-        : tabs;
+      ? tabs.filter((t) => ["overview", "scans", "settings", "portfolio"].includes(t.id))
+      : tabs;
 
   const [isMobile, setIsMobile] = useState(false);
   useEffect(() => {

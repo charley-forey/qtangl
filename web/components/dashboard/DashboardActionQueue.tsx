@@ -7,29 +7,31 @@ export default function DashboardActionQueue({
   hasScans,
   hasSchedule,
   canWrite,
+  onAction,
 }: {
   role?: string;
   hasScans: boolean;
   hasSchedule: boolean;
   canWrite: boolean;
+  onAction?: (action: string) => void;
 }) {
   const isViewer = role === "viewer";
-  const actions: Array<{ label: string; href: string; done?: boolean }> = [];
+  const actions: Array<{ id: string; label: string }> = [];
 
   if (!hasScans && canWrite && !isViewer) {
-    actions.push({ label: "Run authorized baseline scan", href: "#run-baseline" });
+    actions.push({ id: "baseline", label: "Run authorized baseline scan" });
   }
   if (hasScans && !hasSchedule && canWrite && !isViewer) {
-    actions.push({ label: "Create weekly monitoring schedule", href: "#dashboard-monitor" });
+    actions.push({ id: "schedule", label: "Create weekly monitoring schedule" });
   }
   if (hasScans) {
-    actions.push({ label: "Export board report", href: "#evidence-toolbar" });
+    actions.push({ id: "export", label: "Export board report" });
   }
   if (role === "admin") {
-    actions.push({ label: "Invite teammates", href: "#dashboard-settings" });
+    actions.push({ id: "invite", label: "Invite teammates" });
   }
   if (isViewer) {
-    actions.push({ label: "Review latest scan reports", href: "#dashboard-scans", done: hasScans });
+    actions.push({ id: "review", label: "Review latest scan reports" });
   }
 
   if (actions.length === 0) {
@@ -41,8 +43,13 @@ export default function DashboardActionQueue({
       <Eyebrow>Recommended next steps</Eyebrow>
       <ul className="mt-4 space-y-2">
         {actions.map((action) => (
-          <li key={action.label}>
-            <Button href={action.href} variant="secondary" size="sm">
+          <li key={action.id}>
+            <Button
+              type="button"
+              variant="secondary"
+              size="sm"
+              onClick={() => onAction?.(action.id)}
+            >
               {action.label}
             </Button>
           </li>

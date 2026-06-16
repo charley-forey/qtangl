@@ -221,6 +221,17 @@ def main() -> None:
                 if cloud_enqueued:
                     logger.info("Enqueued %d scheduled cloud pull(s)", cloud_enqueued)
                 try:
+                    from app.notifications.digest_email import process_due_board_exports, process_due_weekly_digests
+
+                    digest_sent = process_due_weekly_digests()
+                    if digest_sent:
+                        logger.info("Sent %d weekly digest email(s)", digest_sent)
+                    board_sent = process_due_board_exports()
+                    if board_sent:
+                        logger.info("Sent %d scheduled board export email(s)", board_sent)
+                except Exception:
+                    logger.debug("digest/board export tick skipped", exc_info=True)
+                try:
                     from app.notifications.lead_drip import process_due_drip_emails
 
                     drip_sent = process_due_drip_emails()

@@ -37,6 +37,28 @@ DEFAULT_SETTINGS: dict[str, Any] = {
         "clm": False,
         "kms": False,
     },
+    "dashboardLayout": {
+        "persona": "operator",
+        "pinned": ["kpi", "trend", "digest"],
+        "hidden": [],
+    },
+    "weeklyDigestEnabled": False,
+    "weeklyDigestRecipients": [],
+    "weeklyDigestDayOfWeek": 1,
+    "lastWeeklyDigestAt": None,
+    "lastBoardExportAt": None,
+    "boardExportSchedule": {
+        "enabled": False,
+        "cadenceDays": 7,
+        "recipients": [],
+        "format": "board",
+    },
+    "reportBranding": {
+        "companyName": "",
+        "logoUrl": "",
+        "primaryColor": "",
+    },
+    "notificationReadIds": [],
 }
 
 

@@ -22,6 +22,9 @@ export default function FirstRunChecklist({
   isAdmin,
   settings,
   onSave,
+  highlightInvite,
+  onRunBaseline,
+  scanAllowlist = [],
 }: {
   signedIn: boolean;
   hasScans: boolean;
@@ -29,6 +32,9 @@ export default function FirstRunChecklist({
   isAdmin: boolean;
   settings?: { firstRunChecklist?: ChecklistState };
   onSave: (next: ChecklistState) => Promise<void>;
+  highlightInvite?: boolean;
+  onRunBaseline?: () => void;
+  scanAllowlist?: string[];
 }) {
   const [local, setLocal] = useState<ChecklistState>(settings?.firstRunChecklist ?? {});
   const [saving, setSaving] = useState(false);
@@ -45,6 +51,9 @@ export default function FirstRunChecklist({
 
   const toggle = useCallback(
     async (id: string) => {
+      if (id === "baseline" && !hasScans) {
+        onRunBaseline?.();
+      }
       const next = { ...local, ...autoDone, [id]: !(local[id] ?? autoDone[id]) };
       setLocal(next);
       setSaving(true);
@@ -54,47 +63,51 @@ export default function FirstRunChecklist({
         setSaving(false);
       }
     },
-    [autoDone, local, onSave]
+    [autoDone, hasScans, local, onRunBaseline, onSave]
   );
 
   const visibleSteps = STEPS.filter((step) => step.id !== "invite" || isAdmin);
-  const completed = visibleSteps.filter(
-    (step) => local[step.id] ?? autoDone[step.id]
-  ).length;
-  if (completed >= visibleSteps.length) {
-    return null;
-  }
+  const allDone = visibleSteps.every((step) => local[step.id] ?? autoDone[step.id]);
+  if (allDone) return null;
 
   return (
-    <Card tone="panel" className="rounded-[var(--radius-xl)]">
+    <Card tone="panel" className={highlightInvite ? "ring-1 ring-sky-400/40" : undefined}>
       <Eyebrow>First-run checklist</Eyebrow>
-      <p className="mt-2 text-xs text-[var(--color-gray-400)]">
-        {completed} of {visibleSteps.length} complete
-      </p>
+      {scanAllowlist.length > 0 ? (
+        <p className="mt-2 text-xs text-[var(--color-gray-500)]">
+          Suggested targets: {scanAllowlist.slice(0, 3).join(", ")}
+        </p>
+      ) : null}
       <ul className="mt-4 space-y-2">
         {visibleSteps.map((step) => {
           const done = local[step.id] ?? autoDone[step.id];
           return (
-            <li key={step.id} className="flex items-center gap-3 text-sm">
-              <input
-                type="checkbox"
-                checked={Boolean(done)}
-                disabled={saving || Boolean(autoDone[step.id])}
-                onChange={() => toggle(step.id)}
-                className="h-4 w-4"
-              />
-              <span className={done ? "text-[var(--color-gray-500)] line-through" : "text-white"}>
+            <li key={step.id}>
+              <button
+                type="button"
+                disabled={saving}
+                onClick={() => void toggle(step.id)}
+                className={[
+                  "flex w-full items-center gap-3 rounded-xl border px-3 py-2 text-left text-sm",
+                  done
+                    ? "border-emerald-500/30 text-emerald-200/90"
+                    : step.id === "invite" && highlightInvite
+                      ? "border-sky-400/40 text-white"
+                      : "border-[var(--border-subtle)] text-[var(--color-gray-300)]",
+                ].join(" ")}
+              >
+                <span aria-hidden>{done ? "✓" : "○"}</span>
                 {step.label}
-              </span>
+              </button>
             </li>
           );
         })}
       </ul>
-      {!hasScans ? (
-        <Button href="#run-baseline" size="sm" className="mt-4">
-          Start baseline
+      <div className="mt-3">
+        <Button type="button" variant="ghost" size="sm" onClick={() => onRunBaseline?.()}>
+          Open scan runner
         </Button>
-      ) : null}
+      </div>
     </Card>
   );
 }

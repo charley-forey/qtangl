@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 
+import type { DashboardTabId } from "@/components/dashboard/DashboardTabs";
+
 export type DashboardAlert = {
   type: string;
   message: string;
@@ -9,10 +11,25 @@ export type DashboardAlert = {
   actionUrl?: string;
 };
 
-export default function NotificationCenter({ alerts }: { alerts: DashboardAlert[] }) {
+const TAB_FROM_URL: Record<string, DashboardTabId> = {
+  scans: "scans",
+  monitor: "monitor",
+  remediate: "remediate",
+  settings: "settings",
+  portfolio: "portfolio",
+};
+
+export default function NotificationCenter({
+  alerts,
+  onMarkRead,
+  onNavigateTab,
+}: {
+  alerts: DashboardAlert[];
+  onMarkRead?: (ids: string[]) => void;
+  onNavigateTab?: (tab: DashboardTabId) => void;
+}) {
   const [open, setOpen] = useState(false);
   const [read, setRead] = useState<Set<string>>(new Set());
-  const unread = alerts.filter((a) => !read.has(`${a.type}-${a.message}`)).length;
 
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
@@ -21,6 +38,16 @@ export default function NotificationCenter({ alerts }: { alerts: DashboardAlert[
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, []);
+
+  const unread = alerts.filter((a) => !read.has(`${a.type}-${a.message}`)).length;
+
+  function dismiss(key: string, alert: DashboardAlert) {
+    setRead((prev) => new Set(prev).add(key));
+    onMarkRead?.([key]);
+    const url = alert.actionUrl ?? "";
+    const tab = Object.entries(TAB_FROM_URL).find(([fragment]) => url.includes(fragment))?.[1];
+    if (tab) onNavigateTab?.(tab);
+  }
 
   return (
     <div className="relative">
@@ -52,7 +79,7 @@ export default function NotificationCenter({ alerts }: { alerts: DashboardAlert[
                     <button
                       type="button"
                       className="mt-2 text-sky-400 underline"
-                      onClick={() => setRead((prev) => new Set(prev).add(key))}
+                      onClick={() => dismiss(key, alert)}
                     >
                       Dismiss
                     </button>

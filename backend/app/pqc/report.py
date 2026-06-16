@@ -385,14 +385,14 @@ def _report_provenance(report: MigrationReport) -> dict[str, Any]:
     }
 
 
-def report_to_pdf(report: MigrationReport) -> bytes:
+def report_to_pdf(report: MigrationReport, *, branding: dict[str, Any] | None = None) -> bytes:
     if not _HAS_REPORTLAB:
         payload = json.dumps(report_to_json(report), indent=2).encode("utf-8")
         return payload
 
     from app.pqc.report_pdf import build_pdf
 
-    return build_pdf(report)
+    return build_pdf(report, branding=branding)
 
 
 def _asset_dict(asset: CryptoAsset) -> dict[str, Any]:

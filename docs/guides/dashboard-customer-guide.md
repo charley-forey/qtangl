@@ -32,6 +32,27 @@ API keys for CI/automation are under **Settings → Advanced** after sign-in.
 
 Use the sticky **Evidence exports** bar for one-click PDF, board, auditor, and evidence bundle downloads.
 
+## Personas
+
+Toggle **Operator** vs **Executive** in the dashboard header. Executive mode hides operator-only panels on Overview (runner, CBOM, integrations) and limits tabs to Overview, Scans, Settings, and Portfolio.
+
+## Widget preferences
+
+Under **Settings → Widget preferences**, pin or hide overview widgets (KPI, trend, digest, compliance, forecast, heatmap). Free-tier tenants have heatmap hidden by default.
+
+## Weekly digest email
+
+Enable under **Settings → Alert settings**:
+
+- Toggle **Enable weekly digest email**
+- Add comma-separated recipients
+- Use **Send test digest** (admin) to preview via API
+- Requires `QTANGL_SMTP_*` on the worker (see backend `.env.example`)
+
+## MSSP portfolio
+
+When your account manages multiple customer tenants, open the **Portfolio** tab for aggregate readiness, customers below threshold, and per-customer drill-down. Click a customer row to switch tenant context without a full page reload.
+
 ## Diagnostics
 
 - Auth config: `GET /api/dashboard/auth-health` (booleans only, no secrets)

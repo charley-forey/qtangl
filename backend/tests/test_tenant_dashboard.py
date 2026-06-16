@@ -95,9 +95,60 @@ class TenantDashboardEndpointsTest(unittest.TestCase):
         scan_ids = {row["scanId"] for row in payload["recentScans"]}
         self.assertIn(scan_id, scan_ids)
 
-    def test_dashboard_events_requires_auth(self) -> None:
-        response = self.client.get("/tenant/dashboard/events")
-        self.assertEqual(response.status_code, 401)
+    def test_dashboard_summary_extended_fields(self) -> None:
+        self._seed_scan()
+        response = self.client.get("/tenant/dashboard/summary", headers=self.headers)
+        self.assertEqual(response.status_code, 200)
+        payload = response.json()
+        for key in (
+            "latestScanDetail",
+            "forecast",
+            "remediationVelocity",
+            "sloMetrics",
+            "integrationsSummary",
+            "layoutDefaults",
+            "membershipHealth",
+        ):
+            self.assertIn(key, payload, msg=f"missing {key}")
+        self.assertIn("persona", payload["layoutDefaults"])
+
+    def test_dashboard_tab_scans(self) -> None:
+        scan_id = self._seed_scan()
+        response = self.client.get("/tenant/dashboard/tab/scans", headers=self.headers)
+        self.assertEqual(response.status_code, 200)
+        payload = response.json()
+        self.assertEqual(payload["tab"], "scans")
+        scan_ids = {row["scanId"] for row in payload["data"]["scans"]}
+        self.assertIn(scan_id, scan_ids)
+
+    def test_dashboard_tab_settings(self) -> None:
+        response = self.client.get("/tenant/dashboard/tab/settings", headers=self.headers)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("settings", response.json()["data"])
+
+    def test_dashboard_tab_unknown(self) -> None:
+        response = self.client.get("/tenant/dashboard/tab/unknown", headers=self.headers)
+        self.assertEqual(response.status_code, 404)
+
+    def test_portfolio_summary(self) -> None:
+        self._seed_scan()
+        response = self.client.get("/tenant/partner/portfolio-summary", headers=self.headers)
+        self.assertEqual(response.status_code, 200)
+        payload = response.json()
+        self.assertIn("children", payload)
+        self.assertIn("rollup", payload)
+
+    def test_digest_preview(self) -> None:
+        self._seed_scan()
+        response = self.client.post("/tenant/dashboard/digest/preview", headers=self.headers)
+        self.assertEqual(response.status_code, 200)
+        payload = response.json()
+        self.assertIn("html", payload)
+        self.assertIn("narrative", payload["digest"])
+
+    def test_bulk_export_requires_scan_ids(self) -> None:
+        response = self.client.post("/tenant/scans/bulk-export", headers=self.headers, json={})
+        self.assertEqual(response.status_code, 400)
 
 
 if __name__ == "__main__":

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export type CommandAction = {
   id: string;
@@ -16,6 +16,7 @@ export default function DashboardCommandPalette({
 }) {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
+  const dialogRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
@@ -28,6 +29,28 @@ export default function DashboardCommandPalette({
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, []);
+
+  useEffect(() => {
+    if (!open || !dialogRef.current) return;
+    const focusable = dialogRef.current.querySelectorAll<HTMLElement>(
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    );
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    first?.focus();
+    function trap(e: KeyboardEvent) {
+      if (e.key !== "Tab" || focusable.length === 0) return;
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last?.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first?.focus();
+      }
+    }
+    document.addEventListener("keydown", trap);
+    return () => document.removeEventListener("keydown", trap);
+  }, [open]);
 
   const filtered = actions.filter((a) =>
     a.label.toLowerCase().includes(query.toLowerCase())
@@ -46,8 +69,14 @@ export default function DashboardCommandPalette({
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/70 px-4 pt-24">
-      <div className="w-full max-w-lg rounded-2xl border border-[var(--border-strong)] bg-black p-4 shadow-2xl">
+    <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/70 px-4 pt-24" role="presentation">
+      <div
+        ref={dialogRef}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Command palette"
+        className="w-full max-w-lg rounded-2xl border border-[var(--border-strong)] bg-black p-4 shadow-2xl"
+      >
         <input
           autoFocus
           value={query}

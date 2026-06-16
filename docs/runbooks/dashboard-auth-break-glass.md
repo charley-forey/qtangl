@@ -32,6 +32,25 @@
 2. Webhook `organization_membership.deleted` revokes `dashboard_session_keys` for that user/tenant.
 3. Rotate automation keys if the user had access to them.
 
+## Session expiry (operators)
+
+- The dashboard shows a **session expired** banner when BFF calls return `401`.
+- Users should use **Sign out** and re-authenticate via `/dashboard/login`.
+- Proactive warning is enabled for WorkOS BFF mode via client-side fetch interception.
+
+## Weekly digest / board export email (SMTP)
+
+Digest and scheduled board emails require SMTP on the **worker** process:
+
+| Variable | Notes |
+|----------|-------|
+| `QTANGL_SMTP_HOST` | Required for any outbound email |
+| `QTANGL_SMTP_PORT` | Default `587` |
+| `QTANGL_SMTP_USER` / `QTANGL_SMTP_PASSWORD` | Optional auth |
+| `QTANGL_SMTP_FROM` | From address |
+
+Tenant toggles: `weeklyDigestEnabled`, `boardExportSchedule.enabled` in tenant settings.
+
 ## Rate limits
 
 - API key rate limit: `QTANGL_RATE_LIMIT_PER_MINUTE` (default 300/min per key).

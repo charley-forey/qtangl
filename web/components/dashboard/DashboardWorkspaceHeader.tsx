@@ -7,9 +7,11 @@ import type { DashboardSession } from "@/lib/dashboard-bff";
 
 export default function DashboardWorkspaceHeader({
   tier,
+  membershipHealth,
   onSessionChange,
 }: {
   tier?: string;
+  membershipHealth?: Array<{ tenantId: string; latestReadinessBand?: string | null }>;
   onSessionChange?: (session: DashboardSession) => void;
 }) {
   const { session, signOut } = useDashboardSession();
@@ -22,6 +24,7 @@ export default function DashboardWorkspaceHeader({
       <div className="flex flex-wrap items-center gap-3">
         <TenantSwitcher
           session={session}
+          membershipHealth={membershipHealth}
           onSwitched={(next) => {
             if (next) onSessionChange?.(next);
           }}

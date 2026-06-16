@@ -4,18 +4,22 @@ import Card from "@/components/ui/Card";
 import Eyebrow from "@/components/ui/Eyebrow";
 import StatusPill from "@/components/dashboard/ui/StatusPill";
 
+import type { ScanProgressState } from "@/lib/dashboard-state";
+
 export default function SystemHealthBar({
   schedulerEnabled,
   lastScanAt,
   scansThisMonth,
   quotaLimit,
   apiOk,
+  scanProgress,
 }: {
   schedulerEnabled?: boolean;
   lastScanAt?: string | null;
   scansThisMonth?: number;
   quotaLimit?: number | null;
   apiOk?: boolean;
+  scanProgress?: ScanProgressState | null;
 }) {
   const quotaPct =
     quotaLimit && quotaLimit > 0 && scansThisMonth != null
@@ -42,6 +46,12 @@ export default function SystemHealthBar({
           <StatusPill
             label={`Quota ${quotaPct}%`}
             tone={quotaPct >= 90 ? "warning" : "neutral"}
+          />
+        ) : null}
+        {scanProgress && ["queued", "running"].includes(scanProgress.status) ? (
+          <StatusPill
+            label={`Scan ${scanProgress.progressPct}%`}
+            tone="neutral"
           />
         ) : null}
       </div>

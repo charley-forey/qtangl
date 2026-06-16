@@ -52,11 +52,13 @@ SEVERITY = {
 }
 
 
-def build_pdf(report: MigrationReport) -> bytes:
+def build_pdf(report: MigrationReport, *, branding: dict[str, Any] | None = None) -> bytes:
     if not _HAS_REPORTLAB:
         raise RuntimeError("reportlab is required for PDF generation")
 
     buffer = io.BytesIO()
+    company = str((branding or {}).get("companyName") or "").strip()
+    header_label = f"{company} — Q-Day Readiness" if company else "Qtangl — Q-Day Readiness Report"
     doc = SimpleDocTemplate(
         buffer,
         pagesize=letter,
@@ -64,8 +66,8 @@ def build_pdf(report: MigrationReport) -> bytes:
         rightMargin=0.75 * inch,
         topMargin=0.85 * inch,
         bottomMargin=0.75 * inch,
-        title="Qtangl Q-Day Readiness Report",
-        author="Qtangl",
+        title=header_label,
+        author=company or "Qtangl",
     )
     styles = getSampleStyleSheet()
     title_style = ParagraphStyle(
@@ -342,8 +344,8 @@ def build_pdf(report: MigrationReport) -> bytes:
 
     doc.build(
         story,
-        onFirstPage=lambda c, d: _page_header_footer(c, d, report.scan_id),
-        onLaterPages=lambda c, d: _page_header_footer(c, d, report.scan_id),
+        onFirstPage=lambda c, d: _page_header_footer(c, d, report.scan_id, company),
+        onLaterPages=lambda c, d: _page_header_footer(c, d, report.scan_id, company),
     )
     return buffer.getvalue()
 
@@ -512,14 +514,15 @@ def _coverage_table(report: MigrationReport) -> list[Any]:
     return [table]
 
 
-def _page_header_footer(canvas: Any, doc: Any, scan_id: str = "") -> None:
+def _page_header_footer(canvas: Any, doc: Any, scan_id: str = "", company_name: str = "") -> None:
     canvas.saveState()
     width, height = letter
     canvas.setFillColor(NAVY)
     canvas.rect(0, height - 0.45 * inch, width, 0.45 * inch, fill=1, stroke=0)
     canvas.setFillColor(WHITE)
     canvas.setFont("Helvetica-Bold", 9)
-    canvas.drawString(0.75 * inch, height - 0.3 * inch, "Qtangl — Q-Day Readiness Report")
+    header = f"{company_name} — Q-Day Readiness Report" if company_name else "Qtangl — Q-Day Readiness Report"
+    canvas.drawString(0.75 * inch, height - 0.3 * inch, header)
     canvas.setFont("Helvetica", 8)
     canvas.drawRightString(width - 0.75 * inch, height - 0.3 * inch, "Confidential — endpoint-scoped inventory")
     canvas.setFillColor(MUTED)

@@ -133,17 +133,37 @@ def weekly_executive_digest(*, tenant_id: str) -> dict[str, Any]:
             "wins": [],
             "risks": ["Portfolio has no recent evidence."],
             "nextWeekFocus": ["Run baseline scans for all portfolio targets."],
+            "sinceLastBoardMeeting": "No board meeting baseline recorded.",
+            "topCryptoRisks": [],
+            "narrative": "Establish a baseline scan to unlock executive digest insights.",
         }
     improving = sorted(scans, key=lambda row: float(row.get("readinessScore", 0)), reverse=True)[:3]
     lagging = sorted(scans, key=lambda row: float(row.get("readinessScore", 0)))[:3]
+    top_risks = [
+        f"{row.get('target')}: readiness {row.get('readinessScore')} ({row.get('readinessBand', 'unknown')})"
+        for row in lagging
+    ]
+    overall = rollup.get("overallReadiness", 0)
+    bu_deltas = rollup.get("businessUnitDeltas") or {}
+    delta_bits = [f"{unit}: {delta:+.1f}" for unit, delta in bu_deltas.items() if delta is not None][:3]
+    narrative = (
+        f"Portfolio readiness stands at {overall}. "
+        f"{'Business unit movement: ' + ', '.join(delta_bits) + '. ' if delta_bits else ''}"
+        "Focus remediation on lagging targets and validate board evidence exports weekly."
+    )
     return {
-        "headline": f"Portfolio readiness is {rollup.get('overallReadiness', 0)}.",
+        "headline": f"Portfolio readiness is {overall}.",
         "wins": [f"{row.get('target')}: score {row.get('readinessScore')}" for row in improving],
         "risks": [f"{row.get('target')}: score {row.get('readinessScore')}" for row in lagging],
         "nextWeekFocus": [
             "Close top critical remediation items in lagging targets.",
             "Validate board/auditor report provenance on all executive exports.",
         ],
+        "sinceLastBoardMeeting": (
+            f"Overall readiness moved to {overall} across {len(scans)} tracked target(s)."
+        ),
+        "topCryptoRisks": top_risks,
+        "narrative": narrative,
     }
 
 

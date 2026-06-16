@@ -1,0 +1,255 @@
+"use client";
+
+import dynamic from "next/dynamic";
+import { useMemo, useState } from "react";
+
+import Card from "@/components/ui/Card";
+import Eyebrow from "@/components/ui/Eyebrow";
+import DashboardOnboarding, { DashboardSection } from "@/components/dashboard/DashboardOnboarding";
+import type { ScansTabBundle } from "@/lib/dashboard-state";
+import type { TenantScanSummary } from "@/lib/tenant-api";
+import { formatUtcDateTime } from "@/lib/format";
+import { trackDashboardEvent } from "@/lib/dashboard-analytics";
+
+const AssessRunnerPanel = dynamic(() => import("@/components/pqc/AssessRunnerPanel"), { loading: () => null });
+
+type Props = {
+  bundle: ScansTabBundle | null;
+  bffMode: boolean;
+  savedKey: string;
+  canWrite: boolean;
+  reportUrlForScan: (scanId: string, format?: "pdf" | "json" | "bundle" | "executive" | "board" | "auditor") => string;
+  onOpenReport: (scanId: string) => void;
+  onMessage: (message: string) => void;
+  scanIdParam?: string;
+};
+
+export default function DashboardScansTab({
+  bundle,
+  bffMode,
+  savedKey,
+  canWrite,
+  reportUrlForScan,
+  onOpenReport,
+  onMessage,
+}: Props) {
+  const scans = bundle?.scans ?? [];
+  const [selected, setSelected] = useState<Set<string>>(new Set());
+  const [showRunner, setShowRunner] = useState(true);
+  const diffByScan = useMemo(() => {
+    const map = new Map<string, number | null>();
+    const detail = bundle?.latestScanDetail;
+    if (detail?.scanDiff?.summary && typeof detail.scanDiff.summary === "object") {
+      const delta = (detail.scanDiff.summary as { readinessDelta?: number }).readinessDelta;
+      if (delta != null) map.set(detail.scanId, Number(delta));
+    }
+    return map;
+  }, [bundle?.latestScanDetail]);
+
+  async function bulkExport() {
+    if (selected.size === 0) return;
+    try {
+      const response = await fetch("/api/dashboard/tenant/scans/bulk-export", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ scanIds: [...selected] }),
+      });
+      if (!response.ok) throw new Error("Bulk export failed.");
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
+      const anchor = document.createElement("a");
+      anchor.href = url;
+      anchor.download = "qtangl-evidence-bundles.zip";
+      anchor.click();
+      URL.revokeObjectURL(url);
+      trackDashboardEvent("dashboard_bulk_export", { count: selected.size });
+      onMessage(`Downloaded ${selected.size} evidence bundle(s).`);
+    } catch (error) {
+      onMessage(error instanceof Error ? error.message : "Bulk export failed.");
+    }
+  }
+
+  function toggleScan(scanId: string) {
+    setSelected((prev) => {
+      const next = new Set(prev);
+      if (next.has(scanId)) next.delete(scanId);
+      else next.add(scanId);
+      return next;
+    });
+  }
+
+  return (
+    <>
+      {canWrite && showRunner ? (
+        <DashboardSection title="Run baseline assessment" id="run-baseline">
+          <AssessRunnerPanel
+            apiKey={bffMode ? "bff" : savedKey}
+            useBff={bffMode}
+            initialInventory={[]}
+            initialScenarios={[]}
+            backendConnected
+            backendMessage={null}
+          />
+          <button type="button" className="mt-2 text-xs underline" onClick={() => setShowRunner(false)}>
+            Hide runner
+          </button>
+        </DashboardSection>
+      ) : canWrite ? (
+        <button type="button" className="text-sm underline" onClick={() => setShowRunner(true)}>
+          Run baseline assessment
+        </button>
+      ) : null}
+
+      <DashboardSection title="Scan history" id="dashboard-scans">
+        {scans.length === 0 ? (
+          <Card tone="ghost">
+            <p className="text-sm text-[var(--color-gray-400)]">No scans yet for this tenant.</p>
+          </Card>
+        ) : (
+          <Card tone="panel">
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <Eyebrow>Recent PQC scans</Eyebrow>
+              {selected.size > 0 ? (
+                <button type="button" className="text-xs text-white underline" onClick={() => void bulkExport()}>
+                  Download {selected.size} bundle(s)
+                </button>
+              ) : null}
+            </div>
+            <div className="mt-4 hidden overflow-x-auto md:block">
+              <ScanTable
+                scans={scans}
+                selected={selected}
+                diffByScan={diffByScan}
+                reportUrlForScan={reportUrlForScan}
+                onToggle={toggleScan}
+                onOpenReport={onOpenReport}
+              />
+            </div>
+            <div className="mt-4 space-y-3 md:hidden">
+              {scans.map((scan) => (
+                <ScanCard
+                  key={scan.scanId}
+                  scan={scan}
+                  selected={selected.has(scan.scanId)}
+                  delta={diffByScan.get(scan.scanId)}
+                  reportUrlForScan={reportUrlForScan}
+                  onToggle={() => toggleScan(scan.scanId)}
+                  onOpenReport={() => onOpenReport(scan.scanId)}
+                />
+              ))}
+            </div>
+          </Card>
+        )}
+      </DashboardSection>
+    </>
+  );
+}
+
+function ScanTable({
+  scans,
+  selected,
+  diffByScan,
+  reportUrlForScan,
+  onToggle,
+  onOpenReport,
+}: {
+  scans: TenantScanSummary[];
+  selected: Set<string>;
+  diffByScan: Map<string, number | null>;
+  reportUrlForScan: Props["reportUrlForScan"];
+  onToggle: (scanId: string) => void;
+  onOpenReport: (scanId: string) => void;
+}) {
+  return (
+    <table className="min-w-full text-left text-sm">
+      <thead className="text-xs uppercase tracking-[0.14em] text-[var(--color-gray-500)]">
+        <tr>
+          <th className="pb-3 pr-2" />
+          <th className="pb-3 pr-4">Scan ID</th>
+          <th className="pb-3 pr-4">Status</th>
+          <th className="pb-3 pr-4">Created</th>
+          <th className="pb-3 pr-4">Readiness</th>
+          <th className="pb-3 pr-4">Δ</th>
+          <th className="pb-3">Actions</th>
+        </tr>
+      </thead>
+      <tbody className="text-[var(--color-gray-300)]">
+        {scans.map((scan) => (
+          <tr key={scan.scanId} className="border-t border-[var(--border-subtle)]">
+            <td className="py-3 pr-2">
+              {scan.status === "done" ? (
+                <input type="checkbox" checked={selected.has(scan.scanId)} onChange={() => onToggle(scan.scanId)} />
+              ) : null}
+            </td>
+            <td className="py-3 pr-4 font-mono text-xs text-white">{scan.scanId}</td>
+            <td className="py-3 pr-4">{scan.status}</td>
+            <td className="py-3 pr-4">{formatUtcDateTime(scan.createdAt)}</td>
+            <td className="py-3 pr-4">
+              {scan.readinessScore != null ? `${scan.readinessScore}${scan.readinessBand ? ` · ${scan.readinessBand}` : ""}` : "—"}
+            </td>
+            <td className="py-3 pr-4">
+              {diffByScan.has(scan.scanId) ? (diffByScan.get(scan.scanId) ?? "—") : "—"}
+            </td>
+            <td className="py-3">
+              {scan.status === "done" ? (
+                <div className="flex flex-wrap gap-2">
+                  <a href={reportUrlForScan(scan.scanId, "pdf")} className="underline" target="_blank" rel="noreferrer">
+                    PDF
+                  </a>
+                  <button type="button" className="underline" onClick={() => onOpenReport(scan.scanId)}>
+                    Reports
+                  </button>
+                </div>
+              ) : (
+                "—"
+              )}
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
+}
+
+function ScanCard({
+  scan,
+  selected,
+  delta,
+  reportUrlForScan,
+  onToggle,
+  onOpenReport,
+}: {
+  scan: TenantScanSummary;
+  selected: boolean;
+  delta?: number | null;
+  reportUrlForScan: Props["reportUrlForScan"];
+  onToggle: () => void;
+  onOpenReport: () => void;
+}) {
+  return (
+    <div className="rounded-xl border border-[var(--border-subtle)] p-3 text-sm">
+      <div className="flex items-start justify-between gap-2">
+        <p className="font-mono text-xs text-white">{scan.scanId}</p>
+        {scan.status === "done" ? <input type="checkbox" checked={selected} onChange={onToggle} /> : null}
+      </div>
+      <p className="mt-1 text-[var(--color-gray-400)]">{scan.status}</p>
+      <p className="mt-1 text-[var(--color-gray-400)]">{formatUtcDateTime(scan.createdAt)}</p>
+      {scan.readinessScore != null ? (
+        <p className="mt-1">
+          {scan.readinessScore}
+          {delta != null ? ` (${delta > 0 ? "+" : ""}${delta})` : ""}
+        </p>
+      ) : null}
+      {scan.status === "done" ? (
+        <div className="mt-2 flex gap-3">
+          <a href={reportUrlForScan(scan.scanId, "pdf")} className="underline">
+            PDF
+          </a>
+          <button type="button" className="underline" onClick={onOpenReport}>
+            Reports
+          </button>
+        </div>
+      ) : null}
+    </div>
+  );
+}

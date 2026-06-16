@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import asyncio
 import json
+import logging
+import time
 from datetime import datetime, timezone
 from typing import Any
 
@@ -43,6 +45,8 @@ from app.remediation.service import (
 from app.pqc.serialize import serialize_bundle
 from app.sharing.service import create_share_link, list_share_links, revoke_share_link
 from app.store.scan_jobs import delete_job, get_job, list_jobs_for_tenant, load_scan_bundle
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/tenant", tags=["tenant"])
 
@@ -343,6 +347,10 @@ def _recent_scan_summaries(*, tenant_id: str, limit: int = 10) -> list[dict[str,
 
 async def _dashboard_events_generator(*, tenant_id: str):
     seen: dict[str, str] = {}
+
+    def _progress_pct(status: str) -> int:
+        return {"queued": 10, "running": 55, "done": 100, "error": 100}.get(status, 0)
+
     while True:
         for scan in list_jobs_for_tenant(tenant_id=tenant_id, limit=25):
             scan_id = str(scan.get("scanId", ""))
@@ -354,6 +362,7 @@ async def _dashboard_events_generator(*, tenant_id: str):
                     payload = {
                         "scanId": scan_id,
                         "status": job_status,
+                        "progressPct": _progress_pct(job_status),
                         "targetDomain": scan.get("targetDomain"),
                         "updatedAt": scan.get("updatedAt"),
                     }
@@ -364,6 +373,7 @@ async def _dashboard_events_generator(*, tenant_id: str):
                     "scanId": scan_id,
                     "status": job_status,
                     "previousStatus": previous,
+                    "progressPct": _progress_pct(job_status),
                     "targetDomain": scan.get("targetDomain"),
                     "readinessScore": scan.get("readinessScore"),
                     "readinessBand": scan.get("readinessBand"),
@@ -474,7 +484,10 @@ def tenant_scan_report(
             headers={"Content-Disposition": f'attachment; filename="{scan_id}-evidence.zip"'},
         )
     report_for_pdf = apply_remediation_to_migration_report(bundle.report, statuses=statuses)
-    content = report_to_pdf(report_for_pdf)
+    from app.tenant.settings import get_tenant_settings_raw
+
+    branding = get_tenant_settings_raw(tenant_id=auth.tenant_id).get("reportBranding") or {}
+    content = report_to_pdf(report_for_pdf, branding=branding if isinstance(branding, dict) else None)
     return Response(content=content, media_type="application/pdf")
 
 
@@ -1220,12 +1233,110 @@ def tenant_readiness_trend(
     }
 
 
+def _remediation_velocity_summary(*, tenant_id: str) -> dict[str, Any]:
+    from app.remediation.service import remediation_velocity
+
+    return remediation_velocity(tenant_id=tenant_id)
+
+
+def _slo_metrics_summary(*, tenant_id: str) -> dict[str, Any]:
+    scans = list_jobs_for_tenant(tenant_id=tenant_id, limit=100)
+    terminal = [scan for scan in scans if scan.get("status") in {"done", "error"}]
+    success = sum(1 for scan in terminal if scan.get("status") == "done")
+    reliability = round((100.0 * success / len(terminal)), 1) if terminal else 100.0
+    report_ready = sum(1 for scan in terminal if scan.get("reportAvailable"))
+    report_rate = round((100.0 * report_ready / len(terminal)), 1) if terminal else 100.0
+    return {
+        "scanSuccessRatePct": reliability,
+        "reportAvailabilityPct": report_rate,
+        "sampleSize": len(terminal),
+        "targetSloPct": 99.0,
+    }
+
+
+def _integrations_summary(*, tenant_id: str) -> dict[str, Any]:
+    from app.integrations.service import list_integrations
+
+    rows = list_integrations(tenant_id=tenant_id)
+    configured = {str(r.get("provider", "")).lower(): bool(r.get("configured")) for r in rows}
+    settings = {}
+    try:
+        from app.tenant.settings import get_tenant_settings_raw
+
+        settings = get_tenant_settings_raw(tenant_id=tenant_id)
+    except Exception:
+        pass
+    return {
+        "jiraConfigured": configured.get("jira", False),
+        "webhookConfigured": bool(settings.get("webhookSigningSecret")),
+        "providers": rows,
+    }
+
+
+def _layout_defaults(*, tenant_id: str) -> dict[str, Any]:
+    from app.billing.entitlements import tenant_entitlements
+    from app.tenant.settings import get_tenant_settings_raw
+
+    settings = get_tenant_settings_raw(tenant_id=tenant_id)
+    layout = settings.get("dashboardLayout") or {}
+    tier = str(tenant_entitlements(tenant_id=tenant_id).get("tier") or "free")
+    hidden = list(layout.get("hidden") or [])
+    if tier == "free" and "heatmap" not in hidden:
+        hidden = [*hidden, "heatmap"]
+    return {
+        "persona": layout.get("persona") or "operator",
+        "pinned": layout.get("pinned") or ["kpi", "trend", "digest"],
+        "hidden": hidden,
+        "tier": tier,
+    }
+
+
+def _forecast_summary(*, tenant_id: str) -> dict[str, Any]:
+    from app.monitoring.anomaly import forecast_readiness
+
+    scores = [
+        float(scan["readinessScore"])
+        for scan in list_jobs_for_tenant(tenant_id=tenant_id, limit=50)
+        if scan.get("readinessScore") is not None
+    ]
+    scores.reverse()
+    return forecast_readiness(scores=scores)
+
+
+def _latest_scan_detail(*, tenant_id: str) -> dict[str, Any] | None:
+    scans = list_jobs_for_tenant(tenant_id=tenant_id, limit=20)
+    latest_done = next((s for s in scans if s.get("status") == "done"), None)
+    if not latest_done:
+        return None
+    scan_id = str(latest_done["scanId"])
+    bundle = load_scan_bundle(scan_id, tenant_id=tenant_id)
+    if not bundle:
+        return {"scanId": scan_id, "readinessScore": latest_done.get("readinessScore")}
+    report = bundle.get("report") or {}
+    backlog = report.get("remediationBacklog") or []
+    critical = [
+        {"id": i.get("id"), "title": i.get("title"), "severity": i.get("severity")}
+        for i in backlog
+        if str(i.get("severity", "")).lower() == "critical"
+    ][:10]
+    return {
+        "scanId": scan_id,
+        "readinessScore": report.get("readinessScore") or latest_done.get("readinessScore"),
+        "readinessBand": report.get("readinessBand") or latest_done.get("readinessBand"),
+        "scanDiff": report.get("scanDiff"),
+        "complianceSummary": report.get("complianceSummary"),
+        "compliancePack": report.get("compliancePack"),
+        "openCriticalItems": critical,
+    }
+
+
 @router.get("/dashboard/summary")
 def tenant_dashboard_summary(auth: AuthContext = Depends(require_auth_readonly)) -> dict:
     from app.portfolio.service import portfolio_command_center, weekly_executive_digest
 
+    started = time.perf_counter()
     metrics = _tenant_scan_metrics(tenant_id=auth.tenant_id)
-    return {
+    payload = {
         "status": "success",
         "tenantId": auth.tenant_id,
         "me": _build_tenant_me_payload(auth=auth),
@@ -1237,7 +1348,240 @@ def tenant_dashboard_summary(auth: AuthContext = Depends(require_auth_readonly))
         "recentScans": _recent_scan_summaries(tenant_id=auth.tenant_id, limit=10),
         "schedulesSummary": _schedules_summary(tenant_id=auth.tenant_id),
         "health": _dashboard_health(tenant_id=auth.tenant_id),
+        "latestScanDetail": _latest_scan_detail(tenant_id=auth.tenant_id),
+        "forecast": _forecast_summary(tenant_id=auth.tenant_id),
+        "remediationVelocity": _remediation_velocity_summary(tenant_id=auth.tenant_id),
+        "sloMetrics": _slo_metrics_summary(tenant_id=auth.tenant_id),
+        "integrationsSummary": _integrations_summary(tenant_id=auth.tenant_id),
+        "layoutDefaults": _layout_defaults(tenant_id=auth.tenant_id),
+        "membershipHealth": _membership_health_for_tenant(tenant_id=auth.tenant_id),
     }
+    elapsed_ms = (time.perf_counter() - started) * 1000
+    logger.info("dashboard.summary tenant=%s duration_ms=%.1f", auth.tenant_id, elapsed_ms)
+    threshold = float(os.environ.get("QTANGL_DASHBOARD_SUMMARY_WARN_MS", "800"))
+    if elapsed_ms > threshold:
+        logger.warning(
+            "dashboard.summary slow tenant=%s duration_ms=%.1f threshold_ms=%.0f",
+            auth.tenant_id,
+            elapsed_ms,
+            threshold,
+        )
+    return payload
+
+
+def _membership_health_for_tenant(*, tenant_id: str) -> list[dict[str, Any]]:
+    from app.partner.service import list_child_tenants
+
+    children = list_child_tenants(parent_tenant_id=tenant_id)
+    if not children:
+        metrics = _tenant_scan_metrics(tenant_id=tenant_id)
+        return [
+            {
+                "tenantId": tenant_id,
+                "latestReadinessScore": metrics.get("latestReadinessScore"),
+                "latestReadinessBand": metrics.get("latestReadinessBand"),
+            }
+        ]
+    health: list[dict[str, Any]] = []
+    for child in children:
+        child_id = str(child.get("childTenantId", ""))
+        if not child_id:
+            continue
+        metrics = _tenant_scan_metrics(tenant_id=child_id)
+        health.append(
+            {
+                "tenantId": child_id,
+                "tenantName": child.get("childTenantName") or child_id,
+                "latestReadinessScore": metrics.get("latestReadinessScore"),
+                "latestReadinessBand": metrics.get("latestReadinessBand"),
+            }
+        )
+    return health
+
+
+def _dashboard_tab_scans(*, tenant_id: str) -> dict[str, Any]:
+    scans = list_jobs_for_tenant(tenant_id=tenant_id, limit=100)
+    detail = _latest_scan_detail(tenant_id=tenant_id)
+    return {"scans": scans, "latestScanDetail": detail}
+
+
+def _dashboard_tab_monitor(*, tenant_id: str) -> dict[str, Any]:
+    schedules = list_schedules(tenant_id=tenant_id) if persistence_enabled() else []
+    cbom: dict[str, Any] = {}
+    try:
+        from app.cbom.service import aggregate_cbom
+
+        cbom = aggregate_cbom(tenant_id=tenant_id) or {}
+    except Exception:
+        cbom = {}
+    return {
+        "schedules": schedules,
+        "schedulesSummary": _schedules_summary(tenant_id=tenant_id),
+        "integrationsSummary": _integrations_summary(tenant_id=tenant_id),
+        "cbomAggregate": cbom.get("aggregate"),
+        "commandCenter": __import__("app.portfolio.service", fromlist=["portfolio_command_center"]).portfolio_command_center(
+            tenant_id=tenant_id
+        ),
+    }
+
+
+def _dashboard_tab_remediate(*, tenant_id: str) -> dict[str, Any]:
+    detail = _latest_scan_detail(tenant_id=tenant_id)
+    remediation_scan = None
+    if detail and detail.get("scanId"):
+        scan_id = str(detail["scanId"])
+        bundle = load_scan_bundle(scan_id, tenant_id=tenant_id)
+        backlog = (bundle or {}).get("report", {}).get("remediationBacklog") or []
+        statuses = list_remediation_status(tenant_id=tenant_id, scan_id=scan_id)
+        remediation_scan = {
+            "scanId": scan_id,
+            "items": backlog[:20],
+            "statuses": statuses,
+        }
+    return {
+        "remediationScan": remediation_scan,
+        "remediationVelocity": _remediation_velocity_summary(tenant_id=tenant_id),
+        "sloMetrics": _slo_metrics_summary(tenant_id=tenant_id),
+    }
+
+
+def _dashboard_tab_settings(*, tenant_id: str) -> dict[str, Any]:
+    from app.tenant.settings import get_tenant_settings
+
+    return {
+        "settings": get_tenant_settings(tenant_id=tenant_id),
+        "layoutDefaults": _layout_defaults(tenant_id=tenant_id),
+        "billingPortalConfigured": False,
+    }
+
+
+def _dashboard_tab_portfolio(*, tenant_id: str) -> dict[str, Any]:
+    from app.partner.service import list_child_tenants
+    from app.portfolio.service import readiness_rollup
+
+    children = list_child_tenants(parent_tenant_id=tenant_id)
+    child_summaries = []
+    below_threshold = 0
+    scores: list[float] = []
+    for child in children:
+        child_id = str(child.get("childTenantId", ""))
+        if not child_id:
+            continue
+        metrics = _tenant_scan_metrics(tenant_id=child_id)
+        score = metrics.get("latestReadinessScore")
+        band = metrics.get("latestReadinessBand") or ""
+        if score is not None:
+            scores.append(float(score))
+            if float(score) < 70 or str(band).lower() in {"lagging", "critical", "high-risk"}:
+                below_threshold += 1
+        child_summaries.append(
+            {
+                **child,
+                "latestReadiness": score,
+                "latestBand": band,
+                "openCritical": metrics.get("openCriticalCount", 0),
+                "lastScanAt": metrics.get("latestScanAt"),
+            }
+        )
+    rollup = readiness_rollup(tenant_id=tenant_id)
+    return {
+        "children": child_summaries,
+        "rollup": rollup,
+        "aggregateReadiness": round(sum(scores) / len(scores), 1) if scores else 0,
+        "customersBelowThreshold": below_threshold,
+        "atRiskCount": below_threshold,
+    }
+
+
+@router.get("/dashboard/tab/{tab_name}")
+def tenant_dashboard_tab(tab_name: str, auth: AuthContext = Depends(require_auth_readonly)) -> dict:
+    builders = {
+        "scans": _dashboard_tab_scans,
+        "monitor": _dashboard_tab_monitor,
+        "remediate": _dashboard_tab_remediate,
+        "settings": _dashboard_tab_settings,
+        "portfolio": _dashboard_tab_portfolio,
+    }
+    builder = builders.get(tab_name.lower())
+    if builder is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Unknown dashboard tab.")
+    return {"status": "success", "tab": tab_name, "data": builder(tenant_id=auth.tenant_id)}
+
+
+@router.get("/partner/portfolio-summary")
+def tenant_partner_portfolio_summary(auth: AuthContext = Depends(require_auth_readonly)) -> dict:
+    return {"status": "success", **(_dashboard_tab_portfolio(tenant_id=auth.tenant_id))}
+
+
+class DigestPreviewRequest(BaseModel):
+    recipients: list[str] = Field(default_factory=list)
+
+
+@router.post("/dashboard/digest/preview")
+def tenant_dashboard_digest_preview(auth: AuthContext = Depends(require_auth_readonly)) -> dict:
+    from app.notifications.digest_email import build_weekly_digest_html
+    from app.portfolio.service import weekly_executive_digest
+
+    digest = weekly_executive_digest(tenant_id=auth.tenant_id)
+    children = _dashboard_tab_portfolio(tenant_id=auth.tenant_id).get("children", [])
+    html = build_weekly_digest_html(
+        tenant_id=auth.tenant_id,
+        digest=digest,
+        child_summaries=children if len(children) > 1 else [],
+    )
+    return {"status": "success", "digest": digest, "html": html}
+
+
+@router.post("/dashboard/digest/send-test")
+def tenant_dashboard_digest_send_test(
+    body: DigestPreviewRequest,
+    auth: AuthContext = Depends(require_auth_admin),
+) -> dict:
+    from app.notifications.digest_email import send_weekly_digest_email
+    from app.portfolio.service import weekly_executive_digest
+
+    digest = weekly_executive_digest(tenant_id=auth.tenant_id)
+    children = _dashboard_tab_portfolio(tenant_id=auth.tenant_id).get("children", [])
+    results = []
+    for recipient in body.recipients[:5]:
+        results.append(
+            send_weekly_digest_email(
+                to_email=recipient,
+                tenant_id=auth.tenant_id,
+                digest=digest,
+                child_summaries=children if len(children) > 1 else [],
+            )
+        )
+    return {"status": "success", "results": results}
+
+
+class BulkExportRequest(BaseModel):
+    scanIds: list[str] = Field(default_factory=list)
+
+
+@router.post("/scans/bulk-export")
+def tenant_scans_bulk_export(
+    body: BulkExportRequest,
+    auth: AuthContext = Depends(require_auth_readonly),
+) -> Response:
+    import zipfile
+    from io import BytesIO
+
+    if not body.scanIds:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="scanIds required.")
+    buffer = BytesIO()
+    with zipfile.ZipFile(buffer, "w", zipfile.ZIP_DEFLATED) as archive:
+        for scan_id in body.scanIds[:25]:
+            bundle = load_scan_bundle(scan_id, tenant_id=auth.tenant_id)
+            if not bundle:
+                continue
+            archive.writestr(f"{scan_id}/bundle.json", json.dumps(bundle))
+    buffer.seek(0)
+    return Response(
+        content=buffer.getvalue(),
+        media_type="application/zip",
+        headers={"Content-Disposition": 'attachment; filename="qtangl-evidence-bundles.zip"'},
+    )
 
 
 @router.get("/dashboard/events")

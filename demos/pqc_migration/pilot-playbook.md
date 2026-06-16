@@ -194,6 +194,18 @@ Send the customer:
 
 **Do not give customers the admin key or the public sandbox key.**
 
+### MSSP portfolio demo (multi-customer)
+
+For partners managing multiple child tenants:
+
+1. Sign in at `/dashboard` with a user that has portfolio memberships.
+2. Open the **Portfolio** tab — show aggregate readiness and customers below threshold.
+3. Click a customer row to switch tenant without reload.
+4. Return to Portfolio after a child baseline scan to show updated rollup.
+5. Optional: enable **weekly digest** in Settings and send a test email (requires SMTP on worker).
+
+See [dashboard-mssp-portfolio.md](../../docs/guides/dashboard-mssp-portfolio.md).
+
 **Key rotation:** If a tenant API key is pasted into chat, email, or a shared doc, revoke it immediately (`DELETE /admin/keys/{id}`) and issue a replacement. Report download URLs with `api_key=` query params are convenient for pilots but must not be shared publicly.
 
 ---

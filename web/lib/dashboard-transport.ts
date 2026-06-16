@@ -2,34 +2,18 @@ import type { DashboardBootstrap } from "@/lib/dashboard-data";
 import { fetchDashboardJson } from "@/lib/dashboard-bff";
 import type { DashboardAlert } from "@/components/dashboard/NotificationCenter";
 import type { WeeklyDigest } from "@/components/dashboard/ExecutiveDigestCard";
+import type {
+  DashboardSummary,
+  DashboardTabBundle,
+  LatestScanDetail,
+  MonitorTabBundle,
+  PortfolioTabBundle,
+  RemediateTabBundle,
+  ScansTabBundle,
+  SettingsTabBundle,
+} from "@/lib/dashboard-state";
 
-export type DashboardSummary = {
-  me: Record<string, unknown>;
-  kpis: {
-    latestReadiness?: number | null;
-    latestBand?: string | null;
-    delta?: number | null;
-    openCritical?: number;
-    nextScheduleAt?: string | null;
-    scansThisMonth?: number;
-    quotaLimit?: number | null;
-  };
-  trend: Array<{ date: string; score: number; scanId: string; band?: string }>;
-  digest: WeeklyDigest | null;
-  commandCenter: {
-    businessUnits: Record<string, number>;
-    businessUnitDeltas?: Record<string, number | null>;
-    highRiskTargets?: Array<{ target: string; readinessScore: number }>;
-  } | null;
-  alerts: DashboardAlert[];
-  recentScans: DashboardBootstrap["scans"];
-  schedulesSummary: { active: number; nextRunAt?: string | null };
-  health: {
-    schedulerEnabled?: boolean;
-    persistenceEnabled?: boolean;
-    lastScanAt?: string | null;
-  };
-};
+export type { DashboardSummary } from "@/lib/dashboard-state";
 
 export async function fetchDashboardSummaryViaBff(): Promise<DashboardSummary> {
   const payload = await fetchDashboardJson<{
@@ -42,6 +26,13 @@ export async function fetchDashboardSummaryViaBff(): Promise<DashboardSummary> {
     recentScans: DashboardBootstrap["scans"];
     schedulesSummary: DashboardSummary["schedulesSummary"];
     health: DashboardSummary["health"];
+    latestScanDetail: LatestScanDetail | null;
+    forecast: DashboardSummary["forecast"];
+    remediationVelocity: DashboardSummary["remediationVelocity"];
+    sloMetrics: DashboardSummary["sloMetrics"];
+    integrationsSummary: DashboardSummary["integrationsSummary"];
+    layoutDefaults: DashboardSummary["layoutDefaults"];
+    membershipHealth: DashboardSummary["membershipHealth"];
   }>("/tenant/dashboard/summary");
 
   return {
@@ -54,7 +45,45 @@ export async function fetchDashboardSummaryViaBff(): Promise<DashboardSummary> {
     recentScans: payload.recentScans ?? [],
     schedulesSummary: payload.schedulesSummary ?? { active: 0 },
     health: payload.health ?? {},
+    latestScanDetail: payload.latestScanDetail ?? null,
+    forecast: payload.forecast ?? null,
+    remediationVelocity: payload.remediationVelocity ?? null,
+    sloMetrics: payload.sloMetrics ?? null,
+    integrationsSummary: payload.integrationsSummary ?? null,
+    layoutDefaults: payload.layoutDefaults ?? { persona: "operator", pinned: [], hidden: [] },
+    membershipHealth: payload.membershipHealth ?? [],
   };
+}
+
+export async function fetchTabBundle(tab: string): Promise<DashboardTabBundle> {
+  const payload = await fetchDashboardJson<{ data: DashboardTabBundle }>(`/tenant/dashboard/tab/${tab}`);
+  const data = payload.data;
+  if (tab === "monitor") {
+    const monitor = data as MonitorTabBundle;
+    let cbomAggregate = monitor.cbomAggregate ?? null;
+    if (!cbomAggregate) {
+      try {
+        const aggPayload = await fetchDashboardJson<{ aggregate?: Record<string, unknown> }>(
+          "/tenant/cbom/aggregate"
+        );
+        const aggregate = aggPayload.aggregate;
+        cbomAggregate = {
+          componentCount: Number(aggregate?.componentCount ?? 0),
+          openConflicts: Number(aggregate?.openConflicts ?? 0),
+          readiness: (aggregate?.readiness as Record<string, unknown> | null) ?? null,
+        };
+      } catch {
+        cbomAggregate = null;
+      }
+    }
+    return { ...monitor, cbomAggregate };
+  }
+  return data;
+}
+
+export async function fetchPortfolioSummary(): Promise<PortfolioTabBundle> {
+  const payload = await fetchDashboardJson<PortfolioTabBundle>("/tenant/partner/portfolio-summary");
+  return payload;
 }
 
 export async function fetchDashboardBootstrapViaBff(): Promise<DashboardBootstrap> {
@@ -65,31 +94,6 @@ export async function fetchDashboardBootstrapViaBff(): Promise<DashboardBootstra
     billingPortalUrl = typeof portal.portalUrl === "string" ? portal.portalUrl : null;
   } catch {
     billingPortalUrl = null;
-  }
-
-  let cbomAggregate: DashboardBootstrap["cbomAggregate"] = null;
-  let cbomConflicts: DashboardBootstrap["cbomConflicts"] = [];
-  let cbomDrift: DashboardBootstrap["cbomDrift"] = null;
-  try {
-    const aggPayload = await fetchDashboardJson<{ aggregate?: Record<string, unknown> }>(
-      "/tenant/cbom/aggregate"
-    );
-    const aggregate = aggPayload.aggregate;
-    cbomAggregate = {
-      componentCount: Number(aggregate?.componentCount ?? 0),
-      openConflicts: Number(aggregate?.openConflicts ?? 0),
-      readiness: (aggregate?.readiness as Record<string, unknown> | null) ?? null,
-    };
-    const conflictPayload = await fetchDashboardJson<{ conflicts?: DashboardBootstrap["cbomConflicts"] }>(
-      "/tenant/cbom/conflicts"
-    );
-    cbomConflicts = conflictPayload.conflicts ?? [];
-    const driftPayload = await fetchDashboardJson<{ drift?: Record<string, unknown> }>("/tenant/cbom/diff");
-    cbomDrift = driftPayload.drift ?? null;
-  } catch {
-    cbomAggregate = null;
-    cbomConflicts = [];
-    cbomDrift = null;
   }
 
   return {
@@ -106,9 +110,9 @@ export async function fetchDashboardBootstrapViaBff(): Promise<DashboardBootstra
     },
     scans: summary.recentScans,
     billingPortalUrl,
-    cbomAggregate,
-    cbomConflicts,
-    cbomDrift,
+    cbomAggregate: null,
+    cbomConflicts: [],
+    cbomDrift: null,
   };
 }
 

@@ -43,6 +43,7 @@ export default function RemediationBoard({
   items,
   initialStatuses,
   jiraConfigured = false,
+  highlightId,
   allScans = [],
 }: {
   apiKey: string;
@@ -50,6 +51,7 @@ export default function RemediationBoard({
   items: RemediationItem[];
   initialStatuses: StatusRow[];
   jiraConfigured?: boolean;
+  highlightId?: string;
   allScans?: Array<{ scanId: string; label: string }>;
 }) {
   const [statuses, setStatuses] = useState<Record<string, string>>(() => {
@@ -258,7 +260,12 @@ export default function RemediationBoard({
       {items.slice(0, 10).map((item) => (
         <div
           key={item.id}
-          className="flex flex-col gap-3 rounded-lg border border-[var(--border-subtle)] p-3"
+          className={[
+            "flex flex-col gap-3 rounded-lg border p-3",
+            highlightId === item.id
+              ? "border-sky-400/60 bg-sky-500/10"
+              : "border-[var(--border-subtle)]",
+          ].join(" ")}
         >
           <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
             <div>
