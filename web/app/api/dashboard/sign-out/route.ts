@@ -1,24 +1,26 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import { clearQtanglSessionCookies } from "@/lib/auth/dashboard-session-cookies";
+import {
+  clearQtanglSessionCookieStore,
+  clearQtanglSessionCookies,
+  DASHBOARD_LOGIN_PATH,
+} from "@/lib/auth/dashboard-sign-out";
 import { workosAuthEnabled } from "@/lib/auth/workos";
 
 export const runtime = "nodejs";
 
 /** Full-page sign out: clear Qtangl cookies and WorkOS session, then redirect. */
 export async function GET(request: NextRequest) {
-  const redirectUrl = new URL("/dashboard/login", request.url);
-  const response = NextResponse.redirect(redirectUrl);
-  clearQtanglSessionCookies(response);
+  await clearQtanglSessionCookieStore();
+
+  const returnTo = new URL(DASHBOARD_LOGIN_PATH, request.url).toString();
 
   if (workosAuthEnabled()) {
-    try {
-      const { signOut } = await import("@workos-inc/authkit-nextjs");
-      await signOut({ returnTo: "/dashboard/login" });
-    } catch {
-      /* WorkOS cookie may already be cleared */
-    }
+    const { signOut } = await import("@workos-inc/authkit-nextjs");
+    return signOut({ returnTo });
   }
 
+  const response = NextResponse.redirect(new URL(DASHBOARD_LOGIN_PATH, request.url));
+  clearQtanglSessionCookies(response);
   return response;
 }

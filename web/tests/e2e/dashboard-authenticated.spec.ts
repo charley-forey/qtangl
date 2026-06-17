@@ -33,6 +33,19 @@ test.describe("Dashboard authenticated (mocked BFF)", () => {
           },
           commandCenter: { businessUnits: { default: 78 }, highRiskTargets: [] },
           alerts: [],
+          recommendations: [
+            {
+              id: "rec-test-1",
+              priority: 1,
+              category: "schedule",
+              what: "Monitoring schedule not configured",
+              soWhat: "Crypto posture can drift between audits.",
+              nowWhat: "Create a weekly monitoring schedule.",
+              source: "onboarding_schedule",
+              proof: { deepLink: "/dashboard?tab=monitor" },
+            },
+          ],
+          maturity: { stage: 2, name: "Prioritized", tier: "Assess + workshop", progressPct: 33 },
           recentScans: [
             {
               scanId: "scan-1",
@@ -91,5 +104,12 @@ test.describe("Dashboard authenticated (mocked BFF)", () => {
     await expect(page.getByRole("tabpanel")).toBeVisible({ timeout: 15000 });
     await expect(page.getByText("78")).toBeVisible();
     await expect(page.getByText("Executive digest")).toBeVisible();
+  });
+
+  test("overview shows personalized recommendations", async ({ page }) => {
+    await page.goto("/dashboard");
+    await expect(page.getByText("Recommended next steps")).toBeVisible({ timeout: 15000 });
+    await expect(page.getByText("Monitoring schedule not configured")).toBeVisible();
+    await expect(page.getByText("Crypto-agility maturity")).toBeVisible();
   });
 });

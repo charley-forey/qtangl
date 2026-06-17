@@ -27,6 +27,32 @@ export type LatestScanDetail = {
   openCriticalItems?: Array<{ id?: string; title?: string; severity?: string }>;
 };
 
+export type DashboardRecommendation = {
+  id: string;
+  priority: number;
+  category: string;
+  what: string;
+  soWhat: string;
+  nowWhat: string;
+  proof?: {
+    type?: string;
+    scanId?: string | null;
+    deepLink?: string;
+  };
+  source: string;
+  dismissible?: boolean;
+};
+
+export type MaturityStage = {
+  stage: number;
+  name: string;
+  tier: string;
+  nextStage?: number | null;
+  nextStageName?: string | null;
+  nextStageTier?: string | null;
+  progressPct?: number;
+};
+
 export type DashboardSummary = {
   me: Record<string, unknown>;
   kpis: DashboardKpis;
@@ -39,13 +65,19 @@ export type DashboardSummary = {
     recommendedActions?: string[];
   } | null;
   alerts: DashboardAlert[];
+  recommendations?: DashboardRecommendation[];
+  maturity?: MaturityStage | null;
   recentScans: TenantScanSummary[];
   schedulesSummary: { active: number; nextRunAt?: string | null };
   health: {
     schedulerEnabled?: boolean;
     persistenceEnabled?: boolean;
     lastScanAt?: string | null;
+    score?: number;
+    band?: "green" | "yellow" | "red";
+    signals?: Record<string, { score: number; status: string }>;
   };
+  firstScanAt?: string | null;
   latestScanDetail: LatestScanDetail | null;
   forecast: { projected?: number; current?: number; slope?: number } | null;
   remediationVelocity: {
@@ -76,6 +108,12 @@ export type DashboardSummary = {
     latestReadinessScore?: number | null;
     latestReadinessBand?: string | null;
   }>;
+  portfolioSummary?: { childrenCount?: number };
+  coaching?: {
+    phase?: string;
+    milestones?: Record<string, string>;
+    bannersDismissed?: string[];
+  };
 };
 
 export type ScansTabBundle = {
@@ -113,6 +151,7 @@ export type PortfolioTabBundle = {
   aggregateReadiness: number;
   customersBelowThreshold: number;
   atRiskCount: number;
+  totalOpenAlerts?: number;
 };
 
 export type DashboardTabBundle =

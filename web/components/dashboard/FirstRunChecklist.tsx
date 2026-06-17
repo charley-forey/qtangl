@@ -1,16 +1,23 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
 import Eyebrow from "@/components/ui/Eyebrow";
+import { TakeTourButton } from "@/components/dashboard/ProductTour";
 
-const STEPS = [
+const PHASE_1_STEPS = [
   { id: "sign_in", label: "Sign in to workspace" },
   { id: "baseline", label: "Run authorized baseline scan" },
   { id: "schedule", label: "Enable weekly monitoring" },
   { id: "invite", label: "Invite a teammate (admin)" },
+] as const;
+
+const PHASE_2_STEPS = [
+  { id: "verify", label: "Verify a signed report" },
+  { id: "digest", label: "Enable weekly digest" },
+  { id: "webhooks", label: "Configure webhooks" },
 ] as const;
 
 type ChecklistState = Record<string, boolean>;
@@ -21,9 +28,15 @@ export default function FirstRunChecklist({
   hasSchedule,
   isAdmin,
   settings,
+  milestones,
+  coachingPhase,
+  webhookConfigured,
+  digestEnabled,
+  toursCompleted = [],
   onSave,
   highlightInvite,
   onRunBaseline,
+  onOpenSettings,
   scanAllowlist = [],
 }: {
   signedIn: boolean;
@@ -31,28 +44,54 @@ export default function FirstRunChecklist({
   hasSchedule: boolean;
   isAdmin: boolean;
   settings?: { firstRunChecklist?: ChecklistState };
+  milestones?: Record<string, string>;
+  coachingPhase?: string;
+  webhookConfigured?: boolean;
+  digestEnabled?: boolean;
+  toursCompleted?: string[];
   onSave: (next: ChecklistState) => Promise<void>;
   highlightInvite?: boolean;
   onRunBaseline?: () => void;
+  onOpenSettings?: () => void;
   scanAllowlist?: string[];
 }) {
   const [local, setLocal] = useState<ChecklistState>(settings?.firstRunChecklist ?? {});
   const [saving, setSaving] = useState(false);
+  const [activeTour, setActiveTour] = useState<string | null>(null);
 
   useEffect(() => {
     setLocal(settings?.firstRunChecklist ?? {});
   }, [settings?.firstRunChecklist]);
 
-  const autoDone: ChecklistState = {
+  const phase1AutoDone: ChecklistState = {
     sign_in: signedIn,
     baseline: hasScans,
     schedule: hasSchedule,
   };
 
+  const phase2AutoDone: ChecklistState = {
+    verify: Boolean(milestones?.firstVerifyAt),
+    digest: Boolean(milestones?.digestEnabledAt || digestEnabled),
+    webhooks: Boolean(webhookConfigured),
+  };
+
+  const phase1Steps = PHASE_1_STEPS.filter((step) => step.id !== "invite" || isAdmin);
+  const phase1Done = phase1Steps.every((step) => local[step.id] ?? phase1AutoDone[step.id]);
+  const showPhase2 = phase1Done || coachingPhase === "phase_2";
+  const steps = showPhase2 ? [...phase1Steps, ...PHASE_2_STEPS] : phase1Steps;
+
+  const autoDone = useMemo(
+    () => ({ ...phase1AutoDone, ...(showPhase2 ? phase2AutoDone : {}) }),
+    [phase1AutoDone, phase2AutoDone, showPhase2]
+  );
+
   const toggle = useCallback(
     async (id: string) => {
       if (id === "baseline" && !hasScans) {
         onRunBaseline?.();
+      }
+      if (id === "digest" || id === "webhooks") {
+        onOpenSettings?.();
       }
       const next = { ...local, ...autoDone, [id]: !(local[id] ?? autoDone[id]) };
       setLocal(next);
@@ -63,23 +102,22 @@ export default function FirstRunChecklist({
         setSaving(false);
       }
     },
-    [autoDone, hasScans, local, onRunBaseline, onSave]
+    [autoDone, hasScans, local, onOpenSettings, onRunBaseline, onSave]
   );
 
-  const visibleSteps = STEPS.filter((step) => step.id !== "invite" || isAdmin);
-  const allDone = visibleSteps.every((step) => local[step.id] ?? autoDone[step.id]);
+  const allDone = steps.every((step) => local[step.id] ?? autoDone[step.id]);
   if (allDone) return null;
 
   return (
     <Card tone="panel" className={highlightInvite ? "ring-1 ring-sky-400/40" : undefined}>
-      <Eyebrow>First-run checklist</Eyebrow>
+      <Eyebrow>{showPhase2 ? "Next steps" : "First-run checklist"}</Eyebrow>
       {scanAllowlist.length > 0 ? (
         <p className="mt-2 text-xs text-[var(--color-gray-500)]">
           Suggested targets: {scanAllowlist.slice(0, 3).join(", ")}
         </p>
       ) : null}
       <ul className="mt-4 space-y-2">
-        {visibleSteps.map((step) => {
+        {steps.map((step) => {
           const done = local[step.id] ?? autoDone[step.id];
           return (
             <li key={step.id}>
@@ -103,10 +141,17 @@ export default function FirstRunChecklist({
           );
         })}
       </ul>
-      <div className="mt-3">
+      <div className="mt-3 flex flex-wrap items-center gap-3">
         <Button type="button" variant="ghost" size="sm" onClick={() => onRunBaseline?.()}>
           Open scan runner
         </Button>
+        {activeTour ? (
+          <TakeTourButton tourId={activeTour} completed={toursCompleted} onStart={() => setActiveTour(null)} />
+        ) : (
+          <button type="button" className="text-xs text-sky-400 underline" onClick={() => setActiveTour("overview")}>
+            Take product tour
+          </button>
+        )}
       </div>
     </Card>
   );

@@ -4,12 +4,14 @@ export default function KpiCard({
   label,
   value,
   hint,
+  hintExtra,
   delta,
   tone = "default",
 }: {
   label: string;
   value: ReactNode;
   hint?: string;
+  hintExtra?: ReactNode;
   delta?: string | null;
   tone?: "default" | "critical" | "warning" | "success";
 }) {
@@ -29,7 +31,12 @@ export default function KpiCard({
       </p>
       <p className={`mt-2 text-2xl font-semibold tracking-tight ${toneClass}`}>{value}</p>
       {delta ? <p className="mt-1 text-xs text-[var(--color-gray-400)]">{delta}</p> : null}
-      {hint ? <p className="mt-2 text-xs text-[var(--color-gray-500)]">{hint}</p> : null}
+      {hint || hintExtra ? (
+        <p className="mt-2 flex flex-wrap items-center gap-1 text-xs text-[var(--color-gray-500)]">
+          {hint ? <span>{hint}</span> : null}
+          {hintExtra}
+        </p>
+      ) : null}
     </div>
   );
 }

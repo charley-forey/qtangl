@@ -138,6 +138,13 @@ export const PQC_GLOSSARY: GlossaryEntry[] = [
       "Distinct from readiness: measures how quickly keys and algorithms can be rotated without service disruption.",
     url: "https://csrc.nist.gov/pubs/ir/8547/final",
   },
+  {
+    id: "cbom",
+    term: "CBOM (Cryptographic Bill of Materials)",
+    plain:
+      "Machine-readable inventory of cryptographic assets, algorithms, and key lineage — used to track PQC migration coverage across hosts, code, and HSMs.",
+    url: "https://www.cisa.gov/quantum",
+  },
 ];
 
 export const PQC_FRAMEWORKS: GlossaryEntry[] = [
@@ -247,4 +254,26 @@ export const PQC_FRAMEWORKS: GlossaryEntry[] = [
 
 export function glossaryById(id: string): GlossaryEntry | undefined {
   return [...PQC_GLOSSARY, ...PQC_FRAMEWORKS].find((entry) => entry.id === id);
+}
+
+/** Map dashboard alert rule names to glossary term ids for in-context tooltips. */
+export const ALERT_RULE_GLOSSARY: Record<string, string> = {
+  readiness_drop: "readiness_score",
+  new_quantum_vulnerable: "hndl",
+  algorithm_degraded: "crqc",
+  cert_expiring_30d: "mosca",
+  cert_expiring_assets: "mosca",
+  scan_diff_info: "readiness_score",
+  cbom_assets_added: "cbom",
+  cbom_assets_changed: "cbom",
+  drift_host: "hndl",
+  drift_code: "hndl",
+  drift_cbom: "cbom",
+  drift_external: "hndl",
+  drift_generic: "readiness_score",
+  discovery_source_runtime_drift: "forward_secrecy",
+};
+
+export function glossaryIdForAlertRule(rule: string): string | undefined {
+  return ALERT_RULE_GLOSSARY[rule] ?? ALERT_RULE_GLOSSARY[rule.replace(/-/g, "_")];
 }

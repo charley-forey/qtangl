@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import Card from "@/components/ui/Card";
 import Eyebrow from "@/components/ui/Eyebrow";
@@ -12,7 +12,12 @@ import type { TenantScanSummary } from "@/lib/tenant-api";
 import { formatUtcDateTime } from "@/lib/format";
 import { trackDashboardEvent } from "@/lib/dashboard-analytics";
 
+import LegalAcceptancePanel from "@/components/dashboard/LegalAcceptancePanel";
+
 const AssessRunnerPanel = dynamic(() => import("@/components/pqc/AssessRunnerPanel"), { loading: () => null });
+const PassportPanel = dynamic(() => import("@/components/pqc/PassportPanel"), { loading: () => null });
+const ScanDiffPanel = dynamic(() => import("@/components/pqc/ScanDiffPanel"), { loading: () => null });
+import type { ScanDiff } from "@/components/pqc/ScanDiffPanel";
 
 type Props = {
   bundle: ScansTabBundle | null;
@@ -23,6 +28,7 @@ type Props = {
   onOpenReport: (scanId: string) => void;
   onMessage: (message: string) => void;
   scanIdParam?: string;
+  tenantSettings?: Record<string, unknown> | null;
 };
 
 export default function DashboardScansTab({
@@ -33,10 +39,24 @@ export default function DashboardScansTab({
   reportUrlForScan,
   onOpenReport,
   onMessage,
+  tenantSettings,
 }: Props) {
   const scans = bundle?.scans ?? [];
+  const billing = (tenantSettings?.billing as { termsAcceptedAt?: string; termsVersion?: string }) ?? {};
+  const termsRequired = String(tenantSettings?.termsVersionRequired ?? "2026-06-08");
+  const legalOk = Boolean(billing.termsAcceptedAt && billing.termsVersion === termsRequired);
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [showRunner, setShowRunner] = useState(true);
+  const latestDiff = bundle?.latestScanDetail?.scanDiff as ScanDiff | null | undefined;
+  const diffDelta = latestDiff?.readinessDelta ?? 0;
+  const [diffPanelOpen, setDiffPanelOpen] = useState(false);
+
+  useEffect(() => {
+    if (latestDiff?.previousScanId && diffDelta !== 0) {
+      setDiffPanelOpen(true);
+    }
+  }, [latestDiff?.previousScanId, diffDelta]);
+
   const diffByScan = useMemo(() => {
     const map = new Map<string, number | null>();
     const detail = bundle?.latestScanDetail;
@@ -81,8 +101,20 @@ export default function DashboardScansTab({
 
   return (
     <>
-      {canWrite && showRunner ? (
+      {canWrite && !legalOk ? (
+        <Card tone="panel">
+          <Eyebrow>Legal acceptance required</Eyebrow>
+          <p className="mt-2 text-sm text-[var(--color-gray-400)]">
+            Accept terms and scan authorization before running production baselines.
+          </p>
+          <div className="mt-4">
+            <LegalAcceptancePanel onAccepted={() => onMessage("Legal acceptance recorded.")} />
+          </div>
+        </Card>
+      ) : null}
+      {canWrite && legalOk && showRunner ? (
         <DashboardSection title="Run baseline assessment" id="run-baseline">
+          <div data-tour="scans-runner">
           <AssessRunnerPanel
             apiKey={bffMode ? "bff" : savedKey}
             useBff={bffMode}
@@ -94,11 +126,39 @@ export default function DashboardScansTab({
           <button type="button" className="mt-2 text-xs underline" onClick={() => setShowRunner(false)}>
             Hide runner
           </button>
+          </div>
         </DashboardSection>
       ) : canWrite ? (
         <button type="button" className="text-sm underline" onClick={() => setShowRunner(true)}>
           Run baseline assessment
         </button>
+      ) : null}
+
+      {latestDiff?.previousScanId ? (
+        <DashboardSection title="What changed since last scan" id="scan-diff-story">
+          <Card tone="panel">
+            <div className="flex items-center justify-between gap-2">
+              <Eyebrow>Scan diff story</Eyebrow>
+              <button
+                type="button"
+                className="text-xs text-white underline"
+                onClick={() => setDiffPanelOpen((v) => !v)}
+              >
+                {diffPanelOpen ? "Collapse" : "Expand"}
+              </button>
+            </div>
+            {diffPanelOpen ? (
+              <div className="mt-4">
+                <ScanDiffPanel diff={latestDiff} />
+              </div>
+            ) : (
+              <p className="mt-2 text-sm text-[var(--color-gray-400)]">
+                Readiness moved {diffDelta > 0 ? "+" : ""}
+                {diffDelta} points — expand to review new vulnerabilities and drift causes.
+              </p>
+            )}
+          </Card>
+        </DashboardSection>
       ) : null}
 
       <DashboardSection title="Scan history" id="dashboard-scans">
@@ -136,6 +196,8 @@ export default function DashboardScansTab({
                 reportUrlForScan={reportUrlForScan}
                 onToggle={toggleScan}
                 onOpenReport={onOpenReport}
+                savedKey={savedKey}
+                bffMode={bffMode}
               />
             </div>
             <div className="mt-4 space-y-3 md:hidden">
@@ -148,6 +210,8 @@ export default function DashboardScansTab({
                   reportUrlForScan={reportUrlForScan}
                   onToggle={() => toggleScan(scan.scanId)}
                   onOpenReport={() => onOpenReport(scan.scanId)}
+                  savedKey={savedKey}
+                  bffMode={bffMode}
                 />
               ))}
             </div>
@@ -165,6 +229,8 @@ function ScanTable({
   reportUrlForScan,
   onToggle,
   onOpenReport,
+  savedKey,
+  bffMode,
 }: {
   scans: TenantScanSummary[];
   selected: Set<string>;
@@ -172,6 +238,8 @@ function ScanTable({
   reportUrlForScan: Props["reportUrlForScan"];
   onToggle: (scanId: string) => void;
   onOpenReport: (scanId: string) => void;
+  savedKey: string;
+  bffMode: boolean;
 }) {
   return (
     <table className="min-w-full text-left text-sm">
@@ -212,6 +280,7 @@ function ScanTable({
                   <button type="button" className="underline" onClick={() => onOpenReport(scan.scanId)}>
                     Reports
                   </button>
+                  <PassportPanel scanId={scan.scanId} apiKey={savedKey} useBff={bffMode} />
                 </div>
               ) : (
                 "—"
@@ -231,6 +300,8 @@ function ScanCard({
   reportUrlForScan,
   onToggle,
   onOpenReport,
+  savedKey,
+  bffMode,
 }: {
   scan: TenantScanSummary;
   selected: boolean;
@@ -238,6 +309,8 @@ function ScanCard({
   reportUrlForScan: Props["reportUrlForScan"];
   onToggle: () => void;
   onOpenReport: () => void;
+  savedKey: string;
+  bffMode: boolean;
 }) {
   return (
     <div className="rounded-xl border border-[var(--border-subtle)] p-3 text-sm">
@@ -261,6 +334,7 @@ function ScanCard({
           <button type="button" className="underline" onClick={onOpenReport}>
             Reports
           </button>
+          <PassportPanel scanId={scan.scanId} apiKey={savedKey} useBff={bffMode} />
         </div>
       ) : null}
     </div>

@@ -95,6 +95,70 @@ def create_monitor_checkout_session(
         return {"ok": False, "reason": str(exc)}
 
 
+def create_tenant_checkout_session(
+    *,
+    tenant_id: str,
+    email: str,
+    product: str,
+    success_url: str,
+    cancel_url: str,
+    stripe_customer_id: str | None = None,
+) -> dict[str, Any]:
+    """Checkout for logged-in tenant: one-time assess or monitor subscription."""
+    secret = os.environ.get("QTANGL_STRIPE_SECRET_KEY")
+    if not secret:
+        return {"ok": False, "reason": "stripe_unconfigured"}
+
+    if product == "assess":
+        price_id = os.environ.get("QTANGL_STRIPE_ASSESS_PRICE_ID")
+        mode = "payment"
+        meta_product = "pqc-assess"
+    elif product == "monitor":
+        price_id = os.environ.get("QTANGL_STRIPE_MONITOR_PRICE_ID")
+        mode = "subscription"
+        meta_product = "pqc-monitor-upgrade"
+    else:
+        return {"ok": False, "reason": "invalid_product"}
+
+    if not price_id:
+        return {"ok": False, "reason": "stripe_price_unconfigured"}
+
+    fields: dict[str, str] = {
+        "mode": mode,
+        "success_url": success_url,
+        "cancel_url": cancel_url,
+        "line_items[0][price]": price_id,
+        "line_items[0][quantity]": "1",
+        "metadata[tenant_id]": tenant_id,
+        "metadata[product]": meta_product,
+        "metadata[email]": email,
+    }
+    if stripe_customer_id:
+        fields["customer"] = stripe_customer_id
+    else:
+        fields["customer_email"] = email
+
+    payload = urllib.parse.urlencode(fields).encode("utf-8")
+    request = urllib.request.Request(
+        "https://api.stripe.com/v1/checkout/sessions",
+        data=payload,
+        headers={
+            "Authorization": f"Bearer {secret}",
+            "Content-Type": "application/x-www-form-urlencoded",
+        },
+        method="POST",
+    )
+    try:
+        with urllib.request.urlopen(request, timeout=20) as response:
+            session = json.loads(response.read().decode("utf-8"))
+            return {"ok": True, "checkoutUrl": session.get("url"), "sessionId": session.get("id")}
+    except urllib.error.HTTPError as exc:
+        logger.warning("Stripe tenant checkout failed: %s", exc.read().decode()[:200])
+        return {"ok": False, "reason": f"stripe_http_{exc.code}"}
+    except Exception as exc:
+        return {"ok": False, "reason": str(exc)}
+
+
 def provision_monitor_tenant(*, email: str, company: str) -> dict[str, Any]:
     """Create tenant + API key after successful payment (or manual admin trigger)."""
     core = _provision_tenant_core(
@@ -173,11 +237,64 @@ def verify_stripe_webhook(payload: bytes, signature_header: str) -> dict[str, An
         return None
 
 
-def handle_checkout_completed(session: dict[str, Any]) -> dict[str, Any]:
-    """Provision tenant when checkout.session.completed fires."""
+def handle_assess_checkout_completed(session: dict[str, Any]) -> dict[str, Any]:
+    from app.billing.entitlements import mark_assess_paid, upsert_subscription
+
+    metadata = session.get("metadata") or {}
+    tenant_id = str(metadata.get("tenant_id") or "")
+    if not tenant_id:
+        return {"provisioned": False, "reason": "missing_tenant_id"}
+    mark_assess_paid(tenant_id=tenant_id)
+    upsert_subscription(
+        tenant_id=tenant_id,
+        tier="free",
+        stripe_customer_id=session.get("customer"),
+        status="active",
+    )
+    from app.audit.service import log_action
+
+    log_action(tenant_id=tenant_id, action="billing.assess_paid", actor="stripe", detail={"sessionId": session.get("id")})
+    try:
+        from app.coaching.milestones import record_milestone
+
+        record_milestone(tenant_id=tenant_id, name="assessPaidAt")
+    except Exception:
+        pass
+    return {"provisioned": True, "tenantId": tenant_id, "product": "assess"}
+
+
+def handle_monitor_upgrade_completed(session: dict[str, Any]) -> dict[str, Any]:
     from app.billing.entitlements import upsert_subscription
 
     metadata = session.get("metadata") or {}
+    tenant_id = str(metadata.get("tenant_id") or "")
+    if not tenant_id:
+        return {"provisioned": False, "reason": "missing_tenant_id"}
+    upsert_subscription(
+        tenant_id=tenant_id,
+        tier="monitor",
+        stripe_customer_id=session.get("customer"),
+        stripe_subscription_id=session.get("subscription"),
+        status="active",
+    )
+    from app.audit.service import log_action
+
+    log_action(tenant_id=tenant_id, action="billing.monitor_upgraded", actor="stripe", detail={"sessionId": session.get("id")})
+    return {"provisioned": True, "tenantId": tenant_id, "product": "monitor"}
+
+
+def handle_checkout_completed(session: dict[str, Any]) -> dict[str, Any]:
+    """Provision tenant when checkout.session.completed fires."""
+    metadata = session.get("metadata") or {}
+    product = str(metadata.get("product") or "")
+
+    if product == "pqc-assess":
+        return handle_assess_checkout_completed(session)
+    if product == "pqc-monitor-upgrade":
+        return handle_monitor_upgrade_completed(session)
+
+    from app.billing.entitlements import upsert_subscription
+
     company = metadata.get("company") or session.get("customer_details", {}).get("name") or "Monitor"
     email = session.get("customer_email") or session.get("customer_details", {}).get("email") or ""
     if not email:

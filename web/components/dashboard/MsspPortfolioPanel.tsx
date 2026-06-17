@@ -36,7 +36,7 @@ export default function MsspPortfolioPanel({
 
   return (
     <div className="space-y-4">
-      <div className="grid gap-4 sm:grid-cols-3">
+      <div className="grid gap-4 sm:grid-cols-4">
         <Card tone="panel">
           <Eyebrow>Aggregate readiness</Eyebrow>
           <p className="mt-2 text-3xl font-semibold text-white">{bundle?.aggregateReadiness ?? rollup?.overallReadiness ?? "—"}</p>
@@ -49,6 +49,10 @@ export default function MsspPortfolioPanel({
           <Eyebrow>At risk</Eyebrow>
           <p className="mt-2 text-3xl font-semibold text-red-200">{bundle?.atRiskCount ?? 0}</p>
         </Card>
+        <Card tone="panel">
+          <Eyebrow>Open alerts</Eyebrow>
+          <p className="mt-2 text-3xl font-semibold text-sky-200">{bundle?.totalOpenAlerts ?? 0}</p>
+        </Card>
       </div>
 
       {Object.keys(businessUnits).length > 0 ? (
@@ -58,12 +62,64 @@ export default function MsspPortfolioPanel({
       {children.length > 0 ? (
         <Card tone="panel">
           <Eyebrow>Customer tenants</Eyebrow>
-          <ul className="mt-3 space-y-2 text-sm">
+          <div className="mt-3 hidden overflow-x-auto md:block">
+            <table className="min-w-full text-left text-sm">
+              <thead className="text-xs uppercase tracking-[0.14em] text-[var(--color-gray-500)]">
+                <tr>
+                  <th className="pb-2 pr-4">Customer</th>
+                  <th className="pb-2 pr-4">Readiness</th>
+                  <th className="pb-2 pr-4">Open alerts</th>
+                  <th className="pb-2 pr-4">Remediation %</th>
+                  <th className="pb-2 pr-4">Last scan</th>
+                  <th className="pb-2">Action</th>
+                </tr>
+              </thead>
+              <tbody className="text-[var(--color-gray-300)]">
+                {children.map((child) => {
+                  const tenantId = String(child.childTenantId ?? child.tenantId ?? "");
+                  const name = String(child.childTenantName ?? child.tenantName ?? tenantId);
+                  const score = child.latestReadiness ?? child.latestReadinessScore;
+                  const band = String(child.latestBand ?? "");
+                  const openAlerts = Number(child.openAlerts ?? 0);
+                  const velocity = child.remediationVelocityPct;
+                  const lastScanAge = child.lastScanAgeDays;
+                  return (
+                    <tr key={tenantId} className="border-t border-[var(--border-subtle)]">
+                      <td className="py-2 pr-4 text-white">{name}</td>
+                      <td className="py-2 pr-4">
+                        {score != null ? String(score) : "—"} {band ? `· ${band}` : ""}
+                      </td>
+                      <td className="py-2 pr-4">{openAlerts}</td>
+                      <td className="py-2 pr-4">{velocity != null ? `${velocity}%` : "—"}</td>
+                      <td className="py-2 pr-4">{lastScanAge != null ? `${lastScanAge}d ago` : "—"}</td>
+                      <td className="py-2">
+                        <button
+                          type="button"
+                          className="text-sky-300 underline"
+                          onClick={async () => {
+                            await switchActiveTenant(tenantId);
+                            trackDashboardEvent("dashboard_portfolio_click", { tenantId });
+                            onSwitchTenant?.();
+                          }}
+                        >
+                          Open workspace
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+          <ul className="mt-3 space-y-2 text-sm md:hidden">
             {children.map((child) => {
               const tenantId = String(child.childTenantId ?? child.tenantId ?? "");
               const name = String(child.childTenantName ?? child.tenantName ?? tenantId);
               const score = child.latestReadiness ?? child.latestReadinessScore;
               const band = String(child.latestBand ?? "");
+              const openAlerts = Number(child.openAlerts ?? 0);
+              const velocity = child.remediationVelocityPct;
+              const lastScanAge = child.lastScanAgeDays;
               return (
                 <li key={tenantId}>
                   <button
@@ -77,7 +133,9 @@ export default function MsspPortfolioPanel({
                   >
                     <span className="text-white">{name}</span>
                     <span className="text-[var(--color-gray-400)]">
-                      {score != null ? String(score) : "—"} {band ? `· ${band}` : ""}
+                      {score != null ? String(score) : "—"} {band ? `· ${band}` : ""} · {openAlerts} alerts
+                      {velocity != null ? ` · ${velocity}%` : ""}
+                      {lastScanAge != null ? ` · ${lastScanAge}d` : ""}
                     </span>
                   </button>
                 </li>

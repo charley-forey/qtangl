@@ -8,4 +8,13 @@ export function trackDashboardEvent(
   const posthog = (window as Window & { posthog?: { capture: (e: string, p?: object) => void } })
     .posthog;
   posthog?.capture(event, properties);
+
+  void fetch("/api/dashboard/analytics", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",
+    body: JSON.stringify({ event, properties: properties ?? {} }),
+  }).catch(() => {
+    /* analytics must not block UX */
+  });
 }

@@ -6,8 +6,10 @@ import type { DashboardAlert } from "@/components/dashboard/NotificationCenter";
 import type { DashboardSession } from "@/lib/dashboard-bff";
 import type { DashboardSummary, ScanProgressState } from "@/lib/dashboard-state";
 import DashboardWorkspaceHeader from "@/components/dashboard/DashboardWorkspaceHeader";
-import DashboardPersonaToggle from "@/components/dashboard/DashboardPersonaToggle";
+import DashboardRoleBadge from "@/components/dashboard/DashboardRoleBadge";
 import NotificationCenter from "@/components/dashboard/NotificationCenter";
+import ReadinessCopilotDrawer from "@/components/dashboard/ReadinessCopilotDrawer";
+import NpsMicroSurvey from "@/components/dashboard/NpsMicroSurvey";
 import DashboardCommandPalette from "@/components/dashboard/DashboardCommandPalette";
 import SystemHealthBar from "@/components/dashboard/SystemHealthBar";
 import DashboardKpiStrip from "@/components/dashboard/DashboardKpiStrip";
@@ -28,11 +30,14 @@ type Props = {
   sessionWarning?: string | null;
   reportUrlForScan: (scanId: string, format?: "pdf" | "json" | "bundle" | "executive" | "board" | "auditor") => string;
   rolePolicy?: RolePolicy;
-  onPersonaChange: (persona: DashboardPersona) => void;
+  sessionRole?: string;
   onTabChange: (tab: DashboardTabId) => void;
   onDensityToggle: () => void;
   onSessionChange: (session: DashboardSession) => void;
   onMarkAlertsRead: (ids: string[]) => void;
+  onRefreshAlerts?: () => void;
+  tenantSettings?: Record<string, unknown> | null;
+  onSettingsChange?: (settings: Record<string, unknown>) => void;
   children: React.ReactNode;
 };
 
@@ -47,17 +52,21 @@ export default function DashboardShell({
   scanProgress,
   sessionWarning,
   reportUrlForScan,
-  onPersonaChange,
   onTabChange,
   onDensityToggle,
   onSessionChange,
   onMarkAlertsRead,
+  onRefreshAlerts,
+  tenantSettings,
+  onSettingsChange,
   children,
   rolePolicy,
+  sessionRole,
 }: Props) {
   const me = summary.me;
   const latestScan = summary.recentScans.find((s) => s.readinessScore != null);
-  const showPortfolio = (dashboardSession?.memberships?.length ?? 0) > 1;
+  const childrenCount = summary.portfolioSummary?.childrenCount ?? 0;
+  const showPortfolio = childrenCount > 0 || (dashboardSession?.memberships?.length ?? 0) > 1;
 
   return (
     <div className={density === "compact" ? "space-y-4" : "space-y-8"}>
@@ -74,8 +83,14 @@ export default function DashboardShell({
           onSessionChange={onSessionChange}
         />
         <div className="flex flex-wrap items-center gap-2">
-          <DashboardPersonaToggle value={persona} onChange={onPersonaChange} />
-          <NotificationCenter alerts={alerts} onMarkRead={onMarkAlertsRead} onNavigateTab={onTabChange} />
+          <DashboardRoleBadge role={sessionRole ?? dashboardSession?.role} />
+          <ReadinessCopilotDrawer persona={persona === "executive" ? "executive" : "operator"} />
+          <NotificationCenter
+            alerts={alerts}
+            onMarkRead={onMarkAlertsRead}
+            onNavigateTab={onTabChange}
+            onRefresh={onRefreshAlerts}
+          />
           <DashboardCommandPalette actions={commandActions} />
           <button
             type="button"
@@ -121,6 +136,16 @@ export default function DashboardShell({
       </div>
 
       <EvidenceToolbar scanId={latestScan?.scanId ?? null} reportUrlForScan={reportUrlForScan} />
+
+      <NpsMicroSurvey
+        firstScanAt={summary.firstScanAt}
+        tenantSettings={tenantSettings}
+        onDismissed={() => {
+          if (tenantSettings && onSettingsChange) {
+            onSettingsChange(tenantSettings);
+          }
+        }}
+      />
     </div>
   );
 }

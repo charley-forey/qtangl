@@ -22,6 +22,7 @@ export const optimizationMetadata = {
 
 export const siteMetadata = {
   name: "Qtangl",
+  ticker: "QTGL",
   ...readinessMetadata,
   url: "https://qtangl.com",
   contactEmail: "charley@qtangl.com",

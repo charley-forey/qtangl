@@ -108,6 +108,20 @@ export function DashboardSessionProvider({ children }: { children: ReactNode }) 
   }, [refreshSession]);
 
   useEffect(() => {
+    if (!session?.userId || typeof window === "undefined") return;
+    const posthog = (
+      window as Window & {
+        posthog?: { identify: (id: string, props?: Record<string, unknown>) => void };
+      }
+    ).posthog;
+    posthog?.identify?.(session.userId, {
+      tenantId: session.tenantId,
+      role: session.role,
+      email: session.email,
+    });
+  }, [session?.userId, session?.tenantId, session?.role, session?.email]);
+
+  useEffect(() => {
     if (searchParams.get("session") === "refresh") {
       refreshSession().finally(() => {
         const url = new URL(window.location.href);

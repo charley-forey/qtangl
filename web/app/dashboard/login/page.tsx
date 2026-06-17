@@ -10,10 +10,14 @@ import {
 
 const ONBOARDING_COOKIE = "qtangl_onboarding";
 
+function searchParamsHasInvite(params: { invite?: string; welcome?: string }): boolean {
+  return params.invite === "1" || params.welcome === "invite";
+}
+
 export default async function DashboardLoginPage({
   searchParams,
 }: {
-  searchParams: Promise<{ onboarding?: string; invite?: string }>;
+  searchParams: Promise<{ onboarding?: string; invite?: string; welcome?: string }>;
 }) {
   const params = await searchParams;
   if (!workosAuthEnabled()) {
@@ -41,7 +45,9 @@ export default async function DashboardLoginPage({
   const { getSignInUrl } = await import("@workos-inc/authkit-nextjs");
   const returnPath = params.onboarding
     ? `/dashboard?onboarding=${encodeURIComponent(params.onboarding)}&session=refresh`
-    : "/dashboard?session=refresh";
+    : params.invite === "1" || searchParamsHasInvite(params)
+      ? "/dashboard?welcome=invite&session=refresh"
+      : "/dashboard?session=refresh";
   const signInUrl = await getSignInUrl({ redirectUri: undefined, state: returnPath });
   redirect(signInUrl);
 }

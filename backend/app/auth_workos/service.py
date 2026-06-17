@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
 WORKOS_API_BASE = "https://api.workos.com"
 WEBHOOK_TOLERANCE_SEC = 300
 
-ROLE_TO_WORKOS = {"admin": "admin", "operator": "member", "viewer": "member"}
+ROLE_TO_WORKOS = {"admin": "admin", "operator": "member", "executive": "member", "viewer": "member"}
 WORKOS_TO_QTANGL = {"admin": "admin", "member": "operator"}
 
 

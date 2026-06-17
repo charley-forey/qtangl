@@ -55,8 +55,11 @@ export async function fetchDashboardSummaryViaBff(): Promise<DashboardSummary> {
   };
 }
 
-export async function fetchTabBundle(tab: string): Promise<DashboardTabBundle> {
-  const payload = await fetchDashboardJson<{ data: DashboardTabBundle }>(`/tenant/dashboard/tab/${tab}`);
+export async function fetchTabBundle(tab: string, opts?: { scanId?: string }): Promise<DashboardTabBundle> {
+  const query = opts?.scanId ? `?scan_id=${encodeURIComponent(opts.scanId)}` : "";
+  const payload = await fetchDashboardJson<{ data: DashboardTabBundle }>(
+    `/tenant/dashboard/tab/${tab}${query}`
+  );
   const data = payload.data;
   if (tab === "monitor") {
     const monitor = data as MonitorTabBundle;

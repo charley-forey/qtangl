@@ -727,6 +727,24 @@ class DiscoveryJob(Base):
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_utcnow, onupdate=_utcnow)
 
 
+class TenantAlert(Base):
+    __tablename__ = "tenant_alerts"
+    __table_args__ = (Index("ix_tenant_alerts_tenant_fired", "tenant_id", "fired_at"),)
+
+    id: Mapped[str] = mapped_column(String(80), primary_key=True)
+    tenant_id: Mapped[str] = mapped_column(String(64), ForeignKey("tenants.id"), index=True)
+    rule: Mapped[str] = mapped_column(String(64), nullable=False)
+    severity: Mapped[str] = mapped_column(String(16), default="info")
+    message: Mapped[str] = mapped_column(Text, nullable=False)
+    source: Mapped[str] = mapped_column(String(32), default="scan")
+    payload_json: Mapped[str] = mapped_column(Text, default="{}")
+    fired_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_utcnow, index=True)
+    read_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    resolved_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    resolved_by: Mapped[str | None] = mapped_column(String(80), nullable=True)
+    resolution: Mapped[str | None] = mapped_column(String(32), nullable=True)
+
+
 class MergeConflict(Base):
     __tablename__ = "cbom_merge_conflicts"
     __table_args__ = (Index("ix_cbom_conflicts_tenant_status", "tenant_id", "status"),)

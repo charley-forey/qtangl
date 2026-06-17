@@ -158,6 +158,20 @@ class ShareLinkRequest(BaseModel):
     scope: str = Field(default="report", pattern="^(report|bundle|passport)$")
 
 
+class TrackEventRequest(BaseModel):
+    event: str = Field(min_length=1, max_length=128)
+    properties: dict[str, Any] = Field(default_factory=dict)
+
+
+def _first_scan_at(*, tenant_id: str) -> str | None:
+    scans = list_jobs_for_tenant(tenant_id=tenant_id, limit=500)
+    done = [s for s in scans if s.get("status") == "done" and s.get("createdAt")]
+    if not done:
+        return None
+    earliest = min(done, key=lambda s: str(s.get("createdAt")))
+    return str(earliest.get("createdAt"))
+
+
 def _tenant_scan_metrics(*, tenant_id: str) -> dict[str, Any]:
     scans = list_jobs_for_tenant(tenant_id=tenant_id, limit=500)
     latest_done = next(
@@ -262,8 +276,13 @@ def _dashboard_kpis(*, tenant_id: str, metrics: dict[str, Any]) -> dict[str, Any
     entitlements = tenant_entitlements(tenant_id=tenant_id)
     max_scans = int(entitlements.get("maxScansPerMonth", 100))
     max_schedules = int(entitlements.get("maxSchedules", 10))
+    trend = _readiness_trend_points(tenant_id=tenant_id)
+    delta = None
+    if len(trend) >= 2:
+        delta = round(float(trend[-1]["score"]) - float(trend[-2]["score"]), 1)
     return {
         **metrics,
+        "delta": delta,
         "scanQuota": {
             "used": metrics.get("scansThisMonth", 0),
             "limit": max_scans,
@@ -278,8 +297,31 @@ def _dashboard_kpis(*, tenant_id: str, metrics: dict[str, Any]) -> dict[str, Any
 
 def _dashboard_alerts(*, tenant_id: str) -> list[dict[str, Any]]:
     from app.monitoring.anomaly import detect_readiness_anomalies
+    from app.store.tenant_alerts import list_alerts
+    from app.tenant.settings import get_tenant_settings_raw
+
+    settings = get_tenant_settings_raw(tenant_id=tenant_id)
+    read_ids = set(settings.get("notificationReadIds") or [])
 
     alerts: list[dict[str, Any]] = []
+
+    for row in list_alerts(tenant_id=tenant_id, since_days=30):
+        alert_id = str(row.get("id", ""))
+        if alert_id in read_ids or row.get("readAt"):
+            continue
+        alerts.append(
+            {
+                "id": alert_id,
+                "source": row.get("source", "persisted"),
+                "type": row.get("rule", "alert"),
+                "rule": row.get("rule"),
+                "severity": row.get("severity", "info"),
+                "message": row.get("message"),
+                "actionUrl": row.get("actionUrl"),
+                "firedAt": row.get("firedAt"),
+            }
+        )
+
     scores = [
         float(scan["readinessScore"])
         for scan in list_jobs_for_tenant(tenant_id=tenant_id, limit=50)
@@ -287,15 +329,53 @@ def _dashboard_alerts(*, tenant_id: str) -> list[dict[str, Any]]:
     ]
     scores.reverse()
     for anomaly in detect_readiness_anomalies(scores=scores):
-        alerts.append({"source": "anomaly", **anomaly})
+        key = f"anomaly-{anomaly.get('from')}-{anomaly.get('to')}"
+        if key in read_ids:
+            continue
+        message = (
+            f"Readiness dropped {abs(anomaly.get('delta', 0))} pts "
+            f"({anomaly.get('from')} → {anomaly.get('to')})"
+        )
+        alerts.append(
+            {
+                "id": key,
+                "source": "anomaly",
+                "type": "readiness_drop",
+                "message": message,
+                "actionUrl": "/dashboard?tab=overview",
+                **anomaly,
+            }
+        )
 
     scan_quota = check_scan_quota(tenant_id=tenant_id)
     if scan_quota:
-        alerts.append({"source": "quota", "type": "scan_quota", "severity": "high", **scan_quota})
+        key = "quota-scan"
+        if key not in read_ids:
+            alerts.append(
+                {
+                    "id": key,
+                    "source": "quota",
+                    "type": "scan_quota",
+                    "severity": "high",
+                    "actionUrl": "/dashboard?upgrade=monitor",
+                    **scan_quota,
+                }
+            )
 
     schedule_quota = check_schedule_quota(tenant_id=tenant_id)
     if schedule_quota:
-        alerts.append({"source": "quota", "type": "schedule_quota", "severity": "medium", **schedule_quota})
+        key = "quota-schedule"
+        if key not in read_ids:
+            alerts.append(
+                {
+                    "id": key,
+                    "source": "quota",
+                    "type": "schedule_quota",
+                    "severity": "medium",
+                    "actionUrl": "/dashboard?upgrade=monitor",
+                    **schedule_quota,
+                }
+            )
 
     return alerts
 
@@ -315,7 +395,10 @@ def _schedules_summary(*, tenant_id: str) -> dict[str, Any]:
     }
 
 
-def _dashboard_health(*, tenant_id: str) -> dict[str, Any]:
+def _dashboard_health(*, tenant_id: str, role: str = "operator") -> dict[str, Any]:
+    from app.customer_success.health import compute_customer_health
+    from app.tenant.settings import get_tenant_settings_raw
+
     scans = list_jobs_for_tenant(tenant_id=tenant_id, limit=100)
     terminal = [scan for scan in scans if scan.get("status") in {"done", "error"}]
     success = sum(1 for scan in terminal if scan.get("status") == "done")
@@ -326,12 +409,34 @@ def _dashboard_health(*, tenant_id: str) -> dict[str, Any]:
         if scan.get("status") == "done" and scan.get("readinessScore") is not None
     )
     report_rate = round((100.0 * report_ready / len(terminal)), 1) if terminal else 100.0
+    latest_done = next((scan for scan in scans if scan.get("status") == "done"), None)
+    last_scan_at = None
+    if latest_done:
+        last_scan_at = latest_done.get("updatedAt") or latest_done.get("createdAt")
+    metrics = _tenant_scan_metrics(tenant_id=tenant_id)
+    schedules = list_schedules(tenant_id=tenant_id) if persistence_enabled() else []
+    settings = get_tenant_settings_raw(tenant_id=tenant_id)
+    velocity = _remediation_velocity_summary(tenant_id=tenant_id)
+    cs_health = compute_customer_health(
+        tenant_id=tenant_id,
+        last_scan_at=last_scan_at,
+        open_critical=int(metrics.get("openCriticalCount") or 0),
+        schedule_active=len(schedules) > 0,
+        has_scans=len(scans) > 0,
+        remediation_velocity=velocity,
+        role=role,
+        settings=settings,
+    )
     return {
         "scanSuccessRatePct": reliability,
         "reportAvailabilityPct": report_rate,
         "sampleSize": len(terminal),
+        "lastScanAt": last_scan_at,
         "persistenceEnabled": persistence_enabled(),
         "schedulerEnabled": scheduler_enabled() and redis_enabled(),
+        "score": cs_health["score"],
+        "band": cs_health["band"],
+        "signals": cs_health["signals"],
     }
 
 
@@ -352,6 +457,7 @@ def _recent_scan_summaries(*, tenant_id: str, limit: int = 10) -> list[dict[str,
 
 async def _dashboard_events_generator(*, tenant_id: str):
     seen: dict[str, str] = {}
+    seen_alert_count = 0
 
     def _progress_pct(status: str) -> int:
         return {"queued": 10, "running": 55, "done": 100, "error": 100}.get(status, 0)
@@ -385,6 +491,17 @@ async def _dashboard_events_generator(*, tenant_id: str):
                     "updatedAt": scan.get("updatedAt"),
                 }
                 yield f"event: scan\ndata: {json.dumps(payload)}\n\n"
+
+        try:
+            from app.store.tenant_alerts import list_alerts
+
+            alerts = list_alerts(tenant_id=tenant_id, since_days=7, unread_only=True)
+            if len(alerts) != seen_alert_count:
+                seen_alert_count = len(alerts)
+                alert_payload = {"count": len(alerts), "latest": alerts[0] if alerts else None}
+                yield f"event: alert\ndata: {json.dumps(alert_payload)}\n\n"
+        except Exception:
+            pass
 
         heartbeat = {"ts": datetime.now(timezone.utc).isoformat(), "tenantId": tenant_id}
         yield f"event: heartbeat\ndata: {json.dumps(heartbeat)}\n\n"
@@ -475,6 +592,12 @@ def tenant_scan_report(
         from app.pqc.report import report_to_board
 
         payload = report_to_board(bundle.report)
+        try:
+            from app.coaching.milestones import record_milestone
+
+            record_milestone(tenant_id=auth.tenant_id, name="firstBoardExportAt")
+        except Exception:
+            pass
         return JSONResponse(content=merge_remediation_into_report(payload, statuses=statuses))
     if format == "auditor":
         from app.pqc.report import report_to_auditor
@@ -616,6 +739,12 @@ def tenant_create_schedule(
     from app.telemetry.events import track_event
 
     track_event("schedule_created", tenant_id=auth.tenant_id, properties={"scheduleId": schedule["id"]})
+    try:
+        from app.coaching.milestones import record_milestone
+
+        record_milestone(tenant_id=auth.tenant_id, name="firstScheduleAt")
+    except Exception:
+        pass
     return {"status": "success", "schedule": schedule}
 
 
@@ -1085,7 +1214,10 @@ def tenant_remediation_intelligence(
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Scan not found.")
     backlog = bundle_dict.get("remediationBacklog") or []
     plans = [recommend_remediation_plan(item) for item in backlog[:50]]
-    return {"status": "success", "scanId": scan_id, "plans": plans}
+    from app.remediation.playbooks import playbook_for_item
+
+    playbooks = {str(item.get("id", idx)): playbook_for_item(item) for idx, item in enumerate(backlog[:50])}
+    return {"status": "success", "scanId": scan_id, "plans": plans, "playbooks": playbooks}
 
 
 @router.post("/scans/{scan_id}/remediation/simulate")
@@ -1233,8 +1365,91 @@ def tenant_cloud_pull(provider: str, auth: AuthContext = Depends(require_auth_re
 def tenant_ai_explain(body: dict[str, Any], auth: AuthContext = Depends(require_auth_readonly)) -> dict:
     from app.ai.copilot import explain_finding
 
+    if body.get("scanId"):
+        from app.recommendations.service import explain_scan_brief
+
+        return explain_scan_brief(
+            tenant_id=auth.tenant_id,
+            scan_id=str(body["scanId"]),
+            persona=str(body.get("persona") or "executive"),
+        )
+
     finding = body.get("finding") or {}
     return {"status": "success", **explain_finding(finding=finding, context=str(body.get("context", "")))}
+
+
+@router.post("/ai/explain-scan")
+def tenant_ai_explain_scan(body: dict[str, Any], auth: AuthContext = Depends(require_auth_readonly)) -> dict:
+    from app.recommendations.service import explain_scan_brief
+
+    scan_id = str(body.get("scanId") or "")
+    if not scan_id:
+        raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail="scanId required")
+    return explain_scan_brief(
+        tenant_id=auth.tenant_id,
+        scan_id=scan_id,
+        persona=str(body.get("persona") or "executive"),
+    )
+
+
+@router.post("/ai/explain-portfolio")
+def tenant_ai_explain_portfolio(body: dict[str, Any], auth: AuthContext = Depends(require_auth_readonly)) -> dict:
+    from app.recommendations.service import explain_portfolio_brief
+
+    return explain_portfolio_brief(
+        tenant_id=auth.tenant_id,
+        persona=str(body.get("persona") or "executive"),
+        prompt=str(body.get("prompt") or body.get("question") or "") or None,
+    )
+
+
+@router.get("/dashboard/recommendations")
+def tenant_dashboard_recommendations(auth: AuthContext = Depends(require_auth_readonly)) -> dict:
+    from app.recommendations.service import build_recommendations
+
+    role = str(auth.role or "operator")
+    recs = build_recommendations(tenant_id=auth.tenant_id, role=role)
+    return {"status": "success", "recommendations": recs}
+
+
+@router.post("/recommendations/{recommendation_id}/dismiss")
+def tenant_dismiss_recommendation(
+    recommendation_id: str,
+    auth: AuthContext = Depends(require_auth_readonly),
+) -> dict:
+    from app.recommendations.service import dismiss_recommendation
+
+    dismiss_recommendation(tenant_id=auth.tenant_id, recommendation_id=recommendation_id)
+    return {"status": "success", "dismissed": recommendation_id}
+
+
+@router.patch("/alerts/{alert_id}/read")
+def tenant_mark_alert_read(alert_id: str, auth: AuthContext = Depends(require_auth_readonly)) -> dict:
+    from app.store.tenant_alerts import mark_alert_read
+    from app.tenant.settings import get_tenant_settings_raw, upsert_tenant_settings
+
+    ok = mark_alert_read(tenant_id=auth.tenant_id, alert_id=alert_id)
+    settings = get_tenant_settings_raw(tenant_id=auth.tenant_id)
+    read_ids = list(settings.get("notificationReadIds") or [])
+    if alert_id not in read_ids:
+        read_ids.append(alert_id)
+    upsert_tenant_settings(tenant_id=auth.tenant_id, settings={"notificationReadIds": read_ids[-200:]})
+    return {"status": "success", "read": ok, "alertId": alert_id}
+
+
+@router.post("/alerts/read-all")
+def tenant_mark_all_alerts_read(auth: AuthContext = Depends(require_auth_readonly)) -> dict:
+    from app.store.tenant_alerts import mark_all_alerts_read
+
+    count = mark_all_alerts_read(tenant_id=auth.tenant_id)
+    alerts = _dashboard_alerts(tenant_id=auth.tenant_id)
+    read_ids = [str(a.get("id", "")) for a in alerts if a.get("id")]
+    from app.tenant.settings import get_tenant_settings_raw, upsert_tenant_settings
+
+    settings = get_tenant_settings_raw(tenant_id=auth.tenant_id)
+    merged = list(settings.get("notificationReadIds") or []) + read_ids
+    upsert_tenant_settings(tenant_id=auth.tenant_id, settings={"notificationReadIds": list(dict.fromkeys(merged))[-200:]})
+    return {"status": "success", "marked": count}
 
 
 @router.get("/analytics/anomaly")
@@ -1262,6 +1477,16 @@ def tenant_readiness_trend(
         "count": len(points),
         "points": points,
     }
+
+
+@router.post("/analytics/track")
+def tenant_track_event(body: TrackEventRequest, auth: AuthContext = Depends(require_auth_readonly)) -> dict:
+    from app.telemetry.events import is_allowed_event, track_event
+
+    if not is_allowed_event(body.event):
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Unknown analytics event")
+    track_event(body.event, tenant_id=auth.tenant_id, properties=body.properties)
+    return {"status": "success", "event": body.event}
 
 
 def _remediation_velocity_summary(*, tenant_id: str) -> dict[str, Any]:
@@ -1363,10 +1588,21 @@ def _latest_scan_detail(*, tenant_id: str) -> dict[str, Any] | None:
 
 @router.get("/dashboard/summary")
 def tenant_dashboard_summary(auth: AuthContext = Depends(require_auth_readonly)) -> dict:
+    from app.coaching.milestones import get_milestones
+    from app.partner.service import list_child_tenants
     from app.portfolio.service import portfolio_command_center, weekly_executive_digest
+    from app.recommendations.maturity import compute_maturity_stage
+    from app.recommendations.service import build_recommendations
+    from app.tenant.settings import get_tenant_settings_raw
 
     started = time.perf_counter()
     metrics = _tenant_scan_metrics(tenant_id=auth.tenant_id)
+    role = str(auth.role or "operator")
+    recommendations = build_recommendations(tenant_id=auth.tenant_id, role=role)
+    maturity = compute_maturity_stage(tenant_id=auth.tenant_id)
+    settings_raw = get_tenant_settings_raw(tenant_id=auth.tenant_id)
+    coaching_settings = settings_raw.get("coaching") or {}
+    partner_children = list_child_tenants(parent_tenant_id=auth.tenant_id)
     payload = {
         "status": "success",
         "tenantId": auth.tenant_id,
@@ -1376,9 +1612,12 @@ def tenant_dashboard_summary(auth: AuthContext = Depends(require_auth_readonly))
         "digest": weekly_executive_digest(tenant_id=auth.tenant_id),
         "commandCenter": portfolio_command_center(tenant_id=auth.tenant_id),
         "alerts": _dashboard_alerts(tenant_id=auth.tenant_id),
+        "recommendations": recommendations,
+        "maturity": maturity,
         "recentScans": _recent_scan_summaries(tenant_id=auth.tenant_id, limit=10),
         "schedulesSummary": _schedules_summary(tenant_id=auth.tenant_id),
-        "health": _dashboard_health(tenant_id=auth.tenant_id),
+        "health": _dashboard_health(tenant_id=auth.tenant_id, role=role),
+        "firstScanAt": _first_scan_at(tenant_id=auth.tenant_id),
         "latestScanDetail": _latest_scan_detail(tenant_id=auth.tenant_id),
         "forecast": _forecast_summary(tenant_id=auth.tenant_id),
         "remediationVelocity": _remediation_velocity_summary(tenant_id=auth.tenant_id),
@@ -1386,6 +1625,12 @@ def tenant_dashboard_summary(auth: AuthContext = Depends(require_auth_readonly))
         "integrationsSummary": _integrations_summary(tenant_id=auth.tenant_id),
         "layoutDefaults": _layout_defaults(tenant_id=auth.tenant_id),
         "membershipHealth": _membership_health_for_tenant(tenant_id=auth.tenant_id),
+        "portfolioSummary": {"childrenCount": len(partner_children)},
+        "coaching": {
+            "phase": coaching_settings.get("phase", "first_run"),
+            "milestones": get_milestones(tenant_id=auth.tenant_id),
+            "bannersDismissed": coaching_settings.get("bannersDismissed") or [],
+        },
     }
     elapsed_ms = (time.perf_counter() - started) * 1000
     logger.info("dashboard.summary tenant=%s duration_ms=%.1f", auth.tenant_id, elapsed_ms)
@@ -1456,16 +1701,18 @@ def _dashboard_tab_monitor(*, tenant_id: str) -> dict[str, Any]:
     }
 
 
-def _dashboard_tab_remediate(*, tenant_id: str) -> dict[str, Any]:
+def _dashboard_tab_remediate(*, tenant_id: str, scan_id: str | None = None) -> dict[str, Any]:
     detail = _latest_scan_detail(tenant_id=tenant_id)
+    target_scan_id = scan_id
+    if not target_scan_id and detail and detail.get("scanId"):
+        target_scan_id = str(detail["scanId"])
     remediation_scan = None
-    if detail and detail.get("scanId"):
-        scan_id = str(detail["scanId"])
-        bundle = load_scan_bundle(scan_id, tenant_id=tenant_id)
+    if target_scan_id:
+        bundle = load_scan_bundle(target_scan_id, tenant_id=tenant_id)
         backlog = (bundle or {}).get("report", {}).get("remediationBacklog") or []
-        statuses = list_remediation_status(tenant_id=tenant_id, scan_id=scan_id)
+        statuses = list_remediation_status(tenant_id=tenant_id, scan_id=target_scan_id)
         remediation_scan = {
-            "scanId": scan_id,
+            "scanId": target_scan_id,
             "items": backlog[:20],
             "statuses": statuses,
         }
@@ -1487,13 +1734,18 @@ def _dashboard_tab_settings(*, tenant_id: str) -> dict[str, Any]:
 
 
 def _dashboard_tab_portfolio(*, tenant_id: str) -> dict[str, Any]:
+    from datetime import datetime, timezone
+
     from app.partner.service import list_child_tenants
     from app.portfolio.service import readiness_rollup
+    from app.store.tenant_alerts import list_alerts
 
     children = list_child_tenants(parent_tenant_id=tenant_id)
     child_summaries = []
     below_threshold = 0
     scores: list[float] = []
+    total_open_alerts = 0
+    now = datetime.now(timezone.utc)
     for child in children:
         child_id = str(child.get("childTenantId", ""))
         if not child_id:
@@ -1501,17 +1753,31 @@ def _dashboard_tab_portfolio(*, tenant_id: str) -> dict[str, Any]:
         metrics = _tenant_scan_metrics(tenant_id=child_id)
         score = metrics.get("latestReadinessScore")
         band = metrics.get("latestReadinessBand") or ""
+        open_alerts = len(list_alerts(tenant_id=child_id, since_days=90, include_resolved=False))
+        total_open_alerts += open_alerts
         if score is not None:
             scores.append(float(score))
             if float(score) < 70 or str(band).lower() in {"lagging", "critical", "high-risk"}:
                 below_threshold += 1
+        last_scan_at = metrics.get("latestScanAt")
+        last_scan_age_days: int | None = None
+        if last_scan_at:
+            try:
+                parsed = datetime.fromisoformat(str(last_scan_at).replace("Z", "+00:00"))
+                last_scan_age_days = max(0, (now - parsed).days)
+            except Exception:
+                last_scan_age_days = None
+        velocity = _remediation_velocity_summary(tenant_id=child_id)
         child_summaries.append(
             {
                 **child,
                 "latestReadiness": score,
                 "latestBand": band,
                 "openCritical": metrics.get("openCriticalCount", 0),
-                "lastScanAt": metrics.get("latestScanAt"),
+                "openAlerts": open_alerts,
+                "lastScanAt": last_scan_at,
+                "lastScanAgeDays": last_scan_age_days,
+                "remediationVelocityPct": velocity.get("completionRatePct"),
             }
         )
     rollup = readiness_rollup(tenant_id=tenant_id)
@@ -1521,15 +1787,20 @@ def _dashboard_tab_portfolio(*, tenant_id: str) -> dict[str, Any]:
         "aggregateReadiness": round(sum(scores) / len(scores), 1) if scores else 0,
         "customersBelowThreshold": below_threshold,
         "atRiskCount": below_threshold,
+        "totalOpenAlerts": total_open_alerts,
     }
 
 
 @router.get("/dashboard/tab/{tab_name}")
-def tenant_dashboard_tab(tab_name: str, auth: AuthContext = Depends(require_auth_readonly)) -> dict:
+def tenant_dashboard_tab(
+    tab_name: str,
+    scan_id: str | None = None,
+    auth: AuthContext = Depends(require_auth_readonly),
+) -> dict:
     builders = {
         "scans": _dashboard_tab_scans,
         "monitor": _dashboard_tab_monitor,
-        "remediate": _dashboard_tab_remediate,
+        "remediate": lambda tenant_id: _dashboard_tab_remediate(tenant_id=tenant_id, scan_id=scan_id),
         "settings": _dashboard_tab_settings,
         "portfolio": _dashboard_tab_portfolio,
     }
@@ -1735,7 +2006,16 @@ def tenant_compliance_posture(
     if bundle is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Scan not found.")
     report = bundle.get("report") or {}
-    return {"status": "success", "frameworks": map_scan_to_frameworks(report=report)}
+    posture = map_scan_to_frameworks(report=report)
+    frameworks = [
+        {
+            "name": name.replace("-", " ").upper(),
+            "status": "mapped" if values.get("coveragePct", 0) >= 70 else "gap",
+            "coveragePct": values.get("coveragePct"),
+        }
+        for name, values in posture.items()
+    ]
+    return {"status": "success", "frameworks": frameworks, "posture": posture}
 
 
 @router.get("/partner/children")
@@ -1750,17 +2030,163 @@ def tenant_partner_link_child(
     body: dict[str, Any],
     auth: AuthContext = Depends(require_auth_write),
 ) -> dict:
+    from app.billing.entitlements import tenant_entitlements
+    from app.db.config import persistence_enabled
+    from app.db.engine import db_session
+    from app.db.models import Tenant as TenantRow
     from app.partner.service import link_child_tenant
+
+    child_tenant_id = str(body.get("childTenantId", "")).strip()
+    if not child_tenant_id:
+        raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail="childTenantId required.")
+    if child_tenant_id == auth.tenant_id:
+        raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail="Cannot link tenant to itself.")
+
+    tier = str(tenant_entitlements(tenant_id=auth.tenant_id).get("tier", ""))
+    if tier not in {"enterprise", "convert"}:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Partner child linking requires enterprise or convert tier.",
+        )
+
+    if persistence_enabled():
+        with db_session() as session:
+            child = session.get(TenantRow, child_tenant_id)
+            if child is None:
+                raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Child tenant not found.")
 
     child = link_child_tenant(
         parent_tenant_id=auth.tenant_id,
-        child_tenant_id=str(body.get("childTenantId", "")),
+        child_tenant_id=child_tenant_id,
         label=str(body.get("label", "")),
+    )
+    log_action(
+        tenant_id=auth.tenant_id,
+        action="partner.child_linked",
+        resource_id=child_tenant_id,
+        detail={"label": body.get("label", "")},
     )
     return {"status": "success", "child": child}
 
 
+class BillingCheckoutBody(BaseModel):
+    product: str = Field(pattern="^(assess|monitor)$")
+    successUrl: str | None = None
+    cancelUrl: str | None = None
+
+
+class OnboardingPatchBody(BaseModel):
+    step: str | None = None
+    dismissed: bool | None = None
+    complete: bool | None = None
+    toursCompleted: list[str] | None = None
+
+
+class LegalAcceptBody(BaseModel):
+    termsVersion: str = Field(min_length=4, max_length=32)
+    scanAuthorization: bool | None = None
+    domain: str | None = None
+
+
+@router.patch("/onboarding")
+def tenant_patch_onboarding(
+    body: OnboardingPatchBody,
+    auth: AuthContext = Depends(require_auth_readonly),
+) -> dict:
+    from app.tenant.settings import patch_tenant_onboarding_state
+
+    patch: dict = {}
+    if body.step is not None:
+        patch["step"] = body.step
+    if body.dismissed is not None:
+        patch["dismissed"] = body.dismissed
+    if body.complete is not None:
+        patch["complete"] = body.complete
+    if body.toursCompleted is not None:
+        patch["toursCompleted"] = body.toursCompleted
+    state = patch_tenant_onboarding_state(tenant_id=auth.tenant_id, patch=patch)
+    return {"status": "success", "onboarding": state}
+
+
+@router.post("/legal/accept")
+def tenant_legal_accept(
+    body: LegalAcceptBody,
+    auth: AuthContext = Depends(require_auth_readonly),
+) -> dict:
+    from datetime import datetime, timezone
+
+    from app.audit.service import log_action
+    from app.tenant.settings import patch_tenant_billing_flags
+
+    now = datetime.now(timezone.utc).isoformat()
+    billing_patch: dict = {
+        "termsAcceptedAt": now,
+        "termsVersion": body.termsVersion,
+    }
+    if body.scanAuthorization:
+        billing_patch["scanAuthorizationAt"] = now
+        billing_patch["scanAuthorizedBy"] = auth.user_id or auth.email
+        if body.domain:
+            billing_patch["scanAuthorizedDomain"] = body.domain.strip()
+    flags = patch_tenant_billing_flags(tenant_id=auth.tenant_id, patch=billing_patch)
+    log_action(
+        tenant_id=auth.tenant_id,
+        action="legal.accepted",
+        actor=auth.email or auth.role,
+        detail={"termsVersion": body.termsVersion, "scanAuthorization": bool(body.scanAuthorization)},
+    )
+    return {"status": "success", "billing": flags}
+
+
+@router.post("/billing/checkout")
+def tenant_billing_checkout(
+    body: BillingCheckoutBody,
+    auth: AuthContext = Depends(require_auth_admin),
+) -> dict:
+    import os
+
+    from app.billing.service import create_tenant_checkout_session, stripe_configured
+    from app.db.config import persistence_enabled
+    from app.db.engine import db_session
+    from app.db.models import TenantSubscription as SubscriptionRow
+
+    if not stripe_configured():
+        return {"status": "error", "code": "stripe_unconfigured", "message": "Stripe is not configured."}
+
+    base = os.environ.get("QTANGL_PUBLIC_URL", "https://www.qtangl.com").rstrip("/")
+    success = body.successUrl or f"{base}/dashboard?checkout={body.product}&session=refresh"
+    cancel = body.cancelUrl or f"{base}/dashboard?checkout=cancelled"
+
+    customer_id = None
+    if persistence_enabled():
+        with db_session() as session:
+            row = (
+                session.query(SubscriptionRow)
+                .filter(SubscriptionRow.tenant_id == auth.tenant_id)
+                .one_or_none()
+            )
+            if row:
+                customer_id = row.stripe_customer_id
+
+    result = create_tenant_checkout_session(
+        tenant_id=auth.tenant_id,
+        email=auth.email or "",
+        product=body.product,
+        success_url=success,
+        cancel_url=cancel,
+        stripe_customer_id=customer_id,
+    )
+    if not result.get("ok"):
+        return {"status": "error", "code": result.get("reason", "checkout_failed")}
+    return {
+        "status": "success",
+        "checkoutUrl": result.get("checkoutUrl"),
+        "sessionId": result.get("sessionId"),
+    }
+
+
 @router.get("/billing/portal")
+@router.post("/billing/portal")
 def tenant_billing_portal(auth: AuthContext = Depends(require_auth_readonly)) -> dict:
     import os
 
@@ -1932,16 +2358,16 @@ def tenant_test_clm(clm_provider: str, auth: AuthContext = Depends(require_auth_
 
 class ApiKeyCreateRequest(BaseModel):
     label: str = Field(default="automation", max_length=64)
-    role: str = Field(default="operator", pattern="^(admin|operator|viewer)$")
+    role: str = Field(default="operator", pattern="^(admin|operator|executive|viewer)$")
 
 
 class TeamInviteRequest(BaseModel):
     email: str = Field(min_length=3, max_length=320)
-    role: str = Field(default="operator", pattern="^(admin|operator|viewer)$")
+    role: str = Field(default="operator", pattern="^(admin|operator|executive|viewer)$")
 
 
 class MemberRoleUpdate(BaseModel):
-    role: str = Field(pattern="^(admin|operator|viewer)$")
+    role: str = Field(pattern="^(admin|operator|executive|viewer)$")
 
 
 class SsoPortalRequest(BaseModel):

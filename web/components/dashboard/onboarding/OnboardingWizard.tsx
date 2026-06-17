@@ -6,11 +6,20 @@ import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
 import Eyebrow from "@/components/ui/Eyebrow";
 import type { DashboardOnboarding } from "@/lib/dashboard-bff";
-import { patchDashboardJson, postDashboardJson } from "@/lib/dashboard-bff";
+import { patchDashboardJson, postDashboardJson, putDashboardJson } from "@/lib/dashboard-bff";
+import LegalAcceptancePanel from "@/components/dashboard/LegalAcceptancePanel";
+import ReadinessTrend from "@/components/pqc/ReadinessTrend";
 
-type WizardStep = "company" | "baseline" | "schedule" | "invite";
+type WizardStep = "company" | "learn" | "trial" | "baseline" | "schedule" | "invite";
 
-const STEP_ORDER: WizardStep[] = ["company", "baseline", "schedule", "invite"];
+const STEP_ORDER: WizardStep[] = ["company", "learn", "trial", "baseline", "schedule", "invite"];
+
+const INDUSTRY_OPTIONS = [
+  { id: "financial", label: "Financial services" },
+  { id: "healthcare", label: "Healthcare" },
+  { id: "government", label: "Government" },
+  { id: "general", label: "General / other" },
+] as const;
 
 function stepIndex(step: WizardStep): number {
   return STEP_ORDER.indexOf(step);
@@ -24,11 +33,14 @@ type Props = {
   hasScans: boolean;
   hasSchedule: boolean;
   scanAllowlist?: string[];
+  industry?: string;
   onDismiss: () => void;
+  onComplete?: () => void;
   onRenamed: (name: string) => void;
   onOpenScans: () => void;
   onOpenMonitor: () => void;
   onOpenTeam: () => void;
+  onOpenUpgrade?: (product: "assess" | "monitor") => void;
   onMessage?: (message: string) => void;
 };
 
@@ -40,11 +52,14 @@ export default function OnboardingWizard({
   hasScans,
   hasSchedule,
   scanAllowlist = [],
+  industry = "financial",
   onDismiss,
+  onComplete,
   onRenamed,
   onOpenScans,
   onOpenMonitor,
   onOpenTeam,
+  onOpenUpgrade,
   onMessage,
 }: Props) {
   const initialStep = useMemo<WizardStep>(() => {
@@ -57,7 +72,14 @@ export default function OnboardingWizard({
   const [step, setStep] = useState<WizardStep>(initialStep);
   const [companyName, setCompanyName] = useState(tenantName);
   const [domain, setDomain] = useState(scanAllowlist[0] ?? "");
+  const [selectedIndustry, setSelectedIndustry] = useState(industry);
   const [saving, setSaving] = useState(false);
+
+  const finishWizard = useCallback(async () => {
+    await patchDashboardJson("/tenant/onboarding", { complete: true, dismissed: true });
+    onComplete?.();
+    onDismiss();
+  }, [onComplete, onDismiss]);
 
   const saveCompany = useCallback(async () => {
     setSaving(true);
@@ -66,20 +88,22 @@ export default function OnboardingWizard({
         name: companyName.trim(),
       });
       onRenamed(payload.tenantName);
+      await putDashboardJson("/tenant/settings", { industry: selectedIndustry });
       if (domain.trim()) {
         await postDashboardJson("/tenant/authorized-domains", {
           domains: [domain.trim()],
           attestation: "I am authorized to scan these domains for my organization.",
         });
       }
-      setStep("baseline");
+      setStep("learn");
+      await patchDashboardJson("/tenant/onboarding", { step: "learn" });
       onMessage?.("Workspace saved.");
     } catch (exc) {
       onMessage?.(exc instanceof Error ? exc.message : "Unable to save workspace.");
     } finally {
       setSaving(false);
     }
-  }, [companyName, domain, onMessage, onRenamed]);
+  }, [companyName, domain, onMessage, onRenamed, selectedIndustry]);
 
   if (onboarding?.complete) {
     return null;
@@ -98,7 +122,7 @@ export default function OnboardingWizard({
         </div>
         <button
           type="button"
-          onClick={onDismiss}
+          onClick={() => void patchDashboardJson("/tenant/onboarding", { dismissed: true }).then(onDismiss)}
           className="text-xs text-[var(--color-gray-500)] underline underline-offset-4"
         >
           Skip for now
@@ -133,6 +157,22 @@ export default function OnboardingWizard({
           </div>
           <div>
             <label className="text-xs uppercase tracking-[0.14em] text-[var(--color-gray-500)]">
+              Industry
+            </label>
+            <select
+              className="mt-2 w-full rounded border border-[var(--border-subtle)] bg-transparent px-3 py-2 text-sm text-white"
+              value={selectedIndustry}
+              onChange={(e) => setSelectedIndustry(e.target.value)}
+            >
+              {INDUSTRY_OPTIONS.map((opt) => (
+                <option key={opt.id} value={opt.id} className="bg-black text-white">
+                  {opt.label}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label className="text-xs uppercase tracking-[0.14em] text-[var(--color-gray-500)]">
               Primary domain (optional)
             </label>
             <input
@@ -142,9 +182,62 @@ export default function OnboardingWizard({
               placeholder="example.com"
             />
           </div>
-          <Button type="button" disabled={saving || !companyName.trim()} onClick={() => void saveCompany()}>
+          <LegalAcceptancePanel
+            requireScanAuthorization={Boolean(domain.trim())}
+            domain={domain.trim()}
+            onAccepted={() => {
+              void saveCompany();
+            }}
+          />
+        </div>
+      ) : null}
+
+      {step === "learn" ? (
+        <div className="mt-6 space-y-4">
+          <p className="text-sm text-[var(--color-gray-300)]">
+            Your readiness score measures quantum-vulnerable cryptography across live endpoints. Trends and signed
+            evidence help auditors verify progress without trusting a spreadsheet.
+          </p>
+          <ReadinessTrend
+            points={[
+              { scanId: "sample-1", createdAt: "2026-01-01", readinessScore: 42, readinessBand: "at-risk" },
+              { scanId: "sample-2", createdAt: "2026-02-01", readinessScore: 58, readinessBand: "developing" },
+              { scanId: "sample-3", createdAt: "2026-03-01", readinessScore: 71, readinessBand: "on-track" },
+            ]}
+          />
+          <Button
+            type="button"
+            onClick={() => {
+              setStep("trial");
+              void patchDashboardJson("/tenant/onboarding", { step: "trial" });
+            }}
+          >
             Continue
           </Button>
+        </div>
+      ) : null}
+
+      {step === "trial" ? (
+        <div className="mt-6 space-y-4">
+          <p className="text-sm text-[var(--color-gray-300)]">
+            Run one free trial scan to preview findings. Production baseline unlocks signed PDF, CBOM export, and board
+            report.
+          </p>
+          <div className="flex flex-wrap gap-3">
+            <Button type="button" onClick={onOpenScans}>
+              Run trial scan
+            </Button>
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={() => {
+                setStep("baseline");
+                void patchDashboardJson("/tenant/onboarding", { step: "baseline" });
+              }}
+            >
+              Skip to baseline
+            </Button>
+          </div>
         </div>
       ) : null}
 
@@ -156,6 +249,9 @@ export default function OnboardingWizard({
           <div className="flex flex-wrap gap-3">
             <Button type="button" onClick={onOpenScans}>
               Run baseline scan
+            </Button>
+            <Button type="button" variant="secondary" onClick={() => onOpenUpgrade?.("assess")}>
+              Purchase production baseline
             </Button>
             {hasScans ? (
               <Button type="button" variant="secondary" onClick={() => setStep("schedule")}>
@@ -175,7 +271,7 @@ export default function OnboardingWizard({
                 manual scans on Assess.
               </p>
               <div className="flex flex-wrap gap-3">
-                <Button href="/monitor" size="sm">
+                <Button type="button" variant="secondary" size="sm" onClick={() => onOpenUpgrade?.("monitor")}>
                   Upgrade to Monitor
                 </Button>
                 <Button type="button" variant="secondary" size="sm" onClick={() => setStep("invite")}>
@@ -212,7 +308,7 @@ export default function OnboardingWizard({
                 <Button type="button" onClick={onOpenTeam}>
                   Invite teammate
                 </Button>
-                <Button type="button" variant="secondary" onClick={onDismiss}>
+                <Button type="button" variant="secondary" onClick={() => void finishWizard()}>
                   Finish setup
                 </Button>
               </div>
@@ -222,7 +318,7 @@ export default function OnboardingWizard({
               <p className="text-sm text-[var(--color-gray-300)]">
                 Team invites are available on Monitor tier. You can finish setup and upgrade later from Settings.
               </p>
-              <Button type="button" onClick={onDismiss}>
+              <Button type="button" onClick={() => void finishWizard()}>
                 Finish setup
               </Button>
             </>

@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 
 import Card from "@/components/ui/Card";
 import Eyebrow from "@/components/ui/Eyebrow";
-import { patchDashboardJson, postDashboardJson } from "@/lib/dashboard-bff";
+import { patchDashboardJson, fetchDashboardJson, postDashboardJson } from "@/lib/dashboard-bff";
 
 type Props = {
   tenantName?: string;
@@ -108,9 +108,7 @@ export default function WorkspaceSettingsPanel({
               onClick={async () => {
                 setPortalLoading(true);
                 try {
-                  const payload = await postDashboardJson<{ portalUrl?: string }>("/tenant/billing/portal", {
-                    returnUrl: `${window.location.origin}/dashboard?tab=settings`,
-                  });
+                  const payload = await fetchDashboardJson<{ portalUrl?: string }>("/tenant/billing/portal");
                   if (payload.portalUrl) {
                     window.open(payload.portalUrl, "_blank", "noopener,noreferrer");
                   } else {

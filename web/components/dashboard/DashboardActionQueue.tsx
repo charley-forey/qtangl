@@ -1,60 +1,57 @@
-import Button from "@/components/ui/Button";
-import Card from "@/components/ui/Card";
+"use client";
+
+import { useRouter } from "next/navigation";
+
 import Eyebrow from "@/components/ui/Eyebrow";
+import RecommendationCard, {
+  type DashboardRecommendation,
+} from "@/components/dashboard/RecommendationCard";
+import { fetchDashboardJson } from "@/lib/dashboard-bff";
+import { navigateDashboardDeepLink } from "@/lib/dashboard-deep-links";
+import { trackDashboardEvent } from "@/lib/dashboard-analytics";
 
 export default function DashboardActionQueue({
-  role,
-  hasScans,
-  hasSchedule,
-  canWrite,
+  recommendations,
   onAction,
+  onDismissed,
 }: {
-  role?: string;
-  hasScans: boolean;
-  hasSchedule: boolean;
-  canWrite: boolean;
+  recommendations: DashboardRecommendation[];
   onAction?: (action: string) => void;
+  onDismissed?: () => void;
 }) {
-  const isViewer = role === "viewer";
-  const actions: Array<{ id: string; label: string }> = [];
+  const router = useRouter();
 
-  if (!hasScans && canWrite && !isViewer) {
-    actions.push({ id: "baseline", label: "Run authorized baseline scan" });
-  }
-  if (hasScans && !hasSchedule && canWrite && !isViewer) {
-    actions.push({ id: "schedule", label: "Create weekly monitoring schedule" });
-  }
-  if (hasScans) {
-    actions.push({ id: "export", label: "Export board report" });
-  }
-  if (role === "admin") {
-    actions.push({ id: "invite", label: "Invite teammates" });
-  }
-  if (isViewer) {
-    actions.push({ id: "review", label: "Review latest scan reports" });
-  }
-
-  if (actions.length === 0) {
+  if (!recommendations.length) {
     return null;
   }
 
+  async function dismiss(id: string) {
+    try {
+      await fetchDashboardJson(`/tenant/recommendations/${encodeURIComponent(id)}/dismiss`, {
+        method: "POST",
+      });
+      onDismissed?.();
+    } catch {
+      /* optional */
+    }
+  }
+
+  function handleDeepLink(link: string) {
+    trackDashboardEvent("recommendation_clicked", { deepLink: link });
+    navigateDashboardDeepLink(link, router, (tab) => onAction?.(tab));
+  }
+
   return (
-    <Card tone="ghost" className="border border-[var(--border-subtle)]">
+    <div className="space-y-3" data-tour="action-queue">
       <Eyebrow>Recommended next steps</Eyebrow>
-      <ul className="mt-4 space-y-2">
-        {actions.map((action) => (
-          <li key={action.id}>
-            <Button
-              type="button"
-              variant="secondary"
-              size="sm"
-              onClick={() => onAction?.(action.id)}
-            >
-              {action.label}
-            </Button>
-          </li>
-        ))}
-      </ul>
-    </Card>
+      {recommendations.slice(0, 5).map((rec) => (
+        <RecommendationCard
+          key={rec.id}
+          recommendation={rec}
+          onAction={handleDeepLink}
+          onDismiss={dismiss}
+        />
+      ))}
+    </div>
   );
 }

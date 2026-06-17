@@ -240,6 +240,20 @@ def main() -> None:
                 except Exception:
                     logger.debug("drip tick skipped", exc_info=True)
                 try:
+                    from app.notifications.tenant_drip import (
+                        process_daily_alert_digests,
+                        process_due_tenant_drip_emails,
+                    )
+
+                    tenant_drip = process_due_tenant_drip_emails()
+                    if tenant_drip:
+                        logger.info("Sent %d tenant lifecycle email(s)", tenant_drip)
+                    daily_alerts = process_daily_alert_digests()
+                    if daily_alerts:
+                        logger.info("Sent %d daily alert digest email(s)", daily_alerts)
+                except Exception:
+                    logger.debug("tenant drip tick skipped", exc_info=True)
+                try:
                     from app.evidence.vault import purge_expired_vault_objects
                     from app.lifecycle.retention import (
                         purge_old_schedule_run_logs,

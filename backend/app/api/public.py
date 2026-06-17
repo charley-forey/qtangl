@@ -177,7 +177,9 @@ async def stripe_webhook(request: Request) -> dict:
     obj = event.get("data", {}).get("object", {})
 
     if event_type == "checkout.session.completed":
-        if obj.get("metadata", {}).get("product") == "pqc-monitor":
+        metadata = obj.get("metadata") or {}
+        product = metadata.get("product")
+        if product in {"pqc-monitor", "pqc-assess", "pqc-monitor-upgrade"}:
             result = handle_checkout_completed(obj)
             return {"status": "success", **result}
     elif event_type == "customer.subscription.updated":

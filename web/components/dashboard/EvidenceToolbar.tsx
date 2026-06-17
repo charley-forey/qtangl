@@ -28,7 +28,7 @@ export default function EvidenceToolbar({
   ];
 
   async function copyVerifyLink() {
-    const url = `${window.location.origin}/verify?scan=${encodeURIComponent(scanId ?? "")}`;
+    const url = `${window.location.origin}/verify?scanId=${encodeURIComponent(scanId ?? "")}`;
     await navigator.clipboard.writeText(url);
     trackDashboardEvent("dashboard_export", { format: "verify_link" });
     setMessage("Verify link copied.");

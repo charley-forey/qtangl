@@ -3,7 +3,10 @@
 import { useEffect, useState } from "react";
 
 import RemediationCopilotDrawer from "@/components/dashboard/RemediationCopilotDrawer";
+import VerifyFixPanel from "@/components/dashboard/VerifyFixPanel";
+import InfoTip from "@/components/pqc/InfoTip";
 import { fetchTenantJson, postTenantJson } from "@/lib/tenant-api";
+import { trackDashboardEvent } from "@/lib/dashboard-analytics";
 
 type RemediationItem = {
   id: string;
@@ -44,6 +47,7 @@ export default function RemediationBoard({
   initialStatuses,
   jiraConfigured = false,
   highlightId,
+  actionParam,
   allScans = [],
 }: {
   apiKey: string;
@@ -52,6 +56,7 @@ export default function RemediationBoard({
   initialStatuses: StatusRow[];
   jiraConfigured?: boolean;
   highlightId?: string;
+  actionParam?: string;
   allScans?: Array<{ scanId: string; label: string }>;
 }) {
   const [statuses, setStatuses] = useState<Record<string, string>>(() => {
@@ -102,6 +107,17 @@ export default function RemediationBoard({
   >({});
   const [expandedPlaybook, setExpandedPlaybook] = useState<string | null>(null);
   const [playbooks, setPlaybooks] = useState<Record<string, string[]>>({});
+  const [verifyPanelOpen, setVerifyPanelOpen] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!highlightId) return;
+    const el = document.getElementById(`remediation-${highlightId}`);
+    el?.scrollIntoView({ behavior: "smooth", block: "center" });
+    if (actionParam === "verify") {
+      setVerifyPanelOpen(highlightId);
+      setExpandedPlaybook(highlightId);
+    }
+  }, [highlightId, actionParam]);
 
   useEffect(() => {
     if (!scanId) return;
@@ -222,6 +238,7 @@ export default function RemediationBoard({
       }));
       if (result.verified) {
         setStatuses((prev) => ({ ...prev, [remediationId]: "done" }));
+        trackDashboardEvent("verify_fix_succeeded", { remediationId, scanId });
       }
     } catch (error) {
       setPushMessage(error instanceof Error ? error.message : "Verify failed.");
@@ -236,7 +253,11 @@ export default function RemediationBoard({
 
   return (
     <div className="space-y-3">
-      <p className="text-sm text-[var(--color-gray-300)]">Completion: {pct}%</p>
+      <p className="flex flex-wrap items-center gap-2 text-sm text-[var(--color-gray-300)]">
+        Completion: {pct}%
+        <InfoTip termId="mosca" label="Mosca-ranked priorities" />
+        <InfoTip termId="hndl" />
+      </p>
       {allScans.length > 1 ? (
         <label className="flex flex-col gap-1 text-xs text-[var(--color-gray-400)]">
           Verification scan (re-scan after fix)
@@ -260,6 +281,7 @@ export default function RemediationBoard({
       {items.slice(0, 10).map((item) => (
         <div
           key={item.id}
+          id={`remediation-${item.id}`}
           className={[
             "flex flex-col gap-3 rounded-lg border p-3",
             highlightId === item.id
@@ -323,7 +345,7 @@ export default function RemediationBoard({
                   Push to Jira
                 </button>
               ) : null}
-              {verifyScanId ? (
+              {verifyScanId || verifyPanelOpen === item.id ? (
                 <button
                   type="button"
                   disabled={verifyingId === item.id}
@@ -368,8 +390,16 @@ export default function RemediationBoard({
           {automationResults[item.id] ? (
             <AutomationEvidence result={automationResults[item.id]!} />
           ) : null}
-          {verifyResults[item.id] ? (
-            <VerificationEvidence result={verifyResults[item.id]!} />
+          {verifyPanelOpen === item.id || (actionParam === "verify" && highlightId === item.id) ? (
+            <VerifyFixPanel
+              remediationId={item.id}
+              verifyScanId={verifyScanId}
+              verifying={verifyingId === item.id}
+              result={verifyResults[item.id]}
+              onVerify={verifyFix}
+              onSelectScan={setVerifyScanId}
+              scanOptions={allScans.filter((s) => s.scanId !== scanId)}
+            />
           ) : null}
         </div>
       ))}

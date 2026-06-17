@@ -15,8 +15,10 @@ import { postDashboardJson, putDashboardJson } from "@/lib/dashboard-bff";
 const AlertSettings = dynamic(() => import("@/components/dashboard/AlertSettings"));
 const AuditLogPanel = dynamic(() => import("@/components/dashboard/AuditLogPanel"));
 const TeamSettingsPanel = dynamic(() => import("@/components/dashboard/TeamSettingsPanel"));
+const MsspPortfolioSettings = dynamic(() => import("@/components/dashboard/MsspPortfolioSettings"));
 const WorkspaceSettingsPanel = dynamic(() => import("@/components/dashboard/WorkspaceSettingsPanel"));
 const ApiKeysPanel = dynamic(() => import("@/components/dashboard/ApiKeysPanel"));
+const EvidenceVaultPanel = dynamic(() => import("@/components/pqc/EvidenceVaultPanel"));
 
 type Props = {
   bundle: SettingsTabBundle | null;
@@ -31,6 +33,7 @@ type Props = {
   persona: DashboardPersona;
   apiKey: string;
   loading: boolean;
+  recentScanIds?: string[];
   onMessage: (message: string) => void;
   onSettingsChange: (settings: Record<string, unknown>) => void;
   onApiKeyChange: (key: string) => void;
@@ -50,6 +53,7 @@ export default function DashboardSettingsTab({
   persona,
   apiKey,
   loading,
+  recentScanIds = [],
   onMessage,
   onSettingsChange,
   onApiKeyChange,
@@ -62,6 +66,22 @@ export default function DashboardSettingsTab({
   return (
     <DashboardSection title="Settings" id="dashboard-settings">
       {canManageKeys && bffMode ? <ApiKeysPanel role={sessionRole} /> : null}
+
+      <Card tone="panel">
+        <Eyebrow>Evidence vault</Eyebrow>
+        <p className="mt-2 text-xs text-[var(--color-gray-500)]">
+          Retention policy: {String(settings.evidenceRetentionMonths ?? 12)} months
+          {settings.autoRetainScans ? " · auto-retain enabled" : ""}
+        </p>
+        <div className="mt-4">
+          <EvidenceVaultPanel
+            apiKey={savedKey}
+            useBff={bffMode}
+            scanIds={recentScanIds}
+            onMessage={onMessage}
+          />
+        </div>
+      </Card>
 
       <Card tone="panel">
         <Eyebrow>Alert settings</Eyebrow>
@@ -100,7 +120,15 @@ export default function DashboardSettingsTab({
             canInvite={canInvite}
             onMessage={onMessage}
           />
-          <TeamSettingsPanel role={sessionRole} canInvite={canInvite} tier={tier} />
+          <div data-tour="settings-team">
+          <TeamSettingsPanel
+            role={sessionRole}
+            canInvite={canInvite}
+            tier={tier}
+            maxTeamInvites={3}
+          />
+          </div>
+          <MsspPortfolioSettings canAdmin={canAdmin} />
           <Card tone="panel">
             <Eyebrow>Enterprise SSO</Eyebrow>
             <button

@@ -10,7 +10,15 @@ from app.db.engine import db_session
 from app.db.models import TenantSubscription as SubscriptionRow
 
 TIER_DEFAULTS: dict[str, dict[str, Any]] = {
-    "free": {"maxSchedules": 0, "maxScansPerMonth": 5, "maxApiKeys": 1, "maxTeamInvites": 0, "features": ["assess"]},
+    "free": {
+        "maxSchedules": 0,
+        "maxScansPerMonth": 5,
+        "maxApiKeys": 1,
+        "maxTeamInvites": 3,
+        "trialScansRemaining": 1,
+        "productionScansRemaining": 0,
+        "features": ["assess", "team"],
+    },
     "monitor": {"maxSchedules": 10, "maxScansPerMonth": 100, "maxApiKeys": 5, "maxTeamInvites": 10, "features": ["assess", "monitor", "team"]},
     "convert": {
         "maxSchedules": 25,
@@ -37,7 +45,6 @@ MAX_API_KEYS_BY_TIER: dict[str, int | None] = {
 
 
 def check_scan_quota(*, tenant_id: str) -> dict[str, Any] | None:
-    """Return error payload if scan quota exceeded, else None."""
     ent = tenant_entitlements(tenant_id=tenant_id)
     max_scans = int(ent.get("maxScansPerMonth", 100))
     used = scans_created_this_month(tenant_id=tenant_id)
@@ -50,6 +57,54 @@ def check_scan_quota(*, tenant_id: str) -> dict[str, Any] | None:
             "upgradeUrl": "/pricing",
         }
     return None
+
+
+def check_production_scan_access(*, tenant_id: str, use_fixture: bool = False) -> dict[str, Any] | None:
+    """Gate live production scans: 1 free trial, then paid assess required."""
+    if use_fixture:
+        return None
+    from app.tenant.settings import get_tenant_billing_flags
+
+    billing = get_tenant_billing_flags(tenant_id=tenant_id)
+    if billing.get("assessPaidAt"):
+        return check_scan_quota(tenant_id=tenant_id)
+
+    ent = tenant_entitlements(tenant_id=tenant_id)
+    trial_limit = int(ent.get("trialScansRemaining", 1))
+    trial_used = int(billing.get("trialScansUsed", 0))
+    if trial_used < trial_limit:
+        return None
+    return {
+        "code": "assess_payment_required",
+        "tier": ent.get("tier"),
+        "trialUsed": trial_used,
+        "trialLimit": trial_limit,
+        "upgradeUrl": "/dashboard?upgrade=assess",
+        "checkoutProduct": "assess",
+    }
+
+
+def record_production_scan_usage(*, tenant_id: str, use_fixture: bool = False) -> None:
+    if use_fixture:
+        return
+    from app.tenant.settings import get_tenant_billing_flags, patch_tenant_billing_flags
+
+    billing = get_tenant_billing_flags(tenant_id=tenant_id)
+    if billing.get("assessPaidAt"):
+        return
+    trial_used = int(billing.get("trialScansUsed", 0))
+    patch_tenant_billing_flags(tenant_id=tenant_id, patch={"trialScansUsed": trial_used + 1})
+
+
+def mark_assess_paid(*, tenant_id: str) -> dict[str, Any]:
+    from datetime import datetime, timezone
+
+    from app.tenant.settings import patch_tenant_billing_flags
+
+    return patch_tenant_billing_flags(
+        tenant_id=tenant_id,
+        patch={"assessPaidAt": datetime.now(timezone.utc).isoformat()},
+    )
 
 
 def check_convert_feature(*, tenant_id: str) -> dict[str, Any] | None:

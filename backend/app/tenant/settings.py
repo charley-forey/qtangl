@@ -43,6 +43,11 @@ DEFAULT_SETTINGS: dict[str, Any] = {
         "hidden": [],
     },
     "rolePolicies": {
+        "executive": {
+            "tabs": ["overview", "scans"],
+            "widgets": ["kpi", "trend", "digest", "compliance"],
+            "exports": ["pdf", "board"],
+        },
         "viewer": {
             "tabs": ["overview", "scans"],
             "widgets": ["kpi", "trend", "digest", "compliance"],
@@ -76,6 +81,31 @@ DEFAULT_SETTINGS: dict[str, Any] = {
         "primaryColor": "",
     },
     "notificationReadIds": [],
+    "billing": {
+        "trialScansUsed": 0,
+        "assessPaidAt": None,
+        "termsAcceptedAt": None,
+        "termsVersion": None,
+        "scanAuthorizationAt": None,
+    },
+    "onboarding": {
+        "step": "company",
+        "dismissed": False,
+        "complete": False,
+        "toursCompleted": [],
+    },
+    "coaching": {
+        "phase": "first_run",
+        "milestones": {},
+        "bannersDismissed": [],
+        "dripOptOut": False,
+        "dripSent": [],
+    },
+    "dismissedRecommendations": [],
+    "lastRecommendationRunAt": None,
+    "salesLed": False,
+    "termsVersionRequired": "2026-06-08",
+    "lastBoardMeetingAt": None,
 }
 
 
@@ -151,6 +181,7 @@ def upsert_tenant_settings(*, tenant_id: str, settings: dict[str, Any]) -> dict[
             if key == "webhookSigningSecret" and value in ("", "***"):
                 continue
             merged[key] = value
+        digest_was_enabled = bool(existing.get("weeklyDigestEnabled"))
         stored = encrypt_json_blob(merged)
         if row is None:
             row = TenantSettingsRow(tenant_id=tenant_id, settings_json=stored, updated_at=now)
@@ -159,6 +190,13 @@ def upsert_tenant_settings(*, tenant_id: str, settings: dict[str, Any]) -> dict[
             row.settings_json = stored
             row.updated_at = now
         session.flush()
+        if not digest_was_enabled and bool(merged.get("weeklyDigestEnabled")):
+            try:
+                from app.coaching.milestones import record_milestone
+
+                record_milestone(tenant_id=tenant_id, name="digestEnabledAt")
+            except Exception:
+                pass
         response = dict(merged)
         if response.get("webhookSigningSecret"):
             response["webhookSigningSecret"] = "***"
@@ -210,3 +248,36 @@ def set_tenant_scan_allowlist(
             cleaned.append(host)
     upsert_tenant_settings(tenant_id=tenant_id, settings={"scanAllowlist": cleaned})
     return cleaned
+
+
+def get_tenant_billing_flags(*, tenant_id: str) -> dict[str, Any]:
+    settings = get_tenant_settings_raw(tenant_id=tenant_id)
+    billing = settings.get("billing") or {}
+    if not isinstance(billing, dict):
+        billing = {}
+    defaults = DEFAULT_SETTINGS.get("billing") or {}
+    merged = {**defaults, **billing}
+    return merged
+
+
+def patch_tenant_billing_flags(*, tenant_id: str, patch: dict[str, Any]) -> dict[str, Any]:
+    current = get_tenant_billing_flags(tenant_id=tenant_id)
+    current.update(patch)
+    upsert_tenant_settings(tenant_id=tenant_id, settings={"billing": current})
+    return current
+
+
+def get_tenant_onboarding_state(*, tenant_id: str) -> dict[str, Any]:
+    settings = get_tenant_settings_raw(tenant_id=tenant_id)
+    onboarding = settings.get("onboarding") or {}
+    if not isinstance(onboarding, dict):
+        onboarding = {}
+    defaults = DEFAULT_SETTINGS.get("onboarding") or {}
+    return {**defaults, **onboarding}
+
+
+def patch_tenant_onboarding_state(*, tenant_id: str, patch: dict[str, Any]) -> dict[str, Any]:
+    current = get_tenant_onboarding_state(tenant_id=tenant_id)
+    current.update(patch)
+    upsert_tenant_settings(tenant_id=tenant_id, settings={"onboarding": current})
+    return current

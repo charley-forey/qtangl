@@ -187,7 +187,7 @@ def require_auth(
     return AuthContext(token=token, tenant_id=tenant_id, role=role, auth_method="api_key")
 
 
-ROLE_RANK = {"viewer": 0, "operator": 1, "admin": 2}
+ROLE_RANK = {"executive": 0, "viewer": 0, "operator": 1, "admin": 2}
 
 
 def require_tenant_role(min_role: str):
@@ -207,7 +207,7 @@ def require_tenant_role(min_role: str):
 
 
 def require_auth_write(auth: AuthContext = Depends(require_auth)) -> AuthContext:
-    if auth.role == "viewer":
+    if auth.role in {"viewer", "executive"}:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Viewer role cannot modify tenant resources.",

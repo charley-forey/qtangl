@@ -137,6 +137,17 @@ def _dispatch_drift_alerts(
     try:
         from app.notifications.webhook_store import active_webhook_urls
         from app.notifications.webhooks import notify_drift_v2
+        from app.store.tenant_alerts import persist_alert
+
+        for alert in alerts:
+            persist_alert(
+                tenant_id=tenant_id,
+                rule=str(alert.get("rule", "drift_alert")),
+                severity=str(alert.get("severity", "info")),
+                message=str(alert.get("message", "")),
+                source="drift",
+                payload={"jobId": job_id, "scanId": scan_id, **alert},
+            )
 
         secret = settings.get("webhookSigningSecret") or ""
         for url in active_webhook_urls(tenant_id=tenant_id):

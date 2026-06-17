@@ -22,12 +22,13 @@ export function useDashboardTab(activeTab: DashboardTabId) {
   const [error, setError] = useState<string | null>(null);
 
   const loadTab = useCallback(
-    async (tab: DashboardTabId, force = false) => {
+    async (tab: DashboardTabId, force = false, opts?: { scanId?: string }) => {
       if (tab === "overview") {
         setBundle(null);
         return null;
       }
-      const cached = cacheRef.current[tab];
+      const cacheKey = tab === "remediate" && opts?.scanId ? `${tab}:${opts.scanId}` : tab;
+      const cached = cacheRef.current[cacheKey as DashboardTabId];
       if (cached && !force) {
         setBundle(cached);
         return cached;
@@ -36,8 +37,11 @@ export function useDashboardTab(activeTab: DashboardTabId) {
       setLoading(true);
       setError(null);
       try {
-        const data = await fetchTabBundle(TAB_ENDPOINTS[tab]);
-        cacheRef.current[tab] = data;
+        const data = await fetchTabBundle(
+          TAB_ENDPOINTS[tab],
+          tab === "remediate" && opts?.scanId ? { scanId: opts.scanId } : undefined
+        );
+        cacheRef.current[cacheKey as DashboardTabId] = data;
         setBundle(data);
         trackDashboardEvent("dashboard_tab_loaded", {
           tab,

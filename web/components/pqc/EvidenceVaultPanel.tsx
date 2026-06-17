@@ -4,6 +4,7 @@ import { useCallback, useState } from "react";
 
 import Button from "@/components/ui/Button";
 import Eyebrow from "@/components/ui/Eyebrow";
+import { fetchDashboardJson, postDashboardJson } from "@/lib/dashboard-bff";
 import { fetchTenantJson, postTenantJson } from "@/lib/tenant-api";
 import { formatUtcDateTime } from "@/lib/format";
 
@@ -26,10 +27,12 @@ export default function EvidenceVaultPanel({
   apiKey,
   scanIds = [],
   onMessage,
+  useBff = false,
 }: {
   apiKey: string;
   scanIds?: string[];
   onMessage?: (message: string) => void;
+  useBff?: boolean;
 }) {
   const [summary, setSummary] = useState<VaultSummary | null>(null);
   const [loading, setLoading] = useState(false);
@@ -40,23 +43,30 @@ export default function EvidenceVaultPanel({
     setLoading(true);
     setError(null);
     try {
-      const payload = await fetchTenantJson<VaultSummary>("/tenant/evidence", apiKey);
+      const payload = useBff
+        ? await fetchDashboardJson<VaultSummary>("/tenant/evidence")
+        : await fetchTenantJson<VaultSummary>("/tenant/evidence", apiKey);
       setSummary(payload);
     } catch (loadError) {
       setError(loadError instanceof Error ? loadError.message : "Failed to load evidence vault.");
     } finally {
       setLoading(false);
     }
-  }, [apiKey]);
+  }, [apiKey, useBff]);
 
   async function retainScan(scanId: string) {
     setRetaining(scanId);
     try {
-      const result = await postTenantJson<{ retained?: boolean; retainedUntil?: string }>(
-        `/tenant/evidence/${encodeURIComponent(scanId)}/retain`,
-        apiKey,
-        {}
-      );
+      const result = useBff
+        ? await postDashboardJson<{ retained?: boolean; retainedUntil?: string }>(
+            `/tenant/evidence/${encodeURIComponent(scanId)}/retain`,
+            {}
+          )
+        : await postTenantJson<{ retained?: boolean; retainedUntil?: string }>(
+            `/tenant/evidence/${encodeURIComponent(scanId)}/retain`,
+            apiKey,
+            {}
+          );
       if (result.retained) {
         onMessage?.(`Evidence retained for ${scanId} until ${result.retainedUntil ?? "policy default"}.`);
       } else {

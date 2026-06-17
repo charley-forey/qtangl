@@ -14,7 +14,7 @@ export function useDashboardSummary() {
   const [scanProgress, setScanProgress] = useState<ScanProgressState | null>(null);
   const loadedAtRef = useRef<number | null>(null);
 
-  const loadSummary = useCallback(async () => {
+  const loadSummary = useCallback(async (): Promise<DashboardSummary | null> => {
     const started = performance.now();
     setLoading(true);
     setError(null);
@@ -29,9 +29,11 @@ export function useDashboardSummary() {
       trackDashboardEvent("dashboard_ttfv", {
         durationMs: Math.round(performance.now() - started),
       });
+      return payload;
     } catch (loadError) {
       setSummary(null);
       setError(loadError instanceof Error ? loadError.message : "Failed to load dashboard.");
+      return null;
     } finally {
       setLoading(false);
     }

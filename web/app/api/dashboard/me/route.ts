@@ -1,7 +1,7 @@
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
-import { clearQtanglSessionCookies } from "@/lib/auth/dashboard-session-cookies";
+import { clearQtanglSessionCookies, clearQtanglSessionCookieStore } from "@/lib/auth/dashboard-session-cookies";
 import { BFF_SESSION_TTL_SECONDS, resolveBootstrapCredentials } from "@/lib/auth/bff-session";
 import {
   ACTIVE_TENANT_COOKIE,
@@ -256,15 +256,8 @@ export async function POST(request: NextRequest) {
 }
 
 export async function DELETE() {
-  const response = NextResponse.json({ ok: true });
+  await clearQtanglSessionCookieStore();
+  const response = NextResponse.json({ ok: true, signOutUrl: "/api/dashboard/sign-out" });
   clearQtanglSessionCookies(response);
-  if (workosAuthEnabled()) {
-    try {
-      const { signOut } = await import("@workos-inc/authkit-nextjs");
-      await signOut({ returnTo: "/dashboard/login" });
-    } catch {
-      /* ignore */
-    }
-  }
   return response;
 }

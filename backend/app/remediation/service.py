@@ -191,6 +191,34 @@ def verify_remediation_fix(
             verify_scan_id=verify_scan_id,
             asset_id=asset_id,
         )
+    if improved:
+        try:
+            from app.store.tenant_alerts import resolve_alerts_for_remediation
+
+            resolve_alerts_for_remediation(
+                tenant_id=tenant_id,
+                scan_id=baseline_scan_id,
+                remediation_id=remediation_id,
+                verify_scan_id=verify_scan_id,
+            )
+            from app.telemetry.events import track_event
+
+            track_event(
+                "alert_resolved",
+                tenant_id=tenant_id,
+                properties={
+                    "remediationId": remediation_id,
+                    "scanId": baseline_scan_id,
+                    "verifyScanId": verify_scan_id,
+                },
+            )
+            track_event(
+                "verify_fix_succeeded",
+                tenant_id=tenant_id,
+                properties={"remediationId": remediation_id, "scanId": baseline_scan_id},
+            )
+        except Exception:
+            pass
     return {
         "verified": improved,
         "assetId": asset_id,

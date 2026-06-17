@@ -104,6 +104,8 @@ def readiness_rollup(*, tenant_id: str) -> dict[str, Any]:
 
 
 def portfolio_command_center(*, tenant_id: str) -> dict[str, Any]:
+    from app.recommendations.service import recommendation_action_strings
+
     rollup = readiness_rollup(tenant_id=tenant_id)
     scans = rollup.get("scans", [])
     high_risk = [
@@ -116,23 +118,22 @@ def portfolio_command_center(*, tenant_id: str) -> dict[str, Any]:
         "businessUnits": rollup.get("byBusinessUnit", {}),
         "businessUnitDeltas": rollup.get("businessUnitDeltas", {}),
         "highRiskTargets": high_risk[:10],
-        "recommendedActions": [
-            "Prioritize high-risk units for 30-day remediation sprint.",
-            "Require signed board pack for each target below readiness threshold.",
-            "Track weekly readiness delta and unresolved critical findings.",
-        ],
+        "recommendedActions": recommendation_action_strings(tenant_id=tenant_id),
     }
 
 
 def weekly_executive_digest(*, tenant_id: str) -> dict[str, Any]:
+    from app.recommendations.service import recommendation_action_strings
+
     rollup = readiness_rollup(tenant_id=tenant_id)
     scans = rollup.get("scans", [])
+    focus = recommendation_action_strings(tenant_id=tenant_id, role="executive")
     if not scans:
         return {
             "headline": "No scans completed this week.",
             "wins": [],
             "risks": ["Portfolio has no recent evidence."],
-            "nextWeekFocus": ["Run baseline scans for all portfolio targets."],
+            "nextWeekFocus": focus[:3] or ["Run baseline scans for all portfolio targets."],
             "sinceLastBoardMeeting": "No board meeting baseline recorded.",
             "topCryptoRisks": [],
             "narrative": "Establish a baseline scan to unlock executive digest insights.",
@@ -155,7 +156,8 @@ def weekly_executive_digest(*, tenant_id: str) -> dict[str, Any]:
         "headline": f"Portfolio readiness is {overall}.",
         "wins": [f"{row.get('target')}: score {row.get('readinessScore')}" for row in improving],
         "risks": [f"{row.get('target')}: score {row.get('readinessScore')}" for row in lagging],
-        "nextWeekFocus": [
+        "nextWeekFocus": focus[:3]
+        or [
             "Close top critical remediation items in lagging targets.",
             "Validate board/auditor report provenance on all executive exports.",
         ],

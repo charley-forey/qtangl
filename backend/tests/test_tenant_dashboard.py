@@ -94,6 +94,8 @@ class TenantDashboardEndpointsTest(unittest.TestCase):
             "health",
         ):
             self.assertIn(key, payload, msg=f"missing {key}")
+        self.assertIn("score", payload["health"])
+        self.assertIn("band", payload["health"])
         self.assertGreaterEqual(payload["kpis"]["scanCount"], 1)
         scan_ids = {row["scanId"] for row in payload["recentScans"]}
         self.assertIn(scan_id, scan_ids)
@@ -151,6 +153,23 @@ class TenantDashboardEndpointsTest(unittest.TestCase):
 
     def test_bulk_export_requires_scan_ids(self) -> None:
         response = self.client.post("/tenant/scans/bulk-export", headers=self.headers, json={})
+        self.assertEqual(response.status_code, 400)
+
+    def test_analytics_track_accepts_dashboard_event(self) -> None:
+        response = self.client.post(
+            "/tenant/analytics/track",
+            headers=self.headers,
+            json={"event": "dashboard_tab_changed", "properties": {"tab": "overview"}},
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()["event"], "dashboard_tab_changed")
+
+    def test_analytics_track_rejects_unknown_event(self) -> None:
+        response = self.client.post(
+            "/tenant/analytics/track",
+            headers=self.headers,
+            json={"event": "not_a_real_event"},
+        )
         self.assertEqual(response.status_code, 400)
 
     def test_dashboard_summary_with_bff_session(self) -> None:

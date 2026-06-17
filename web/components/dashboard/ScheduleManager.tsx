@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 
 import { useQtanglClient } from "@qtangl/sdk-react";
 
+import { fetchDashboardJson, postDashboardJson } from "@/lib/dashboard-bff";
 import { type ScheduledScan } from "@/lib/tenant-api";
 import { formatUtcDateTime } from "@/lib/format";
 
@@ -28,6 +29,8 @@ export default function ScheduleManager({
   const [editingId, setEditingId] = useState<string | null>(null);
   const [cadenceHours, setCadenceHours] = useState(168);
   const [notifyEmail, setNotifyEmail] = useState("");
+  const [createTarget, setCreateTarget] = useState("");
+  const [creating, setCreating] = useState(false);
 
   const loadRuns = useCallback(
     async (scheduleId: string) => {
@@ -72,12 +75,71 @@ export default function ScheduleManager({
     }
   }
 
+  async function createSchedule() {
+    if (!createTarget.trim()) {
+      onMessage("Enter a target domain for the schedule.");
+      return;
+    }
+    setCreating(true);
+    try {
+      await postDashboardJson("/tenant/schedules", {
+        scenarioId: "production-baseline",
+        target: createTarget.trim(),
+        cadenceHours,
+        notifyEmail: notifyEmail || null,
+        jobType: "scan",
+      });
+      onMessage("Schedule created.");
+      setCreateTarget("");
+      onRefresh();
+    } catch (error) {
+      onMessage(error instanceof Error ? error.message : "Create failed.");
+    } finally {
+      setCreating(false);
+    }
+  }
+
   if (!schedules.length) {
-    return <p className="text-sm text-[var(--muted)]">No active schedules. Create one below.</p>;
+    return (
+      <div className="space-y-4">
+        <p className="text-sm text-[var(--muted)]">No active schedules yet.</p>
+        <div className="grid gap-2 sm:grid-cols-3">
+          <input
+            type="text"
+            value={createTarget}
+            onChange={(e) => setCreateTarget(e.target.value)}
+            placeholder="Target domain"
+            className="rounded-full border border-[var(--border-strong)] bg-black px-3 py-1.5 text-sm text-white sm:col-span-2"
+          />
+          <input
+            type="number"
+            min={1}
+            value={cadenceHours}
+            onChange={(e) => setCadenceHours(Number(e.target.value))}
+            className="rounded-full border border-[var(--border-strong)] bg-black px-3 py-1.5 text-sm text-white"
+          />
+          <input
+            type="email"
+            value={notifyEmail}
+            onChange={(e) => setNotifyEmail(e.target.value)}
+            placeholder="Alert email (optional)"
+            className="rounded-full border border-[var(--border-strong)] bg-black px-3 py-1.5 text-sm text-white sm:col-span-2"
+          />
+          <button
+            type="button"
+            disabled={creating}
+            onClick={() => void createSchedule()}
+            className="rounded-full bg-white px-4 py-1.5 text-sm font-medium text-black disabled:opacity-50"
+          >
+            Create schedule
+          </button>
+        </div>
+      </div>
+    );
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4" data-tour="schedule-manager">
       {schedules.map((schedule) => (
         <div
           key={schedule.id}
@@ -162,6 +224,33 @@ export default function ScheduleManager({
           ) : null}
         </div>
       ))}
+      <div className="rounded-2xl border border-dashed border-[var(--border-strong)] p-4">
+        <p className="text-xs text-[var(--muted)]">Create schedule</p>
+        <div className="mt-3 grid gap-2 sm:grid-cols-3">
+          <input
+            type="text"
+            value={createTarget}
+            onChange={(e) => setCreateTarget(e.target.value)}
+            placeholder="Target domain"
+            className="rounded-full border border-[var(--border-strong)] bg-black px-3 py-1.5 text-sm text-white sm:col-span-2"
+          />
+          <input
+            type="number"
+            min={1}
+            value={cadenceHours}
+            onChange={(e) => setCadenceHours(Number(e.target.value))}
+            className="rounded-full border border-[var(--border-strong)] bg-black px-3 py-1.5 text-sm text-white"
+          />
+          <button
+            type="button"
+            disabled={creating}
+            onClick={() => void createSchedule()}
+            className="rounded-full bg-white px-4 py-1.5 text-sm font-medium text-black disabled:opacity-50 sm:col-span-3 sm:w-fit"
+          >
+            Add schedule
+          </button>
+        </div>
+      </div>
     </div>
   );
 }

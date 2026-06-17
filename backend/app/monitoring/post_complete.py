@@ -195,6 +195,25 @@ def _enrich_completed_scan(scan_id: str, bundle: ScanBundle, *, tenant_id: str) 
 
     if alerts:
         logger.info("Scan %s triggered %d alert(s)", scan_id, len(alerts))
+        from app.store.tenant_alerts import _top_critical_remediation_id, persist_alert
+
+        report_dict = serialize_bundle(bundle).get("report") or {}
+        top_remediation_id = _top_critical_remediation_id(report_dict)
+        for alert in alerts:
+            if alert.get("severity") in {"high", "critical", "medium", "info"}:
+                payload = {
+                    "scanId": scan_id,
+                    "remediationId": top_remediation_id,
+                    **alert,
+                }
+                persist_alert(
+                    tenant_id=tenant_id,
+                    rule=str(alert.get("rule", "scan_alert")),
+                    severity=str(alert.get("severity", "info")),
+                    message=str(alert.get("message", "")),
+                    source="scan",
+                    payload=payload,
+                )
         from app.telemetry.events import track_event
 
         for alert in alerts:
@@ -217,6 +236,13 @@ def _enrich_completed_scan(scan_id: str, bundle: ScanBundle, *, tenant_id: str) 
             "alertCount": len(alerts),
         },
     )
+
+    try:
+        from app.coaching.milestones import record_milestone
+
+        record_milestone(tenant_id=tenant_id, name="firstScanAt")
+    except Exception:
+        logger.debug("coaching milestone firstScanAt skipped scan_id=%s", scan_id)
 
     if settings.get("autoRetainScans"):
         try:

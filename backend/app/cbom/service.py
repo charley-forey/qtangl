@@ -582,6 +582,18 @@ def post_ingest_cbom_hooks(*, tenant_id: str, ingest_result: dict[str, Any]) -> 
     except Exception:
         pass
     alerts = evaluate_cbom_alerts(drift) if drift.get("available") else []
+    if alerts:
+        from app.store.tenant_alerts import persist_alert
+
+        for alert in alerts:
+            persist_alert(
+                tenant_id=tenant_id,
+                rule=str(alert.get("rule", "cbom_alert")),
+                severity=str(alert.get("severity", "info")),
+                message=str(alert.get("message", "")),
+                source="cbom",
+                payload={"ingestJobId": ingest_result.get("ingestJobId"), **alert},
+            )
     settings = get_tenant_settings_raw(tenant_id=tenant_id)
     signing_secret = str(settings.get("webhookSigningSecret") or "")
     urls = active_webhook_urls(tenant_id=tenant_id, event="cbom.ingested")

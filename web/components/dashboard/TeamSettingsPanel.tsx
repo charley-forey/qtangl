@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 
 import Card from "@/components/ui/Card";
 import Eyebrow from "@/components/ui/Eyebrow";
+import { roleLabel, normalizeDashboardRole } from "@/lib/dashboard-persona";
 import {
   deleteDashboardJson,
   fetchDashboardJson,
@@ -26,14 +27,27 @@ type Invite = {
   status: string;
 };
 
+const ROLE_OPTIONS = [
+  { value: "executive", label: "Executive" },
+  { value: "operator", label: "Operator" },
+  { value: "admin", label: "Admin" },
+] as const;
+
+function roleSelectValue(role: string): string {
+  const normalized = normalizeDashboardRole(role);
+  return normalized === "viewer" ? "executive" : normalized;
+}
+
 export default function TeamSettingsPanel({
   role,
   canInvite = true,
   tier = "monitor",
+  maxTeamInvites = 3,
 }: {
   role?: string;
   canInvite?: boolean;
   tier?: string;
+  maxTeamInvites?: number | null;
 }) {
   const [members, setMembers] = useState<Member[]>([]);
   const [invites, setInvites] = useState<Invite[]>([]);
@@ -65,15 +79,33 @@ export default function TeamSettingsPanel({
     );
   }
 
-  const invitesBlocked = !canInvite || tier === "free";
+  const seatLimit = maxTeamInvites ?? (tier === "free" ? 3 : 10);
+  const seatsUsed = members.length + invites.length;
+  const invitesBlocked = !canInvite || (seatLimit !== null && seatsUsed >= seatLimit);
 
   return (
     <Card tone="ghost" className="border border-[var(--border-subtle)]">
-      <Eyebrow>Team members</Eyebrow>
-      {invitesBlocked ? (
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <Eyebrow>Team members</Eyebrow>
+        {seatLimit != null ? (
+          <span className="text-xs text-[var(--color-gray-500)]">
+            {seatsUsed} / {seatLimit} seats
+          </span>
+        ) : null}
+      </div>
+      {tier === "free" && seatLimit != null ? (
+        <p className="mt-2 text-sm text-[var(--color-gray-400)]">
+          Free workspaces include up to {seatLimit} team members. Upgrade to Monitor for larger teams.
+        </p>
+      ) : null}
+      {invitesBlocked && canInvite ? (
         <p className="mt-2 text-sm text-amber-200/90">
-          Team invites require a <strong className="text-white">Monitor</strong> plan or above. Upgrade under
-          Workspace settings, then return here to invite colleagues.
+          Seat limit reached. Upgrade under Workspace settings to invite more colleagues.
+        </p>
+      ) : null}
+      {!canInvite ? (
+        <p className="mt-2 text-sm text-amber-200/90">
+          Team invites are not available on your current plan.
         </p>
       ) : null}
       <ul className="mt-3 space-y-2 text-sm">
@@ -83,7 +115,7 @@ export default function TeamSettingsPanel({
             <div className="flex flex-wrap items-center gap-2">
               <select
                 className="rounded border border-[var(--border-subtle)] bg-transparent px-2 py-1 text-xs"
-                value={member.role}
+                value={roleSelectValue(member.role)}
                 onChange={async (event) => {
                   await patchDashboardJson(`/tenant/members/${member.membershipId}`, {
                     role: event.target.value,
@@ -91,9 +123,11 @@ export default function TeamSettingsPanel({
                   await reload();
                 }}
               >
-                <option value="admin">admin</option>
-                <option value="operator">operator</option>
-                <option value="viewer">viewer</option>
+                {ROLE_OPTIONS.map((opt) => (
+                  <option key={opt.value} value={opt.value}>
+                    {opt.label}
+                  </option>
+                ))}
               </select>
               <button
                 type="button"
@@ -112,10 +146,13 @@ export default function TeamSettingsPanel({
       <div className="mt-6">
         <Eyebrow>Pending invites</Eyebrow>
         <ul className="mt-2 space-y-2 text-sm">
+          {invites.length === 0 ? (
+            <li className="text-[var(--color-gray-500)]">No pending invites.</li>
+          ) : null}
           {invites.map((invite) => (
             <li key={invite.inviteId} className="flex justify-between gap-2">
               <span>
-                {invite.email} · {invite.role}
+                {invite.email} · {roleLabel(invite.role)}
               </span>
               <button
                 type="button"
@@ -145,9 +182,11 @@ export default function TeamSettingsPanel({
           onChange={(e) => setInviteRole(e.target.value)}
           disabled={invitesBlocked}
         >
-          <option value="admin">admin</option>
-          <option value="operator">operator</option>
-          <option value="viewer">viewer</option>
+          {ROLE_OPTIONS.map((opt) => (
+            <option key={opt.value} value={opt.value}>
+              {opt.label}
+            </option>
+          ))}
         </select>
         <button
           type="button"

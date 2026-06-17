@@ -7,6 +7,31 @@ from typing import Any
 
 logger = logging.getLogger("qtangl.telemetry")
 
+DASHBOARD_EVENTS = frozenset(
+    {
+        "dashboard_loaded",
+        "dashboard_ttfv",
+        "dashboard_tab_changed",
+        "recommendation_clicked",
+        "recommendation_dismissed",
+        "alert_clicked",
+        "alert_resolved",
+        "alert_dismissed",
+        "verify_fix_started",
+        "verify_fix_succeeded",
+        "milestone_recorded",
+        "tour_completed",
+        "checkout_started",
+        "scan_complete",
+        "schedule_created",
+        "board_export",
+        "dashboard_bulk_export",
+        "dashboard_export",
+        "passport_created",
+        "evidence_retained",
+    }
+)
+
 PRD_EVENTS = frozenset(
     {
         "schedule_created",
@@ -27,8 +52,14 @@ PRD_EVENTS = frozenset(
         "cbom_conflict_resolved",
         "aggregated_cbom_exported",
         "integration_connected",
+        "tenant_drip_sent",
     }
+    | DASHBOARD_EVENTS
 )
+
+
+def is_allowed_event(event: str) -> bool:
+    return event in PRD_EVENTS
 
 
 def track_event(
@@ -38,8 +69,9 @@ def track_event(
     properties: dict[str, Any] | None = None,
 ) -> None:
     """Emit product analytics events (structured logs; wire PostHog when configured)."""
-    if event not in PRD_EVENTS:
+    if not is_allowed_event(event):
         logger.debug("Unknown telemetry event: %s", event)
+        return
     payload = {
         "event": event,
         "tenantId": tenant_id,

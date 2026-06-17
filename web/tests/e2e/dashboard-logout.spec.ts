@@ -3,9 +3,18 @@ import { test, expect } from "@playwright/test";
 test.describe("Dashboard sign out", () => {
   test.beforeEach(async ({ page }) => {
     await page.route("**/api/dashboard/sign-out", async (route) => {
+      const headers: Record<string, string> = {
+        Location: "/dashboard/login",
+        "Set-Cookie": [
+          "qtangl_session_assertion=; Path=/; Max-Age=0",
+          "qtangl_session_key=; Path=/; Max-Age=0",
+          "qtangl_active_tenant=; Path=/; Max-Age=0",
+          "wos-session=; Path=/; Max-Age=0",
+        ].join(", "),
+      };
       await route.fulfill({
         status: 302,
-        headers: { Location: "/dashboard/login" },
+        headers,
       });
     });
   });

@@ -7,10 +7,15 @@ export type RolePolicy = {
 };
 
 export const DEFAULT_ROLE_POLICIES: Record<string, RolePolicy> = {
+  executive: {
+    tabs: ["overview", "scans"],
+    widgets: ["kpi", "trend", "digest", "compliance"],
+    exports: ["pdf", "board"],
+  },
   viewer: {
     tabs: ["overview", "scans"],
     widgets: ["kpi", "trend", "digest", "compliance"],
-    exports: ["pdf"],
+    exports: ["pdf", "board"],
   },
   operator: {
     tabs: ["overview", "scans", "monitor", "remediate"],
@@ -28,9 +33,10 @@ export function resolveRolePolicy(
   role: string | undefined,
   custom?: Record<string, RolePolicy> | null
 ): RolePolicy {
-  const key = (role ?? "viewer").toLowerCase();
+  const key = (role ?? "executive").toLowerCase();
+  const normalized = key === "viewer" ? "executive" : key;
   const merged = { ...DEFAULT_ROLE_POLICIES, ...(custom ?? {}) };
-  return merged[key] ?? merged.viewer ?? DEFAULT_ROLE_POLICIES.viewer;
+  return merged[normalized] ?? merged.executive ?? DEFAULT_ROLE_POLICIES.executive;
 }
 
 export function tabAllowed(policy: RolePolicy, tab: DashboardTabId): boolean {

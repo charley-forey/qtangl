@@ -16,6 +16,7 @@ type TenantSettings = {
   weeklyDigestEnabled?: boolean;
   weeklyDigestRecipients?: string[] | string;
   weeklyDigestDayOfWeek?: number;
+  alertMode?: string;
 };
 
 export default function AlertSettings({
@@ -138,6 +139,17 @@ export default function AlertSettings({
           onChange={(e) => setSettings({ ...settings, certExpiryDays: Number(e.target.value) })}
           className="rounded-full border border-[var(--border-strong)] bg-black px-4 py-2"
         />
+      </label>
+      <label className="flex flex-col gap-1 text-sm text-white">
+        Alert delivery mode
+        <select
+          value={String(settings.alertMode ?? "per_event")}
+          onChange={(e) => setSettings({ ...settings, alertMode: e.target.value })}
+          className="rounded-full border border-[var(--border-strong)] bg-black px-4 py-2"
+        >
+          <option value="per_event">Per event (immediate)</option>
+          <option value="daily_digest">Daily digest email</option>
+        </select>
       </label>
       <div className="border-t border-[var(--border-subtle)] pt-4">
         <Eyebrow>Weekly executive digest</Eyebrow>

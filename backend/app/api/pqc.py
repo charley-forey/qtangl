@@ -217,7 +217,7 @@ def scan_pqc(
     auth: AuthContext = Depends(require_auth),
     idempotency_key: str | None = Header(default=None, alias="Idempotency-Key"),
 ) -> dict:
-    from app.billing.entitlements import check_scan_quota
+    from app.billing.entitlements import check_production_scan_access, record_production_scan_usage
     from app.store.idempotency import cache_scan_id, get_cached_scan_id
 
     if idempotency_key:
@@ -241,7 +241,7 @@ def scan_pqc(
                         **_report_meta_for_scan(cached, tenant_id=auth.tenant_id),
                     }
 
-    quota_error = check_scan_quota(tenant_id=auth.tenant_id)
+    quota_error = check_production_scan_access(tenant_id=auth.tenant_id, use_fixture=request.useFixture)
     if quota_error:
         from app.telemetry.events import track_event
 
@@ -329,6 +329,7 @@ def scan_pqc(
         if not use_worker_queue():
             bundle = run_live()
             save_scan_bundle(bundle.scan_id, bundle, tenant_id=auth.tenant_id)
+            record_production_scan_usage(tenant_id=auth.tenant_id, use_fixture=False)
             if idempotency_key:
                 cache_scan_id(
                     tenant_id=auth.tenant_id,
@@ -359,6 +360,7 @@ def scan_pqc(
             return run_live(on_progress=on_progress)
 
         run_job_async(scan_id, runner, tenant_id=auth.tenant_id)
+        record_production_scan_usage(tenant_id=auth.tenant_id, use_fixture=False)
         if idempotency_key:
             cache_scan_id(tenant_id=auth.tenant_id, idempotency_key=idempotency_key, scan_id=scan_id)
         return {
@@ -686,6 +688,16 @@ def verify_report(scan_id: str, request: Request) -> dict:
         "report_verified",
         properties={"scanId": scan_id, "valid": result.get("valid"), "source": "public_verify"},
     )
+    if result.get("valid"):
+        try:
+            from app.coaching.milestones import record_milestone
+            from app.store.scan_jobs import get_scan_tenant_id
+
+            verify_tenant_id = get_scan_tenant_id(scan_id)
+            if verify_tenant_id:
+                record_milestone(tenant_id=verify_tenant_id, name="firstVerifyAt")
+        except Exception:
+            pass
     _dispatch_verify_webhook(
         scan_id=scan_id,
         valid=bool(result.get("valid")),
@@ -728,6 +740,16 @@ def verify_report_json(body: VerifyReportRequest, request: Request) -> dict:
         },
     )
     scan_id = str(report_json.get("scanId") or "")
+    if scan_id and result.get("valid"):
+        try:
+            from app.coaching.milestones import record_milestone
+            from app.store.scan_jobs import get_scan_tenant_id
+
+            verify_tenant_id = get_scan_tenant_id(scan_id)
+            if verify_tenant_id:
+                record_milestone(tenant_id=verify_tenant_id, name="firstVerifyAt")
+        except Exception:
+            pass
     if scan_id:
         _dispatch_verify_webhook(
             scan_id=scan_id,

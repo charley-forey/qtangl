@@ -4,7 +4,9 @@ import { useEffect, useState } from "react";
 
 import Button from "@/components/ui/Button";
 import Eyebrow from "@/components/ui/Eyebrow";
+import { postDashboardJson } from "@/lib/dashboard-bff";
 import { postTenantJson } from "@/lib/tenant-api";
+import { trackDashboardEvent } from "@/lib/dashboard-analytics";
 
 type PassportScope = "report" | "bundle" | "passport";
 
@@ -20,10 +22,12 @@ export default function PassportPanel({
   scanId,
   apiKey,
   onCreated,
+  useBff = false,
 }: {
   scanId: string;
   apiKey: string;
   onCreated?: (result: ShareResult) => void;
+  useBff?: boolean;
 }) {
   const [open, setOpen] = useState(false);
   const [label, setLabel] = useState("");
@@ -51,12 +55,18 @@ export default function PassportPanel({
     setLoading(true);
     setError(null);
     try {
-      const payload = await postTenantJson<ShareResult>(
-        `/tenant/scans/${encodeURIComponent(scanId)}/share`,
-        apiKey,
-        { label: label.trim(), scope, expiresHours }
-      );
+      const payload = useBff
+        ? await postDashboardJson<ShareResult>(
+            `/tenant/scans/${encodeURIComponent(scanId)}/share`,
+            { label: label.trim(), scope, expiresHours }
+          )
+        : await postTenantJson<ShareResult>(
+            `/tenant/scans/${encodeURIComponent(scanId)}/share`,
+            apiKey,
+            { label: label.trim(), scope, expiresHours }
+          );
       setResult(payload);
+      trackDashboardEvent("passport_created", { scanId, scope });
       onCreated?.(payload);
     } catch (createError) {
       setError(createError instanceof Error ? createError.message : "Failed to create passport.");
@@ -145,7 +155,7 @@ export default function PassportPanel({
               <Button
                 type="button"
                 size="sm"
-                disabled={loading || !apiKey}
+                disabled={loading || (!useBff && !apiKey)}
                 aria-busy={loading}
                 onClick={() => void createPassport()}
               >

@@ -18,21 +18,35 @@ import { useDashboardTab } from "@/hooks/useDashboardTab";
 import { useDashboardCommandActions } from "@/hooks/useDashboardCommandActions";
 import { useSessionExpiryWarning } from "@/hooks/useSessionExpiryWarning";
 import { defaultTabForPersona } from "@/lib/dashboard-state";
+import { roleToPersona, normalizeDashboardRole } from "@/lib/dashboard-persona";
 import type { SettingsTabBundle } from "@/lib/dashboard-state";
 import { dashboardReportUrl, putDashboardJson, type DashboardSession } from "@/lib/dashboard-bff";
 import { resolveRolePolicy } from "@/lib/dashboard-role-policies";
+import UpgradeModal from "@/components/dashboard/UpgradeModal";
+import { useUpgradeGate } from "@/hooks/useUpgradeGate";
 import { useDashboardEvents } from "@/lib/dashboard-events";
 import { trackDashboardEvent } from "@/lib/dashboard-analytics";
 import { getStoredTenantApiKey, setStoredTenantApiKey, tenantReportUrl } from "@/lib/tenant-api";
+import type { PqcScanResponse } from "@/lib/pqc";
 import { qtanglApiBaseUrl } from "@/lib/api";
+import { fetchDashboardJson } from "@/lib/dashboard-bff";
+import { parseDashboardDeepLink, resolveDashboardTabFromDeepLink } from "@/lib/dashboard-deep-links";
 
 const ReportDrawer = dynamic(() => import("@/components/pqc/ReportDrawer"), { loading: () => null });
+const DashboardScanResultsGuide = dynamic(() => import("@/components/dashboard/DashboardScanResultsGuide"), {
+  loading: () => null,
+});
 
 export default function DashboardClient() {
   const searchParams = useSearchParams();
   const scanIdParam = searchParams.get("scanId") ?? "";
   const remediationIdParam = searchParams.get("remediationId");
+  const actionParam = searchParams.get("action");
+  const deepLink = parseDashboardDeepLink(searchParams);
   const welcomeInvite = searchParams.get("welcome") === "invite";
+  const upgradeParam = searchParams.get("upgrade");
+  const checkoutParam = searchParams.get("checkout");
+  const { upgradeOpen, upgradeProduct, openUpgrade, closeUpgrade } = useUpgradeGate();
   const {
     session: contextSession,
     checked,
@@ -54,6 +68,8 @@ export default function DashboardClient() {
   const [tenantSettings, setTenantSettings] = useState<Record<string, unknown> | null>(null);
   const [actionMessage, setActionMessage] = useState<string | null>(null);
   const [reportDrawerOpen, setReportDrawerOpen] = useState(false);
+  const [reportScan, setReportScan] = useState<PqcScanResponse | null>(null);
+  const [reportScanId, setReportScanId] = useState<string | null>(null);
   const [apiKey, setApiKey] = useState("");
   const [savedKey, setSavedKey] = useState<string | null>(null);
   const [bffMode, setBffMode] = useState(false);
@@ -108,21 +124,63 @@ export default function DashboardClient() {
 
   useEffect(() => {
     if (summary) {
-      setPersona(summary.layoutDefaults.persona ?? "operator");
+      const role = normalizeDashboardRole(String(contextSession?.role ?? summary.me.role ?? ""));
+      setPersona(roleToPersona(role));
       if ((tabBundle as SettingsTabBundle | null)?.settings) {
         setTenantSettings((tabBundle as SettingsTabBundle).settings);
       }
     }
-  }, [summary, tabBundle]);
+  }, [summary, tabBundle, contextSession?.role]);
 
   useEffect(() => {
-    if (bffMode && summary) void loadTab(activeTab);
-  }, [activeTab, bffMode, loadTab, summary]);
+    if (!contextSession?.role) return;
+    setActiveTab(defaultTabForPersona(roleToPersona(contextSession.role)));
+    // Set default tab once per session role
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [contextSession?.tenantId, contextSession?.role]);
 
   useEffect(() => {
-    if (scanIdParam) setActiveTab("scans");
-    if (remediationIdParam) setActiveTab("remediate");
-  }, [remediationIdParam, scanIdParam]);
+    if (bffMode && summary) {
+      void loadTab(activeTab, false, activeTab === "remediate" && scanIdParam ? { scanId: scanIdParam } : undefined);
+    }
+  }, [activeTab, bffMode, loadTab, summary, scanIdParam]);
+
+  useEffect(() => {
+    if (bffMode && summary) {
+      trackDashboardEvent("dashboard_loaded", { tab: activeTab });
+    }
+  }, [bffMode, summary?.me.tenantId, activeTab]);
+
+  useEffect(() => {
+    const tab = resolveDashboardTabFromDeepLink(deepLink);
+    if (tab) setActiveTab(tab);
+  }, [deepLink.tab, deepLink.scanId, deepLink.remediationId, deepLink.action]);
+
+  useEffect(() => {
+    if (upgradeParam === "assess") openUpgrade("assess");
+    if (upgradeParam === "monitor") openUpgrade("monitor");
+  }, [openUpgrade, upgradeParam]);
+
+  const loadReportScan = useCallback(async (scanId: string) => {
+    setReportScanId(scanId);
+    try {
+      const payload = await fetchDashboardJson<Record<string, unknown>>(`/tenant/scans/${encodeURIComponent(scanId)}`);
+      if (payload.status === "success" && payload.scanId) {
+        setReportScan(payload as unknown as PqcScanResponse);
+      }
+    } catch {
+      setReportScan(null);
+    }
+  }, []);
+
+  const openReportDrawer = useCallback(
+    (scanId?: string) => {
+      const id = scanId ?? summary?.recentScans.find((s) => s.status === "done")?.scanId;
+      if (id) void loadReportScan(id);
+      setReportDrawerOpen(true);
+    },
+    [loadReportScan, summary?.recentScans]
+  );
 
   useDashboardEvents({
     enabled: bffMode && Boolean(summary),
@@ -138,7 +196,21 @@ export default function DashboardClient() {
         updatedAt: data.updatedAt as string | undefined,
       });
       if (data.status === "done") {
+        const scanId = String(data.scanId ?? "");
         setActionMessage(`Scan complete — readiness ${data.readinessScore ?? "n/a"}`);
+        trackDashboardEvent("scan_complete", { scanId });
+        void loadSummary().then((updated) => {
+          const diff = updated?.latestScanDetail?.scanDiff as { readinessDelta?: number } | null | undefined;
+          const delta = diff?.readinessDelta ?? 0;
+          if (delta !== 0) {
+            setActiveTab("scans");
+          }
+        });
+        openReportDrawer(scanId);
+        const billing = (tenantSettings?.billing as { trialScansUsed?: number; assessPaidAt?: string | null }) ?? {};
+        if (!billing.assessPaidAt && Number(billing.trialScansUsed ?? 0) >= 0) {
+          openUpgrade("assess");
+        }
         invalidateTab("scans");
         invalidateTab("remediate");
       }
@@ -168,18 +240,7 @@ export default function DashboardClient() {
     setTenantSettings(next);
   }, [tenantSettings]);
 
-  const savePersona = useCallback(async (nextPersona: DashboardPersona) => {
-    setPersona(nextPersona);
-    setActiveTab(defaultTabForPersona(nextPersona));
-    const next = {
-      ...(tenantSettings ?? {}),
-      dashboardLayout: { ...((tenantSettings?.dashboardLayout as object) ?? {}), persona: nextPersona },
-    };
-    await putDashboardJson("/tenant/settings", { settings: next });
-    setTenantSettings(next);
-  }, [tenantSettings]);
-
-  const sessionRole = contextSession?.role ?? summary?.me.role;
+  const sessionRole = normalizeDashboardRole(String(contextSession?.role ?? summary?.me.role ?? ""));
   const canWrite = capabilities?.canWrite ?? (sessionRole === "admin" || sessionRole === "operator");
   const canAdmin = capabilities?.canAdmin ?? sessionRole === "admin";
   const rolePolicy = useMemo(
@@ -260,7 +321,7 @@ export default function DashboardClient() {
           sessionWarning={expiring ? sessionWarning : null}
           reportUrlForScan={reportUrlForScan}
           rolePolicy={rolePolicy}
-          onPersonaChange={savePersona}
+          sessionRole={sessionRole}
           onTabChange={(tab) => {
             setActiveTab(tab);
             trackDashboardEvent("dashboard_tab_changed", { tab });
@@ -279,6 +340,9 @@ export default function DashboardClient() {
             await putDashboardJson("/tenant/settings", { settings: next });
             setTenantSettings(next);
           }}
+          onRefreshAlerts={() => void loadSummary()}
+          tenantSettings={tenantSettings}
+          onSettingsChange={setTenantSettings}
         >
           <DashboardTabRouter
             activeTab={activeTab}
@@ -291,13 +355,14 @@ export default function DashboardClient() {
             canAdmin={canAdmin}
             canManageKeys={capabilities?.canManageKeys ?? canAdmin}
             canInvite={capabilities?.canInvite}
-            sessionRole={typeof sessionRole === "string" ? sessionRole : "viewer"}
+            sessionRole={sessionRole}
             rolePolicy={rolePolicy}
             dashboardSession={dashboardSession}
             tenantSettings={tenantSettings}
             welcomeInvite={welcomeInvite}
             scanIdParam={scanIdParam}
             remediationIdParam={remediationIdParam}
+            actionParam={actionParam}
             apiKey={apiKey}
             loading={loading}
             reportUrlForScan={reportUrlForScan}
@@ -317,28 +382,47 @@ export default function DashboardClient() {
               setSavedKey(apiKey);
               setBffMode(false);
             }}
-            onOpenComplianceReport={() => {
-              setReportDrawerOpen(true);
-            }}
-            onOpenReport={() => {
-              setReportDrawerOpen(true);
-            }}
+            onOpenComplianceReport={() => openReportDrawer()}
+            onOpenReport={(scanId) => openReportDrawer(scanId)}
             onRefreshMonitor={() => void loadTab("monitor", true)}
             onPortfolioSwitch={() => {
               bffBootstrappedKeyRef.current = null;
               void refreshSession().then(() => loadSummary());
               invalidateTab("portfolio");
             }}
+            onOpenUpgrade={openUpgrade}
+            checkoutSuccess={checkoutParam}
           />
         </DashboardShell>
       ) : null}
+      <UpgradeModal
+        open={upgradeOpen}
+        product={upgradeProduct}
+        onClose={closeUpgrade}
+        onMessage={setActionMessage}
+        salesLed={Boolean(tenantSettings?.salesLed)}
+      />
       <ReportDrawer
         open={reportDrawerOpen}
         onClose={() => setReportDrawerOpen(false)}
-        scan={null}
-        reportStatus="checking"
-        missingReason={null}
+        scan={reportScan}
+        reportStatus={reportScan ? "ready" : "checking"}
+        missingReason={reportScan ? null : "Loading scan report…"}
       />
+      {reportDrawerOpen && reportScanId && reportScan ? (
+        <div className="fixed bottom-4 right-4 z-[60] max-w-md">
+          <DashboardScanResultsGuide
+            scanId={reportScanId}
+            readinessScore={reportScan.scoreboard?.qtangl?.readiness_score}
+            readinessBand={reportScan.readinessBand}
+            onTabChange={(tab) => {
+              setReportDrawerOpen(false);
+              setActiveTab(tab as DashboardTabId);
+            }}
+            onOpenUpgrade={openUpgrade}
+          />
+        </div>
+      ) : null}
     </div>
   );
 

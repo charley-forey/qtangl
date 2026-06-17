@@ -1,4 +1,5 @@
 import KpiCard from "@/components/dashboard/ui/KpiCard";
+import InfoTip from "@/components/pqc/InfoTip";
 import { formatUtcDateTime } from "@/lib/format";
 
 export type DashboardKpiData = {
@@ -22,11 +23,12 @@ export default function DashboardKpiStrip({ kpis }: { kpis: DashboardKpiData }) 
     (kpis.openCritical ?? 0) > 0 ? ("critical" as const) : ("default" as const);
 
   return (
-    <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+    <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4" data-tour="kpi-strip">
       <KpiCard
         label="Readiness"
         value={readiness}
         hint={kpis.latestBand ?? undefined}
+        hintExtra={<InfoTip termId="readiness_band" />}
         delta={delta}
       />
       <KpiCard
