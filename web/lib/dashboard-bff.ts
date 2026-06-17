@@ -31,9 +31,12 @@ export type DashboardMeResponse = {
   session?: DashboardSession;
   capabilities?: DashboardCapabilities;
   onboarding?: DashboardOnboarding;
+  credentialsReady?: boolean;
   reason?: "no_membership" | "bff_secret_missing" | "database_unavailable" | "workos_user_missing";
   workosSignedIn?: boolean;
 };
+
+export const DASHBOARD_SIGN_OUT_URL = "/api/dashboard/sign-out";
 
 let inferredWorkosAuth = false;
 

@@ -6,8 +6,8 @@ Use this checklist before each pilot release or WorkOS configuration change.
 
 - [ ] Vercel: `QTANGL_DASHBOARD_AUTH_WORKOS=true` and `NEXT_PUBLIC_QTANGL_DASHBOARD_AUTH_WORKOS=true`
 - [ ] Vercel + Railway: `QTANGL_BFF_SESSION_SECRET` matches exactly
-- [ ] `GET /api/dashboard/auth-health` — all booleans true, `hasBffSessionSecret: true`, `clientWorkosFlagSet: true`
-- [ ] WorkOS webhook delivers `organization_membership.*` events to Railway
+- [ ] `GET /api/dashboard/auth-health` — all booleans true, `hasBffSessionSecret: true`, `bffSecretMatchesBackend: true`, `clientWorkosFlagSet: true`
+- [ ] WorkOS webhook delivers `organization_membership.*` and `invitation.accepted` to `POST /public/workos/webhook` on Railway
 
 ## Signup / invite
 
@@ -22,13 +22,14 @@ Use this checklist before each pilot release or WorkOS configuration change.
 - [ ] SSO org → same behavior
 - [ ] After callback, `?session=refresh` triggers session re-bootstrap
 - [ ] Tenant switcher changes data without full reload
-- [ ] Sign out clears cookies and returns to sign-in
+- [ ] Sign out (navbar, error card, or workspace header) navigates to `/api/dashboard/sign-out` → login page; user stays signed out
 
 ## Session → data chain
 
-- [ ] `GET /api/dashboard/me` → `authenticated: true` with `tenantId`, `role`, `capabilities`
+- [ ] `GET /api/dashboard/me` → `authenticated: true` with `tenantId`, `role`, `capabilities`, `credentialsReady: true`
 - [ ] `GET /api/dashboard/tenant/dashboard/summary` → 200 with `kpis`, `recentScans`
-- [ ] `GET /api/dashboard/session-debug` → `hasAssertionCookie: true`, `summaryOk: true` (when signed in)
+- [ ] `GET /api/dashboard/session-debug` → `credentialsReady: true`, `summaryOk: true` (when signed in)
+- [ ] Dashboard does not flash between loading skeleton and error (stable state on credential failure)
 - [ ] Signed-in user with no membership sees **No workspace linked** (not marketing landing)
 
 ## Data visibility
@@ -62,4 +63,4 @@ See [dashboard-team-roles.md](./dashboard-team-roles.md) for admin workflow deta
 - [ ] `pytest backend/tests/test_tenant_dashboard.py`
 - [ ] `npx playwright test web/tests/e2e/dashboard-authenticated.spec.ts`
 - [ ] `npx playwright test web/tests/e2e/dashboard-no-membership.spec.ts`
-- [ ] `npx playwright test web/tests/e2e/dashboard-role-gating.spec.ts`
+- [ ] `npx playwright test web/tests/e2e/dashboard-logout.spec.ts`

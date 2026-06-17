@@ -21,13 +21,27 @@
 
 ## Signed in but empty dashboard
 
-1. `GET /api/dashboard/auth-health` — confirm `clientWorkosFlagSet`, `hasBffSessionSecret`, `bootstrapReachable`.
+1. `GET /api/dashboard/auth-health` — confirm `clientWorkosFlagSet`, `hasBffSessionSecret`, `bffSecretMatchesBackend`, `bootstrapReachable`.
 2. DevTools → `GET /api/dashboard/me` after login:
    - `authenticated: false` + `reason: no_membership` → user needs invite or pending invite link on bootstrap.
-   - `reason: bff_secret_missing` → set matching secret on Vercel + Railway.
-3. `GET /api/dashboard/tenant/dashboard/summary` → expect 200; if 401, sign out and sign in again (session assertion cookie).
-4. `GET /api/dashboard/session-debug` (while signed in) — `hasAssertionCookie` and `summaryOk` should be true.
-5. UI should show KPI strip or an explicit error card — never a duplicate marketing landing after sign-in.
+   - `reason: bff_secret_missing` or `credentialsReady: false` → set matching `QTANGL_BFF_SESSION_SECRET` on Vercel + Railway.
+3. `GET /api/dashboard/tenant/dashboard/summary` → expect 200; if 401, use **Sign out** then sign in again (session cookies re-minted on bootstrap).
+4. `GET /api/dashboard/session-debug` (while signed in) — `credentialsReady` and `summaryOk` should be true; follow `recommendedAction` if present.
+5. UI should show KPI strip or a stable error card — never a flashing skeleton/error loop or duplicate marketing landing after sign-in.
+
+## WorkOS webhooks (membership linking)
+
+Configure WorkOS to POST to:
+
+`https://<railway-api-host>/public/workos/webhook`
+
+Required events:
+
+- `organization_membership.created`
+- `organization_membership.deleted`
+- `invitation.accepted`
+
+Set `WORKOS_WEBHOOK_SECRET` on Railway to match the WorkOS dashboard signing secret. Without webhooks, invited users may sign in but see **No workspace linked** until bootstrap links a pending `TenantInvite`.
 
 See [dashboard-auth-validation.md](../guides/dashboard-auth-validation.md) for the full release checklist.
 
@@ -37,7 +51,7 @@ See [dashboard-auth-validation.md](../guides/dashboard-auth-validation.md) for t
 |-------|-----|
 | WorkOS AuthKit session | 8h sliding (WorkOS default) |
 | BFF `X-Qtangl-Session` assertion | 8h (`BFF_SESSION_TTL_SECONDS`) |
-| Dashboard session keys | 15 min |
+| Dashboard session keys | 8h (aligned with assertion) |
 
 ## Offboarding an employee
 
@@ -48,7 +62,7 @@ See [dashboard-auth-validation.md](../guides/dashboard-auth-validation.md) for t
 ## Session expiry (operators)
 
 - The dashboard shows a **session expired** banner when BFF calls return `401`.
-- Users should use **Sign out** and re-authenticate via `/dashboard/login`.
+- Users should use **Sign out** in the navbar, workspace header, or error card — navigates to `/api/dashboard/sign-out` and clears WorkOS + Qtangl cookies.
 - Proactive warning is enabled for WorkOS BFF mode via client-side fetch interception.
 
 ## Weekly digest / board export email (SMTP)

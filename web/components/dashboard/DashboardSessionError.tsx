@@ -3,6 +3,7 @@
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
 import Eyebrow from "@/components/ui/Eyebrow";
+import { useDashboardSession } from "@/components/dashboard/dashboard-session-context";
 import type { DashboardMeResponse } from "@/lib/dashboard-bff";
 
 const REASON_COPY: Record<
@@ -16,7 +17,7 @@ const REASON_COPY: Record<
   },
   bff_secret_missing: {
     title: "Dashboard auth misconfigured",
-    body: "The BFF session secret is not set on the web app. Operations must configure QTANGL_BFF_SESSION_SECRET to match the API.",
+    body: "The workspace API session could not be established. Ensure QTANGL_BFF_SESSION_SECRET is set on Railway and Vercel with the same value, then sign out and sign in again.",
     cta: { label: "Check auth health", href: "/api/dashboard/auth-health" },
   },
   database_unavailable: {
@@ -32,9 +33,22 @@ const REASON_COPY: Record<
 
 function formatSummaryError(message: string): string {
   if (message.includes("Missing credentials")) {
-    return "Your sign-in succeeded, but the workspace API session was not established. Ensure QTANGL_BFF_SESSION_SECRET is set on Railway and matches Vercel, then sign in again. Auth diagnostics shows whether session cookies are present.";
+    return "Your sign-in succeeded, but the workspace API session was not established. Ensure QTANGL_BFF_SESSION_SECRET is set on Railway and matches Vercel, then sign out and sign in again.";
   }
   return message;
+}
+
+function SignOutButton() {
+  const { signOut } = useDashboardSession();
+  return (
+    <button
+      type="button"
+      onClick={() => signOut()}
+      className="touch-target relative inline-flex h-10 items-center justify-center gap-2 overflow-hidden rounded-full border border-[var(--border)] bg-white/[0.02] px-4 text-sm font-medium text-white transition duration-300 hover:-translate-y-0.5 hover:border-[var(--border-strong)] hover:bg-white/[0.05]"
+    >
+      Sign out
+    </button>
+  );
 }
 
 export default function DashboardSessionError({
@@ -55,6 +69,7 @@ export default function DashboardSessionError({
           <Button href="/api/dashboard/auth-health" variant="secondary" size="sm">
             Auth diagnostics
           </Button>
+          <SignOutButton />
           {workosEnabled ? (
             <Button href="/dashboard/login" size="sm">
               Sign in again
@@ -81,6 +96,7 @@ export default function DashboardSessionError({
             {copy.cta.label}
           </Button>
         ) : null}
+        <SignOutButton />
         <Button href="/api/dashboard/auth-health" variant="secondary" size="sm">
           Auth diagnostics
         </Button>

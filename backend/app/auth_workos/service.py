@@ -94,6 +94,10 @@ def invite_user(
         if tenant is None:
             return None
         if not tenant.workos_org_id:
+            org_id = create_organization(tenant_id=tenant_id, name=tenant.name)
+            if org_id:
+                tenant = session.get(Tenant, tenant_id)
+        if not tenant or not tenant.workos_org_id:
             row_id = f"inv-{uuid.uuid4().hex[:12]}"
             existing = (
                 session.query(TenantInvite)

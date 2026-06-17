@@ -26,7 +26,15 @@ type Invite = {
   status: string;
 };
 
-export default function TeamSettingsPanel({ role }: { role?: string }) {
+export default function TeamSettingsPanel({
+  role,
+  canInvite = true,
+  tier = "monitor",
+}: {
+  role?: string;
+  canInvite?: boolean;
+  tier?: string;
+}) {
   const [members, setMembers] = useState<Member[]>([]);
   const [invites, setInvites] = useState<Invite[]>([]);
   const [email, setEmail] = useState("");
@@ -57,9 +65,17 @@ export default function TeamSettingsPanel({ role }: { role?: string }) {
     );
   }
 
+  const invitesBlocked = !canInvite || tier === "free";
+
   return (
     <Card tone="ghost" className="border border-[var(--border-subtle)]">
       <Eyebrow>Team members</Eyebrow>
+      {invitesBlocked ? (
+        <p className="mt-2 text-sm text-amber-200/90">
+          Team invites require a <strong className="text-white">Monitor</strong> plan or above. Upgrade under
+          Workspace settings, then return here to invite colleagues.
+        </p>
+      ) : null}
       <ul className="mt-3 space-y-2 text-sm">
         {members.map((member) => (
           <li key={member.membershipId} className="flex flex-wrap items-center justify-between gap-2 border-t border-[var(--border-subtle)] pt-2">
@@ -121,11 +137,13 @@ export default function TeamSettingsPanel({ role }: { role?: string }) {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder="colleague@company.com"
+          disabled={invitesBlocked}
         />
         <select
           className="rounded border border-[var(--border-subtle)] bg-transparent px-3 py-2 text-sm"
           value={inviteRole}
           onChange={(e) => setInviteRole(e.target.value)}
+          disabled={invitesBlocked}
         >
           <option value="admin">admin</option>
           <option value="operator">operator</option>
@@ -133,7 +151,8 @@ export default function TeamSettingsPanel({ role }: { role?: string }) {
         </select>
         <button
           type="button"
-          className="rounded-full bg-white px-4 py-2 text-xs font-medium text-black"
+          disabled={invitesBlocked || !email.trim()}
+          className="rounded-full bg-white px-4 py-2 text-xs font-medium text-black disabled:cursor-not-allowed disabled:opacity-40"
           onClick={async () => {
             setError(null);
             try {

@@ -16,7 +16,7 @@ from app.db.engine import db_session
 from app.db.models import DashboardSessionKey, TenantMembership, User
 
 BFF_SESSION_TTL_SECONDS = 8 * 3600
-SESSION_KEY_TTL_SECONDS = 15 * 60
+SESSION_KEY_TTL_SECONDS = 8 * 3600
 
 
 @dataclass(slots=True)

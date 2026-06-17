@@ -4,6 +4,7 @@ import Card from "@/components/ui/Card";
 import Eyebrow from "@/components/ui/Eyebrow";
 import DashboardLanding from "@/components/dashboard/DashboardLanding";
 import { useDashboardSession } from "@/components/dashboard/dashboard-session-context";
+import DashboardSessionError from "@/components/dashboard/DashboardSessionError";
 import { legacyKeyClientEnabled } from "@/lib/dashboard-bff";
 
 export default function DashboardAuthGate({
@@ -24,7 +25,9 @@ export default function DashboardAuthGate({
   }
 
   if (sessionReason) {
-    return <>{children}</>;
+    return (
+      <DashboardSessionError reason={sessionReason} workosEnabled={workosEnabled} />
+    );
   }
 
   const ssoRequired = requireSso;

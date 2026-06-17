@@ -138,7 +138,8 @@ def test_bff_session_auth_header(client: TestClient):
     assert body["authMethod"] == "bff_session"
 
 
-def test_bootstrap_no_membership(client: TestClient):
+def test_bootstrap_no_membership(client: TestClient, monkeypatch: pytest.MonkeyPatch):
+    monkeypatch.setenv("QTANGL_DASHBOARD_SELF_SERVE_SIGNUP", "false")
     response = client.get(
         "/internal/dashboard/bootstrap",
         params={"workos_user_id": "user_none", "email": "none@example.com"},

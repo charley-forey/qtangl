@@ -15,6 +15,7 @@ import { postDashboardJson, putDashboardJson } from "@/lib/dashboard-bff";
 const AlertSettings = dynamic(() => import("@/components/dashboard/AlertSettings"));
 const AuditLogPanel = dynamic(() => import("@/components/dashboard/AuditLogPanel"));
 const TeamSettingsPanel = dynamic(() => import("@/components/dashboard/TeamSettingsPanel"));
+const WorkspaceSettingsPanel = dynamic(() => import("@/components/dashboard/WorkspaceSettingsPanel"));
 const ApiKeysPanel = dynamic(() => import("@/components/dashboard/ApiKeysPanel"));
 
 type Props = {
@@ -23,7 +24,10 @@ type Props = {
   bffMode: boolean;
   canAdmin: boolean;
   canManageKeys: boolean;
+  canInvite?: boolean;
   sessionRole: string;
+  tenantName?: string;
+  tier?: string;
   persona: DashboardPersona;
   apiKey: string;
   loading: boolean;
@@ -39,7 +43,10 @@ export default function DashboardSettingsTab({
   bffMode,
   canAdmin,
   canManageKeys,
+  canInvite,
   sessionRole,
+  tenantName,
+  tier,
   persona,
   apiKey,
   loading,
@@ -86,7 +93,13 @@ export default function DashboardSettingsTab({
 
       {canAdmin && bffMode ? (
         <>
-          <TeamSettingsPanel role={sessionRole} />
+          <WorkspaceSettingsPanel
+            tenantName={tenantName}
+            tier={tier}
+            canInvite={canInvite}
+            onMessage={onMessage}
+          />
+          <TeamSettingsPanel role={sessionRole} canInvite={canInvite} tier={tier} />
           <Card tone="panel">
             <Eyebrow>Enterprise SSO</Eyebrow>
             <button

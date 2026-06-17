@@ -1,6 +1,7 @@
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
+import { clearQtanglSessionCookies } from "@/lib/auth/dashboard-session-cookies";
 import {
   ACTIVE_TENANT_COOKIE,
   bffSessionSecret,
@@ -106,7 +107,7 @@ async function bootstrapFromBackend(
   return { ok: true, data: (await response.json()) as BootstrapResponse };
 }
 
-const SESSION_KEY_MAX_AGE_SECONDS = 15 * 60;
+const SESSION_KEY_MAX_AGE_SECONDS = 8 * 3600;
 
 function applySessionCookies(response: NextResponse, bootstrap: BootstrapResponse) {
   if (bootstrap.sessionAssertion) {
@@ -243,6 +244,9 @@ export async function POST(request: NextRequest) {
     authenticated: true,
     session: sessionPayload(bootstrap.data),
     capabilities: bootstrap.data.capabilities ?? capabilitiesFromRole(bootstrap.data.role),
+    credentialsReady: Boolean(
+      bootstrap.data.sessionAssertion || bootstrap.data.sessionKey?.sessionKey
+    ),
   });
   applySessionCookies(response, bootstrap.data);
   return response;
@@ -250,14 +254,11 @@ export async function POST(request: NextRequest) {
 
 export async function DELETE() {
   const response = NextResponse.json({ ok: true });
-  response.cookies.delete(SESSION_ASSERTION_COOKIE);
-  response.cookies.delete(SESSION_KEY_COOKIE);
-  response.cookies.delete(ACTIVE_TENANT_COOKIE);
-  response.cookies.delete("qtangl_session");
+  clearQtanglSessionCookies(response);
   if (workosAuthEnabled()) {
     try {
       const { signOut } = await import("@workos-inc/authkit-nextjs");
-      await signOut();
+      await signOut({ returnTo: "/dashboard/login" });
     } catch {
       /* ignore */
     }

@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import Modal from "@/components/ui/Modal";
-import NavbarAccountMenu from "@/components/dashboard/NavbarAccountMenu";
+import NavbarAccountMenu, { NavbarMobileAccountActions } from "@/components/dashboard/NavbarAccountMenu";
 import { footerCopy, footerNav, nav, navbarCopy } from "@/lib/copy/nav";
 import { navCta } from "@/lib/siteConfig";
 
@@ -207,6 +207,8 @@ export default function Navbar() {
           >
             {navCta.name}
           </Link>
+          <div className="hairline-divider" />
+          <NavbarMobileAccountActions onNavigate={() => setOpen(false)} />
           <div className="hairline-divider" />
           <div className="space-y-2">
             <p className="px-3 text-xs uppercase tracking-[0.22em] text-[var(--color-gray-500)]">

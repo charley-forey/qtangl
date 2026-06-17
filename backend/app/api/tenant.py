@@ -72,6 +72,10 @@ class TenantSettingsRequest(BaseModel):
     industry: str | None = None
 
 
+class TenantWorkspacePatchRequest(BaseModel):
+    name: str = Field(min_length=1, max_length=120)
+
+
 class AuthorizedDomainsRequest(BaseModel):
     domains: list[str] = Field(default_factory=list, max_length=50)
     attestation: str = Field(min_length=10, max_length=4000)
@@ -662,6 +666,26 @@ def tenant_settings_put(
     saved = upsert_tenant_settings(tenant_id=auth.tenant_id, settings=current)
     log_action(tenant_id=auth.tenant_id, action="settings.update", detail=updates)
     return {"status": "success", "settings": saved}
+
+
+@router.patch("/workspace")
+def tenant_workspace_patch(
+    body: TenantWorkspacePatchRequest,
+    auth: AuthContext = Depends(require_auth_admin),
+) -> dict:
+    from app.db.engine import db_session
+    from app.db.models import Tenant
+
+    if not persistence_enabled():
+        raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail="Database unavailable.")
+    name = body.name.strip()
+    with db_session() as session:
+        tenant = session.get(Tenant, auth.tenant_id)
+        if tenant is None:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Tenant not found.")
+        tenant.name = name
+    log_action(tenant_id=auth.tenant_id, action="workspace.rename", detail={"name": name})
+    return {"status": "success", "tenantId": auth.tenant_id, "tenantName": name}
 
 
 @router.get("/authorized-domains")

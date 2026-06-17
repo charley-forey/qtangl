@@ -25,13 +25,14 @@ async function resolveWorkosUserId(): Promise<string | null> {
   }
 }
 
-/** Admin-only session diagnostics (no secrets). */
+/** Session diagnostics (no secrets). */
 export async function GET() {
   const cookieStore = await cookies();
   const hasAssertionCookie = Boolean(cookieStore.get(SESSION_ASSERTION_COOKIE)?.value);
   const hasSessionKeyCookie = Boolean(cookieStore.get(SESSION_KEY_COOKIE)?.value);
   const activeTenantId = cookieStore.get(ACTIVE_TENANT_COOKIE)?.value ?? null;
   const workosUserId = await resolveWorkosUserId();
+  const credentialsReady = hasAssertionCookie || hasSessionKeyCookie;
 
   let bootstrapOk: boolean | null = null;
   let summaryOk: boolean | null = null;
@@ -52,7 +53,7 @@ export async function GET() {
     }
   }
 
-  if ((hasAssertionCookie || hasSessionKeyCookie) && activeTenantId) {
+  if (credentialsReady && activeTenantId) {
     try {
       const upstreamHeaders: Record<string, string> = {};
       const assertion = cookieStore.get(SESSION_ASSERTION_COOKIE)?.value;
@@ -75,12 +76,22 @@ export async function GET() {
     }
   }
 
+  let recommendedAction: string | null = null;
+  if (workosUserId && !credentialsReady) {
+    recommendedAction =
+      "Set QTANGL_BFF_SESSION_SECRET on Railway and Vercel (same value), redeploy, then sign out and sign in.";
+  } else if (credentialsReady && summaryOk === false) {
+    recommendedAction = "Session cookies present but summary failed — check Railway API health and membership.";
+  }
+
   return NextResponse.json({
     hasAssertionCookie,
     hasSessionKeyCookie,
+    credentialsReady,
     activeTenantId,
     bootstrapOk,
     summaryOk,
     workosAuthenticated: Boolean(workosUserId),
+    recommendedAction,
   });
 }

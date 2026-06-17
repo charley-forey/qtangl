@@ -2,7 +2,7 @@
 
 import dynamic from "next/dynamic";
 import { useSearchParams } from "next/navigation";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { QtanglProvider } from "@qtangl/sdk-react";
 
 import Card from "@/components/ui/Card";
@@ -41,7 +41,11 @@ export default function DashboardClient() {
     workosEnabled,
     refreshSession,
     sessionReady,
+    credentialsReady,
   } = useDashboardSession();
+
+  const tenantId = contextSession?.tenantId;
+  const userId = contextSession?.userId;
 
   const [activeTab, setActiveTab] = useState<DashboardTabId>("overview");
   const [persona, setPersona] = useState<DashboardPersona>("operator");
@@ -53,6 +57,9 @@ export default function DashboardClient() {
   const [apiKey, setApiKey] = useState("");
   const [savedKey, setSavedKey] = useState<string | null>(null);
   const [bffMode, setBffMode] = useState(false);
+  const [bffConnected, setBffConnected] = useState(false);
+
+  const bffBootstrappedKeyRef = useRef<string | null>(null);
 
   const { summary, loading, error, scanProgress, loadSummary, patchScan } = useDashboardSummary();
   const { bundle: tabBundle, loadTab, invalidateTab } = useDashboardTab(activeTab);
@@ -62,22 +69,33 @@ export default function DashboardClient() {
     await loadSummary();
   }, [refreshSession, loadSummary]);
 
-  const { expiring, message: sessionWarning } = useSessionExpiryWarning(bffMode, retrySessionAndSummary);
+  const { expiring, message: sessionWarning } = useSessionExpiryWarning(
+    bffConnected,
+    retrySessionAndSummary
+  );
 
   const connectBff = useCallback(async () => {
     setBffMode(true);
     setSavedKey("bff");
-    await refreshSession();
     await loadSummary();
-  }, [loadSummary, refreshSession]);
+    setBffConnected(true);
+  }, [loadSummary]);
 
   useEffect(() => {
     if (contextSession) setDashboardSession(contextSession);
   }, [contextSession]);
 
   useEffect(() => {
-    if (contextSession && sessionReady) void connectBff();
-  }, [contextSession, sessionReady, connectBff]);
+    if (!tenantId || !sessionReady || !credentialsReady) {
+      return;
+    }
+    const bootstrapKey = `${tenantId}:${userId ?? ""}`;
+    if (bffBootstrappedKeyRef.current === bootstrapKey) {
+      return;
+    }
+    bffBootstrappedKeyRef.current = bootstrapKey;
+    void connectBff();
+  }, [tenantId, userId, sessionReady, credentialsReady, connectBff]);
 
   useEffect(() => {
     const stored = getStoredTenantApiKey();
@@ -181,6 +199,15 @@ export default function DashboardClient() {
     );
   }
 
+  if (contextSession && credentialsReady === false) {
+    return (
+      <DashboardSessionError
+        reason="bff_secret_missing"
+        workosEnabled={workosEnabled}
+      />
+    );
+  }
+
   if (contextSession && !summary) {
     if (loading) {
       return (
@@ -207,7 +234,7 @@ export default function DashboardClient() {
     );
   }
 
-  if (!contextSession && sessionReason && workosEnabled) {
+  if (!contextSession && sessionReason && !workosEnabled) {
     return <DashboardSessionError reason={sessionReason} workosEnabled={workosEnabled} />;
   }
 
@@ -262,6 +289,7 @@ export default function DashboardClient() {
             canWrite={canWrite}
             canAdmin={canAdmin}
             canManageKeys={capabilities?.canManageKeys ?? canAdmin}
+            canInvite={capabilities?.canInvite}
             sessionRole={typeof sessionRole === "string" ? sessionRole : "viewer"}
             rolePolicy={rolePolicy}
             dashboardSession={dashboardSession}
@@ -296,7 +324,8 @@ export default function DashboardClient() {
             }}
             onRefreshMonitor={() => void loadTab("monitor", true)}
             onPortfolioSwitch={() => {
-              void loadSummary();
+              bffBootstrappedKeyRef.current = null;
+              void refreshSession().then(() => loadSummary());
               invalidateTab("portfolio");
             }}
           />

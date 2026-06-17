@@ -32,6 +32,7 @@ type Props = {
   canWrite: boolean;
   canAdmin: boolean;
   canManageKeys?: boolean;
+  canInvite?: boolean;
   sessionRole: string;
   rolePolicy: RolePolicy;
   dashboardSession: DashboardSession | null;
@@ -66,6 +67,7 @@ export default function DashboardTabRouter(props: Props) {
     canWrite,
     canAdmin,
     canManageKeys,
+    canInvite,
     sessionRole,
     rolePolicy,
     dashboardSession,
@@ -150,7 +152,13 @@ export default function DashboardTabRouter(props: Props) {
           bffMode={bffMode}
           canAdmin={canAdmin}
           canManageKeys={canManageKeys ?? canAdmin}
+          canInvite={canInvite}
           sessionRole={sessionRole}
+          tenantName={
+            (dashboardSession?.tenantName as string | undefined) ??
+            (summary.me.tenantName as string | undefined)
+          }
+          tier={String((summary.me.entitlements as { tier?: string })?.tier ?? "free")}
           persona={persona}
           apiKey={apiKey}
           loading={loading}
@@ -171,6 +179,7 @@ export default function DashboardTabRouter(props: Props) {
     bffMode,
     canAdmin,
     canManageKeys,
+    canInvite,
     canWrite,
     dashboardSession,
     loading,

@@ -69,6 +69,7 @@ test.describe("Dashboard authenticated (mocked BFF)", () => {
           body: JSON.stringify({
             authenticated: true,
             authMethod: "workos",
+            credentialsReady: true,
             session: {
               email: "admin@test.com",
               tenantId: "tenant-test",

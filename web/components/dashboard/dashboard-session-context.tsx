@@ -12,6 +12,7 @@ import {
 import { useSearchParams } from "next/navigation";
 
 import {
+  DASHBOARD_SIGN_OUT_URL,
   fetchDashboardMe,
   setInferredWorkosAuth,
   workosClientAuthEnabled,
@@ -25,12 +26,13 @@ type DashboardSessionContextValue = {
   session: DashboardSession | null;
   checked: boolean;
   sessionReady: boolean;
+  credentialsReady: boolean;
   workosEnabled: boolean;
   sessionReason?: DashboardMeResponse["reason"];
   capabilities: DashboardCapabilities | null;
   onboarding: DashboardOnboarding | null;
   refreshSession: () => Promise<DashboardMeResponse>;
-  signOut: () => Promise<void>;
+  signOut: () => void;
 };
 
 const DashboardSessionContext = createContext<DashboardSessionContextValue | null>(null);
@@ -43,6 +45,7 @@ export function DashboardSessionProvider({ children }: { children: ReactNode }) 
   const [sessionReason, setSessionReason] = useState<DashboardMeResponse["reason"]>();
   const [capabilities, setCapabilities] = useState<DashboardCapabilities | null>(null);
   const [onboarding, setOnboarding] = useState<DashboardOnboarding | null>(null);
+  const [credentialsReady, setCredentialsReady] = useState(false);
   const [workosEnabled, setWorkosEnabled] = useState(workosClientAuthEnabled());
 
   const refreshSession = useCallback(async (): Promise<DashboardMeResponse> => {
@@ -60,12 +63,14 @@ export function DashboardSessionProvider({ children }: { children: ReactNode }) 
         setSessionReason(legacySession ? undefined : "workos_user_missing");
         setCapabilities(null);
         setOnboarding(null);
+        setCredentialsReady(Boolean(legacySession));
         setWorkosEnabled(false);
         setSessionReady(true);
         return { authenticated: Boolean(legacySession), session: legacySession ?? undefined };
       } catch {
         setSession(null);
         setSessionReason("workos_user_missing");
+        setCredentialsReady(false);
         setSessionReady(true);
         return { authenticated: false, reason: "workos_user_missing" };
       }
@@ -80,20 +85,26 @@ export function DashboardSessionProvider({ children }: { children: ReactNode }) 
     setSessionReason(payload.authenticated ? undefined : payload.reason);
     setCapabilities(payload.capabilities ?? null);
     setOnboarding(payload.onboarding ?? null);
+    setCredentialsReady(
+      payload.authenticated
+        ? payload.credentialsReady !== false
+        : false
+    );
     setSessionReady(true);
     return payload;
   }, [searchParams]);
 
-  const signOut = useCallback(async () => {
-    if (workosEnabled || workosClientAuthEnabled()) {
-      await fetch("/api/dashboard/me", { method: "DELETE" });
-    } else {
-      await fetch("/api/auth/session", { method: "DELETE" });
+  const signOut = useCallback(() => {
+    if (typeof window !== "undefined") {
+      sessionStorage.removeItem("qtangl_onboarding_token");
     }
-    setSession(null);
-    setCapabilities(null);
-    setOnboarding(null);
-    window.location.href = "/dashboard";
+    if (workosEnabled || workosClientAuthEnabled()) {
+      window.location.href = DASHBOARD_SIGN_OUT_URL;
+      return;
+    }
+    void fetch("/api/auth/session", { method: "DELETE" }).finally(() => {
+      window.location.href = "/dashboard/login";
+    });
   }, [workosEnabled]);
 
   useEffect(() => {
@@ -115,6 +126,7 @@ export function DashboardSessionProvider({ children }: { children: ReactNode }) 
       session,
       checked,
       sessionReady,
+      credentialsReady,
       workosEnabled,
       sessionReason,
       capabilities,
@@ -126,6 +138,7 @@ export function DashboardSessionProvider({ children }: { children: ReactNode }) 
       session,
       checked,
       sessionReady,
+      credentialsReady,
       workosEnabled,
       sessionReason,
       capabilities,

@@ -401,6 +401,13 @@ def provision_dashboard_workspace(*, user_id: str, email: str, name: str | None 
     upsert_tenant_subscription(tenant_id=tenant_id, tier="free")
     issue_api_key(tenant_id=tenant_id, label="dashboard-primary", role="admin")
 
+    try:
+        from app.auth_workos.service import create_organization
+
+        create_organization(tenant_id=tenant_id, name=company)
+    except Exception as exc:
+        logger.warning("WorkOS org creation skipped for self-serve tenant=%s: %s", tenant_id, exc)
+
     mem_id = f"mem-{uuid.uuid4().hex[:12]}"
     with db_session() as session:
         session.add(
