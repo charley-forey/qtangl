@@ -7,6 +7,7 @@ import {
   workosAuthKitMissing,
   workosAuthKitReady,
 } from "@/lib/auth/workos";
+import { signBffSession } from "@/lib/auth/bff-session";
 
 export const runtime = "nodejs";
 
@@ -50,12 +51,23 @@ async function probeBffSecretMatchesBackend(): Promise<boolean | null> {
 export async function GET() {
   const bootstrapReachable = await probeBootstrapReachable();
   const bffSecretMatchesBackend = await probeBffSecretMatchesBackend();
+  const webCanSignSessions = Boolean(
+    signBffSession({
+      tenantId: "probe",
+      userId: "probe",
+      role: "admin",
+      email: "probe@example.com",
+    })
+  );
   return NextResponse.json({
     workosAuthEnabled: workosAuthEnabled(),
     workosAuthKitReady: workosAuthKitReady(),
     missing: workosAuthKitMissing(),
     hasBffSessionSecret: Boolean(process.env.QTANGL_BFF_SESSION_SECRET),
     bffSecretMatchesBackend,
+    webCanSignSessions,
+    backendNeedsBffSecretForVerify:
+      "Railway must also set QTANGL_BFF_SESSION_SECRET to the same value so API requests verify session cookies.",
     clientWorkosFlagSet: process.env.NEXT_PUBLIC_QTANGL_DASHBOARD_AUTH_WORKOS === "true",
     redirectUriConfigured: Boolean(process.env.NEXT_PUBLIC_WORKOS_REDIRECT_URI?.trim()),
     cookiePasswordConfigured: (process.env.WORKOS_COOKIE_PASSWORD ?? "").length >= 32,

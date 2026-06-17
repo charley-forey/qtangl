@@ -19,6 +19,7 @@ async function proxyRequest(request: NextRequest, pathSegments: string[]) {
   const headers = new Headers(request.headers);
   headers.delete("host");
   headers.delete("connection");
+  headers.delete("authorization");
 
   if (assertion) {
     headers.set("X-Qtangl-Session", assertion);
@@ -51,6 +52,16 @@ async function proxyRequest(request: NextRequest, pathSegments: string[]) {
   const responseHeaders = new Headers(upstream.headers);
   responseHeaders.delete("content-encoding");
   responseHeaders.delete("transfer-encoding");
+
+  if (!assertion && !sessionKey && !legacySession && backendPath.includes("/dashboard/summary")) {
+    return NextResponse.json(
+      {
+        detail:
+          "Missing credentials. Sign out, sign in again, or check /api/dashboard/session-debug for cookie status.",
+      },
+      { status: 401 }
+    );
+  }
 
   if (backendPath.includes("/report") && upstream.ok) {
     return new NextResponse(upstream.body, {

@@ -80,7 +80,7 @@ export async function fetchDashboardMe(onboardingToken?: string | null): Promise
     params.set("onboarding", token);
   }
   const url = params.toString() ? `/api/dashboard/me?${params.toString()}` : "/api/dashboard/me";
-  const response = await fetch(url, { cache: "no-store" });
+  const response = await fetch(url, { cache: "no-store", credentials: "include" });
   if (!response.ok) {
     return { authenticated: false, reason: "workos_user_missing" };
   }
@@ -106,6 +106,7 @@ export async function fetchDashboardJson<T>(path: string, init?: RequestInit): P
   const normalized = path.startsWith("/") ? path : `/${path}`;
   const response = await fetch(`/api/dashboard${normalized}`, {
     ...init,
+    credentials: "include",
     cache: "no-store",
     headers: {
       "Content-Type": "application/json",

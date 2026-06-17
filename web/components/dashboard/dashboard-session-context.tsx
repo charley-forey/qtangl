@@ -85,11 +85,7 @@ export function DashboardSessionProvider({ children }: { children: ReactNode }) 
     setSessionReason(payload.authenticated ? undefined : payload.reason);
     setCapabilities(payload.capabilities ?? null);
     setOnboarding(payload.onboarding ?? null);
-    setCredentialsReady(
-      payload.authenticated
-        ? payload.credentialsReady !== false
-        : false
-    );
+    setCredentialsReady(payload.authenticated && payload.credentialsReady === true);
     setSessionReady(true);
     return payload;
   }, [searchParams]);

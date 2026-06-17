@@ -77,9 +77,10 @@ export default function DashboardClient() {
   const connectBff = useCallback(async () => {
     setBffMode(true);
     setSavedKey("bff");
+    await refreshSession();
     await loadSummary();
     setBffConnected(true);
-  }, [loadSummary]);
+  }, [loadSummary, refreshSession]);
 
   useEffect(() => {
     if (contextSession) setDashboardSession(contextSession);

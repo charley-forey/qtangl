@@ -2,6 +2,7 @@ import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
 import { clearQtanglSessionCookies } from "@/lib/auth/dashboard-session-cookies";
+import { BFF_SESSION_TTL_SECONDS, resolveBootstrapCredentials } from "@/lib/auth/bff-session";
 import {
   ACTIVE_TENANT_COOKIE,
   bffSessionSecret,
@@ -107,11 +108,15 @@ async function bootstrapFromBackend(
   return { ok: true, data: (await response.json()) as BootstrapResponse };
 }
 
-const SESSION_KEY_MAX_AGE_SECONDS = 8 * 3600;
+const SESSION_KEY_MAX_AGE_SECONDS = BFF_SESSION_TTL_SECONDS;
 
-function applySessionCookies(response: NextResponse, bootstrap: BootstrapResponse) {
-  if (bootstrap.sessionAssertion) {
-    response.cookies.set(SESSION_ASSERTION_COOKIE, bootstrap.sessionAssertion, {
+function applySessionCookies(
+  response: NextResponse,
+  bootstrap: BootstrapResponse,
+  credentials: ReturnType<typeof resolveBootstrapCredentials>
+) {
+  if (credentials.assertion) {
+    response.cookies.set(SESSION_ASSERTION_COOKIE, credentials.assertion, {
       httpOnly: true,
       sameSite: "lax",
       secure: process.env.NODE_ENV === "production",
@@ -122,7 +127,7 @@ function applySessionCookies(response: NextResponse, bootstrap: BootstrapRespons
     response.cookies.delete(SESSION_ASSERTION_COOKIE);
   }
 
-  const rawSessionKey = bootstrap.sessionKey?.sessionKey;
+  const rawSessionKey = credentials.sessionKey;
   if (rawSessionKey) {
     response.cookies.set(SESSION_KEY_COOKIE, rawSessionKey, {
       httpOnly: true,
@@ -211,18 +216,17 @@ export async function GET(request: NextRequest) {
     });
   }
 
-  const credentialsReady = Boolean(
-    bootstrap.data.sessionAssertion || bootstrap.data.sessionKey?.sessionKey
-  );
+  const credentials = resolveBootstrapCredentials(bootstrap.data);
   const response = NextResponse.json({
     authenticated: true,
     authMethod: "workos",
     session: sessionPayload(bootstrap.data),
     capabilities: bootstrap.data.capabilities ?? capabilitiesFromRole(bootstrap.data.role),
     onboarding: bootstrap.data.onboarding ?? { complete: false, nextStep: "baseline" },
-    credentialsReady,
+    credentialsReady: credentials.ready,
+    sessionSignedOnWeb: Boolean(!bootstrap.data.sessionAssertion && credentials.assertion),
   });
-  applySessionCookies(response, bootstrap.data);
+  applySessionCookies(response, bootstrap.data, credentials);
   if (onboardingToken) {
     response.cookies.delete(ONBOARDING_COOKIE);
   }
@@ -240,15 +244,14 @@ export async function POST(request: NextRequest) {
   if (!bootstrap.ok) {
     return NextResponse.json({ error: "Unable to switch tenant.", reason: bootstrap.reason }, { status: 403 });
   }
+  const credentials = resolveBootstrapCredentials(bootstrap.data);
   const response = NextResponse.json({
     authenticated: true,
     session: sessionPayload(bootstrap.data),
     capabilities: bootstrap.data.capabilities ?? capabilitiesFromRole(bootstrap.data.role),
-    credentialsReady: Boolean(
-      bootstrap.data.sessionAssertion || bootstrap.data.sessionKey?.sessionKey
-    ),
+    credentialsReady: credentials.ready,
   });
-  applySessionCookies(response, bootstrap.data);
+  applySessionCookies(response, bootstrap.data, credentials);
   return response;
 }
 
