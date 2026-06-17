@@ -11,6 +11,7 @@ Visual identity, design tokens, accessibility standards, and the "trust visual l
 | Element | Direction |
 |---------|-----------|
 | Name | Qtangl |
+| Stock ticker | **QTGL** |
 | Category | Post-quantum readiness platform |
 | Tagline | "Assess. Monitor. Convert." (primary; see [01](./01-positioning-and-brand.md)) |
 | Personality | Credible, precise, calm, evidence-led — not hype, not fear |

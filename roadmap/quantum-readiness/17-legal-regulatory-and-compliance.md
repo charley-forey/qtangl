@@ -95,6 +95,7 @@ Cryptography is export-controlled; a US-based crypto tooling vendor should asses
 
 | Item | Status | Action |
 |------|--------|--------|
+| Stock ticker | **QTGL** (reserved) | Register with exchange at IPO; align cap table docs |
 | Delaware C-Corp | Confirm | Incorporate if not done; standard for venture |
 | Cap table | Maintain | Use Carta/Pulley; clean for diligence |
 | Founder vesting + 83(b) | Confirm | Standard 4-yr/1-yr cliff |

@@ -115,6 +115,7 @@ The technical innovation is the **unification of discovery, risk prioritization,
 | Location | [City, State, USA] |
 | Employees | [N] |
 | Entity type | [C-Corp / LLC] |
+| Stock ticker (reserved) | QTGL |
 | Website | https://qtangl.com |
 | Product status | Pilot — live Assess scan, CBOM, Mosca scoring, Monitor beta |
 

@@ -4,6 +4,18 @@ Readiness-specific unit economics, SaaS metrics (CAC/LTV/payback/NRR), scenario 
 
 ---
 
+## Company identifiers
+
+| Field | Value |
+|-------|-------|
+| Name | Qtangl |
+| Stock ticker | **QTGL** |
+| Website | https://qtangl.com |
+
+Canonical source: [`siteMetadata.ticker`](../../web/lib/copy/product.ts).
+
+---
+
 ## Revenue model (readiness-first)
 
 | Product | Model | ACV range | Margin |

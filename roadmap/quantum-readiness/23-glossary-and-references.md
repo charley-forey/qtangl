@@ -22,6 +22,15 @@ Shared vocabulary for the transformation — PQC terms, product terms, acronyms,
 
 ---
 
+## Company terms
+
+| Term | Definition |
+|------|------------|
+| **Qtangl** | Company name; post-quantum readiness platform |
+| **QTGL** | Reserved stock ticker symbol |
+
+---
+
 ## PQC & cryptography terms
 
 | Term | Definition |
