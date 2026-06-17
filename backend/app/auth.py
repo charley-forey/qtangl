@@ -187,6 +187,25 @@ def require_auth(
     return AuthContext(token=token, tenant_id=tenant_id, role=role, auth_method="api_key")
 
 
+ROLE_RANK = {"viewer": 0, "operator": 1, "admin": 2}
+
+
+def require_tenant_role(min_role: str):
+    """Dependency factory enforcing minimum tenant role (viewer < operator < admin)."""
+
+    def _require(auth: AuthContext = Depends(require_auth)) -> AuthContext:
+        current = ROLE_RANK.get(auth.role, 0)
+        required = ROLE_RANK.get(min_role, 0)
+        if current < required:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail=f"{min_role} role or higher required for this resource.",
+            )
+        return auth
+
+    return _require
+
+
 def require_auth_write(auth: AuthContext = Depends(require_auth)) -> AuthContext:
     if auth.role == "viewer":
         raise HTTPException(

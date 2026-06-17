@@ -57,7 +57,7 @@ def issue_api_key(
         raise RuntimeError("Tenant management requires DATABASE_URL")
     raw_key = generate_api_key()
     key_id = f"key-{uuid.uuid4().hex[:12]}"
-    key_prefix = raw_key[:16] + "…"
+    key_prefix = raw_key[:15] + "…"
     with db_session() as session:
         if session.get(Tenant, tenant_id) is None:
             raise ValueError(f"Unknown tenant: {tenant_id}")

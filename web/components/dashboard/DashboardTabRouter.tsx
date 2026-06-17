@@ -107,6 +107,7 @@ export default function DashboardTabRouter(props: Props) {
           onSaveChecklist={onSaveChecklist}
           onOpenComplianceReport={onOpenComplianceReport}
           onAction={onAction}
+          onMessage={onMessage}
         />
       );
     }

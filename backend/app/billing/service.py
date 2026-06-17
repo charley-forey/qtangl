@@ -97,30 +97,23 @@ def create_monitor_checkout_session(
 
 def provision_monitor_tenant(*, email: str, company: str) -> dict[str, Any]:
     """Create tenant + API key after successful payment (or manual admin trigger)."""
-    base_id = _slug_tenant_id(company)
-    tenant_id = base_id
-    from app.db.config import persistence_enabled
-    from app.db.engine import db_session
-    from app.db.models import Tenant
-
-    if persistence_enabled():
-        with db_session() as session:
-            if session.get(Tenant, tenant_id) is not None:
-                tenant_id = f"{base_id}-{uuid.uuid4().hex[:8]}"
-    tenant = create_tenant(tenant_id=tenant_id, name=company, admin_email=email)
-    key = issue_api_key(tenant_id=tenant["tenantId"], label="monitor-primary")
-    from app.billing.entitlements import upsert_tenant_subscription
-
-    upsert_tenant_subscription(tenant_id=tenant["tenantId"], tier="monitor")
+    core = _provision_tenant_core(
+        email=email,
+        company=company,
+        tier="monitor",
+        source="stripe_monitor",
+        api_key_label="monitor-primary",
+    )
+    tenant_id = core["tenantId"]
     from app.billing.onboarding_tokens import create_onboarding_token
     from app.notifications.email import send_report_email
 
-    base = os.environ.get("QTANGL_PUBLIC_URL", "https://www.qtangl.com")
     token_info = create_onboarding_token(
-        tenant_id=tenant["tenantId"],
-        api_key=key["apiKey"],
+        tenant_id=tenant_id,
+        api_key=core["apiKey"],
         email=email,
     )
+    base = os.environ.get("QTANGL_PUBLIC_URL", "https://www.qtangl.com")
     onboarding_v2 = os.getenv("QTANGL_ONBOARDING_V2", "false").lower() in {"1", "true", "yes"}
     retrieve_url = f"{base}/dashboard/login?onboarding={token_info['token']}"
     assess_url = f"{base}/assess?onboarding={token_info['token']}&mode=production"
@@ -147,7 +140,7 @@ def provision_monitor_tenant(*, email: str, company: str) -> dict[str, Any]:
         subject_prefix="[Qtangl Welcome]",
         body_extra=body_extra,
     )
-    return {"tenantId": tenant["tenantId"], "onboardingTokenExpiresAt": token_info["expiresAt"]}
+    return {"tenantId": tenant_id, "onboardingTokenExpiresAt": token_info["expiresAt"]}
 
 
 def verify_stripe_webhook(payload: bytes, signature_header: str) -> dict[str, Any] | None:
@@ -314,38 +307,124 @@ def create_billing_portal_session(*, customer_id: str, return_url: str) -> dict[
         return {"ok": False, "reason": str(exc)}
 
 
-def provision_assess_tenant(*, email: str, company: str, domain: str | None = None) -> dict[str, Any]:
-    """Create free-tier Assess tenant with onboarding token (self-serve R2)."""
-    base_id = _slug_tenant_id(company)
-    tenant_id = base_id
+def _record_signup_audit(*, tenant_id: str, source: str, detail: dict[str, Any] | None = None) -> None:
+    from app.audit.service import log_action
+
+    payload = {"source": source, **(detail or {})}
+    log_action(tenant_id=tenant_id, action="tenant.created", actor="system", detail=payload)
+    log_action(tenant_id=tenant_id, action="signup.source", actor="system", detail={"source": source})
+
+
+def _resolve_unique_tenant_id(company: str, *, explicit_id: str | None = None) -> str:
     from app.db.config import persistence_enabled
     from app.db.engine import db_session
     from app.db.models import Tenant
 
+    base_id = explicit_id or _slug_tenant_id(company)
+    tenant_id = base_id
     if persistence_enabled():
         with db_session() as session:
             if session.get(Tenant, tenant_id) is not None:
                 tenant_id = f"{base_id}-{uuid.uuid4().hex[:8]}"
-    tenant = create_tenant(tenant_id=tenant_id, name=company, admin_email=email)
-    key = issue_api_key(tenant_id=tenant["tenantId"], label="assess-primary")
+    return tenant_id
+
+
+def _provision_tenant_core(
+    *,
+    email: str,
+    company: str,
+    tier: str,
+    source: str,
+    tenant_id: str | None = None,
+    domain: str | None = None,
+    user_id: str | None = None,
+    auth_mode: str = "magic_link",
+    api_key_label: str = "primary",
+    create_workos_org: bool = True,
+) -> dict[str, Any]:
+    """Shared tenant provisioning for assess signup, monitor checkout, and dashboard self-serve."""
     from app.billing.entitlements import upsert_tenant_subscription
-    from app.billing.onboarding_tokens import create_onboarding_token
-    from app.notifications.email import send_report_email
+    from app.db.config import persistence_enabled
+    from app.db.engine import db_session
+    from app.db.models import TenantMembership
     from app.tenant.settings import set_tenant_scan_allowlist
 
-    upsert_tenant_subscription(tenant_id=tenant["tenantId"], tier="free")
+    email_l = email.lower().strip()
+    resolved_id = _resolve_unique_tenant_id(company, explicit_id=tenant_id)
+    create_id = None if source == "dashboard_self_serve" else resolved_id
+    tenant = create_tenant(
+        tenant_id=create_id,
+        name=company,
+        admin_email=email_l,
+        auth_mode=auth_mode,
+    )
+    tenant_id = tenant["tenantId"]
+    upsert_tenant_subscription(tenant_id=tenant_id, tier=tier)
+    key = issue_api_key(tenant_id=tenant_id, label=api_key_label, role="admin")
+
     if domain:
-        email_domain = email.split("@")[-1].lower()
+        email_domain = email_l.split("@")[-1]
         normalized = domain.lower().strip()
         if normalized == email_domain or normalized.endswith(f".{email_domain}"):
-            set_tenant_scan_allowlist(tenant_id=tenant["tenantId"], domains=[normalized])
+            set_tenant_scan_allowlist(tenant_id=tenant_id, domains=[normalized])
 
-    base = os.environ.get("QTANGL_PUBLIC_URL", "https://www.qtangl.com")
+    if create_workos_org:
+        try:
+            from app.auth_workos.service import create_organization
+
+            create_organization(tenant_id=tenant_id, name=company)
+        except Exception as exc:
+            logger.warning("WorkOS org creation skipped for tenant=%s source=%s: %s", tenant_id, source, exc)
+
+    membership_id: str | None = None
+    if user_id and persistence_enabled():
+        mem_id = f"mem-{uuid.uuid4().hex[:12]}"
+        with db_session() as session:
+            session.add(
+                TenantMembership(
+                    id=mem_id,
+                    tenant_id=tenant_id,
+                    user_id=user_id,
+                    role="admin",
+                )
+            )
+        membership_id = mem_id
+
+    _record_signup_audit(
+        tenant_id=tenant_id,
+        source=source,
+        detail={"email": email_l, "tier": tier, "membershipId": membership_id},
+    )
+    logger.info("Provisioned tenant=%s source=%s tier=%s", tenant_id, source, tier)
+    return {
+        "tenantId": tenant_id,
+        "tenantName": company,
+        "apiKey": key["apiKey"],
+        "membershipId": membership_id,
+        "role": "admin" if membership_id else None,
+    }
+
+
+def provision_assess_tenant(*, email: str, company: str, domain: str | None = None) -> dict[str, Any]:
+    """Create free-tier Assess tenant with onboarding token (self-serve R2)."""
+    core = _provision_tenant_core(
+        email=email,
+        company=company,
+        tier="free",
+        source="assess_signup",
+        domain=domain,
+        api_key_label="assess-primary",
+    )
+    tenant_id = core["tenantId"]
+    from app.billing.onboarding_tokens import create_onboarding_token
+    from app.notifications.email import send_report_email
+
     token_info = create_onboarding_token(
-        tenant_id=tenant["tenantId"],
-        api_key=key["apiKey"],
+        tenant_id=tenant_id,
+        api_key=core["apiKey"],
         email=email,
     )
+    base = os.environ.get("QTANGL_PUBLIC_URL", "https://www.qtangl.com")
     onboarding_v2 = os.getenv("QTANGL_ONBOARDING_V2", "false").lower() in {"1", "true", "yes"}
     login_url = f"{base}/dashboard/login?onboarding={token_info['token']}"
     assess_url = f"{base}/assess?onboarding={token_info['token']}&mode=production"
@@ -370,7 +449,7 @@ def provision_assess_tenant(*, email: str, company: str, domain: str | None = No
         body_extra=body_extra,
     )
     return {
-        "tenantId": tenant["tenantId"],
+        "tenantId": tenant_id,
         "onboardingTokenExpiresAt": token_info["expiresAt"],
         "assessUrl": assess_url,
     }
@@ -385,9 +464,6 @@ def provision_dashboard_workspace(*, user_id: str, email: str, name: str | None 
     if not dashboard_self_serve_signup_enabled():
         return None
     from app.db.config import persistence_enabled
-    from app.db.engine import db_session
-    from app.db.models import TenantMembership
-    from app.billing.entitlements import upsert_tenant_subscription
 
     if not persistence_enabled():
         return None
@@ -396,27 +472,18 @@ def provision_dashboard_workspace(*, user_id: str, email: str, name: str | None 
     domain = email_l.split("@")[-1] if "@" in email_l else "workspace"
     company = (name or "").strip() or domain.split(".")[0].replace("-", " ").title() or "Workspace"
 
-    tenant = create_tenant(tenant_id=None, name=company, admin_email=email_l, auth_mode="magic_link")
-    tenant_id = tenant["tenantId"]
-    upsert_tenant_subscription(tenant_id=tenant_id, tier="free")
-    issue_api_key(tenant_id=tenant_id, label="dashboard-primary", role="admin")
-
-    try:
-        from app.auth_workos.service import create_organization
-
-        create_organization(tenant_id=tenant_id, name=company)
-    except Exception as exc:
-        logger.warning("WorkOS org creation skipped for self-serve tenant=%s: %s", tenant_id, exc)
-
-    mem_id = f"mem-{uuid.uuid4().hex[:12]}"
-    with db_session() as session:
-        session.add(
-            TenantMembership(
-                id=mem_id,
-                tenant_id=tenant_id,
-                user_id=user_id,
-                role="admin",
-            )
-        )
-    logger.info("Self-serve dashboard workspace provisioned tenant=%s user=%s", tenant_id, user_id)
-    return {"tenantId": tenant_id, "tenantName": company, "role": "admin", "membershipId": mem_id}
+    core = _provision_tenant_core(
+        email=email_l,
+        company=company,
+        tier="free",
+        source="dashboard_self_serve",
+        user_id=user_id,
+        auth_mode="magic_link",
+        api_key_label="dashboard-primary",
+    )
+    return {
+        "tenantId": core["tenantId"],
+        "tenantName": core["tenantName"],
+        "role": core["role"],
+        "membershipId": core["membershipId"],
+    }

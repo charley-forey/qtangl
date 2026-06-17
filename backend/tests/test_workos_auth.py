@@ -174,6 +174,37 @@ def test_bootstrap_links_pending_invite(client: TestClient):
     assert body["capabilities"]["canWrite"] is True
 
 
+def test_invalid_assertion_falls_back_to_session_key(client: TestClient):
+    create_tenant(tenant_id="tenant-fallback", name="Fallback Co")
+    with db_session() as session:
+        session.add(User(id="usr-fb", workos_user_id="user_fb", email="fb@example.com"))
+        session.add(
+            TenantMembership(
+                id="mem-fb",
+                tenant_id="tenant-fallback",
+                user_id="usr-fb",
+                role="admin",
+            )
+        )
+    from app.auth_workos.session import mint_session_key
+
+    session_key_info = mint_session_key(tenant_id="tenant-fallback", user_id="usr-fb")
+    assert session_key_info is not None
+    session_key = session_key_info["sessionKey"]
+    invalid_assertion = "not-a-valid-bff-session-token"
+    response = client.get(
+        "/tenant/me",
+        headers={
+            "X-Qtangl-Session": invalid_assertion,
+            "Authorization": f"Bearer {session_key}",
+        },
+    )
+    assert response.status_code == 200
+    body = response.json()
+    assert body["tenantId"] == "tenant-fallback"
+    assert body["authMethod"] == "session_key"
+
+
 def test_bootstrap_session_key_auth(client: TestClient):
     create_tenant(tenant_id="tenant-sk", name="Session Key Co")
     with db_session() as session:
@@ -236,6 +267,29 @@ def test_bootstrap_links_onboarding_token(client: TestClient):
     body = response.json()
     assert body["tenantId"] == "tenant-ob"
     assert body["role"] == "admin"
+
+
+def test_webhook_deduplication(client: TestClient):
+    create_tenant(tenant_id="tenant-dedup", name="Dedup Co")
+    with db_session() as session:
+        tenant = session.get(Tenant, "tenant-dedup")
+        assert tenant is not None
+        tenant.workos_org_id = "org_dedup"
+        session.add(User(id="usr-dedup", workos_user_id="user_dedup", email="dedup@example.com"))
+    event = {
+        "id": "evt_dedup_1",
+        "event": "organization_membership.created",
+        "data": {
+            "id": "om_dedup",
+            "organization_id": "org_dedup",
+            "user_id": "user_dedup",
+            "role": {"slug": "admin"},
+        },
+    }
+    first = handle_webhook_event(event)
+    assert first["handled"] is True
+    second = handle_webhook_event(event)
+    assert second.get("deduplicated") is True
 
 
 def test_patch_member_role(client: TestClient):

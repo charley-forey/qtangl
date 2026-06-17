@@ -96,6 +96,7 @@ export default function DashboardSettingsTab({
           <WorkspaceSettingsPanel
             tenantName={tenantName}
             tier={tier}
+            timezone={String(bundle?.settings?.timezone ?? "UTC")}
             canInvite={canInvite}
             onMessage={onMessage}
           />

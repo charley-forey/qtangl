@@ -321,10 +321,52 @@ def delete_membership_from_webhook(data: dict[str, Any]) -> dict[str, Any] | Non
         return payload
 
 
+def _workos_webhook_seen(event_id: str) -> bool:
+    if not event_id or not persistence_enabled():
+        return False
+    from app.db.models import AuditLogEntry as AuditLogRow
+
+    with db_session() as session:
+        row = (
+            session.query(AuditLogRow)
+            .filter(
+                AuditLogRow.action == "workos.webhook.received",
+                AuditLogRow.resource_id == str(event_id),
+            )
+            .one_or_none()
+        )
+        return row is not None
+
+
+def _mark_workos_webhook(*, event_id: str, event_type: str, tenant_id: str | None) -> None:
+    from app.audit.service import log_action
+
+    log_action(
+        tenant_id=tenant_id or "platform",
+        action="workos.webhook.received",
+        actor="workos",
+        resource_id=str(event_id),
+        detail={"event": event_type},
+    )
+
+
+def _finalize_webhook_result(*, result: dict[str, Any], event_id: str, event_type: str) -> dict[str, Any]:
+    tenant_for_mark = result.get("tenantId") or (result.get("membership") or {}).get("tenantId")
+    if event_id and result.get("handled"):
+        _mark_workos_webhook(event_id=event_id, event_type=event_type, tenant_id=tenant_for_mark)
+    return result
+
+
 def handle_webhook_event(event: dict[str, Any]) -> dict[str, Any]:
     event_type = str(event.get("event", ""))
     data = event.get("data") or {}
+    event_id = str(event.get("id") or data.get("id") or "")
     result: dict[str, Any] = {"event": event_type, "handled": False}
+
+    if event_id and _workos_webhook_seen(event_id):
+        result["handled"] = True
+        result["deduplicated"] = True
+        return result
 
     if event_type == "user.created":
         user_id = data.get("id")
@@ -336,21 +378,21 @@ def handle_webhook_event(event: dict[str, Any]) -> dict[str, Any]:
                 name=(data.get("first_name") or "") + " " + (data.get("last_name") or ""),
             )
             result["handled"] = True
-        return result
+        return _finalize_webhook_result(result=result, event_id=event_id, event_type=event_type)
 
     if event_type in {"organization_membership.created", "organization_membership.updated"}:
         synced = sync_membership_from_webhook(data)
         result["handled"] = synced is not None
         if synced:
             result["membership"] = synced
-        return result
+        return _finalize_webhook_result(result=result, event_id=event_id, event_type=event_type)
 
     if event_type == "organization_membership.deleted":
         deleted = delete_membership_from_webhook(data)
         result["handled"] = deleted is not None
         if deleted:
             result["membership"] = deleted
-        return result
+        return _finalize_webhook_result(result=result, event_id=event_id, event_type=event_type)
 
     if event_type == "invitation.accepted":
         invite_id = data.get("id")
@@ -394,9 +436,9 @@ def handle_webhook_event(event: dict[str, Any]) -> dict[str, Any]:
                         )
                     result["tenantId"] = tenant.id
         result["handled"] = True
-        return result
+        return _finalize_webhook_result(result=result, event_id=event_id, event_type=event_type)
 
-    return result
+    return _finalize_webhook_result(result=result, event_id=event_id, event_type=event_type)
 
 
 def link_onboarding_for_user(

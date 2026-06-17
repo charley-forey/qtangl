@@ -320,6 +320,7 @@ export default function DashboardClient() {
             onOpenComplianceReport={() => {
               setReportDrawerOpen(true);
             }}
+            onMessage={setActionMessage}
             onOpenReport={() => {
               setReportDrawerOpen(true);
             }}

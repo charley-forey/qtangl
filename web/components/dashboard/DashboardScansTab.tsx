@@ -5,6 +5,7 @@ import { useMemo, useState } from "react";
 
 import Card from "@/components/ui/Card";
 import Eyebrow from "@/components/ui/Eyebrow";
+import EmptyState from "@/components/dashboard/ui/EmptyState";
 import DashboardOnboarding, { DashboardSection } from "@/components/dashboard/DashboardOnboarding";
 import type { ScansTabBundle } from "@/lib/dashboard-state";
 import type { TenantScanSummary } from "@/lib/tenant-api";
@@ -102,9 +103,21 @@ export default function DashboardScansTab({
 
       <DashboardSection title="Scan history" id="dashboard-scans">
         {scans.length === 0 ? (
-          <Card tone="ghost">
-            <p className="text-sm text-[var(--color-gray-400)]">No scans yet for this tenant.</p>
-          </Card>
+          <EmptyState
+            title="No scans yet"
+            description="Run your first authorized baseline scan to populate readiness scores, evidence packs, and dashboard trends."
+            action={
+              canWrite ? (
+                <button
+                  type="button"
+                  className="rounded-full bg-white px-4 py-2 text-xs font-medium text-black"
+                  onClick={() => setShowRunner(true)}
+                >
+                  Run baseline scan
+                </button>
+              ) : undefined
+            }
+          />
         ) : (
           <Card tone="panel">
             <div className="flex flex-wrap items-center justify-between gap-2">

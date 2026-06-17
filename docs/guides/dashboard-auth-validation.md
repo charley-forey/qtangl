@@ -5,7 +5,8 @@ Use this checklist before each pilot release or WorkOS configuration change.
 ## Environment parity
 
 - [ ] Vercel: `QTANGL_DASHBOARD_AUTH_WORKOS=true` and `NEXT_PUBLIC_QTANGL_DASHBOARD_AUTH_WORKOS=true`
-- [ ] Vercel + Railway: `QTANGL_BFF_SESSION_SECRET` matches exactly
+- [ ] Vercel + Railway: `QTANGL_BFF_SESSION_SECRET` matches exactly (32+ char random; redeploy **both** after setting)
+- [ ] Generate once: `openssl rand -hex 32` — paste the same value into Vercel and Railway project env
 - [ ] `GET /api/dashboard/auth-health` — all booleans true, `hasBffSessionSecret: true`, `bffSecretMatchesBackend: true`, `clientWorkosFlagSet: true`
 - [ ] WorkOS webhook delivers `organization_membership.*` and `invitation.accepted` to `POST /public/workos/webhook` on Railway
 
@@ -28,7 +29,8 @@ Use this checklist before each pilot release or WorkOS configuration change.
 
 - [ ] `GET /api/dashboard/me` → `authenticated: true` with `tenantId`, `role`, `capabilities`, `credentialsReady: true`
 - [ ] `GET /api/dashboard/tenant/dashboard/summary` → 200 with `kpis`, `recentScans`
-- [ ] `GET /api/dashboard/session-debug` → `credentialsReady: true`, `summaryOk: true` (when signed in)
+- [ ] `GET /api/dashboard/session-debug` → `credentialsReady: true`, `summaryOk: true`, `summaryAuthMethod: both` when both cookies set (when signed in)
+- [ ] If `summaryOk: false` with `sessionKeySummaryOk: true` and `assertionSummaryOk: false`, redeploy after BFF proxy dual-header fix and sign in again
 - [ ] Dashboard does not flash between loading skeleton and error (stable state on credential failure)
 - [ ] Signed-in user with no membership sees **No workspace linked** (not marketing landing)
 

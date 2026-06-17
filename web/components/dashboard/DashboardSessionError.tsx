@@ -35,6 +35,15 @@ function formatSummaryError(message: string): string {
   if (message.includes("Missing credentials")) {
     return "Your sign-in succeeded, but workspace API cookies were not sent to the server. Sign out, sign in again, then open /api/dashboard/session-debug — credentialsReady should be true and summaryOk true. Also confirm QTANGL_BFF_SESSION_SECRET is set on Railway (same value as Vercel) so the API can verify session cookies.";
   }
+  if (
+    message.includes("401") ||
+    message.includes("403") ||
+    message.includes("503") ||
+    message.includes("Unable to load") ||
+    message.includes("summary failed")
+  ) {
+    return "Your session cookies are set, but the workspace summary API returned an error. Open /api/dashboard/session-debug and check summaryStatus, assertionSummaryOk, and sessionKeySummaryOk. If sessionKeySummaryOk is true but assertionSummaryOk is false, sign out and sign in again. If both fail, confirm QTANGL_BFF_SESSION_SECRET matches on Vercel and Railway and redeploy both.";
+  }
   return message;
 }
 

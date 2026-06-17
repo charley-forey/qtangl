@@ -1,6 +1,9 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import { useEffect, useState } from "react";
+
+import { useDashboardSession } from "@/components/dashboard/dashboard-session-context";
 
 import DashboardActionQueue from "@/components/dashboard/DashboardActionQueue";
 import BusinessUnitHeatmap from "@/components/dashboard/BusinessUnitHeatmap";
@@ -10,6 +13,7 @@ import DashboardTrendSection from "@/components/dashboard/DashboardTrendSection"
 import DashboardWidgetGate from "@/components/dashboard/DashboardWidgetGate";
 import ExecutiveDigestCard from "@/components/dashboard/ExecutiveDigestCard";
 import FirstRunChecklist from "@/components/dashboard/FirstRunChecklist";
+import OnboardingWizard from "@/components/dashboard/onboarding/OnboardingWizard";
 import ForecastCard from "@/components/dashboard/ForecastCard";
 import type { DashboardPersona } from "@/components/dashboard/DashboardPersonaToggle";
 import type { DashboardTabId } from "@/components/dashboard/DashboardTabs";
@@ -33,6 +37,7 @@ type Props = {
   onSaveChecklist: (checklist: Record<string, boolean>) => Promise<void>;
   onOpenComplianceReport?: () => void;
   onAction: (action: string) => void;
+  onMessage?: (message: string) => void;
   rolePolicy?: RolePolicy;
 };
 
@@ -48,8 +53,18 @@ export default function DashboardOverviewTab({
   onSaveChecklist,
   onOpenComplianceReport,
   onAction,
+  onMessage,
   rolePolicy,
 }: Props) {
+  const { onboarding, capabilities } = useDashboardSession();
+  const [wizardDismissed, setWizardDismissed] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setWizardDismissed(window.localStorage.getItem("qtangl_onboarding_dismissed") === "true");
+    }
+  }, []);
+
   const layout = summary.layoutDefaults;
   const detail = summary.latestScanDetail;
   const compliance =
@@ -59,6 +74,27 @@ export default function DashboardOverviewTab({
 
   return (
     <div className="space-y-4">
+      {!wizardDismissed && onboarding && !onboarding.complete && summary.recentScans.length === 0 ? (
+        <OnboardingWizard
+          tenantName={summary.me.tenantName ?? summary.me.tenantId}
+          tier={String(summary.me.entitlements?.tier ?? "free")}
+          canInvite={capabilities?.canInvite ?? false}
+          onboarding={onboarding}
+          hasScans={summary.recentScans.length > 0}
+          hasSchedule={summary.schedulesSummary.active > 0}
+          scanAllowlist={(tenantSettings?.scanAllowlist as string[] | undefined) ?? []}
+          onDismiss={() => {
+            window.localStorage.setItem("qtangl_onboarding_dismissed", "true");
+            setWizardDismissed(true);
+          }}
+          onRenamed={() => undefined}
+          onOpenScans={() => onTabChange("scans")}
+          onOpenMonitor={() => onTabChange("monitor")}
+          onOpenTeam={() => onTabChange("settings")}
+          onMessage={onMessage}
+        />
+      ) : null}
+
       <DashboardWidgetGate widgetId="checklist" layout={layout} rolePolicy={rolePolicy}>
         <FirstRunChecklist
           signedIn={signedIn}

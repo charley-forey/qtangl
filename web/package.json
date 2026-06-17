@@ -20,6 +20,7 @@
     "test:access": "node --experimental-strip-types --test tests/access-validation.test.mjs",
     "test:readiness-roi": "node --experimental-strip-types --test tests/readiness-roi.test.mjs",
     "test:assess-config": "node --test tests/assess-config.test.mjs",
+    "test:bff-auth-headers": "node --test tests/bff-auth-headers.test.mjs",
     "generate:pwa-icons": "node scripts/generate-pwa-icons.mjs",
     "generate:comparison-pdf": "node scripts/generate-comparison-guide-pdf.mjs",
     "build:sdk": "npm run build --prefix ../sdk/typescript",

@@ -12,7 +12,7 @@ from fastapi import APIRouter, Depends, HTTPException, Query, status
 from fastapi.responses import JSONResponse, Response, StreamingResponse
 
 from app.audit.service import log_action
-from app.auth import AuthContext, require_auth, require_auth_admin, require_auth_readonly, require_auth_write
+from app.auth import AuthContext, require_auth, require_auth_admin, require_auth_operator, require_auth_readonly, require_auth_write
 from app.db.config import persistence_enabled, redis_enabled
 import os
 from app.billing.entitlements import (
@@ -74,6 +74,7 @@ class TenantSettingsRequest(BaseModel):
 
 class TenantWorkspacePatchRequest(BaseModel):
     name: str = Field(min_length=1, max_length=120)
+    timezone: str | None = Field(default=None, max_length=64)
 
 
 class AuthorizedDomainsRequest(BaseModel):
@@ -441,7 +442,7 @@ def tenant_scan_detail(scan_id: str, auth: AuthContext = Depends(require_auth_re
 
 
 @router.delete("/scans/{scan_id}")
-def tenant_delete_scan(scan_id: str, auth: AuthContext = Depends(require_auth)) -> dict:
+def tenant_delete_scan(scan_id: str, auth: AuthContext = Depends(require_auth_write)) -> dict:
     deleted = delete_job(scan_id, tenant_id=auth.tenant_id)
     if not deleted:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Scan not found.")
@@ -684,8 +685,14 @@ def tenant_workspace_patch(
         if tenant is None:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Tenant not found.")
         tenant.name = name
-    log_action(tenant_id=auth.tenant_id, action="workspace.rename", detail={"name": name})
-    return {"status": "success", "tenantId": auth.tenant_id, "tenantName": name}
+    if body.timezone:
+        from app.tenant.settings import get_tenant_settings_raw, upsert_tenant_settings
+
+        current = get_tenant_settings_raw(tenant_id=auth.tenant_id)
+        current["timezone"] = body.timezone.strip()
+        upsert_tenant_settings(tenant_id=auth.tenant_id, settings=current)
+    log_action(tenant_id=auth.tenant_id, action="workspace.rename", detail={"name": name, "timezone": body.timezone})
+    return {"status": "success", "tenantId": auth.tenant_id, "tenantName": name, "timezone": body.timezone}
 
 
 @router.get("/authorized-domains")
@@ -848,7 +855,7 @@ def tenant_remediation_verify(
 
 
 @router.delete("/schedules/{schedule_id}")
-def tenant_delete_schedule(schedule_id: str, auth: AuthContext = Depends(require_auth)) -> dict:
+def tenant_delete_schedule(schedule_id: str, auth: AuthContext = Depends(require_auth_write)) -> dict:
     if not delete_schedule(tenant_id=auth.tenant_id, schedule_id=schedule_id):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Schedule not found.")
     log_action(tenant_id=auth.tenant_id, action="schedule.delete", resource_id=schedule_id)
@@ -883,7 +890,7 @@ def tenant_list_passports(
 
 
 @router.delete("/share/{link_id}")
-def tenant_revoke_share(link_id: str, auth: AuthContext = Depends(require_auth)) -> dict:
+def tenant_revoke_share(link_id: str, auth: AuthContext = Depends(require_auth_write)) -> dict:
     if not revoke_share_link(tenant_id=auth.tenant_id, link_id=link_id):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Share link not found.")
     return {"status": "success", "linkId": link_id, "revoked": True}
@@ -1815,7 +1822,7 @@ def tenant_evidence_vault(auth: AuthContext = Depends(require_auth_readonly)) ->
 
 
 @router.post("/evidence/{scan_id}/retain")
-def tenant_retain_evidence(scan_id: str, auth: AuthContext = Depends(require_auth)) -> dict:
+def tenant_retain_evidence(scan_id: str, auth: AuthContext = Depends(require_auth_write)) -> dict:
     from app.evidence.vault import retain_scan_evidence
     from app.pqc.report import report_to_json
     from app.pqc.bundle_codec import bundle_from_api_dict
@@ -1861,14 +1868,14 @@ def tenant_upsert_cloud_integration(
 
 
 @router.post("/integrations/cloud/{provider}/test")
-def tenant_test_cloud_integration(provider: str, auth: AuthContext = Depends(require_auth)) -> dict:
+def tenant_test_cloud_integration(provider: str, auth: AuthContext = Depends(require_auth_operator)) -> dict:
     from app.integrations.cloud import test_cloud_connection
 
     return {"status": "success", **test_cloud_connection(tenant_id=auth.tenant_id, provider=provider.lower())}
 
 
 @router.post("/integrations/keyfactor")
-def tenant_upsert_keyfactor(body: KeyfactorIntegrationRequest, auth: AuthContext = Depends(require_auth)) -> dict:
+def tenant_upsert_keyfactor(body: KeyfactorIntegrationRequest, auth: AuthContext = Depends(require_auth_operator)) -> dict:
     from app.integrations.service import upsert_integration
 
     integration = upsert_integration(
@@ -1880,7 +1887,7 @@ def tenant_upsert_keyfactor(body: KeyfactorIntegrationRequest, auth: AuthContext
 
 
 @router.post("/integrations/keyfactor/test")
-def tenant_test_keyfactor(auth: AuthContext = Depends(require_auth)) -> dict:
+def tenant_test_keyfactor(auth: AuthContext = Depends(require_auth_operator)) -> dict:
     from app.integrations.keyfactor import pull_keyfactor_inventory
     from app.integrations.pull import _load_integration_config
 
@@ -1912,7 +1919,7 @@ def tenant_upsert_clm(
 
 
 @router.post("/integrations/clm/{clm_provider}/test")
-def tenant_test_clm(clm_provider: str, auth: AuthContext = Depends(require_auth)) -> dict:
+def tenant_test_clm(clm_provider: str, auth: AuthContext = Depends(require_auth_operator)) -> dict:
     from app.integrations.clm import pull_clm
     from app.integrations.pull import _load_integration_config
 

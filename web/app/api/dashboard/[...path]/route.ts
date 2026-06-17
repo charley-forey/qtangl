@@ -1,6 +1,7 @@
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
+import { buildBffUpstreamAuthHeaders } from "@/lib/auth/bff-auth-headers";
 import { qtanglApiBaseUrlServer, SESSION_ASSERTION_COOKIE, SESSION_KEY_COOKIE } from "@/lib/auth/workos";
 
 const ALLOWED_PREFIXES = ["/tenant/", "/pqc/"];
@@ -21,11 +22,12 @@ async function proxyRequest(request: NextRequest, pathSegments: string[]) {
   headers.delete("connection");
   headers.delete("authorization");
 
-  if (assertion) {
-    headers.set("X-Qtangl-Session", assertion);
-  } else if (sessionKey) {
-    headers.set("Authorization", `Bearer ${sessionKey}`);
-  } else if (legacySession) {
+  const upstreamAuth = buildBffUpstreamAuthHeaders({ assertion, sessionKey });
+  for (const [key, value] of Object.entries(upstreamAuth)) {
+    headers.set(key, value);
+  }
+
+  if (!assertion && !sessionKey && legacySession) {
     try {
       const session = JSON.parse(legacySession) as { apiKey?: string };
       if (session.apiKey) {

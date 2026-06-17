@@ -2,6 +2,10 @@ import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
 import {
+  bffAuthForwardMode,
+  buildBffUpstreamAuthHeaders,
+} from "@/lib/auth/bff-auth-headers";
+import {
   ACTIVE_TENANT_COOKIE,
   bffSessionSecret,
   qtanglApiBaseUrlServer,
@@ -25,17 +29,39 @@ async function resolveWorkosUserId(): Promise<string | null> {
   }
 }
 
+async function probeSummary(headers: Record<string, string>) {
+  const response = await fetch(`${qtanglApiBaseUrlServer()}/tenant/dashboard/summary`, {
+    headers,
+    cache: "no-store",
+  });
+  let detail: string | null = null;
+  try {
+    const text = await response.text();
+    detail = text.slice(0, 280) || null;
+  } catch {
+    detail = null;
+  }
+  return { ok: response.ok, status: response.status, detail };
+}
+
 /** Session diagnostics (no secrets). */
 export async function GET() {
   const cookieStore = await cookies();
-  const hasAssertionCookie = Boolean(cookieStore.get(SESSION_ASSERTION_COOKIE)?.value);
-  const hasSessionKeyCookie = Boolean(cookieStore.get(SESSION_KEY_COOKIE)?.value);
+  const assertion = cookieStore.get(SESSION_ASSERTION_COOKIE)?.value ?? null;
+  const sessionKey = cookieStore.get(SESSION_KEY_COOKIE)?.value ?? null;
+  const hasAssertionCookie = Boolean(assertion);
+  const hasSessionKeyCookie = Boolean(sessionKey);
   const activeTenantId = cookieStore.get(ACTIVE_TENANT_COOKIE)?.value ?? null;
   const workosUserId = await resolveWorkosUserId();
   const credentialsReady = hasAssertionCookie || hasSessionKeyCookie;
+  const summaryAuthMethod = bffAuthForwardMode(assertion, sessionKey);
 
   let bootstrapOk: boolean | null = null;
   let summaryOk: boolean | null = null;
+  let summaryStatus: number | null = null;
+  let summaryDetail: string | null = null;
+  let assertionSummaryOk: boolean | null = null;
+  let sessionKeySummaryOk: boolean | null = null;
 
   const secret = bffSessionSecret();
   if (secret && workosUserId) {
@@ -55,22 +81,20 @@ export async function GET() {
 
   if (credentialsReady && activeTenantId) {
     try {
-      const upstreamHeaders: Record<string, string> = {};
-      const assertion = cookieStore.get(SESSION_ASSERTION_COOKIE)?.value;
-      const sessionKey = cookieStore.get(SESSION_KEY_COOKIE)?.value;
       if (assertion) {
-        upstreamHeaders["X-Qtangl-Session"] = assertion;
-      } else if (sessionKey) {
-        upstreamHeaders.Authorization = `Bearer ${sessionKey}`;
+        const assertionProbe = await probeSummary(buildBffUpstreamAuthHeaders({ assertion }));
+        assertionSummaryOk = assertionProbe.ok;
       }
-      const summaryResponse = await fetch(
-        `${qtanglApiBaseUrlServer()}/tenant/dashboard/summary`,
-        {
-          headers: upstreamHeaders,
-          cache: "no-store",
-        }
+      if (sessionKey) {
+        const sessionKeyProbe = await probeSummary(buildBffUpstreamAuthHeaders({ sessionKey }));
+        sessionKeySummaryOk = sessionKeyProbe.ok;
+      }
+      const combinedProbe = await probeSummary(
+        buildBffUpstreamAuthHeaders({ assertion, sessionKey })
       );
-      summaryOk = summaryResponse.ok;
+      summaryOk = combinedProbe.ok;
+      summaryStatus = combinedProbe.status;
+      summaryDetail = combinedProbe.detail;
     } catch {
       summaryOk = false;
     }
@@ -81,7 +105,16 @@ export async function GET() {
     recommendedAction =
       "Set QTANGL_BFF_SESSION_SECRET on Railway and Vercel (same value), redeploy, then sign out and sign in.";
   } else if (credentialsReady && summaryOk === false) {
-    recommendedAction = "Session cookies present but summary failed — check Railway API health and membership.";
+    if (assertionSummaryOk === false && sessionKeySummaryOk === true) {
+      recommendedAction =
+        "Session key works but assertion failed — stale assertion cookie or BFF secret mismatch on Railway. Sign out and sign in, or align QTANGL_BFF_SESSION_SECRET on Vercel and Railway.";
+    } else if (summaryStatus === 403) {
+      recommendedAction = "Authenticated but membership or role denied — verify tenant membership in Railway database.";
+    } else if (summaryStatus && summaryStatus >= 500) {
+      recommendedAction = "Railway API error loading summary — check API logs and database health (not a cookie issue).";
+    } else {
+      recommendedAction = "Session cookies present but summary failed — check Railway API health and membership.";
+    }
   }
 
   return NextResponse.json({
@@ -91,6 +124,11 @@ export async function GET() {
     activeTenantId,
     bootstrapOk,
     summaryOk,
+    summaryStatus,
+    summaryAuthMethod,
+    assertionSummaryOk,
+    sessionKeySummaryOk,
+    summaryDetail,
     workosAuthenticated: Boolean(workosUserId),
     recommendedAction,
   });

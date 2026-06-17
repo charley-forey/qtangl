@@ -9,6 +9,7 @@ import { patchDashboardJson, postDashboardJson } from "@/lib/dashboard-bff";
 type Props = {
   tenantName?: string;
   tier?: string;
+  timezone?: string;
   canInvite?: boolean;
   onRenamed?: (name: string) => void;
   onMessage?: (message: string) => void;
@@ -17,17 +18,20 @@ type Props = {
 export default function WorkspaceSettingsPanel({
   tenantName = "",
   tier = "free",
+  timezone: timezoneProp = "UTC",
   canInvite = false,
   onRenamed,
   onMessage,
 }: Props) {
   const [name, setName] = useState(tenantName);
+  const [timezone, setTimezone] = useState(timezoneProp);
   const [saving, setSaving] = useState(false);
   const [portalLoading, setPortalLoading] = useState(false);
 
   useEffect(() => {
     setName(tenantName);
-  }, [tenantName]);
+    setTimezone(timezoneProp);
+  }, [tenantName, timezoneProp]);
 
   const tierLabel = tier === "free" ? "Assess (Free)" : tier === "monitor" ? "Monitor" : tier;
 
@@ -59,6 +63,7 @@ export default function WorkspaceSettingsPanel({
                 try {
                   const payload = await patchDashboardJson<{ tenantName: string }>("/tenant/workspace", {
                     name: name.trim(),
+                    timezone: timezone.trim() || "UTC",
                   });
                   onRenamed?.(payload.tenantName);
                   onMessage?.("Workspace name updated.");
@@ -72,6 +77,18 @@ export default function WorkspaceSettingsPanel({
               Save
             </button>
           </div>
+        </div>
+
+        <div>
+          <label className="text-xs uppercase tracking-[0.14em] text-[var(--color-gray-500)]">
+            Timezone (schedules)
+          </label>
+          <input
+            className="mt-2 w-full rounded border border-[var(--border-subtle)] bg-transparent px-3 py-2 text-sm text-white"
+            value={timezone}
+            onChange={(e) => setTimezone(e.target.value)}
+            placeholder="America/New_York"
+          />
         </div>
 
         <div>
