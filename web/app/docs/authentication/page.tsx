@@ -136,11 +136,26 @@ export default function AuthenticationPage() {
         </DocsSection>
 
         <DocsSection>
-          <DocsHeading>Dashboard SSO (OIDC)</DocsHeading>
+          <DocsHeading>Dashboard sign-in & team roles</DocsHeading>
           <p className="text-sm leading-8 text-[var(--color-gray-300)]">
-            Dashboard login supports OIDC SSO configured via{" "}
-            <code className="font-mono text-white">PUT /tenant/oidc</code> (admin role). API keys remain
-            required for programmatic access. See{" "}
+            Humans sign in at{" "}
+            <Link href="/dashboard" className="text-white underline underline-offset-4">
+              /dashboard
+            </Link>{" "}
+            via WorkOS (email magic link or enterprise SSO). First sign-in can self-provision a free Assess workspace
+            with <code className="font-mono text-white">admin</code> role. Tenant admins invite colleagues and assign{" "}
+            <code className="font-mono text-white">admin</code>,{" "}
+            <code className="font-mono text-white">operator</code>, or{" "}
+            <code className="font-mono text-white">viewer</code> under Settings → Team (Monitor tier+ for invites). See{" "}
+            <Link href="/docs/guides/dashboard-team-roles" className="text-white underline underline-offset-4">
+              Dashboard team &amp; roles
+            </Link>
+            .
+          </p>
+          <p className="mt-4 text-sm leading-8 text-[var(--color-gray-300)]">
+            Enterprise OIDC SSO is configured via{" "}
+            <code className="font-mono text-white">PUT /tenant/oidc</code> (admin role). API keys remain required for
+            programmatic access. See{" "}
             <Link href="/docs/guides/sso-setup" className="text-white underline underline-offset-4">
               Dashboard SSO setup
             </Link>

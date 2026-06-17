@@ -1,6 +1,6 @@
 # Qtangl Documentation Corpus
 
-> Generated 2026-06-15 | API v0.9.0 | https://qtangl.com/docs
+> Generated 2026-06-17 | API v0.9.0 | https://qtangl.com/docs
 
 # Qtangl Agent Context
 
@@ -73,6 +73,7 @@ Hybrid scheduling/routing (`POST /optimize`) is a **Labs expansion** — mention
 - [PQC scanner guide](https://qtangl.com/docs/guides/pqc-demo)
 - [Monitor setup](https://qtangl.com/docs/guides/monitor-setup)
 - [Dashboard SSO](https://qtangl.com/docs/guides/sso-setup)
+- [Dashboard team & roles](https://qtangl.com/docs/guides/dashboard-team-roles)
 - [Concepts](https://qtangl.com/docs/concepts)
 - [Data formats](https://qtangl.com/docs/data-formats)
 

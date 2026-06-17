@@ -52,6 +52,10 @@ AUTH_DASHBOARD_REQUIRE_SSO=true
         <DocsSection>
           <DocsHeading>Related</DocsHeading>
           <p className="text-sm leading-8 text-[var(--color-gray-300)]">
+            <Link href="/docs/guides/dashboard-team-roles" className="text-white underline underline-offset-4">
+              Dashboard team &amp; roles
+            </Link>{" "}
+            ·{" "}
             <Link href="/trust/security" className="text-white underline underline-offset-4">
               Security architecture
             </Link>{" "}

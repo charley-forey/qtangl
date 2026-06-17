@@ -72,5 +72,5 @@ Tenant toggles: `weeklyDigestEnabled`, `boardExportSchedule.enabled` in tenant s
 ## Tier gates
 
 - SSO Admin Portal: enterprise tier (`check_sso_feature`).
-- Team invites: monitor+ (`check_team_invites_feature`).
+- Team invites: monitor+ (`check_team_invites_feature`). Admin workflow: [dashboard-team-roles.md](../guides/dashboard-team-roles.md)
 - API key quota: free 1, monitor 5, enterprise unlimited (`check_api_key_quota`).

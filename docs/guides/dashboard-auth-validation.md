@@ -43,7 +43,12 @@ Use this checklist before each pilot release or WorkOS configuration change.
 - [ ] Viewer: overview + scans tabs only; compliance widgets visible
 - [ ] Operator: monitor + remediate tabs visible
 - [ ] Admin: settings team panel, API keys, SSO portal
-- [ ] Admin can PATCH member role in Settings → Team
+- [ ] Admin can change member role in Settings → Team dropdown
+- [ ] Admin removes member → 403 on next API call
+- [ ] Free tier: Send invite returns upgrade/tier error (expected)
+- [ ] Monitor tier: Send invite succeeds; pending invite visible in Team panel
+
+See [dashboard-team-roles.md](./dashboard-team-roles.md) for admin workflow details.
 
 ## Failure modes
 

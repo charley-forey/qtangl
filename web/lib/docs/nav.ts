@@ -30,6 +30,7 @@ export const docsSections: DocsNavSection[] = [
       { name: "PQC scanner guide", href: "/docs/guides/pqc-demo", status: "pilot" },
       { name: "Monitor setup", href: "/docs/guides/monitor-setup", status: "ga" },
       { name: "Dashboard SSO", href: "/docs/guides/sso-setup", status: "pilot" },
+      { name: "Dashboard team & roles", href: "/docs/guides/dashboard-team-roles", status: "ga" },
       { name: "Concepts", href: "/docs/concepts" },
       { name: "Data formats", href: "/docs/data-formats" },
     ],

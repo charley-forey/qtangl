@@ -17,10 +17,13 @@ WorkOS sign-in alone does not grant dashboard access. Each user needs a row in `
 
 | Path | When |
 |------|------|
+| **Self-serve first sign-in** | `/dashboard/login` — free workspace + admin membership (`QTANGL_DASHBOARD_SELF_SERVE_SIGNUP`) |
 | WorkOS invite accepted | Webhook `organization_membership.created` (preferred) |
-| Pending `TenantInvite` | Auto-linked on first `/internal/dashboard/bootstrap` |
+| Pending `TenantInvite` | Auto-linked on first bootstrap (admin sent invite from Settings → Team) |
 | Admin pilot provision | `POST /admin/tenants` + team invite |
-| Onboarding token | `/dashboard?onboarding=TOKEN` (future self-serve) |
+| Onboarding token | `/dashboard/login?onboarding=TOKEN` after Assess/Monitor signup email |
+
+Admin invite workflow and role matrix: [dashboard-team-roles.md](./dashboard-team-roles.md).
 
 If bootstrap returns 403, the user sees **No workspace linked** in the dashboard UI — not the logged-out marketing page.
 

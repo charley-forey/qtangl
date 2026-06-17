@@ -117,6 +117,13 @@
     "headings": []
   },
   {
+    "href": "/docs/guides/dashboard-team-roles",
+    "title": "Dashboard team & roles",
+    "section": "Core Workflow",
+    "description": "",
+    "headings": []
+  },
+  {
     "href": "/docs/guides/data-model",
     "title": "Tenancy & RLS",
     "section": "Operations",

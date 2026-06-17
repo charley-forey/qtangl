@@ -3,8 +3,10 @@
 ## Sign in
 
 1. Open [https://www.qtangl.com/dashboard](https://www.qtangl.com/dashboard).
-2. Click **Sign in** (navbar or hero).
+2. Click **Sign in to get started** (prominent hero) or **Sign in** in the navbar.
 3. Complete WorkOS hosted sign-in (email magic link or enterprise SSO).
+
+**First sign-in** from the dashboard creates a free Assess workspace automatically (admin role). No API key paste required.
 
 API keys for CI/automation are under **Settings → Automation API keys** after sign-in (admin only). Legacy key paste is hidden when WorkOS sign-in is enabled.
 
@@ -12,10 +14,29 @@ API keys for CI/automation are under **Settings → Automation API keys** after 
 
 | Step | Action |
 |------|--------|
-| 1 | Sign in to workspace |
+| 1 | Sign in to workspace ([Sign in to get started](https://www.qtangl.com/dashboard)) |
 | 2 | Run authorized baseline scan (Scans tab) |
 | 3 | Create weekly monitoring schedule (Settings → Scheduled monitoring) |
-| 4 | Invite teammates (Settings → Team, admin only) |
+| 4 | Invite teammates (Settings → Team, **admin** only — **Monitor tier+**) |
+
+## Team, invites, and roles
+
+Tenant **admins** manage people under **Settings → Team members**:
+
+1. Enter a colleague’s work email and choose **admin**, **operator**, or **viewer**.
+2. Click **Send invite** — WorkOS emails them a sign-in link.
+3. After they sign in, they see your tenant dashboard with the role you assigned.
+4. Change roles anytime with the dropdown next to each member; **Remove** revokes access.
+
+| Role | Typical use |
+|------|-------------|
+| **admin** | Team, API keys, SSO, all settings and exports |
+| **operator** | Scans, monitor, remediate |
+| **viewer** | Read-only overview and scans |
+
+**Free (Assess) workspaces** can sign in but **cannot send team invites** until upgraded to **Monitor**. Automation keys for CI are separate (**Settings → Automation API keys**, admin only).
+
+Full guide: [dashboard-team-roles.md](./dashboard-team-roles.md)
 
 ## Dashboard tabs
 
@@ -62,5 +83,6 @@ When your account manages multiple customer tenants, open the **Portfolio** tab 
 
 ## Support
 
+- Team & roles: [dashboard-team-roles.md](./dashboard-team-roles.md)
 - Break-glass access: [dashboard-auth-break-glass.md](../runbooks/dashboard-auth-break-glass.md)
 - SSO setup: `/docs/guides/sso-setup`
