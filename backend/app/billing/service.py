@@ -374,3 +374,42 @@ def provision_assess_tenant(*, email: str, company: str, domain: str | None = No
         "onboardingTokenExpiresAt": token_info["expiresAt"],
         "assessUrl": assess_url,
     }
+
+
+def dashboard_self_serve_signup_enabled() -> bool:
+    return os.getenv("QTANGL_DASHBOARD_SELF_SERVE_SIGNUP", "true").lower() in {"1", "true", "yes"}
+
+
+def provision_dashboard_workspace(*, user_id: str, email: str, name: str | None = None) -> dict[str, Any] | None:
+    """First WorkOS sign-in from /dashboard — create free-tier tenant + admin membership."""
+    if not dashboard_self_serve_signup_enabled():
+        return None
+    from app.db.config import persistence_enabled
+    from app.db.engine import db_session
+    from app.db.models import TenantMembership
+    from app.billing.entitlements import upsert_tenant_subscription
+
+    if not persistence_enabled():
+        return None
+
+    email_l = email.lower().strip()
+    domain = email_l.split("@")[-1] if "@" in email_l else "workspace"
+    company = (name or "").strip() or domain.split(".")[0].replace("-", " ").title() or "Workspace"
+
+    tenant = create_tenant(tenant_id=None, name=company, admin_email=email_l, auth_mode="magic_link")
+    tenant_id = tenant["tenantId"]
+    upsert_tenant_subscription(tenant_id=tenant_id, tier="free")
+    issue_api_key(tenant_id=tenant_id, label="dashboard-primary", role="admin")
+
+    mem_id = f"mem-{uuid.uuid4().hex[:12]}"
+    with db_session() as session:
+        session.add(
+            TenantMembership(
+                id=mem_id,
+                tenant_id=tenant_id,
+                user_id=user_id,
+                role="admin",
+            )
+        )
+    logger.info("Self-serve dashboard workspace provisioned tenant=%s user=%s", tenant_id, user_id)
+    return {"tenantId": tenant_id, "tenantName": company, "role": "admin", "membershipId": mem_id}

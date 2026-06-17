@@ -11,8 +11,8 @@ const REASON_COPY: Record<
 > = {
   no_membership: {
     title: "No workspace linked",
-    body: "Your account signed in successfully, but no organization membership was found. Ask your admin to send an invite, or request pilot access.",
-    cta: { label: "Request pilot", href: "/access" },
+    body: "Your account signed in successfully, but no organization membership was found. Sign out, then use Sign in to get started again — first login now auto-creates a free workspace. Or ask your admin for an invite.",
+    cta: { label: "Sign in again", href: "/dashboard/login" },
   },
   bff_secret_missing: {
     title: "Dashboard auth misconfigured",

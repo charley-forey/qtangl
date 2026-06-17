@@ -173,6 +173,20 @@ def test_bootstrap_links_pending_invite(client: TestClient):
     assert body["capabilities"]["canWrite"] is True
 
 
+def test_bootstrap_self_serve_provision(client: TestClient, monkeypatch: pytest.MonkeyPatch):
+    monkeypatch.setenv("QTANGL_DASHBOARD_SELF_SERVE_SIGNUP", "true")
+    response = client.get(
+        "/internal/dashboard/bootstrap",
+        params={"workos_user_id": "user_self", "email": "selfserve@example.com", "name": "Self Serve"},
+        headers={"X-Qtangl-Bff-Secret": "bff-secret-test-key-32chars-min"},
+    )
+    assert response.status_code == 200
+    body = response.json()
+    assert body["tenantId"]
+    assert body["role"] == "admin"
+    assert body["tenantName"]
+
+
 def test_bootstrap_links_onboarding_token(client: TestClient):
     from app.billing.onboarding_tokens import create_onboarding_token
 

@@ -35,6 +35,12 @@ def dashboard_bootstrap(
     link_pending_invites_for_user(user_id=user_id, email=email)
     memberships = list_user_memberships(user_id=user_id)
     if not memberships:
+        from app.billing.service import provision_dashboard_workspace
+
+        provisioned = provision_dashboard_workspace(user_id=user_id, email=email, name=name)
+        if provisioned:
+            memberships = list_user_memberships(user_id=user_id)
+    if not memberships:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="No organization membership found for this user.",
