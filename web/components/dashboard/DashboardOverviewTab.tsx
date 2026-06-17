@@ -76,8 +76,8 @@ export default function DashboardOverviewTab({
     <div className="space-y-4">
       {!wizardDismissed && onboarding && !onboarding.complete && summary.recentScans.length === 0 ? (
         <OnboardingWizard
-          tenantName={summary.me.tenantName ?? summary.me.tenantId}
-          tier={String(summary.me.entitlements?.tier ?? "free")}
+          tenantName={String(summary.me.tenantName ?? summary.me.tenantId ?? "")}
+          tier={String((summary.me.entitlements as { tier?: string } | undefined)?.tier ?? "free")}
           canInvite={capabilities?.canInvite ?? false}
           onboarding={onboarding}
           hasScans={summary.recentScans.length > 0}
