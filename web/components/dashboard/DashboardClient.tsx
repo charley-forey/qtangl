@@ -40,6 +40,7 @@ export default function DashboardClient() {
     capabilities,
     workosEnabled,
     refreshSession,
+    sessionReady,
   } = useDashboardSession();
 
   const [activeTab, setActiveTab] = useState<DashboardTabId>("overview");
@@ -66,16 +67,17 @@ export default function DashboardClient() {
   const connectBff = useCallback(async () => {
     setBffMode(true);
     setSavedKey("bff");
+    await refreshSession();
     await loadSummary();
-  }, [loadSummary]);
+  }, [loadSummary, refreshSession]);
 
   useEffect(() => {
     if (contextSession) setDashboardSession(contextSession);
   }, [contextSession]);
 
   useEffect(() => {
-    if (contextSession) void connectBff();
-  }, [contextSession, connectBff]);
+    if (contextSession && sessionReady) void connectBff();
+  }, [contextSession, sessionReady, connectBff]);
 
   useEffect(() => {
     const stored = getStoredTenantApiKey();

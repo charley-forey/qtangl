@@ -173,6 +173,32 @@ def test_bootstrap_links_pending_invite(client: TestClient):
     assert body["capabilities"]["canWrite"] is True
 
 
+def test_bootstrap_session_key_auth(client: TestClient):
+    create_tenant(tenant_id="tenant-sk", name="Session Key Co")
+    with db_session() as session:
+        session.add(User(id="usr-sk", workos_user_id="user_sk", email="sk@example.com"))
+        session.add(
+            TenantMembership(
+                id="mem-sk",
+                tenant_id="tenant-sk",
+                user_id="usr-sk",
+                role="admin",
+            )
+        )
+    response = client.get(
+        "/internal/dashboard/bootstrap",
+        params={"workos_user_id": "user_sk", "email": "sk@example.com"},
+        headers={"X-Qtangl-Bff-Secret": "bff-secret-test-key-32chars-min"},
+    )
+    assert response.status_code == 200
+    body = response.json()
+    session_key = body.get("sessionKey", {}).get("sessionKey")
+    assert session_key
+    me = client.get("/tenant/me", headers={"Authorization": f"Bearer {session_key}"})
+    assert me.status_code == 200
+    assert me.json()["tenantId"] == "tenant-sk"
+
+
 def test_bootstrap_self_serve_provision(client: TestClient, monkeypatch: pytest.MonkeyPatch):
     monkeypatch.setenv("QTANGL_DASHBOARD_SELF_SERVE_SIGNUP", "true")
     response = client.get(

@@ -1,23 +1,30 @@
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
-import { qtanglApiBaseUrlServer, SESSION_ASSERTION_COOKIE } from "@/lib/auth/workos";
+import { qtanglApiBaseUrlServer, SESSION_ASSERTION_COOKIE, SESSION_KEY_COOKIE } from "@/lib/auth/workos";
 
 export const runtime = "nodejs";
 
 export async function GET(request: NextRequest) {
   const cookieStore = await cookies();
   const assertion = cookieStore.get(SESSION_ASSERTION_COOKIE)?.value;
-  if (!assertion) {
+  const sessionKey = cookieStore.get(SESSION_KEY_COOKIE)?.value;
+  if (!assertion && !sessionKey) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const upstreamHeaders: Record<string, string> = {
+    Accept: "text/event-stream",
+  };
+  if (assertion) {
+    upstreamHeaders["X-Qtangl-Session"] = assertion;
+  } else if (sessionKey) {
+    upstreamHeaders.Authorization = `Bearer ${sessionKey}`;
   }
 
   const target = `${qtanglApiBaseUrlServer()}/tenant/dashboard/events`;
   const upstream = await fetch(target, {
-    headers: {
-      Accept: "text/event-stream",
-      "X-Qtangl-Session": assertion,
-    },
+    headers: upstreamHeaders,
     cache: "no-store",
   });
 

@@ -99,4 +99,6 @@ export function mapEmailToTenant(email: string): { tenantId: string; role: strin
 }
 
 export const SESSION_ASSERTION_COOKIE = "qtangl_session_assertion";
+/** Short-lived dashboard API credential minted at bootstrap (fallback when assertion cookie absent). */
+export const SESSION_KEY_COOKIE = "qtangl_session_key";
 export const ACTIVE_TENANT_COOKIE = "qtangl_active_tenant";

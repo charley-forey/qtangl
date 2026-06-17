@@ -30,6 +30,13 @@ const REASON_COPY: Record<
   },
 };
 
+function formatSummaryError(message: string): string {
+  if (message.includes("Missing credentials")) {
+    return "Your sign-in succeeded, but the workspace API session was not established. Ensure QTANGL_BFF_SESSION_SECRET is set on Railway and matches Vercel, then sign in again. Auth diagnostics shows whether session cookies are present.";
+  }
+  return message;
+}
+
 export default function DashboardSessionError({
   reason,
   summaryError,
@@ -43,7 +50,7 @@ export default function DashboardSessionError({
     return (
       <Card tone="ghost" className="border border-red-500/40">
         <Eyebrow>Unable to load workspace</Eyebrow>
-        <p className="mt-3 text-sm text-red-200">{summaryError}</p>
+        <p className="mt-3 text-sm text-red-200">{formatSummaryError(summaryError)}</p>
         <div className="mt-4 flex flex-wrap gap-3">
           <Button href="/api/dashboard/auth-health" variant="secondary" size="sm">
             Auth diagnostics

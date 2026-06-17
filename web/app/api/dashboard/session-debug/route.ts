@@ -6,6 +6,7 @@ import {
   bffSessionSecret,
   qtanglApiBaseUrlServer,
   SESSION_ASSERTION_COOKIE,
+  SESSION_KEY_COOKIE,
   workosAuthEnabled,
 } from "@/lib/auth/workos";
 
@@ -28,6 +29,7 @@ async function resolveWorkosUserId(): Promise<string | null> {
 export async function GET() {
   const cookieStore = await cookies();
   const hasAssertionCookie = Boolean(cookieStore.get(SESSION_ASSERTION_COOKIE)?.value);
+  const hasSessionKeyCookie = Boolean(cookieStore.get(SESSION_KEY_COOKIE)?.value);
   const activeTenantId = cookieStore.get(ACTIVE_TENANT_COOKIE)?.value ?? null;
   const workosUserId = await resolveWorkosUserId();
 
@@ -50,14 +52,20 @@ export async function GET() {
     }
   }
 
-  if (hasAssertionCookie && activeTenantId) {
+  if ((hasAssertionCookie || hasSessionKeyCookie) && activeTenantId) {
     try {
+      const upstreamHeaders: Record<string, string> = {};
+      const assertion = cookieStore.get(SESSION_ASSERTION_COOKIE)?.value;
+      const sessionKey = cookieStore.get(SESSION_KEY_COOKIE)?.value;
+      if (assertion) {
+        upstreamHeaders["X-Qtangl-Session"] = assertion;
+      } else if (sessionKey) {
+        upstreamHeaders.Authorization = `Bearer ${sessionKey}`;
+      }
       const summaryResponse = await fetch(
         `${qtanglApiBaseUrlServer()}/tenant/dashboard/summary`,
         {
-          headers: {
-            "X-Qtangl-Session": cookieStore.get(SESSION_ASSERTION_COOKIE)!.value,
-          },
+          headers: upstreamHeaders,
           cache: "no-store",
         }
       );
@@ -69,6 +77,7 @@ export async function GET() {
 
   return NextResponse.json({
     hasAssertionCookie,
+    hasSessionKeyCookie,
     activeTenantId,
     bootstrapOk,
     summaryOk,

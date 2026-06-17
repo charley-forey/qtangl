@@ -6,6 +6,7 @@ import {
   bffSessionSecret,
   qtanglApiBaseUrlServer,
   SESSION_ASSERTION_COOKIE,
+  SESSION_KEY_COOKIE,
   workosAuthEnabled,
 } from "@/lib/auth/workos";
 
@@ -19,6 +20,12 @@ type BootstrapResponse = {
   authMode: string;
   memberships: Array<{ tenantId: string; tenantName: string; role: string; authMode?: string }>;
   sessionAssertion: string | null;
+  sessionKey?: {
+    sessionKey?: string;
+    sessionKeyId?: string;
+    expiresAt?: string;
+    role?: string;
+  } | null;
   capabilities?: {
     canAdmin: boolean;
     canWrite: boolean;
@@ -99,6 +106,8 @@ async function bootstrapFromBackend(
   return { ok: true, data: (await response.json()) as BootstrapResponse };
 }
 
+const SESSION_KEY_MAX_AGE_SECONDS = 15 * 60;
+
 function applySessionCookies(response: NextResponse, bootstrap: BootstrapResponse) {
   if (bootstrap.sessionAssertion) {
     response.cookies.set(SESSION_ASSERTION_COOKIE, bootstrap.sessionAssertion, {
@@ -108,7 +117,23 @@ function applySessionCookies(response: NextResponse, bootstrap: BootstrapRespons
       path: "/",
       maxAge: 8 * 3600,
     });
+  } else {
+    response.cookies.delete(SESSION_ASSERTION_COOKIE);
   }
+
+  const rawSessionKey = bootstrap.sessionKey?.sessionKey;
+  if (rawSessionKey) {
+    response.cookies.set(SESSION_KEY_COOKIE, rawSessionKey, {
+      httpOnly: true,
+      sameSite: "lax",
+      secure: process.env.NODE_ENV === "production",
+      path: "/",
+      maxAge: SESSION_KEY_MAX_AGE_SECONDS,
+    });
+  } else {
+    response.cookies.delete(SESSION_KEY_COOKIE);
+  }
+
   response.cookies.set(ACTIVE_TENANT_COOKIE, bootstrap.tenantId, {
     httpOnly: true,
     sameSite: "lax",
@@ -185,12 +210,16 @@ export async function GET(request: NextRequest) {
     });
   }
 
+  const credentialsReady = Boolean(
+    bootstrap.data.sessionAssertion || bootstrap.data.sessionKey?.sessionKey
+  );
   const response = NextResponse.json({
     authenticated: true,
     authMethod: "workos",
     session: sessionPayload(bootstrap.data),
     capabilities: bootstrap.data.capabilities ?? capabilitiesFromRole(bootstrap.data.role),
     onboarding: bootstrap.data.onboarding ?? { complete: false, nextStep: "baseline" },
+    credentialsReady,
   });
   applySessionCookies(response, bootstrap.data);
   if (onboardingToken) {
@@ -222,6 +251,7 @@ export async function POST(request: NextRequest) {
 export async function DELETE() {
   const response = NextResponse.json({ ok: true });
   response.cookies.delete(SESSION_ASSERTION_COOKIE);
+  response.cookies.delete(SESSION_KEY_COOKIE);
   response.cookies.delete(ACTIVE_TENANT_COOKIE);
   response.cookies.delete("qtangl_session");
   if (workosAuthEnabled()) {

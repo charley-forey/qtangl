@@ -1,7 +1,7 @@
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
-import { qtanglApiBaseUrlServer, SESSION_ASSERTION_COOKIE } from "@/lib/auth/workos";
+import { qtanglApiBaseUrlServer, SESSION_ASSERTION_COOKIE, SESSION_KEY_COOKIE } from "@/lib/auth/workos";
 
 const ALLOWED_PREFIXES = ["/tenant/", "/pqc/"];
 
@@ -13,6 +13,7 @@ async function proxyRequest(request: NextRequest, pathSegments: string[]) {
 
   const cookieStore = await cookies();
   const assertion = cookieStore.get(SESSION_ASSERTION_COOKIE)?.value;
+  const sessionKey = cookieStore.get(SESSION_KEY_COOKIE)?.value;
   const legacySession = cookieStore.get("qtangl_session")?.value;
 
   const headers = new Headers(request.headers);
@@ -21,6 +22,8 @@ async function proxyRequest(request: NextRequest, pathSegments: string[]) {
 
   if (assertion) {
     headers.set("X-Qtangl-Session", assertion);
+  } else if (sessionKey) {
+    headers.set("Authorization", `Bearer ${sessionKey}`);
   } else if (legacySession) {
     try {
       const session = JSON.parse(legacySession) as { apiKey?: string };
