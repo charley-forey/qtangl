@@ -130,7 +130,7 @@ After every production deploy:
 python backend/scripts/verify_production_rollout.py --full
 ```
 
-See [`docs/runbooks/release-acceptance-checklist.md`](../../docs/runbooks/release-acceptance-checklist.md) and [`docs/runbooks/dogfood-production-enablement.md`](../../docs/runbooks/dogfood-production-enablement.md).
+See [`docs/runbooks/release-acceptance-checklist.md`](../../docs/runbooks/release-acceptance-checklist.md), [`docs/runbooks/dogfood-production-enablement.md`](../../docs/runbooks/dogfood-production-enablement.md), and [`docs/runbooks/trust-visibility-go-live.md`](../../docs/runbooks/trust-visibility-go-live.md).
 
 ## Report unavailable (`scan_not_found`, `bundle_not_persisted`)
 

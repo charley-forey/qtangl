@@ -2,6 +2,8 @@
 
 Review weekly (founder ritual). Update **Last verified** when evidence is checked.
 
+**Go-live sequence:** [`trust-visibility-go-live.md`](../runbooks/trust-visibility-go-live.md) (Deploy → dogfood prod → signup walkthrough → scorecard).
+
 ## Weekly acceptance scorecard (Monday, ~5 min)
 
 | Metric | Target | Current | Source |
