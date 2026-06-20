@@ -43,11 +43,21 @@ type Props = {
 
   onTabChange?: (tab: string) => void;
 
+  onOpenUpgrade?: (product: "monitor") => void;
+
 };
 
 
 
-export default function DashboardMonitorTab({ bundle, summary, savedKey, onMessage, onRefresh, onTabChange }: Props) {
+export default function DashboardMonitorTab({
+  bundle,
+  summary,
+  savedKey,
+  onMessage,
+  onRefresh,
+  onTabChange,
+  onOpenUpgrade,
+}: Props) {
   const cc = bundle?.commandCenter ?? summary.commandCenter;
 
   return (
@@ -147,7 +157,12 @@ export default function DashboardMonitorTab({ bundle, summary, savedKey, onMessa
 
         <div className="mt-4">
 
-          <ScheduleManager schedules={bundle?.schedules ?? []} onRefresh={onRefresh} onMessage={onMessage} />
+          <ScheduleManager
+            schedules={bundle?.schedules ?? []}
+            onRefresh={onRefresh}
+            onMessage={onMessage}
+            onOpenUpgrade={onOpenUpgrade}
+          />
 
         </div>
 

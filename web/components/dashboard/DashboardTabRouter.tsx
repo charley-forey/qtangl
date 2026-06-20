@@ -163,6 +163,7 @@ export default function DashboardTabRouter(props: Props) {
             onMessage={onMessage}
             onRefresh={onRefreshMonitor}
             onTabChange={(tab) => onTabChange(tab as DashboardTabId)}
+            onOpenUpgrade={onOpenUpgrade}
           />
         </>
       );

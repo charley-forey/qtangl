@@ -19,10 +19,12 @@ export default function ScheduleManager({
   schedules,
   onRefresh,
   onMessage,
+  onOpenUpgrade,
 }: {
   schedules: ScheduledScan[];
   onRefresh: () => void;
   onMessage: (msg: string) => void;
+  onOpenUpgrade?: (product: "monitor") => void;
 }) {
   const client = useQtanglClient();
   const [runsBySchedule, setRunsBySchedule] = useState<Record<string, ScheduleRun[]>>({});
@@ -93,7 +95,13 @@ export default function ScheduleManager({
       setCreateTarget("");
       onRefresh();
     } catch (error) {
-      onMessage(error instanceof Error ? error.message : "Create failed.");
+      const message = error instanceof Error ? error.message : "Create failed.";
+      if (message.includes("schedule_quota")) {
+        onOpenUpgrade?.("monitor");
+        onMessage("Scheduled monitoring requires Monitor tier. Upgrade to create schedules.");
+        return;
+      }
+      onMessage(message);
     } finally {
       setCreating(false);
     }

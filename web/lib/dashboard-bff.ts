@@ -61,8 +61,16 @@ async function parseJson<T>(response: Response): Promise<T> {
     const detail = await response.text();
     let message = detail || `Dashboard request failed (${response.status})`;
     try {
-      const parsed = JSON.parse(detail) as { detail?: string; message?: string; error?: string };
-      message = parsed.detail ?? parsed.message ?? parsed.error ?? message;
+      const parsed = JSON.parse(detail) as {
+        detail?: string | Record<string, unknown>;
+        message?: string;
+        error?: string;
+      };
+      if (typeof parsed.detail === "object" && parsed.detail !== null) {
+        message = JSON.stringify(parsed.detail);
+      } else {
+        message = String(parsed.detail ?? parsed.message ?? parsed.error ?? message);
+      }
     } catch {
       /* keep raw */
     }
