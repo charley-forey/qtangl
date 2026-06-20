@@ -473,6 +473,26 @@ export async function getAuthorizedDomains(apiKey: string) {
   });
 }
 
+export async function peekOnboardingToken(token: string) {
+  const { qtanglApiBaseUrl } = await import("@/lib/api");
+  const response = await fetch(
+    `${qtanglApiBaseUrl}/public/onboarding-key/${encodeURIComponent(token)}?peek=true`
+  );
+  if (!response.ok) {
+    throw new Error("Onboarding link invalid, expired, or already used.");
+  }
+  return response.json() as Promise<{
+    status: string;
+    tenantId: string;
+    apiKey?: string;
+    loginUrl?: string;
+    dashboardUrl?: string;
+    assessUrl?: string;
+    email?: string;
+    peek?: boolean;
+  }>;
+}
+
 export async function redeemOnboardingToken(token: string) {
   const { qtanglApiBaseUrl } = await import("@/lib/api");
   const response = await fetch(`${qtanglApiBaseUrl}/public/onboarding-key/${encodeURIComponent(token)}`);
@@ -482,7 +502,10 @@ export async function redeemOnboardingToken(token: string) {
   return response.json() as Promise<{
     status: string;
     tenantId: string;
-    apiKey: string;
+    apiKey?: string;
+    loginUrl?: string;
     dashboardUrl: string;
+    assessUrl?: string;
+    email?: string;
   }>;
 }

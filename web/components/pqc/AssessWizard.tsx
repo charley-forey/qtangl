@@ -2,12 +2,23 @@
 
 import Button from "@/components/ui/Button";
 import type { AssessApiMode } from "@/lib/qtangl-api-context";
-import { PUBLIC_DEMO_LIVE_HOSTS, WIZARD_STEPS } from "@/lib/assess-config";
+import {
+  ASSESS_INTENT_STEPS,
+  ASSESS_CBOM_IMPORT_ENABLED,
+  ASSESS_PORTFOLIO_ENABLED,
+  ASSESS_AI_NARRATIVE_ENABLED,
+  type AssessIntent,
+} from "@/lib/assess-config";
 import type { Scenario } from "@/lib/pqc";
 import { trackEvent } from "@/lib/analytics";
 
 import AssessDiscoveryScope from "./AssessDiscoveryScope";
+import AssessModeToggle from "./AssessModeToggle";
+import AssessMyDomainPanel from "./AssessMyDomainPanel";
+import AssessPortfolioPanel from "./AssessPortfolioPanel";
+import AssessAiBriefCard from "./AssessAiBriefCard";
 import AuthorizedDomainsPanel from "./AuthorizedDomainsPanel";
+import CbomImportPanel from "./CbomImportPanel";
 import CloudInventoryUploadCard from "./CloudInventoryUploadCard";
 import DemoGuideStrip from "./DemoGuideStrip";
 import ScanLog from "./ScanLog";
@@ -44,6 +55,9 @@ type AssessWizardProps = {
   onIndustryChange?: (value: string) => void;
   authorizedDomains?: string[];
   uploadApiKey?: string;
+  intent?: AssessIntent;
+  onApplyLiveDemoPreset?: () => void;
+  showCustomize?: boolean;
 };
 
 export default function AssessWizard({
@@ -74,6 +88,9 @@ export default function AssessWizard({
   onIndustryChange,
   authorizedDomains = [],
   uploadApiKey,
+  intent = "sample",
+  onApplyLiveDemoPreset,
+  showCustomize = false,
 }: AssessWizardProps) {
   const isProduction = assessMode === "production";
   const wizardSteps = isProduction
@@ -82,12 +99,16 @@ export default function AssessWizard({
         { id: 2, label: "Scope" },
         { id: 3, label: "Run" },
       ]
-    : WIZARD_STEPS;
+    : ASSESS_INTENT_STEPS[intent];
+
   if (collapsed) {
     return (
       <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-4">
         <p className="text-sm text-[var(--color-gray-300)]">
           Assessment configured: <span className="text-white">{activeScenario.title}</span>
+          {!useFixture && customDomain ? (
+            <span className="text-[var(--color-gray-500)]"> · {customDomain}</span>
+          ) : null}
         </p>
         <Button variant="secondary" size="sm" onClick={onExpand}>
           New assessment
@@ -96,25 +117,42 @@ export default function AssessWizard({
     );
   }
 
+  if (!isProduction && intent === "my-domain") {
+    return <AssessMyDomainPanel />;
+  }
+
+  if (!isProduction && !showCustomize) {
+    return null;
+  }
+
+  const guideIntent = intent === "live-demo" ? "live-demo" : "sample";
+
   return (
     <div className="space-y-6 pqc-print-hide">
-      {!isProduction ? <DemoGuideStrip /> : null}
-      <div className="flex flex-wrap gap-2">
-        {wizardSteps.map((step) => (
-          <button
-            key={step.id}
-            type="button"
-            onClick={() => onWizardStep(step.id)}
-            className={`rounded-full border px-3 py-1.5 text-xs font-medium transition ${
-              wizardStep === step.id
-                ? "border-white bg-white text-black"
-                : "border-[var(--color-border)] text-[var(--color-gray-400)] hover:text-white"
-            }`}
-          >
-            {step.id}. {step.label}
-          </button>
-        ))}
-      </div>
+      {!isProduction ? <DemoGuideStrip intent={guideIntent} /> : null}
+
+      {ASSESS_PORTFOLIO_ENABLED && uploadApiKey ? (
+        <AssessPortfolioPanel apiKey={uploadApiKey} />
+      ) : null}
+
+      {wizardSteps.length > 0 ? (
+        <div className="flex flex-wrap gap-2">
+          {wizardSteps.map((step) => (
+            <button
+              key={step.id}
+              type="button"
+              onClick={() => onWizardStep(step.id)}
+              className={`rounded-full border px-3 py-1.5 text-xs font-medium transition ${
+                wizardStep === step.id
+                  ? "border-white bg-white text-black"
+                  : "border-[var(--color-border)] text-[var(--color-gray-400)] hover:text-white"
+              }`}
+            >
+              {step.id}. {step.label}
+            </button>
+          ))}
+        </div>
+      ) : null}
 
       {isProduction && wizardStep === 1 && (
         <div className="space-y-4">
@@ -144,6 +182,9 @@ export default function AssessWizard({
       {isProduction && wizardStep === 2 && (
         <div className="space-y-4">
           <AssessDiscoveryScope />
+          {ASSESS_CBOM_IMPORT_ENABLED && uploadApiKey ? (
+            <CbomImportPanel apiKey={uploadApiKey} />
+          ) : null}
           <div className="flex justify-between gap-3">
             <Button variant="secondary" onClick={() => onWizardStep(1)}>
               Back
@@ -186,8 +227,21 @@ export default function AssessWizard({
         </div>
       )}
 
-      {!isProduction && wizardStep === 1 && (
+      {!isProduction && intent === "sample" && wizardStep === 1 && (
         <div className="space-y-4">
+          <AssessModeToggle
+            useFixture={urlSynced ? useFixture : true}
+            onUseFixtureChange={(fixture) => {
+              if (!fixture) {
+                onApplyLiveDemoPreset?.();
+                return;
+              }
+              onUseFixtureChange(true);
+              onAuthorizedChange(false);
+            }}
+            onApplyOqsPreset={onApplyLiveDemoPreset}
+            showOqsPreset
+          />
           <p className="text-sm text-[var(--color-gray-400)]">Pick a regulated scenario or industry baseline.</p>
           <ScenarioPicker
             scenarios={scenarios}
@@ -198,81 +252,83 @@ export default function AssessWizard({
             }}
           />
           <div className="flex justify-end">
-            <Button onClick={() => onWizardStep(2)}>Next: Target</Button>
+            <Button onClick={() => onWizardStep(2)}>Next: Scope</Button>
           </div>
         </div>
       )}
 
-      {!isProduction && wizardStep === 2 && (
+      {!isProduction && intent === "live-demo" && wizardStep === 1 && (
         <div className="space-y-4">
+          <AssessModeToggle
+            useFixture={false}
+            onUseFixtureChange={(fixture) => onUseFixtureChange(fixture)}
+            onApplyOqsPreset={onApplyLiveDemoPreset}
+            showOqsPreset
+            disabled
+          />
           <ScanTargetCard
             target={activeScenario.target}
             authorized={authorized}
             onAuthorizedChange={onAuthorizedChange}
             customDomain={customDomain}
             onCustomDomainChange={onCustomDomainChange}
+            useFixture={false}
+            onApplyOqsPreset={onApplyLiveDemoPreset}
           />
-          {!useFixture && (
-            <p className="rounded-lg border border-amber-500/30 bg-amber-500/10 p-3 text-xs text-amber-100">
-              Live demo scans are limited to approved targets ({[...PUBLIC_DEMO_LIVE_HOSTS].join(", ")}).
-              Use fixture mode for the full scenario demo.
-            </p>
-          )}
+          <div className="flex justify-between gap-3">
+            <Button variant="secondary" onClick={() => onWizardStep(1)} disabled>
+              Back
+            </Button>
+            <Button onClick={() => onWizardStep(2)} disabled={!authorized}>
+              Next: Scope
+            </Button>
+          </div>
+        </div>
+      )}
+
+      {!isProduction && wizardStep === 2 && (
+        <div className="space-y-4">
+          <AssessDiscoveryScope />
+          {intent === "sample" ? (
+            <CloudInventoryUploadCard
+              apiKey={uploadApiKey}
+              onUploaded={(sessionId) => {
+                onBundleUploaded(sessionId);
+                trackEvent("pqc_bundle_uploaded", { sessionId });
+              }}
+            />
+          ) : null}
+          {ASSESS_CBOM_IMPORT_ENABLED && uploadApiKey ? (
+            <CbomImportPanel apiKey={uploadApiKey} />
+          ) : null}
           <div className="flex justify-between gap-3">
             <Button variant="secondary" onClick={() => onWizardStep(1)}>
               Back
             </Button>
-            <Button onClick={() => onWizardStep(3)}>Next: Scope</Button>
+            <Button onClick={() => onWizardStep(3)}>Next: Run</Button>
           </div>
         </div>
       )}
 
       {!isProduction && wizardStep === 3 && (
         <div className="space-y-4">
-          <AssessDiscoveryScope />
-          <CloudInventoryUploadCard
-            apiKey={uploadApiKey}
-            onUploaded={(sessionId) => {
-              onBundleUploaded(sessionId);
-              trackEvent("pqc_bundle_uploaded", { sessionId });
-            }}
-          />
-          <div className="flex justify-between gap-3">
-            <Button variant="secondary" onClick={() => onWizardStep(2)}>
-              Back
-            </Button>
-            <Button onClick={() => onWizardStep(4)}>Next: Run</Button>
-          </div>
-        </div>
-      )}
-
-      {!isProduction && wizardStep === 4 && (
-        <div className="space-y-4">
+          {ASSESS_AI_NARRATIVE_ENABLED && uploadApiKey ? (
+            <AssessAiBriefCard apiKey={uploadApiKey} />
+          ) : null}
           <div className="rounded-lg border border-[var(--color-border)] bg-black/20 p-4 text-sm text-[var(--color-gray-300)]">
             <p>
               <span className="text-white">Scenario:</span> {activeScenario.title}
             </p>
             <p className="mt-2">
-              <span className="text-white">Target:</span> {customDomain || activeScenario.target.domain}
+              <span className="text-white">Target:</span>{" "}
+              {useFixture ? `${activeScenario.target.domain} (fixture)` : customDomain || activeScenario.target.domain}
             </p>
             <p className="mt-2">
-              <span className="text-white">Mode:</span> {useFixture ? "Fixture (recommended)" : "Live scan"}
+              <span className="text-white">Mode:</span> {useFixture ? "Fixture (offline sample)" : "Live scan"}
             </p>
           </div>
           <PqcCollapsibleSection title="Advanced options">
             <div className="space-y-3">
-              <label className="flex items-center gap-2 text-xs text-[var(--color-gray-400)]">
-                <input
-                  type="checkbox"
-                  checked={urlSynced ? useFixture : true}
-                  onChange={(e) => {
-                    const fixture = e.target.checked;
-                    onUseFixtureChange(fixture);
-                    if (fixture) onAuthorizedChange(false);
-                  }}
-                />
-                Fixture mode (no outbound network)
-              </label>
               <label className="flex items-center gap-2 text-xs text-[var(--color-gray-400)]">
                 <input
                   type="checkbox"
@@ -293,7 +349,7 @@ export default function AssessWizard({
             </div>
           )}
           <div className="flex flex-wrap justify-between gap-3">
-            <Button variant="secondary" onClick={() => onWizardStep(3)}>
+            <Button variant="secondary" onClick={() => onWizardStep(2)}>
               Back
             </Button>
             <Button onClick={onRunScan} disabled={isScanning || (!useFixture && !authorized)}>

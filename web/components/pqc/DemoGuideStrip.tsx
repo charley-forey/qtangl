@@ -1,8 +1,19 @@
-export default function DemoGuideStrip() {
+import { assessIntentCopy } from "@/lib/copy/readiness-assess-intent";
+
+type DemoGuideStripProps = {
+  intent?: "sample" | "live-demo";
+};
+
+export default function DemoGuideStrip({ intent = "sample" }: DemoGuideStripProps) {
+  const banner =
+    intent === "live-demo" ? assessIntentCopy.liveDemoBanner : assessIntentCopy.sampleBanner;
+
   return (
-    <p className="text-xs text-[var(--color-gray-500)]">
-      1) Pick a scenario · 2) Run scan (fixture for recordings) · 3) Review Mosca HNDL risk · 4) Prove PQ
-      handshake · 5) Export CBOM / PDF report
-    </p>
+    <div className="rounded-lg border border-sky-500/20 bg-sky-950/30 px-4 py-3">
+      <p className="text-xs leading-6 text-sky-100">{banner}</p>
+      <p className="mt-2 text-[11px] leading-5 text-[var(--color-gray-500)]">
+        Review Mosca HNDL risk → prove PQ handshake → export CBOM / signed PDF with verify link.
+      </p>
+    </div>
   );
 }

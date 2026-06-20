@@ -9,12 +9,7 @@ import Card from "@/components/ui/Card";
 import Eyebrow from "@/components/ui/Eyebrow";
 import { initialAccessFormState } from "@/lib/access/form-state";
 import { trackEvent } from "@/lib/analytics";
-import {
-  miniAssessmentCopy,
-  miniAssessmentScenarios,
-  sampleCbomPath,
-  type MiniAssessmentScenario,
-} from "@/lib/copy/readiness-value";
+import { miniAssessmentCopy, miniAssessmentScenarios, sampleCbomPath, type MiniAssessmentScenario } from "@/lib/copy/readiness-value";
 import { readMiniAssessmentFunnel } from "@/lib/hndl-funnel";
 
 const MINI_TO_ASSESS_SCENARIO: Record<string, string> = {
@@ -69,6 +64,7 @@ export default function MiniAssessmentClient() {
   const [state, formAction, pending] = useActionState(requestAccess, initialAccessFormState);
   const [selected, setSelected] = useState<MiniAssessmentScenario>(miniAssessmentScenarios[0]!);
   const [formStartedAt] = useState(() => Date.now());
+  const [capturedDomain, setCapturedDomain] = useState<string | undefined>();
   const unlocked = state.status === "success";
   const { gate, selector, upsell } = miniAssessmentCopy;
   const { results, findings } = selected;
@@ -89,10 +85,14 @@ export default function MiniAssessmentClient() {
 
   useEffect(() => {
     if (unlocked) {
-      trackEvent("mini_assess_email_captured", { scenarioId: selected.id, source: formSource });
+      trackEvent("mini_assess_email_captured", {
+        scenarioId: selected.id,
+        source: formSource,
+        domain: capturedDomain,
+      });
       trackEvent("mini_assessment_unlock", { scenarioId: selected.id });
     }
-  }, [unlocked, selected.id, formSource]);
+  }, [unlocked, selected.id, formSource, capturedDomain]);
 
   if (!unlocked) {
     return (
@@ -106,7 +106,15 @@ export default function MiniAssessmentClient() {
         <div className="mt-8 border-t border-[var(--border-subtle)] pt-8">
           <Eyebrow>{gate.title}</Eyebrow>
           <p className="mt-4 text-sm leading-7 text-[var(--color-gray-300)]">{gate.description}</p>
-          <form action={formAction} className="mt-6 space-y-4">
+          <form
+            action={formAction}
+            className="mt-6 space-y-4"
+            onSubmit={(event) => {
+              const form = event.currentTarget;
+              const domainField = form.elements.namedItem("message") as HTMLInputElement | null;
+              setCapturedDomain(domainField?.value?.trim() || undefined);
+            }}
+          >
             <input type="hidden" name="interest" value="Q-Day Assessment (one-time)" />
             <input type="hidden" name="source" value={formSource} />
             <input type="hidden" name="formStartedAt" value={String(formStartedAt)} />
@@ -150,6 +158,9 @@ export default function MiniAssessmentClient() {
 
   return (
     <div className="space-y-6">
+      <div className="rounded-xl border border-[var(--border-subtle)] bg-black/30 px-4 py-3 text-sm text-[var(--color-gray-300)]">
+        <span className="font-medium text-white">{selected.label}</span> — fixture preview for this vertical.
+      </div>
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <Eyebrow>{results.targetDomain}</Eyebrow>
         <ScenarioPicker selected={selected} onSelect={setSelected} />
@@ -204,7 +215,13 @@ export default function MiniAssessmentClient() {
           <Button href="/assess/start" variant="secondary">
             Start authorized baseline
           </Button>
-          <Button href={demoScanHref} variant="secondary">
+          <Button
+            href={demoScanHref}
+            variant="secondary"
+            onClick={() =>
+              trackEvent("mini_to_assess_handoff", { scenarioId: selected.id, source: formSource })
+            }
+          >
             Try full demo (fixture)
           </Button>
           <Button

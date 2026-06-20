@@ -51,8 +51,13 @@ class AssessSignupRequest(BaseModel):
 @router.post("/assess-signup")
 def public_assess_signup(body: AssessSignupRequest) -> dict:
     """Self-serve Assess signup — free tier tenant + onboarding token."""
-    from app.billing.service import provision_assess_tenant
+    from app.billing.service import assess_signup_rate_limited, provision_assess_tenant
 
+    if assess_signup_rate_limited(email=body.email):
+        raise HTTPException(
+            status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+            detail="Too many signup attempts for this email. Try again later.",
+        )
     try:
         result = provision_assess_tenant(email=body.email, company=body.company, domain=body.domain)
     except Exception as exc:
@@ -97,8 +102,15 @@ def public_monitor_provision(body: MonitorProvisionRequest) -> dict:
 
 
 @router.post("/lead-capture")
-def public_lead_capture(body: LeadCaptureRequest) -> dict:
+def public_lead_capture(request: Request, body: LeadCaptureRequest) -> dict:
     """Capture mini-assessment lead and trigger onboarding drip step 1."""
+    from app.billing.service import lead_capture_rate_limited
+
+    if lead_capture_rate_limited(email=body.email):
+        raise HTTPException(
+            status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+            detail="Too many lead capture attempts for this email. Try again later.",
+        )
     result = capture_lead(email=body.email, source=body.source, scenario=body.scenario)
     return {"status": "success", **result}
 
@@ -110,11 +122,14 @@ def public_unsubscribe(body: UnsubscribeRequest) -> dict:
 
 
 @router.get("/onboarding-key/{token}")
-def public_redeem_onboarding_key(token: str) -> dict:
-    """One-time onboarding after Monitor checkout (24h TTL)."""
-    from app.billing.onboarding_tokens import redeem_onboarding_token
+def public_redeem_onboarding_key(token: str, peek: bool = False) -> dict:
+    """Onboarding after Assess/Monitor signup (24h TTL). Use peek=true for assess-first (non-destructive)."""
+    from app.billing.onboarding_tokens import peek_onboarding_token, redeem_onboarding_token
 
-    result = redeem_onboarding_token(token)
+    if peek:
+        result = peek_onboarding_token(token)
+    else:
+        result = redeem_onboarding_token(token)
     if result is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -122,20 +137,40 @@ def public_redeem_onboarding_key(token: str) -> dict:
         )
     base = os.environ.get("QTANGL_PUBLIC_URL", "https://www.qtangl.com")
     onboarding_v2 = os.getenv("QTANGL_ONBOARDING_V2", "false").lower() in {"1", "true", "yes"}
-    if onboarding_v2:
+    login_url = f"{base}/dashboard/login?onboarding={token}"
+    assess_url = f"{base}/assess?onboarding={token}&mode=production"
+    if onboarding_v2 and not peek:
         return {
             "status": "success",
             "tenantId": result["tenantId"],
-            "loginUrl": f"{base}/dashboard/login?onboarding={token}",
-            "dashboardUrl": f"{base}/dashboard/login?onboarding={token}",
+            "loginUrl": login_url,
+            "dashboardUrl": login_url,
+            "assessUrl": assess_url,
             "email": result.get("email"),
         }
-    return {
+    if onboarding_v2 and peek:
+        return {
+            "status": "success",
+            "tenantId": result["tenantId"],
+            "loginUrl": login_url,
+            "dashboardUrl": login_url,
+            "assessUrl": assess_url,
+            "email": result.get("email"),
+            "peek": True,
+        }
+    payload: dict = {
         "status": "success",
         "tenantId": result["tenantId"],
-        "apiKey": result["apiKey"],
         "dashboardUrl": f"{base}/dashboard",
+        "assessUrl": assess_url,
+        "loginUrl": login_url,
+        "email": result.get("email"),
     }
+    if peek:
+        payload["peek"] = True
+    if result.get("apiKey"):
+        payload["apiKey"] = result["apiKey"]
+    return payload
 
 
 @router.post("/workos/webhook")

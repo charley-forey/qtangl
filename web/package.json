@@ -17,6 +17,7 @@
     "check:schema-sync": "node scripts/check_schema_sync.mjs",
     "check:no-demo-pqc-links": "node scripts/check-no-demo-pqc-links.mjs",
     "test:e2e": "playwright test",
+    "test:e2e:assess": "playwright test tests/e2e/assess.spec.ts tests/e2e/assess-production.spec.ts --project=chromium",
     "test:access": "node --experimental-strip-types --test tests/access-validation.test.mjs",
     "test:readiness-roi": "node --experimental-strip-types --test tests/readiness-roi.test.mjs",
     "test:assess-config": "node --test tests/assess-config.test.mjs",

@@ -28,6 +28,8 @@ Follow this doc for Track **E1** (first PQC pilot): sell, demo, run the assessme
 | Paying customer (automation) | Settings → Advanced | Tenant API key for CI only |
 | Self-serve Assess (R2) | `/assess/start` → email link | Free tier tenant |
 
+**Welcome email dual CTA:** Self-serve signup emails include both dashboard sign-in and direct Assess production links. Send prospects the dashboard link for WorkOS SSO; use the Assess link only when they need immediate fixture-free baseline setup.
+
 **Never** send fixture autorun links to paying customers.
 
 ### Admin: provision tenant + allowlist

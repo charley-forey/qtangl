@@ -70,6 +70,24 @@ def main() -> int:
         failures.append("autorun assess page missing bank scenario marker")
     print(f"  autorun assess OK ({autorun_status})")
 
+    start_status, _, start_body = _fetch(f"{base}/assess/start")
+    if start_status != 200:
+        failures.append(f"/assess/start HTTP {start_status}")
+    if "authorized baseline" not in start_body.lower() and "assess workspace" not in start_body.lower():
+        failures.append("/assess/start missing signup marker")
+    print(f"  /assess/start OK ({start_status})")
+
+    verify_status, _, verify_body = _fetch(f"{base}/verify?scanId=golden-bank-tls-inventory")
+    if verify_status != 200:
+        failures.append(f"verify golden HTTP {verify_status}")
+    if "verify" not in verify_body.lower():
+        failures.append("verify golden page missing verify marker")
+    print(f"  verify golden OK ({verify_status})")
+
+    for marker in ("What do you want to do", "Three paths"):
+        if marker.lower() not in body.lower():
+            failures.append(f"/assess missing intent picker marker: {marker}")
+
     if failures:
         print("FAIL:")
         for item in failures:

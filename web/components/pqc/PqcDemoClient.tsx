@@ -2,10 +2,12 @@
 
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
+import Link from "next/link";
 
 import { ASSESS_PRODUCTION_MODE_ENABLED } from "@/lib/assess-config";
 import type { CryptoAsset, Scenario } from "@/lib/pqc";
-import { redeemOnboardingToken } from "@/lib/pqc";
+import { peekOnboardingToken } from "@/lib/pqc";
+import { setStoredTenantApiKey } from "@/lib/tenant-api";
 import { QtanglApiProvider } from "@/lib/qtangl-api-context";
 
 import QDayCommandCenter from "./QDayCommandCenter";
@@ -25,6 +27,7 @@ export default function PqcDemoClient(props: {
   );
   const [initialTenantKey, setInitialTenantKey] = useState<string | null>(null);
   const [onboardingError, setOnboardingError] = useState<string | null>(null);
+  const [onboardingLoginUrl, setOnboardingLoginUrl] = useState<string | null>(null);
   const [onboardingReady, setOnboardingReady] = useState(!onboardingToken);
 
   useEffect(() => {
@@ -33,16 +36,28 @@ export default function PqcDemoClient(props: {
       return;
     }
     let cancelled = false;
-    async function redeem() {
+    async function loadOnboarding() {
       try {
-        const payload = await redeemOnboardingToken(onboardingToken);
+        const payload = await peekOnboardingToken(onboardingToken);
         if (cancelled) return;
-        setInitialTenantKey(payload.apiKey);
-        setInitialMode("production");
-        const url = new URL(window.location.href);
-        url.searchParams.delete("onboarding");
-        url.searchParams.set("mode", "production");
-        window.history.replaceState({}, "", `${url.pathname}${url.search}`);
+        if (payload.loginUrl) {
+          setOnboardingLoginUrl(payload.loginUrl);
+        }
+        if (payload.apiKey) {
+          setStoredTenantApiKey(payload.apiKey);
+          setInitialTenantKey(payload.apiKey);
+          setInitialMode("production");
+          window.dispatchEvent(new Event("qtangl-api-key-updated"));
+          const url = new URL(window.location.href);
+          url.searchParams.delete("onboarding");
+          url.searchParams.set("mode", "production");
+          window.history.replaceState({}, "", `${url.pathname}${url.search}`);
+        } else if (payload.loginUrl) {
+          setOnboardingError(null);
+          setInitialMode("demo");
+        } else {
+          setOnboardingError("Onboarding link did not return credentials. Use dashboard sign-in.");
+        }
       } catch (err) {
         if (!cancelled) {
           setOnboardingError(err instanceof Error ? err.message : "Onboarding failed.");
@@ -51,7 +66,7 @@ export default function PqcDemoClient(props: {
         if (!cancelled) setOnboardingReady(true);
       }
     }
-    void redeem();
+    void loadOnboarding();
     return () => {
       cancelled = true;
     };
@@ -61,11 +76,35 @@ export default function PqcDemoClient(props: {
     return <p className="text-sm text-[var(--color-gray-400)]">Retrieving your tenant key…</p>;
   }
 
+  if (onboardingLoginUrl && !initialTenantKey && modeParam === "production") {
+    return (
+      <div className="rounded-lg border border-sky-500/30 bg-sky-950/40 p-4 text-sm text-sky-100">
+        <p className="font-medium text-white">Sign in to run your production baseline</p>
+        <p className="mt-2 text-[var(--color-gray-300)]">
+          Your workspace is ready. Sign in with your work email to load authorized domains and scan history.
+        </p>
+        <Link
+          href={onboardingLoginUrl}
+          className="mt-4 inline-block rounded-full border border-white bg-white px-5 py-2 text-sm font-medium text-black"
+        >
+          Sign in to dashboard
+        </Link>
+      </div>
+    );
+  }
+
   return (
     <QtanglApiProvider initialMode={initialMode} initialTenantKey={initialTenantKey}>
       {onboardingError ? (
         <div className="mb-4 rounded-lg border border-red-500/30 bg-red-500/10 p-3 text-sm text-red-200">
           {onboardingError}
+          {onboardingLoginUrl ? (
+            <p className="mt-2">
+              <Link href={onboardingLoginUrl} className="underline text-white">
+                Sign in to dashboard
+              </Link>
+            </p>
+          ) : null}
         </div>
       ) : null}
       <QDayCommandCenter {...props} />

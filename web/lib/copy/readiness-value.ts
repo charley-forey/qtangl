@@ -77,7 +77,7 @@ export const miniAssessmentCopy = {
     label: "Choose the scenario closest to your environment for a tailored sample.",
   },
   upsell: {
-    primary: { label: "Run a live scan on your domain", href: "/assess" },
+    primary: { label: "Start authorized workspace", href: "/assess/start" },
     secondary: {
       label: "Request a Monitor pilot",
       href: "/access?interest=Q-Day%20Monitor%20(annual)&source=mini-assessment",

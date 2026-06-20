@@ -1,13 +1,22 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 
-import { ASSESS_PRODUCTION_MODE_ENABLED } from "@/lib/assess-config";
+import {
+  ASSESS_MSSP_WHITELABEL,
+  ASSESS_PRODUCTION_MODE_ENABLED,
+} from "@/lib/assess-config";
 import ProductModeBanner from "@/components/marketing/ProductModeBanner";
+import Card from "@/components/ui/Card";
 import type { CryptoAsset, Scenario } from "@/lib/pqc";
 import { useQtanglApi } from "@/lib/qtangl-api-context";
+import { useUpgradeGate } from "@/hooks/useUpgradeGate";
 
+import AssessIntentPicker from "./AssessIntentPicker";
+import AssessMsspBanner from "./AssessMsspBanner";
 import AssessResultsPanel from "./AssessResultsPanel";
+import AssessScanError from "./AssessScanError";
+import AssessUpgradePrompt from "./AssessUpgradePrompt";
 import AssessWizard from "./AssessWizard";
 import InventoryHeatmap from "./InventoryHeatmap";
 import ProductionModeBanner from "./ProductionModeBanner";
@@ -39,6 +48,7 @@ export default function QDayCommandCenter({
   const resultsRef = useRef<HTMLDivElement>(null);
   const [reportOpen, setReportOpen] = useState(false);
   const { mode, apiKey, tenantApiKey, setTenantApiKey } = useQtanglApi();
+  const { upgradeOpen, upgradeProduct, closeUpgrade, parsePaymentError } = useUpgradeGate();
   const isProduction = mode === "production" && ASSESS_PRODUCTION_MODE_ENABLED;
 
   const scan = useAssessScan({
@@ -89,6 +99,15 @@ export default function QDayCommandCenter({
     setWizardCollapsed,
     handleScan,
     selectScenario,
+    intent,
+    setIntent,
+    showCustomize,
+    setShowCustomize,
+    applyLiveDemoPreset,
+    quickStartSample,
+    quickStartLiveDemo,
+    errorKind,
+    blockedDomain,
   } = scan;
 
   async function onRunScan() {
@@ -97,17 +116,20 @@ export default function QDayCommandCenter({
   }
 
   function onRunComparisonScan() {
-    void handleScan("manual");
+    void handleScan("manual").then(() => {
+      document.querySelector("[data-assess-upsell]")?.scrollIntoView({ behavior: "smooth" });
+    });
   }
 
-  return (
-    <div className="space-y-6">
-      {!compact && isProduction ? (
-        <ProductionModeBanner />
-      ) : !compact ? (
-        <ProductModeBanner mode="live" />
-      ) : null}
+  useEffect(() => {
+    if (error && parsePaymentError(new Error(error))) {
+      setError(null);
+    }
+  }, [error, parsePaymentError, setError]);
 
+  const scannerBody = (
+    <div className="space-y-6">
+      {ASSESS_MSSP_WHITELABEL ? <AssessMsspBanner /> : null}
       {!isProduction ? <TenantKeyStrip onKeyChange={setTenantApiKey} /> : null}
 
       {!backendConnected && backendMessage && (
@@ -134,6 +156,18 @@ export default function QDayCommandCenter({
         </div>
       )}
 
+      {!isProduction && !wizardCollapsed && !scanResponse ? (
+        <AssessIntentPicker
+          activeIntent={intent}
+          onIntentChange={setIntent}
+          onQuickSample={quickStartSample}
+          onQuickLiveDemo={quickStartLiveDemo}
+          isScanning={isScanning}
+          showCustomize={showCustomize}
+          onToggleCustomize={() => setShowCustomize((value) => !value)}
+        />
+      ) : null}
+
       <AssessWizard
         scenarios={scenarios}
         activeScenarioId={activeScenarioId}
@@ -159,24 +193,28 @@ export default function QDayCommandCenter({
         onExpand={() => {
           setWizardCollapsed(false);
           setWizardStep(1);
+          setShowCustomize(intent !== "my-domain");
         }}
         assessMode={isProduction ? "production" : "demo"}
         industry={industry}
         onIndustryChange={setIndustry}
         authorizedDomains={authorizedDomains}
         uploadApiKey={isProduction ? apiKey : undefined}
+        intent={intent}
+        onApplyLiveDemoPreset={applyLiveDemoPreset}
+        showCustomize={showCustomize || isProduction}
       />
 
-      {error && (
-        <div className="rounded-lg border border-red-500/30 bg-red-500/10 p-3 text-sm text-red-200">
-          <p>{error}</p>
-          <button type="button" className="mt-2 text-xs underline" onClick={() => setError(null)}>
-            Dismiss
-          </button>
-        </div>
-      )}
+      {error ? (
+        <AssessScanError
+          message={error}
+          kind={errorKind}
+          blockedDomain={blockedDomain ?? undefined}
+          onDismiss={() => setError(null)}
+        />
+      ) : null}
 
-      {scanResponse && (
+      {scanResponse ? (
         <div ref={resultsRef}>
           <AssessResultsPanel
             scan={scanResponse}
@@ -189,12 +227,12 @@ export default function QDayCommandCenter({
             onError={setError}
             onOpenDrawer={() => setReportOpen(true)}
             onRunComparisonScan={onRunComparisonScan}
-            tenantApiKey={isProduction ? tenantApiKey : null}
+            tenantApiKey={tenantApiKey ?? (isProduction ? apiKey : null)}
             assessMode={isProduction ? "production" : "demo"}
-            reportApiKey={isProduction ? apiKey : undefined}
+            reportApiKey={isProduction ? apiKey : tenantApiKey ?? undefined}
           />
         </div>
-      )}
+      ) : null}
 
       {!scanResponse && inventory.length > 0 && !isScanning && !isProduction && (
         <PqcSection title="Fixture inventory preview">
@@ -202,11 +240,15 @@ export default function QDayCommandCenter({
         </PqcSection>
       )}
 
-      {!compact && !isProduction && (
+      {!compact && !isProduction ? (
         <p className="text-center text-xs text-[var(--color-gray-500)]">
-          Production customers: check your welcome email for dashboard access.
+          Production customers:{" "}
+          <a href="/assess/start" className="underline text-white">
+            start an authorized workspace
+          </a>{" "}
+          or check your welcome email for dashboard access.
         </p>
-      )}
+      ) : null}
 
       <ReportDrawer
         open={reportOpen}
@@ -215,6 +257,30 @@ export default function QDayCommandCenter({
         reportStatus={reportStatus}
         missingReason={reportAvailability?.missingReason ?? null}
       />
+      <AssessUpgradePrompt
+        open={upgradeOpen}
+        product={upgradeProduct}
+        onClose={closeUpgrade}
+        onMessage={setError}
+      />
+    </div>
+  );
+
+  return (
+    <div className="space-y-6">
+      {!compact && isProduction ? (
+        <ProductionModeBanner />
+      ) : !compact ? (
+        <ProductModeBanner mode="live" />
+      ) : null}
+
+      {compact ? (
+        scannerBody
+      ) : (
+        <Card tone="strong" className="rounded-[var(--radius-xl)] p-6">
+          {scannerBody}
+        </Card>
+      )}
     </div>
   );
 }

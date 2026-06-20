@@ -522,6 +522,92 @@ def _provision_tenant_core(
     }
 
 
+def _notify_crm_assess_signup(
+    *,
+    email: str,
+    company: str,
+    domain: str | None,
+    tenant_id: str,
+) -> None:
+    """Optional CRM webhook when QTANGL_CRM_WEBHOOK_URL is set."""
+    url = os.environ.get("QTANGL_CRM_WEBHOOK_URL", "").strip()
+    if not url:
+        return
+    payload = {
+        "event": "assess_signup",
+        "email": email,
+        "company": company,
+        "domain": domain,
+        "tenantId": tenant_id,
+    }
+    try:
+        body = json.dumps(payload).encode("utf-8")
+        req = urllib.request.Request(
+            url,
+            data=body,
+            headers={"Content-Type": "application/json"},
+            method="POST",
+        )
+        with urllib.request.urlopen(req, timeout=5) as response:
+            if response.status >= 400:
+                logger.warning("CRM webhook returned HTTP %s", response.status)
+    except (urllib.error.URLError, TimeoutError, ValueError) as exc:
+        logger.warning("CRM webhook failed: %s", exc)
+
+
+def assess_signup_rate_limited(*, email: str) -> bool:
+    """Simple in-memory rate limit per email domain (abuse prevention)."""
+    import time
+
+    limit = int(os.getenv("QTANGL_ASSESS_SIGNUP_LIMIT_PER_HOUR", "5"))
+    if limit <= 0:
+        return False
+    email_l = email.lower().strip()
+    domain = email_l.split("@")[-1] if "@" in email_l else email_l
+    now = time.time()
+    window = 3600.0
+    if not hasattr(assess_signup_rate_limited, "_hits"):
+        assess_signup_rate_limited._hits = {}  # type: ignore[attr-defined]
+    hits: dict[str, list[float]] = assess_signup_rate_limited._hits  # type: ignore[attr-defined]
+    bucket = hits.setdefault(domain, [])
+    bucket[:] = [t for t in bucket if now - t < window]
+    if len(bucket) >= limit:
+        return True
+    bucket.append(now)
+    return False
+
+
+def lead_capture_rate_limited(*, email: str) -> bool:
+    """Rate limit mini-assessment / lead capture per email domain."""
+    import time
+
+    limit = int(os.getenv("QTANGL_LEAD_CAPTURE_LIMIT_PER_HOUR", "10"))
+    if limit <= 0:
+        return False
+    email_l = email.lower().strip()
+    domain = email_l.split("@")[-1] if "@" in email_l else email_l
+    now = time.time()
+    window = 3600.0
+    if not hasattr(lead_capture_rate_limited, "_hits"):
+        lead_capture_rate_limited._hits = {}  # type: ignore[attr-defined]
+    hits: dict[str, list[float]] = lead_capture_rate_limited._hits  # type: ignore[attr-defined]
+    bucket = hits.setdefault(domain, [])
+    bucket[:] = [t for t in bucket if now - t < window]
+    if len(bucket) >= limit:
+        return True
+    bucket.append(now)
+    return False
+
+
+def _domain_allowlist_seeded(*, email: str, domain: str | None) -> bool:
+    if not domain:
+        return False
+    email_l = email.lower().strip()
+    email_domain = email_l.split("@")[-1]
+    normalized = domain.lower().strip()
+    return normalized == email_domain or normalized.endswith(f".{email_domain}")
+
+
 def provision_assess_tenant(*, email: str, company: str, domain: str | None = None) -> dict[str, Any]:
     """Create free-tier Assess tenant with onboarding token (self-serve R2)."""
     core = _provision_tenant_core(
@@ -545,30 +631,45 @@ def provision_assess_tenant(*, email: str, company: str, domain: str | None = No
     onboarding_v2 = os.getenv("QTANGL_ONBOARDING_V2", "false").lower() in {"1", "true", "yes"}
     login_url = f"{base}/dashboard/login?onboarding={token_info['token']}"
     assess_url = f"{base}/assess?onboarding={token_info['token']}&mode=production"
+    allowlist_seeded = _domain_allowlist_seeded(email=email, domain=domain)
     if onboarding_v2:
         body_extra = (
             "Your Assess workspace is ready. Sign in with the secure link below (expires in 24 hours).\n\n"
-            f"Sign in: {login_url}\n"
+            f"Sign in (recommended): {login_url}\n"
             f"Assess production mode: {assess_url}"
         )
     else:
         body_extra = (
-            "Your Assess workspace is ready. Open the secure link below once to retrieve your "
-            f"tenant API key (expires in 24 hours).\n\n{assess_url}"
+            "Your Assess workspace is ready.\n\n"
+            f"Sign in to dashboard: {login_url}\n"
+            f"Or open Assess production mode: {assess_url}\n\n"
+            "The onboarding link expires in 24 hours."
         )
     send_report_email(
         to_email=email,
         scan_id="assess-signup",
         target_domain=company,
-        report_url=login_url if onboarding_v2 else assess_url,
+        report_url=login_url,
         readiness_band="Assess free tier",
         subject_prefix="[Qtangl Assess]",
         body_extra=body_extra,
     )
+    warning = None
+    if domain and not allowlist_seeded:
+        warning = (
+            "Domain did not match your work email domain and was not added to your scan allowlist. "
+            "Add authorized domains in the dashboard after sign-in."
+        )
+    elif not domain:
+        warning = "No domain provided — add authorized domains in the dashboard before running a live scan."
+    _notify_crm_assess_signup(email=email, company=company, domain=domain, tenant_id=tenant_id)
     return {
         "tenantId": tenant_id,
         "onboardingTokenExpiresAt": token_info["expiresAt"],
         "assessUrl": assess_url,
+        "loginUrl": login_url,
+        "allowlistSeeded": allowlist_seeded,
+        "warning": warning,
     }
 
 

@@ -84,6 +84,24 @@ def test_public_onboarding_key_endpoint(db_client: TestClient) -> None:
     assert again.status_code == 404
 
 
+def test_public_onboarding_key_peek_non_destructive(db_client: TestClient) -> None:
+    issued = create_onboarding_token(
+        tenant_id="tenant-peek",
+        api_key="qtangl_peek_key",
+        email="peek@example.com",
+    )
+    peek = db_client.get(f"/public/onboarding-key/{issued['token']}?peek=true")
+    assert peek.status_code == 200
+    peek_body = peek.json()
+    assert peek_body.get("peek") is True
+    assert peek_body["tenantId"] == "tenant-peek"
+
+    redeem = db_client.get(f"/public/onboarding-key/{issued['token']}")
+    assert redeem.status_code == 200
+    redeem_body = redeem.json()
+    assert redeem_body["apiKey"] == "qtangl_peek_key"
+
+
 def test_token_hash_not_reversible_from_db(db_client: TestClient) -> None:
     issued = create_onboarding_token(
         tenant_id="tenant-hash",

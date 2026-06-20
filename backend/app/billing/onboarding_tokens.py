@@ -55,6 +55,42 @@ def create_onboarding_token(*, tenant_id: str, api_key: str, email: str) -> dict
     return {"token": token, "expiresAt": expires_at.isoformat()}
 
 
+def peek_onboarding_token(token: str) -> dict[str, Any] | None:
+    """Return api key without marking token redeemed (assess-first path)."""
+    token_hash = hashlib.sha256(token.encode()).hexdigest()
+    now = datetime.now(timezone.utc)
+
+    if persistence_enabled():
+        from app.db.models import OnboardingKeyToken as OnboardingKeyTokenRow
+
+        with db_session() as session:
+            row = (
+                session.query(OnboardingKeyTokenRow)
+                .filter(OnboardingKeyTokenRow.token_hash == token_hash)
+                .one_or_none()
+            )
+            if row is None or row.redeemed_at is not None or _as_utc_aware(row.expires_at) < now:
+                return None
+            data = decrypt_json_blob(row.payload_encrypted)
+            return {
+                "tenantId": row.tenant_id,
+                "apiKey": data.get("apiKey"),
+                "email": data.get("email"),
+                "tokenHash": token_hash,
+            }
+
+    entry = _memory_tokens.get(token_hash)
+    if entry is None or entry.get("redeemed") or entry["expiresAt"] < now:
+        return None
+    data = decrypt_json_blob(entry["payload"])
+    return {
+        "tenantId": entry["tenantId"],
+        "apiKey": data.get("apiKey"),
+        "email": data.get("email"),
+        "tokenHash": token_hash,
+    }
+
+
 def redeem_onboarding_token(token: str) -> dict[str, Any] | None:
     """Return api key once; mark token redeemed."""
     token_hash = hashlib.sha256(token.encode()).hexdigest()

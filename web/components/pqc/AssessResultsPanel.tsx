@@ -7,6 +7,9 @@ import { ASSESS_RESULT_TABS, scenarioIndustry, type AssessResultTab } from "@/li
 import type { PqcScanResponse, ReportAvailabilityResponse } from "@/lib/pqc";
 
 import AssessReportHeader from "./AssessReportHeader";
+import AssessBoardReadoutGuide from "./AssessBoardReadoutGuide";
+import AssessCiPathCard from "./AssessCiPathCard";
+import AssessRemediationBridge from "./AssessRemediationBridge";
 import AssessUpsellBlock from "./AssessUpsellBlock";
 import CompliancePanel from "./CompliancePanel";
 import ExecutivePriorities from "./ExecutivePriorities";
@@ -28,6 +31,8 @@ import ScanLog from "./ScanLog";
 import ScanProvenanceCard from "./ScanProvenanceCard";
 import ScanResultsGuide from "./ScanResultsGuide";
 import AssessShareLinkButton from "./AssessShareLinkButton";
+import PassportPanel from "./PassportPanel";
+import EvidenceVaultPanel from "./EvidenceVaultPanel";
 import SeverityDonut from "./SeverityDonut";
 import VulnerabilityCard from "./VulnerabilityCard";
 import { PqcSection, PqcTabPanel, PqcTabs } from "./ui";
@@ -133,7 +138,12 @@ export default function AssessResultsPanel({
         <PqcSection title="Remediation preview">
           <RemediationBacklog items={scan.remediationBacklog} limit={8} />
         </PqcSection>
-        <AssessUpsellBlock scan={scan} onRunComparisonScan={onRunComparisonScan} hidden={isProduction} />
+        <AssessBoardReadoutGuide />
+        <AssessUpsellBlock
+          scan={scan}
+          onRunComparisonScan={onRunComparisonScan}
+          tenantApiKey={tenantApiKey}
+        />
       </PqcTabPanel>
 
       <PqcTabPanel id="assess-panel-compliance" active={activeTab === "compliance"} tabId="compliance" className="pqc-print-tab-compliance">
@@ -175,6 +185,7 @@ export default function AssessResultsPanel({
         <PqcSection title="Remediation backlog">
           <RemediationBacklog items={scan.remediationBacklog} />
         </PqcSection>
+        <AssessRemediationBridge items={scan.remediationBacklog} scanId={scan.scanId} />
         <PqcSection title="What-if readiness projection">
           <RemediationWhatIfPublic
             scanId={scan.scanId}
@@ -237,6 +248,27 @@ export default function AssessResultsPanel({
           </p>
           <AssessShareLinkButton scanId={scan.scanId} className="mt-3" />
         </PqcSection>
+        <AssessCiPathCard scanId={scan.scanId} />
+        {(isProduction || tenantApiKey) && reportApiKey ? (
+          <PqcSection title="Evidence vault">
+            <p className="text-sm text-[var(--color-gray-400)]">
+              Download retained scan artifacts (reports, CBOM, transparency log receipts).
+            </p>
+            <div className="mt-3">
+              <EvidenceVaultPanel apiKey={reportApiKey} scanIds={[scan.scanId]} />
+            </div>
+          </PqcSection>
+        ) : null}
+        {(isProduction || tenantApiKey) && reportApiKey ? (
+          <PqcSection title="Readiness passport">
+            <p className="text-sm text-[var(--color-gray-400)]">
+              Create a time-limited passport link for auditors — includes verify scope and log inclusion.
+            </p>
+            <div className="mt-3">
+              <PassportPanel scanId={scan.scanId} apiKey={reportApiKey} />
+            </div>
+          </PqcSection>
+        ) : null}
         {isProduction || tenantApiKey ? (
           <PqcSection title="Your workspace">
             <Link
@@ -254,10 +286,11 @@ export default function AssessResultsPanel({
           </PqcSection>
         ) : null}
         <p className="text-xs text-[var(--color-gray-500)]">
-          Transparency log:{" "}
+          Signed reports are recorded in the Qtangl transparency log —{" "}
           <a href="/trust" className="text-white underline">
-            /trust
+            view log inclusion on /trust
           </a>
+          .
         </p>
       </PqcTabPanel>
     </div>

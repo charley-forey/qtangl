@@ -3,6 +3,8 @@
 import { useCallback, useState } from "react";
 
 import type { UpgradeProduct } from "@/components/dashboard/UpgradeModal";
+import { ASSESS_EVENTS } from "@/lib/analytics/assess-events";
+import { trackEvent } from "@/lib/analytics";
 
 export function useUpgradeGate() {
   const [upgradeOpen, setUpgradeOpen] = useState(false);
@@ -11,6 +13,9 @@ export function useUpgradeGate() {
   const openUpgrade = useCallback((product: UpgradeProduct = "assess") => {
     setUpgradeProduct(product);
     setUpgradeOpen(true);
+    trackEvent(ASSESS_EVENTS.upgradePromptShown, {
+      code: product === "assess" ? "assess_payment_required" : product,
+    });
   }, []);
 
   const closeUpgrade = useCallback(() => setUpgradeOpen(false), []);

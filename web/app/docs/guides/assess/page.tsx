@@ -87,8 +87,9 @@ export default function AssessGuidePage() {
           <Link href="/assess" className="text-white underline underline-offset-4">
             /assess
           </Link>{" "}
-          runs a four-step wizard (scenario → target → scope → run), then opens a tabbed readout:
-          Executive, Compliance, Inventory, Remediation, Technical, and Evidence.
+          starts with three paths: sample report (no domain), Open Quantum Safe live demo, or authorized
+          workspace for your domain. Customize to run a three-step wizard (scenario → scope → run), then open a
+          tabbed readout: Executive, Compliance, Inventory, Remediation, Technical, and Evidence.
         </p>
         <ul className="mt-4 list-disc space-y-2 pl-5 text-sm leading-7 text-[var(--color-gray-300)]">
           <li>

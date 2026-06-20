@@ -26,6 +26,17 @@ See [backend/docs/RAILWAY_DEPLOY.md](../../backend/docs/RAILWAY_DEPLOY.md) and [
 - [ ] Complete demo #2: live scan on authorized domain OR cloud JSON upload
 - [ ] Record Loom per [script.md](./script.md) (E3-002)
 
+### Persona script validation (target &lt;15s autorun)
+
+| Script | URL | Timing target | Recorded |
+|--------|-----|---------------|----------|
+| Sales demo (bank autorun) | `/assess?scenario=bank-tls-inventory&autorun=1` | &lt;15s to Executive tab | [ ] |
+| CISO board readout | Executive → Evidence → board PDF | 15 min flow | [ ] |
+| Gov contractor | `/assess?scenario=gov-contractor-cmmc&autorun=1` | &lt;30s | [ ] |
+| Healthcare HNDL | `/assess?scenario=healthcare-insurer-hndl&autorun=1` | &lt;30s | [ ] |
+
+Automated gate: `web/tests/e2e/assess.spec.ts` asserts bank autorun &lt;15s and axe on intent picker + post-scan.
+
 ## Close
 
 - [ ] Customize [roadmap/templates/pqc-pilot-sow.md](../../roadmap/templates/pqc-pilot-sow.md)

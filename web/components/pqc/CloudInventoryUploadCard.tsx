@@ -91,7 +91,8 @@ export default function CloudInventoryUploadCard({ onUploaded, apiKey }: CloudIn
       </div>
       {error ? <p className="mt-3 text-xs text-red-300">{error}</p> : null}
       <p className="mt-3 text-[10px] text-[var(--color-gray-600)]">
-        Uploads are deleted within 24 hours per retention policy.
+        Uploads are deleted within 24 hours per retention policy. For AWS ACM exports, use the ACM
+        certificate export template in the dashboard cloud inventory guide.
       </p>
     </div>
   );

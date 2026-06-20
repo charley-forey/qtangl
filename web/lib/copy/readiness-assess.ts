@@ -5,13 +5,13 @@ export const assessPageCopy = {
       "Baseline quantum-vulnerable cryptography with live scans, Mosca HNDL risk, and CBOM exports — mapped to NSM-10, CNSA 2.0, NIST IR 8547, PCI-DSS 4.0, and CMMC, with signed PDF reports your auditors can verify.",
   },
   hero: {
-    eyebrow: "Assess",
+    eyebrow: "Q-Day readiness",
     title: "Baseline your crypto in one session",
     description:
-      "Scan external-facing TLS, map algorithms to NSM-10 and NIST IR 8547, and export evidence your board can review.",
+      "See a sample report in one click, try a live scan on the Open Quantum Safe test server, or authorize your own domains for a production baseline.",
     actions: [
-      { href: "#scanner", label: "Start assessment" },
-      { href: "/docs/guides/pqc-demo", label: "API guide", variant: "secondary" as const },
+      { href: "/assess?scenario=bank-tls-inventory&autorun=1", label: "See sample bank report" },
+      { href: "/assess/start", label: "Scan my domain", variant: "secondary" as const },
     ],
   },
   features: {
@@ -39,7 +39,7 @@ export const assessPageCopy = {
   scenarios: {
     eyebrow: "Scenarios",
     title: "Try a regulated scenario",
-    description: "Pre-loaded targets for banking, government, and healthcare readiness workflows.",
+    description: "Pre-loaded fixture targets for banking, government, and healthcare readiness workflows — no domain required.",
     items: [
       { label: "Bank TLS inventory", href: "/assess?scenario=bank-tls-inventory&autorun=1" },
       { label: "Gov contractor CMMC", href: "/assess?scenario=gov-contractor-cmmc&autorun=1" },
@@ -47,9 +47,10 @@ export const assessPageCopy = {
     ],
   },
   cta: {
-    title: "Start with a live scan",
-    description: "No account required for the public scanner. Request pilot access for production domains.",
-    primary: { label: "Run Q-Day scan", href: "#scanner" },
+    title: "Ready for your own domains?",
+    description:
+      "Self-serve Assess workspace includes 5 scans per month and domain allowlisting. Sales-led pilots cover multi-domain estates and Monitor onboarding.",
+    primary: { label: "Start authorized workspace", href: "/assess/start" },
     secondary: { label: "Request pilot", href: "/access" },
   },
 } as const;

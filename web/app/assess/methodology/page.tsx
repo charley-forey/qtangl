@@ -80,6 +80,34 @@ export default function AssessMethodologyPage() {
             </ul>
           </section>
           <section>
+            <h2 className="text-lg text-white">Rate limits & abuse prevention</h2>
+            <p>
+              Public assess-signup and mini-assessment endpoints are rate-limited per email domain. Live scans honor{" "}
+              <code className="text-white">QTANGL_PQC_MAX_ENDPOINTS</code> and{" "}
+              <code className="text-white">QTANGL_PQC_SCAN_TIMEOUT</code> server caps. See{" "}
+              <Link href="/docs/operations/rate-limits" className="text-white underline">
+                rate limits documentation
+              </Link>
+              .
+            </p>
+          </section>
+          <section>
+            <h2 className="text-lg text-white">Enterprise integrations</h2>
+            <p>
+              Scan-complete webhooks (v2) notify your SIEM or ticketing system when production scans finish. Slack drift
+              alerts connect via dashboard Integration settings. Cloud inventory uploads support ACM export format first.
+            </p>
+            <p className="mt-2">
+              <Link href="/docs/guides/drift-monitoring" className="text-white underline">
+                Drift monitoring guide
+              </Link>
+              {" · "}
+              <Link href="/docs/integrations/ci-cd" className="text-white underline">
+                CI/CD integration
+              </Link>
+            </p>
+          </section>
+          <section>
             <h2 className="text-lg text-white">Limitations</h2>
             <ul>
               <li>Endpoint-scoped inventory aid — not a formal cryptographic audit or penetration test.</li>

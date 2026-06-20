@@ -60,8 +60,8 @@ export default function DashboardScansTab({
   const diffByScan = useMemo(() => {
     const map = new Map<string, number | null>();
     const detail = bundle?.latestScanDetail;
-    if (detail?.scanDiff?.summary && typeof detail.scanDiff.summary === "object") {
-      const delta = (detail.scanDiff.summary as { readinessDelta?: number }).readinessDelta;
+    if (detail?.scanDiff && detail.scanId) {
+      const delta = detail.scanDiff.readinessDelta;
       if (delta != null) map.set(detail.scanId, Number(delta));
     }
     return map;

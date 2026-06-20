@@ -10,7 +10,6 @@ import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
 import Eyebrow from "@/components/ui/Eyebrow";
 import AssessScannerLoader from "@/components/pqc/AssessScannerLoader";
-import ProductModeBanner from "@/components/marketing/ProductModeBanner";
 import TrustDogfoodSelfScan from "@/components/trust/TrustDogfoodSelfScan";
 import JsonLd from "@/components/seo/JsonLd";
 import { qtanglApiBaseUrl } from "@/lib/api";
@@ -73,14 +72,14 @@ export default async function AssessPage({
         eyebrow={hero.eyebrow}
         title={hero.title}
         description={hero.description}
-        actions={[
-          { href: "#scanner", label: "Start assessment" },
-          { href: "/access", label: "Request pilot", variant: "secondary" },
-        ]}
+        actions={hero.actions.map((action) => ({
+          href: action.href,
+          label: action.label,
+          variant: "variant" in action ? action.variant : undefined,
+        }))}
       />
 
       <Section gap="tight" id="scanner" className="scroll-mt-28">
-        <ProductModeBanner mode="live" />
         <div className="mb-6 flex flex-wrap gap-3">
           {assessTrustSignals.map((signal) => (
             <Button key={signal.label} href={signal.href} variant="secondary" size="sm">
@@ -100,7 +99,7 @@ export default async function AssessPage({
       <Section gap="tight">
         <div className="content-reading">
           <Eyebrow>How it works</Eyebrow>
-          <h2 className="heading-section mt-4">Baseline in four steps</h2>
+          <h2 className="heading-section mt-4">Three paths to your baseline</h2>
         </div>
         <ol className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {assessHowItWorks.map((item) => (

@@ -5,8 +5,11 @@ import { useRouter, useSearchParams } from "next/navigation";
 
 import {
   AUTORUN_SCENARIO_IDS,
+  OQS_DEMO_HOST,
   PUBLIC_DEMO_LIVE_HOSTS,
+  isAssessIntent,
   isAssessResultTab,
+  type AssessIntent,
   type AssessResultTab,
 } from "@/lib/assess-config";
 import { trackEvent } from "@/lib/analytics";
@@ -24,6 +27,8 @@ import {
   syncReportAfterScan,
   waitForPqcScan,
 } from "@/lib/pqc";
+
+import type { AssessScanErrorKind } from "./AssessScanError";
 
 export function useAssessScan({
   initialInventory,
@@ -74,6 +79,10 @@ export function useAssessScan({
   const [activeTab, setActiveTab] = useState<AssessResultTab>("executive");
   const [wizardStep, setWizardStep] = useState(1);
   const [wizardCollapsed, setWizardCollapsed] = useState(false);
+  const [intent, setIntent] = useState<AssessIntent>("sample");
+  const [showCustomize, setShowCustomize] = useState(false);
+  const [errorKind, setErrorKind] = useState<AssessScanErrorKind>("generic");
+  const [blockedDomain, setBlockedDomain] = useState<string | null>(null);
 
   const bootstrapAttempted = useRef(false);
   const autorunAttempted = useRef(false);
@@ -93,6 +102,7 @@ export function useAssessScan({
       } else {
         params.set("scenario", activeScenarioId);
         params.set("useFixture", String(useFixture));
+        if (intent !== "sample") params.set("intent", intent);
       }
       if (bundleSessionId) params.set("session", bundleSessionId);
       const sid = overrides?.scanId ?? scanResponse?.scanId;
@@ -112,15 +122,18 @@ export function useAssessScan({
       basePath,
       syncUrlEnabled,
       isProduction,
+      intent,
     ]
   );
 
   useEffect(() => {
-    trackEvent("assess_landing_view", { path: basePath, mode: analyticsMode });
+    const intentParam = searchParams.get("intent");
+    const landingIntent = isAssessIntent(intentParam) ? intentParam : "sample";
+    trackEvent("assess_landing_view", { path: basePath, mode: analyticsMode, intent: landingIntent });
     if (!isProduction) {
       trackEvent("demo_viewed", { demo: "pqc", mode: analyticsMode });
     }
-  }, [basePath, analyticsMode, isProduction]);
+  }, [basePath, analyticsMode, isProduction, searchParams]);
 
   useEffect(() => {
     if (isProduction) {
@@ -132,12 +145,28 @@ export function useAssessScan({
     if (scenarioParam) setActiveScenarioId(scenarioParam);
     setUseFixture(searchParams.get("useFixture") !== "false");
     setUseLiteScan(searchParams.get("depth") === "lite");
+    const intentParam = searchParams.get("intent");
+    if (isAssessIntent(intentParam)) {
+      setIntent(intentParam);
+      if (intentParam === "live-demo") {
+        setUseFixture(false);
+        setCustomDomain(OQS_DEMO_HOST);
+        setAuthorized(true);
+      }
+    } else if (searchParams.get("useFixture") === "false") {
+      setIntent("live-demo");
+    }
     const session = searchParams.get("session");
     if (session) setBundleSessionId(session);
     const tabParam = searchParams.get("tab");
     if (isAssessResultTab(tabParam)) setActiveTab(tabParam);
     setUrlSynced(true);
   }, [searchParams, isProduction]);
+
+  useEffect(() => {
+    if (wizardStep < 1) return;
+    trackEvent("assess_wizard_step", { step: wizardStep, intent });
+  }, [wizardStep, intent]);
 
   useEffect(() => {
     if (isProduction) {
@@ -273,8 +302,10 @@ export function useAssessScan({
       if (!useFixture && !isProduction && customDomain) {
         const normalized = customDomain.trim().toLowerCase().replace(/^https?:\/\//, "").split("/")[0];
         if (!PUBLIC_DEMO_LIVE_HOSTS.has(normalized)) {
+          setErrorKind("domain_not_allowed");
+          setBlockedDomain(normalized);
           setError(
-            "Public demo live scans are limited to approved targets (e.g. test.openquantumsafe.org). Use fixture mode or request a pilot for your domain."
+            `Host "${normalized}" is not permitted for public demo live scans. Use fixture mode, scan ${OQS_DEMO_HOST}, or start an authorized workspace for your domain.`
           );
           return;
         }
@@ -292,6 +323,8 @@ export function useAssessScan({
 
       setIsScanning(true);
       setError(null);
+      setErrorKind("generic");
+      setBlockedDomain(null);
       setScanProgress(null);
       setScanTimeline([]);
       setIsAutorunActive(source === "autorun");
@@ -362,9 +395,24 @@ export function useAssessScan({
         );
         setReportAvailability(availability);
         setReportStatus(availability.reportAvailable ? "ready" : "unavailable");
+        try {
+          const refreshed = await pollPqcScan(completed.scanId, isProduction ? apiKey : undefined);
+          if (refreshed.status === "success") {
+            setScanResponse(refreshed);
+          }
+        } catch {
+          // Keep completed scan if refresh fails (scanDiff may arrive later).
+        }
         syncUrl({ scanId: completed.scanId });
       } catch (err) {
-        setError(err instanceof Error ? err.message : "Scan failed");
+        const message = err instanceof Error ? err.message : "Scan failed";
+        if (message.includes("not permitted") || message.includes("not on your tenant")) {
+          setErrorKind("domain_not_allowed");
+          setBlockedDomain(customDomain.trim().toLowerCase() || null);
+        } else {
+          setErrorKind("generic");
+        }
+        setError(message);
       } finally {
         setIsScanning(false);
         setScanProgress(null);
@@ -413,6 +461,48 @@ export function useAssessScan({
     setCustomDomain("");
     trackEvent("scenario_changed", { scenarioId: id, assessMode: analyticsMode });
   }, [analyticsMode]);
+
+  const applyLiveDemoPreset = useCallback(() => {
+    setIntent("live-demo");
+    setUseFixture(false);
+    setCustomDomain(OQS_DEMO_HOST);
+    setAuthorized(true);
+    trackEvent("assess_oqs_preset_applied");
+  }, []);
+
+  const changeIntent = useCallback((next: AssessIntent) => {
+    setIntent(next);
+    setError(null);
+    setWizardStep(1);
+    if (next === "sample") {
+      setUseFixture(true);
+      setAuthorized(false);
+      setCustomDomain("");
+    } else if (next === "live-demo") {
+      setUseFixture(false);
+      setCustomDomain(OQS_DEMO_HOST);
+      setAuthorized(true);
+    }
+  }, []);
+
+  const quickStartSample = useCallback(() => {
+    setIntent("sample");
+    setActiveScenarioId("bank-tls-inventory");
+    setUseFixture(true);
+    setAuthorized(false);
+    setCustomDomain("");
+    setShowCustomize(false);
+    void handleScan("autorun");
+  }, [handleScan]);
+
+  const quickStartLiveDemo = useCallback(() => {
+    setIntent("live-demo");
+    setUseFixture(false);
+    setCustomDomain(OQS_DEMO_HOST);
+    setAuthorized(true);
+    setShowCustomize(false);
+    void handleScan("manual");
+  }, [handleScan]);
 
   const changeTab = useCallback(
     (tab: AssessResultTab) => {
@@ -477,5 +567,14 @@ export function useAssessScan({
     handleScan,
     selectScenario,
     syncUrl,
+    intent,
+    setIntent: changeIntent,
+    showCustomize,
+    setShowCustomize,
+    applyLiveDemoPreset,
+    quickStartSample,
+    quickStartLiveDemo,
+    errorKind,
+    blockedDomain,
   };
 }

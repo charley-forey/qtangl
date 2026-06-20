@@ -73,6 +73,7 @@ jobs:
           QTANGL_ENABLE_TRANSPARENCY_LOG: "true"
           DATABASE_URL: sqlite:///./ci_test.db
         run: |
+          python -m pytest tests/test_assess_signup.py tests/test_onboarding_tokens.py tests/test_pqc_safety.py -q --tb=short
           python -m pytest tests/ -q --tb=short \
             --ignore=tests/test_sdk_client.py \
             --ignore=tests/test_sdk_resources.py
@@ -263,7 +264,18 @@ jobs:
       - name: E2E assess page
         env:
           QTANGL_API_BASE_URL: http://127.0.0.1:8000
-        run: npx playwright test tests/e2e/assess.spec.ts --project=chromium
+        run: npx playwright test tests/e2e/assess.spec.ts tests/e2e/assess-production.spec.ts --project=chromium
+
+      - name: E2E assess R4 flags (optional)
+        continue-on-error: true
+        env:
+          QTANGL_API_BASE_URL: http://127.0.0.1:8000
+          NEXT_PUBLIC_ASSESS_PORTFOLIO: "true"
+          NEXT_PUBLIC_ASSESS_CBOM_IMPORT: "true"
+          NEXT_PUBLIC_ASSESS_AI_NARRATIVE: "true"
+          NEXT_PUBLIC_ASSESS_MSSP_WHITELABEL: "true"
+          NEXT_PUBLIC_ASSESS_MONITOR_CHECKOUT: "true"
+        run: npx playwright test tests/e2e/assess.spec.ts --project=chromium --grep "landing sections"
 
       - name: E2E HNDL hub
         env:

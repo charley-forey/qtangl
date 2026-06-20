@@ -126,6 +126,13 @@ export default function VerifyPageClient() {
   }, [scanId]);
 
   useEffect(() => {
+    trackEvent("verify_viewed", {
+      scanId: scanId || undefined,
+      referrer: typeof document !== "undefined" ? document.referrer || undefined : undefined,
+    });
+  }, [scanId]);
+
+  useEffect(() => {
     if (!scanId) {
       setResult(null);
       setError(null);

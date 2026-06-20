@@ -19,12 +19,36 @@ export const ASSESS_MONITOR_CHECKOUT_ENABLED =
 export const ASSESS_PRODUCTION_MODE_ENABLED =
   process.env.NEXT_PUBLIC_ASSESS_PRODUCTION_MODE !== "false";
 
+/** Primary public PQC test endpoint for guided live demos (OQS project). */
+export const OQS_DEMO_HOST = "test.openquantumsafe.org";
+
 /** Hosts allowed for anonymous demo live scans (must match backend PUBLIC_DEMO_HOSTS). */
 export const PUBLIC_DEMO_LIVE_HOSTS = new Set([
-  "test.openquantumsafe.org",
+  OQS_DEMO_HOST,
   "qtangl.com",
   "www.qtangl.com",
 ]);
+
+/** Visitor intent on the public /assess scanner. */
+export type AssessIntent = "sample" | "live-demo" | "my-domain";
+
+export function isAssessIntent(value: string | null): value is AssessIntent {
+  return value === "sample" || value === "live-demo" || value === "my-domain";
+}
+
+export const ASSESS_INTENT_STEPS: Record<AssessIntent, readonly { id: number; label: string }[]> = {
+  sample: [
+    { id: 1, label: "Scenario" },
+    { id: 2, label: "Scope" },
+    { id: 3, label: "Run" },
+  ],
+  "live-demo": [
+    { id: 1, label: "Live target" },
+    { id: 2, label: "Scope" },
+    { id: 3, label: "Run" },
+  ],
+  "my-domain": [],
+};
 
 export const PRODUCTION_INDUSTRIES = [
   { id: "financial", label: "Financial services" },
