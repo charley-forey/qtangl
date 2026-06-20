@@ -108,6 +108,35 @@ Operational steps:
 5. Run `python scripts/verify_production_rollout.py --full` with the dogfood key after env is set.
 6. Enable daily `pqc-dogfood.yml` live job and `dogfood-freshness.yml` monitor.
 
+## Public Assess live demo (`test.openquantumsafe.org`)
+
+For **Scan test.openquantumsafe.org** on https://www.qtangl.com/assess:
+
+```
+QTANGL_PQC_ENABLE_LIVE_SCAN=true
+QTANGL_PQC_SCAN_ALLOWLIST=test.openquantumsafe.org,qtangl.com,www.qtangl.com
+```
+
+`QTANGL_SECRETS_KEY` must be a valid Fernet key (see troubleshooting below). Live scans update sandbox trial counters in Postgres — that path encrypts tenant settings.
+
+## Troubleshooting: `Fernet key must be 32 url-safe base64-encoded bytes`
+
+**Symptom:** `POST /pqc/scan` returns 500 on live scans; Assess UI shows the Fernet error.
+
+**Cause:** `QTANGL_SECRETS_KEY` on Railway is missing, truncated, or not a Fernet key (common mistake: reusing another secret).
+
+**Fix:**
+
+```bash
+python -c "from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())"
+```
+
+1. Set `QTANGL_SECRETS_KEY` on **API and worker** to the generated value (same on both).
+2. Redeploy API + worker.
+3. Confirm: `curl -s https://api.qtangl.com/health/ready` → `secretsKey.valid` is `true`.
+
+If you change the key after data was encrypted with an old key, re-save tenant settings or accept a one-time decrypt fallback (logged server-side).
+
 ## Smoke test
 
 ```bash

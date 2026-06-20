@@ -159,9 +159,13 @@ def health() -> dict[str, str]:
 def health_ready() -> dict[str, object]:
     from app.monitoring.scheduler_state import scheduler_metrics
 
+    from app.security.secrets import secrets_key_status
+
     db_ok = ping_db() if persistence_enabled() else True
     redis_ok = ping_redis() if redis_enabled() else True
-    ready = db_ok and redis_ok
+    secrets = secrets_key_status()
+    secrets_ok = not secrets.get("configured") or secrets.get("valid")
+    ready = db_ok and redis_ok and secrets_ok
     metrics = scheduler_metrics()
     stale = False
     last_tick = metrics.get("lastTickAt")
@@ -180,6 +184,7 @@ def health_ready() -> dict[str, object]:
         "workerQueueEnabled": use_worker_queue(),
         "scheduler": metrics,
         "schedulerStale": stale,
+        "secretsKey": secrets,
     }
 
 

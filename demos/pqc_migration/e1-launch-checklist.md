@@ -24,7 +24,7 @@ See [backend/docs/RAILWAY_DEPLOY.md](../../backend/docs/RAILWAY_DEPLOY.md) and [
 
 - [ ] Complete demo #1: fixture scan + CBOM/PDF + verify QR + Monitor diff story (two scans)
 - [ ] Complete demo #2: live scan on authorized domain OR cloud JSON upload
-- [ ] Record Loom per [script.md](./script.md) (E3-002)
+- [ ] Record Loom per [loom-hero-demo-storyboard.md](./loom-hero-demo-storyboard.md) (E3-002; talk track in [script.md](./script.md))
 
 ### Persona script validation (target &lt;15s autorun)
 

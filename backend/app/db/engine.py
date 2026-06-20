@@ -98,11 +98,22 @@ def scan_db_session(*, tenant_id: str | None = None) -> Iterator[Session]:
 
 
 def validate_production_config() -> None:
-    if require_secrets_key() and not os.getenv("QTANGL_SECRETS_KEY"):
+    from app.security.secrets import is_valid_fernet_key
+
+    key = os.getenv("QTANGL_SECRETS_KEY")
+    if require_secrets_key() and not key:
         raise RuntimeError(
             "QTANGL_SECRETS_KEY is required in production. Generate with: "
             'python -c "from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())"'
         )
+    if key and not is_valid_fernet_key(key):
+        msg = (
+            "QTANGL_SECRETS_KEY is set but invalid (must be 32 url-safe base64-encoded bytes). "
+            "Generate with: python -c \"from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())\""
+        )
+        if require_secrets_key():
+            raise RuntimeError(msg)
+        logger.error(msg)
     if production_mode() and use_create_all_on_startup():
         logger.warning("QTANGL_DB_AUTO_MIGRATE should be false in production; use alembic upgrade head")
 

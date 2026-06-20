@@ -3,10 +3,38 @@
 from __future__ import annotations
 
 import json
+import logging
 import os
 from typing import Any
 
+logger = logging.getLogger(__name__)
+
 _SENSITIVE_KEYS = {"apiToken", "password", "apiKey", "token", "webhookSigningSecret"}
+
+_FERNET_KEY_HELP = (
+    "Generate a valid key with: "
+    'python -c "from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())"'
+)
+
+
+def is_valid_fernet_key(key: str | None) -> bool:
+    if not key or not isinstance(key, str):
+        return False
+    try:
+        from cryptography.fernet import Fernet
+
+        Fernet(key.encode())
+        return True
+    except (ValueError, TypeError):
+        return False
+
+
+def secrets_key_status() -> dict[str, object]:
+    """Health/readiness: whether QTANGL_SECRETS_KEY is present and Fernet-valid."""
+    key = os.environ.get("QTANGL_SECRETS_KEY")
+    if not key:
+        return {"configured": False, "valid": False}
+    return {"configured": True, "valid": is_valid_fernet_key(key)}
 
 
 def _fernet():
@@ -15,7 +43,11 @@ def _fernet():
     key = os.environ.get("QTANGL_SECRETS_KEY")
     if not key:
         return None
-    return Fernet(key.encode() if isinstance(key, str) else key)
+    try:
+        return Fernet(key.encode() if isinstance(key, str) else key)
+    except ValueError:
+        logger.error("QTANGL_SECRETS_KEY is set but invalid. %s", _FERNET_KEY_HELP)
+        return None
 
 
 def encrypt_json_blob(data: dict[str, Any]) -> str:
@@ -28,11 +60,20 @@ def encrypt_json_blob(data: dict[str, Any]) -> str:
 
 def decrypt_json_blob(stored: str) -> dict[str, Any]:
     if not stored or not stored.startswith("enc:"):
-        return json.loads(stored or "{}")
+        try:
+            return json.loads(stored or "{}")
+        except json.JSONDecodeError:
+            logger.warning("tenant settings JSON corrupt — using empty defaults")
+            return {}
     f = _fernet()
     if f is None:
-        return json.loads(stored[4:])
-    return json.loads(f.decrypt(stored[4:].encode()).decode())
+        logger.warning("cannot decrypt tenant settings — invalid or missing QTANGL_SECRETS_KEY")
+        return {}
+    try:
+        return json.loads(f.decrypt(stored[4:].encode()).decode())
+    except Exception:
+        logger.warning("tenant settings decrypt failed — using empty defaults")
+        return {}
 
 
 def encrypt_config(config: dict[str, Any]) -> str:

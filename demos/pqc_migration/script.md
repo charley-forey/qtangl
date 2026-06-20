@@ -1,5 +1,7 @@
 # Q-Day readiness — 3:20 demo script
 
+**Loom recording:** shot-by-shot storyboard with tab clicks and timestamps → [loom-hero-demo-storyboard.md](./loom-hero-demo-storyboard.md)
+
 **0:00** — "Your board wants a PQC migration plan before NSM-10 and NIST IR 8547 deadlines. Spreadsheets won't cut it."
 
 **0:25** — Open `/assess?scenario=bank-tls-inventory&autorun=1` (Regional bank TLS inventory).

@@ -13,7 +13,7 @@ import {
   formatDogfoodDate,
   isDogfoodStale,
 } from "@/lib/dogfood";
-import { trackDashboardEvent } from "@/lib/dashboard-analytics";
+import { trackEvent } from "@/lib/analytics";
 
 const fallbackScanId = process.env.NEXT_PUBLIC_DOGFOOD_SCAN_ID?.trim() || "";
 
@@ -38,12 +38,12 @@ export default function TrustDogfoodSelfScan({ showTargetsTable = false, compact
         if (cancelled) return;
         if (payload?.latest) {
           setSummary(payload);
-          trackDashboardEvent("trust_dogfood_viewed", {
+          trackEvent("trust_dogfood_viewed", {
             allFresh: payload.freshness?.allFresh ?? false,
             targetCount: payload.targets?.length ?? 0,
           });
           if (payload.targets?.some((t) => t.stale)) {
-            trackDashboardEvent("trust_dogfood_stale_seen");
+            trackEvent("trust_dogfood_stale_seen");
           }
           return;
         }
@@ -185,7 +185,7 @@ export default function TrustDogfoodSelfScan({ showTargetsTable = false, compact
                           <a
                             href={row.verifyUrl}
                             className="underline"
-                            onClick={() => trackDashboardEvent("trust_verify_clicked", { target: row.targetDomain })}
+                            onClick={() => trackEvent("trust_verify_clicked", { target: row.targetDomain })}
                           >
                             Verify
                           </a>
@@ -207,7 +207,7 @@ export default function TrustDogfoodSelfScan({ showTargetsTable = false, compact
           <Link
             href={latest?.verifyUrl ?? `/verify?scanId=${encodeURIComponent(scanId)}`}
             className="text-sm text-white underline underline-offset-4"
-            onClick={() => trackDashboardEvent("trust_verify_clicked", { source: "primary_cta" })}
+            onClick={() => trackEvent("trust_verify_clicked", { source: "primary_cta" })}
           >
             Verify our latest report
           </Link>

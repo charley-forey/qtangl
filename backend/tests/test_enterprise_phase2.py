@@ -16,6 +16,23 @@ class EnterprisePhase2Test(unittest.TestCase):
             validate_production_config()
         os.environ.pop("QTANGL_ENV", None)
 
+    def test_production_rejects_invalid_secrets_key(self) -> None:
+        os.environ["QTANGL_ENV"] = "production"
+        os.environ["QTANGL_SECRETS_KEY"] = "not-a-valid-fernet-key"
+        with self.assertRaises(RuntimeError):
+            validate_production_config()
+        os.environ.pop("QTANGL_ENV", None)
+        os.environ.pop("QTANGL_SECRETS_KEY", None)
+
+    def test_encrypt_survives_invalid_secrets_key(self) -> None:
+        from app.security.secrets import encrypt_json_blob, is_valid_fernet_key
+
+        os.environ["QTANGL_SECRETS_KEY"] = "not-a-valid-fernet-key"
+        self.assertFalse(is_valid_fernet_key(os.environ["QTANGL_SECRETS_KEY"]))
+        stored = encrypt_json_blob({"trialScansUsed": 1})
+        self.assertFalse(stored.startswith("enc:"))
+        os.environ.pop("QTANGL_SECRETS_KEY", None)
+
     def test_offboard_removes_tenant_rows(self) -> None:
         from fastapi.testclient import TestClient
 
