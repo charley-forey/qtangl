@@ -31,10 +31,16 @@ import MaturityStageCard from "@/components/dashboard/MaturityStageCard";
 import { patchDashboardJson, putDashboardJson } from "@/lib/dashboard-bff";
 import { isQtanglHqTenant } from "@/lib/dogfood";
 import type { RolePolicy } from "@/lib/dashboard-role-policies";
+import Card from "@/components/ui/Card";
+import Eyebrow from "@/components/ui/Eyebrow";
+import Button from "@/components/ui/Button";
+import type { ScanDiff } from "@/components/pqc/ScanDiffPanel";
 
 const ExecutiveAiExplainCard = dynamic(() => import("@/components/dashboard/ExecutiveAiExplainCard"), {
   loading: () => null,
 });
+
+const ScanDiffPanel = dynamic(() => import("@/components/pqc/ScanDiffPanel"), { loading: () => null });
 
 type Props = {
   summary: DashboardSummary;
@@ -86,6 +92,10 @@ export default function DashboardOverviewTab({
 
   const layout = summary.layoutDefaults;
   const detail = summary.latestScanDetail;
+  const scanDiff = detail?.scanDiff as ScanDiff | null | undefined;
+  const hasScanDiff = Boolean(scanDiff?.previousScanId);
+  const needsSchedule =
+    summary.recentScans.length > 0 && summary.schedulesSummary.active === 0;
   const compliance =
     detail?.compliancePack || detail?.complianceSummary
       ? { pack: detail.compliancePack, summary: detail.complianceSummary }
@@ -172,6 +182,43 @@ export default function DashboardOverviewTab({
           onOpenUpgrade={onOpenUpgrade}
           onMessage={onMessage}
         />
+      ) : null}
+
+      {hasScanDiff ? (
+        <Card tone="panel" className="rounded-[var(--radius-xl)]">
+          <Eyebrow>Drift since last scan</Eyebrow>
+          <p className="mt-2 text-sm text-[var(--color-gray-400)]">
+            Monitor diffs each assessment against your prior baseline — new quantum-vulnerable assets, score movement,
+            and certificate regressions.
+          </p>
+          <div className="mt-4">
+            <ScanDiffPanel diff={scanDiff} />
+          </div>
+          <div className="mt-4 flex flex-wrap gap-3">
+            <Button variant="secondary" size="sm" onClick={() => onTabChange("scans")}>
+              View scan history
+            </Button>
+            <Button variant="secondary" size="sm" onClick={() => onTabChange("monitor")}>
+              Monitor settings
+            </Button>
+          </div>
+        </Card>
+      ) : needsSchedule ? (
+        <Card tone="strong" className="rounded-[var(--radius-xl)] border-amber-500/20">
+          <Eyebrow>Schedule re-scans</Eyebrow>
+          <p className="mt-3 text-sm leading-7 text-[var(--color-gray-300)]">
+            One scan is a snapshot. Configure weekly or monthly re-scans so crypto drift surfaces before your next
+            audit — requires the Monitor worker and scheduler on your deployment tier.
+          </p>
+          <div className="mt-4 flex flex-wrap gap-3">
+            <Button size="sm" onClick={() => onTabChange("monitor")}>
+              Configure scheduled scans
+            </Button>
+            <Button href="/monitor" variant="secondary" size="sm">
+              Monitor tier overview
+            </Button>
+          </div>
+        </Card>
       ) : null}
 
       {detail?.scanId ? (

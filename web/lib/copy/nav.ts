@@ -3,15 +3,16 @@ import { statusPageHref } from "@/lib/siteConfig";
 export const nav = [
   { name: "Platform", href: "/platform" },
   { name: "Assess", href: "/assess" },
+  { name: "Demo", href: "/assess?scenario=bank-tls-inventory&autorun=1" },
   { name: "Monitor", href: "/monitor" },
   { name: "Convert", href: "/convert" },
-  { name: "Trust", href: "/trust" },
   { name: "Pricing", href: "/pricing" },
   { name: "Docs", href: "/docs" },
 ] as const;
 
 export const footerNav = [
   { name: "Dashboard", href: "/dashboard" },
+  { name: "Assess start", href: "/assess/start" },
   { name: "Access", href: "/access" },
   { name: "Journey", href: "/journey" },
   { name: "Resources", href: "/resources" },
@@ -20,17 +21,19 @@ export const footerNav = [
   { name: "Q-Day hub", href: "/q-day" },
   { name: "Solutions", href: "/solutions" },
   { name: "Partners", href: "/partners" },
+  { name: "Trust", href: "/trust" },
   { name: "Status", href: statusPageHref },
   { name: "Verify", href: "/verify" },
   { name: "Learn", href: "/learn" },
   { name: "Blog", href: "/blog" },
+  { name: "Quantum Planning", href: "/platform/optimize" },
   { name: "About", href: "/about" },
 ] as const;
 
 export const navbarCopy = {
-  subtitle: "Cryptographic Posture",
+  subtitle: "Q-Day Readiness",
   subtitleHref: "/platform",
-  primaryCtaLabel: "Get access",
+  primaryCtaLabel: "Run Q-Day scan",
   mobileMenuLabel: "Open menu",
   mobileTitle: "Qtangl navigation",
 } as const;

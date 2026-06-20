@@ -127,7 +127,7 @@ export default function Navbar() {
 
               return (
                 <Link
-                  key={item.href}
+                  key={item.name}
                   href={item.href}
                   className={[
                     navLinkClass,
@@ -184,7 +184,7 @@ export default function Navbar() {
 
               return (
                 <Link
-                  key={item.href}
+                  key={item.name}
                   href={item.href}
                   onClick={() => setOpen(false)}
                   className={`touch-target block rounded-xl border px-3 py-3 text-base transition ${

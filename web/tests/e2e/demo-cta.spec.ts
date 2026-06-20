@@ -1,5 +1,12 @@
 import { expect, test } from "@playwright/test";
 
+test("homepage primary CTA links to assess", async ({ page }) => {
+  await page.goto("/");
+  const runScan = page.getByRole("link", { name: /Run Q-Day scan/i }).first();
+  await expect(runScan).toBeVisible();
+  await expect(runScan).toHaveAttribute("href", "/assess");
+});
+
 test("homepage links to assess or platform demo path", async ({ page }) => {
   await page.goto("/");
   const assessLink = page.getByRole("link", { name: /assess|mini-assessment|q-day/i }).first();
@@ -11,6 +18,14 @@ test("homepage links to assess or platform demo path", async ({ page }) => {
 test("mini-assessment page loads scenario picker", async ({ page }) => {
   await page.goto("/assess/mini");
   await expect(page.getByRole("button", { pressed: true }).first()).toBeVisible();
+});
+
+test("mini-assessment email gate unlocks fixture preview", async ({ page }) => {
+  await page.goto("/assess/mini");
+  await page.getByPlaceholder("you@company.com").fill("buyer@example.com");
+  await page.getByRole("button", { name: /Show my results/i }).click();
+  await expect(page.getByText(/Readiness score/i)).toBeVisible({ timeout: 15_000 });
+  await expect(page.getByRole("link", { name: /Download sample CBOM/i })).toBeVisible();
 });
 
 test("verify page accepts scanId query param", async ({ page }) => {
