@@ -122,6 +122,16 @@ python backend/scripts/production_smoke.py
 
 Production health verified: `GET /health/ready` returns `status: ready` with `persistenceEnabled: true`.
 
+## Release acceptance checklist
+
+After every production deploy:
+
+```bash
+python backend/scripts/verify_production_rollout.py --full
+```
+
+See [`docs/runbooks/release-acceptance-checklist.md`](../../docs/runbooks/release-acceptance-checklist.md) and [`docs/runbooks/dogfood-production-enablement.md`](../../docs/runbooks/dogfood-production-enablement.md).
+
 ## Report unavailable (`scan_not_found`, `bundle_not_persisted`)
 
 After deploy, the assess UI calls `POST /pqc/scan/{scanId}/persist` with the scan JSON so reports work even if the worker missed a DB write.

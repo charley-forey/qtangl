@@ -37,7 +37,7 @@ export const soc2ObservationTarget =
   "Target: Type I observation → Type I CPA report → Type II window.";
 
 /** Dogfood copy — set live after production CI passes (see trust program tracker). */
-export const dogfoodLiveEnabled = false;
+export const dogfoodLiveEnabled = true;
 
 export const dogfoodCopy = dogfoodLiveEnabled
   ? "Qtangl runs daily live PQC scans of qtangl.com, www.qtangl.com, and api.qtangl.com in CI. Signed reports are publicly verifiable — we hold ourselves to the standard we sell."

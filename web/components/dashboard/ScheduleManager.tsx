@@ -161,6 +161,24 @@ export default function ScheduleManager({
               <p className="text-xs text-[var(--muted)]">
                 Every {schedule.cadenceHours}h · next{" "}
                 {schedule.nextRunAt ? formatUtcDateTime(schedule.nextRunAt) : "—"}
+                {(() => {
+                  const runs = runsBySchedule[schedule.id] ?? [];
+                  const last = runs[0];
+                  if (!last) return " · last run: none yet";
+                  const tone =
+                    last.status === "done" || last.status === "success"
+                      ? "text-emerald-400"
+                      : "text-amber-400";
+                  return (
+                    <>
+                      {" · "}
+                      <span className={tone}>
+                        last run: {last.status}
+                        {last.createdAt ? ` · ${formatUtcDateTime(last.createdAt)}` : ""}
+                      </span>
+                    </>
+                  );
+                })()}
                 {schedule.lastDriftSnapshotId ? (
                   <> · drift snap {schedule.lastDriftSnapshotId.slice(0, 12)}…</>
                 ) : null}

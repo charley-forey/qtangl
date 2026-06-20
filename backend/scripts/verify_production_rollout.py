@@ -51,6 +51,10 @@ def main() -> int:
 
     if args.full:
         headers = {"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"}
+        dogfood = _get(f"{base}/pqc/dogfood/summary")
+        freshness = dogfood.get("freshness") or {}
+        if not freshness.get("allFresh"):
+            failures.append("dogfood summary not allFresh (run pqc-dogfood CI or check prod config)")
         scan = _post(
             f"{base}/pqc/scan",
             headers,

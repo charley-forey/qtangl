@@ -82,6 +82,8 @@ Use in this order on sales calls:
 
 ## 3. Demo modes — which to use when
 
+**Enterprise / procurement calls:** Open [`/trust/dogfood`](https://www.qtangl.com/trust/dogfood) first — live signed scans of Qtangl production domains before the fixture demo. Verify link: `GET /pqc/dogfood/latest`.
+
 | Mode | When | How |
 |------|------|-----|
 | **Fixture** | First calls, recordings, no legal paperwork | `/assess` → select scenario → check authorization → **Run scan** with fixture enabled (default) |

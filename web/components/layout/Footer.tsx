@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 
+import DogfoodTrustBadge from "@/components/trust/DogfoodTrustBadge";
 import { footerCopy, footerNav, legalNav, nav } from "@/lib/copy/nav";
 import { footerBlurb, footerContact, siteMetadata } from "@/lib/copy/product";
 
@@ -49,6 +50,9 @@ export default function Footer() {
             </div>
           </div>
           <div className="mt-6 hairline-divider max-w-xl" />
+          <div className="mt-4">
+            <DogfoodTrustBadge />
+          </div>
         </div>
 
         <div className="space-y-4 text-sm text-[var(--color-gray-300)]">

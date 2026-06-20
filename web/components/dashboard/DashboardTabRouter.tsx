@@ -192,6 +192,7 @@ export default function DashboardTabRouter(props: Props) {
             convertTier={convertTier}
             latestReadiness={summary.kpis.latestReadiness}
             trend={summary.trend}
+            maturityStage={summary.maturity?.stage}
           />
         </>
       );

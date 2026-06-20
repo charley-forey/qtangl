@@ -33,6 +33,21 @@ const PACK_ITEMS = [
     description: "Security posture, incident response, and data residency.",
   },
   {
+    title: "Live dogfood proof",
+    href: "/trust/dogfood",
+    description: "Qtangl scans its own production domains — signed, verifiable reports.",
+  },
+  {
+    title: "Verify latest self-scan",
+    href: "https://api.qtangl.com/pqc/dogfood/latest",
+    description: "Machine-readable latest scan JSON with verification block (refresh weekly for questionnaires).",
+  },
+  {
+    title: "Customer proof pack",
+    href: "/docs/guides/evidence-retention",
+    description: "Verify URL, CBOM, board PDF, and schedule statement for auditor handoff.",
+  },
+  {
     title: "Request access / NDA",
     href: "/access?interest=Q-Day%20Assessment%20(one-time)",
     description: "Sales-led pilots with optional mutual NDA before deep technical review.",
@@ -52,13 +67,27 @@ export default function ProcurementPackPage() {
         <div className="mt-8 grid gap-4 md:grid-cols-2">
           {PACK_ITEMS.map((item) => (
             <Card key={item.href} tone="ghost" className="border border-[var(--border-subtle)]">
-              <Link href={item.href} className="block">
-                <p className="font-medium text-white">{item.title}</p>
-                <p className="mt-2 text-sm text-[var(--color-gray-400)]">{item.description}</p>
-              </Link>
+              {item.href.startsWith("http") ? (
+                <a href={item.href} className="block" target="_blank" rel="noreferrer">
+                  <p className="font-medium text-white">{item.title}</p>
+                  <p className="mt-2 text-sm text-[var(--color-gray-400)]">{item.description}</p>
+                </a>
+              ) : (
+                <Link href={item.href} className="block">
+                  <p className="font-medium text-white">{item.title}</p>
+                  <p className="mt-2 text-sm text-[var(--color-gray-400)]">{item.description}</p>
+                </Link>
+              )}
             </Card>
           ))}
         </div>
+        <p className="mt-8 text-sm text-[var(--color-gray-500)]">
+          <strong className="text-[var(--color-gray-400)]">Does Qtangl scan itself?</strong> Yes — see{" "}
+          <Link href="/trust/dogfood" className="underline hover:text-white">
+            /trust/dogfood
+          </Link>{" "}
+          for live multi-domain posture, CI freshness monitor, and auditor bundle metadata.
+        </p>
         <p className="mt-8 text-sm text-[var(--color-gray-500)]">
           Need a signed MNDA or custom Order Form?{" "}
           <Link href="/access" className="underline hover:text-white">

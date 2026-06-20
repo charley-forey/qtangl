@@ -35,6 +35,7 @@ export type PlatformStatusSnapshot = {
 async function fetchHealthJson<T>(path: string): Promise<T> {
   const response = await fetch(`${qtanglApiBaseUrl}${path}`, {
     cache: "no-store",
+    signal: AbortSignal.timeout(8_000),
   });
 
   if (!response.ok) {

@@ -26,8 +26,10 @@ import type { DashboardPersona } from "@/components/dashboard/DashboardPersonaTo
 import type { DashboardTabId } from "@/components/dashboard/DashboardTabs";
 import type { DashboardSummary } from "@/lib/dashboard-state";
 import { summaryTrendPoints } from "@/lib/dashboard-state";
+import DogfoodPostureCard from "@/components/dashboard/DogfoodPostureCard";
 import MaturityStageCard from "@/components/dashboard/MaturityStageCard";
 import { patchDashboardJson, putDashboardJson } from "@/lib/dashboard-bff";
+import { isQtanglHqTenant } from "@/lib/dogfood";
 import type { RolePolicy } from "@/lib/dashboard-role-policies";
 
 const ExecutiveAiExplainCard = dynamic(() => import("@/components/dashboard/ExecutiveAiExplainCard"), {
@@ -75,7 +77,8 @@ export default function DashboardOverviewTab({
   bffMode = true,
   onSettingsChange,
 }: Props) {
-  const { onboarding, capabilities } = useDashboardSession();
+  const { onboarding, capabilities, session } = useDashboardSession();
+  const showDogfoodMirror = isQtanglHqTenant(tenantSettings, session?.email);
   const onboardingRecord =
     (tenantSettings?.onboarding as { complete?: boolean; dismissed?: boolean } | undefined) ??
     (onboarding as { complete?: boolean; dismissed?: boolean } | null | undefined);
@@ -202,6 +205,7 @@ export default function DashboardOverviewTab({
           onRunBaseline={() => onTabChange("scans")}
           onOpenSettings={() => onTabChange("settings")}
           scanAllowlist={(tenantSettings?.scanAllowlist as string[] | undefined) ?? []}
+          isHq={showDogfoodMirror}
         />
       </DashboardWidgetGate>
 
@@ -220,6 +224,8 @@ export default function DashboardOverviewTab({
           onDismissed={() => onMessage?.("Recommendation dismissed.")}
         />
       </DashboardWidgetGate>
+
+      {showDogfoodMirror ? <DogfoodPostureCard /> : null}
 
       <MaturityStageCard maturity={summary.maturity} onAction={(tab) => onTabChange(tab as DashboardTabId)} />
 

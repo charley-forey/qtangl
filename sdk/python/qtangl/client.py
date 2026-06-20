@@ -104,6 +104,18 @@ class QtanglClient:
     def transparency_inclusion(self, content_hash: str) -> JsonDict:
         return self._transport.request("GET", f"/pqc/transparency/{content_hash}", auth=False)
 
+    def dogfood_latest(self) -> JsonDict:
+        return self._transport.request("GET", "/pqc/dogfood/latest", auth=False)
+
+    def dogfood_summary(self) -> JsonDict:
+        return self._transport.request("GET", "/pqc/dogfood/summary", auth=False)
+
+    def dogfood_history(self, *, days: int = 90) -> JsonDict:
+        return self._transport.request("GET", f"/pqc/dogfood/history?days={days}", auth=False)
+
+    def dogfood_auditor_bundle(self) -> JsonDict:
+        return self._transport.request("GET", "/pqc/dogfood/auditor-bundle", auth=False)
+
     def list_schedules(self) -> JsonDict:
         return self._transport.request("GET", "/tenant/schedules")
 

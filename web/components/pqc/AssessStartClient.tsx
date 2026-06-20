@@ -23,7 +23,7 @@ export default function AssessStartClient() {
     event.preventDefault();
     setPending(true);
     setError(null);
-    trackEvent("assess_signup_started", { mode: "production" });
+    trackEvent("assess_signup_started", { mode: "production", source: "assess_start" });
     try {
       const response = await fetch(`${qtanglApiBaseUrl}/public/assess-signup`, {
         method: "POST",
@@ -34,7 +34,7 @@ export default function AssessStartClient() {
       if (!response.ok) {
         throw new Error(typeof payload.detail === "string" ? payload.detail : "Signup failed.");
       }
-      trackEvent("assess_signup_completed", { mode: "production" });
+      trackEvent("assess_signup_completed", { mode: "production", source: "assess_start" });
       if (payload.assessUrl) {
         setSuccessUrl(payload.assessUrl);
         window.location.href = payload.assessUrl;

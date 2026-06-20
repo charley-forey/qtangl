@@ -2,6 +2,7 @@
 
 import dynamic from "next/dynamic";
 
+import ConvertExpectationsPanel from "@/components/dashboard/ConvertExpectationsPanel";
 import Card from "@/components/ui/Card";
 import Eyebrow from "@/components/ui/Eyebrow";
 import RemediationBoard from "@/components/pqc/RemediationBoard";
@@ -25,6 +26,7 @@ type Props = {
   convertTier?: boolean;
   latestReadiness?: number | null;
   trend?: import("@/lib/dashboard-state").DashboardSummary["trend"];
+  maturityStage?: number;
 };
 
 export default function DashboardRemediateTab({
@@ -39,6 +41,7 @@ export default function DashboardRemediateTab({
   convertTier,
   latestReadiness,
   trend = [],
+  maturityStage,
 }: Props) {
   const remediation = bundle?.remediationScan;
 
@@ -58,6 +61,7 @@ export default function DashboardRemediateTab({
         </Card>
       ) : null}
       <FrameworkDeadlineRoadmap readinessScore={latestReadiness} trend={trend} />
+      <ConvertExpectationsPanel maturityStage={maturityStage} />
       {remediation ? (
         <Card tone="panel" data-tour="remediation-board">
           <Eyebrow>Top remediation priorities</Eyebrow>

@@ -96,6 +96,52 @@ class DogfoodLatestTest(unittest.TestCase):
         self.assertEqual(data["scanId"], "scan-e2e-dogfood-id")
         self.assertTrue(data["verification"]["valid"], msg=latest.text)
 
+    def _seed_dogfood_scan(self, *, target: str, scan_id: str | None = None) -> str:
+        dataset = load_dataset()
+        kwargs: dict = {
+            "scenario_id": "bank-tls-inventory",
+            "use_fixture": True,
+            "target_override": target,
+        }
+        if scan_id:
+            kwargs["scan_id"] = scan_id
+        bundle = run_pqc_scan(dataset, **kwargs)
+        with patch(
+            "app.monitoring.post_complete.enrich_completed_scan",
+            side_effect=lambda scan_id, b, tenant_id: b,
+        ):
+            save_scan_bundle(bundle.scan_id, bundle, tenant_id="dogfood")
+        return bundle.scan_id
+
+    def test_dogfood_summary_multi_target(self) -> None:
+        self._seed_dogfood_scan(target="www.qtangl.com")
+        self._seed_dogfood_scan(target="qtangl.com")
+        self._seed_dogfood_scan(target="api.qtangl.com")
+
+        response = self.client.get("/pqc/dogfood/summary")
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.assertEqual(data["status"], "success")
+        self.assertEqual(len(data["targets"]), 3)
+        self.assertTrue(all(t.get("scanId") for t in data["targets"]))
+        self.assertIn("freshness", data)
+
+    def test_dogfood_history(self) -> None:
+        self._seed_dogfood_scan(target="www.qtangl.com")
+        response = self.client.get("/pqc/dogfood/history?days=90")
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.assertGreaterEqual(len(data["points"]), 1)
+
+    def test_dogfood_auditor_bundle(self) -> None:
+        self._seed_dogfood_scan(target="www.qtangl.com")
+        response = self.client.get("/pqc/dogfood/auditor-bundle")
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.assertEqual(data["status"], "success")
+        self.assertGreaterEqual(len(data["targets"]), 1)
+        self.assertIn("transparencyLog", data)
+
 
 if __name__ == "__main__":
     unittest.main()

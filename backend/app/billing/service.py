@@ -598,6 +598,13 @@ def provision_dashboard_workspace(*, user_id: str, email: str, name: str | None 
         auth_mode="magic_link",
         api_key_label="dashboard-primary",
     )
+    if email_l.endswith("@qtangl.com"):
+        from app.tenant.settings import upsert_tenant_settings
+
+        upsert_tenant_settings(
+            tenant_id=core["tenantId"],
+            settings={"orgType": "internal_hq", "dogfoodMirrorEnabled": True},
+        )
     return {
         "tenantId": core["tenantId"],
         "tenantName": core["tenantName"],

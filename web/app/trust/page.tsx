@@ -206,6 +206,11 @@ export default function TrustPage() {
       <Section gap="tight">
         <div className="mx-auto max-w-3xl space-y-4">
           <TrustDogfoodSelfScan />
+          <p className="text-sm text-[var(--color-gray-400)]">
+            <Link href="/trust/dogfood" className="text-sky-300 underline underline-offset-4">
+              Full multi-domain dogfood report
+            </Link>
+          </p>
           <Card tone="ghost" className="rounded-[var(--radius-xl)] border border-[var(--border-subtle)]">
             <p className="text-sm font-semibold text-white">SOC 2 status (honest)</p>
             <p className="mt-2 text-sm leading-7 text-[var(--color-gray-400)]">{soc2StatusSafe}</p>

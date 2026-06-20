@@ -70,6 +70,7 @@ export default function MsspPortfolioPanel({
                   <th className="pb-2 pr-4">Readiness</th>
                   <th className="pb-2 pr-4">Open alerts</th>
                   <th className="pb-2 pr-4">Remediation %</th>
+                  <th className="pb-2 pr-4">Schedules</th>
                   <th className="pb-2 pr-4">Last scan</th>
                   <th className="pb-2">Action</th>
                 </tr>
@@ -83,6 +84,7 @@ export default function MsspPortfolioPanel({
                   const openAlerts = Number(child.openAlerts ?? 0);
                   const velocity = child.remediationVelocityPct;
                   const lastScanAge = child.lastScanAgeDays;
+                  const schedules = Number(child.activeSchedules ?? 0);
                   return (
                     <tr key={tenantId} className="border-t border-[var(--border-subtle)]">
                       <td className="py-2 pr-4 text-white">{name}</td>
@@ -91,6 +93,7 @@ export default function MsspPortfolioPanel({
                       </td>
                       <td className="py-2 pr-4">{openAlerts}</td>
                       <td className="py-2 pr-4">{velocity != null ? `${velocity}%` : "—"}</td>
+                      <td className="py-2 pr-4">{schedules > 0 ? `${schedules} active` : "—"}</td>
                       <td className="py-2 pr-4">{lastScanAge != null ? `${lastScanAge}d ago` : "—"}</td>
                       <td className="py-2">
                         <button

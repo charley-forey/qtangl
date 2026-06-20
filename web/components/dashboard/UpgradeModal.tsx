@@ -15,7 +15,10 @@ type Props = {
   salesLed?: boolean;
 };
 
-const COPY: Record<UpgradeProduct, { title: string; body: string; cta: string }> = {
+const COPY: Record<
+  UpgradeProduct,
+  { title: string; body: string; cta: string; preview?: string[] }
+> = {
   assess: {
     title: "Unlock production baseline",
     body: "Your free trial scan is complete. Purchase a production baseline assessment for signed PDF, CBOM export, and executive report.",
@@ -30,6 +33,12 @@ const COPY: Record<UpgradeProduct, { title: string; body: string; cta: string }>
     title: "Upgrade to Convert",
     body: "Crypto-flip orchestration, program management, and verify-fix at scale require Convert.",
     cta: "Contact sales",
+    preview: [
+      "Verify-fix workflow on critical findings",
+      "Remediation program board with owners and waves",
+      "Crypto-flip orchestration (CLM integrations)",
+      "Executive program velocity reporting",
+    ],
   },
 };
 
@@ -93,6 +102,13 @@ export default function UpgradeModal({ open, product, onClose, onMessage, salesL
       >
         <h2 className="text-lg font-semibold text-white">{copy.title}</h2>
         <p className="mt-3 text-sm leading-7 text-[var(--color-gray-300)]">{copy.body}</p>
+        {copy.preview && copy.preview.length > 0 ? (
+          <ul className="mt-4 list-disc space-y-1 pl-5 text-xs text-[var(--color-gray-400)]">
+            {copy.preview.map((item) => (
+              <li key={item}>{item}</li>
+            ))}
+          </ul>
+        ) : null}
         <p className="mt-3 text-xs text-[var(--color-gray-500)]">
           By continuing you agree to our{" "}
           <a href="/terms" className="underline hover:text-white">

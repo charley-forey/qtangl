@@ -1,48 +1,19 @@
-"use client";
+import StatusPageClient, { type DogfoodState } from "@/components/status/StatusPageClient";
+import { fetchDogfoodSummary } from "@/lib/dogfood";
+import { getPlatformStatus, platformStatusCopy } from "@/lib/status";
 
-import { useEffect, useState } from "react";
+export const metadata = platformStatusCopy.metadata;
+export const dynamic = "force-dynamic";
 
-import { qtanglApiBaseUrl } from "@/lib/api";
+function resolveDogfoodState(): Promise<DogfoodState> {
+  return fetchDogfoodSummary().then((summary) => {
+    if (!summary?.latest) return "unavailable";
+    if (summary.freshness?.allFresh === false) return "stale";
+    return "operational";
+  });
+}
 
-export default function StatusPage() {
-  const [health, setHealth] = useState<string>("loading");
-  const [ready, setReady] = useState<Record<string, unknown> | null>(null);
-
-  useEffect(() => {
-    async function load() {
-      try {
-        const [h, r] = await Promise.all([
-          fetch(`${qtanglApiBaseUrl}/health`),
-          fetch(`${qtanglApiBaseUrl}/health/ready`),
-        ]);
-        const hp = (await h.json()) as { status?: string };
-        setHealth(hp.status ?? "unknown");
-        setReady((await r.json()) as Record<string, unknown>);
-      } catch {
-        setHealth("unreachable");
-      }
-    }
-    void load();
-  }, []);
-
-  return (
-    <main className="mx-auto max-w-2xl px-6 py-16 text-white">
-      <h1 className="text-2xl font-semibold">Qtangl Status</h1>
-      <p className="mt-2 text-sm text-[var(--color-gray-400)]">Evidence endpoints and platform health</p>
-      <dl className="mt-8 space-y-4">
-        <div>
-          <dt className="text-xs uppercase tracking-wider text-[var(--color-gray-500)]">API</dt>
-          <dd className="text-lg capitalize">{health}</dd>
-        </div>
-        <div>
-          <dt className="text-xs uppercase tracking-wider text-[var(--color-gray-500)]">Readiness</dt>
-          <dd className="text-lg capitalize">{String(ready?.status ?? "—")}</dd>
-        </div>
-        <div>
-          <dt className="text-xs uppercase tracking-wider text-[var(--color-gray-500)]">Database</dt>
-          <dd>{ready?.database === true ? "OK" : "Degraded"}</dd>
-        </div>
-      </dl>
-    </main>
-  );
+export default async function StatusPage() {
+  const [snapshot, dogfood] = await Promise.all([getPlatformStatus(), resolveDogfoodState()]);
+  return <StatusPageClient snapshot={snapshot} dogfood={dogfood} />;
 }

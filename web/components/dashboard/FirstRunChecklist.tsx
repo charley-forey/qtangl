@@ -20,6 +20,11 @@ const PHASE_2_STEPS = [
   { id: "webhooks", label: "Configure webhooks" },
 ] as const;
 
+const HQ_STEPS = [
+  { id: "dogfood_verify", label: "Review latest dogfood scan" },
+  { id: "dogfood_ci", label: "Confirm dogfood CI freshness is green" },
+] as const;
+
 type ChecklistState = Record<string, boolean>;
 
 export default function FirstRunChecklist({
@@ -38,6 +43,7 @@ export default function FirstRunChecklist({
   onRunBaseline,
   onOpenSettings,
   scanAllowlist = [],
+  isHq = false,
 }: {
   signedIn: boolean;
   hasScans: boolean;
@@ -54,6 +60,7 @@ export default function FirstRunChecklist({
   onRunBaseline?: () => void;
   onOpenSettings?: () => void;
   scanAllowlist?: string[];
+  isHq?: boolean;
 }) {
   const [local, setLocal] = useState<ChecklistState>(settings?.firstRunChecklist ?? {});
   const [saving, setSaving] = useState(false);
@@ -78,7 +85,9 @@ export default function FirstRunChecklist({
   const phase1Steps = PHASE_1_STEPS.filter((step) => step.id !== "invite" || isAdmin);
   const phase1Done = phase1Steps.every((step) => local[step.id] ?? phase1AutoDone[step.id]);
   const showPhase2 = phase1Done || coachingPhase === "phase_2";
-  const steps = showPhase2 ? [...phase1Steps, ...PHASE_2_STEPS] : phase1Steps;
+  const steps = showPhase2
+    ? [...phase1Steps, ...PHASE_2_STEPS, ...(isHq ? HQ_STEPS : [])]
+    : [...phase1Steps, ...(isHq ? HQ_STEPS : [])];
 
   const autoDone = useMemo(
     () => ({ ...phase1AutoDone, ...(showPhase2 ? phase2AutoDone : {}) }),
@@ -92,6 +101,12 @@ export default function FirstRunChecklist({
       }
       if (id === "digest" || id === "webhooks") {
         onOpenSettings?.();
+      }
+      if (id === "dogfood_verify") {
+        window.open("/trust/dogfood", "_blank", "noopener,noreferrer");
+      }
+      if (id === "dogfood_ci") {
+        window.open("/ops/dogfood", "_blank", "noopener,noreferrer");
       }
       const next = { ...local, ...autoDone, [id]: !(local[id] ?? autoDone[id]) };
       setLocal(next);

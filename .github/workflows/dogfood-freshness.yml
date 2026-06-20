@@ -83,3 +83,15 @@ jobs:
                 labels: ['dogfood-stale', 'security'],
               });
             }
+
+      - name: Notify Slack on failure
+        if: failure()
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.DOGFOOD_SLACK_WEBHOOK_URL }}
+        run: |
+          if [ -z "$SLACK_WEBHOOK_URL" ]; then
+            echo "DOGFOOD_SLACK_WEBHOOK_URL not set — skip Slack notify"
+            exit 0
+          fi
+          payload=$(python3 -c 'import json,os; print(json.dumps({"text": ":warning: Dogfood freshness check failed. See dogfood-freshness workflow and docs/runbooks/dogfood-ci-failure.md"}))')
+          curl -fsS -X POST -H 'Content-type: application/json' --data "$payload" "$SLACK_WEBHOOK_URL"

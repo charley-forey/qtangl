@@ -245,6 +245,21 @@ def build_recommendations(
                         )
 
     maturity = compute_maturity_stage(tenant_id=tenant_id)
+    if maturity.get("stage") == 3 and maturity.get("nextStage") == 4:
+        recs.append(
+            _mk(
+                category="remediation",
+                what="Ready for Convert — verify-fix at scale",
+                so_what="You are Monitored with active schedules; critical findings need closed-loop migration.",
+                now_what="Start verify-fix on one critical TLS finding, then talk to sales about Convert orchestration.",
+                source="convert_upgrade",
+                priority=6,
+                deep_link="/dashboard?tab=remediate&upgrade=convert",
+                proof_type="maturity",
+                role_filter=["admin", "operator", "executive"],
+                extra_id="stage3-convert",
+            )
+        )
     if maturity.get("nextStage") is not None:
         recs.append(
             _mk(

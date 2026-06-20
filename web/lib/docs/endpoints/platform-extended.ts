@@ -29,6 +29,27 @@ export const platformExtendedEndpoints: Record<string, DocsEndpoint> = {
     "Public latest Qtangl self-scan for the trust center dogfood tenant.",
     false,
   ),
+  "pqc-dogfood-summary": stub(
+    "pqc-dogfood-summary",
+    "GET",
+    "/pqc/dogfood/summary",
+    "Public multi-domain dogfood posture summary with per-target freshness.",
+    false,
+  ),
+  "pqc-dogfood-history": stub(
+    "pqc-dogfood-history",
+    "GET",
+    "/pqc/dogfood/history",
+    "Public readiness history for dogfood tenant scans (query: days=90).",
+    false,
+  ),
+  "pqc-dogfood-auditor-bundle": stub(
+    "pqc-dogfood-auditor-bundle",
+    "GET",
+    "/pqc/dogfood/auditor-bundle",
+    "Quarterly auditor package metadata: verify URLs, board PDF links, transparency root.",
+    false,
+  ),
   "discovery-summary": stub(
     "discovery-summary",
     "GET",

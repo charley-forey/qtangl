@@ -5,7 +5,7 @@ import os
 import time
 import uuid
 from dataclasses import asdict, replace
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from threading import Lock
 from typing import Any, Callable
 
@@ -338,6 +338,136 @@ def load_scan_bundle_for_public_verify(scan_id: str) -> dict[str, Any] | None:
 
 def dogfood_tenant_id() -> str:
     return os.getenv("QTANGL_DOGFOOD_TENANT_ID", "dogfood").strip() or "dogfood"
+
+
+DOGFOOD_TARGETS = (
+    "www.qtangl.com",
+    "qtangl.com",
+    "api.qtangl.com",
+)
+
+DOGFOOD_STALE_DAYS = 8
+
+
+def _dogfood_scan_summaries(*, limit: int = 50) -> list[dict[str, Any]]:
+    """Completed dogfood scans with bundle, newest first."""
+    tenant_id = dogfood_tenant_id()
+    out: list[dict[str, Any]] = []
+
+    if persistence_enabled():
+        from sqlalchemy import select
+
+        with scan_db_session() as session:
+            rows = (
+                session.execute(
+                    select(ScanJobRow)
+                    .where(ScanJobRow.tenant_id == tenant_id, ScanJobRow.status == "done")
+                    .order_by(ScanJobRow.created_at.desc())
+                    .limit(limit)
+                )
+                .scalars()
+                .all()
+            )
+            for row in rows:
+                if not _bundle_json_from_row(row):
+                    continue
+                summary = _job_summary(row)
+                out.append(summary)
+    else:
+        with _job_lock:
+            jobs = [
+                job
+                for job in _memory_jobs.values()
+                if job.tenant_id == tenant_id and job.status == "done" and job.bundle
+            ]
+            jobs.sort(key=lambda j: j.updated_at, reverse=True)
+            for job in jobs[:limit]:
+                report = job.bundle.report if job.bundle else None
+                out.append(
+                    {
+                        "scanId": job.scan_id,
+                        "targetDomain": report.target_domain if report else None,
+                        "readinessScore": report.readiness_score if report else None,
+                        "readinessBand": report.readiness_band if report else None,
+                        "createdAt": datetime.fromtimestamp(job.created_at, tz=timezone.utc).isoformat(),
+                        "updatedAt": datetime.fromtimestamp(job.updated_at, tz=timezone.utc).isoformat(),
+                    }
+                )
+    return out
+
+
+def _staleness_days(iso: str | None) -> float | None:
+    if not iso:
+        return None
+    try:
+        parsed = datetime.fromisoformat(iso.replace("Z", "+00:00"))
+        if parsed.tzinfo is None:
+            parsed = parsed.replace(tzinfo=timezone.utc)
+        return max(0.0, (datetime.now(timezone.utc) - parsed).total_seconds() / 86400.0)
+    except ValueError:
+        return None
+
+
+def dogfood_target_summaries() -> list[dict[str, Any]]:
+    """Latest scan per canonical dogfood target domain."""
+    summaries = _dogfood_scan_summaries()
+    by_target: dict[str, dict[str, Any]] = {}
+    for row in summaries:
+        target = str(row.get("targetDomain") or "").lower()
+        if target and target not in by_target:
+            by_target[target] = row
+    public_base = os.getenv("QTANGL_PUBLIC_URL", "https://www.qtangl.com").rstrip("/")
+    targets: list[dict[str, Any]] = []
+    for canonical in DOGFOOD_TARGETS:
+        row = by_target.get(canonical)
+        if not row:
+            targets.append({"targetDomain": canonical, "scanId": None, "missing": True})
+            continue
+        scanned_at = row.get("updatedAt") or row.get("createdAt")
+        staleness = _staleness_days(str(scanned_at) if scanned_at else None)
+        scan_id = str(row.get("scanId") or "")
+        targets.append(
+            {
+                "targetDomain": canonical,
+                "scanId": scan_id,
+                "readinessScore": row.get("readinessScore"),
+                "readinessBand": row.get("readinessBand"),
+                "scannedAt": scanned_at,
+                "stalenessDays": round(staleness, 1) if staleness is not None else None,
+                "stale": staleness is not None and staleness > DOGFOOD_STALE_DAYS,
+                "verifyUrl": f"{public_base}/verify?scanId={scan_id}" if scan_id else None,
+            }
+        )
+    return targets
+
+
+def dogfood_history(*, days: int = 90) -> list[dict[str, Any]]:
+    """Readiness trend points for dogfood tenant scans within window."""
+    since = datetime.now(timezone.utc) - timedelta(days=max(1, days))
+    points: list[dict[str, Any]] = []
+    for row in _dogfood_scan_summaries(limit=200):
+        scanned_at = row.get("updatedAt") or row.get("createdAt")
+        if not scanned_at:
+            continue
+        try:
+            when = datetime.fromisoformat(str(scanned_at).replace("Z", "+00:00"))
+            if when.tzinfo is None:
+                when = when.replace(tzinfo=timezone.utc)
+        except ValueError:
+            continue
+        if when < since:
+            continue
+        points.append(
+            {
+                "scanId": row.get("scanId"),
+                "targetDomain": row.get("targetDomain"),
+                "readinessScore": row.get("readinessScore"),
+                "readinessBand": row.get("readinessBand"),
+                "scannedAt": scanned_at,
+            }
+        )
+    points.sort(key=lambda p: str(p.get("scannedAt") or ""))
+    return points
 
 
 def latest_dogfood_scan_id(*, preferred_target: str = "www.qtangl.com") -> str | None:

@@ -33,6 +33,11 @@ from app.pqc.jobs import (
     save_scan_bundle,
     scan_storage_diagnosis,
 )
+from app.store.scan_jobs import (
+    DOGFOOD_STALE_DAYS,
+    dogfood_history,
+    dogfood_target_summaries,
+)
 from app.pqc.pipeline import run_pqc_scan
 from app.pqc.report import (
     report_to_auditor,
@@ -764,8 +769,6 @@ def verify_report_json(body: VerifyReportRequest, request: Request) -> dict:
 def dogfood_latest(request: Request) -> dict:
     """Public latest Qtangl self-scan for trust center (dogfood tenant)."""
     from app.api.public_rate_limit import enforce_public_rate_limit
-    from app.pqc.signing import verify_report_signature
-    from app.pqc.transparency import log_inclusion_block
 
     enforce_public_rate_limit(request)
 
@@ -773,11 +776,21 @@ def dogfood_latest(request: Request) -> dict:
     if not scan_id:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No dogfood scan available.")
 
-    payload = load_scan_bundle_for_public_verify(scan_id)
+    payload = _dogfood_scan_payload(scan_id)
     if payload is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Dogfood scan bundle not found.")
+    return payload
 
-    report_json = dict(payload.get("report") or {})
+
+def _dogfood_scan_payload(scan_id: str) -> dict[str, Any] | None:
+    from app.pqc.signing import verify_report_signature
+    from app.pqc.transparency import current_root, log_inclusion_block
+
+    bundle = load_scan_bundle_for_public_verify(scan_id)
+    if bundle is None:
+        return None
+
+    report_json = dict(bundle.get("report") or {})
     signature = report_json.get("signature") or {}
     verify_payload = {k: v for k, v in report_json.items() if k != "signature"}
     result = verify_report_signature(verify_payload, signature)
@@ -798,8 +811,79 @@ def dogfood_latest(request: Request) -> dict:
         "scannedAt": scanned_at_str,
         "verifyUrl": f"{public_base}/verify?scanId={scan_id}",
         "verification": result,
+        "transparencyRootUrl": f"{os.getenv('QTANGL_API_BASE_URL', public_base).rstrip('/')}/pqc/transparency/root",
+        "contentHash": content_hash,
     }
 
+
+@router.get("/dogfood/summary")
+def dogfood_summary(request: Request) -> dict:
+    """Public multi-domain dogfood posture summary."""
+    from app.api.public_rate_limit import enforce_public_rate_limit
+
+    enforce_public_rate_limit(request)
+
+    targets = dogfood_target_summaries()
+    latest_id = latest_dogfood_scan_id()
+    latest = _dogfood_scan_payload(latest_id) if latest_id else None
+    all_fresh = all(not t.get("stale") and t.get("scanId") for t in targets if not t.get("missing"))
+
+    return {
+        "status": "success",
+        "latest": latest,
+        "targets": targets,
+        "freshness": {
+            "allFresh": all_fresh,
+            "staleAfterDays": DOGFOOD_STALE_DAYS,
+        },
+    }
+
+
+@router.get("/dogfood/history")
+def dogfood_history_endpoint(request: Request, days: int = Query(default=90, ge=7, le=365)) -> dict:
+    """Public readiness history for dogfood tenant scans."""
+    from app.api.public_rate_limit import enforce_public_rate_limit
+
+    enforce_public_rate_limit(request)
+    return {"status": "success", "days": days, "points": dogfood_history(days=days)}
+
+
+@router.get("/dogfood/auditor-bundle")
+def dogfood_auditor_bundle(request: Request) -> dict:
+    """Quarterly-style auditor package metadata (verify URLs + transparency root)."""
+    from app.api.public_rate_limit import enforce_public_rate_limit
+    from app.pqc.transparency import current_root
+
+    enforce_public_rate_limit(request)
+
+    targets = dogfood_target_summaries()
+    latest_id = latest_dogfood_scan_id()
+    public_base = os.getenv("QTANGL_PUBLIC_URL", "https://www.qtangl.com").rstrip("/")
+    items = []
+    for target in targets:
+        scan_id = target.get("scanId")
+        if not scan_id:
+            continue
+        items.append(
+            {
+                "targetDomain": target.get("targetDomain"),
+                "scanId": scan_id,
+                "readinessScore": target.get("readinessScore"),
+                "readinessBand": target.get("readinessBand"),
+                "scannedAt": target.get("scannedAt"),
+                "verifyUrl": target.get("verifyUrl"),
+                "boardPdfUrl": f"{public_base}/pqc/scan/{scan_id}/report?format=board",
+            }
+        )
+    return {
+        "status": "success",
+        "generatedAt": __import__("datetime").datetime.now(__import__("datetime").timezone.utc).isoformat(),
+        "latestScanId": latest_id,
+        "targets": items,
+        "transparencyLog": current_root(),
+        "productCbomUrl": f"{public_base}/downloads/qtangl-platform.cdx.json",
+        "productCbomDocUrl": f"{public_base}/docs/trust/product-sbom",
+    }
 
 @router.get("/index")
 def readiness_index(request: Request, industry: str = "financial") -> dict:

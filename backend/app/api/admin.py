@@ -32,6 +32,10 @@ class MsspParentRequest(BaseModel):
     parentTenantId: str = Field(min_length=1, max_length=64)
 
 
+class TenantSettingsAdminRequest(BaseModel):
+    settings: dict = Field(default_factory=dict)
+
+
 @router.post("/tenants")
 def admin_create_tenant(
     request: CreateTenantRequest,
@@ -77,9 +81,15 @@ def admin_set_mssp_parent(
     _: str = Depends(require_admin),
 ) -> dict:
     """R3: Link child tenant to MSSP parent for portfolio / white-label."""
+    from app.partner.service import link_child_tenant
     from app.tenant.settings import upsert_tenant_settings
 
     upsert_tenant_settings(tenant_id=tenant_id, settings={"msspParentTenantId": request.parentTenantId})
+    link_child_tenant(
+        parent_tenant_id=request.parentTenantId,
+        child_tenant_id=tenant_id,
+        label="portfolio-child",
+    )
     log_action(
         tenant_id=tenant_id,
         action="mssp.parent_linked",
@@ -87,6 +97,18 @@ def admin_set_mssp_parent(
         detail={"parentTenantId": request.parentTenantId},
     )
     return {"status": "success", "tenantId": tenant_id, "msspParentTenantId": request.parentTenantId}
+
+
+@router.put("/tenants/{tenant_id}/settings")
+def admin_upsert_tenant_settings(
+    tenant_id: str,
+    request: TenantSettingsAdminRequest,
+    _: str = Depends(require_admin),
+) -> dict:
+    from app.tenant.settings import upsert_tenant_settings
+
+    merged = upsert_tenant_settings(tenant_id=tenant_id, settings=request.settings)
+    return {"status": "success", "tenantId": tenant_id, "settings": merged}
 
 
 @router.post("/tenants/{tenant_id}/keys")

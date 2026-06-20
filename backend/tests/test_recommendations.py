@@ -82,6 +82,23 @@ class RecommendationsEngineTest(unittest.TestCase):
         self.assertIn("firstScanAt", payload)
         self.assertIsInstance(payload["recommendations"], list)
 
+    def test_convert_recommendation_at_stage_three(self) -> None:
+        from app.monitoring.service import create_schedule
+
+        dataset = load_dataset()
+        bundle = run_pqc_scan(dataset, scenario_id="bank-tls-inventory", use_fixture=True)
+        save_scan_bundle(bundle.scan_id, bundle, tenant_id="tenant-rec")
+        create_schedule(
+            tenant_id="tenant-rec",
+            scenario_id="bank-tls-inventory",
+            target="api.example.com",
+            cadence_hours=168,
+        )
+        stage = compute_maturity_stage(tenant_id="tenant-rec")
+        self.assertGreaterEqual(stage["stage"], 3)
+        recs = build_recommendations(tenant_id="tenant-rec", role="admin")
+        self.assertTrue(any(r.get("source") == "convert_upgrade" for r in recs))
+
     def test_explain_portfolio_api(self) -> None:
         response = self.client.post(
             "/tenant/ai/explain-portfolio",

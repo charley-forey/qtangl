@@ -1768,6 +1768,9 @@ def _dashboard_tab_portfolio(*, tenant_id: str) -> dict[str, Any]:
             except Exception:
                 last_scan_age_days = None
         velocity = _remediation_velocity_summary(tenant_id=child_id)
+        from app.monitoring.service import list_schedules
+
+        active_schedules = len(list_schedules(tenant_id=child_id)) if persistence_enabled() else 0
         child_summaries.append(
             {
                 **child,
@@ -1778,6 +1781,7 @@ def _dashboard_tab_portfolio(*, tenant_id: str) -> dict[str, Any]:
                 "lastScanAt": last_scan_at,
                 "lastScanAgeDays": last_scan_age_days,
                 "remediationVelocityPct": velocity.get("completionRatePct"),
+                "activeSchedules": active_schedules,
             }
         )
     rollup = readiness_rollup(tenant_id=tenant_id)
