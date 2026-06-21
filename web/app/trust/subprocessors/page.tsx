@@ -21,6 +21,13 @@ const subprocessors = [
     dpa: "SOC 2 Type II (NDA); HIPAA BAA (Enterprise); DPA",
   },
   { name: "Vercel", purpose: "Web frontend CDN", data: "Static assets, analytics cookies", region: "Global", dpa: "DPA available" },
+  {
+    name: "WorkOS",
+    purpose: "Dashboard authentication",
+    data: "User email, name, org membership, SSO/session metadata",
+    region: "US",
+    dpa: "DPA available",
+  },
   { name: "Postgres (managed)", purpose: "Primary database", data: "Tenant scans, remediation, audit", region: "US (EU by agreement)", dpa: "DPA available" },
   { name: "Redis (managed)", purpose: "Job queue", data: "Job payloads (ephemeral)", region: "Contractual", dpa: "DPA available" },
   { name: "Stripe", purpose: "Billing", data: "Billing contact, subscription metadata", region: "Global", dpa: "Stripe DPA" },
@@ -35,7 +42,7 @@ export default function TrustSubprocessorsPage() {
       <PageHero
         eyebrow="Trust Center"
         title="Sub-processors"
-        description="Current register for enterprise review. Last updated 2026-06-10. We notify customers 30 days before adding a new sub-processor."
+        description="Current register for enterprise review. Last updated 2026-06-21. We notify customers 30 days before adding a new sub-processor."
       />
 
       <Section gap="tight">

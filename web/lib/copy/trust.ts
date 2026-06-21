@@ -43,7 +43,7 @@ export const dogfoodCopy = dogfoodLiveEnabled
   ? "Qtangl runs daily live PQC scans of qtangl.com, www.qtangl.com, and api.qtangl.com in CI. Signed reports are publicly verifiable — we hold ourselves to the standard we sell."
   : "Qtangl is enabling live self-scans of our own domains in production CI. Until live dogfood is configured, verify any scan at /verify or run your own assessment at /assess.";
 
-export const subprocessorsLastUpdated = "2026-06-10";
+export const subprocessorsLastUpdated = "2026-06-21";
 
 export const dataRetentionMonthsDefault = 12;
 
