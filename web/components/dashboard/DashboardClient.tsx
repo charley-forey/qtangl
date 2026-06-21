@@ -20,7 +20,13 @@ import { useSessionExpiryWarning } from "@/hooks/useSessionExpiryWarning";
 import { defaultTabForPersona } from "@/lib/dashboard-state";
 import { roleToPersona, normalizeDashboardRole } from "@/lib/dashboard-persona";
 import type { SettingsTabBundle } from "@/lib/dashboard-state";
-import { dashboardReportUrl, putDashboardJson, type DashboardSession } from "@/lib/dashboard-bff";
+import {
+  dashboardReportUrl,
+  fetchDashboardJson,
+  patchDashboardJson,
+  putDashboardJson,
+  type DashboardSession,
+} from "@/lib/dashboard-bff";
 import { resolveRolePolicy } from "@/lib/dashboard-role-policies";
 import UpgradeModal from "@/components/dashboard/UpgradeModal";
 import DashboardToast from "@/components/dashboard/DashboardToast";
@@ -32,7 +38,6 @@ import { trackDashboardEvent } from "@/lib/dashboard-analytics";
 import { getStoredTenantApiKey, setStoredTenantApiKey, tenantReportUrl } from "@/lib/tenant-api";
 import type { PqcScanResponse } from "@/lib/pqc";
 import { qtanglApiBaseUrl } from "@/lib/api";
-import { fetchDashboardJson } from "@/lib/dashboard-bff";
 import { parseDashboardDeepLink, resolveDashboardTabFromDeepLink } from "@/lib/dashboard-deep-links";
 
 const ReportDrawer = dynamic(() => import("@/components/pqc/ReportDrawer"), { loading: () => null });
