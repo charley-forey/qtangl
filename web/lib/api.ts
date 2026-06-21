@@ -45,8 +45,24 @@ export async function fetchQtanglJson<T>(
     const detail = await response.text();
     let message = detail || `Qtangl request failed with ${response.status}`;
     try {
-      const parsed = JSON.parse(detail) as { detail?: string; message?: string };
-      message = parsed.detail ?? parsed.message ?? message;
+      const parsed = JSON.parse(detail) as {
+        detail?: unknown;
+        message?: string;
+        code?: string;
+      };
+      const payload =
+        typeof parsed.detail === "object" && parsed.detail !== null
+          ? (parsed.detail as { message?: string; code?: string })
+          : parsed;
+      if (typeof payload.message === "string") {
+        message = payload.message;
+      } else if (typeof payload.code === "string") {
+        message = JSON.stringify(payload);
+      } else if (typeof parsed.detail === "string") {
+        message = parsed.detail;
+      } else if (typeof parsed.message === "string") {
+        message = parsed.message;
+      }
     } catch {
       // keep raw body
     }

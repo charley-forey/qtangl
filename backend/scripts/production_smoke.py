@@ -20,6 +20,11 @@ def main() -> int:
         action="store_true",
         help="Only check /health and /health/ready (no API key required)",
     )
+    parser.add_argument(
+        "--live-demo",
+        action="store_true",
+        help="Also POST a sandbox live scan against test.openquantumsafe.org (requires QTANGL_PQC_ENABLE_LIVE_SCAN)",
+    )
     args = parser.parse_args()
 
     base = os.environ.get("QTANGL_API_BASE", "http://127.0.0.1:8000").rstrip("/")
@@ -82,6 +87,24 @@ def main() -> int:
         print("FAIL: evidence bundle is not a ZIP")
         return 1
     print(f"  bundle: {len(bundle)} bytes")
+
+    if args.live_demo:
+        live = _post(
+            f"{base}/pqc/scan",
+            headers,
+            {
+                "scenarioId": "bank-tls-inventory",
+                "useFixture": False,
+                "target": "test.openquantumsafe.org",
+                "depth": "standard",
+            },
+        )
+        live_status = live.get("status")
+        live_id = live.get("scanId")
+        if live_status not in {"success", "running"} or not live_id:
+            print("FAIL: live demo scan did not start", live)
+            return 1
+        print(f"  live-demo: status={live_status} scanId={live_id}")
 
     print("OK: production smoke passed")
     return 0

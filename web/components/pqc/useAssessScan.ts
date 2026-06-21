@@ -30,6 +30,7 @@ import {
 
 import type { AssessScanErrorKind } from "./AssessScanError";
 import { handleDashboardApiError } from "@/lib/dashboard-errors";
+import type { UpgradeProduct } from "@/components/dashboard/UpgradeModal";
 
 export function useAssessScan({
   initialInventory,
@@ -89,6 +90,7 @@ export function useAssessScan({
   const [showCustomize, setShowCustomize] = useState(false);
   const [errorKind, setErrorKind] = useState<AssessScanErrorKind>("generic");
   const [blockedDomain, setBlockedDomain] = useState<string | null>(null);
+  const [upgradeProduct, setUpgradeProduct] = useState<UpgradeProduct | null>(null);
 
   const bootstrapAttempted = useRef(false);
   const autorunAttempted = useRef(false);
@@ -352,6 +354,7 @@ export function useAssessScan({
       setError(null);
       setErrorKind("generic");
       setBlockedDomain(null);
+      setUpgradeProduct(null);
       setScanProgress(null);
       setScanTimeline([]);
       setIsAutorunActive(source === "autorun");
@@ -440,11 +443,16 @@ export function useAssessScan({
           message.includes("Terms of Service")
         ) {
           setErrorKind("legal_required");
+        } else if (handled.upgradeProduct) {
+          setErrorKind("payment_required");
         } else if (message.includes("not permitted") || message.includes("not on your tenant")) {
           setErrorKind("domain_not_allowed");
           setBlockedDomain(customDomain.trim().toLowerCase() || null);
         } else {
           setErrorKind("generic");
+        }
+        if (handled.upgradeProduct) {
+          setUpgradeProduct(handled.upgradeProduct);
         }
         setError(message);
       } finally {
@@ -620,5 +628,7 @@ export function useAssessScan({
     quickStartLiveDemo,
     errorKind,
     blockedDomain,
+    upgradeProduct,
+    clearUpgradeProduct: () => setUpgradeProduct(null),
   };
 }

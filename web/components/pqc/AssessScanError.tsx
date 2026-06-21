@@ -9,12 +9,16 @@ import { trackEvent } from "@/lib/analytics";
 
 type AssessScanErrorProps = {
   message: string;
-  kind?: "domain_not_allowed" | "legal_required" | "generic";
+  kind?: "domain_not_allowed" | "legal_required" | "payment_required" | "generic";
   blockedDomain?: string;
   onDismiss: () => void;
 };
 
-export type AssessScanErrorKind = "domain_not_allowed" | "legal_required" | "generic";
+export type AssessScanErrorKind =
+  | "domain_not_allowed"
+  | "legal_required"
+  | "payment_required"
+  | "generic";
 
 export default function AssessScanError({
   message,
@@ -27,14 +31,21 @@ export default function AssessScanError({
     kind === "domain_not_allowed" ||
     message.includes("not permitted") ||
     message.includes("limited to approved");
+  const isPaymentRequired =
+    kind === "payment_required" ||
+    message.includes("Assess") ||
+    message.includes("quota reached") ||
+    message.includes("trial");
 
   useEffect(() => {
     if (isDomainBlocked && blockedDomain) {
       trackEvent(ASSESS_EVENTS.blockedDomain, { domain: blockedDomain, kind });
+    } else if (isPaymentRequired) {
+      trackEvent(ASSESS_EVENTS.scanFailed, { message, kind: "payment_required" });
     } else {
       trackEvent(ASSESS_EVENTS.scanFailed, { message, kind });
     }
-  }, [isDomainBlocked, blockedDomain, kind, message]);
+  }, [isDomainBlocked, blockedDomain, isPaymentRequired, kind, message]);
 
   return (
     <div className="rounded-lg border border-red-500/30 bg-red-500/10 p-4 text-sm text-red-100">
@@ -46,6 +57,31 @@ export default function AssessScanError({
             Go to legal acceptance
           </Link>
         </p>
+      ) : null}
+      {isPaymentRequired ? (
+        <div className="mt-3 space-y-2 text-xs leading-6 text-red-100/90">
+          <p>Your options:</p>
+          <ol className="list-decimal space-y-1 pl-5">
+            <li>
+              <button type="button" className="underline text-white" onClick={onDismiss}>
+                Run a free sample scenario
+              </button>{" "}
+              — offline fixture, no payment required
+            </li>
+            <li>
+              <Link href="/assess/start" className="underline text-white">
+                Start an authorized workspace
+              </Link>{" "}
+              — one free live scan on your work domain
+            </li>
+            <li>
+              <Link href="/pricing" className="underline text-white">
+                View Assess pricing
+              </Link>{" "}
+              — production baselines and signed exports
+            </li>
+          </ol>
+        </div>
       ) : null}
       {isDomainBlocked ? (
         <div className="mt-3 space-y-2 text-xs leading-6 text-red-100/90">

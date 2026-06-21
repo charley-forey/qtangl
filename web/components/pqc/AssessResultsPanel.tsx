@@ -78,14 +78,15 @@ export default function AssessResultsPanel({
   reportApiKey,
 }: AssessResultsPanelProps) {
   const isProduction = assessMode === "production";
-  const topAsset = scan.assets[0];
+  const assets = scan.assets ?? [];
+  const topAsset = assets[0];
   const explanations = scan.report?.assetExplanations as Record<string, string> | undefined;
   const industry =
     (scan.details?.industry as string | undefined) ??
     scenarioIndustry(scan.scenario?.id ?? "bank-tls-inventory");
 
   const qualityIssues: string[] = [];
-  if (scan.assets.length === 0) qualityIssues.push("No assets discovered.");
+  if (assets.length === 0) qualityIssues.push("No assets discovered.");
   if ((scan.timeline?.length ?? 0) === 0) qualityIssues.push("No timeline events captured.");
   if ((scan.remediationBacklog?.length ?? 0) === 0) qualityIssues.push("No remediation items generated.");
   if (reportStatus === "unavailable") qualityIssues.push("Report bundle is unavailable for this scan context.");
@@ -127,7 +128,7 @@ export default function AssessResultsPanel({
             <MoscaTimeline mosca={scan.mosca} />
           </PqcSection>
           <PqcSection title="Severity mix">
-            <SeverityDonut assets={scan.assets} />
+            <SeverityDonut assets={assets} />
           </PqcSection>
         </div>
         {topAsset && (
@@ -169,10 +170,10 @@ export default function AssessResultsPanel({
 
       <PqcTabPanel id="assess-panel-inventory" active={activeTab === "inventory"} tabId="inventory">
         <PqcSection title="Algorithm rollup & inventory">
-          <InventoryTable assets={scan.assets} explanations={explanations} />
+          <InventoryTable assets={assets} explanations={explanations} />
         </PqcSection>
         <PqcSection title="Risk quadrant">
-          <RiskQuadrant assets={scan.assets} />
+          <RiskQuadrant assets={assets} />
         </PqcSection>
         {scan.scanCoverage && scan.scanCoverage.length > 0 && (
           <PqcSection title="Scan coverage (unreachable / errored)">

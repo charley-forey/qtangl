@@ -92,3 +92,36 @@ test("transport throws QtanglApiError", async () => {
     }
   );
 });
+
+test("transport surfaces structured 402 payment detail", async () => {
+  const fetchImpl = async () =>
+    new Response(
+      JSON.stringify({
+        detail: {
+          code: "assess_payment_required",
+          upgradeUrl: "/dashboard?upgrade=assess",
+        },
+      }),
+      {
+        status: 402,
+        headers: { "content-type": "application/json", "X-Request-Id": "req-402" },
+      }
+    );
+
+  const client = new QtanglClient({
+    baseUrl: "https://api.example.com",
+    apiKey: "demo-key",
+    fetchImpl,
+    maxRetries: 0,
+  });
+
+  await assert.rejects(
+    () => client.scan({ scenarioId: "bank-tls-inventory", useFixture: false }),
+    (error) => {
+      assert.ok(error instanceof QtanglApiError);
+      assert.equal(error.status, 402);
+      assert.match(error.message, /assess_payment_required/);
+      return true;
+    }
+  );
+});

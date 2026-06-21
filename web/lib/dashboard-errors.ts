@@ -1,3 +1,5 @@
+import { QtanglApiError } from "@qtangl/sdk";
+
 import type { UpgradeProduct } from "@/components/dashboard/UpgradeModal";
 
 export type DashboardApiErrorResult = {
@@ -30,7 +32,37 @@ function isKnownCode(value: string): value is DashboardErrorCode {
   return (KNOWN_CODES as readonly string[]).includes(value);
 }
 
+function isErrorPayload(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && typeof (value as { code?: unknown }).code === "string";
+}
+
+function unwrapApiDetail(detail: unknown): Record<string, unknown> | null {
+  if (isErrorPayload(detail)) {
+    return detail;
+  }
+  if (typeof detail === "object" && detail !== null && "detail" in detail) {
+    const nested = (detail as { detail: unknown }).detail;
+    if (isErrorPayload(nested)) {
+      return nested;
+    }
+    if (typeof nested === "string") {
+      return { message: nested };
+    }
+  }
+  return null;
+}
+
 export function parseDashboardApiError(error: unknown): Record<string, unknown> | null {
+  if (error instanceof QtanglApiError) {
+    const fromDetail = unwrapApiDetail(error.detail);
+    if (fromDetail) {
+      return fromDetail;
+    }
+    if (error.status === 402) {
+      return { code: "assess_payment_required", message: error.message };
+    }
+  }
+
   const message = error instanceof Error ? error.message : String(error);
   try {
     const parsed = JSON.parse(message) as Record<string, unknown>;

@@ -28,6 +28,21 @@ class EntitlementsTest(unittest.TestCase):
                 self.assertIsNotNone(err)
                 self.assertEqual(err["code"], "scan_quota_exceeded")
 
+    def test_sandbox_live_scan_skips_payment_gate(self) -> None:
+        from app.billing.entitlements import check_batch_production_scan_access
+
+        err = check_batch_production_scan_access(tenant_id="sandbox", count=1, use_fixture=False)
+        self.assertIsNone(err)
+
+    def test_sandbox_live_scan_skips_usage_recording(self) -> None:
+        from unittest.mock import patch
+
+        from app.billing.entitlements import record_production_scan_usage
+
+        with patch("app.tenant.settings.patch_tenant_billing_flags") as mock_patch:
+            record_production_scan_usage(tenant_id="sandbox", use_fixture=False)
+            mock_patch.assert_not_called()
+
     def test_schedule_cadence_below_minimum(self) -> None:
         with patch("app.billing.entitlements.tenant_entitlements") as mock_ent:
             mock_ent.return_value = {**TIER_DEFAULTS["monitor"], "tier": "monitor", "status": "active"}

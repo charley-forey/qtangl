@@ -61,7 +61,7 @@ export default function QDayCommandCenter({
   const resultsRef = useRef<HTMLDivElement>(null);
   const [reportOpen, setReportOpen] = useState(false);
   const { mode, apiKey, tenantApiKey, setTenantApiKey } = useQtanglApi();
-  const { upgradeOpen, upgradeProduct, closeUpgrade, parsePaymentError } = useUpgradeGate();
+  const { upgradeOpen, upgradeProduct: modalUpgradeProduct, openUpgrade, closeUpgrade } = useUpgradeGate();
   const isProduction = mode === "production" && ASSESS_PRODUCTION_MODE_ENABLED;
 
   const scan = useAssessScan({
@@ -123,7 +123,15 @@ export default function QDayCommandCenter({
     quickStartLiveDemo,
     errorKind,
     blockedDomain,
+    upgradeProduct: scanUpgradeProduct,
+    clearUpgradeProduct,
   } = scan;
+
+  useEffect(() => {
+    if (!scanUpgradeProduct) return;
+    openUpgrade(scanUpgradeProduct);
+    clearUpgradeProduct();
+  }, [scanUpgradeProduct, openUpgrade, clearUpgradeProduct]);
 
   async function onRunScan() {
     await handleScan("manual");
@@ -135,12 +143,6 @@ export default function QDayCommandCenter({
       document.querySelector("[data-assess-upsell]")?.scrollIntoView({ behavior: "smooth" });
     });
   }
-
-  useEffect(() => {
-    if (error && parsePaymentError(new Error(error))) {
-      setError(null);
-    }
-  }, [error, parsePaymentError, setError]);
 
   const scannerBody = (
     <div className="space-y-6">
@@ -212,7 +214,7 @@ export default function QDayCommandCenter({
         onRefresh={onRefresh}
         isScanning={isScanning}
         scanProgress={scanProgress}
-        timeline={scanTimeline.length > 0 ? scanTimeline : scanResponse?.timeline}
+        timeline={scanTimeline.length > 0 ? scanTimeline : (scanResponse?.timeline ?? [])}
         onRunScan={onRunScan}
         collapsed={wizardCollapsed}
         onExpand={() => {
@@ -284,7 +286,7 @@ export default function QDayCommandCenter({
       />
       <AssessUpgradePrompt
         open={upgradeOpen}
-        product={upgradeProduct}
+        product={modalUpgradeProduct}
         onClose={closeUpgrade}
         onMessage={setError}
       />

@@ -73,6 +73,8 @@ def check_batch_production_scan_access(
     """Gate batch live scans against trial limits and monthly quota."""
     if use_fixture:
         return None
+    if tenant_id == "sandbox":
+        return None
     if count < 1:
         return {"code": "invalid_batch", "message": "At least one domain is required."}
 
@@ -123,7 +125,7 @@ def check_batch_production_scan_access(
 
 
 def record_production_scan_usage(*, tenant_id: str, use_fixture: bool = False) -> None:
-    if use_fixture:
+    if use_fixture or tenant_id == "sandbox":
         return
     from app.tenant.settings import get_tenant_billing_flags, patch_tenant_billing_flags
 

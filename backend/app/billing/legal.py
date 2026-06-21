@@ -5,6 +5,8 @@ from typing import Any
 
 def check_legal_acceptance(*, tenant_id: str) -> dict[str, Any] | None:
     """Return error payload when terms acceptance is missing or stale."""
+    if tenant_id == "sandbox":
+        return None
     from app.tenant.settings import get_tenant_billing_flags, get_tenant_settings_raw
 
     billing = get_tenant_billing_flags(tenant_id=tenant_id)

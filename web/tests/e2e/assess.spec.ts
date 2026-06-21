@@ -209,4 +209,94 @@ test.describe("Assess page", () => {
     );
     expect(blocking).toEqual([]);
   });
+
+  test("live demo 402 shows friendly error and upgrade modal without crashing", async ({ page }) => {
+    test.setTimeout(60_000);
+    await page.route("**/pqc/scan", async (route) => {
+      if (route.request().method() !== "POST") {
+        await route.continue();
+        return;
+      }
+      await route.fulfill({
+        status: 402,
+        contentType: "application/json",
+        body: JSON.stringify({
+          detail: {
+            code: "assess_payment_required",
+            upgradeUrl: "/dashboard?upgrade=assess",
+            checkoutProduct: "assess",
+          },
+        }),
+      });
+    });
+
+    await page.goto("/assess");
+    await expect(page.getByRole("heading", { name: /What do you want to do/i })).toBeVisible({
+      timeout: 60_000,
+    });
+    await page.getByRole("button", { name: /Try a real live scan/i }).click();
+    await page.getByRole("button", { name: /Scan test\.openquantumsafe\.org/i }).click();
+
+    await expect(page.getByText(/Production scans require Assess/i)).toBeVisible({ timeout: 15_000 });
+    await expect(page.getByRole("heading", { name: /Unlock production baseline/i })).toBeVisible();
+    await expect(page.getByText(/\[object Object\]/i)).toHaveCount(0);
+    await expect(page.getByRole("heading", { name: /What do you want to do/i })).toBeVisible();
+  });
+
+  test("live demo scan progress does not crash when timeline is empty", async ({ page }) => {
+    test.setTimeout(60_000);
+    let postCount = 0;
+    await page.route("**/pqc/scan", async (route) => {
+      if (route.request().method() !== "POST") {
+        await route.continue();
+        return;
+      }
+      postCount += 1;
+      if (postCount === 1) {
+        await route.fulfill({
+          status: 200,
+          contentType: "application/json",
+          body: JSON.stringify({
+            status: "running",
+            scanId: "mock-live-scan",
+            summary: "Live scan started",
+          }),
+        });
+        return;
+      }
+      await route.fulfill({
+        status: 402,
+        contentType: "application/json",
+        body: JSON.stringify({
+          detail: { code: "assess_payment_required" },
+        }),
+      });
+    });
+
+    await page.route("**/pqc/scan/mock-live-scan", async (route) => {
+      await route.fulfill({
+        status: 402,
+        contentType: "application/json",
+        body: JSON.stringify({
+          detail: { code: "assess_payment_required" },
+        }),
+      });
+    });
+
+    await page.goto("/assess");
+    await expect(page.getByRole("heading", { name: /What do you want to do/i })).toBeVisible({
+      timeout: 60_000,
+    });
+    await page.getByRole("button", { name: /Try a real live scan/i }).click();
+    await page.getByRole("button", { name: /Configure live demo/i }).click();
+    await page.getByRole("button", { name: /Next: Scope/i }).click();
+    await page.getByRole("button", { name: /Next: Run/i }).click();
+    await page.getByRole("button", { name: /Run Q-Day scan/i }).click();
+
+    await expect(page.getByText(/Scan in progress|Starting live scan|Scanning/i).first()).toBeVisible({
+      timeout: 10_000,
+    });
+    await expect(page.getByText(/Production scans require Assess/i)).toBeVisible({ timeout: 15_000 });
+    await expect(page.getByText(/\[object Object\]/i)).toHaveCount(0);
+  });
 });

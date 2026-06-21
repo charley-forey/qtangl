@@ -72,10 +72,21 @@ export async function requestJson(
         } catch {
           /* keep text */
         }
-        const message =
+        const inner =
           typeof detail === "object" && detail && "detail" in detail
-            ? String((detail as { detail: unknown }).detail)
-            : text || `HTTP ${response.status}`;
+            ? (detail as { detail: unknown }).detail
+            : detail;
+        let message = text || `HTTP ${response.status}`;
+        if (typeof inner === "string") {
+          message = inner;
+        } else if (typeof inner === "object" && inner !== null) {
+          const payload = inner as { message?: unknown; code?: unknown };
+          if (typeof payload.message === "string") {
+            message = payload.message;
+          } else if (typeof payload.code === "string") {
+            message = JSON.stringify(inner);
+          }
+        }
         throw new QtanglApiError(response.status, message, { requestId, detail });
       }
       if (response.status === 204) {
