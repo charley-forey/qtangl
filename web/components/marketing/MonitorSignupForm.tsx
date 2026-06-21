@@ -9,6 +9,7 @@ import { generalContactEmail } from "@/lib/copy/trust";
 export default function MonitorSignupForm() {
   const [email, setEmail] = useState("");
   const [company, setCompany] = useState("");
+  const [domain, setDomain] = useState("");
   const [message, setMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -20,7 +21,11 @@ export default function MonitorSignupForm() {
       const response = await fetch(`${qtanglApiBaseUrl}/public/monitor-signup`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, company }),
+        body: JSON.stringify({
+          email,
+          company,
+          domain: domain.trim() || undefined,
+        }),
       });
       const payload = await response.json();
       if (!response.ok) {
@@ -63,6 +68,16 @@ export default function MonitorSignupForm() {
         placeholder="Company name"
         className="w-full rounded-full border border-[var(--border-strong)] bg-black px-4 py-2 text-sm text-white"
       />
+      <input
+        type="text"
+        value={domain}
+        onChange={(e) => setDomain(e.target.value)}
+        placeholder="Primary domain (e.g. example.com)"
+        className="w-full rounded-full border border-[var(--border-strong)] bg-black px-4 py-2 text-sm text-white"
+      />
+      <p className="text-xs text-[var(--color-gray-500)]">
+        Use your organization&apos;s domain. It must match your work email (e.g. api.example.com for you@example.com).
+      </p>
       <button
         type="submit"
         disabled={loading}

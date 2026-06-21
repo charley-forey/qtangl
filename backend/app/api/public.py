@@ -24,11 +24,13 @@ router = APIRouter(prefix="/public", tags=["public"])
 class MonitorSignupRequest(BaseModel):
     email: str = Field(min_length=3, max_length=320)
     company: str = Field(min_length=2, max_length=200)
+    domain: str | None = Field(default=None, max_length=253)
 
 
 class MonitorProvisionRequest(BaseModel):
     email: str = Field(min_length=3, max_length=320)
     company: str = Field(min_length=2, max_length=200)
+    domain: str | None = Field(default=None, max_length=253)
     adminSecret: str
 
 
@@ -77,7 +79,8 @@ def public_monitor_signup(body: MonitorSignupRequest) -> dict:
     session = create_monitor_checkout_session(
         email=body.email,
         company=body.company,
-        success_url=f"{base}/dashboard?signup=success",
+        domain=body.domain,
+        success_url=f"{base}/dashboard/login?signup=success",
         cancel_url=f"{base}/access?signup=cancelled",
     )
     if not session.get("ok"):
@@ -95,7 +98,7 @@ def public_monitor_provision(body: MonitorProvisionRequest) -> dict:
     if not expected or body.adminSecret != expected:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Invalid provision secret.")
     try:
-        result = provision_monitor_tenant(email=body.email, company=body.company)
+        result = provision_monitor_tenant(email=body.email, company=body.company, domain=body.domain)
     except Exception as exc:
         raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail=str(exc)) from exc
     return {"status": "success", **result}

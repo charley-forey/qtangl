@@ -58,6 +58,7 @@ type Props = {
   onMessage?: (message: string) => void;
   onOpenUpgrade?: (product: "assess" | "monitor") => void;
   checkoutSuccess?: string | null;
+  forceOnboarding?: boolean;
   reportUrlForScan?: (scanId: string, format?: "board") => string;
   rolePolicy?: RolePolicy;
   bffMode?: boolean;
@@ -80,6 +81,7 @@ export default function DashboardOverviewTab({
   onMessage,
   onOpenUpgrade,
   checkoutSuccess,
+  forceOnboarding = false,
   reportUrlForScan,
   rolePolicy,
   bffMode = true,
@@ -91,7 +93,9 @@ export default function DashboardOverviewTab({
   const onboardingRecord =
     (tenantSettings?.onboarding as { complete?: boolean; dismissed?: boolean } | undefined) ??
     (onboarding as { complete?: boolean; dismissed?: boolean } | null | undefined);
-  const showWizard = Boolean(onboardingRecord && !onboardingRecord.complete && !onboardingRecord.dismissed);
+  const showWizard =
+    forceOnboarding ||
+    Boolean(onboardingRecord && !onboardingRecord.complete && !onboardingRecord.dismissed);
 
   const layout = summary.layoutDefaults;
   const detail = summary.latestScanDetail;

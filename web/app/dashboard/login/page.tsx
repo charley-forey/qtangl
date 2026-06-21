@@ -17,9 +17,15 @@ function searchParamsHasInvite(params: { invite?: string; welcome?: string }): b
 export default async function DashboardLoginPage({
   searchParams,
 }: {
-  searchParams: Promise<{ onboarding?: string; invite?: string; welcome?: string }>;
+  searchParams: Promise<{ onboarding?: string; invite?: string; welcome?: string; signup?: string }>;
 }) {
   const params = await searchParams;
+
+  if (params.signup === "success" && !params.onboarding) {
+    const DashboardSignupSuccess = (await import("@/components/dashboard/DashboardSignupSuccess")).default;
+    return <DashboardSignupSuccess />;
+  }
+
   if (!workosAuthEnabled()) {
     if (legacyKeyAuthEnabled()) {
       redirect(`/dashboard${params.onboarding ? `?onboarding=${params.onboarding}` : ""}`);
@@ -45,9 +51,11 @@ export default async function DashboardLoginPage({
   const { getSignInUrl } = await import("@workos-inc/authkit-nextjs");
   const returnPath = params.onboarding
     ? `/dashboard?onboarding=${encodeURIComponent(params.onboarding)}&session=refresh`
-    : params.invite === "1" || searchParamsHasInvite(params)
-      ? "/dashboard?welcome=invite&session=refresh"
-      : "/dashboard?session=refresh";
+    : params.signup === "success"
+      ? "/dashboard?signup=success&checkout=monitor&session=refresh"
+      : params.invite === "1" || searchParamsHasInvite(params)
+        ? "/dashboard?welcome=invite&session=refresh"
+        : "/dashboard?session=refresh";
   const signInUrl = await getSignInUrl({ redirectUri: undefined, state: returnPath });
   redirect(signInUrl);
 }

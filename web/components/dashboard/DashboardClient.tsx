@@ -49,6 +49,8 @@ export default function DashboardClient() {
   const welcomeInvite = searchParams.get("welcome") === "invite";
   const upgradeParam = searchParams.get("upgrade");
   const checkoutParam = searchParams.get("checkout");
+  const signupSuccessParam = searchParams.get("signup") === "success";
+  const checkoutSuccess = checkoutParam ?? (signupSuccessParam ? "monitor" : null);
   const { upgradeOpen, upgradeProduct, openUpgrade, closeUpgrade } = useUpgradeGate();
   const {
     session: contextSession,
@@ -183,6 +185,21 @@ export default function DashboardClient() {
     if (upgradeParam === "assess") openUpgrade("assess");
     if (upgradeParam === "monitor") openUpgrade("monitor");
   }, [openUpgrade, upgradeParam]);
+
+  useEffect(() => {
+    if (!bffConnected || (!signupSuccessParam && checkoutParam !== "monitor")) return;
+    void patchDashboardJson("/tenant/onboarding", { dismissed: false, complete: false, step: "company" }).then(() => {
+      setTenantSettings((prev) => ({
+        ...(prev ?? {}),
+        onboarding: {
+          ...((prev?.onboarding as Record<string, unknown>) ?? {}),
+          dismissed: false,
+          complete: false,
+          step: "company",
+        },
+      }));
+    });
+  }, [bffConnected, checkoutParam, signupSuccessParam]);
 
   const loadReportScan = useCallback(async (scanId: string) => {
     setReportScanId(scanId);
@@ -421,7 +438,8 @@ export default function DashboardClient() {
             onRefreshSummary={() => void loadSummary()}
             onPortfolioSwitch={() => void reloadWorkspace()}
             onOpenUpgrade={openUpgrade}
-            checkoutSuccess={checkoutParam}
+            checkoutSuccess={checkoutSuccess}
+            forceOnboarding={signupSuccessParam || checkoutParam === "monitor"}
           />
         </DashboardShell>
       ) : null}

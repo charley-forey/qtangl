@@ -63,6 +63,7 @@ type Props = {
   onPortfolioSwitch: () => void;
   onOpenUpgrade?: (product: UpgradeProduct) => void;
   checkoutSuccess?: string | null;
+  forceOnboarding?: boolean;
   tabLoading?: boolean;
   tabError?: string | null;
   onRetryTab?: () => void;
@@ -106,6 +107,7 @@ export default function DashboardTabRouter(props: Props) {
     onPortfolioSwitch,
     onOpenUpgrade,
     checkoutSuccess,
+    forceOnboarding,
     tabLoading,
     tabError,
     onRetryTab,
@@ -157,6 +159,7 @@ export default function DashboardTabRouter(props: Props) {
             onMessage={onMessage}
             onOpenUpgrade={onOpenUpgrade}
             checkoutSuccess={checkoutSuccess}
+            forceOnboarding={forceOnboarding}
             reportUrlForScan={reportUrlForScan}
             bffMode={bffMode}
             onSettingsChange={onSettingsChange}
@@ -322,6 +325,7 @@ export default function DashboardTabRouter(props: Props) {
     tenantSettings,
     welcomeInvite,
     checkoutSuccess,
+    forceOnboarding,
     toursCompleted,
     tabLoading,
     tabError,

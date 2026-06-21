@@ -120,3 +120,142 @@ def test_provision_monitor_email_excludes_plaintext_api_key(monkeypatch, tmp_pat
     engine_module._engine = None
     engine_module._SessionLocal = None
     os.environ.pop("DATABASE_URL", None)
+
+
+def test_provision_monitor_seeds_allowlist_when_domain_matches(monkeypatch, tmp_path):
+    import os
+
+    from app.billing.service import provision_monitor_tenant
+    from app.tenant.settings import get_tenant_scan_allowlist
+
+    db_path = tmp_path / "monitor_domain.db"
+    os.environ["DATABASE_URL"] = f"sqlite:///{db_path}"
+    os.environ["QTANGL_DB_AUTO_MIGRATE"] = "true"
+
+    import app.db.engine as engine_module
+
+    if engine_module._engine is not None:
+        engine_module._engine.dispose()
+    engine_module._engine = None
+    engine_module._SessionLocal = None
+
+    from app.db.engine import init_db
+
+    init_db()
+
+    monkeypatch.setattr(
+        "app.notifications.email.send_report_email",
+        lambda **kwargs: {"sent": True},
+    )
+
+    result = provision_monitor_tenant(
+        email="buyer@example.com",
+        company="Example Monitor",
+        domain="api.example.com",
+    )
+    assert result["allowlistSeeded"] is True
+    allowlist = get_tenant_scan_allowlist(tenant_id=result["tenantId"])
+    assert "api.example.com" in allowlist
+
+    if engine_module._engine is not None:
+        engine_module._engine.dispose()
+    engine_module._engine = None
+    engine_module._SessionLocal = None
+    os.environ.pop("DATABASE_URL", None)
+
+
+def test_provision_monitor_reuses_existing_tenant(monkeypatch, tmp_path):
+    import os
+
+    from app.billing.service import find_tenant_id_for_email, provision_assess_tenant, provision_monitor_tenant
+
+    db_path = tmp_path / "monitor_dedupe.db"
+    os.environ["DATABASE_URL"] = f"sqlite:///{db_path}"
+    os.environ["QTANGL_DB_AUTO_MIGRATE"] = "true"
+
+    import app.db.engine as engine_module
+
+    if engine_module._engine is not None:
+        engine_module._engine.dispose()
+    engine_module._engine = None
+    engine_module._SessionLocal = None
+
+    from app.db.engine import init_db
+
+    init_db()
+
+    monkeypatch.setattr(
+        "app.notifications.email.send_report_email",
+        lambda **kwargs: {"sent": True},
+    )
+
+    assess = provision_assess_tenant(
+        email="buyer@example.com",
+        company="Example Corp",
+        domain="api.example.com",
+    )
+    monitor = provision_monitor_tenant(
+        email="buyer@example.com",
+        company="Example Corp",
+        domain="api.example.com",
+    )
+    assert monitor["tenantId"] == assess["tenantId"]
+    assert monitor.get("upgraded") is True
+    assert find_tenant_id_for_email(email="buyer@example.com") == assess["tenantId"]
+
+    if engine_module._engine is not None:
+        engine_module._engine.dispose()
+    engine_module._engine = None
+    engine_module._SessionLocal = None
+    os.environ.pop("DATABASE_URL", None)
+
+
+def test_handle_checkout_completed_passes_domain_from_metadata(monkeypatch, tmp_path):
+    import os
+
+    from app.billing.service import handle_checkout_completed
+    from app.tenant.settings import get_tenant_scan_allowlist
+
+    db_path = tmp_path / "checkout_domain.db"
+    os.environ["DATABASE_URL"] = f"sqlite:///{db_path}"
+    os.environ["QTANGL_DB_AUTO_MIGRATE"] = "true"
+
+    import app.db.engine as engine_module
+
+    if engine_module._engine is not None:
+        engine_module._engine.dispose()
+    engine_module._engine = None
+    engine_module._SessionLocal = None
+
+    from app.db.engine import init_db
+
+    init_db()
+
+    monkeypatch.setattr(
+        "app.notifications.email.send_report_email",
+        lambda **kwargs: {"sent": True},
+    )
+
+    result = handle_checkout_completed(
+        {
+            "metadata": {
+                "company": "Acme Monitor",
+                "product": "pqc-monitor",
+                "email": "ops@acme.com",
+                "domain": "api.acme.com",
+            },
+            "customer_email": "ops@acme.com",
+            "customer": "cus_test",
+            "subscription": "sub_test",
+            "id": "cs_test",
+        }
+    )
+    assert result["provisioned"] is True
+    allowlist = get_tenant_scan_allowlist(tenant_id=result["tenantId"])
+    assert "api.acme.com" in allowlist
+
+    if engine_module._engine is not None:
+        engine_module._engine.dispose()
+    engine_module._engine = None
+    engine_module._SessionLocal = None
+    os.environ.pop("DATABASE_URL", None)
