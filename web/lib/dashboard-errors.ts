@@ -10,6 +10,7 @@ const KNOWN_CODES = [
   "legal_acceptance_required",
   "scan_quota_exceeded",
   "assess_payment_required",
+  "trial_batch_limit",
   "schedule_quota_exceeded",
   "api_key_quota_exceeded",
 ] as const;
@@ -20,6 +21,7 @@ const FRIENDLY_MESSAGES: Record<DashboardErrorCode, string> = {
   legal_acceptance_required: "Accept the current Terms of Service to continue.",
   scan_quota_exceeded: "Monthly scan quota reached. Upgrade your plan to run more scans.",
   assess_payment_required: "Production scans require Assess. Complete checkout to continue.",
+  trial_batch_limit: "Your trial does not include enough scans for this batch. Upgrade or scan fewer domains.",
   schedule_quota_exceeded: "Scheduled monitoring requires a higher tier. Upgrade to Monitor.",
   api_key_quota_exceeded: "API key limit reached for your tier. Upgrade for more automation keys.",
 };
@@ -63,7 +65,7 @@ export function parseDashboardApiError(error: unknown): Record<string, unknown> 
 }
 
 function upgradeProductForCode(code: DashboardErrorCode): UpgradeProduct | undefined {
-  if (code === "assess_payment_required") {
+  if (code === "assess_payment_required" || code === "trial_batch_limit") {
     return "assess";
   }
   if (code === "schedule_quota_exceeded" || code === "api_key_quota_exceeded" || code === "scan_quota_exceeded") {

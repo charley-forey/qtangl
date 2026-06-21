@@ -386,16 +386,44 @@ export async function provePqcHandshake(useFixture = true, apiKey?: string) {
   });
 }
 
+export type PqcBundleUploadResponse = {
+  status: "success";
+  sessionId: string;
+  summary: string;
+  rowCount?: number;
+  preview?: { algorithms: string[]; qVulnerable?: number };
+  discoveredHosts?: string[];
+  suggestedDomains?: string[];
+  alreadyAuthorized?: string[];
+};
+
 export async function uploadPqcBundle(file: File, apiKey?: string) {
   const formData = new FormData();
   formData.append("file", file);
-  return fetchQtanglJson<{
-    status: "success";
-    sessionId: string;
-    summary: string;
-    rowCount?: number;
-    preview?: { algorithms: string[]; qVulnerable?: number };
-  }>("/pqc/upload-bundle", { method: "POST", body: formData, skipJsonContentType: true, apiKey });
+  return fetchQtanglJson<PqcBundleUploadResponse>("/pqc/upload-bundle", {
+    method: "POST",
+    body: formData,
+    skipJsonContentType: true,
+    apiKey,
+  });
+}
+
+export type BatchScanResponse = {
+  status: "success";
+  count: number;
+  summary: string;
+  scans: Array<{ scanId: string; target: string; status: string }>;
+};
+
+export async function batchScanDomains(
+  input: { domains?: string[]; industry?: string; depth?: "standard" | "lite" },
+  apiKey?: string
+) {
+  return fetchQtanglJson<BatchScanResponse>("/tenant/scans/batch", {
+    method: "POST",
+    body: JSON.stringify(input),
+    apiKey,
+  });
 }
 
 export type ReadinessIndexSnapshot = {

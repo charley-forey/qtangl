@@ -14,6 +14,11 @@ type AssessRunnerPanelProps = {
   backendMessage: string | null;
   apiKey: string;
   useBff?: boolean;
+  canAdminDomains?: boolean;
+  onDomainsChange?: (domains: string[]) => void;
+  onMessage?: (message: string) => void;
+  onOpenUpgrade?: (product: "assess" | "monitor") => void;
+  onRefresh?: () => void;
   onScanComplete?: (scanId: string) => void;
 };
 
@@ -24,6 +29,11 @@ export default function AssessRunnerPanel({
   backendMessage,
   apiKey,
   useBff = false,
+  canAdminDomains = false,
+  onDomainsChange,
+  onMessage,
+  onOpenUpgrade,
+  onRefresh,
 }: AssessRunnerPanelProps) {
   return (
     <QtanglApiProvider initialMode="production" initialTenantKey={apiKey} useBff={useBff}>
@@ -42,6 +52,12 @@ export default function AssessRunnerPanel({
             compact
             basePath="/dashboard"
             syncUrlEnabled={false}
+            canAdminDomains={canAdminDomains}
+            useBffForDomains={useBff}
+            onDomainsChange={onDomainsChange}
+            onMessage={onMessage}
+            onOpenUpgrade={onOpenUpgrade}
+            onRefresh={onRefresh}
           />
         </div>
       </Card>

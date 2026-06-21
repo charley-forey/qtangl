@@ -83,6 +83,31 @@ class AuthorizedDomainsRequest(BaseModel):
     attestation: str = Field(min_length=10, max_length=4000)
 
 
+class AuthorizedDomainsPatchRequest(BaseModel):
+    action: str = Field(pattern="^(add|remove|add_many)$")
+    domain: str | None = Field(default=None, max_length=253)
+    domains: list[str] | None = Field(default=None, max_length=50)
+    attestation: str | None = Field(default=None, max_length=4000)
+
+
+class BatchScanRequest(BaseModel):
+    domains: list[str] | None = Field(default=None, max_length=50)
+    industry: str | None = Field(default=None, max_length=64)
+    depth: str = Field(default="standard", pattern="^(standard|lite)$")
+    createSchedules: bool = False
+    scheduleCadenceHours: int = Field(default=168, ge=1, le=8760)
+    notifyEmail: str | None = None
+    skipExistingSchedules: bool = True
+
+
+class BatchScheduleRequest(BaseModel):
+    targets: list[str] | None = Field(default=None, max_length=50)
+    cadenceHours: int = Field(default=168, ge=1, le=8760)
+    notifyEmail: str | None = None
+    scenarioId: str = Field(default="production-baseline")
+    skipExisting: bool = True
+
+
 class SchedulePatchRequest(BaseModel):
     cadenceHours: int | None = Field(default=None, ge=1, le=8760)
     notifyEmail: str | None = None
@@ -529,6 +554,75 @@ def tenant_scans(
     }
 
 
+@router.post("/scans/batch")
+def tenant_scans_batch(
+    body: BatchScanRequest,
+    auth: AuthContext = Depends(require_auth_write),
+) -> dict:
+    from app.billing.legal import check_legal_acceptance
+    from app.pqc.batch_scan import start_batch_live_scans
+    from app.tenant.settings import get_tenant_scan_allowlist
+
+    legal_error = check_legal_acceptance(tenant_id=auth.tenant_id)
+    if legal_error:
+        raise HTTPException(status_code=402, detail=legal_error)
+
+    targets = body.domains or get_tenant_scan_allowlist(tenant_id=auth.tenant_id)
+    if not targets:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail="Add authorized domains before running a batch baseline.",
+        )
+    payload = start_batch_live_scans(
+        tenant_id=auth.tenant_id,
+        domains=targets,
+        auth=auth,
+        industry=body.industry,
+        depth=body.depth,
+    )
+    return _maybe_attach_batch_schedules(
+        auth=auth,
+        body=body,
+        scan_targets=targets,
+        scan_payload=payload,
+    )
+
+
+def _maybe_attach_batch_schedules(
+    *,
+    auth: AuthContext,
+    body: BatchScanRequest,
+    scan_targets: list[str],
+    scan_payload: dict[str, Any],
+) -> dict[str, Any]:
+    if not body.createSchedules:
+        return scan_payload
+    from app.monitoring.batch_schedules import create_batch_schedules
+
+    schedule_targets = scan_targets
+    schedule_result = create_batch_schedules(
+        tenant_id=auth.tenant_id,
+        targets=schedule_targets,
+        cadence_hours=body.scheduleCadenceHours,
+        notify_email=body.notifyEmail,
+        skip_existing=body.skipExistingSchedules,
+    )
+    log_action(
+        tenant_id=auth.tenant_id,
+        action="schedule.batch_created",
+        actor=auth.role,
+        detail={
+            "count": schedule_result.get("count"),
+            "skipped": schedule_result.get("skipped"),
+            "targets": schedule_targets,
+        },
+    )
+    scan_payload["schedules"] = schedule_result.get("schedules") or []
+    scan_payload["schedulesSkipped"] = schedule_result.get("skipped") or []
+    scan_payload["scheduleSummary"] = schedule_result.get("summary")
+    return scan_payload
+
+
 @router.get("/scans/{scan_id}")
 def tenant_scan_detail(scan_id: str, auth: AuthContext = Depends(require_auth_readonly)) -> dict:
     job = get_job(scan_id, tenant_id=auth.tenant_id)
@@ -754,6 +848,39 @@ def tenant_create_schedule(
     return {"status": "success", "schedule": schedule}
 
 
+@router.post("/schedules/batch")
+def tenant_create_schedules_batch(
+    body: BatchScheduleRequest,
+    auth: AuthContext = Depends(require_auth_write),
+) -> dict:
+    from app.monitoring.batch_schedules import create_batch_schedules
+    from app.tenant.settings import get_tenant_scan_allowlist
+
+    targets = body.targets or get_tenant_scan_allowlist(tenant_id=auth.tenant_id)
+    result = create_batch_schedules(
+        tenant_id=auth.tenant_id,
+        targets=targets,
+        cadence_hours=body.cadenceHours,
+        notify_email=body.notifyEmail,
+        scenario_id=body.scenarioId,
+        skip_existing=body.skipExisting,
+    )
+    log_action(
+        tenant_id=auth.tenant_id,
+        action="schedule.batch_created",
+        actor=auth.role,
+        detail={"count": result.get("count"), "skipped": result.get("skipped")},
+    )
+    try:
+        from app.coaching.milestones import record_milestone
+
+        if int(result.get("count") or 0) > 0:
+            record_milestone(tenant_id=auth.tenant_id, name="firstScheduleAt")
+    except Exception:
+        pass
+    return result
+
+
 @router.patch("/schedules/{schedule_id}")
 def tenant_patch_schedule(
     schedule_id: str,
@@ -856,6 +983,66 @@ def tenant_authorized_domains_post(
         actor=auth.role,
         detail={"domains": domains, "attestation": body.attestation[:500]},
     )
+    return {"status": "success", "domains": domains, "tenantId": auth.tenant_id}
+
+
+@router.patch("/authorized-domains")
+def tenant_authorized_domains_patch(
+    body: AuthorizedDomainsPatchRequest,
+    auth: AuthContext = Depends(require_auth_admin),
+) -> dict:
+    from app.tenant.settings import (
+        append_tenant_scan_allowlist,
+        append_tenant_scan_allowlist_many,
+        remove_tenant_scan_allowlist,
+    )
+
+    try:
+        if body.action == "add":
+            if not body.domain:
+                raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail="Domain is required.")
+            attestation = (body.attestation or "").strip()
+            if len(attestation) < 10:
+                raise HTTPException(
+                    status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                    detail="Add an attestation confirming you are authorized to scan this domain.",
+                )
+            domains = append_tenant_scan_allowlist(tenant_id=auth.tenant_id, domain=body.domain)
+            log_action(
+                tenant_id=auth.tenant_id,
+                action="authorized_domains.add",
+                actor=auth.role,
+                detail={"domain": body.domain, "domains": domains, "attestation": attestation[:500]},
+            )
+        elif body.action == "add_many":
+            requested = body.domains or []
+            if not requested:
+                raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail="Domains are required.")
+            attestation = (body.attestation or "").strip()
+            if len(attestation) < 10:
+                raise HTTPException(
+                    status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                    detail="Add an attestation confirming you are authorized to scan these domains.",
+                )
+            domains = append_tenant_scan_allowlist_many(tenant_id=auth.tenant_id, domains=requested)
+            log_action(
+                tenant_id=auth.tenant_id,
+                action="authorized_domains.add_many",
+                actor=auth.role,
+                detail={"domainsAdded": requested, "domains": domains, "attestation": attestation[:500]},
+            )
+        else:
+            if not body.domain:
+                raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail="Domain is required.")
+            domains = remove_tenant_scan_allowlist(tenant_id=auth.tenant_id, domain=body.domain)
+            log_action(
+                tenant_id=auth.tenant_id,
+                action="authorized_domains.remove",
+                actor=auth.role,
+                detail={"domain": body.domain, "domains": domains},
+            )
+    except ValueError as exc:
+        raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail=str(exc)) from exc
     return {"status": "success", "domains": domains, "tenantId": auth.tenant_id}
 
 

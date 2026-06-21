@@ -1100,6 +1100,46 @@ export const tenantEndpoints: Record<string, DocsEndpoint> = {
     responseFields: [{ name: "downloadUrl", type: "string", required: false, description: "Signed download URL when async." }],
     examples: [{ label: "Bulk export", request: { scanIds: ["scan_001"] }, response: { status: "success" } }],
   }),
+  "tenant-scans-batch": defineEndpoint("tenant-scans-batch", {
+    method: "POST",
+    path: "/tenant/scans/batch",
+    summary: "Start live baseline scans for multiple authorized domains.",
+    auth: true,
+    role: ROLE_OPERATOR,
+    requestFields: [
+      { name: "domains", type: "string[]", required: false, description: "Subset to scan; defaults to full allowlist." },
+      { name: "industry", type: "string", required: false, description: "Industry for peer comparison." },
+      { name: "depth", type: "string", required: false, default: "standard", description: "Scan depth." },
+      { name: "createSchedules", type: "boolean", required: false, description: "Also create monitor schedules." },
+      { name: "scheduleCadenceHours", type: "number", required: false, description: "Cadence when createSchedules is true." },
+    ],
+    examples: [
+      {
+        label: "Batch scan",
+        request: { domains: ["qtangl.com", "api.qtangl.com"], industry: "general" },
+        response: { status: "success", count: 2, scans: [{ scanId: "scan-abc", target: "qtangl.com", status: "running" }] },
+      },
+    ],
+  }),
+  "tenant-schedules-batch": defineEndpoint("tenant-schedules-batch", {
+    method: "POST",
+    path: "/tenant/schedules/batch",
+    summary: "Create monitor schedules for multiple authorized targets.",
+    auth: true,
+    role: ROLE_OPERATOR,
+    requestFields: [
+      { name: "targets", type: "string[]", required: false, description: "Domains to schedule; defaults to allowlist." },
+      { name: "cadenceHours", type: "number", required: false, default: "168", description: "Hours between runs." },
+      { name: "skipExisting", type: "boolean", required: false, description: "Skip targets that already have schedules." },
+    ],
+    examples: [
+      {
+        label: "Batch schedules",
+        request: { targets: ["qtangl.com", "api.qtangl.com"], cadenceHours: 168 },
+        response: { status: "success", count: 2, schedules: [{ id: "sched-1", target: "qtangl.com" }] },
+      },
+    ],
+  }),
   "tenant-api-keys-list": defineEndpoint("tenant-api-keys-list", {
     method: "GET",
     path: "/tenant/api-keys",
@@ -1212,11 +1252,27 @@ export const tenantEndpoints: Record<string, DocsEndpoint> = {
   "tenant-authorized-domains-create": defineEndpoint("tenant-authorized-domains-create", {
     method: "POST",
     path: "/tenant/authorized-domains",
-    summary: "Add an authorized email domain for invites.",
+    summary: "Replace the full authorized scan domain list.",
     auth: true,
     role: ROLE_ADMIN,
-    requestFields: [{ name: "domain", type: "string", required: true, description: "Domain to authorize." }],
-    examples: [{ label: "Add domain", request: { domain: "example.com" }, response: { status: "success" } }],
+    requestFields: [
+      { name: "domains", type: "string[]", required: true, description: "Authorized domains." },
+      { name: "attestation", type: "string", required: true, description: "Authorization attestation." },
+    ],
+    examples: [{ label: "Replace list", request: { domains: ["example.com"], attestation: "I am authorized…" }, response: { status: "success" } }],
+  }),
+  "tenant-authorized-domains-patch": defineEndpoint("tenant-authorized-domains-patch", {
+    method: "PATCH",
+    path: "/tenant/authorized-domains",
+    summary: "Add or remove a single authorized scan domain.",
+    auth: true,
+    role: ROLE_ADMIN,
+    requestFields: [
+      { name: "action", type: "string", required: true, description: "add or remove" },
+      { name: "domain", type: "string", required: true, description: "Domain to add or remove." },
+      { name: "attestation", type: "string", required: false, description: "Required when action is add." },
+    ],
+    examples: [{ label: "Add domain", request: { action: "add", domain: "api.example.com", attestation: "I am authorized…" }, response: { status: "success" } }],
   }),
   "tenant-onboarding-patch": defineEndpoint("tenant-onboarding-patch", {
     method: "PATCH",

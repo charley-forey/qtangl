@@ -8,6 +8,8 @@ import Eyebrow from "@/components/ui/Eyebrow";
 import EmptyState from "@/components/dashboard/ui/EmptyState";
 import DashboardOnboarding, { DashboardSection } from "@/components/dashboard/DashboardOnboarding";
 import AuthorizedDomainsPanel from "@/components/dashboard/AuthorizedDomainsPanel";
+import BatchScanPanel from "@/components/dashboard/BatchScanPanel";
+import BatchSchedulePanel from "@/components/dashboard/BatchSchedulePanel";
 import ScheduleRecommendationCard from "@/components/dashboard/ScheduleRecommendationCard";
 import type { ScansTabBundle } from "@/lib/dashboard-state";
 import type { TenantScanSummary } from "@/lib/tenant-api";
@@ -76,6 +78,7 @@ export default function DashboardScansTab({
   const allowlist = scanAllowlist.length
     ? scanAllowlist
     : ((tenantSettings?.scanAllowlist as string[] | undefined) ?? []);
+  const industry = String(tenantSettings?.industry ?? "financial");
   const coaching = (tenantSettings?.coaching as { bannersDismissed?: string[] } | undefined) ?? {};
   const scheduleRecommendationDismissed = (coaching.bannersDismissed ?? []).includes("schedule-recommendation");
   const [selected, setSelected] = useState<Set<string>>(new Set());
@@ -203,15 +206,50 @@ export default function DashboardScansTab({
         </Card>
       ) : null}
 
-      {canWrite && legalOk && allowlist.length === 0 ? (
-        <DashboardSection title="Authorize domains" id="scans-allowlist">
+      {canWrite && legalOk ? (
+        <DashboardSection title="Authorized domains" id="scans-allowlist">
           <AuthorizedDomainsPanel
             canAdmin={canWrite}
+            compact={allowlist.length > 0}
             onMessage={onMessage}
+            onDomainsChange={(domains) => {
+              onSettingsChange?.({ ...(tenantSettings ?? {}), scanAllowlist: domains });
+            }}
           />
-          <p className="mt-2 text-xs text-[var(--color-gray-500)]">
-            Add at least one domain before running a live production baseline.
-          </p>
+          {allowlist.length === 0 ? (
+            <p className="mt-2 text-xs text-[var(--color-gray-500)]">
+              Add at least one domain before running a live production baseline, or upload a PEM certificate bundle below.
+            </p>
+          ) : null}
+        </DashboardSection>
+      ) : null}
+
+      {canWrite && legalOk && allowlist.length >= 1 ? (
+        <DashboardSection title="Batch scan" id="batch-scan">
+          <BatchScanPanel
+            domains={allowlist}
+            industry={industry}
+            canWrite={canWrite}
+            useBff={bffMode}
+            apiKey={bffMode ? undefined : savedKey}
+            onMessage={onMessage}
+            onRefresh={onRefresh}
+            onOpenUpgrade={onOpenUpgrade}
+          />
+        </DashboardSection>
+      ) : null}
+
+      {canWrite && legalOk && allowlist.length >= 2 ? (
+        <DashboardSection title="Monitor schedules" id="batch-schedules">
+          <BatchSchedulePanel
+            domains={allowlist}
+            canWrite={canWrite}
+            useBff={bffMode}
+            apiKey={bffMode ? undefined : savedKey}
+            onMessage={onMessage}
+            onRefresh={onRefresh}
+            onOpenUpgrade={onOpenUpgrade}
+          />
         </DashboardSection>
       ) : null}
 
@@ -226,12 +264,19 @@ export default function DashboardScansTab({
         />
       ) : null}
 
-      {canWrite && legalOk && allowlist.length > 0 && showRunner ? (
+      {canWrite && legalOk && showRunner ? (
         <DashboardSection title="Run baseline assessment" id="run-baseline">
           <div data-tour="scans-runner">
             <AssessRunnerPanel
               apiKey={bffMode ? "bff" : savedKey}
               useBff={bffMode}
+              canAdminDomains={canWrite}
+              onMessage={onMessage}
+              onDomainsChange={(domains) => {
+                onSettingsChange?.({ ...(tenantSettings ?? {}), scanAllowlist: domains });
+              }}
+              onOpenUpgrade={onOpenUpgrade}
+              onRefresh={onRefresh}
               initialInventory={[]}
               initialScenarios={[]}
               backendConnected
@@ -242,7 +287,7 @@ export default function DashboardScansTab({
             </button>
           </div>
         </DashboardSection>
-      ) : canWrite && legalOk && allowlist.length > 0 ? (
+      ) : canWrite && legalOk ? (
         <button type="button" className="text-sm underline" onClick={() => setShowRunner(true)}>
           Run baseline assessment
         </button>

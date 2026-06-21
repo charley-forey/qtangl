@@ -34,6 +34,12 @@ type Props = {
   compact?: boolean;
   basePath?: string;
   syncUrlEnabled?: boolean;
+  canAdminDomains?: boolean;
+  useBffForDomains?: boolean;
+  onDomainsChange?: (domains: string[]) => void;
+  onMessage?: (message: string) => void;
+  onOpenUpgrade?: (product: "assess" | "monitor") => void;
+  onRefresh?: () => void;
 };
 
 export default function QDayCommandCenter({
@@ -44,6 +50,12 @@ export default function QDayCommandCenter({
   compact = false,
   basePath = "/assess",
   syncUrlEnabled = true,
+  canAdminDomains = false,
+  useBffForDomains = false,
+  onDomainsChange,
+  onMessage,
+  onOpenUpgrade,
+  onRefresh,
 }: Props) {
   const resultsRef = useRef<HTMLDivElement>(null);
   const [reportOpen, setReportOpen] = useState(false);
@@ -79,6 +91,8 @@ export default function QDayCommandCenter({
     setIndustry,
     authorizedDomains,
     setBundleSession,
+    uploadDiscovery,
+    reloadAuthorizedDomains,
     scanResponse,
     isScanning,
     error,
@@ -185,6 +199,16 @@ export default function QDayCommandCenter({
         onUseLiteScanChange={setUseLiteScan}
         urlSynced={urlSynced}
         onBundleUploaded={setBundleSession}
+        uploadDiscovery={uploadDiscovery}
+        canAdminDomains={canAdminDomains}
+        useBffForDomains={useBffForDomains}
+        onDomainsChange={(domains) => {
+          void reloadAuthorizedDomains();
+          onDomainsChange?.(domains);
+        }}
+        onMessage={onMessage}
+        onOpenUpgrade={onOpenUpgrade}
+        onRefresh={onRefresh}
         isScanning={isScanning}
         scanProgress={scanProgress}
         timeline={scanTimeline.length > 0 ? scanTimeline : scanResponse?.timeline}

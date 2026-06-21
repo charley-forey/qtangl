@@ -15,6 +15,7 @@ from app.auth import AuthContext, require_api_key_readonly, require_auth, requir
 from app.db.config import persistence_enabled, use_worker_queue
 from app.models.api import ErrorResponse
 from app.pqc.data import (
+    discover_hosts_from_upload_rows,
     load_dataset,
     load_handshake_trace,
     load_scenario,
@@ -207,12 +208,21 @@ async def upload_bundle(
         if str(row.get("status", "")).lower() in {"broken", "at-risk", "quantum_vulnerable"}
     )
     algorithms = sorted({str(row.get("algorithm", "unknown")) for row in rows if row.get("algorithm")})[:8]
+    discovered_hosts = discover_hosts_from_upload_rows(rows)
+    from app.tenant.settings import get_tenant_scan_allowlist
+
+    authorized = set(get_tenant_scan_allowlist(tenant_id=auth.tenant_id))
+    suggested_domains = [host for host in discovered_hosts if host not in authorized]
+    already_authorized = [host for host in discovered_hosts if host in authorized]
     return {
         "status": "success",
         "sessionId": session_id,
         "rowCount": len(rows),
         "summary": f"Validated {len(rows)} bundle entries and stored them in a 24-hour session.",
         "preview": {"algorithms": algorithms, "qVulnerable": q_vulnerable},
+        "discoveredHosts": discovered_hosts,
+        "suggestedDomains": suggested_domains,
+        "alreadyAuthorized": already_authorized,
     }
 
 

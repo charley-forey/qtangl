@@ -250,6 +250,42 @@ def set_tenant_scan_allowlist(
     return cleaned
 
 
+def append_tenant_scan_allowlist(*, tenant_id: str, domain: str) -> list[str]:
+    from app.pqc.safety import normalize_host
+
+    host = normalize_host(domain.strip())
+    if not host:
+        raise ValueError("Domain is required.")
+    current = get_tenant_scan_allowlist(tenant_id=tenant_id)
+    if host in current:
+        return current
+    return set_tenant_scan_allowlist(tenant_id=tenant_id, domains=[*current, host])
+
+
+def remove_tenant_scan_allowlist(*, tenant_id: str, domain: str) -> list[str]:
+    from app.pqc.safety import normalize_host
+
+    host = normalize_host(domain.strip())
+    if not host:
+        raise ValueError("Domain is required.")
+    current = get_tenant_scan_allowlist(tenant_id=tenant_id)
+    return set_tenant_scan_allowlist(tenant_id=tenant_id, domains=[item for item in current if item != host])
+
+
+def append_tenant_scan_allowlist_many(*, tenant_id: str, domains: list[str]) -> list[str]:
+    from app.pqc.safety import normalize_host
+
+    current = get_tenant_scan_allowlist(tenant_id=tenant_id)
+    merged = list(current)
+    for domain in domains:
+        host = normalize_host(str(domain).strip())
+        if not host:
+            continue
+        if host not in merged:
+            merged.append(host)
+    return set_tenant_scan_allowlist(tenant_id=tenant_id, domains=merged)
+
+
 def get_tenant_billing_flags(*, tenant_id: str) -> dict[str, Any]:
     settings = get_tenant_settings_raw(tenant_id=tenant_id)
     billing = settings.get("billing") or {}

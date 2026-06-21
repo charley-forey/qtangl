@@ -72,6 +72,7 @@ def _run_scan_once(
             seed=int(payload.get("seed", 1234)),
             on_progress=on_progress,
             depth=str(payload.get("depth", "standard")),
+            industry=payload.get("industry"),
             scan_id=scan_id,
         )
         complete_job(scan_id, bundle, tenant_id=tenant_id)

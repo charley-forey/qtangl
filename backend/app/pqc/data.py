@@ -276,12 +276,25 @@ def parse_uploaded_bundle_pem(pem_text: str) -> list[dict[str, Any]]:
             key_size = getattr(pub, "key_size", None)
             algo = type(pub).__name__.replace("PublicKey", "")
             vuln = classify_algorithm(algo, key_size=key_size, context="tls")
+            from cryptography.x509.oid import NameOID
+
+            from app.pqc.safety import normalize_host
+
+            host_label = f"uploaded-cert-{index + 1}"
+            try:
+                cn_attrs = cert.subject.get_attributes_for_oid(NameOID.COMMON_NAME)
+                if cn_attrs:
+                    normalized = normalize_host(str(cn_attrs[0].value))
+                    if normalized:
+                        host_label = normalized
+            except Exception:
+                pass
             rows.append(
                 {
-                    "host": f"uploaded-cert-{index + 1}",
+                    "host": host_label,
                     "port": None,
                     "kind": "tls",
-                    "label": f"Uploaded certificate {index + 1}",
+                    "label": host_label if host_label.startswith("uploaded-cert-") else f"Certificate · {host_label}",
                     "algorithm": vuln.algorithm,
                     "keySize": key_size,
                     "vulnerability": vulnerability_dict(vuln),
@@ -300,3 +313,25 @@ def parse_uploaded_bundle_pem(pem_text: str) -> list[dict[str, Any]]:
                 }
             )
     return rows
+
+
+def discover_hosts_from_upload_rows(rows: list[dict[str, Any]]) -> list[str]:
+    """Return normalized hostnames discovered in an uploaded inventory bundle."""
+    import re
+
+    from app.pqc.safety import normalize_host
+
+    domain_pattern = re.compile(
+        r"^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?(?:\.[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?)+$"
+    )
+    hosts: list[str] = []
+    for row in rows:
+        raw = str(row.get("host") or "").strip()
+        if not raw or raw.startswith("uploaded-cert-"):
+            continue
+        host = normalize_host(raw)
+        if not host or not domain_pattern.match(host):
+            continue
+        if host not in hosts:
+            hosts.append(host)
+    return hosts

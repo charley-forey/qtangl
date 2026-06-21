@@ -18,6 +18,7 @@ import AssessMyDomainPanel from "./AssessMyDomainPanel";
 import AssessPortfolioPanel from "./AssessPortfolioPanel";
 import AssessAiBriefCard from "./AssessAiBriefCard";
 import AuthorizedDomainsPanel from "./AuthorizedDomainsPanel";
+import UploadDomainSuggestPanel from "@/components/dashboard/UploadDomainSuggestPanel";
 import CbomImportPanel from "./CbomImportPanel";
 import CloudInventoryUploadCard from "./CloudInventoryUploadCard";
 import DemoGuideStrip from "./DemoGuideStrip";
@@ -43,7 +44,22 @@ type AssessWizardProps = {
   useLiteScan: boolean;
   onUseLiteScanChange: (value: boolean) => void;
   urlSynced: boolean;
-  onBundleUploaded: (sessionId: string) => void;
+  onBundleUploaded: (sessionId: string, discovery?: {
+    discoveredHosts?: string[];
+    suggestedDomains?: string[];
+    alreadyAuthorized?: string[];
+  }) => void;
+  uploadDiscovery?: {
+    discoveredHosts?: string[];
+    suggestedDomains?: string[];
+    alreadyAuthorized?: string[];
+  } | null;
+  canAdminDomains?: boolean;
+  useBffForDomains?: boolean;
+  onDomainsChange?: (domains: string[]) => void;
+  onMessage?: (message: string) => void;
+  onOpenUpgrade?: (product: "assess" | "monitor") => void;
+  onRefresh?: () => void;
   isScanning: boolean;
   scanProgress: string | null;
   timeline: Array<{ label?: string }> | undefined;
@@ -77,6 +93,13 @@ export default function AssessWizard({
   onUseLiteScanChange,
   urlSynced,
   onBundleUploaded,
+  uploadDiscovery,
+  canAdminDomains = false,
+  useBffForDomains = false,
+  onDomainsChange,
+  onMessage,
+  onOpenUpgrade,
+  onRefresh,
   isScanning,
   scanProgress,
   timeline,
@@ -161,11 +184,29 @@ export default function AssessWizard({
           </p>
           <CloudInventoryUploadCard
             apiKey={uploadApiKey}
-            onUploaded={(sessionId) => {
-              onBundleUploaded(sessionId);
+            onUploaded={(sessionId, discovery) => {
+              onBundleUploaded(sessionId, discovery);
               trackEvent("pqc_bundle_uploaded", { sessionId, assessMode: "production" });
             }}
           />
+          {uploadDiscovery?.discoveredHosts?.length ||
+          uploadDiscovery?.suggestedDomains?.length ||
+          uploadDiscovery?.alreadyAuthorized?.length ? (
+            <UploadDomainSuggestPanel
+              discoveredHosts={uploadDiscovery?.discoveredHosts ?? []}
+              suggestedDomains={uploadDiscovery?.suggestedDomains ?? []}
+              alreadyAuthorized={uploadDiscovery?.alreadyAuthorized ?? []}
+              authorizedDomains={authorizedDomains}
+              industry={industry}
+              canAdmin={canAdminDomains}
+              useBff={useBffForDomains}
+              apiKey={uploadApiKey}
+              onMessage={onMessage}
+              onDomainsChange={onDomainsChange}
+              onOpenUpgrade={onOpenUpgrade}
+              onRefresh={onRefresh}
+            />
+          ) : null}
           <AuthorizedDomainsPanel
             domains={authorizedDomains}
             selectedDomain={customDomain}

@@ -67,6 +67,11 @@ export function useAssessScan({
   const [industry, setIndustry] = useState("financial");
   const [authorizedDomains, setAuthorizedDomains] = useState<string[]>([]);
   const [bundleSessionId, setBundleSessionId] = useState<string | null>(null);
+  const [uploadDiscovery, setUploadDiscovery] = useState<{
+    discoveredHosts?: string[];
+    suggestedDomains?: string[];
+    alreadyAuthorized?: string[];
+  } | null>(null);
   const [scanResponse, setScanResponse] = useState<PqcScanResponse | null>(null);
   const [isScanning, setIsScanning] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -195,6 +200,27 @@ export function useAssessScan({
     return () => {
       cancelled = true;
     };
+  }, [isProduction, apiKey]);
+
+  const reloadAuthorizedDomains = useCallback(async () => {
+    if (!isProduction || !apiKey) return;
+    try {
+      const response = await getAuthorizedDomains(apiKey);
+      setAuthorizedDomains(response.domains ?? []);
+      setUploadDiscovery((current) =>
+        current
+          ? {
+              ...current,
+              suggestedDomains: (current.suggestedDomains ?? []).filter(
+                (domain) => !(response.domains ?? []).includes(domain)
+              ),
+              alreadyAuthorized: response.domains ?? [],
+            }
+          : current
+      );
+    } catch {
+      setAuthorizedDomains([]);
+    }
   }, [isProduction, apiKey]);
 
   useEffect(() => {
@@ -525,8 +551,16 @@ export function useAssessScan({
   );
 
   const setBundleSession = useCallback(
-    (sessionId: string) => {
+    (
+      sessionId: string,
+      discovery?: {
+        discoveredHosts?: string[];
+        suggestedDomains?: string[];
+        alreadyAuthorized?: string[];
+      }
+    ) => {
       setBundleSessionId(sessionId);
+      setUploadDiscovery(discovery ?? null);
       if (!syncUrlEnabled) return;
       const params = new URLSearchParams(searchParams.toString());
       params.set("session", sessionId);
@@ -553,7 +587,9 @@ export function useAssessScan({
     setIndustry,
     authorizedDomains,
     bundleSessionId,
+    uploadDiscovery,
     setBundleSession,
+    reloadAuthorizedDomains,
     scanResponse,
     isScanning,
     error,

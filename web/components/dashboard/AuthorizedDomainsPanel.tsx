@@ -5,41 +5,108 @@ import { useCallback, useEffect, useState } from "react";
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
 import Eyebrow from "@/components/ui/Eyebrow";
-import { fetchDashboardJson, postDashboardJson } from "@/lib/dashboard-bff";
+import { fetchDashboardJson, patchDashboardJson, postDashboardJson } from "@/lib/dashboard-bff";
 
 type Props = {
   canAdmin?: boolean;
+  compact?: boolean;
   onMessage?: (message: string) => void;
+  onDomainsChange?: (domains: string[]) => void;
 };
 
-export default function AuthorizedDomainsPanel({ canAdmin = false, onMessage }: Props) {
+const DEFAULT_ATTESTATION =
+  "I am authorized to scan these domains on behalf of my organization.";
+
+export default function AuthorizedDomainsPanel({
+  canAdmin = false,
+  compact = false,
+  onMessage,
+  onDomainsChange,
+}: Props) {
   const [domains, setDomains] = useState<string[]>([]);
-  const [draft, setDraft] = useState("");
-  const [attestation, setAttestation] = useState("");
+  const [newDomain, setNewDomain] = useState("");
+  const [attestation, setAttestation] = useState(DEFAULT_ATTESTATION);
+  const [bulkDraft, setBulkDraft] = useState("");
+  const [showBulkEdit, setShowBulkEdit] = useState(false);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+
+  const applyDomains = useCallback(
+    (next: string[]) => {
+      setDomains(next);
+      onDomainsChange?.(next);
+    },
+    [onDomainsChange]
+  );
 
   const loadDomains = useCallback(async () => {
     setLoading(true);
     try {
       const payload = await fetchDashboardJson<{ domains?: string[] }>("/tenant/authorized-domains");
       const next = payload.domains ?? [];
-      setDomains(next);
-      setDraft(next.join("\n"));
+      applyDomains(next);
+      setBulkDraft(next.join("\n"));
     } catch (error) {
       onMessage?.(error instanceof Error ? error.message : "Unable to load authorized domains.");
-      setDomains([]);
+      applyDomains([]);
     } finally {
       setLoading(false);
     }
-  }, [onMessage]);
+  }, [applyDomains, onMessage]);
 
   useEffect(() => {
     void loadDomains();
   }, [loadDomains]);
 
-  async function saveDomains() {
-    const parsed = draft
+  async function addDomain() {
+    const domain = newDomain.trim();
+    if (!domain) {
+      onMessage?.("Enter a domain to authorize.");
+      return;
+    }
+    if (attestation.trim().length < 10) {
+      onMessage?.("Add an attestation confirming you are authorized to scan this domain.");
+      return;
+    }
+    setSaving(true);
+    try {
+      const payload = await patchDashboardJson<{ domains?: string[] }>("/tenant/authorized-domains", {
+        action: "add",
+        domain,
+        attestation: attestation.trim(),
+      });
+      const next = payload.domains ?? [...domains, domain];
+      applyDomains(next);
+      setBulkDraft(next.join("\n"));
+      setNewDomain("");
+      onMessage?.(`Added ${domain}.`);
+    } catch (error) {
+      onMessage?.(error instanceof Error ? error.message : "Unable to add domain.");
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  async function removeDomain(domain: string) {
+    setSaving(true);
+    try {
+      const payload = await patchDashboardJson<{ domains?: string[] }>("/tenant/authorized-domains", {
+        action: "remove",
+        domain,
+      });
+      const next = payload.domains ?? domains.filter((item) => item !== domain);
+      applyDomains(next);
+      setBulkDraft(next.join("\n"));
+      onMessage?.(`Removed ${domain}.`);
+    } catch (error) {
+      onMessage?.(error instanceof Error ? error.message : "Unable to remove domain.");
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  async function saveBulkDomains() {
+    const parsed = bulkDraft
       .split(/[\n,]+/)
       .map((item) => item.trim())
       .filter(Boolean);
@@ -53,7 +120,10 @@ export default function AuthorizedDomainsPanel({ canAdmin = false, onMessage }: 
         domains: parsed,
         attestation: attestation.trim(),
       });
-      setDomains(payload.domains ?? parsed);
+      const next = payload.domains ?? parsed;
+      applyDomains(next);
+      setBulkDraft(next.join("\n"));
+      setShowBulkEdit(false);
       onMessage?.("Authorized domains updated.");
     } catch (error) {
       onMessage?.(error instanceof Error ? error.message : "Unable to save authorized domains.");
@@ -66,7 +136,9 @@ export default function AuthorizedDomainsPanel({ canAdmin = false, onMessage }: 
     <Card tone="ghost" className="border border-[var(--border-subtle)]">
       <Eyebrow>Authorized scan domains</Eyebrow>
       <p className="mt-2 text-sm text-[var(--color-gray-400)]">
-        Domains your organization has attested for production scanning.
+        {compact
+          ? "Domains your organization has attested for live production scanning. Add one at a time or upload a PEM bundle instead."
+          : "Domains your organization has attested for production scanning. Add domains as you discover endpoints — each baseline scan targets one domain at a time."}
       </p>
       {loading ? (
         <p className="mt-3 text-xs text-[var(--color-gray-500)]">Loading…</p>
@@ -77,34 +149,75 @@ export default function AuthorizedDomainsPanel({ canAdmin = false, onMessage }: 
               {domains.map((domain) => (
                 <li
                   key={domain}
-                  className="rounded-full border border-[var(--border-subtle)] px-3 py-1 text-xs text-white"
+                  className="inline-flex items-center gap-2 rounded-full border border-[var(--border-subtle)] px-3 py-1 text-xs text-white"
                 >
-                  {domain}
+                  <span>{domain}</span>
+                  {canAdmin ? (
+                    <button
+                      type="button"
+                      disabled={saving}
+                      onClick={() => void removeDomain(domain)}
+                      className="text-[var(--color-gray-400)] hover:text-white disabled:opacity-50"
+                      aria-label={`Remove ${domain}`}
+                    >
+                      ×
+                    </button>
+                  ) : null}
                 </li>
               ))}
             </ul>
           ) : (
             <p className="mt-3 text-xs text-amber-200">No authorized domains configured yet.</p>
           )}
+
           {canAdmin ? (
             <div className="mt-4 space-y-3">
-              <textarea
-                value={draft}
-                onChange={(e) => setDraft(e.target.value)}
-                rows={4}
-                placeholder="example.com&#10;api.example.com"
-                className="w-full rounded-xl border border-[var(--border-subtle)] bg-transparent px-3 py-2 text-sm text-white"
-              />
+              <div className="flex flex-col gap-2 sm:flex-row">
+                <input
+                  type="text"
+                  value={newDomain}
+                  onChange={(e) => setNewDomain(e.target.value)}
+                  placeholder="api.example.com"
+                  className="flex-1 rounded-xl border border-[var(--border-subtle)] bg-transparent px-3 py-2 text-sm text-white"
+                  onKeyDown={(event) => {
+                    if (event.key === "Enter") {
+                      event.preventDefault();
+                      void addDomain();
+                    }
+                  }}
+                />
+                <Button type="button" size="sm" disabled={saving} onClick={() => void addDomain()}>
+                  {saving ? "Saving…" : "Add domain"}
+                </Button>
+              </div>
               <textarea
                 value={attestation}
                 onChange={(e) => setAttestation(e.target.value)}
-                rows={3}
-                placeholder="I am authorized to scan these domains on behalf of my organization."
+                rows={2}
+                placeholder={DEFAULT_ATTESTATION}
                 className="w-full rounded-xl border border-[var(--border-subtle)] bg-transparent px-3 py-2 text-sm text-white"
               />
-              <Button type="button" size="sm" disabled={saving} onClick={() => void saveDomains()}>
-                {saving ? "Saving…" : "Save authorized domains"}
-              </Button>
+              <button
+                type="button"
+                className="text-xs text-[var(--color-gray-500)] underline"
+                onClick={() => setShowBulkEdit((value) => !value)}
+              >
+                {showBulkEdit ? "Hide bulk edit" : "Bulk edit all domains"}
+              </button>
+              {showBulkEdit ? (
+                <div className="space-y-3 rounded-xl border border-[var(--border-subtle)] p-3">
+                  <textarea
+                    value={bulkDraft}
+                    onChange={(e) => setBulkDraft(e.target.value)}
+                    rows={4}
+                    placeholder="example.com&#10;api.example.com"
+                    className="w-full rounded-xl border border-[var(--border-subtle)] bg-transparent px-3 py-2 text-sm text-white"
+                  />
+                  <Button type="button" size="sm" disabled={saving} onClick={() => void saveBulkDomains()}>
+                    {saving ? "Saving…" : "Replace full list"}
+                  </Button>
+                </div>
+              ) : null}
             </div>
           ) : null}
         </>

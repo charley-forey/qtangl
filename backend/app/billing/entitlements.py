@@ -61,27 +61,65 @@ def check_scan_quota(*, tenant_id: str) -> dict[str, Any] | None:
 
 def check_production_scan_access(*, tenant_id: str, use_fixture: bool = False) -> dict[str, Any] | None:
     """Gate live production scans: 1 free trial, then paid assess required."""
+    return check_batch_production_scan_access(tenant_id=tenant_id, count=1, use_fixture=use_fixture)
+
+
+def check_batch_production_scan_access(
+    *,
+    tenant_id: str,
+    count: int,
+    use_fixture: bool = False,
+) -> dict[str, Any] | None:
+    """Gate batch live scans against trial limits and monthly quota."""
     if use_fixture:
         return None
+    if count < 1:
+        return {"code": "invalid_batch", "message": "At least one domain is required."}
+
     from app.tenant.settings import get_tenant_billing_flags
 
     billing = get_tenant_billing_flags(tenant_id=tenant_id)
     if billing.get("assessPaidAt"):
-        return check_scan_quota(tenant_id=tenant_id)
+        ent = tenant_entitlements(tenant_id=tenant_id)
+        max_scans = int(ent.get("maxScansPerMonth", 100))
+        used = scans_created_this_month(tenant_id=tenant_id)
+        if used + count > max_scans:
+            return {
+                "code": "scan_quota_exceeded",
+                "tier": ent.get("tier"),
+                "limit": max_scans,
+                "used": used,
+                "requested": count,
+                "remaining": max(0, max_scans - used),
+                "upgradeUrl": "/pricing",
+            }
+        return None
 
     ent = tenant_entitlements(tenant_id=tenant_id)
     trial_limit = int(ent.get("trialScansRemaining", 1))
     trial_used = int(billing.get("trialScansUsed", 0))
-    if trial_used < trial_limit:
-        return None
-    return {
-        "code": "assess_payment_required",
-        "tier": ent.get("tier"),
-        "trialUsed": trial_used,
-        "trialLimit": trial_limit,
-        "upgradeUrl": "/dashboard?upgrade=assess",
-        "checkoutProduct": "assess",
-    }
+    trial_remaining = max(0, trial_limit - trial_used)
+    if count > trial_remaining:
+        if trial_remaining == 0:
+            return {
+                "code": "assess_payment_required",
+                "tier": ent.get("tier"),
+                "trialUsed": trial_used,
+                "trialLimit": trial_limit,
+                "requested": count,
+                "upgradeUrl": "/dashboard?upgrade=assess",
+                "checkoutProduct": "assess",
+            }
+        return {
+            "code": "trial_batch_limit",
+            "tier": ent.get("tier"),
+            "trialRemaining": trial_remaining,
+            "requested": count,
+            "message": f"Trial allows {trial_remaining} more scan(s); batch requested {count}.",
+            "upgradeUrl": "/dashboard?upgrade=assess",
+            "checkoutProduct": "assess",
+        }
+    return None
 
 
 def record_production_scan_usage(*, tenant_id: str, use_fixture: bool = False) -> None:

@@ -90,8 +90,9 @@ export default function OnboardingWizard({
       onRenamed(payload.tenantName);
       await putDashboardJson("/tenant/settings", { industry: selectedIndustry });
       if (domain.trim()) {
-        await postDashboardJson("/tenant/authorized-domains", {
-          domains: [domain.trim()],
+        await patchDashboardJson("/tenant/authorized-domains", {
+          action: "add",
+          domain: domain.trim(),
           attestation: "I am authorized to scan these domains for my organization.",
         });
       }

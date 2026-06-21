@@ -92,7 +92,13 @@ export default function DashboardSettingsTab({
             }
           />
           <ReportBrandingPanel onMessage={onMessage} onSettingsChange={onSettingsChange} />
-          <AuthorizedDomainsPanel canAdmin={canAdmin} onMessage={onMessage} />
+          <AuthorizedDomainsPanel
+            canAdmin={canAdmin}
+            onMessage={onMessage}
+            onDomainsChange={(domains) =>
+              onSettingsChange({ ...(tenantSettings ?? settings), scanAllowlist: domains })
+            }
+          />
           <Card tone="panel">
             <Eyebrow>Data export</Eyebrow>
             <p className="mt-2 text-sm text-[var(--color-gray-400)]">

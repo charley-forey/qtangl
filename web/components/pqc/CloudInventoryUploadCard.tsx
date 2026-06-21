@@ -10,8 +10,15 @@ type UploadPreview = {
   qVulnerable?: number;
 };
 
+export type PqcUploadDiscovery = {
+  preview?: UploadPreview;
+  discoveredHosts?: string[];
+  suggestedDomains?: string[];
+  alreadyAuthorized?: string[];
+};
+
 type CloudInventoryUploadCardProps = {
-  onUploaded: (sessionId: string, preview?: UploadPreview) => void;
+  onUploaded: (sessionId: string, discovery?: PqcUploadDiscovery) => void;
   apiKey?: string;
 };
 
@@ -27,7 +34,12 @@ export default function CloudInventoryUploadCard({ onUploaded, apiKey }: CloudIn
       setError(null);
       try {
         const response = await uploadPqcBundle(file, apiKey);
-        onUploaded(response.sessionId, response.preview);
+        onUploaded(response.sessionId, {
+          preview: response.preview,
+          discoveredHosts: response.discoveredHosts,
+          suggestedDomains: response.suggestedDomains,
+          alreadyAuthorized: response.alreadyAuthorized,
+        });
       } catch (uploadError) {
         setError(uploadError instanceof Error ? uploadError.message : "Upload failed.");
       } finally {
