@@ -29,7 +29,8 @@ def build_evidence_bundle(
         json_payload = merge_remediation_into_report(json_payload, statuses=remediation_statuses)
 
     opts = dict(pdf_options or {})
-    brand = branding if isinstance(branding, dict) else None
+    brand = branding if isinstance(branding, dict) else opts.pop("branding", None)
+    opts.pop("branding", None)
 
     log_inclusion: dict[str, Any] | None = None
     content_hash = (report.signature or {}).get("contentHash")

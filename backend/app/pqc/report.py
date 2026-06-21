@@ -401,7 +401,9 @@ def report_to_pdf(
     from app.pqc.report_pdf import build_pdf
 
     opts = dict(pdf_options or {})
-    return build_pdf(report, branding=branding, **opts)
+    effective_branding = branding if branding is not None else opts.pop("branding", None)
+    opts.pop("branding", None)
+    return build_pdf(report, branding=effective_branding, **opts)
 
 
 def _asset_dict(asset: CryptoAsset) -> dict[str, Any]:

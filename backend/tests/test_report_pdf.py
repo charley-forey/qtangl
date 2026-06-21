@@ -47,8 +47,17 @@ class PqcReportPdfTest(unittest.TestCase):
         self.assertTrue(pdf_bytes.startswith(b"%PDF"))
         self.assertGreater(len(pdf_bytes), 500)
 
-
-class PqcReportTargetTest(unittest.TestCase):
+    def test_pdf_accepts_branding_in_pdf_options(self) -> None:
+        """Regression: export_report_response passes branding twice (kwarg + pdf_options)."""
+        dataset = load_dataset()
+        bundle = run_pqc_scan(dataset, scenario_id="bank-tls-inventory", use_fixture=True)
+        brand = {"companyName": "Regional Bank Holdings"}
+        pdf_bytes = report_to_pdf(
+            bundle.report,
+            branding=brand,
+            pdf_options={"branding": brand, "watermark": False, "coherence_issues": []},
+        )
+        self.assertTrue(pdf_bytes.startswith(b"%PDF"))
     def test_report_target_matches_live_override(self) -> None:
         dataset = load_dataset()
         with (

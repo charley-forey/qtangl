@@ -7,7 +7,7 @@ from app.pqc.data import load_dataset
 from app.pqc.models import MigrationReport, MoscaAssessment
 from app.pqc.pipeline import run_pqc_scan
 from app.pqc.report import report_to_pdf
-from app.pqc.report_export import bundle_report, enrich_report_for_export
+from app.pqc.report_export import bundle_report, enrich_report_for_export, export_report_response
 from app.pqc.report_pdf import build_board_pdf
 from app.pqc.report_validate import validate_report_coherence
 from app.pqc.serialize import serialize_bundle
@@ -84,6 +84,18 @@ class ReportPdfExportTest(unittest.TestCase):
         synced = bundle_report(bundle)
         self.assertGreater(len(synced.assets), 0)
 
-
-if __name__ == "__main__":
+    def test_export_report_response_pdf(self) -> None:
+        bundle = run_pqc_scan(load_dataset(), scenario_id="bank-tls-inventory", use_fixture=True)
+        report = bundle_report(bundle)
+        response = export_report_response(
+            scan_id=bundle.scan_id,
+            report=report,
+            export_format="pdf",
+            tenant_id="sandbox",
+            branding={"companyName": "Demo Bank"},
+        )
+        body = response.body
+        if isinstance(body, memoryview):
+            body = body.tobytes()
+        self.assertTrue(body.startswith(b"%PDF"))
     unittest.main()
