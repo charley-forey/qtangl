@@ -73,7 +73,7 @@ export default function AboutPage() {
                   href={card.href}
                   className="mt-4 inline-block text-sm font-medium text-white underline-offset-4 hover:underline"
                 >
-                  {aboutReadinessContent.optimizeLink.label}
+                  {"linkLabel" in card && card.linkLabel ? card.linkLabel : "Learn more →"}
                 </Link>
               ) : null}
             </Card>

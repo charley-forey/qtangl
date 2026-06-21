@@ -58,11 +58,11 @@ export const maturityStages: readonly MaturityStage[] = [
   },
   {
     stage: 6,
-    name: "Optimizing",
-    characteristics: "Post-quantum ops secure; exploring quantum advantage in planning",
-    tier: "Optimize (expansion)",
-    href: "/platform/optimize",
-    cta: "Explore optimization →",
+    name: "Verified",
+    characteristics: "Portfolio-wide evidence; transparency log; auditor-ready packs",
+    tier: "Enterprise",
+    href: "/trust",
+    cta: "Trust center →",
   },
 ] as const;
 
@@ -82,7 +82,7 @@ export const journeyPageCopy = {
     eyebrow: "Core insight",
     title: "Never sell Stage 6 to a Stage 0 buyer",
     description:
-      "Always propose the next maturity stage plus one. Optimization is expansion — only after PQC defense is proven.",
+      "Always propose the next maturity stage plus one. Assessment hooks; Monitor and signed evidence retain.",
   },
   personas: [
     {

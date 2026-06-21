@@ -28,7 +28,7 @@ function buildAutoReplyText(payload: Pick<AccessPayload, "name" | "interest">) {
     `We received your interest in ${payload.interest.toLowerCase()}. Our team reviews requests on a rolling basis and will reply within 2 business days.`,
     "",
     "While you wait:",
-    `- Explore the hospital demo: ${siteMetadata.url}/demo/hospital`,
+    `- Run a Q-Day scan: ${siteMetadata.url}/assess`,
     `- Read the docs: ${siteMetadata.url}/docs`,
     "",
     `Urgent timeline? Reply to this email or write directly to ${siteMetadata.contactEmail}.`,

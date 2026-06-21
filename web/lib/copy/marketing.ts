@@ -155,7 +155,7 @@ export const docsCards = [
   },
   {
     title: "Quickstart",
-    description: "First request in minutes — summary, measurements, and solution shape.",
+    description: "First PQC scan in minutes — inventory, CBOM export, and verify link.",
     href: "/docs/quickstart",
   },
   {
@@ -164,8 +164,8 @@ export const docsCards = [
     href: "/docs/concepts",
   },
   {
-    title: "API guide",
-    description: "Auth, rate limits, and `/optimize` with classical-first method honesty.",
+    title: "PQC API guide",
+    description: "Auth, rate limits, scan workflow, and report exports.",
     href: "/docs/api",
   },
 ] as const;

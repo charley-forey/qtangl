@@ -75,8 +75,6 @@ export const conceptsPage = {
       meaning: "Independent signature and content-hash check at /verify or via qtangl-verify CLI",
     },
   ],
-  labsNote:
-    "Hybrid scheduling, routing, and allocation APIs remain available for pilot customers under Labs / optimization. See /technology for quantum solver vocabulary.",
 } as const;
 
 export const docsGuideCopy = {

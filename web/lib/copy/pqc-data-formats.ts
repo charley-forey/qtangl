@@ -234,7 +234,4 @@ export const pqcDataFormatsMeta = {
   lastUpdated: "2026-06-10",
   methodHonesty:
     "Field definitions describe Qtangl API contracts. CBOM exports follow CycloneDX; full third-party BOM validation is the importer's responsibility.",
-  labsNote:
-    "Schedule, routing, and allocation payloads for POST /optimize remain documented under Labs / optimization.",
-  labsHref: "/docs/reference/schemas#optimize-request",
 } as const;

@@ -38,6 +38,8 @@ const ORPHAN_ALLOWLIST = new Set([
   "/docs/reference/ev-fleet/upload-fleet",
   "/docs/reference/ev-fleet/upload-stops",
   "/docs/reference/ev-fleet/plan-solve",
+  "/docs/labs",
+  "/docs/reference/optimize",
 ]);
 
 function endpointDocsHref(endpointId) {

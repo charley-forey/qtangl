@@ -140,21 +140,6 @@ export default function QuickstartPage() {
         </DocsSection>
 
         <DocsSection>
-          <DocsHeading>Alternate: Labs optimization</DocsHeading>
-          <p className="text-sm leading-8 text-[var(--color-gray-300)]">
-            For hybrid scheduling demos, see{" "}
-            <Link href="/docs/reference/optimize" className="text-white underline underline-offset-4">
-              POST /optimize
-            </Link>{" "}
-            and the{" "}
-            <Link href="/labs" className="text-white underline underline-offset-4">
-              Labs
-            </Link>{" "}
-            section.
-          </p>
-        </DocsSection>
-
-        <DocsSection>
           <DocsHeading>Next steps</DocsHeading>
           <DocsCallout variant="tip">
             <ul className="list-disc space-y-2 pl-5">

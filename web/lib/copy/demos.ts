@@ -14,14 +14,11 @@ export type DemoCatalogEntry = {
 };
 
 export const demosPageCopy = {
-  eyebrow: "Demos",
+  eyebrow: "Demo",
   title: "Q-Day readiness — live product demo.",
   description:
-    "Start with the Q-Day scanner for post-quantum inventory. Hybrid optimization workflows live under Labs (expansion).",
-  catalogHeading: "Q-Day readiness (product)",
-  labsHeading: "Labs — hybrid optimization (expansion)",
-  optimizationHeading: "Labs — hybrid optimization (expansion)",
-  sandboxHeading: "Labs — for developers",
+    "Inventory quantum-vulnerable cryptography, export CycloneDX CBOM, and generate signed reports with public verify links.",
+  catalogHeading: "Q-Day scanner",
 } as const;
 
 export const labsHubCopy = {

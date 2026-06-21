@@ -19,7 +19,7 @@ export const metadata: Metadata = buildPageMetadata({
 });
 
 export default function PricingPage() {
-  const { hero, tiers, footnote, roiLink, optimizeLink } = pricingPageCopy;
+  const { hero, tiers, footnote, roiLink } = pricingPageCopy;
 
   return (
     <PageShell>
@@ -76,18 +76,12 @@ export default function PricingPage() {
         </div>
 
         <p className="mt-10 max-w-3xl text-sm leading-7 text-[var(--color-gray-400)]">{footnote}</p>
-        <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center">
+        <div className="mt-6">
           <Link
             href={roiLink.href}
             className="text-sm font-medium text-white underline-offset-4 hover:underline"
           >
             {roiLink.label}
-          </Link>
-          <Link
-            href={optimizeLink.href}
-            className="text-sm font-medium text-[var(--color-gray-400)] underline-offset-4 hover:text-white hover:underline"
-          >
-            {optimizeLink.label}
           </Link>
         </div>
       </Section>

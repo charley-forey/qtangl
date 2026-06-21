@@ -38,14 +38,11 @@ export const aboutReadinessContent = {
         "Inventory aid, not formal audit. Quantum-vulnerable ≠ broken today — we quantify exposure honestly.",
     },
     {
-      eyebrow: "Expansion path",
+      eyebrow: "Compare vendors",
       description:
-        "Hybrid optimization for hospital, airline, and fleet workflows — after defense is proven.",
-      href: "/platform/optimize",
+        "See how Qtangl stacks up on signed evidence, mid-market packaging, and continuous monitoring.",
+      href: "/compare",
+      linkLabel: "View comparisons →",
     },
   ],
-  optimizeLink: {
-    label: "Explore hybrid optimization →",
-    href: "/platform/optimize",
-  },
 } as const;

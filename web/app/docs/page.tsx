@@ -102,15 +102,6 @@ export default function DocsPage() {
         </DocsSection>
 
         <DocsSection>
-          <DocsCallout variant="info" title="Labs / optimization (expansion)">
-            Hybrid scheduling and routing APIs remain available for expansion demos. Primary documentation
-            focuses on Q-Day readiness — Assess, Monitor, Convert. See{" "}
-            <Link href="/docs/labs">Labs overview</Link> for optimization guides and{" "}
-            <code className="text-xs">POST /optimize</code> reference.
-          </DocsCallout>
-        </DocsSection>
-
-        <DocsSection>
           <DocsHeading>Documentation map</DocsHeading>
           <div className="grid gap-6 lg:grid-cols-2">
             {docsSections.map((section) => (

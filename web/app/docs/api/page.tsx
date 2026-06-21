@@ -109,16 +109,6 @@ export default function DocsApiPage() {
             </Link>
           </Card>
         </DocsSection>
-
-        <DocsSection>
-          <DocsHeading>Labs / optimization</DocsHeading>
-          <DocsCallout variant="info">
-            <code className="font-mono text-xs">POST /optimize</code> and domain demos (hospital, airline,
-            ev-fleet) remain available under{" "}
-            <Link href="/docs/reference/optimize">Labs reference</Link>. Primary product documentation
-            focuses on Q-Day readiness.
-          </DocsCallout>
-        </DocsSection>
       </DocsShell>
     </div>
   );

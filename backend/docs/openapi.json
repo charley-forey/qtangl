@@ -4760,6 +4760,125 @@
         }
       }
     },
+    "/tenant/scans/batch": {
+      "post": {
+        "tags": [
+          "tenant"
+        ],
+        "summary": "Tenant Scans Batch",
+        "operationId": "tenant_scans_batch_tenant_scans_batch_post",
+        "parameters": [
+          {
+            "name": "api_key",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Api Key"
+            }
+          },
+          {
+            "name": "count_toward_rate_limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": true,
+              "title": "Count Toward Rate Limit"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          },
+          {
+            "name": "x-api-key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Api-Key"
+            }
+          },
+          {
+            "name": "X-Qtangl-Session",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Qtangl-Session"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BatchScanRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Tenant Scans Batch Tenant Scans Batch Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/tenant/scans/{scan_id}": {
       "get": {
         "tags": [
@@ -5613,6 +5732,125 @@
         }
       }
     },
+    "/tenant/schedules/batch": {
+      "post": {
+        "tags": [
+          "tenant"
+        ],
+        "summary": "Tenant Create Schedules Batch",
+        "operationId": "tenant_create_schedules_batch_tenant_schedules_batch_post",
+        "parameters": [
+          {
+            "name": "api_key",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Api Key"
+            }
+          },
+          {
+            "name": "count_toward_rate_limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": true,
+              "title": "Count Toward Rate Limit"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          },
+          {
+            "name": "x-api-key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Api-Key"
+            }
+          },
+          {
+            "name": "X-Qtangl-Session",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Qtangl-Session"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BatchScheduleRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Tenant Create Schedules Batch Tenant Schedules Batch Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/tenant/schedules/{schedule_id}": {
       "patch": {
         "tags": [
@@ -6399,6 +6637,97 @@
                   "type": "object",
                   "additionalProperties": true,
                   "title": "Response Tenant Authorized Domains Post Tenant Authorized Domains Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "tenant"
+        ],
+        "summary": "Tenant Authorized Domains Patch",
+        "operationId": "tenant_authorized_domains_patch_tenant_authorized_domains_patch",
+        "parameters": [
+          {
+            "name": "api_key",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Api Key"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          },
+          {
+            "name": "x-api-key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Api-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AuthorizedDomainsPatchRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Tenant Authorized Domains Patch Tenant Authorized Domains Patch"
                 }
               }
             }
@@ -20918,6 +21247,59 @@
         "type": "object",
         "title": "AuthorizedDomainsAdminRequest"
       },
+      "AuthorizedDomainsPatchRequest": {
+        "properties": {
+          "action": {
+            "type": "string",
+            "pattern": "^(add|remove|add_many)$",
+            "title": "Action"
+          },
+          "domain": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 253
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Domain"
+          },
+          "domains": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array",
+                "maxItems": 50
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Domains"
+          },
+          "attestation": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 4000
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Attestation"
+          }
+        },
+        "type": "object",
+        "required": [
+          "action"
+        ],
+        "title": "AuthorizedDomainsPatchRequest"
+      },
       "AuthorizedDomainsRequest": {
         "properties": {
           "domains": {
@@ -20940,6 +21322,122 @@
           "attestation"
         ],
         "title": "AuthorizedDomainsRequest"
+      },
+      "BatchScanRequest": {
+        "properties": {
+          "domains": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array",
+                "maxItems": 50
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Domains"
+          },
+          "industry": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 64
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Industry"
+          },
+          "depth": {
+            "type": "string",
+            "pattern": "^(standard|lite)$",
+            "title": "Depth",
+            "default": "standard"
+          },
+          "createSchedules": {
+            "type": "boolean",
+            "title": "Createschedules",
+            "default": false
+          },
+          "scheduleCadenceHours": {
+            "type": "integer",
+            "maximum": 8760.0,
+            "minimum": 1.0,
+            "title": "Schedulecadencehours",
+            "default": 168
+          },
+          "notifyEmail": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Notifyemail"
+          },
+          "skipExistingSchedules": {
+            "type": "boolean",
+            "title": "Skipexistingschedules",
+            "default": true
+          }
+        },
+        "type": "object",
+        "title": "BatchScanRequest"
+      },
+      "BatchScheduleRequest": {
+        "properties": {
+          "targets": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array",
+                "maxItems": 50
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Targets"
+          },
+          "cadenceHours": {
+            "type": "integer",
+            "maximum": 8760.0,
+            "minimum": 1.0,
+            "title": "Cadencehours",
+            "default": 168
+          },
+          "notifyEmail": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Notifyemail"
+          },
+          "scenarioId": {
+            "type": "string",
+            "title": "Scenarioid",
+            "default": "production-baseline"
+          },
+          "skipExisting": {
+            "type": "boolean",
+            "title": "Skipexisting",
+            "default": true
+          }
+        },
+        "type": "object",
+        "title": "BatchScheduleRequest"
       },
       "BillingCheckoutBody": {
         "properties": {

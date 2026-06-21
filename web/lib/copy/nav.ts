@@ -26,7 +26,6 @@ export const footerNav = [
   { name: "Verify", href: "/verify" },
   { name: "Learn", href: "/learn" },
   { name: "Blog", href: "/blog" },
-  { name: "Quantum Planning", href: "/platform/optimize" },
   { name: "About", href: "/about" },
 ] as const;
 

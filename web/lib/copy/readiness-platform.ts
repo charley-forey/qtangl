@@ -56,18 +56,10 @@ export const platformPageCopy = {
       { href: "/trust", label: "Trust center", variant: "secondary" as const },
     ],
   },
-  optimize: {
-    eyebrow: "Also from Qtangl",
-    title: "Hybrid optimization for operations teams",
-    description:
-      "Hospital re-staffing, airline crew recovery, and EV fleet routing — a separate expansion motion after readiness.",
-    href: "/platform/optimize",
-    cta: "Explore optimization demos →",
-  },
   maturity: {
     eyebrow: "Maturity model",
     title: "Where are you on the journey?",
-    description: "Stages 0–6 from unaware to optimizing — always propose the next stage plus one.",
+    description: "Stages 0–6 from unaware to verified — always propose the next stage plus one.",
     href: "/journey",
     cta: "Explore customer journey →",
   },

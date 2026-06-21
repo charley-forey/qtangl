@@ -89,9 +89,8 @@ export const pricingPageCopy = {
     },
   ] satisfies PricingTier[],
   footnote:
-    "Optimize Pilot ($50K–$200K) and API Developer tiers ($500–$5K/mo) available as separate expansion motions.",
+    "Enterprise and MSSP packages include portfolio command center, discovery depth, and custom SLA options.",
   roiLink: { label: "Estimate ROI with our calculator →", href: "/resources/roi" },
-  optimizeLink: { label: "Explore optimization pricing →", href: "/platform/optimize" },
   faqs: [
     {
       question: "Is Qtangl a formal audit or attestation?",

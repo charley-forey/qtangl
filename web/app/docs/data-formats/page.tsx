@@ -141,13 +141,6 @@ export default function DataFormatsPage() {
           <DocsHeading>Method honesty</DocsHeading>
           <DocsCallout variant="honesty">{pqcDataFormatsMeta.methodHonesty}</DocsCallout>
         </DocsSection>
-
-        <DocsCallout variant="info" title="Labs / optimization">
-          {pqcDataFormatsMeta.labsNote}{" "}
-          <Link href={pqcDataFormatsMeta.labsHref} className="text-white underline underline-offset-4">
-            Optimize schemas →
-          </Link>
-        </DocsCallout>
       </DocsShell>
     </div>
   );

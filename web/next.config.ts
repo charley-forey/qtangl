@@ -65,20 +65,59 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       {
-        source: "/try",
-        destination: "/sandbox",
+        source: "/demo",
+        has: [{ type: "query", key: "view", value: "sandbox" }],
+        destination: "/docs/quickstart",
         permanent: true,
       },
       {
         source: "/demo",
-        has: [{ type: "query", key: "view", value: "sandbox" }],
-        destination: "/sandbox",
+        destination: "/assess",
+        permanent: true,
+      },
+      {
+        source: "/demo/:path*",
+        destination: "/assess",
+        permanent: true,
+      },
+      {
+        source: "/labs",
+        destination: "/platform",
+        permanent: true,
+      },
+      {
+        source: "/platform/optimize",
+        destination: "/platform",
         permanent: true,
       },
       {
         source: "/sandbox",
-        has: [{ type: "query", key: "view", value: "sandbox" }],
-        destination: "/sandbox",
+        destination: "/docs/quickstart",
+        permanent: true,
+      },
+      {
+        source: "/technology",
+        destination: "/platform",
+        permanent: true,
+      },
+      {
+        source: "/api",
+        destination: "/docs/api",
+        permanent: true,
+      },
+      {
+        source: "/docs/labs",
+        destination: "/docs",
+        permanent: true,
+      },
+      {
+        source: "/docs/reference/optimize",
+        destination: "/docs/api",
+        permanent: true,
+      },
+      {
+        source: "/try",
+        destination: "/assess",
         permanent: true,
       },
     ];

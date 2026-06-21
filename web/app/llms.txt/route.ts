@@ -85,15 +85,6 @@ ${frameworkLinks}
 - HNDL infographic: ${siteMetadata.url}/downloads/hndl-infographic.svg
 - Learn topic — HNDL risk: ${siteMetadata.url}/learn/topics/hndl-risk
 
-## Hybrid optimization (expansion)
-
-- Technology: ${siteMetadata.url}/technology
-- Optimization hub: ${siteMetadata.url}/platform/optimize
-- API reference (concise): ${siteMetadata.url}/api
-- API sandbox: ${siteMetadata.url}/sandbox
-- Hospital re-staffing demo: ${siteMetadata.url}/demo/hospital
-- Airline crew recovery demo: ${siteMetadata.url}/demo/airline
-
 ## Competitive comparisons
 
 - Comparison hub: ${siteMetadata.url}/compare

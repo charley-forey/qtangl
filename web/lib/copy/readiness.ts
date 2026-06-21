@@ -27,11 +27,11 @@ export const readinessLexicon = {
 
 export const readinessGuardrails = {
   lead:
-    "Lead with cryptographic visibility and CPM (Assess → Monitor → Convert). Optimization is expansion, not the headline.",
+    "Lead with cryptographic visibility and CPM (Assess → Monitor → Convert). Signed evidence is the product.",
   honesty:
     "Name algorithms and standards explicitly. Signed evidence beats vague quantum claims.",
   scope:
-    "Readiness copy on homepage, platform, and PQC surfaces. Quantum lexicon stays on optimization pages.",
+    "Readiness copy on every customer-facing surface — homepage, platform, docs, and GTM.",
   federal:
     "Federal-facing surfaces use CPM, cryptographic inventory, and quantum readiness — not quantum computing.",
 } as const;

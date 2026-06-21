@@ -36,7 +36,6 @@ const readinessRoutes = [
   "/trust",
   "/status",
   "/verify",
-  "/labs",
   "/journey",
   "/resources",
   "/resources/roi",
@@ -55,22 +54,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const routes = [
     "",
     ...readinessRoutes,
-    "/demo",
-    "/sandbox",
-    "/demo/hospital",
-    "/demo/hospital/methodology",
-    "/demo/airline",
-    "/demo/airline/methodology",
-    "/demo/ev-fleet",
-    "/demo/ev-fleet/methodology",
-    "/platform/optimize",
     "/about",
-    "/technology",
     "/access",
-    "/api",
     ...getAllDocsHrefs(),
     "/blog",
-    ...blogPosts.map((post) => post.href),
+    ...blogPosts
+      .filter(
+        (post) =>
+          ("readiness" in post && post.readiness === true) ||
+          ("hndl" in post && post.hndl === true) ||
+          ("featured" in post && post.featured === true)
+      )
+      .map((post) => post.href),
     "/learn",
     "/learn/library",
     "/learn/compare",
@@ -103,11 +98,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
             route.startsWith("/blog/") ||
             route.startsWith("/compare")
           ? 0.9
-          : route === "/demo/hospital" ||
-              route === "/demo/airline" ||
-              route === "/demo/ev-fleet" ||
-              route === "/technology"
-            ? 0.5
-            : 0.7,
+          : 0.7,
   }));
 }

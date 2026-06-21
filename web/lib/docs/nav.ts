@@ -188,15 +188,6 @@ export const docsSections: DocsNavSection[] = [
       { name: "JSON schemas", href: "/docs/reference/schemas" },
     ],
   },
-  {
-    id: "labs",
-    title: "Labs / optimization (expansion)",
-    defaultCollapsed: true,
-    items: [
-      { name: "Labs overview", href: "/docs/labs" },
-      { name: "POST /optimize", href: "/docs/reference/optimize" },
-    ],
-  },
 ];
 
 /** Flat nav order for prev/next pager and search index. */

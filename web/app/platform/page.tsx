@@ -21,7 +21,7 @@ export const metadata: Metadata = buildPageMetadata({
 });
 
 export default function PlatformPage() {
-  const { hero, journey, tiers, proof, optimize, maturity, whyQtangl } = platformPageCopy;
+  const { hero, journey, tiers, proof, maturity, whyQtangl } = platformPageCopy;
 
   return (
     <PageShell>
@@ -112,24 +112,6 @@ export default function PlatformPage() {
               {action.label}
             </Button>
           ))}
-        </div>
-      </Section>
-
-      <Section gap="tight">
-        <div className="content-reading">
-          <Eyebrow>{optimize.eyebrow}</Eyebrow>
-          <h2 className="heading-section mt-4">{optimize.title}</h2>
-          <p className="mt-4 max-w-3xl text-base leading-8 text-[var(--color-gray-300)]">
-            {optimize.description}
-          </p>
-        </div>
-        <div className="mt-8">
-          <Link
-            href={optimize.href}
-            className="text-sm font-medium text-white underline-offset-4 hover:underline"
-          >
-            {optimize.cta}
-          </Link>
         </div>
       </Section>
 

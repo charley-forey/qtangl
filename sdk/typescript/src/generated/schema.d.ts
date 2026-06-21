@@ -1012,6 +1012,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/tenant/scans/batch": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Tenant Scans Batch */
+        post: operations["tenant_scans_batch_tenant_scans_batch_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/tenant/scans/{scan_id}": {
         parameters: {
             query?: never;
@@ -1094,6 +1111,23 @@ export interface paths {
         put?: never;
         /** Tenant Create Schedule */
         post: operations["tenant_create_schedule_tenant_schedules_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/tenant/schedules/batch": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Tenant Create Schedules Batch */
+        post: operations["tenant_create_schedules_batch_tenant_schedules_batch_post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1185,7 +1219,8 @@ export interface paths {
         delete?: never;
         options?: never;
         head?: never;
-        patch?: never;
+        /** Tenant Authorized Domains Patch */
+        patch: operations["tenant_authorized_domains_patch_tenant_authorized_domains_patch"];
         trace?: never;
     };
     "/tenant/audit": {
@@ -3684,12 +3719,74 @@ export interface components {
              */
             attestation: string;
         };
+        /** AuthorizedDomainsPatchRequest */
+        AuthorizedDomainsPatchRequest: {
+            /** Action */
+            action: string;
+            /** Domain */
+            domain?: string | null;
+            /** Domains */
+            domains?: string[] | null;
+            /** Attestation */
+            attestation?: string | null;
+        };
         /** AuthorizedDomainsRequest */
         AuthorizedDomainsRequest: {
             /** Domains */
             domains?: string[];
             /** Attestation */
             attestation: string;
+        };
+        /** BatchScanRequest */
+        BatchScanRequest: {
+            /** Domains */
+            domains?: string[] | null;
+            /** Industry */
+            industry?: string | null;
+            /**
+             * Depth
+             * @default standard
+             */
+            depth: string;
+            /**
+             * Createschedules
+             * @default false
+             */
+            createSchedules: boolean;
+            /**
+             * Schedulecadencehours
+             * @default 168
+             */
+            scheduleCadenceHours: number;
+            /** Notifyemail */
+            notifyEmail?: string | null;
+            /**
+             * Skipexistingschedules
+             * @default true
+             */
+            skipExistingSchedules: boolean;
+        };
+        /** BatchScheduleRequest */
+        BatchScheduleRequest: {
+            /** Targets */
+            targets?: string[] | null;
+            /**
+             * Cadencehours
+             * @default 168
+             */
+            cadenceHours: number;
+            /** Notifyemail */
+            notifyEmail?: string | null;
+            /**
+             * Scenarioid
+             * @default production-baseline
+             */
+            scenarioId: string;
+            /**
+             * Skipexisting
+             * @default true
+             */
+            skipExisting: boolean;
         };
         /** BillingCheckoutBody */
         BillingCheckoutBody: {
@@ -6977,6 +7074,48 @@ export interface operations {
             };
         };
     };
+    tenant_scans_batch_tenant_scans_batch_post: {
+        parameters: {
+            query?: {
+                api_key?: string | null;
+                count_toward_rate_limit?: boolean;
+            };
+            header?: {
+                authorization?: string | null;
+                "x-api-key"?: string | null;
+                "X-Qtangl-Session"?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["BatchScanRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     tenant_scan_detail_tenant_scans__scan_id__get: {
         parameters: {
             query?: {
@@ -7296,6 +7435,48 @@ export interface operations {
             };
         };
     };
+    tenant_create_schedules_batch_tenant_schedules_batch_post: {
+        parameters: {
+            query?: {
+                api_key?: string | null;
+                count_toward_rate_limit?: boolean;
+            };
+            header?: {
+                authorization?: string | null;
+                "x-api-key"?: string | null;
+                "X-Qtangl-Session"?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["BatchScheduleRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     tenant_delete_schedule_tenant_schedules__schedule_id__delete: {
         parameters: {
             query?: {
@@ -7587,6 +7768,46 @@ export interface operations {
         requestBody: {
             content: {
                 "application/json": components["schemas"]["AuthorizedDomainsRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    tenant_authorized_domains_patch_tenant_authorized_domains_patch: {
+        parameters: {
+            query?: {
+                api_key?: string | null;
+            };
+            header?: {
+                authorization?: string | null;
+                "x-api-key"?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AuthorizedDomainsPatchRequest"];
             };
         };
         responses: {

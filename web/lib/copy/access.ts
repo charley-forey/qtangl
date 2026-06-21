@@ -69,7 +69,6 @@ export const accessFormCopy = {
         "Enterprise PQC program",
         "Security diligence (DPA / SOC 2 / questionnaires)",
         "MSSP / partner inquiry",
-        "Optimization pilot",
       ],
     },
     currentTools: {
@@ -153,11 +152,6 @@ export const accessSuccessCopy = {
       { label: "Platform overview", href: "/platform" },
       { label: "Trust center", href: "/trust" },
       { label: "Read the docs", href: "/docs" },
-    ],
-    "Optimization pilot": [
-      { label: "Hospital re-staffing demo", href: "/demo/hospital" },
-      { label: "Technology overview", href: "/technology" },
-      { label: "Try the sandbox", href: "/sandbox" },
     ],
   } as Record<string, { label: string; href: string }[]>,
 } as const;

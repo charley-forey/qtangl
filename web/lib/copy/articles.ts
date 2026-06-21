@@ -20,9 +20,9 @@ export const articleOutcomeStrip = [
 
 export const blogIndexCopy = {
   eyebrow: "Blog",
-  title: "Q-Day readiness and hybrid optimization.",
+  title: "Q-Day readiness field notes.",
   description:
-    "PQC inventory, crypto drift, and signed evidence — plus scheduling, routing, and staffing field notes.",
+    "PQC inventory, crypto drift, HNDL urgency, and signed evidence — for security and compliance teams.",
 } as const;
 
 export const blogClosingCta = {

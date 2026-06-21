@@ -174,17 +174,6 @@ export default function ConceptsPage() {
             </li>
           </ul>
         </Card>
-
-        <DocsCallout variant="info" title="Labs / optimization">
-          {conceptsPage.labsNote}{" "}
-          <Link href="/technology" className="text-white underline underline-offset-4">
-            Technology →
-          </Link>{" "}
-          ·{" "}
-          <Link href="/docs/guides/schedule" className="text-white underline underline-offset-4">
-            Schedule guide
-          </Link>
-        </DocsCallout>
       </DocsShell>
     </div>
   );

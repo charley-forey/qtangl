@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 
-/** Legacy URL — optimization demos live under /labs (expansion motion). */
+/** Legacy URL — optimization is out of scope; platform is readiness-only. */
 export default function OptimizeHubRedirectPage() {
-  redirect("/labs");
+  redirect("/platform");
 }

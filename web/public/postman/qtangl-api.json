@@ -1461,6 +1461,20 @@
       }
     },
     {
+      "name": "PATCH /tenant/authorized-domains",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/authorized-domains",
+        "description": "Tenant Authorized Domains Patch"
+      }
+    },
+    {
       "name": "POST /tenant/authorized-domains",
       "request": {
         "method": "POST",
@@ -2791,6 +2805,20 @@
       }
     },
     {
+      "name": "POST /tenant/scans/batch",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/scans/batch",
+        "description": "Tenant Scans Batch"
+      }
+    },
+    {
       "name": "POST /tenant/scans/bulk-export",
       "request": {
         "method": "POST",
@@ -2998,6 +3026,20 @@
         ],
         "url": "{{baseUrl}}/tenant/schedules",
         "description": "Tenant Create Schedule"
+      }
+    },
+    {
+      "name": "POST /tenant/schedules/batch",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/schedules/batch",
+        "description": "Tenant Create Schedules Batch"
       }
     },
     {
