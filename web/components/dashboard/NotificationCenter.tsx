@@ -34,15 +34,23 @@ export default function NotificationCenter({
   onMarkRead,
   onNavigateTab,
   onRefresh,
+  notificationReadIds = [],
 }: {
   alerts: DashboardAlert[];
   onMarkRead?: (ids: string[]) => void;
   onNavigateTab?: (tab: DashboardTabId) => void;
   onRefresh?: () => void;
+  notificationReadIds?: string[];
 }) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
-  const [read, setRead] = useState<Set<string>>(new Set());
+  const [read, setRead] = useState<Set<string>>(() => new Set(notificationReadIds));
+
+  useEffect(() => {
+    if (notificationReadIds.length) {
+      setRead((prev) => new Set([...prev, ...notificationReadIds]));
+    }
+  }, [notificationReadIds]);
 
   useEffect(() => {
     function onKey(e: KeyboardEvent) {

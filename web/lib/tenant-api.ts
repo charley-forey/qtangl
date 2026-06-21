@@ -15,6 +15,11 @@ export type TenantScanSummary = {
   readinessBand?: string | null;
   createdAt: string;
   updatedAt: string;
+  authMethod?: string | null;
+  apiKeyId?: string | null;
+  actorEmail?: string | null;
+  scheduleId?: string | null;
+  sourceLabel?: string | null;
 };
 
 export type ScheduledScan = {

@@ -11,6 +11,7 @@ import {
   SESSION_KEY_COOKIE,
   workosAuthEnabled,
 } from "@/lib/auth/workos";
+import { isQtanglOpsEmail } from "@/lib/ops-gate";
 
 type BootstrapResponse = {
   status: string;
@@ -225,6 +226,7 @@ export async function GET(request: NextRequest) {
     onboarding: bootstrap.data.onboarding ?? { complete: false, nextStep: "baseline" },
     credentialsReady: credentials.ready,
     sessionSignedOnWeb: Boolean(!bootstrap.data.sessionAssertion && credentials.assertion),
+    isQtanglOps: isQtanglOpsEmail(bootstrap.data.email),
   });
   applySessionCookies(response, bootstrap.data, credentials);
   if (onboardingToken) {

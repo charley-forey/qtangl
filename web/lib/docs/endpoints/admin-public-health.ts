@@ -2,6 +2,103 @@ import { defineEndpoint, ROLE_ADMIN, ROLE_PUBLIC } from "@/lib/docs/endpoint-fac
 import type { DocsEndpoint } from "@/lib/docs/types";
 
 export const adminEndpoints: Record<string, DocsEndpoint> = {
+  "admin-platform-summary": defineEndpoint("admin-platform-summary", {
+    method: "GET",
+    path: "/admin/platform/summary",
+    summary: "Platform-wide tenant, user, and scan totals for ops dashboards.",
+    role: ROLE_ADMIN,
+    examples: [
+      {
+        label: "Platform summary",
+        response: {
+          status: "success",
+          totals: { tenants: 42, users: 128, scansLast30Days: 310, signupsLast7Days: 3, signupsLast30Days: 11 },
+          tierBreakdown: { monitor: 30, convert: 8, enterprise: 4 },
+          schedulerEnabled: true,
+        },
+      },
+    ],
+  }),
+  "admin-tenants-list": defineEndpoint("admin-tenants-list", {
+    method: "GET",
+    path: "/admin/tenants",
+    summary: "Paginated tenant directory with usage signals for ops search and export.",
+    role: ROLE_ADMIN,
+    queryParams: [
+      { name: "search", type: "string", required: false, description: "Filter by tenant ID or name." },
+      { name: "tier", type: "string", required: false, description: "Filter by subscription tier." },
+      { name: "limit", type: "number", required: false, default: "50", description: "Page size (1–200)." },
+      { name: "offset", type: "number", required: false, default: "0", description: "Pagination offset." },
+    ],
+    pagination: true,
+    examples: [
+      {
+        label: "List tenants",
+        response: {
+          status: "success",
+          total: 2,
+          limit: 50,
+          offset: 0,
+          tenants: [
+            {
+              tenantId: "acme-bank",
+              name: "Acme Bank",
+              tier: "monitor",
+              memberCount: 5,
+              scansThisMonth: 12,
+              scheduleCount: 1,
+              assessPaid: false,
+              orgType: "customer",
+              lastScanAt: "2026-06-18T14:22:00Z",
+              createdAt: "2026-05-01T09:00:00Z",
+            },
+          ],
+        },
+      },
+    ],
+  }),
+  "admin-tenants-get": defineEndpoint("admin-tenants-get", {
+    method: "GET",
+    path: "/admin/tenants/{tenant_id}",
+    summary: "Full tenant detail: subscription, settings, memberships, keys, and recent scans.",
+    role: ROLE_ADMIN,
+    examples: [
+      {
+        label: "Tenant detail",
+        response: {
+          status: "success",
+          tenantId: "acme-bank",
+          name: "Acme Bank",
+          subscription: { tier: "monitor" },
+          settings: { scanAllowlist: ["acmebank.com"], orgType: "customer", msspParentTenantId: null },
+          memberships: [{ email: "security@acmebank.com", role: "admin" }],
+          apiKeys: [{ keyId: "key_01", label: "automation", revoked: false }],
+        },
+      },
+    ],
+  }),
+  "admin-tenants-patch": defineEndpoint("admin-tenants-patch", {
+    method: "PATCH",
+    path: "/admin/tenants/{tenant_id}",
+    summary: "Update tenant subscription tier (free, monitor, convert, enterprise).",
+    role: ROLE_ADMIN,
+    requestFields: [
+      {
+        name: "tier",
+        type: '"free" | "monitor" | "convert" | "enterprise"',
+        required: true,
+        description: "New subscription tier.",
+        example: "convert",
+      },
+    ],
+    examples: [
+      {
+        label: "Upgrade tier",
+        request: { tier: "convert" },
+        response: { status: "success", tenantId: "acme-bank", tier: "convert" },
+      },
+    ],
+  }),
   "admin-tenants-create": defineEndpoint("admin-tenants-create", {
     method: "POST",
     path: "/admin/tenants",
@@ -16,18 +113,151 @@ export const adminEndpoints: Record<string, DocsEndpoint> = {
         example: "Acme Bank - EMEA",
       },
       {
-        name: "slug",
+        name: "tenantId",
         type: "string",
-        required: true,
-        description: "Unique tenant slug used in internal routing and auditing.",
+        required: false,
+        description: "Optional stable tenant ID slug; auto-generated if omitted.",
         example: "acme-bank-emea",
+      },
+      {
+        name: "tier",
+        type: '"free" | "monitor" | "convert" | "enterprise"',
+        required: false,
+        default: "monitor",
+        description: "Initial subscription tier.",
       },
     ],
     examples: [
       {
         label: "Create tenant",
-        request: { name: "Acme Bank - EMEA", slug: "acme-bank-emea" },
-        response: { status: "success", tenant_id: "ten_01J9W7Q9N4", created: true },
+        request: { name: "Acme Bank - EMEA", tenantId: "acme-bank-emea", tier: "monitor" },
+        response: {
+          tenantId: "acme-bank-emea",
+          name: "Acme Bank - EMEA",
+          subscription: { tier: "monitor" },
+        },
+      },
+    ],
+  }),
+  "admin-authorized-domains": defineEndpoint("admin-authorized-domains", {
+    method: "PUT",
+    path: "/admin/tenants/{tenant_id}/authorized-domains",
+    summary: "Replace tenant scan allowlist (authorized domains) with audit attestation.",
+    role: ROLE_ADMIN,
+    requestFields: [
+      {
+        name: "domains",
+        type: "string[]",
+        required: true,
+        description: "Domain names permitted for scanning.",
+        example: '["acmebank.com", "acmebank.eu"]',
+      },
+      {
+        name: "attestation",
+        type: "string",
+        required: false,
+        default: "Sales-led provisioning",
+        description: "Ops attestation recorded in audit log.",
+      },
+    ],
+    examples: [
+      {
+        label: "Set authorized domains",
+        request: { domains: ["acmebank.com"], attestation: "Customer contract signed 2026-06-01" },
+        response: { status: "success", tenantId: "acme-bank", domains: ["acmebank.com"] },
+      },
+    ],
+  }),
+  "admin-mssp-parent": defineEndpoint("admin-mssp-parent", {
+    method: "PUT",
+    path: "/admin/tenants/{tenant_id}/mssp-parent",
+    summary: "Link a child tenant to an MSSP/enterprise parent for portfolio views.",
+    role: ROLE_ADMIN,
+    requestFields: [
+      {
+        name: "parentTenantId",
+        type: "string",
+        required: true,
+        description: "Parent tenant ID to link under.",
+        example: "mssp-partner-01",
+      },
+    ],
+    examples: [
+      {
+        label: "Link MSSP parent",
+        request: { parentTenantId: "mssp-partner-01" },
+        response: { status: "success", tenantId: "acme-bank", msspParentTenantId: "mssp-partner-01" },
+      },
+    ],
+  }),
+  "admin-tenant-settings": defineEndpoint("admin-tenant-settings", {
+    method: "PUT",
+    path: "/admin/tenants/{tenant_id}/settings",
+    summary: "Merge tenant settings JSON (orgType, salesLed, remediation flags, etc.).",
+    role: ROLE_ADMIN,
+    requestFields: [
+      {
+        name: "settings",
+        type: "object",
+        required: true,
+        description: "Partial settings object merged into existing tenant settings.",
+        example: '{ "orgType": "mssp", "salesLed": true }',
+      },
+    ],
+    examples: [
+      {
+        label: "Merge settings",
+        request: { settings: { orgType: "mssp", remediationProgramEnabled: true } },
+        response: {
+          status: "success",
+          tenantId: "acme-bank",
+          settings: { orgType: "mssp", remediationProgramEnabled: true },
+        },
+      },
+    ],
+  }),
+  "admin-users-list": defineEndpoint("admin-users-list", {
+    method: "GET",
+    path: "/admin/users",
+    summary: "Cross-tenant user directory with membership counts for ops support.",
+    role: ROLE_ADMIN,
+    queryParams: [
+      { name: "search", type: "string", required: false, description: "Filter by email." },
+      { name: "limit", type: "number", required: false, default: "50", description: "Page size (1–200)." },
+      { name: "offset", type: "number", required: false, default: "0", description: "Pagination offset." },
+    ],
+    pagination: true,
+    examples: [
+      {
+        label: "List users",
+        response: {
+          status: "success",
+          total: 1,
+          users: [{ userId: "usr_01", email: "security@acmebank.com", membershipCount: 1 }],
+        },
+      },
+    ],
+  }),
+  "admin-analytics-funnel": defineEndpoint("admin-analytics-funnel", {
+    method: "GET",
+    path: "/admin/analytics/funnel",
+    summary: "Golden-path funnel snapshot (signup → scan → paid → schedule → verify → board export).",
+    role: ROLE_ADMIN,
+    queryParams: [
+      { name: "days", type: "number", required: false, default: "30", description: "Lookback window (1–365 days)." },
+    ],
+    examples: [
+      {
+        label: "30-day funnel",
+        response: {
+          status: "success",
+          days: 30,
+          funnel: [
+            { stage: "signup", count: 20, conversionPct: null },
+            { stage: "first_scan", count: 15, conversionPct: 75.0 },
+          ],
+          totals: { tenants: 20 },
+        },
       },
     ],
   }),

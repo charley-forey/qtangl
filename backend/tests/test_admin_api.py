@@ -8,7 +8,10 @@ import tempfile
 import pytest
 from fastapi.testclient import TestClient
 
+from app.billing.entitlements import upsert_tenant_subscription
 from app.db.engine import init_db
+from app.db.models import User
+from app.db.engine import db_session
 from app.main import app
 from app.tenants.service import create_tenant, issue_api_key
 
@@ -106,3 +109,81 @@ def test_admin_unconfigured_returns_503(monkeypatch: pytest.MonkeyPatch) -> None
         json={"name": "Unconfigured"},
     )
     assert response.status_code == 503
+
+
+def test_admin_platform_summary_and_tenant_list(admin_client: TestClient) -> None:
+    create_tenant(name="Summary Co", tenant_id="tenant-summary-co")
+    upsert_tenant_subscription(tenant_id="tenant-summary-co", tier="monitor")
+
+    summary = admin_client.get(
+        "/admin/platform/summary",
+        headers={"Authorization": "Bearer admin-test-key-secret"},
+    )
+    assert summary.status_code == 200
+    body = summary.json()
+    assert body["totals"]["tenants"] >= 1
+    assert "tierBreakdown" in body
+
+    listed = admin_client.get(
+        "/admin/tenants?search=summary",
+        headers={"Authorization": "Bearer admin-test-key-secret"},
+    )
+    assert listed.status_code == 200
+    tenants = listed.json()["tenants"]
+    assert any(row["tenantId"] == "tenant-summary-co" for row in tenants)
+
+
+def test_admin_tenant_detail_and_patch_tier(admin_client: TestClient) -> None:
+    tenant = create_tenant(name="Detail Co", tenant_id="tenant-detail-co")
+    upsert_tenant_subscription(tenant_id=tenant["tenantId"], tier="free")
+
+    detail = admin_client.get(
+        f"/admin/tenants/{tenant['tenantId']}",
+        headers={"Authorization": "Bearer admin-test-key-secret"},
+    )
+    assert detail.status_code == 200
+    payload = detail.json()
+    assert payload["tenantId"] == tenant["tenantId"]
+    assert payload["subscription"]["tier"] == "free"
+
+    patched = admin_client.patch(
+        f"/admin/tenants/{tenant['tenantId']}",
+        headers={
+            "Authorization": "Bearer admin-test-key-secret",
+            "X-Qtangl-Ops-Actor": "ops@qtangl.com",
+        },
+        json={"tier": "monitor"},
+    )
+    assert patched.status_code == 200
+    assert patched.json()["subscription"]["tier"] == "monitor"
+
+
+def test_admin_list_users(admin_client: TestClient) -> None:
+    tenant = create_tenant(name="Users Co", tenant_id="tenant-users-co")
+    with db_session() as session:
+        session.add(
+            User(
+                id="user-ops-1",
+                workos_user_id="workos-user-ops-1",
+                email="alice@example.com",
+            )
+        )
+    from app.db.models import TenantMembership
+
+    with db_session() as session:
+        session.add(
+            TenantMembership(
+                id="mem-ops-1",
+                tenant_id=tenant["tenantId"],
+                user_id="user-ops-1",
+                role="admin",
+            )
+        )
+
+    response = admin_client.get(
+        "/admin/users?search=alice",
+        headers={"Authorization": "Bearer admin-test-key-secret"},
+    )
+    assert response.status_code == 200
+    users = response.json()["users"]
+    assert any(row["email"] == "alice@example.com" for row in users)

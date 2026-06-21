@@ -1,14 +1,18 @@
 from __future__ import annotations
 
+import logging
 import os
 import uuid
 from datetime import datetime, timezone
 from typing import Any
 
+from app.billing.legal import check_legal_acceptance
 from app.db.config import persistence_enabled
 from app.db.engine import db_session
 from app.db.models import ScheduledScan as ScheduledScanRow
 from app.store.scan_jobs import create_job
+
+logger = logging.getLogger(__name__)
 
 
 def scheduler_enabled() -> bool:
@@ -250,7 +254,20 @@ def enqueue_due_scans() -> int:
                     payload["bundleSessionId"] = session_id
                     payload["useFixture"] = True
         payload["scheduleId"] = schedule["id"]
-        scan_id = create_job(tenant_id=schedule["tenantId"], payload=payload)
+        legal_error = check_legal_acceptance(tenant_id=schedule["tenantId"])
+        if legal_error:
+            logger.warning(
+                "scheduler skipped schedule_id=%s tenant_id=%s: legal acceptance required",
+                schedule["id"],
+                schedule["tenantId"],
+            )
+            continue
+        scan_id = create_job(
+            tenant_id=schedule["tenantId"],
+            payload=payload,
+            auth_method="scheduler",
+            schedule_id=schedule["id"],
+        )
         mark_run(schedule["id"], scan_id=scan_id)
         _log_schedule_run(
             schedule_id=schedule["id"],

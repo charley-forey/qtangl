@@ -4,6 +4,7 @@ import TenantSwitcher from "@/components/dashboard/TenantSwitcher";
 import StatusPill from "@/components/dashboard/ui/StatusPill";
 import { useDashboardSession } from "@/components/dashboard/dashboard-session-context";
 import type { DashboardSession } from "@/lib/dashboard-bff";
+import { isQtanglOpsFromSessionEmail } from "@/lib/ops-auth";
 
 export default function DashboardWorkspaceHeader({
   tier,
@@ -33,6 +34,11 @@ export default function DashboardWorkspaceHeader({
         <StatusPill label={session.role} />
       </div>
       <div className="flex items-center gap-3 text-xs text-[var(--color-gray-400)]">
+        {isQtanglOpsFromSessionEmail(session.email) ? (
+          <a href="/ops" className="rounded-full border border-[var(--border-strong)] px-3 py-1.5 text-white hover:bg-white/5">
+            Ops console
+          </a>
+        ) : null}
         <span>{session.email}</span>
         <button
           type="button"

@@ -135,7 +135,7 @@ def test_bff_session_auth_header(client: TestClient):
     assert response.status_code == 200
     body = response.json()
     assert body["tenantId"] == "tenant-api"
-    assert body["authMethod"] == "bff_session"
+    assert body["authMethod"] == "workos"
 
 
 def test_bootstrap_no_membership(client: TestClient, monkeypatch: pytest.MonkeyPatch):

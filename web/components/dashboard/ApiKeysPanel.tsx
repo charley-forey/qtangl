@@ -9,6 +9,8 @@ import {
   fetchDashboardJson,
   postDashboardJson,
 } from "@/lib/dashboard-bff";
+import { handleDashboardApiError } from "@/lib/dashboard-errors";
+import { formatUtcDateTime } from "@/lib/format";
 
 type ApiKeyRow = {
   keyId: string;
@@ -17,6 +19,7 @@ type ApiKeyRow = {
   keyPrefix?: string;
   createdAt: string;
   lastUsedAt?: string | null;
+  scansThisMonth?: number;
   revoked: boolean;
 };
 
@@ -85,7 +88,8 @@ export default function ApiKeysPanel({ role }: { role?: string }) {
               setCreatedSecret(payload.apiKey);
               await loadKeys();
             } catch (exc) {
-              setError(exc instanceof Error ? exc.message : "Unable to create key.");
+              const handled = handleDashboardApiError(exc);
+              setError(handled.message);
             } finally {
               setLoading(false);
             }
@@ -106,6 +110,8 @@ export default function ApiKeysPanel({ role }: { role?: string }) {
           <li key={key.keyId} className="flex flex-wrap items-center justify-between gap-2 border-t border-[var(--border-subtle)] pt-2">
             <span>
               {key.label} · {key.role} · {key.keyPrefix ?? "qtangl_…"}
+              {key.lastUsedAt ? ` · last used ${formatUtcDateTime(key.lastUsedAt)}` : " · never used"}
+              {typeof key.scansThisMonth === "number" ? ` · ${key.scansThisMonth} scans this month` : ""}
             </span>
             <button
               type="button"

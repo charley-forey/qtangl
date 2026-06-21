@@ -18,6 +18,9 @@ const TeamSettingsPanel = dynamic(() => import("@/components/dashboard/TeamSetti
 const MsspPortfolioSettings = dynamic(() => import("@/components/dashboard/MsspPortfolioSettings"));
 const WorkspaceSettingsPanel = dynamic(() => import("@/components/dashboard/WorkspaceSettingsPanel"));
 const ApiKeysPanel = dynamic(() => import("@/components/dashboard/ApiKeysPanel"));
+const AuthorizedDomainsPanel = dynamic(() => import("@/components/dashboard/AuthorizedDomainsPanel"));
+const BillingHubPanel = dynamic(() => import("@/components/dashboard/BillingHubPanel"));
+const LegalCompliancePanel = dynamic(() => import("@/components/dashboard/LegalCompliancePanel"));
 const EvidenceVaultPanel = dynamic(() => import("@/components/pqc/EvidenceVaultPanel"));
 
 type Props = {
@@ -34,10 +37,13 @@ type Props = {
   apiKey: string;
   loading: boolean;
   recentScanIds?: string[];
+  tenantSettings?: Record<string, unknown> | null;
+  scansThisMonth?: number;
   onMessage: (message: string) => void;
   onSettingsChange: (settings: Record<string, unknown>) => void;
   onApiKeyChange: (key: string) => void;
   onConnect: () => void;
+  onOpenUpgrade?: (product: "assess" | "monitor" | "convert") => void;
 };
 
 export default function DashboardSettingsTab({
@@ -54,10 +60,13 @@ export default function DashboardSettingsTab({
   apiKey,
   loading,
   recentScanIds = [],
+  tenantSettings,
+  scansThisMonth = 0,
   onMessage,
   onSettingsChange,
   onApiKeyChange,
   onConnect,
+  onOpenUpgrade,
 }: Props) {
   const settings = bundle?.settings ?? {};
   const [ssoPortalUrl, setSsoPortalUrl] = useState<string | null>(null);
@@ -66,6 +75,52 @@ export default function DashboardSettingsTab({
   return (
     <DashboardSection title="Settings" id="dashboard-settings">
       {canManageKeys && bffMode ? <ApiKeysPanel role={sessionRole} /> : null}
+
+      {canAdmin && bffMode ? (
+        <>
+          <BillingHubPanel
+            tier={tier}
+            scansThisMonth={scansThisMonth}
+            onOpenUpgrade={onOpenUpgrade}
+            onMessage={onMessage}
+          />
+          <LegalCompliancePanel
+            tenantSettings={tenantSettings ?? settings}
+            onAccepted={(billing) =>
+              onSettingsChange({ ...(tenantSettings ?? settings), billing })
+            }
+          />
+          <AuthorizedDomainsPanel canAdmin={canAdmin} onMessage={onMessage} />
+          <Card tone="panel">
+            <Eyebrow>Data export</Eyebrow>
+            <p className="mt-2 text-sm text-[var(--color-gray-400)]">
+              Download a JSON bundle of tenant scans, settings, and audit metadata for procurement or GDPR requests.
+            </p>
+            <button
+              type="button"
+              className="mt-3 rounded-full bg-white px-4 py-2 text-xs font-medium text-black"
+              onClick={async () => {
+                try {
+                  const response = await fetch("/api/dashboard/tenant/export");
+                  if (!response.ok) throw new Error("Export failed.");
+                  const blob = await response.blob();
+                  const url = URL.createObjectURL(blob);
+                  const anchor = document.createElement("a");
+                  anchor.href = url;
+                  anchor.download = "qtangl-tenant-export.json";
+                  anchor.click();
+                  URL.revokeObjectURL(url);
+                  onMessage("Tenant export downloaded.");
+                } catch (exc) {
+                  onMessage(exc instanceof Error ? exc.message : "Export failed.");
+                }
+              }}
+            >
+              Download tenant export
+            </button>
+          </Card>
+        </>
+      ) : null}
 
       <Card tone="panel">
         <Eyebrow>Evidence vault</Eyebrow>
@@ -153,7 +208,7 @@ export default function DashboardSettingsTab({
           <Card tone="panel">
             <Eyebrow>Audit log</Eyebrow>
             <div className="mt-4">
-              <AuditLogPanel apiKey={savedKey} />
+              <AuditLogPanel apiKey={savedKey} bffMode={bffMode} />
             </div>
           </Card>
         </>

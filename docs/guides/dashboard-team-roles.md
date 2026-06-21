@@ -170,6 +170,22 @@ See [dashboard-auth-break-glass](../runbooks/dashboard-auth-break-glass.md).
 
 ---
 
+## Automation API keys and scan provenance
+
+Dashboard data is **tenant-wide** — all API keys for an org share the same readiness KPIs, scan history, and remediation backlog. Keys are credentials for automation, not data partitions.
+
+Name keys by purpose (for example `ci-prod`, `ci-staging`, `terraform-readonly`). The **Scans** tab shows a **Source** column on each run:
+
+| Source label | Meaning |
+|--------------|---------|
+| `Dashboard · alice@corp.com` | Human triggered via WorkOS session |
+| `Automation · ci-prod` | Named API key |
+| `Schedule · weekly-prod` | Recurring monitor job |
+
+**Settings → Automation API keys** shows `lastUsedAt` and scans this month per key. Stale keys unused for 90+ days are flagged in the UI.
+
+---
+
 ## Troubleshooting
 
 | Symptom | Likely cause | Fix |

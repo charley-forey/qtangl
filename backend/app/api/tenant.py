@@ -17,6 +17,7 @@ from app.db.config import persistence_enabled, redis_enabled
 import os
 from app.billing.entitlements import (
     check_scan_quota,
+    check_schedule_cadence,
     check_schedule_quota,
     scans_created_this_month,
     tenant_entitlements,
@@ -720,6 +721,9 @@ def tenant_create_schedule(
 
         track_event("tier_upgrade_clicked", tenant_id=auth.tenant_id, properties=quota_error)
         raise HTTPException(status_code=status.HTTP_402_PAYMENT_REQUIRED, detail=quota_error)
+    cadence_error = check_schedule_cadence(tenant_id=auth.tenant_id, cadence_hours=body.cadenceHours)
+    if cadence_error:
+        raise HTTPException(status_code=status.HTTP_402_PAYMENT_REQUIRED, detail=cadence_error)
     if body.jobType == "cloud_pull" and body.integrationProvider not in {"aws", "azure"}:
         raise HTTPException(
             status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
@@ -754,6 +758,10 @@ def tenant_patch_schedule(
     body: SchedulePatchRequest,
     auth: AuthContext = Depends(require_auth_write),
 ) -> dict:
+    if body.cadenceHours is not None:
+        cadence_error = check_schedule_cadence(tenant_id=auth.tenant_id, cadence_hours=body.cadenceHours)
+        if cadence_error:
+            raise HTTPException(status_code=status.HTTP_402_PAYMENT_REQUIRED, detail=cadence_error)
     schedule = update_schedule(
         tenant_id=auth.tenant_id,
         schedule_id=schedule_id,

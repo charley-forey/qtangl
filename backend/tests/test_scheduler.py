@@ -6,6 +6,7 @@ import unittest
 from datetime import datetime, timedelta, timezone
 from unittest.mock import patch
 
+from app.billing.entitlements import check_schedule_cadence, TIER_DEFAULTS
 from app.db.engine import init_db
 from app.monitoring.service import (
     create_schedule,
@@ -30,6 +31,12 @@ class ScheduledScanWorkerTest(unittest.TestCase):
         init_db()
         create_tenant(name="Monitor Co", tenant_id="tenant-monitor")
         self.tenant_id = "tenant-monitor"
+        from app.tenant.settings import patch_tenant_billing_flags
+
+        patch_tenant_billing_flags(
+            tenant_id=self.tenant_id,
+            patch={"termsAcceptedAt": "2026-06-08T00:00:00+00:00", "termsVersion": "2026-06-08"},
+        )
 
     def tearDown(self) -> None:
         self._reset_engine()
@@ -119,6 +126,27 @@ class ScheduledScanWorkerTest(unittest.TestCase):
             row.next_run_at = future
 
         self.assertEqual(len(due_schedules()), 0)
+
+    def test_cadence_minimum_for_monitor_tier(self) -> None:
+        with patch("app.billing.entitlements.tenant_entitlements") as mock_ent:
+            mock_ent.return_value = {**TIER_DEFAULTS["monitor"], "tier": "monitor", "status": "active"}
+            err = check_schedule_cadence(tenant_id=self.tenant_id, cadence_hours=12)
+            self.assertIsNotNone(err)
+            self.assertEqual(err["code"], "schedule_cadence_below_minimum")
+            self.assertIsNone(check_schedule_cadence(tenant_id=self.tenant_id, cadence_hours=24))
+
+    def test_enqueue_skips_schedule_without_legal_acceptance(self) -> None:
+        create_schedule(
+            tenant_id=self.tenant_id,
+            scenario_id="bank-tls-inventory",
+            target="legal-gate.example.com",
+            cadence_hours=24,
+        )
+        with patch("app.monitoring.service.check_legal_acceptance", return_value={"code": "legal_acceptance_required"}):
+            enqueued = enqueue_due_scans()
+        self.assertEqual(enqueued, 0)
+        listed = list_schedules(tenant_id=self.tenant_id)
+        self.assertIsNone(listed[0]["lastRunScanId"])
 
 
 if __name__ == "__main__":

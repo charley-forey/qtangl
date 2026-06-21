@@ -8,16 +8,20 @@ import { postDashboardJson } from "@/lib/dashboard-bff";
 
 const TERMS_VERSION = "2026-06-08";
 
+export type LegalAcceptBilling = Record<string, unknown>;
+
 type Props = {
-  onAccepted?: () => void;
+  onAccepted?: (billing: LegalAcceptBilling) => void;
   requireScanAuthorization?: boolean;
   domain?: string;
+  policyUpdated?: boolean;
 };
 
 export default function LegalAcceptancePanel({
   onAccepted,
   requireScanAuthorization = false,
   domain = "",
+  policyUpdated = false,
 }: Props) {
   const [termsChecked, setTermsChecked] = useState(false);
   const [authChecked, setAuthChecked] = useState(false);
@@ -29,8 +33,13 @@ export default function LegalAcceptancePanel({
   return (
     <div className="space-y-4 rounded-2xl border border-[var(--border-subtle)] bg-black/30 p-4">
       <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--color-gray-500)]">
-        Legal & compliance
+        {policyUpdated ? "Policy updated — re-accept required" : "Legal & compliance"}
       </p>
+      {policyUpdated ? (
+        <p className="text-sm text-[var(--color-gray-300)]">
+          Our Terms of Service or Privacy Policy changed. Review and accept the updated terms to continue.
+        </p>
+      ) : null}
       <label className="flex items-start gap-3 text-sm text-[var(--color-gray-300)]">
         <input
           type="checkbox"
@@ -82,12 +91,15 @@ export default function LegalAcceptancePanel({
           setSaving(true);
           setError(null);
           try {
-            await postDashboardJson("/tenant/legal/accept", {
-              termsVersion: TERMS_VERSION,
-              scanAuthorization: requireScanAuthorization ? true : undefined,
-              domain: domain || undefined,
-            });
-            onAccepted?.();
+            const response = await postDashboardJson<{ status: string; billing: LegalAcceptBilling }>(
+              "/tenant/legal/accept",
+              {
+                termsVersion: TERMS_VERSION,
+                scanAuthorization: requireScanAuthorization ? true : undefined,
+                domain: domain || undefined,
+              }
+            );
+            onAccepted?.(response.billing ?? {});
           } catch (exc) {
             setError(exc instanceof Error ? exc.message : "Unable to save acceptance.");
           } finally {

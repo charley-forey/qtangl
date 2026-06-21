@@ -2,7 +2,15 @@ from __future__ import annotations
 
 from pydantic import BaseModel, Field
 
-from fastapi import APIRouter, Depends, HTTPException, Query, status
+from fastapi import APIRouter, Depends, HTTPException, Query, Request, status
+
+from app.admin.platform_service import (
+    get_tenant_detail_admin,
+    list_tenants_admin,
+    list_users_admin,
+    patch_tenant_tier_admin,
+    platform_summary,
+)
 
 from app.audit.service import log_action
 from app.auth import require_admin
@@ -36,9 +44,75 @@ class TenantSettingsAdminRequest(BaseModel):
     settings: dict = Field(default_factory=dict)
 
 
+class PatchTenantRequest(BaseModel):
+    tier: str = Field(pattern="^(free|monitor|convert|enterprise)$")
+
+
+def _ops_actor(request: Request) -> str:
+    header = request.headers.get("X-Qtangl-Ops-Actor", "").strip()
+    return header or "admin"
+
+
+@router.get("/platform/summary")
+def admin_platform_summary(_: str = Depends(require_admin)) -> dict:
+    return platform_summary()
+
+
+@router.get("/tenants")
+def admin_list_tenants(
+    search: str | None = Query(default=None),
+    tier: str | None = Query(default=None),
+    limit: int = Query(default=50, ge=1, le=200),
+    offset: int = Query(default=0, ge=0),
+    _: str = Depends(require_admin),
+) -> dict:
+    return list_tenants_admin(search=search, tier=tier, limit=limit, offset=offset)
+
+
+@router.get("/tenants/{tenant_id}")
+def admin_get_tenant(tenant_id: str, _: str = Depends(require_admin)) -> dict:
+    detail = get_tenant_detail_admin(tenant_id=tenant_id)
+    if detail is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Tenant not found")
+    return detail
+
+
+@router.patch("/tenants/{tenant_id}")
+def admin_patch_tenant(
+    tenant_id: str,
+    request: PatchTenantRequest,
+    http_request: Request,
+    _: str = Depends(require_admin),
+) -> dict:
+    try:
+        payload = patch_tenant_tier_admin(tenant_id=tenant_id, tier=request.tier)
+    except ValueError as exc:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(exc)) from exc
+    except RuntimeError as exc:
+        raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail=str(exc)) from exc
+    log_action(
+        tenant_id=tenant_id,
+        action="subscription.tier_updated",
+        actor=_ops_actor(http_request),
+        detail={"tier": request.tier},
+    )
+    return payload
+
+
+@router.get("/users")
+def admin_list_users(
+    search: str | None = Query(default=None),
+    limit: int = Query(default=50, ge=1, le=200),
+    offset: int = Query(default=0, ge=0),
+    _: str = Depends(require_admin),
+) -> dict:
+    return list_users_admin(search=search, limit=limit, offset=offset)
+
+
 @router.post("/tenants")
 def admin_create_tenant(
     request: CreateTenantRequest,
+    http_request: Request,
     _: str = Depends(require_admin),
 ) -> dict:
     try:
@@ -47,6 +121,12 @@ def admin_create_tenant(
         subscription = upsert_tenant_subscription(
             tenant_id=tenant["tenantId"],
             tier=request.tier,
+        )
+        log_action(
+            tenant_id=tenant["tenantId"],
+            action="tenant.admin_created",
+            actor=_ops_actor(http_request),
+            detail={"name": request.name, "tier": request.tier},
         )
         return {**tenant, "subscription": subscription}
     except ValueError as exc:
@@ -59,6 +139,7 @@ def admin_create_tenant(
 def admin_set_authorized_domains(
     tenant_id: str,
     request: AuthorizedDomainsAdminRequest,
+    http_request: Request,
     _: str = Depends(require_admin),
 ) -> dict:
     try:
@@ -68,7 +149,7 @@ def admin_set_authorized_domains(
     log_action(
         tenant_id=tenant_id,
         action="authorized_domains.admin_update",
-        actor="admin",
+        actor=_ops_actor(http_request),
         detail={"domains": domains, "attestation": request.attestation[:500]},
     )
     return {"status": "success", "tenantId": tenant_id, "domains": domains}
@@ -78,6 +159,7 @@ def admin_set_authorized_domains(
 def admin_set_mssp_parent(
     tenant_id: str,
     request: MsspParentRequest,
+    http_request: Request,
     _: str = Depends(require_admin),
 ) -> dict:
     """R3: Link child tenant to MSSP parent for portfolio / white-label."""
@@ -93,7 +175,7 @@ def admin_set_mssp_parent(
     log_action(
         tenant_id=tenant_id,
         action="mssp.parent_linked",
-        actor="admin",
+        actor=_ops_actor(http_request),
         detail={"parentTenantId": request.parentTenantId},
     )
     return {"status": "success", "tenantId": tenant_id, "msspParentTenantId": request.parentTenantId}
@@ -103,11 +185,18 @@ def admin_set_mssp_parent(
 def admin_upsert_tenant_settings(
     tenant_id: str,
     request: TenantSettingsAdminRequest,
+    http_request: Request,
     _: str = Depends(require_admin),
 ) -> dict:
     from app.tenant.settings import upsert_tenant_settings
 
     merged = upsert_tenant_settings(tenant_id=tenant_id, settings=request.settings)
+    log_action(
+        tenant_id=tenant_id,
+        action="settings.admin_update",
+        actor=_ops_actor(http_request),
+        detail={"keys": list(request.settings.keys())[:20]},
+    )
     return {"status": "success", "tenantId": tenant_id, "settings": merged}
 
 
@@ -115,10 +204,18 @@ def admin_upsert_tenant_settings(
 def admin_issue_key(
     tenant_id: str,
     request: IssueKeyRequest,
+    http_request: Request,
     _: str = Depends(require_admin),
 ) -> dict:
     try:
-        return issue_api_key(tenant_id=tenant_id, label=request.label)
+        payload = issue_api_key(tenant_id=tenant_id, label=request.label)
+        log_action(
+            tenant_id=tenant_id,
+            action="api_key.admin_issued",
+            actor=_ops_actor(http_request),
+            detail={"keyId": payload.get("keyId"), "label": request.label},
+        )
+        return payload
     except ValueError as exc:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(exc)) from exc
     except RuntimeError as exc:

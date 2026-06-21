@@ -88,7 +88,15 @@ def _apply_scan_metadata(row: ScanJobRow, bundle: ScanBundle, payload: str) -> N
         row.bundle_storage_key = None
 
 
-def create_job(*, tenant_id: str = "sandbox", payload: dict[str, Any] | None = None) -> str:
+def create_job(
+    *,
+    tenant_id: str = "sandbox",
+    payload: dict[str, Any] | None = None,
+    auth_method: str | None = None,
+    api_key_id: str | None = None,
+    actor_email: str | None = None,
+    schedule_id: str | None = None,
+) -> str:
     scan_id = f"scan-{uuid.uuid4()}"
     now = time.time()
     job = ScanJob(
@@ -111,6 +119,10 @@ def create_job(*, tenant_id: str = "sandbox", payload: dict[str, Any] | None = N
                     status="running",
                     timeline_json="[]",
                     payload_json=payload_json,
+                    auth_method=auth_method,
+                    api_key_id=api_key_id,
+                    actor_email=actor_email,
+                    schedule_id=schedule_id,
                 )
             )
     else:
@@ -157,7 +169,8 @@ def list_jobs_for_tenant(*, tenant_id: str, limit: int = 50) -> list[dict[str, A
                 .limit(limit)
                 .all()
             )
-            return [_job_summary(row) for row in rows]
+            key_labels = _api_key_labels_for_tenant(session=session, tenant_id=tenant_id)
+            return [_job_summary(row, key_labels=key_labels) for row in rows]
     with _job_lock:
         jobs = [job for job in _memory_jobs.values() if job.tenant_id == tenant_id]
     jobs.sort(key=lambda job: job.created_at, reverse=True)
@@ -663,7 +676,35 @@ def _row_to_job(row: ScanJobRow) -> ScanJob:
     )
 
 
-def _job_summary(row: ScanJobRow) -> dict[str, Any]:
+def _api_key_labels_for_tenant(*, session: Any, tenant_id: str) -> dict[str, str]:
+    from app.db.models import ApiKey
+
+    rows = session.query(ApiKey).filter(ApiKey.tenant_id == tenant_id).all()
+    return {row.id: row.label for row in rows}
+
+
+def _scan_source_label(
+    *,
+    auth_method: str | None,
+    actor_email: str | None,
+    api_key_id: str | None,
+    schedule_id: str | None,
+    key_labels: dict[str, str],
+) -> str:
+    method = auth_method or "legacy"
+    if method == "workos":
+        return f"Dashboard · {actor_email or 'user'}"
+    if method == "api_key":
+        label = key_labels.get(api_key_id or "", "automation")
+        return f"Automation · {label}"
+    if method == "scheduler":
+        return f"Schedule · {schedule_id or 'recurring'}"
+    if method == "session_key":
+        return "Dashboard · session"
+    return "Legacy"
+
+
+def _job_summary(row: ScanJobRow, *, key_labels: dict[str, str] | None = None) -> dict[str, Any]:
     payload = json.loads(row.payload_json) if row.payload_json else {}
     readiness_score = row.readiness_score
     readiness_band = None
@@ -678,6 +719,11 @@ def _job_summary(row: ScanJobRow) -> dict[str, Any]:
         bundle = json.loads(_bundle_json_from_row(row) or "{}")
         report = bundle.get("report") or {}
         readiness_band = report.get("readinessBand")
+    labels = key_labels or {}
+    auth_method = getattr(row, "auth_method", None)
+    api_key_id = getattr(row, "api_key_id", None)
+    actor_email = getattr(row, "actor_email", None)
+    schedule_id = getattr(row, "schedule_id", None)
     return {
         "scanId": row.id,
         "status": row.status,
@@ -688,6 +734,17 @@ def _job_summary(row: ScanJobRow) -> dict[str, Any]:
         "readinessBand": readiness_band,
         "createdAt": row.created_at.isoformat(),
         "updatedAt": row.updated_at.isoformat(),
+        "authMethod": auth_method,
+        "apiKeyId": api_key_id,
+        "actorEmail": actor_email,
+        "scheduleId": schedule_id,
+        "sourceLabel": _scan_source_label(
+            auth_method=auth_method,
+            actor_email=actor_email,
+            api_key_id=api_key_id,
+            schedule_id=schedule_id,
+            key_labels=labels,
+        ),
     }
 
 

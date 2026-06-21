@@ -23,8 +23,11 @@ import type { SettingsTabBundle } from "@/lib/dashboard-state";
 import { dashboardReportUrl, putDashboardJson, type DashboardSession } from "@/lib/dashboard-bff";
 import { resolveRolePolicy } from "@/lib/dashboard-role-policies";
 import UpgradeModal from "@/components/dashboard/UpgradeModal";
+import DashboardToast from "@/components/dashboard/DashboardToast";
+import TermsBumpModal from "@/components/dashboard/TermsBumpModal";
 import { useUpgradeGate } from "@/hooks/useUpgradeGate";
 import { useDashboardEvents } from "@/lib/dashboard-events";
+import { isTermsBumpRequired } from "@/lib/dashboard-legal";
 import { trackDashboardEvent } from "@/lib/dashboard-analytics";
 import { getStoredTenantApiKey, setStoredTenantApiKey, tenantReportUrl } from "@/lib/tenant-api";
 import type { PqcScanResponse } from "@/lib/pqc";
@@ -66,7 +69,7 @@ export default function DashboardClient() {
   const [density, setDensity] = useState<"comfortable" | "compact">("comfortable");
   const [dashboardSession, setDashboardSession] = useState<DashboardSession | null>(null);
   const [tenantSettings, setTenantSettings] = useState<Record<string, unknown> | null>(null);
-  const [actionMessage, setActionMessage] = useState<string | null>(null);
+  const [toast, setToast] = useState<{ message: string; tone: "success" | "error" | "info" } | null>(null);
   const [reportDrawerOpen, setReportDrawerOpen] = useState(false);
   const [reportScan, setReportScan] = useState<PqcScanResponse | null>(null);
   const [reportScanId, setReportScanId] = useState<string | null>(null);
@@ -78,7 +81,27 @@ export default function DashboardClient() {
   const bffBootstrappedKeyRef = useRef<string | null>(null);
 
   const { summary, loading, error, scanProgress, loadSummary, patchScan } = useDashboardSummary();
-  const { bundle: tabBundle, loadTab, invalidateTab } = useDashboardTab(activeTab);
+  const { bundle: tabBundle, loading: tabLoading, error: tabError, loadTab, invalidateTab } = useDashboardTab(activeTab);
+
+  const showMessage = useCallback((message: string, tone: "success" | "error" | "info" = "info") => {
+    setToast({ message, tone });
+  }, []);
+
+  const loadTenantSettings = useCallback(async () => {
+    try {
+      const payload = await fetchDashboardJson<{ settings: Record<string, unknown> }>("/tenant/settings");
+      if (payload.settings) setTenantSettings(payload.settings);
+    } catch {
+      /* optional */
+    }
+  }, []);
+
+  const reloadWorkspace = useCallback(async () => {
+    bffBootstrappedKeyRef.current = null;
+    await refreshSession();
+    await Promise.all([loadSummary(), loadTenantSettings()]);
+    invalidateTab();
+  }, [invalidateTab, loadSummary, loadTenantSettings, refreshSession]);
 
   const retrySessionAndSummary = useCallback(async () => {
     await refreshSession();
@@ -94,9 +117,9 @@ export default function DashboardClient() {
     setBffMode(true);
     setSavedKey("bff");
     await refreshSession();
-    await loadSummary();
+    await Promise.all([loadSummary(), loadTenantSettings()]);
     setBffConnected(true);
-  }, [loadSummary, refreshSession]);
+  }, [loadSummary, loadTenantSettings, refreshSession]);
 
   useEffect(() => {
     if (contextSession) setDashboardSession(contextSession);
@@ -182,7 +205,7 @@ export default function DashboardClient() {
     [loadReportScan, summary?.recentScans]
   );
 
-  useDashboardEvents({
+  const { connected: eventsConnected } = useDashboardEvents({
     enabled: bffMode && Boolean(summary),
     onEvent: (event) => {
       const data = event.data ?? {};
@@ -197,7 +220,7 @@ export default function DashboardClient() {
       });
       if (data.status === "done") {
         const scanId = String(data.scanId ?? "");
-        setActionMessage(`Scan complete — readiness ${data.readinessScore ?? "n/a"}`);
+        showMessage(`Scan complete — readiness ${data.readinessScore ?? "n/a"}`, "success");
         trackDashboardEvent("scan_complete", { scanId });
         void loadSummary().then((updated) => {
           const diff = updated?.latestScanDetail?.scanDiff as { readinessDelta?: number } | null | undefined;
@@ -307,7 +330,9 @@ export default function DashboardClient() {
           <p>{error}</p>
         </Card>
       ) : null}
-      {actionMessage ? <p className="text-xs text-[var(--color-gray-400)]">{actionMessage}</p> : null}
+      {toast ? (
+        <DashboardToast message={toast.message} tone={toast.tone} onDismiss={() => setToast(null)} />
+      ) : null}
       {summary && savedKey ? (
         <DashboardShell
           summary={summary}
@@ -331,7 +356,10 @@ export default function DashboardClient() {
             setDensity(next);
             localStorage.setItem("qtangl_dashboard_density", next);
           }}
-          onSessionChange={setDashboardSession}
+          onSessionChange={(session) => {
+            setDashboardSession(session);
+            void reloadWorkspace();
+          }}
           onMarkAlertsRead={async (ids) => {
             const next = {
               ...(tenantSettings ?? {}),
@@ -343,6 +371,7 @@ export default function DashboardClient() {
           onRefreshAlerts={() => void loadSummary()}
           tenantSettings={tenantSettings}
           onSettingsChange={setTenantSettings}
+          eventsConnected={bffMode ? eventsConnected : undefined}
         >
           <DashboardTabRouter
             activeTab={activeTab}
@@ -374,7 +403,7 @@ export default function DashboardClient() {
               if (action === "invite") setActiveTab("settings");
               if (action === "export") commandActions.find((a) => a.id === "export")?.onSelect();
             }}
-            onMessage={setActionMessage}
+            onMessage={showMessage}
             onSettingsChange={setTenantSettings}
             onApiKeyChange={setApiKey}
             onConnect={() => {
@@ -385,11 +414,12 @@ export default function DashboardClient() {
             onOpenComplianceReport={() => openReportDrawer()}
             onOpenReport={(scanId) => openReportDrawer(scanId)}
             onRefreshMonitor={() => void loadTab("monitor", true)}
-            onPortfolioSwitch={() => {
-              bffBootstrappedKeyRef.current = null;
-              void refreshSession().then(() => loadSummary());
-              invalidateTab("portfolio");
-            }}
+            tabLoading={tabLoading}
+            tabError={tabError}
+            onRetryTab={() => void loadTab(activeTab, true, activeTab === "remediate" && scanIdParam ? { scanId: scanIdParam } : undefined)}
+            scanProgress={scanProgress}
+            onRefreshSummary={() => void loadSummary()}
+            onPortfolioSwitch={() => void reloadWorkspace()}
             onOpenUpgrade={openUpgrade}
             checkoutSuccess={checkoutParam}
           />
@@ -399,8 +429,20 @@ export default function DashboardClient() {
         open={upgradeOpen}
         product={upgradeProduct}
         onClose={closeUpgrade}
-        onMessage={setActionMessage}
+        onMessage={showMessage}
         salesLed={Boolean(tenantSettings?.salesLed)}
+      />
+      <TermsBumpModal
+        open={Boolean(tenantSettings) && isTermsBumpRequired(tenantSettings)}
+        scanAllowlist={(tenantSettings?.scanAllowlist as string[] | undefined) ?? []}
+        onAccepted={(billing) => {
+          const next = {
+            ...(tenantSettings ?? {}),
+            billing: { ...((tenantSettings?.billing as Record<string, unknown>) ?? {}), ...billing },
+          };
+          setTenantSettings(next);
+          showMessage("Updated terms accepted.", "success");
+        }}
       />
       <ReportDrawer
         open={reportDrawerOpen}

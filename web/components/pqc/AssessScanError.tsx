@@ -9,12 +9,12 @@ import { trackEvent } from "@/lib/analytics";
 
 type AssessScanErrorProps = {
   message: string;
-  kind?: "domain_not_allowed" | "generic";
+  kind?: "domain_not_allowed" | "legal_required" | "generic";
   blockedDomain?: string;
   onDismiss: () => void;
 };
 
-export type AssessScanErrorKind = "domain_not_allowed" | "generic";
+export type AssessScanErrorKind = "domain_not_allowed" | "legal_required" | "generic";
 
 export default function AssessScanError({
   message,
@@ -22,6 +22,7 @@ export default function AssessScanError({
   blockedDomain,
   onDismiss,
 }: AssessScanErrorProps) {
+  const isLegalRequired = kind === "legal_required" || message.includes("legal_acceptance");
   const isDomainBlocked =
     kind === "domain_not_allowed" ||
     message.includes("not permitted") ||
@@ -38,6 +39,14 @@ export default function AssessScanError({
   return (
     <div className="rounded-lg border border-red-500/30 bg-red-500/10 p-4 text-sm text-red-100">
       <p>{message}</p>
+      {isLegalRequired ? (
+        <p className="mt-3 text-xs leading-6 text-red-100/90">
+          Accept the current Terms of Service on the Scans tab before running production baselines.{" "}
+          <Link href="/dashboard?tab=scans" className="underline text-white">
+            Go to legal acceptance
+          </Link>
+        </p>
+      ) : null}
       {isDomainBlocked ? (
         <div className="mt-3 space-y-2 text-xs leading-6 text-red-100/90">
           <p>

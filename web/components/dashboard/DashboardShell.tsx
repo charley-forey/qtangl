@@ -38,6 +38,7 @@ type Props = {
   onRefreshAlerts?: () => void;
   tenantSettings?: Record<string, unknown> | null;
   onSettingsChange?: (settings: Record<string, unknown>) => void;
+  eventsConnected?: boolean;
   children: React.ReactNode;
 };
 
@@ -59,6 +60,7 @@ export default function DashboardShell({
   onRefreshAlerts,
   tenantSettings,
   onSettingsChange,
+  eventsConnected,
   children,
   rolePolicy,
   sessionRole,
@@ -90,6 +92,7 @@ export default function DashboardShell({
             onMarkRead={onMarkAlertsRead}
             onNavigateTab={onTabChange}
             onRefresh={onRefreshAlerts}
+            notificationReadIds={(tenantSettings?.notificationReadIds as string[] | undefined) ?? []}
           />
           <DashboardCommandPalette actions={commandActions} />
           <button
@@ -109,6 +112,7 @@ export default function DashboardShell({
         quotaLimit={summary.kpis.quotaLimit ?? (me.entitlements as { maxScansPerMonth?: number })?.maxScansPerMonth ?? null}
         apiOk
         scanProgress={scanProgress}
+        eventsConnected={eventsConnected}
       />
 
       <DashboardKpiStrip

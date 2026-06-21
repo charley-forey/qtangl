@@ -121,6 +121,10 @@ class ScanJob(Base):
     readiness_score: Mapped[float | None] = mapped_column(Float, nullable=True)
     target_domain: Mapped[str | None] = mapped_column(String(255), nullable=True)
     scenario_id: Mapped[str | None] = mapped_column(String(64), nullable=True)
+    auth_method: Mapped[str | None] = mapped_column(String(32), nullable=True)
+    api_key_id: Mapped[str | None] = mapped_column(String(64), nullable=True)
+    actor_email: Mapped[str | None] = mapped_column(String(320), nullable=True)
+    schedule_id: Mapped[str | None] = mapped_column(String(80), nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_utcnow)
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_utcnow, onupdate=_utcnow)
 

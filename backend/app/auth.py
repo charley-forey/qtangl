@@ -31,6 +31,7 @@ class AuthContext:
     user_id: str | None = None
     email: str | None = None
     auth_method: str = "api_key"
+    api_key_id: str | None = None
 
 
 def get_expected_api_key() -> str:
@@ -74,6 +75,27 @@ def resolve_tenant_id(token: str) -> str:
         raise
     except Exception as exc:
         raise AuthDatabaseError("Unable to resolve tenant from API key.") from exc
+
+
+def resolve_api_key_id(token: str) -> str | None:
+    if token == get_expected_api_key():
+        return None
+    if not persistence_enabled():
+        return None
+    key_hash = hash_api_key(token)
+    try:
+        with db_session() as session:
+            row = session.query(ApiKey).filter(ApiKey.key_hash == key_hash, ApiKey.revoked_at.is_(None)).one_or_none()
+            if row is None:
+                raise HTTPException(
+                    status_code=status.HTTP_401_UNAUTHORIZED,
+                    detail="Invalid API key. Check the pilot token and try again.",
+                )
+            return row.id
+    except HTTPException:
+        raise
+    except Exception as exc:
+        raise AuthDatabaseError("Unable to resolve API key id.") from exc
 
 
 def resolve_role(token: str) -> str:
@@ -178,13 +200,20 @@ def require_auth(
     try:
         tenant_id = resolve_tenant_id(token)
         role = resolve_role(token)
+        api_key_id = resolve_api_key_id(token)
         _touch_api_key_last_used(token)
     except AuthDatabaseError:
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
             detail="Authentication service temporarily unavailable. Try again shortly.",
         ) from None
-    return AuthContext(token=token, tenant_id=tenant_id, role=role, auth_method="api_key")
+    return AuthContext(
+        token=token,
+        tenant_id=tenant_id,
+        role=role,
+        auth_method="api_key",
+        api_key_id=api_key_id,
+    )
 
 
 ROLE_RANK = {"executive": 0, "viewer": 0, "operator": 1, "admin": 2}
@@ -342,7 +371,7 @@ def _resolve_session_auth(
         role=claims.role,
         user_id=claims.user_id,
         email=claims.email,
-        auth_method="bff_session",
+        auth_method="workos",
     )
 
 

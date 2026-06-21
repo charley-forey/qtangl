@@ -7,10 +7,13 @@ import Card from "@/components/ui/Card";
 import Eyebrow from "@/components/ui/Eyebrow";
 import { TakeTourButton } from "@/components/dashboard/ProductTour";
 
+import { isLegalAcceptanceCurrent } from "@/lib/dashboard-legal";
+
 const PHASE_1_STEPS = [
   { id: "sign_in", label: "Sign in to workspace" },
+  { id: "legal", label: "Accept terms & scan authorization" },
   { id: "baseline", label: "Run authorized baseline scan" },
-  { id: "schedule", label: "Enable weekly monitoring" },
+  { id: "schedule", label: "Enable recurring monitoring" },
   { id: "invite", label: "Invite a teammate (admin)" },
 ] as const;
 
@@ -72,6 +75,7 @@ export default function FirstRunChecklist({
 
   const phase1AutoDone: ChecklistState = {
     sign_in: signedIn,
+    legal: isLegalAcceptanceCurrent(settings as Record<string, unknown> | null | undefined),
     baseline: hasScans,
     schedule: hasSchedule,
   };
@@ -98,6 +102,9 @@ export default function FirstRunChecklist({
     async (id: string) => {
       if (id === "baseline" && !hasScans) {
         onRunBaseline?.();
+      }
+      if (id === "legal") {
+        onOpenSettings?.();
       }
       if (id === "digest" || id === "webhooks") {
         onOpenSettings?.();

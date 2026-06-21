@@ -29,6 +29,7 @@ import {
 } from "@/lib/pqc";
 
 import type { AssessScanErrorKind } from "./AssessScanError";
+import { handleDashboardApiError } from "@/lib/dashboard-errors";
 
 export function useAssessScan({
   initialInventory,
@@ -405,8 +406,15 @@ export function useAssessScan({
         }
         syncUrl({ scanId: completed.scanId });
       } catch (err) {
-        const message = err instanceof Error ? err.message : "Scan failed";
-        if (message.includes("not permitted") || message.includes("not on your tenant")) {
+        const handled = handleDashboardApiError(err);
+        const message = handled.message;
+        if (
+          handled.code === "legal_acceptance_required" ||
+          message.includes("legal_acceptance") ||
+          message.includes("Terms of Service")
+        ) {
+          setErrorKind("legal_required");
+        } else if (message.includes("not permitted") || message.includes("not on your tenant")) {
           setErrorKind("domain_not_allowed");
           setBlockedDomain(customDomain.trim().toLowerCase() || null);
         } else {

@@ -152,6 +152,39 @@ def check_crypto_flip_feature(
     return None
 
 
+def min_cadence_hours_for_tier(tier: str) -> int | None:
+    """Minimum schedule cadence in hours by tier; None means schedules are not allowed."""
+    return {
+        "free": None,
+        "monitor": 24,
+        "convert": 12,
+        "enterprise": 1,
+    }.get(tier, 24)
+
+
+def check_schedule_cadence(*, tenant_id: str, cadence_hours: int) -> dict[str, Any] | None:
+    ent = tenant_entitlements(tenant_id=tenant_id)
+    tier = str(ent.get("tier", "monitor"))
+    minimum = min_cadence_hours_for_tier(tier)
+    if minimum is None:
+        return {
+            "code": "schedule_cadence_not_allowed",
+            "tier": tier,
+            "minimumCadenceHours": None,
+            "requestedCadenceHours": cadence_hours,
+            "upgradeUrl": "/pricing",
+        }
+    if cadence_hours < minimum:
+        return {
+            "code": "schedule_cadence_below_minimum",
+            "tier": tier,
+            "minimumCadenceHours": minimum,
+            "requestedCadenceHours": cadence_hours,
+            "upgradeUrl": "/pricing",
+        }
+    return None
+
+
 def check_schedule_quota(*, tenant_id: str) -> dict[str, Any] | None:
     ent = tenant_entitlements(tenant_id=tenant_id)
     max_schedules = int(ent.get("maxSchedules", 10))

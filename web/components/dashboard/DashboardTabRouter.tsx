@@ -21,7 +21,11 @@ import type {
   DashboardTabBundle,
 } from "@/lib/dashboard-state";
 import type { DashboardSession } from "@/lib/dashboard-bff";
+import { putDashboardJson } from "@/lib/dashboard-bff";
 import type { RolePolicy } from "@/lib/dashboard-role-policies";
+import type { ScanProgressState } from "@/lib/dashboard-state";
+import DashboardSkeleton from "@/components/dashboard/ui/DashboardSkeleton";
+import Card from "@/components/ui/Card";
 
 type Props = {
   activeTab: DashboardTabId;
@@ -58,6 +62,11 @@ type Props = {
   onPortfolioSwitch: () => void;
   onOpenUpgrade?: (product: "assess" | "monitor") => void;
   checkoutSuccess?: string | null;
+  tabLoading?: boolean;
+  tabError?: string | null;
+  onRetryTab?: () => void;
+  scanProgress?: ScanProgressState | null;
+  onRefreshSummary?: () => void;
 };
 
 export default function DashboardTabRouter(props: Props) {
@@ -96,6 +105,11 @@ export default function DashboardTabRouter(props: Props) {
     onPortfolioSwitch,
     onOpenUpgrade,
     checkoutSuccess,
+    tabLoading,
+    tabError,
+    onRetryTab,
+    scanProgress,
+    onRefreshSummary,
   } = props;
 
   const toursCompleted =
@@ -106,7 +120,22 @@ export default function DashboardTabRouter(props: Props) {
     onTabChange: (tab: string) => onTabChange(tab as DashboardTabId),
   };
 
-  return useMemo(() => {
+  const tabBody = useMemo(() => {
+    if (tabLoading && activeTab !== "overview") {
+      return <DashboardSkeleton />;
+    }
+    if (tabError && activeTab !== "overview") {
+      return (
+        <Card tone="ghost" className="border border-red-500/40 text-red-200">
+          <p className="text-sm">{tabError}</p>
+          {onRetryTab ? (
+            <button type="button" className="mt-3 text-sm underline" onClick={onRetryTab}>
+              Retry
+            </button>
+          ) : null}
+        </Card>
+      );
+    }
     if (activeTab === "overview") {
       return (
         <>
@@ -130,6 +159,7 @@ export default function DashboardTabRouter(props: Props) {
             reportUrlForScan={reportUrlForScan}
             bffMode={bffMode}
             onSettingsChange={onSettingsChange}
+            onRefreshSummary={onRefreshSummary}
           />
         </>
       );
@@ -148,6 +178,18 @@ export default function DashboardTabRouter(props: Props) {
             onMessage={onMessage}
             scanIdParam={scanIdParam}
             tenantSettings={tenantSettings}
+            onSettingsChange={onSettingsChange}
+            scanAllowlist={(tenantSettings?.scanAllowlist as string[] | undefined) ?? []}
+            scanProgress={scanProgress}
+            schedulesActive={summary.schedulesSummary.active}
+            onDismissScheduleRecommendation={() => {
+              const coaching = (tenantSettings?.coaching as Record<string, unknown>) ?? {};
+              const dismissed = [...((coaching.bannersDismissed as string[]) ?? []), "schedule-recommendation"];
+              const next = { ...(tenantSettings ?? {}), coaching: { ...coaching, bannersDismissed: dismissed } };
+              void putDashboardJson("/tenant/settings", { settings: next }).then(() => onSettingsChange(next));
+            }}
+            onOpenUpgrade={onOpenUpgrade}
+            onRefresh={() => onRefreshSummary?.()}
           />
         </>
       );
@@ -160,10 +202,18 @@ export default function DashboardTabRouter(props: Props) {
             bundle={tabBundle as MonitorTabBundle | null}
             summary={summary}
             savedKey={savedKey}
+            tenantSettings={tenantSettings}
+            canAdmin={canAdmin}
             onMessage={onMessage}
             onRefresh={onRefreshMonitor}
             onTabChange={(tab) => onTabChange(tab as DashboardTabId)}
             onOpenUpgrade={onOpenUpgrade}
+            onDismissScheduleRecommendation={() => {
+              const coaching = (tenantSettings?.coaching as Record<string, unknown>) ?? {};
+              const dismissed = [...((coaching.bannersDismissed as string[]) ?? []), "schedule-recommendation"];
+              const next = { ...(tenantSettings ?? {}), coaching: { ...coaching, bannersDismissed: dismissed } };
+              void putDashboardJson("/tenant/settings", { settings: next }).then(() => onSettingsChange(next));
+            }}
           />
         </>
       );
@@ -194,6 +244,8 @@ export default function DashboardTabRouter(props: Props) {
             latestReadiness={summary.kpis.latestReadiness}
             trend={summary.trend}
             maturityStage={summary.maturity?.stage}
+            onTabChange={onTabChange}
+            onOpenUpgrade={onOpenUpgrade}
           />
         </>
       );
@@ -219,10 +271,17 @@ export default function DashboardTabRouter(props: Props) {
             apiKey={apiKey}
             loading={loading}
             recentScanIds={summary.recentScans.filter((s) => s.status === "done").map((s) => s.scanId)}
+            tenantSettings={tenantSettings}
+            scansThisMonth={
+              summary.kpis.scansThisMonth ?? (summary.me.scansThisMonth as number | undefined) ?? 0
+            }
             onMessage={onMessage}
             onSettingsChange={onSettingsChange}
             onApiKeyChange={onApiKeyChange}
             onConnect={onConnect}
+            onOpenUpgrade={onOpenUpgrade}
+            scanIdParam={scanIdParam}
+            onTabChange={onTabChange}
           />
         </>
       );
@@ -265,5 +324,14 @@ export default function DashboardTabRouter(props: Props) {
     welcomeInvite,
     checkoutSuccess,
     toursCompleted,
+    tabLoading,
+    tabError,
+    onRetryTab,
+    scanProgress,
+    onRefreshSummary,
+    actionParam,
+    onOpenUpgrade,
   ]);
+
+  return tabBody;
 }

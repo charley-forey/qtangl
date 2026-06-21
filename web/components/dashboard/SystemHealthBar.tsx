@@ -13,6 +13,7 @@ export default function SystemHealthBar({
   quotaLimit,
   apiOk,
   scanProgress,
+  eventsConnected,
 }: {
   schedulerEnabled?: boolean;
   lastScanAt?: string | null;
@@ -20,6 +21,7 @@ export default function SystemHealthBar({
   quotaLimit?: number | null;
   apiOk?: boolean;
   scanProgress?: ScanProgressState | null;
+  eventsConnected?: boolean;
 }) {
   const quotaPct =
     quotaLimit && quotaLimit > 0 && scansThisMonth != null
@@ -37,6 +39,12 @@ export default function SystemHealthBar({
           tone={schedulerEnabled ? "success" : "warning"}
         />
         <StatusPill label={apiOk !== false ? "API connected" : "API error"} tone={apiOk !== false ? "success" : "critical"} />
+        {eventsConnected != null ? (
+          <StatusPill
+            label={eventsConnected ? "Live events" : "Events offline"}
+            tone={eventsConnected ? "success" : "warning"}
+          />
+        ) : null}
         {lastScanAt ? (
           <span className="text-[var(--color-gray-400)]">Last scan: {new Date(lastScanAt).toLocaleString()}</span>
         ) : (

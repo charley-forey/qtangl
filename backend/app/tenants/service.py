@@ -97,7 +97,26 @@ def revoke_api_key(*, key_id: str) -> dict[str, Any]:
 def list_tenant_keys(*, tenant_id: str) -> list[dict[str, Any]]:
     if not persistence_enabled():
         return []
+    from datetime import datetime, timezone
+
+    from sqlalchemy import func
+
+    from app.db.models import ScanJob as ScanJobRow
+
+    now = datetime.now(timezone.utc)
+    month_start = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
     with db_session() as session:
+        scan_counts = {
+            key_id: count
+            for key_id, count in session.query(ScanJobRow.api_key_id, func.count(ScanJobRow.id))
+            .filter(
+                ScanJobRow.tenant_id == tenant_id,
+                ScanJobRow.created_at >= month_start,
+                ScanJobRow.api_key_id.isnot(None),
+            )
+            .group_by(ScanJobRow.api_key_id)
+            .all()
+        }
         rows = session.query(ApiKey).filter(ApiKey.tenant_id == tenant_id).all()
         return [
             {
@@ -108,6 +127,7 @@ def list_tenant_keys(*, tenant_id: str) -> list[dict[str, Any]]:
                 "createdAt": row.created_at.isoformat(),
                 "lastUsedAt": row.last_used_at.isoformat() if row.last_used_at else None,
                 "revoked": row.revoked_at is not None,
+                "scansThisMonth": int(scan_counts.get(row.id, 0)),
             }
             for row in rows
         ]

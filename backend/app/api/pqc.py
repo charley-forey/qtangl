@@ -246,6 +246,13 @@ def scan_pqc(
                         **_report_meta_for_scan(cached, tenant_id=auth.tenant_id),
                     }
 
+    if not request.useFixture:
+        from app.billing.legal import check_legal_acceptance
+
+        legal_error = check_legal_acceptance(tenant_id=auth.tenant_id)
+        if legal_error:
+            raise HTTPException(status_code=402, detail=legal_error)
+
     quota_error = check_production_scan_access(tenant_id=auth.tenant_id, use_fixture=request.useFixture)
     if quota_error:
         from app.telemetry.events import track_event
@@ -359,6 +366,9 @@ def scan_pqc(
                 "tenantId": auth.tenant_id,
                 "depth": request.depth,
             },
+            auth_method=auth.auth_method,
+            api_key_id=auth.api_key_id,
+            actor_email=auth.email,
         )
 
         def runner(on_progress):

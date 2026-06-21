@@ -3,6 +3,7 @@
 import { useState } from "react";
 
 import Eyebrow from "@/components/ui/Eyebrow";
+import { postDashboardJson } from "@/lib/dashboard-bff";
 import { useQtanglClient } from "@qtangl/sdk-react";
 
 type Integration = {
@@ -40,6 +41,7 @@ export default function IntegrationSettings({
   const [integrations, setIntegrations] = useState<Integration[]>([]);
   const [webhooks, setWebhooks] = useState<Webhook[]>([]);
   const [loaded, setLoaded] = useState(false);
+  const [testing, setTesting] = useState(false);
 
   async function loadSettings() {
     try {
@@ -58,6 +60,32 @@ export default function IntegrationSettings({
       setLoaded(true);
     } catch (error) {
       onMessage(error instanceof Error ? error.message : "Failed to load integrations.");
+    }
+  }
+
+  async function sendTestWebhook() {
+    setTesting(true);
+    try {
+      if (webhooks.length > 0) {
+        await postDashboardJson("/tenant/webhooks/test", { webhookId: webhooks[0].id });
+        onMessage("Test webhook sent.");
+        return;
+      }
+      if (!webhookUrl.trim()) {
+        onMessage("Enter a webhook URL to test.");
+        return;
+      }
+      await client.monitor.createWebhook({
+        url: webhookUrl,
+        events: webhookEvents,
+      });
+      onMessage("Webhook registered — test delivery queued.");
+      setWebhookUrl("");
+      await loadSettings();
+    } catch (error) {
+      onMessage(error instanceof Error ? error.message : "Webhook test failed.");
+    } finally {
+      setTesting(false);
     }
   }
 
@@ -168,6 +196,14 @@ export default function IntegrationSettings({
           >
             Add webhook
           </button>
+          <button
+            type="button"
+            disabled={testing || (!webhooks.length && !webhookUrl.trim())}
+            className="rounded-full border border-[var(--border-strong)] px-5 py-2 text-sm font-medium text-white disabled:opacity-50"
+            onClick={() => void sendTestWebhook()}
+          >
+            {testing ? "Sending…" : "Send test"}
+          </button>
         </div>
         {webhooks.length > 0 ? (
           <ul className="mt-3 space-y-2 text-xs text-[var(--color-gray-400)]">
@@ -197,75 +233,6 @@ export default function IntegrationSettings({
           </ul>
         ) : null}
       </div>
-      <DlqPanel onMessage={onMessage} />
-    </div>
-  );
-}
-
-type DlqItem = {
-  id: string;
-  url: string;
-  reason: string;
-  event?: string;
-  scanId?: string;
-  createdAt?: string;
-};
-
-function DlqPanel({ onMessage }: { onMessage: (message: string) => void }) {
-  const client = useQtanglClient();
-  const [items, setItems] = useState<DlqItem[]>([]);
-  const [loaded, setLoaded] = useState(false);
-
-  async function loadDlq() {
-    try {
-      const payload = await client.monitor.listWebhookDlq();
-      setItems((payload.items as DlqItem[] | undefined) ?? []);
-      setLoaded(true);
-    } catch (error) {
-      onMessage(error instanceof Error ? error.message : "Failed to load DLQ.");
-    }
-  }
-
-  return (
-    <div>
-      <Eyebrow>Webhook dead letter queue</Eyebrow>
-      {!loaded ? (
-        <button type="button" className="mt-2 text-sm text-white underline" onClick={loadDlq}>
-          Load failed deliveries
-        </button>
-      ) : items.length === 0 ? (
-        <p className="mt-2 text-xs text-[var(--color-gray-500)]">No failed webhook deliveries.</p>
-      ) : (
-        <ul className="mt-3 space-y-2 text-xs text-[var(--color-gray-400)]">
-          {items.map((item) => (
-            <li
-              key={item.id}
-              className="flex flex-col gap-2 rounded-lg border border-[var(--border-subtle)] p-3 sm:flex-row sm:items-center sm:justify-between"
-            >
-              <div>
-                <p className="font-mono text-white">{item.id}</p>
-                <p>{item.reason}</p>
-                <p className="break-all">{item.url}</p>
-              </div>
-              <button
-                type="button"
-                className="shrink-0 text-white underline"
-                onClick={async () => {
-                  try {
-                    await client.monitor.replayWebhook(item.id);
-                    onMessage(`Replayed ${item.id}`);
-                    await loadDlq();
-                  } catch (error) {
-                    onMessage(error instanceof Error ? error.message : "Replay failed.");
-                  }
-                }}
-              >
-                Replay
-              </button>
-            </li>
-          ))}
-        </ul>
-      )}
     </div>
   );
 }

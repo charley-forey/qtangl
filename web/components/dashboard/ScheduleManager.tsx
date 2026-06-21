@@ -4,7 +4,9 @@ import { useCallback, useEffect, useState } from "react";
 
 import { useQtanglClient } from "@qtangl/sdk-react";
 
-import { fetchDashboardJson, postDashboardJson } from "@/lib/dashboard-bff";
+import CadencePicker from "@/components/dashboard/CadencePicker";
+import { postDashboardJson } from "@/lib/dashboard-bff";
+import { handleDashboardApiError } from "@/lib/dashboard-errors";
 import { type ScheduledScan } from "@/lib/tenant-api";
 import { formatUtcDateTime } from "@/lib/format";
 
@@ -20,11 +22,13 @@ export default function ScheduleManager({
   onRefresh,
   onMessage,
   onOpenUpgrade,
+  maxScansPerMonth,
 }: {
   schedules: ScheduledScan[];
   onRefresh: () => void;
   onMessage: (msg: string) => void;
   onOpenUpgrade?: (product: "monitor") => void;
+  maxScansPerMonth?: number | null;
 }) {
   const client = useQtanglClient();
   const [runsBySchedule, setRunsBySchedule] = useState<Record<string, ScheduleRun[]>>({});
@@ -95,13 +99,11 @@ export default function ScheduleManager({
       setCreateTarget("");
       onRefresh();
     } catch (error) {
-      const message = error instanceof Error ? error.message : "Create failed.";
-      if (message.includes("schedule_quota")) {
+      const handled = handleDashboardApiError(error);
+      if (handled.upgradeProduct) {
         onOpenUpgrade?.("monitor");
-        onMessage("Scheduled monitoring requires Monitor tier. Upgrade to create schedules.");
-        return;
       }
-      onMessage(message);
+      onMessage(handled.message);
     } finally {
       setCreating(false);
     }
@@ -119,12 +121,11 @@ export default function ScheduleManager({
             placeholder="Target domain"
             className="rounded-full border border-[var(--border-strong)] bg-black px-3 py-1.5 text-sm text-white sm:col-span-2"
           />
-          <input
-            type="number"
-            min={1}
+          <CadencePicker
             value={cadenceHours}
-            onChange={(e) => setCadenceHours(Number(e.target.value))}
-            className="rounded-full border border-[var(--border-strong)] bg-black px-3 py-1.5 text-sm text-white"
+            onChange={setCadenceHours}
+            maxScansPerMonth={maxScansPerMonth}
+            targetCount={createTarget.trim() ? 1 : 0}
           />
           <input
             type="email"
@@ -215,12 +216,10 @@ export default function ScheduleManager({
           </div>
           {editingId === schedule.id ? (
             <div className="mt-3 grid gap-2 sm:grid-cols-3">
-              <input
-                type="number"
-                min={1}
+              <CadencePicker
                 value={cadenceHours}
-                onChange={(e) => setCadenceHours(Number(e.target.value))}
-                className="rounded-full border border-[var(--border-strong)] bg-black px-3 py-1.5 text-sm text-white"
+                onChange={setCadenceHours}
+                maxScansPerMonth={maxScansPerMonth}
               />
               <input
                 type="email"
@@ -260,12 +259,11 @@ export default function ScheduleManager({
             placeholder="Target domain"
             className="rounded-full border border-[var(--border-strong)] bg-black px-3 py-1.5 text-sm text-white sm:col-span-2"
           />
-          <input
-            type="number"
-            min={1}
+          <CadencePicker
             value={cadenceHours}
-            onChange={(e) => setCadenceHours(Number(e.target.value))}
-            className="rounded-full border border-[var(--border-strong)] bg-black px-3 py-1.5 text-sm text-white"
+            onChange={setCadenceHours}
+            maxScansPerMonth={maxScansPerMonth}
+            targetCount={createTarget.trim() ? 1 : 0}
           />
           <button
             type="button"

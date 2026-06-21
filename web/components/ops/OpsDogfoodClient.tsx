@@ -2,13 +2,12 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 
 import Card from "@/components/ui/Card";
 import Eyebrow from "@/components/ui/Eyebrow";
 import DogfoodPostureCard from "@/components/dashboard/DogfoodPostureCard";
 import TrustDogfoodSelfScan from "@/components/trust/TrustDogfoodSelfScan";
-import { isQtanglOpsEmail } from "@/lib/ops-gate";
+import OpsShell from "@/components/ops/OpsShell";
 
 const CI_LINKS = [
   { label: "PQC dogfood workflow", href: "https://github.com/charley-forey/qtangl/actions/workflows/pqc-dogfood.yml" },
@@ -27,46 +26,16 @@ const ENV_CHECKLIST = [
 ];
 
 export default function OpsDogfoodClient() {
-  const router = useRouter();
-  const [allowed, setAllowed] = useState<boolean | null>(null);
   const [allFresh, setAllFresh] = useState<boolean | null>(null);
 
   useEffect(() => {
-    fetch("/api/dashboard/me")
-      .then((r) => r.json())
-      .then((me) => {
-        const email = String(me?.session?.email ?? me?.email ?? "");
-        const ok = isQtanglOpsEmail(email);
-        setAllowed(ok);
-        if (!ok) router.replace("/dashboard/login");
-      })
-      .catch(() => {
-        setAllowed(false);
-        router.replace("/dashboard/login");
-      });
     void fetch(`${process.env.NEXT_PUBLIC_QTANGL_API_BASE_URL ?? "https://api.qtangl.com"}/pqc/dogfood/summary`)
       .then((r) => (r.ok ? r.json() : null))
       .then((s) => setAllFresh(s?.freshness?.allFresh ?? null));
-  }, [router]);
-
-  if (allowed === null) {
-    return <main className="mx-auto max-w-3xl px-6 py-16 text-white">Checking access…</main>;
-  }
-  if (!allowed) return null;
+  }, []);
 
   return (
-    <main className="mx-auto max-w-3xl space-y-8 px-6 py-16 text-white">
-      <div>
-        <Eyebrow>Internal ops</Eyebrow>
-        <h1 className="mt-2 text-2xl font-semibold">Dogfood status</h1>
-        <p className="mt-2 text-sm text-[var(--color-gray-400)]">
-          Live self-scan pipeline for trust center and sales proof.{" "}
-          <Link href="/ops/funnel" className="underline">
-            Funnel metrics
-          </Link>
-        </p>
-      </div>
-
+    <OpsShell title="Dogfood status" subtitle="Live self-scan pipeline for trust center and sales proof.">
       <Card tone="panel">
         <p className="text-sm">
           Freshness:{" "}
@@ -83,9 +52,6 @@ export default function OpsDogfoodClient() {
             </li>
           ))}
         </ul>
-        <p className="mt-4 text-xs text-[var(--color-gray-500)]">
-          Manual trigger: GitHub Actions → PQC dogfood scan → Run workflow → enable live.
-        </p>
       </Card>
 
       <Card tone="panel">
@@ -95,9 +61,6 @@ export default function OpsDogfoodClient() {
             <li key={item}>{item}</li>
           ))}
         </ul>
-        <p className="mt-4 text-xs text-[var(--color-gray-500)]">
-          Provision: <code className="text-white">python backend/scripts/provision_dogfood.py</code>
-        </p>
       </Card>
 
       <DogfoodPostureCard />
@@ -107,11 +70,7 @@ export default function OpsDogfoodClient() {
         <Link href="/trust/dogfood" className="underline">
           Public dogfood page
         </Link>
-        {" · "}
-        <Link href="/dashboard" className="underline">
-          Dashboard
-        </Link>
       </p>
-    </main>
+    </OpsShell>
   );
 }

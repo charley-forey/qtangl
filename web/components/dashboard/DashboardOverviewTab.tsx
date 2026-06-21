@@ -13,6 +13,7 @@ import DashboardWidgetGate from "@/components/dashboard/DashboardWidgetGate";
 import ExecutiveDigestCard from "@/components/dashboard/ExecutiveDigestCard";
 import FirstRunChecklist from "@/components/dashboard/FirstRunChecklist";
 import CoachingBanner from "@/components/dashboard/CoachingBanner";
+import ScheduleRecommendationCard from "@/components/dashboard/ScheduleRecommendationCard";
 import PeerBenchmarkSummary from "@/components/dashboard/PeerBenchmarkSummary";
 import { BoardMeetingMode } from "@/components/dashboard/FrameworkDeadlineRoadmap";
 import EvidenceFreshnessCard from "@/components/dashboard/EvidenceFreshnessCard";
@@ -61,6 +62,7 @@ type Props = {
   rolePolicy?: RolePolicy;
   bffMode?: boolean;
   onSettingsChange?: (settings: Record<string, unknown>) => void;
+  onRefreshSummary?: () => void;
 };
 
 export default function DashboardOverviewTab({
@@ -82,6 +84,7 @@ export default function DashboardOverviewTab({
   rolePolicy,
   bffMode = true,
   onSettingsChange,
+  onRefreshSummary,
 }: Props) {
   const { onboarding, capabilities, session } = useDashboardSession();
   const showDogfoodMirror = isQtanglHqTenant(tenantSettings, session?.email);
@@ -142,9 +145,9 @@ export default function DashboardOverviewTab({
   async function dismissBanner(bannerId: string) {
     const coaching = (tenantSettings?.coaching as Record<string, unknown>) ?? {};
     const dismissed = [...((coaching.bannersDismissed as string[]) ?? []), bannerId];
-    await putDashboardJson("/tenant/settings", {
-      settings: { ...tenantSettings, coaching: { ...coaching, bannersDismissed: dismissed } },
-    });
+    const next = { ...(tenantSettings ?? {}), coaching: { ...coaching, bannersDismissed: dismissed } };
+    await putDashboardJson("/tenant/settings", { settings: next });
+    onSettingsChange?.(next);
   }
 
   return (
@@ -184,6 +187,19 @@ export default function DashboardOverviewTab({
         />
       ) : null}
 
+      {needsSchedule && !hasScanDiff ? (
+        <ScheduleRecommendationCard
+          scanAllowlist={(tenantSettings?.scanAllowlist as string[] | undefined) ?? []}
+          dismissed={((tenantSettings?.coaching as { bannersDismissed?: string[] } | undefined)?.bannersDismissed ?? []).includes(
+            "schedule-recommendation"
+          )}
+          onDismiss={() => void dismissBanner("schedule-recommendation")}
+          onMessage={onMessage}
+          onRefresh={onRefreshSummary}
+          onOpenUpgrade={onOpenUpgrade}
+        />
+      ) : null}
+
       {hasScanDiff ? (
         <Card tone="panel" className="rounded-[var(--radius-xl)]">
           <Eyebrow>Drift since last scan</Eyebrow>
@@ -200,22 +216,6 @@ export default function DashboardOverviewTab({
             </Button>
             <Button variant="secondary" size="sm" onClick={() => onTabChange("monitor")}>
               Monitor settings
-            </Button>
-          </div>
-        </Card>
-      ) : needsSchedule ? (
-        <Card tone="strong" className="rounded-[var(--radius-xl)] border-amber-500/20">
-          <Eyebrow>Schedule re-scans</Eyebrow>
-          <p className="mt-3 text-sm leading-7 text-[var(--color-gray-300)]">
-            One scan is a snapshot. Configure weekly or monthly re-scans so crypto drift surfaces before your next
-            audit — requires the Monitor worker and scheduler on your deployment tier.
-          </p>
-          <div className="mt-4 flex flex-wrap gap-3">
-            <Button size="sm" onClick={() => onTabChange("monitor")}>
-              Configure scheduled scans
-            </Button>
-            <Button href="/monitor" variant="secondary" size="sm">
-              Monitor tier overview
             </Button>
           </div>
         </Card>
@@ -241,7 +241,7 @@ export default function DashboardOverviewTab({
           hasScans={summary.recentScans.length > 0}
           hasSchedule={summary.schedulesSummary.active > 0}
           isAdmin={canAdmin}
-          settings={tenantSettings as { firstRunChecklist?: Record<string, boolean> } | undefined}
+          settings={tenantSettings as { firstRunChecklist?: Record<string, boolean>; billing?: Record<string, unknown> } | undefined}
           milestones={summary.coaching?.milestones}
           coachingPhase={summary.coaching?.phase}
           webhookConfigured={Boolean(summary.integrationsSummary?.webhookConfigured)}
@@ -268,7 +268,10 @@ export default function DashboardOverviewTab({
         <DashboardActionQueue
           recommendations={summary.recommendations ?? []}
           onAction={onAction}
-          onDismissed={() => onMessage?.("Recommendation dismissed.")}
+          onDismissed={() => {
+            onMessage?.("Recommendation dismissed.");
+            onRefreshSummary?.();
+          }}
         />
       </DashboardWidgetGate>
 
