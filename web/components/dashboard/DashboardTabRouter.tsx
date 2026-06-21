@@ -11,6 +11,7 @@ import MsspPortfolioPanel from "@/components/dashboard/MsspPortfolioPanel";
 import ProductTour from "@/components/dashboard/ProductTour";
 import type { DashboardPersona } from "@/components/dashboard/DashboardPersonaToggle";
 import type { DashboardTabId } from "@/components/dashboard/DashboardTabs";
+import type { UpgradeProduct } from "@/components/dashboard/UpgradeModal";
 import type {
   DashboardSummary,
   MonitorTabBundle,
@@ -60,7 +61,7 @@ type Props = {
   onOpenReport: (scanId: string) => void;
   onRefreshMonitor: () => void;
   onPortfolioSwitch: () => void;
-  onOpenUpgrade?: (product: "assess" | "monitor") => void;
+  onOpenUpgrade?: (product: UpgradeProduct) => void;
   checkoutSuccess?: string | null;
   tabLoading?: boolean;
   tabError?: string | null;
@@ -280,8 +281,6 @@ export default function DashboardTabRouter(props: Props) {
             onApiKeyChange={onApiKeyChange}
             onConnect={onConnect}
             onOpenUpgrade={onOpenUpgrade}
-            scanIdParam={scanIdParam}
-            onTabChange={onTabChange}
           />
         </>
       );

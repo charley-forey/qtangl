@@ -30,7 +30,7 @@ export const adminEndpoints: Record<string, DocsEndpoint> = {
       { name: "limit", type: "number", required: false, default: "50", description: "Page size (1–200)." },
       { name: "offset", type: "number", required: false, default: "0", description: "Pagination offset." },
     ],
-    pagination: true,
+    pagination: "limit and offset",
     examples: [
       {
         label: "List tenants",
@@ -226,7 +226,7 @@ export const adminEndpoints: Record<string, DocsEndpoint> = {
       { name: "limit", type: "number", required: false, default: "50", description: "Page size (1–200)." },
       { name: "offset", type: "number", required: false, default: "0", description: "Pagination offset." },
     ],
-    pagination: true,
+    pagination: "limit and offset",
     examples: [
       {
         label: "List users",
