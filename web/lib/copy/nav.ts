@@ -3,7 +3,6 @@ import { statusPageHref } from "@/lib/siteConfig";
 export const nav = [
   { name: "Platform", href: "/platform" },
   { name: "Assess", href: "/assess" },
-  { name: "Demo", href: "/assess?scenario=bank-tls-inventory&autorun=1" },
   { name: "Monitor", href: "/monitor" },
   { name: "Convert", href: "/convert" },
   { name: "Pricing", href: "/pricing" },
