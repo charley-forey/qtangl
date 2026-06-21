@@ -11,6 +11,7 @@ import {
 } from "@/lib/assess-config";
 import type { Scenario } from "@/lib/pqc";
 import { trackEvent } from "@/lib/analytics";
+import type { UpgradeProduct } from "@/components/dashboard/UpgradeModal";
 
 import AssessDiscoveryScope from "./AssessDiscoveryScope";
 import AssessModeToggle from "./AssessModeToggle";
@@ -58,7 +59,7 @@ type AssessWizardProps = {
   useBffForDomains?: boolean;
   onDomainsChange?: (domains: string[]) => void;
   onMessage?: (message: string) => void;
-  onOpenUpgrade?: (product: "assess" | "monitor") => void;
+  onOpenUpgrade?: (product: UpgradeProduct) => void;
   onRefresh?: () => void;
   isScanning: boolean;
   scanProgress: string | null;
@@ -378,7 +379,10 @@ export default function AssessWizard({
                 />
                 Lite scan (subset of findings)
               </label>
-              <BundleUploader apiKey={uploadApiKey} onUploaded={onBundleUploaded} />
+              <BundleUploader
+                apiKey={uploadApiKey}
+                onUploaded={(sessionId) => onBundleUploaded(sessionId)}
+              />
             </div>
           </PqcCollapsibleSection>
           {isScanning && (

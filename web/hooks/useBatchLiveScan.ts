@@ -10,6 +10,7 @@ import {
   type BatchScanEntry,
 } from "@/lib/batch-scan-client";
 import { trackDashboardEvent } from "@/lib/dashboard-analytics";
+import type { UpgradeProduct } from "@/components/dashboard/UpgradeModal";
 import { handleDashboardApiError } from "@/lib/dashboard-errors";
 
 type Options = {
@@ -18,7 +19,7 @@ type Options = {
   apiKey?: string;
   onMessage?: (message: string) => void;
   onRefresh?: () => void;
-  onOpenUpgrade?: (product: "assess" | "monitor") => void;
+  onOpenUpgrade?: (product: UpgradeProduct) => void;
 };
 
 export function useBatchLiveScan(options: Options) {

@@ -6,6 +6,7 @@ import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
 import Eyebrow from "@/components/ui/Eyebrow";
 import CadencePicker from "@/components/dashboard/CadencePicker";
+import type { UpgradeProduct } from "@/components/dashboard/UpgradeModal";
 import { useBatchLiveScan } from "@/hooks/useBatchLiveScan";
 
 type Props = {
@@ -17,7 +18,7 @@ type Props = {
   maxScansPerMonth?: number | null;
   onMessage?: (message: string) => void;
   onRefresh?: () => void;
-  onOpenUpgrade?: (product: "assess" | "monitor") => void;
+  onOpenUpgrade?: (product: UpgradeProduct) => void;
 };
 
 export default function BatchScanPanel({

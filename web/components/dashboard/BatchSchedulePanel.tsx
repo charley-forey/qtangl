@@ -8,6 +8,7 @@ import Eyebrow from "@/components/ui/Eyebrow";
 import CadencePicker from "@/components/dashboard/CadencePicker";
 import { startBatchSchedules } from "@/lib/batch-scan-client";
 import { handleDashboardApiError } from "@/lib/dashboard-errors";
+import type { UpgradeProduct } from "@/components/dashboard/UpgradeModal";
 
 type Props = {
   domains: string[];
@@ -17,7 +18,7 @@ type Props = {
   maxScansPerMonth?: number | null;
   onMessage?: (message: string) => void;
   onRefresh?: () => void;
-  onOpenUpgrade?: (product: "monitor") => void;
+  onOpenUpgrade?: (product: UpgradeProduct) => void;
 };
 
 export default function BatchSchedulePanel({

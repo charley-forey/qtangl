@@ -18,6 +18,7 @@ import { trackDashboardEvent } from "@/lib/dashboard-analytics";
 import { fetchDashboardJson } from "@/lib/dashboard-bff";
 
 import LegalAcceptancePanel from "@/components/dashboard/LegalAcceptancePanel";
+import type { UpgradeProduct } from "@/components/dashboard/UpgradeModal";
 import { isLegalAcceptanceCurrent } from "@/lib/dashboard-legal";
 import type { ScanProgressState } from "@/lib/dashboard-state";
 
@@ -43,7 +44,7 @@ type Props = {
   scanProgress?: ScanProgressState | null;
   schedulesActive?: number;
   onDismissScheduleRecommendation?: () => void;
-  onOpenUpgrade?: (product: "monitor") => void;
+  onOpenUpgrade?: (product: UpgradeProduct) => void;
   onRefresh?: () => void;
 };
 

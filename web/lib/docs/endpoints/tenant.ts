@@ -1105,7 +1105,7 @@ export const tenantEndpoints: Record<string, DocsEndpoint> = {
     path: "/tenant/scans/batch",
     summary: "Start live baseline scans for multiple authorized domains.",
     auth: true,
-    role: ROLE_OPERATOR,
+    role: ROLE_WRITE,
     requestFields: [
       { name: "domains", type: "string[]", required: false, description: "Subset to scan; defaults to full allowlist." },
       { name: "industry", type: "string", required: false, description: "Industry for peer comparison." },
@@ -1126,7 +1126,7 @@ export const tenantEndpoints: Record<string, DocsEndpoint> = {
     path: "/tenant/schedules/batch",
     summary: "Create monitor schedules for multiple authorized targets.",
     auth: true,
-    role: ROLE_OPERATOR,
+    role: ROLE_WRITE,
     requestFields: [
       { name: "targets", type: "string[]", required: false, description: "Domains to schedule; defaults to allowlist." },
       { name: "cadenceHours", type: "number", required: false, default: "168", description: "Hours between runs." },

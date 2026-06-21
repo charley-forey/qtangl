@@ -7,6 +7,7 @@ import {
   ASSESS_PRODUCTION_MODE_ENABLED,
 } from "@/lib/assess-config";
 import ProductModeBanner from "@/components/marketing/ProductModeBanner";
+import type { UpgradeProduct } from "@/components/dashboard/UpgradeModal";
 import Card from "@/components/ui/Card";
 import type { CryptoAsset, Scenario } from "@/lib/pqc";
 import { useQtanglApi } from "@/lib/qtangl-api-context";
@@ -38,7 +39,7 @@ type Props = {
   useBffForDomains?: boolean;
   onDomainsChange?: (domains: string[]) => void;
   onMessage?: (message: string) => void;
-  onOpenUpgrade?: (product: "assess" | "monitor") => void;
+  onOpenUpgrade?: (product: UpgradeProduct) => void;
   onRefresh?: () => void;
 };
 

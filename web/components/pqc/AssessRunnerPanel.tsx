@@ -3,6 +3,7 @@
 import Card from "@/components/ui/Card";
 import Eyebrow from "@/components/ui/Eyebrow";
 import type { CryptoAsset, Scenario } from "@/lib/pqc";
+import type { UpgradeProduct } from "@/components/dashboard/UpgradeModal";
 import { QtanglApiProvider } from "@/lib/qtangl-api-context";
 
 import QDayCommandCenter from "./QDayCommandCenter";
@@ -17,7 +18,7 @@ type AssessRunnerPanelProps = {
   canAdminDomains?: boolean;
   onDomainsChange?: (domains: string[]) => void;
   onMessage?: (message: string) => void;
-  onOpenUpgrade?: (product: "assess" | "monitor") => void;
+  onOpenUpgrade?: (product: UpgradeProduct) => void;
   onRefresh?: () => void;
   onScanComplete?: (scanId: string) => void;
 };

@@ -6,6 +6,7 @@ import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
 import Eyebrow from "@/components/ui/Eyebrow";
 import { addAuthorizedDomainsMany } from "@/lib/authorized-domains";
+import type { UpgradeProduct } from "@/components/dashboard/UpgradeModal";
 import { useBatchLiveScan } from "@/hooks/useBatchLiveScan";
 
 type Props = {
@@ -19,7 +20,7 @@ type Props = {
   apiKey?: string;
   onMessage?: (message: string) => void;
   onDomainsChange?: (domains: string[]) => void;
-  onOpenUpgrade?: (product: "assess" | "monitor") => void;
+  onOpenUpgrade?: (product: UpgradeProduct) => void;
   onRefresh?: () => void;
 };
 
