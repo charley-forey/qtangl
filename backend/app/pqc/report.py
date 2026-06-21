@@ -107,6 +107,9 @@ def build_migration_report(
             "cryptoAgilityScore": agility,
         },
     )
+    from app.pqc.findings_delta import attach_findings_delta
+
+    report.executive_summary = attach_findings_delta(report)
     json_payload = report_to_json(report)
     report.signature = sign_report_payload(json_payload)
     from app.pqc.transparency import safe_append_after_sign
@@ -385,14 +388,20 @@ def _report_provenance(report: MigrationReport) -> dict[str, Any]:
     }
 
 
-def report_to_pdf(report: MigrationReport, *, branding: dict[str, Any] | None = None) -> bytes:
+def report_to_pdf(
+    report: MigrationReport,
+    *,
+    branding: dict[str, Any] | None = None,
+    pdf_options: dict[str, Any] | None = None,
+) -> bytes:
     if not _HAS_REPORTLAB:
         payload = json.dumps(report_to_json(report), indent=2).encode("utf-8")
         return payload
 
     from app.pqc.report_pdf import build_pdf
 
-    return build_pdf(report, branding=branding)
+    opts = dict(pdf_options or {})
+    return build_pdf(report, branding=branding, **opts)
 
 
 def _asset_dict(asset: CryptoAsset) -> dict[str, Any]:

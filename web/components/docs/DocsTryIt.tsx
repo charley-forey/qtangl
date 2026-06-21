@@ -63,7 +63,7 @@ export default function DocsTryIt({
       </div>
       {!canLive ? (
         <p className="mt-3 text-xs leading-6 text-[var(--color-gray-500)]">
-          Set NEXT_PUBLIC_QTANGL_SANDBOX_API_KEY to call the live pilot API from the browser.
+          Set NEXT_PUBLIC_QTANGL_SANDBOX_API_KEY to call the live sandbox API from the browser.
         </p>
       ) : null}
       {error ? <p className="status-message--error mt-3">{error}</p> : null}

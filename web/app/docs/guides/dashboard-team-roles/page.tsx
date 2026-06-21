@@ -145,7 +145,7 @@ export default function DashboardTeamRolesGuidePage() {
           Admins can override defaults via{" "}
           <code className="font-mono text-white">PATCH /tenant/settings</code> with a{" "}
           <code className="font-mono text-white">rolePolicies</code> object. There is no Settings form for this yet —
-          contact Qtangl support or use the API for pilot customizations. The persona toggle (Operator vs Executive in
+          contact Qtangl support or use the API for customizations. The persona toggle (Operator vs Executive in
           the header) adjusts layout emphasis only; it does not change security boundaries.
         </p>
       </DocsSection>
@@ -200,7 +200,7 @@ export default function DashboardTeamRolesGuidePage() {
         </div>
         <DocsCallout variant="tip">
           If <strong className="font-medium text-white">Send invite</strong> fails with a tier or upgrade message, upgrade
-          to Monitor (or contact Qtangl for pilot provisioning). Monitor tier allows up to 10 pending/active invites per
+          to Monitor (or contact Qtangl for enterprise provisioning). Monitor tier allows up to 10 pending/active invites per
           tenant by default.
         </DocsCallout>
       </DocsSection>
@@ -246,6 +246,30 @@ export default function DashboardTeamRolesGuidePage() {
           <li>
             <strong className="font-medium text-white">Removed user still has access</strong> — they must sign out;
             membership delete revokes server-side session keys.
+          </li>
+        </ul>
+      </DocsSection>
+
+      <DocsSection>
+        <DocsHeading>API reference</DocsHeading>
+        <ul className="list-disc space-y-2 pl-5 text-sm leading-7 text-[var(--color-gray-300)]">
+          <li>
+            <Link href="/docs/reference/tenant/invites-create" className="text-white underline underline-offset-4">
+              POST /tenant/invites
+            </Link>{" "}
+            ·{" "}
+            <Link href="/docs/reference/tenant/members-list" className="text-white underline underline-offset-4">
+              GET /tenant/members
+            </Link>
+          </li>
+          <li>
+            <Link href="/docs/reference/tenant/api-keys-create" className="text-white underline underline-offset-4">
+              POST /tenant/api-keys
+            </Link>{" "}
+            ·{" "}
+            <Link href="/docs/reference/tenant/sso-portal-link" className="text-white underline underline-offset-4">
+              POST /tenant/sso/portal-link
+            </Link>
           </li>
         </ul>
       </DocsSection>

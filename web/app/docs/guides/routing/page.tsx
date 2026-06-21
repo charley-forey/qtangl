@@ -62,8 +62,6 @@ export default function RoutingGuidePage() {
         pathname="/docs/guides/routing"
         searchIndex={docsSearchIndex}
       >
-        <DocsBadge status="pilot" />
-
         <DocsCallout variant="honesty">
           The API accepts <code className="font-mono text-white">type: routing</code> at the edge,
           but the current backend returns <strong className="text-white">501 Not Implemented</strong>{" "}

@@ -16,6 +16,8 @@ export type DocsNavSection = {
   id: string;
   title: string;
   items: DocsNavItem[];
+  /** When true, section starts collapsed in the sidebar. */
+  defaultCollapsed?: boolean;
 };
 
 export type DocsFieldRow = {

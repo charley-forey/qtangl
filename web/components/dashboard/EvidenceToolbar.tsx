@@ -21,10 +21,10 @@ export default function EvidenceToolbar({
   }
 
   const formats: Array<{ format: "pdf" | "board" | "auditor" | "bundle"; label: string }> = [
-    { format: "pdf", label: "PDF" },
-    { format: "board", label: "Board" },
-    { format: "auditor", label: "Auditor" },
     { format: "bundle", label: "Evidence bundle" },
+    { format: "board", label: "Board PDF" },
+    { format: "pdf", label: "Full PDF" },
+    { format: "auditor", label: "Auditor annex" },
   ];
 
   async function copyVerifyLink() {

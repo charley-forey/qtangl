@@ -64,6 +64,13 @@ function extractMainRoutes() {
   return routes;
 }
 
+/** BFF / internal routes excluded from public docs reference. */
+const INTERNAL_ALLOWLIST = new Set([
+  "GET /internal/dashboard/bootstrap",
+  "GET /internal/dashboard/user",
+  "POST /internal/dashboard/link-invite",
+]);
+
 const documented = documentedRoutes(loadEndpointSources());
 const backendRoutes = [];
 
@@ -74,7 +81,9 @@ for (const file of readdirSync(join(repoRoot, "backend", "app", "api"))) {
 }
 backendRoutes.push(...extractMainRoutes());
 
-const undocumented = backendRoutes.filter((route) => !documented.has(route));
+const undocumented = backendRoutes.filter(
+  (route) => !documented.has(route) && !INTERNAL_ALLOWLIST.has(route),
+);
 
 if (undocumented.length > 0) {
   console.error("Undocumented backend routes:");

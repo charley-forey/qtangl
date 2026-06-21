@@ -22,6 +22,7 @@ def send_report_email(
     readiness_band: str = "",
     subject_prefix: str = "",
     body_extra: str | None = None,
+    attachment: tuple[str, bytes, str] | None = None,
 ) -> dict[str, Any]:
     """Send scan completion email. No-op + log when SMTP is unconfigured."""
     host = os.environ.get("QTANGL_SMTP_HOST")
@@ -46,9 +47,11 @@ def send_report_email(
     )
     if body_extra:
         body += f"Alert: {body_extra}\n\n"
+    if attachment:
+        body += "The board brief PDF is attached to this message.\n\n"
     body += (
-        f"Download your report: {report_url}\n\n"
-        "This link requires your tenant API key. Do not forward publicly.\n"
+        f"Open your dashboard: {report_url}\n\n"
+        "Dashboard links require your tenant login. Do not forward publicly.\n"
     )
 
     message = EmailMessage()
@@ -56,6 +59,15 @@ def send_report_email(
     message["From"] = from_addr
     message["To"] = to_email
     message.set_content(body)
+    if attachment:
+        filename, content, mime_type = attachment
+        maintype, _, subtype = mime_type.partition("/")
+        message.add_attachment(
+            content,
+            maintype=maintype or "application",
+            subtype=subtype or "octet-stream",
+            filename=filename,
+        )
 
     try:
         with smtplib.SMTP(host, port, timeout=15) as server:

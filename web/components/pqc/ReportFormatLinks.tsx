@@ -14,14 +14,25 @@ export type PqcReportFormat =
   | "auditor";
 
 const FORMAT_LABELS: Record<PqcReportFormat, string> = {
-  pdf: "PDF",
+  pdf: "Full PDF",
   cbom: "CBOM",
   json: "JSON",
   csv: "CSV",
-  bundle: "Bundle",
-  executive: "Executive",
-  board: "Board",
-  auditor: "Auditor",
+  bundle: "Evidence bundle (ZIP)",
+  executive: "Executive PDF (4pp)",
+  board: "Board PDF (2pp)",
+  auditor: "Auditor annex PDF",
+};
+
+export const FORMAT_DESCRIPTIONS: Record<PqcReportFormat, string> = {
+  pdf: "Complete technical report: inventory, backlog, migration roadmap, and compliance.",
+  cbom: "CycloneDX 1.6 cryptographic bill of materials for GRC and procurement.",
+  json: "Machine-readable report payload for integrations and automation.",
+  csv: "Spreadsheet-friendly remediation backlog export.",
+  bundle: "All PDF variants, CBOM, JSON, CSV, methodology, and signature in one ZIP.",
+  executive: "Four-page CISO summary with KPIs, priorities, and verify QR.",
+  board: "Two-page board brief with readiness gauge, top decisions, and exposure range.",
+  auditor: "Chain-of-custody annex with scope, control mapping, glossary, and references.",
 };
 
 type ReportFormatLinksProps = {

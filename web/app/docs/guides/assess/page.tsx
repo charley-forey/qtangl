@@ -27,7 +27,7 @@ export default function AssessGuidePage() {
             Start a scan with <code className="font-mono text-white">POST /pqc/scan</code>.
           </li>
           <li>
-            Check progress via <code className="font-mono text-white">GET /pqc/scan-status/{"{scan_id}"}</code>.
+            Check progress via <code className="font-mono text-white">GET /pqc/scan/{"{scan_id}"}</code>.
           </li>
           <li>
             Export evidence with <code className="font-mono text-white">GET /pqc/report/{"{scan_id}"}</code>.

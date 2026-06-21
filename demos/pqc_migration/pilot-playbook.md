@@ -315,36 +315,41 @@ After any scan completes, the backend builds a **scan bundle** and stores it in 
 
 | Format | API | Best for |
 |--------|-----|----------|
-| **PDF** | `GET /pqc/report/{scanId}?format=pdf` | Board, CISO, exec readout |
-| **CBOM** | `GET /pqc/report/{scanId}?format=cbom` | GRC, procurement (CycloneDX 1.6, `qtangl-cbom-v1`) |
+| **Evidence bundle (ZIP)** | `GET /tenant/scans/{scanId}/report?format=bundle` | Auditor handoff — all PDFs + CBOM + JSON + CSV + signature |
+| **Board PDF (2pp)** | `?format=board` | Board / exec readout — gauge, top 3 decisions, Mosca timeline, verify QR |
+| **Full PDF** | `?format=pdf` | Technical deep-dive — inventory, backlog, migration roadmap, compliance |
+| **Executive PDF (4pp)** | `?format=executive` | CISO summary |
+| **Auditor annex PDF** | `?format=auditor` | Scope certificate, control mapping, glossary, chain-of-custody |
+| **CBOM** | `?format=cbom` | GRC, procurement (CycloneDX 1.6, `qtangl-cbom-v1`) |
 | **JSON** | `?format=json` | Integrations, your review |
 | **CSV** | `?format=csv` | Spreadsheet backlog |
+| **Board JSON (legacy)** | `?format=board-json` | Machine-readable board payload (prefer Board PDF) |
 
-**Dashboard PDF link:** `GET /tenant/scans/{scanId}/report?format=pdf&api_key=<tenant-key>`  
-(The dashboard “PDF” button uses the tenant key automatically.)
+**Dashboard links:** `GET /tenant/scans/{scanId}/report?format=bundle` (primary) or `?format=board` for the board brief.  
+(The dashboard evidence toolbar uses the tenant key automatically.)
 
-**Demo UI:** After scan on `/assess`, use **Download PDF report** in the results panel (or **All formats** for CBOM/JSON/CSV).
+**Demo UI:** After scan on `/assess`, open **Evidence exports** — download the **evidence bundle** first, or pick persona PDFs from the drawer.
 
-### PDF contents (compliance report pack)
+### PDF contents (full report pack)
 
-- Branded **cover** with scan ID, readiness band badge, Mosca verdict callout
-- **Executive one-pager** with top-3 priority actions
-- **How to read this report** explainer (readiness, coverage, Mosca, HNDL, severity)
-- **Manual vs Qtangl scoreboard** comparison table
-- Readiness score + coverage confidence + crypto-agility score
-- Full **Mosca HNDL block** (X+Y>Z, variable definitions, interpretation)
-- **Cryptographic inventory** (key size, Shor qubits estimate, paginated)
-- Top **HNDL-exposed asset deep-dive** (TLS cipher/group, SANs, validity)
-- **Standards summary** table with authoritative URLs + gap findings
-- Prioritized **remediation backlog** (severity, PQC algorithm, completion % when tracked)
-- **Handshake proof appendix** (fixture/replayed caveat)
-- **Glossary** + numbered **references** appendices
+- Branded **cover** with scan ID, readiness band, exposure range, peer benchmark note
+- **Scope & authorization** certificate (targets, surfaces, scan depth, authorization date)
+- **Findings delta** vs manual baseline when scoreboard data exists
+- **Executive summary** with top-3 priority actions and KPI table
+- **Risk dashboard** — severity mix chart, algorithm breakdown, horizontal Mosca timeline
+- **Cryptographic inventory** with per-asset explanations (paginated)
+- Top **HNDL-exposed asset deep-dive**
+- Prioritized **remediation backlog** + **migration roadmap** Gantt
+- **Remediation what-if** projection and maturity stage (when available)
+- **Standards / compliance** summary with authoritative URLs
 - **Report integrity** appendix (SHA-256 hash, signature fingerprint, verify QR)
 - Honesty notes (*inventory aid, not formal audit*)
 
+Fixture handshake proofs are omitted from customer PDFs; live handshake appendices appear when captured.
+
 ### Evidence audit ZIP
 
-`GET /tenant/scans/{scanId}/report?format=bundle` — PDF + CBOM + JSON + CSV + methodology + signature in one ZIP.
+`GET /tenant/scans/{scanId}/report?format=bundle` — `report.pdf`, `board.pdf`, `executive.pdf`, `auditor-annex.pdf`, CBOM, JSON, CSV, methodology, glossary, references, signature, discovery provenance.
 
 ### Continuous monitoring (B3)
 
@@ -353,8 +358,9 @@ After any scan completes, the backend builds a **scan bundle** and stores it in 
 
 ### Email delivery
 
-- `POST /tenant/scans/{scanId}/email` with `{ "email": "..." }`
+- `POST /tenant/scans/{scanId}/email` with `{ "email": "...", "format": "board" }` — attaches **board.pdf**
 - Configure `QTANGL_SMTP_*` on Railway; safe no-op + log when unset
+- Scheduled board exports (`boardExportSchedule`) also attach board.pdf
 - Optional `notifyEmail` on schedules for completion alerts
 
 ### Remediation tracking (B4)

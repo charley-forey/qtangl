@@ -15,6 +15,8 @@ Sign-off checklist before GA. Run after `assess.spec.ts` passes on preview and p
 | Honest scope claims | External-only discovery; extended surfaces locked | [x] |
 | scanId hydration scope | Sandbox/public-verify store only | [x] |
 | Live scan legal copy | Authorization checkbox on assess wizard | [x] |
+| Report coherence validation | `backend/tests/test_report_coherence.py`; paid exports blocked on contradiction | [x] |
+| Board PDF (2pp) + evidence bundle | `format=board` returns PDF; ZIP includes all PDF variants | [x] |
 
 **Owner:** Product + Eng  
-**Last reviewed:** 2026-06-19
+**Last reviewed:** 2026-06-21

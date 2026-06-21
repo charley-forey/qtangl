@@ -48,7 +48,7 @@ def main() -> int:
                 "readinessBand": row.get("readinessBand"),
                 "scannedAt": row.get("createdAt") or row.get("updatedAt"),
                 "verifyUrl": f"{public_base}/verify?scanId={scan_id}",
-                "boardPdfUrl": f"{args.base_url.rstrip('/')}/tenant/scans/{scan_id}/report?format=board",
+                "boardReportUrl": f"{args.base_url.rstrip('/')}/tenant/scans/{scan_id}/report?format=board",
             }
         )
 

@@ -233,8 +233,8 @@ jobs:
       - name: Readiness content link check
         run: npm run check:readiness-content
 
-      - name: Docs coverage gate
-        run: node scripts/check_docs_coverage.mjs
+      - name: Docs gates
+        run: npm run check:docs
 
       - name: Schema sync check
         run: node scripts/check_schema_sync.mjs

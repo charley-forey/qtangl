@@ -12,9 +12,10 @@ class PqcScanRequest(BaseModel):
     seed: int = Field(default=1234)
     bundleSessionId: str | None = None
     depth: str = Field(default='standard', pattern=r"^(standard|lite)$")
+    industry: str | None = None
 
 class ScheduleCreateRequest(BaseModel):
-    scenarioId: str = Field(default='bank-tls-inventory')
+    scenarioId: str = Field(default='production-baseline')
     target: str | None = None
     cadenceHours: int = Field(default=168, ge=1, le=8760)
     notifyEmail: str | None = None

@@ -1,6 +1,6 @@
 # Qtangl Documentation Corpus
 
-> Generated 2026-06-17 | API v0.9.0 | https://qtangl.com/docs
+> Generated 2026-06-21 | API v0.9.0 | https://qtangl.com/docs
 
 # Qtangl Agent Context
 
@@ -70,10 +70,19 @@ Hybrid scheduling/routing (`POST /optimize`) is a **Labs expansion** — mention
 - [Assess workflow](https://qtangl.com/docs/guides/assess)
 - [Monitor workflow](https://qtangl.com/docs/guides/monitor-workflow)
 - [Convert workflow](https://qtangl.com/docs/guides/convert)
+- [Report formats & exports](https://qtangl.com/docs/guides/report-formats)
+- [Report branding](https://qtangl.com/docs/guides/report-branding)
+- [Executive digest](https://qtangl.com/docs/guides/executive-digest)
 - [PQC scanner guide](https://qtangl.com/docs/guides/pqc-demo)
 - [Monitor setup](https://qtangl.com/docs/guides/monitor-setup)
 - [Dashboard SSO](https://qtangl.com/docs/guides/sso-setup)
 - [Dashboard team & roles](https://qtangl.com/docs/guides/dashboard-team-roles)
+- [Crypto flip guide](https://qtangl.com/docs/guides/crypto-flip)
+- [Drift monitoring](https://qtangl.com/docs/guides/drift-monitoring)
+- [KMS flip (AWS)](https://qtangl.com/docs/guides/kms-flip-aws)
+- [CLM flip (Venafi)](https://qtangl.com/docs/guides/clm-flip-venafi)
+- [Crypto flip API](https://qtangl.com/docs/reference/crypto-flip-api)
+- [Drift API](https://qtangl.com/docs/reference/drift-api)
 - [Concepts](https://qtangl.com/docs/concepts)
 - [Data formats](https://qtangl.com/docs/data-formats)
 
@@ -97,20 +106,10 @@ Hybrid scheduling/routing (`POST /optimize`) is a **Labs expansion** — mention
 - [GET /pqc/scan/{scanId}](https://qtangl.com/docs/reference/pqc/scan-status)
 - [POST /pqc/handshake/prove](https://qtangl.com/docs/reference/pqc/handshake-prove)
 - [GET /pqc/report/{scanId}](https://qtangl.com/docs/reference/pqc/report)
-- [POST /tenant/scans/{scanId}/share](https://qtangl.com/docs/reference/pqc/passport)
 - [POST /pqc/cbom/ingest](https://qtangl.com/docs/reference/pqc/cbom-import)
 
-### Tenant API reference
+### Tenant API — Scans & reports
 - [RBAC & scopes](https://qtangl.com/docs/reference/rbac)
-
-### Discovery depth
-- [Host sensor deploy](https://qtangl.com/docs/guides/host-sensor-deploy)
-- [Code scan CI](https://qtangl.com/docs/guides/code-scan-ci)
-- [POST /tenant/discovery/fleets](https://qtangl.com/docs/reference/discovery/fleets-create)
-- [GET /tenant/discovery/agents](https://qtangl.com/docs/reference/discovery/agents)
-- [POST /tenant/coverage/code-scan](https://qtangl.com/docs/reference/discovery/code-scan)
-- [POST /tenant/discovery/binary-scan](https://qtangl.com/docs/reference/discovery/binary-scan)
-- [GET /tenant/discovery/jobs/{job_id}](https://qtangl.com/docs/reference/discovery/jobs)
 
 ### Integrations
 - [Integrations overview](https://qtangl.com/docs/integrations/overview)
@@ -154,34 +153,6 @@ Hybrid scheduling/routing (`POST /optimize`) is a **Labs expansion** — mention
 - [Docs contribution](https://qtangl.com/docs/resources/contribution)
 - [Errors & status codes](https://qtangl.com/docs/errors)
 - [JSON schemas](https://qtangl.com/docs/reference/schemas)
-
-### Labs / optimization (expansion)
-- [POST /optimize](https://qtangl.com/docs/reference/optimize)
-- [Routing guide](https://qtangl.com/docs/guides/routing)
-- [Allocation guide](https://qtangl.com/docs/guides/allocation)
-- [Schedule guide](https://qtangl.com/docs/guides/schedule)
-- [Hospital demo guide](https://qtangl.com/docs/guides/hospital-demo)
-- [Airline demo guide](https://qtangl.com/docs/guides/airline-demo)
-- [EV fleet demo guide](https://qtangl.com/docs/guides/ev-fleet-demo)
-- [GET /hospital/roster](https://qtangl.com/docs/reference/hospital/roster)
-- [GET /hospital/scenarios](https://qtangl.com/docs/reference/hospital/scenarios)
-- [GET /hospital/callout](https://qtangl.com/docs/reference/hospital/callout)
-- [GET /hospital/qpu-trace](https://qtangl.com/docs/reference/hospital/qpu-trace)
-- [POST /hospital/upload-roster](https://qtangl.com/docs/reference/hospital/upload-roster)
-- [POST /hospital/callout/solve](https://qtangl.com/docs/reference/hospital/callout-solve)
-- [GET /airline/network](https://qtangl.com/docs/reference/airline/network)
-- [GET /airline/scenarios](https://qtangl.com/docs/reference/airline/scenarios)
-- [GET /airline/disruption](https://qtangl.com/docs/reference/airline/disruption)
-- [GET /airline/qpu-trace](https://qtangl.com/docs/reference/airline/qpu-trace)
-- [POST /airline/upload-crew](https://qtangl.com/docs/reference/airline/upload-crew)
-- [POST /airline/recover/solve](https://qtangl.com/docs/reference/airline/recover-solve)
-- [GET /ev-fleet/depot](https://qtangl.com/docs/reference/ev-fleet/depot)
-- [GET /ev-fleet/scenarios](https://qtangl.com/docs/reference/ev-fleet/scenarios)
-- [GET /ev-fleet/window](https://qtangl.com/docs/reference/ev-fleet/window)
-- [GET /ev-fleet/qpu-trace](https://qtangl.com/docs/reference/ev-fleet/qpu-trace)
-- [POST /ev-fleet/upload-fleet](https://qtangl.com/docs/reference/ev-fleet/upload-fleet)
-- [POST /ev-fleet/upload-stops](https://qtangl.com/docs/reference/ev-fleet/upload-stops)
-- [POST /ev-fleet/plan/solve](https://qtangl.com/docs/reference/ev-fleet/plan-solve)
 
 
 ---

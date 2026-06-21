@@ -4,10 +4,10 @@ import ReferenceEndpointPage from "@/components/docs/ReferenceEndpointPage";
 import { docsEndpoints } from "@/lib/docs/endpoints";
 import { buildPageMetadata } from "@/lib/seo";
 
-const endpoint = docsEndpoints["tenant-passport"]!;
+const endpoint = docsEndpoints["tenant-share-create"]!;
 export const metadata: Metadata = buildPageMetadata({
   path: "/docs/reference/pqc/passport",
-  title: endpoint.title,
+  title: "POST /tenant/scans/{scanId}/share (passport)",
   description: endpoint.summary,
 });
 export default function Page() {

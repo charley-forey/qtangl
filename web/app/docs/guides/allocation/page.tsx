@@ -65,8 +65,6 @@ export default function AllocationGuidePage() {
         pathname="/docs/guides/allocation"
         searchIndex={docsSearchIndex}
       >
-        <DocsBadge status="pilot" />
-
         <DocsCallout variant="honesty">
           <code className="font-mono text-white">type: allocation</code> returns{" "}
           <strong className="text-white">501</strong> on the live API today. Payloads below match

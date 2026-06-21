@@ -12,9 +12,19 @@ type DocsSidebarProps = {
   onNavigate?: () => void;
 };
 
+function initialCollapsedState(): Record<string, boolean> {
+  const state: Record<string, boolean> = {};
+  for (const section of docsSections) {
+    if (section.defaultCollapsed) {
+      state[section.id] = true;
+    }
+  }
+  return state;
+}
+
 export default function DocsSidebar({ onNavigate }: DocsSidebarProps) {
   const pathname = usePathname();
-  const [collapsed, setCollapsed] = useState<Record<string, boolean>>({});
+  const [collapsed, setCollapsed] = useState<Record<string, boolean>>(initialCollapsedState);
 
   function toggleSection(id: string) {
     setCollapsed((current) => ({ ...current, [id]: !current[id] }));

@@ -14,8 +14,10 @@ def build_evidence_bundle(
     report: MigrationReport,
     *,
     remediation_statuses: list[dict[str, Any]] | None = None,
+    branding: dict[str, Any] | None = None,
+    pdf_options: dict[str, Any] | None = None,
 ) -> bytes:
-    """One-download auditor handoff: PDF + CBOM + JSON + CSV + methodology + signature."""
+    """One-download auditor handoff: PDF variants + CBOM + JSON + CSV + methodology + signature."""
     from app.remediation.service import apply_remediation_to_migration_report, merge_remediation_into_report
 
     if remediation_statuses:
@@ -25,6 +27,9 @@ def build_evidence_bundle(
     json_payload = report_to_json(report)
     if remediation_statuses:
         json_payload = merge_remediation_into_report(json_payload, statuses=remediation_statuses)
+
+    opts = dict(pdf_options or {})
+    brand = branding if isinstance(branding, dict) else None
 
     log_inclusion: dict[str, Any] | None = None
     content_hash = (report.signature or {}).get("contentHash")
@@ -36,8 +41,13 @@ def build_evidence_bundle(
         except Exception:
             log_inclusion = None
 
+    from app.pqc.report_pdf import build_auditor_pdf, build_board_pdf, build_executive_pdf
+
     with zipfile.ZipFile(buffer, "w", zipfile.ZIP_DEFLATED) as archive:
-        archive.writestr("report.pdf", report_to_pdf(report))
+        archive.writestr("report.pdf", report_to_pdf(report, branding=brand, pdf_options=opts))
+        archive.writestr("board.pdf", build_board_pdf(report, branding=brand, **opts))
+        archive.writestr("executive.pdf", build_executive_pdf(report, branding=brand, **opts))
+        archive.writestr("auditor-annex.pdf", build_auditor_pdf(report, branding=brand, **opts))
         archive.writestr("report.json", json.dumps(json_payload, indent=2))
         if report.compliance_pack:
             archive.writestr(
@@ -62,6 +72,10 @@ def build_evidence_bundle(
         archive.writestr(
             "methodology.md",
             _methodology_markdown(),
+        )
+        archive.writestr(
+            "scoring-methodology.md",
+            _scoring_methodology_markdown(report),
         )
         archive.writestr(
             "glossary.json",
@@ -124,4 +138,25 @@ and remediation coverage.
 ## Limitations
 This scan is an inventory aid, not a formal audit. Shadow keys, HSMs, and offline
 material may be missed.
+"""
+
+
+def _scoring_methodology_markdown(report: MigrationReport) -> str:
+    from app.pqc.risk import crypto_agility_breakdown, readiness_formula_breakdown
+
+    formula = readiness_formula_breakdown(report.assets)
+    agility = crypto_agility_breakdown(report.assets)
+    return f"""# Scoring methodology (scan {report.scan_id})
+
+Readiness = inventory_baseline + safe% − at_risk% − broken% + hybrid_credit
+
+This scan:
+- Inventory baseline: {formula.get('inventoryBaseline', 0)}
+- Hybrid credit: {formula.get('hybridCredit', 0)}
+- Classified assets: {formula.get('classifiedCount', 0)}
+- Score: {report.readiness_score}/100 ({report.readiness_band})
+
+Crypto agility: {agility.get('score', report.crypto_agility_score or 0)} — {agility.get('interpretation', '')}
+
+Shor qubit estimates are order-of-magnitude only, not Q-Day predictions.
 """

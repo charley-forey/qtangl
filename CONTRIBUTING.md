@@ -74,6 +74,9 @@ npm run test:access
 - [ ] Web lint and build pass locally
 - [ ] No secrets or credentials in the diff (see [roadmap/security/secrets-runbook.md](roadmap/security/secrets-runbook.md))
 - [ ] API or schema changes update docs under `web/app/docs/`
+- [ ] `npm run check:docs` passes (from `web/`)
+- [ ] `npm run generate:docs-index` and `generate:docs-export` run if nav/endpoints changed
+- [ ] Changelog entry in `web/lib/docs/changelog.ts` for user-visible doc changes
 - [ ] Roadmap action item ID referenced in PR description when applicable (see [roadmap/backlog/action-items.md](roadmap/backlog/action-items.md))
 
 ## Branch protection (repository admins)

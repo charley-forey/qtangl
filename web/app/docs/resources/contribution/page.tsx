@@ -57,6 +57,39 @@ export default function DocsContributionPage() {
       </DocsSection>
 
       <DocsSection>
+        <DocsHeading>Engineer runbook</DocsHeading>
+        <p className="text-sm leading-8 text-[var(--color-gray-300)]">
+          Use this checklist when changing product behavior that customers see in docs.
+        </p>
+        <ul className="list-disc space-y-2 pl-5 text-sm leading-7 text-[var(--color-gray-300)]">
+          <li>
+            <strong className="font-medium text-white">Narrative guide</strong> — add{" "}
+            <code className="font-mono text-white">web/app/docs/guides/&lt;slug&gt;/page.tsx</code> using{" "}
+            <code className="font-mono text-white">GuidePageLayout</code>; register in{" "}
+            <code className="font-mono text-white">web/lib/docs/nav.ts</code>.
+          </li>
+          <li>
+            <strong className="font-medium text-white">API reference</strong> — add{" "}
+            <code className="font-mono text-white">defineEndpoint(...)</code> in{" "}
+            <code className="font-mono text-white">web/lib/docs/endpoints/*.ts</code>. Tenant/admin/public routes
+            auto-render via <code className="font-mono text-white">[slug]/page.tsx</code>; core PQC routes may need a
+            static page under <code className="font-mono text-white">web/app/docs/reference/pqc/</code>.
+          </li>
+          <li>
+            Run <code className="font-mono text-white">npm run check:docs</code>, then{" "}
+            <code className="font-mono text-white">npm run generate:docs-index</code> and{" "}
+            <code className="font-mono text-white">npm run generate:docs-export</code> when nav or endpoints change.
+          </li>
+          <li>
+            <strong className="font-medium text-white">Status policy</strong> — do not use{" "}
+            <code className="font-mono text-white">pilot</code> in nav or endpoint registries. Omit{" "}
+            <code className="font-mono text-white">status</code> or set <code className="font-mono text-white">ga</code>.
+            Use <code className="font-mono text-white">deprecated</code> only when sunsetting an endpoint.
+          </li>
+        </ul>
+      </DocsSection>
+
+      <DocsSection>
         <DocsHeading>Publish and maintenance cadence</DocsHeading>
         <p className="text-sm leading-8 text-[var(--color-gray-300)]">
           Merge docs updates with product changes whenever possible. For delayed updates, create a tracked follow-up

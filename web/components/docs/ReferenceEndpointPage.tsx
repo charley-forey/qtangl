@@ -117,7 +117,9 @@ export default function ReferenceEndpointPage({
         searchIndex={docsSearchIndex}
       >
         <div className="flex flex-wrap items-center gap-3">
-          <DocsBadge status={endpoint.status} />
+          {endpoint.status && endpoint.status !== "ga" ? (
+            <DocsBadge status={endpoint.status} />
+          ) : null}
           <span className="font-mono text-sm text-[var(--color-gray-300)]">
             {endpoint.method} {endpoint.path}
           </span>

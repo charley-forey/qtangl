@@ -16,6 +16,19 @@ export const tagToStatus: Record<string, DocsFeatureStatus> = {
 };
 export const changelog: ChangelogEntry[] = [
   {
+    version: "0.9.2-docs",
+    date: "2026-06-21",
+    title: "Documentation IA overhaul",
+    tags: ["docs", "ga"],
+    items: [
+      "Restructured sidebar: grouped Tenant API, collapsed Labs and Discovery, wired Convert subtree.",
+      "Removed Pilot badges site-wide; documented pages are GA by default.",
+      "Added report formats, report branding, and executive digest guides.",
+      "Documented 35+ dashboard, team, billing, and analytics tenant routes.",
+      "CI: docs coverage, orphan page, and no-pilot status gates.",
+    ],
+  },
+  {
     version: "0.9.1-docs",
     date: "2026-06-09",
     title: "Enterprise documentation overhaul",

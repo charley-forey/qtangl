@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 
 import DocsCallout from "@/components/docs/DocsCallout";
 import DocsHeading from "@/components/docs/DocsHeading";
@@ -36,7 +37,7 @@ export default function ConvertGuidePage() {
           </li>
           <li>
             Update status and owner:{" "}
-            <code className="font-mono text-white">PATCH /tenant/scans/{"{scan_id}"}/remediation</code>
+            <code className="font-mono text-white">POST /tenant/scans/{"{scan_id}"}/remediation</code>
           </li>
           <li>
             Pull supporting rationale:{" "}
@@ -75,6 +76,41 @@ export default function ConvertGuidePage() {
           <code className="font-mono text-white">POST /pqc/scan</code> if inventory changed. Publish updated evidence
           through <code className="font-mono text-white">GET /tenant/scans/{"{scan_id}"}/report</code>.
         </p>
+      </DocsSection>
+      <DocsSection>
+        <DocsHeading>Related guides</DocsHeading>
+        <ul className="list-disc space-y-2 pl-5 text-sm leading-7 text-[var(--color-gray-300)]">
+          <li>
+            <Link href="/docs/guides/crypto-flip" className="text-white underline underline-offset-4">
+              Crypto flip workflow
+            </Link>
+          </li>
+          <li>
+            <Link href="/docs/guides/drift-monitoring" className="text-white underline underline-offset-4">
+              Drift monitoring
+            </Link>
+          </li>
+          <li>
+            <Link href="/docs/guides/kms-flip-aws" className="text-white underline underline-offset-4">
+              KMS flip (AWS)
+            </Link>
+          </li>
+          <li>
+            <Link href="/docs/guides/clm-flip-venafi" className="text-white underline underline-offset-4">
+              CLM flip (Venafi)
+            </Link>
+          </li>
+          <li>
+            <Link href="/docs/reference/crypto-flip-api" className="text-white underline underline-offset-4">
+              Crypto flip API reference
+            </Link>
+          </li>
+          <li>
+            <Link href="/docs/reference/drift-api" className="text-white underline underline-offset-4">
+              Drift API reference
+            </Link>
+          </li>
+        </ul>
       </DocsSection>
     </GuidePageLayout>
   );

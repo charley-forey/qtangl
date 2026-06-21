@@ -136,7 +136,6 @@ qtangl-verify --json report.json`;
             <Card className="rounded-2xl">
               <div className="flex items-center gap-2">
                 <p className="font-semibold text-white">@qtangl/sdk (TypeScript)</p>
-                <DocsBadge status="pilot" />
               </div>
               <p className="mt-3 text-sm text-[var(--color-gray-300)]">
                 npm package — OpenAPI-generated types, retries, idempotency, public verify endpoints.
@@ -155,7 +154,6 @@ const client = new QtanglClient({
             <Card className="rounded-2xl">
               <div className="flex items-center gap-2">
                 <p className="font-semibold text-white">qtangl (Python)</p>
-                <DocsBadge status="pilot" />
               </div>
               <p className="mt-3 text-sm text-[var(--color-gray-300)]">
                 PyPI package — Pydantic models, retries, idempotency, offline verify via qtangl-verify.

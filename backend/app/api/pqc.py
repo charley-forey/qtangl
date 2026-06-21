@@ -501,40 +501,52 @@ def download_report(
             headers={"X-Qtangl-Report-Missing-Reason": "bundle_not_found"},
         )
 
-    report = bundle.report
+    from app.pqc.report_export import bundle_report, export_report_response
+
+    report = bundle_report(bundle)
+
     fmt = format.lower()
-    if fmt == "json":
-        body = report_to_json(report)
-        return Response(content=__import__("json").dumps(body), media_type="application/json")
     if fmt == "csv":
         return Response(content=report_to_csv(report), media_type="text/csv")
     if fmt == "cbom":
         body = report_to_cbom(report)
         return Response(content=__import__("json").dumps(body), media_type="application/json")
-    if fmt == "pdf":
-        pdf_bytes = report_to_pdf(report)
-        media_type = "application/pdf" if pdf_bytes[:4] == b"%PDF" else "application/json"
-        return Response(content=pdf_bytes, media_type=media_type)
-    if fmt == "bundle" or fmt == "evidence":
-        from app.pqc.report_bundle import build_evidence_bundle
 
-        content = build_evidence_bundle(report)
-        return Response(
-            content=content,
-            media_type="application/zip",
-            headers={"Content-Disposition": f'attachment; filename="{scan_id}-evidence.zip"'},
+    branding = None
+    if auth.tenant_id not in {"sandbox", ""}:
+        try:
+            from app.tenant.settings import get_tenant_settings_raw
+
+            branding = get_tenant_settings_raw(tenant_id=auth.tenant_id).get("reportBranding") or {}
+        except Exception:
+            branding = None
+    statuses: list[dict[str, Any]] = []
+    if auth.tenant_id not in {"sandbox", ""}:
+        try:
+            from app.remediation.service import list_remediation_status
+
+            statuses = list_remediation_status(tenant_id=auth.tenant_id, scan_id=scan_id)
+        except Exception:
+            statuses = []
+
+    if fmt in {"pdf", "board", "auditor", "bundle", "evidence", "executive", "json"}:
+        if fmt == "executive":
+            return export_report_response(
+                scan_id=scan_id,
+                report=report,
+                export_format="executive",
+                tenant_id=auth.tenant_id,
+                branding=branding if isinstance(branding, dict) else None,
+                remediation_statuses=statuses,
+            )
+        return export_report_response(
+            scan_id=scan_id,
+            report=report,
+            export_format="bundle" if fmt in {"evidence"} else fmt,
+            tenant_id=auth.tenant_id,
+            branding=branding if isinstance(branding, dict) else None,
+            remediation_statuses=statuses,
         )
-    if fmt == "executive":
-        from app.pqc.report import report_to_executive
-
-        body = report_to_executive(report)
-        return Response(content=__import__("json").dumps(body), media_type="application/json")
-    if fmt == "board":
-        body = report_to_board(report)
-        return Response(content=__import__("json").dumps(body), media_type="application/json")
-    if fmt == "auditor":
-        body = report_to_auditor(report)
-        return Response(content=__import__("json").dumps(body), media_type="application/json")
     raise HTTPException(
         status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
         detail="format must be json|csv|cbom|pdf|bundle|evidence|executive|board|auditor",
@@ -882,7 +894,7 @@ def dogfood_auditor_bundle(request: Request) -> dict:
                 "readinessBand": target.get("readinessBand"),
                 "scannedAt": target.get("scannedAt"),
                 "verifyUrl": target.get("verifyUrl"),
-                "boardPdfUrl": f"{public_base}/pqc/scan/{scan_id}/report?format=board",
+                "boardReportUrl": f"{public_base}/pqc/report/{scan_id}?format=board",
             }
         )
     return {

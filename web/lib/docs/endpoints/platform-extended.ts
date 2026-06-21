@@ -13,7 +13,7 @@ function stub(
   return defineEndpoint(id, {
     method,
     path,
-    status: "pilot",
+    status: "ga",
     summary,
     auth,
     role: method === "GET" ? ROLE_ANY : ROLE_WRITE,

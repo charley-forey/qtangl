@@ -19,7 +19,7 @@ export function defineEndpoint(
     id,
     method,
     path,
-    status: input.status ?? "pilot",
+    status: input.status ?? "ga",
     title: input.title ?? `${method} ${path}`,
     summary: input.summary,
     auth: input.auth ?? true,

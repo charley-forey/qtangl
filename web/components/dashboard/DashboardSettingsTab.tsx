@@ -21,6 +21,7 @@ const ApiKeysPanel = dynamic(() => import("@/components/dashboard/ApiKeysPanel")
 const AuthorizedDomainsPanel = dynamic(() => import("@/components/dashboard/AuthorizedDomainsPanel"));
 const BillingHubPanel = dynamic(() => import("@/components/dashboard/BillingHubPanel"));
 const LegalCompliancePanel = dynamic(() => import("@/components/dashboard/LegalCompliancePanel"));
+const ReportBrandingPanel = dynamic(() => import("@/components/dashboard/ReportBrandingPanel"));
 const EvidenceVaultPanel = dynamic(() => import("@/components/pqc/EvidenceVaultPanel"));
 
 type Props = {
@@ -90,6 +91,7 @@ export default function DashboardSettingsTab({
               onSettingsChange({ ...(tenantSettings ?? settings), billing })
             }
           />
+          <ReportBrandingPanel onMessage={onMessage} onSettingsChange={onSettingsChange} />
           <AuthorizedDomainsPanel canAdmin={canAdmin} onMessage={onMessage} />
           <Card tone="panel">
             <Eyebrow>Data export</Eyebrow>

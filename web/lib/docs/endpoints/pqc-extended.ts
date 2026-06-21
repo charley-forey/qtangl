@@ -260,4 +260,14 @@ export const pqcExtendedEndpoints: Record<string, DocsEndpoint> = {
       },
     ],
   }),
+  "pqc-scan-remediation-simulate": defineEndpoint("pqc-scan-remediation-simulate", {
+    method: "POST",
+    path: "/pqc/scan/{scan_id}/remediation/simulate",
+    summary: "Simulate remediation impact for a scan without applying changes.",
+    role: ROLE_ANY,
+    requestFields: [
+      { name: "remediationIds", type: "string[]", required: false, description: "Subset of remediations to simulate." },
+    ],
+    examples: [{ label: "Simulate", response: { status: "success", simulation: {} } }],
+  }),
 };

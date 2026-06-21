@@ -23,7 +23,7 @@ export default function AssessBoardReadoutGuide() {
       <ol className="mt-4 list-decimal space-y-2 pl-5 text-sm text-[var(--color-gray-400)]">
         <li>Executive tab — score, peer band, severity mix</li>
         <li>Compliance tab — framework mapping if regulators are on the call</li>
-        <li>Evidence tab — share verify link; download board PDF export</li>
+        <li>Evidence tab — share verify link; download board PDF (2-page brief)</li>
         <li>ROI framing — link to calculator for budget conversation</li>
       </ol>
       <div className="mt-6 flex flex-wrap gap-3">

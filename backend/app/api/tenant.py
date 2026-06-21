@@ -151,6 +151,7 @@ class CloudIntegrationRequest(BaseModel):
 
 class EmailReportRequest(BaseModel):
     email: str
+    format: str = Field(default="board", pattern="^(board|pdf)$")
 
 
 class ShareLinkRequest(BaseModel):
@@ -579,45 +580,30 @@ def tenant_scan_report(
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Scan report not found.")
 
     from app.pqc.bundle_codec import bundle_from_api_dict
+    from app.pqc.report_export import bundle_report, export_report_response
+    from app.tenant.settings import get_tenant_settings_raw
 
     bundle = bundle_from_api_dict(bundle_dict)
+    report = bundle_report(bundle)
     statuses = list_remediation_status(tenant_id=auth.tenant_id, scan_id=scan_id)
+    branding = get_tenant_settings_raw(tenant_id=auth.tenant_id).get("reportBranding") or {}
 
-    if format == "json":
-        payload = report_to_json(bundle.report)
-        return JSONResponse(content=merge_remediation_into_report(payload, statuses=statuses))
-    if format == "executive":
-        payload = report_to_executive(bundle.report)
-        return JSONResponse(content=merge_remediation_into_report(payload, statuses=statuses))
     if format == "board":
-        from app.pqc.report import report_to_board
-
-        payload = report_to_board(bundle.report)
         try:
             from app.coaching.milestones import record_milestone
 
             record_milestone(tenant_id=auth.tenant_id, name="firstBoardExportAt")
         except Exception:
             pass
-        return JSONResponse(content=merge_remediation_into_report(payload, statuses=statuses))
-    if format == "auditor":
-        from app.pqc.report import report_to_auditor
 
-        payload = report_to_auditor(bundle.report)
-        return JSONResponse(content=merge_remediation_into_report(payload, statuses=statuses))
-    if format == "bundle":
-        content = build_evidence_bundle(bundle.report, remediation_statuses=statuses)
-        return Response(
-            content=content,
-            media_type="application/zip",
-            headers={"Content-Disposition": f'attachment; filename="{scan_id}-evidence.zip"'},
-        )
-    report_for_pdf = apply_remediation_to_migration_report(bundle.report, statuses=statuses)
-    from app.tenant.settings import get_tenant_settings_raw
-
-    branding = get_tenant_settings_raw(tenant_id=auth.tenant_id).get("reportBranding") or {}
-    content = report_to_pdf(report_for_pdf, branding=branding if isinstance(branding, dict) else None)
-    return Response(content=content, media_type="application/pdf")
+    return export_report_response(
+        scan_id=scan_id,
+        report=report,
+        export_format=format,
+        tenant_id=auth.tenant_id,
+        branding=branding if isinstance(branding, dict) else None,
+        remediation_statuses=statuses,
+    )
 
 
 @router.post("/scans/{scan_id}/email")
@@ -630,17 +616,33 @@ def tenant_email_report(
     if bundle_dict is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Scan report not found.")
     from app.pqc.bundle_codec import bundle_from_api_dict
+    from app.pqc.report_export import board_pdf_bytes, bundle_report
+    from app.tenant.settings import get_tenant_settings_raw
 
     bundle = bundle_from_api_dict(bundle_dict)
+    report = bundle_report(bundle)
+    statuses = list_remediation_status(tenant_id=auth.tenant_id, scan_id=scan_id)
+    branding = get_tenant_settings_raw(tenant_id=auth.tenant_id).get("reportBranding") or {}
     import os
 
     base = os.environ.get("QTANGL_PUBLIC_URL", "https://www.qtangl.com")
+    attachment: tuple[str, bytes, str] | None = None
+    if body.format == "board":
+        pdf_bytes = board_pdf_bytes(
+            report,
+            tenant_id=auth.tenant_id,
+            branding=branding if isinstance(branding, dict) else None,
+            remediation_statuses=statuses,
+        )
+        attachment = (f"{scan_id}-board.pdf", pdf_bytes, "application/pdf")
     result = send_report_email(
         to_email=body.email,
         scan_id=scan_id,
-        target_domain=bundle.report.target_domain,
+        target_domain=report.target_domain,
         report_url=f"{base}/dashboard",
-        readiness_band=bundle.report.readiness_band,
+        readiness_band=report.readiness_band,
+        subject_prefix="[Board pack]" if body.format == "board" else "[Report]",
+        attachment=attachment,
     )
     log_action(
         tenant_id=auth.tenant_id,
@@ -1886,10 +1888,28 @@ def tenant_scans_bulk_export(
     buffer = BytesIO()
     with zipfile.ZipFile(buffer, "w", zipfile.ZIP_DEFLATED) as archive:
         for scan_id in body.scanIds[:25]:
-            bundle = load_scan_bundle(scan_id, tenant_id=auth.tenant_id)
-            if not bundle:
+            bundle_dict = load_scan_bundle(scan_id, tenant_id=auth.tenant_id)
+            if not bundle_dict:
                 continue
-            archive.writestr(f"{scan_id}/bundle.json", json.dumps(bundle))
+            from app.pqc.bundle_codec import bundle_from_api_dict
+            from app.pqc.report_export import bundle_report, enrich_report_for_export
+            from app.tenant.settings import get_tenant_settings_raw
+
+            bundle = bundle_from_api_dict(bundle_dict)
+            report = enrich_report_for_export(
+                bundle_report(bundle),
+                tenant_id=auth.tenant_id,
+                remediation_statuses=list_remediation_status(tenant_id=auth.tenant_id, scan_id=scan_id),
+                branding=(get_tenant_settings_raw(tenant_id=auth.tenant_id).get("reportBranding") or {}),
+            )
+            archive.writestr(
+                f"{scan_id}/evidence.zip",
+                build_evidence_bundle(
+                    report,
+                    remediation_statuses=list_remediation_status(tenant_id=auth.tenant_id, scan_id=scan_id),
+                    branding=(get_tenant_settings_raw(tenant_id=auth.tenant_id).get("reportBranding") or {}),
+                ),
+            )
     buffer.seek(0)
     return Response(
         content=buffer.getvalue(),

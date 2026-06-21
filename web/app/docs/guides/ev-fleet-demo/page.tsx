@@ -30,7 +30,6 @@ export default function EvFleetDemoGuidePage() {
         pathname="/docs/guides/ev-fleet-demo"
         searchIndex={docsSearchIndex}
       >
-        <DocsBadge status="pilot" />
         <DocsSection>
           <DocsHeading>Interactive demo</DocsHeading>
           <p className="text-sm leading-8 text-[var(--color-gray-300)]">

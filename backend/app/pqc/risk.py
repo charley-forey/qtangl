@@ -313,6 +313,73 @@ def crypto_agility_score(assets: list[CryptoAsset]) -> float:
     return round(min(100.0, score), 1)
 
 
+def crypto_agility_breakdown(assets: list[Any]) -> dict[str, Any]:
+    """Sub-factors for scoring transparency appendix."""
+    from app.pqc.risk import classified_assets
+
+    inventory = classified_assets(assets)
+    if not inventory:
+        return {"score": 0.0, "interpretation": "No classified assets."}
+    pqc_ready = sum(1 for asset in inventory if asset.pqc_ready)
+    short_lived = sum(1 for asset in inventory if (asset.validity_days or 365) <= 90)
+    tls_assets = [a for a in inventory if a.kind == "tls"]
+    modern_tls = sum(1 for asset in tls_assets if asset.tls_version and asset.tls_version.startswith("TLS 1.3"))
+    broken = sum(1 for asset in inventory if asset.vulnerability.status == "broken")
+    reuse = sum(1 for asset in inventory if asset.metadata.get("keyReusePeers"))
+    score = (
+        30.0 * (pqc_ready / len(inventory))
+        + 25.0 * (short_lived / len(inventory))
+        + 25.0 * (modern_tls / max(1, len(tls_assets)))
+        + 20.0 * (1.0 - broken / len(inventory))
+    )
+    interpretation = "Moderate agility"
+    if reuse >= 2:
+        interpretation = f"Low agility — shared keys across {reuse} endpoint(s)"
+    elif score >= 70:
+        interpretation = "High agility — strong PQC/TLS modernization signals"
+    return {
+        "score": round(min(100.0, score), 1),
+        "pqcReadyShare": round(100.0 * pqc_ready / len(inventory), 1),
+        "shortLivedShare": round(100.0 * short_lived / len(inventory), 1),
+        "modernTlsShare": round(100.0 * modern_tls / max(1, len(tls_assets)), 1),
+        "keyReuseEndpoints": reuse,
+        "interpretation": interpretation,
+    }
+
+
+def readiness_formula_breakdown(assets: list[Any]) -> dict[str, Any]:
+    """Expose readiness math for PDF methodology appendix."""
+    from app.pqc.risk import classified_assets
+
+    inventory = classified_assets(assets)
+    if not inventory:
+        return {"score": 0.0, "inventoryBaseline": 0.0, "hybridCredit": 0.0, "classifiedCount": 0}
+    pqc_ready = sum(1 for asset in inventory if asset.pqc_ready)
+    safe = sum(1 for asset in inventory if asset.vulnerability.status == "safe")
+    at_risk = sum(1 for asset in inventory if asset.vulnerability.status == "at-risk")
+    broken = sum(1 for asset in inventory if asset.vulnerability.status == "broken")
+    total = len(inventory)
+    hybrid_credit = (pqc_ready / total) * 20.0
+    inventory_baseline = min(30.0, 10.0 + total * 2.5)
+    raw = (
+        inventory_baseline
+        + 100.0 * (safe / total)
+        - 12.0 * (at_risk / total)
+        - 25.0 * (broken / total)
+        + hybrid_credit
+    )
+    return {
+        "score": round(max(10.0, min(95.0, raw)), 1),
+        "inventoryBaseline": round(inventory_baseline, 1),
+        "hybridCredit": round(hybrid_credit, 1),
+        "safeCount": safe,
+        "atRiskCount": at_risk,
+        "brokenCount": broken,
+        "classifiedCount": total,
+        "pqcReadyCount": pqc_ready,
+    }
+
+
 def scoreboard_summary_dict(scoreboard: RiskScoreboard) -> dict[str, Any]:
     from dataclasses import asdict
 

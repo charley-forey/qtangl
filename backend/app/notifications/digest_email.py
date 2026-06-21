@@ -231,6 +231,25 @@ def process_due_board_exports() -> int:
                 continue
             scan_id = str(latest["scanId"])
             report_url = f"/tenant/scans/{scan_id}/report?format=board"
+            from app.pqc.bundle_codec import bundle_from_api_dict
+            from app.pqc.report_export import board_pdf_bytes, bundle_report
+            from app.store.scan_jobs import load_scan_bundle
+
+            bundle_dict = load_scan_bundle(scan_id, tenant_id=row.tenant_id)
+            attachment: tuple[str, bytes, str] | None = None
+            if bundle_dict:
+                bundle = bundle_from_api_dict(bundle_dict)
+                report = bundle_report(bundle)
+                branding = settings.get("reportBranding") or {}
+                try:
+                    pdf_bytes = board_pdf_bytes(
+                        report,
+                        tenant_id=row.tenant_id,
+                        branding=branding if isinstance(branding, dict) else None,
+                    )
+                    attachment = (f"{scan_id}-board.pdf", pdf_bytes, "application/pdf")
+                except Exception as exc:
+                    logger.warning("Board PDF attachment skipped tenant=%s scan=%s: %s", row.tenant_id, scan_id, exc)
             for recipient in recipients[:5]:
                 result = send_report_email(
                     to_email=str(recipient),
@@ -239,6 +258,7 @@ def process_due_board_exports() -> int:
                     report_url=report_url,
                     readiness_band=str(latest.get("readinessBand") or ""),
                     subject_prefix="[Scheduled board pack]",
+                    attachment=attachment,
                 )
                 if result.get("sent"):
                     sent += 1

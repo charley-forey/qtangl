@@ -5,6 +5,20 @@
   },
   "item": [
     {
+      "name": "GET /admin/analytics/funnel",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/admin/analytics/funnel",
+        "description": "Admin Analytics Funnel"
+      }
+    },
+    {
       "name": "DELETE /admin/keys/{key_id}",
       "request": {
         "method": "DELETE",
@@ -19,6 +33,34 @@
       }
     },
     {
+      "name": "GET /admin/platform/summary",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/admin/platform/summary",
+        "description": "Admin Platform Summary"
+      }
+    },
+    {
+      "name": "GET /admin/tenants",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/admin/tenants",
+        "description": "Admin List Tenants"
+      }
+    },
+    {
       "name": "POST /admin/tenants",
       "request": {
         "method": "POST",
@@ -30,6 +72,48 @@
         ],
         "url": "{{baseUrl}}/admin/tenants",
         "description": "Admin Create Tenant"
+      }
+    },
+    {
+      "name": "GET /admin/tenants/{tenant_id}",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/admin/tenants/example",
+        "description": "Admin Get Tenant"
+      }
+    },
+    {
+      "name": "PATCH /admin/tenants/{tenant_id}",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/admin/tenants/example",
+        "description": "Admin Patch Tenant"
+      }
+    },
+    {
+      "name": "PUT /admin/tenants/{tenant_id}/authorized-domains",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/admin/tenants/example/authorized-domains",
+        "description": "Admin Set Authorized Domains"
       }
     },
     {
@@ -58,6 +142,48 @@
         ],
         "url": "{{baseUrl}}/admin/tenants/example/keys",
         "description": "Admin Issue Key"
+      }
+    },
+    {
+      "name": "PUT /admin/tenants/{tenant_id}/mssp-parent",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/admin/tenants/example/mssp-parent",
+        "description": "Admin Set Mssp Parent"
+      }
+    },
+    {
+      "name": "PUT /admin/tenants/{tenant_id}/settings",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/admin/tenants/example/settings",
+        "description": "Admin Upsert Tenant Settings"
+      }
+    },
+    {
+      "name": "GET /admin/users",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/admin/users",
+        "description": "Admin List Users"
       }
     },
     {
@@ -425,6 +551,48 @@
       }
     },
     {
+      "name": "GET /internal/dashboard/bootstrap",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/internal/dashboard/bootstrap",
+        "description": "Dashboard Bootstrap"
+      }
+    },
+    {
+      "name": "POST /internal/dashboard/link-invite",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/internal/dashboard/link-invite",
+        "description": "Dashboard Link Invite"
+      }
+    },
+    {
+      "name": "GET /internal/dashboard/user",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/internal/dashboard/user",
+        "description": "Dashboard User Lookup"
+      }
+    },
+    {
       "name": "GET /metrics",
       "request": {
         "method": "GET",
@@ -551,6 +719,34 @@
       }
     },
     {
+      "name": "GET /pqc/dogfood/auditor-bundle",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/pqc/dogfood/auditor-bundle",
+        "description": "Dogfood Auditor Bundle"
+      }
+    },
+    {
+      "name": "GET /pqc/dogfood/history",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/pqc/dogfood/history",
+        "description": "Dogfood History Endpoint"
+      }
+    },
+    {
       "name": "GET /pqc/dogfood/latest",
       "request": {
         "method": "GET",
@@ -562,6 +758,20 @@
         ],
         "url": "{{baseUrl}}/pqc/dogfood/latest",
         "description": "Dogfood Latest"
+      }
+    },
+    {
+      "name": "GET /pqc/dogfood/summary",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/pqc/dogfood/summary",
+        "description": "Dogfood Summary"
       }
     },
     {
@@ -901,6 +1111,20 @@
       }
     },
     {
+      "name": "POST /public/assess-signup",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/public/assess-signup",
+        "description": "Public Assess Signup"
+      }
+    },
+    {
       "name": "POST /public/lead-capture",
       "request": {
         "method": "POST",
@@ -985,6 +1209,20 @@
       }
     },
     {
+      "name": "POST /public/workos/webhook",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/public/workos/webhook",
+        "description": "Workos Webhook"
+      }
+    },
+    {
       "name": "GET /r/{token}",
       "request": {
         "method": "GET",
@@ -1027,6 +1265,62 @@
       }
     },
     {
+      "name": "POST /tenant/ai/explain-portfolio",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/ai/explain-portfolio",
+        "description": "Tenant Ai Explain Portfolio"
+      }
+    },
+    {
+      "name": "POST /tenant/ai/explain-scan",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/ai/explain-scan",
+        "description": "Tenant Ai Explain Scan"
+      }
+    },
+    {
+      "name": "POST /tenant/alerts/read-all",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/alerts/read-all",
+        "description": "Tenant Mark All Alerts Read"
+      }
+    },
+    {
+      "name": "PATCH /tenant/alerts/{alert_id}/read",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/alerts/example/read",
+        "description": "Tenant Mark Alert Read"
+      }
+    },
+    {
       "name": "GET /tenant/analytics/anomaly",
       "request": {
         "method": "GET",
@@ -1052,6 +1346,76 @@
         ],
         "url": "{{baseUrl}}/tenant/analytics/forecast",
         "description": "Tenant Forecast"
+      }
+    },
+    {
+      "name": "GET /tenant/analytics/readiness-trend",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/analytics/readiness-trend",
+        "description": "Tenant Readiness Trend"
+      }
+    },
+    {
+      "name": "POST /tenant/analytics/track",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/analytics/track",
+        "description": "Tenant Track Event"
+      }
+    },
+    {
+      "name": "GET /tenant/api-keys",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/api-keys",
+        "description": "Tenant List Api Keys"
+      }
+    },
+    {
+      "name": "POST /tenant/api-keys",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/api-keys",
+        "description": "Tenant Create Api Key"
+      }
+    },
+    {
+      "name": "DELETE /tenant/api-keys/{key_id}",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/api-keys/example",
+        "description": "Tenant Revoke Api Key"
       }
     },
     {
@@ -1083,6 +1447,34 @@
       }
     },
     {
+      "name": "GET /tenant/authorized-domains",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/authorized-domains",
+        "description": "Tenant Authorized Domains Get"
+      }
+    },
+    {
+      "name": "POST /tenant/authorized-domains",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/authorized-domains",
+        "description": "Tenant Authorized Domains Post"
+      }
+    },
+    {
       "name": "GET /tenant/benchmarks",
       "request": {
         "method": "GET",
@@ -1097,9 +1489,37 @@
       }
     },
     {
+      "name": "POST /tenant/billing/checkout",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/billing/checkout",
+        "description": "Tenant Billing Checkout"
+      }
+    },
+    {
       "name": "GET /tenant/billing/portal",
       "request": {
         "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/billing/portal",
+        "description": "Tenant Billing Portal"
+      }
+    },
+    {
+      "name": "POST /tenant/billing/portal",
+      "request": {
+        "method": "POST",
         "header": [
           {
             "key": "Authorization",
@@ -1164,6 +1584,90 @@
         ],
         "url": "{{baseUrl}}/tenant/coverage/code-scan",
         "description": "Tenant Code Scan Async"
+      }
+    },
+    {
+      "name": "POST /tenant/dashboard/digest/preview",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/dashboard/digest/preview",
+        "description": "Tenant Dashboard Digest Preview"
+      }
+    },
+    {
+      "name": "POST /tenant/dashboard/digest/send-test",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/dashboard/digest/send-test",
+        "description": "Tenant Dashboard Digest Send Test"
+      }
+    },
+    {
+      "name": "GET /tenant/dashboard/events",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/dashboard/events",
+        "description": "Tenant Dashboard Events"
+      }
+    },
+    {
+      "name": "GET /tenant/dashboard/recommendations",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/dashboard/recommendations",
+        "description": "Tenant Dashboard Recommendations"
+      }
+    },
+    {
+      "name": "GET /tenant/dashboard/summary",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/dashboard/summary",
+        "description": "Tenant Dashboard Summary"
+      }
+    },
+    {
+      "name": "GET /tenant/dashboard/tab/{tab_name}",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/dashboard/tab/example",
+        "description": "Tenant Dashboard Tab"
       }
     },
     {
@@ -1839,6 +2343,62 @@
       }
     },
     {
+      "name": "GET /tenant/invites",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/invites",
+        "description": "Tenant List Invites"
+      }
+    },
+    {
+      "name": "POST /tenant/invites",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/invites",
+        "description": "Tenant Create Invite"
+      }
+    },
+    {
+      "name": "DELETE /tenant/invites/{invite_id}",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/invites/example",
+        "description": "Tenant Revoke Invite"
+      }
+    },
+    {
+      "name": "POST /tenant/legal/accept",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/legal/accept",
+        "description": "Tenant Legal Accept"
+      }
+    },
+    {
       "name": "GET /tenant/me",
       "request": {
         "method": "GET",
@@ -1850,6 +2410,48 @@
         ],
         "url": "{{baseUrl}}/tenant/me",
         "description": "Tenant Me"
+      }
+    },
+    {
+      "name": "GET /tenant/members",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/members",
+        "description": "Tenant List Members"
+      }
+    },
+    {
+      "name": "DELETE /tenant/members/{membership_id}",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/members/example",
+        "description": "Tenant Remove Member"
+      }
+    },
+    {
+      "name": "PATCH /tenant/members/{membership_id}",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/members/example",
+        "description": "Tenant Update Member Role"
       }
     },
     {
@@ -1895,6 +2497,20 @@
       }
     },
     {
+      "name": "PATCH /tenant/onboarding",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/onboarding",
+        "description": "Tenant Patch Onboarding"
+      }
+    },
+    {
       "name": "GET /tenant/partner/children",
       "request": {
         "method": "GET",
@@ -1920,6 +2536,20 @@
         ],
         "url": "{{baseUrl}}/tenant/partner/children",
         "description": "Tenant Partner Link Child"
+      }
+    },
+    {
+      "name": "GET /tenant/partner/portfolio-summary",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/partner/portfolio-summary",
+        "description": "Tenant Partner Portfolio Summary"
       }
     },
     {
@@ -1976,6 +2606,20 @@
         ],
         "url": "{{baseUrl}}/tenant/portfolio/command-center",
         "description": "Tenant Portfolio Command Center"
+      }
+    },
+    {
+      "name": "POST /tenant/recommendations/{recommendation_id}/dismiss",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/recommendations/example/dismiss",
+        "description": "Tenant Dismiss Recommendation"
       }
     },
     {
@@ -2144,6 +2788,20 @@
         ],
         "url": "{{baseUrl}}/tenant/scans",
         "description": "Tenant Scans"
+      }
+    },
+    {
+      "name": "POST /tenant/scans/bulk-export",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/scans/bulk-export",
+        "description": "Tenant Scans Bulk Export"
       }
     },
     {
@@ -2441,6 +3099,20 @@
       }
     },
     {
+      "name": "POST /tenant/sso/portal-link",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/sso/portal-link",
+        "description": "Tenant Sso Portal Link"
+      }
+    },
+    {
       "name": "GET /tenant/webhooks",
       "request": {
         "method": "GET",
@@ -2508,6 +3180,20 @@
         ],
         "url": "{{baseUrl}}/tenant/webhooks/example",
         "description": "Tenant Delete Webhook"
+      }
+    },
+    {
+      "name": "PATCH /tenant/workspace",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/workspace",
+        "description": "Tenant Workspace Patch"
       }
     }
   ],

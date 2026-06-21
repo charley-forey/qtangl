@@ -409,6 +409,33 @@ export const publicEndpoints: Record<string, DocsEndpoint> = {
       },
     ],
   }),
+  "public-assess-signup": defineEndpoint("public-assess-signup", {
+    method: "POST",
+    path: "/public/assess-signup",
+    summary: "Self-serve assess signup: capture email and provision starter tenant access.",
+    auth: false,
+    role: ROLE_PUBLIC,
+    requestFields: [
+      { name: "email", type: "string", required: true, description: "Work email for tenant provisioning." },
+      { name: "company", type: "string", required: false, description: "Organization name." },
+    ],
+    examples: [
+      {
+        label: "Assess signup",
+        request: { email: "security@acme.com", company: "Acme Corp" },
+        response: { status: "success", provisioned: true },
+      },
+    ],
+  }),
+  "public-workos-webhook": defineEndpoint("public-workos-webhook", {
+    method: "POST",
+    path: "/public/workos/webhook",
+    summary: "Receive WorkOS directory-sync and SSO lifecycle webhook events.",
+    auth: false,
+    role: ROLE_PUBLIC,
+    notes: ["Requires WorkOS webhook signature verification."],
+    examples: [{ label: "Webhook event", response: { status: "success", accepted: true } }],
+  }),
   "public-stripe-webhook": defineEndpoint("public-stripe-webhook", {
     method: "POST",
     path: "/public/stripe-webhook",

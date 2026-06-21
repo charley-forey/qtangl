@@ -8,9 +8,14 @@ import { pqcReportDownloadUrl } from "@/lib/pqc";
 import type { PqcScanResponse } from "@/lib/pqc";
 
 import ReferencesPanel from "./ReferencesPanel";
-import ReportFormatLinks, { shortScanId } from "./ReportFormatLinks";
+import ReportFormatLinks, {
+  FORMAT_DESCRIPTIONS,
+  shortScanId,
+  type PqcReportFormat,
+} from "./ReportFormatLinks";
 
-const DRAWER_FORMATS = ["pdf", "cbom", "json", "csv", "bundle", "executive", "board", "auditor"] as const;
+const SECONDARY_FORMATS: PqcReportFormat[] = ["board", "pdf", "executive", "auditor"];
+const OTHER_FORMATS: PqcReportFormat[] = ["cbom", "json", "csv"];
 
 export default function ReportDrawer({
   open,
@@ -84,7 +89,7 @@ export default function ReportDrawer({
             {reportStatus === "checking"
               ? "Checking report availability…"
               : reportStatus === "ready"
-                ? "All formats ready to download"
+                ? "Start with the evidence bundle for auditor handoff"
                 : `Unavailable${missingReason ? ` (${missingReason})` : ""}`}
           </p>
         </header>
@@ -97,34 +102,62 @@ export default function ReportDrawer({
           ) : null}
 
           <a
-            href={ready ? pqcReportDownloadUrl(scan.scanId, "pdf") : "#"}
+            href={ready ? pqcReportDownloadUrl(scan.scanId, "bundle") : "#"}
             target="_blank"
             rel="noreferrer"
             onClick={(event) => {
               if (!ready) event.preventDefault();
-              else trackEvent("pqc_report_downloaded", { format: "pdf", scanId: scan.scanId });
+              else trackEvent("pqc_report_downloaded", { format: "bundle", scanId: scan.scanId });
             }}
-            className="mb-4 flex h-11 w-full items-center justify-center rounded-full bg-white text-sm font-semibold text-black transition hover:bg-neutral-100"
+            className="mb-2 flex h-11 w-full items-center justify-center rounded-full bg-white text-sm font-semibold text-black transition hover:bg-neutral-100"
           >
-            Download PDF report
+            Download evidence bundle
           </a>
+          <p className="mb-4 text-[10px] leading-relaxed text-[var(--color-gray-500)]">
+            {FORMAT_DESCRIPTIONS.bundle}
+          </p>
 
           <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.14em] text-[var(--color-gray-500)]">
-            Other formats
+            Persona PDFs
           </p>
           <ReportFormatLinks
             scanId={scan.scanId}
             reportStatus={reportStatus}
-            formats={DRAWER_FORMATS.filter((f) => f !== "pdf")}
+            formats={SECONDARY_FORMATS}
+            variant="pill"
+          />
+          <ul className="mb-4 mt-2 space-y-1 text-[10px] text-[var(--color-gray-500)]">
+            {SECONDARY_FORMATS.map((format) => (
+              <li key={format}>
+                <span className="text-[var(--color-gray-400)]">{FORMAT_DESCRIPTIONS[format].split(".")[0]}.</span>
+              </li>
+            ))}
+          </ul>
+
+          <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.14em] text-[var(--color-gray-500)]">
+            Structured exports
+          </p>
+          <ReportFormatLinks
+            scanId={scan.scanId}
+            reportStatus={reportStatus}
+            formats={OTHER_FORMATS}
             variant="pill"
           />
 
-          <a
-            href={`/verify?scanId=${encodeURIComponent(scan.scanId)}`}
-            className="mt-4 inline-block text-xs text-[var(--color-gray-300)] underline underline-offset-4 hover:text-white"
-          >
-            Verify signature independently →
-          </a>
+          <div className="mt-4 space-y-2 border-t border-[var(--color-border)] pt-4 text-xs">
+            <a
+              href={`/verify?scanId=${encodeURIComponent(scan.scanId)}`}
+              className="inline-block text-[var(--color-gray-300)] underline underline-offset-4 hover:text-white"
+            >
+              Verify signature independently →
+            </a>
+            <a
+              href="/docs/reference/pqc/passport"
+              className="block text-[var(--color-gray-400)] underline underline-offset-4 hover:text-white"
+            >
+              Share via Readiness Passport (dashboard) →
+            </a>
+          </div>
 
           {notes.length > 0 ? (
             <ul className="mt-6 space-y-2 border-t border-[var(--color-border)] pt-4 text-xs leading-relaxed text-[var(--color-gray-400)]">

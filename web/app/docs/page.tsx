@@ -35,7 +35,7 @@ export default function DocsPage() {
         pathname="/docs"
         searchIndex={docsSearchIndex}
       >
-        <p className="text-xs text-[var(--color-gray-500)]">Last updated: 2026-06-09</p>
+        <p className="text-xs text-[var(--color-gray-500)]">Last updated: 2026-06-21</p>
 
         <DocsCallout variant="honesty">
           Inventory aid, not formal audit. Quantum-vulnerable algorithms are not broken today — Qtangl
@@ -62,27 +62,27 @@ export default function DocsPage() {
         </DocsSection>
 
         <DocsSection>
-          <DocsHeading>Start here — PQC</DocsHeading>
+          <DocsHeading>Start here — PQC journey</DocsHeading>
           <div className="grid gap-4 sm:grid-cols-2">
             <FeatureCard
-              title="Q-Day assessment scanner"
-              description="Run a live scan with pre-built scenarios."
-              href="/assess"
+              title="Assess workflow"
+              description="Run a baseline scan and persist results."
+              href="/docs/guides/assess"
             />
             <FeatureCard
-              title="PQC demo guide"
-              description="Step-by-step scan, CBOM, and verify workflow."
-              href="/docs/guides/pqc-demo"
+              title="Report formats"
+              description="PDF, bundle, executive, board, and auditor exports."
+              href="/docs/guides/report-formats"
             />
             <FeatureCard
-              title="Verify a report"
-              description="Check signed assessment evidence."
-              href="/verify"
+              title="Verify evidence"
+              description="Independently check signed assessment proofs."
+              href="/docs/guides/verify"
             />
             <FeatureCard
-              title="Q-Day education hub"
-              description="HNDL, Mosca, deadlines, and CBOM guides."
-              href="/q-day"
+              title="Monitor workflow"
+              description="Scheduled re-scans, drift alerts, and remediation."
+              href="/docs/guides/monitor-workflow"
             />
           </div>
         </DocsSection>
@@ -103,10 +103,10 @@ export default function DocsPage() {
 
         <DocsSection>
           <DocsCallout variant="info" title="Labs / optimization (expansion)">
-            Hybrid scheduling and routing APIs remain available for pilot customers. Primary documentation
+            Hybrid scheduling and routing APIs remain available for expansion demos. Primary documentation
             focuses on Q-Day readiness — Assess, Monitor, Convert. See{" "}
-            <Link href="/labs">Labs</Link> or the Labs section in the documentation map for optimization
-            guides and <code className="text-xs">POST /optimize</code> reference.
+            <Link href="/docs/labs">Labs overview</Link> for optimization guides and{" "}
+            <code className="text-xs">POST /optimize</code> reference.
           </DocsCallout>
         </DocsSection>
 

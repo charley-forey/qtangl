@@ -31,8 +31,6 @@ export default function HospitalDemoGuidePage() {
         pathname="/docs/guides/hospital-demo"
         searchIndex={docsSearchIndex}
       >
-        <DocsBadge status="pilot" />
-
         <DocsSection>
           <DocsHeading>Interactive demo</DocsHeading>
           <p className="text-sm leading-8 text-[var(--color-gray-300)]">

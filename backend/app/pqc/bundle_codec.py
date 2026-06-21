@@ -4,13 +4,87 @@ import json
 from typing import Any
 
 from app.pqc.models import (
+    CryptoAsset,
     HandshakeProof,
     MigrationReport,
     MoscaAssessment,
+    QuantumVulnerability,
+    RemediationItem,
     ScanBundle,
     ScanScenario,
 )
 from app.pqc.report import report_to_json
+
+
+def _vulnerability_from_dict(raw: dict[str, Any]) -> QuantumVulnerability:
+    return QuantumVulnerability(
+        algorithm=str(raw.get("algorithm", "unknown")),
+        key_size=raw.get("keySize", raw.get("key_size")),
+        shor_logical_qubits=raw.get("shorLogicalQubits", raw.get("shor_logical_qubits")),
+        classical_security_bits=raw.get("classicalSecurityBits", raw.get("classical_security_bits")),
+        status=raw.get("status", "unknown"),
+        hndl_exposed=bool(raw.get("hndlExposed", raw.get("hndl_exposed", False))),
+        pqc_replacement=str(raw.get("pqcReplacement", raw.get("pqc_replacement", ""))),
+        severity=raw.get("severity", "info"),
+        summary=str(raw.get("summary", "")),
+    )
+
+
+def asset_from_dict(raw: dict[str, Any]) -> CryptoAsset:
+    vuln_raw = raw.get("vulnerability") or {}
+    return CryptoAsset(
+        id=str(raw.get("id", "")),
+        kind=raw.get("kind", "tls"),
+        host=str(raw.get("host", "")),
+        port=raw.get("port"),
+        label=str(raw.get("label", raw.get("host", ""))),
+        algorithm=str(raw.get("algorithm", vuln_raw.get("algorithm", "unknown"))),
+        key_size=raw.get("keySize", raw.get("key_size")),
+        validity_days=raw.get("validityDays", raw.get("validity_days")),
+        san_domains=list(raw.get("sanDomains", raw.get("san_domains", []))),
+        negotiated_cipher=raw.get("negotiatedCipher", raw.get("negotiated_cipher")),
+        negotiated_group=raw.get("negotiatedGroup", raw.get("negotiated_group")),
+        tls_version=raw.get("tlsVersion", raw.get("tls_version")),
+        vulnerability=_vulnerability_from_dict(vuln_raw),
+        hndl_verdict=str(raw.get("hndlVerdict", raw.get("hndl_verdict", ""))),
+        already_too_late=bool(raw.get("alreadyTooLate", raw.get("already_too_late", False))),
+        mosca_priority=float(raw.get("moscaPriority", raw.get("mosca_priority", 0))),
+        standards_refs=list(raw.get("standardsRefs", raw.get("standards_refs", []))),
+        pqc_ready=bool(raw.get("pqcReady", raw.get("pqc_ready", False))),
+        metadata=dict(raw.get("metadata", {})),
+    )
+
+
+def remediation_from_dict(raw: dict[str, Any]) -> RemediationItem:
+    return RemediationItem(
+        id=str(raw.get("id", "")),
+        asset_id=str(raw.get("assetId", raw.get("asset_id", ""))),
+        priority=int(raw.get("priority", 0)),
+        title=str(raw.get("title", "")),
+        action=str(raw.get("action", "")),
+        pqc_algorithm=str(raw.get("pqcAlgorithm", raw.get("pqc_algorithm", ""))),
+        deadline=str(raw.get("deadline", "")),
+        effort_days=int(raw.get("effortDays", raw.get("effort_days", 0))),
+        standards_refs=list(raw.get("standardsRefs", raw.get("standards_refs", []))),
+        severity=raw.get("severity", "info"),
+        summary=str(raw.get("summary", "")),
+        metadata=dict(raw.get("metadata", {})),
+    )
+
+
+def _load_assets(payload: dict[str, Any], report_payload: dict[str, Any]) -> list[CryptoAsset]:
+    raw_assets = payload.get("assets") or report_payload.get("assets") or []
+    return [asset_from_dict(item) for item in raw_assets if isinstance(item, dict)]
+
+
+def _load_backlog(payload: dict[str, Any], report_payload: dict[str, Any]) -> list[RemediationItem]:
+    raw = (
+        payload.get("remediationBacklog")
+        or payload.get("remediation_backlog")
+        or report_payload.get("remediationBacklog")
+        or []
+    )
+    return [remediation_from_dict(item) for item in raw if isinstance(item, dict)]
 
 
 def bundle_from_api_dict(payload: dict[str, Any]) -> ScanBundle:
@@ -41,6 +115,10 @@ def bundle_from_api_dict(payload: dict[str, Any]) -> ScanBundle:
         metadata=dict(handshake_raw.get("metadata", {})),
     )
     scenario_raw = payload.get("scenario", {})
+    assets = _load_assets(payload, report_payload)
+    backlog = _load_backlog(payload, report_payload)
+    if not assets and report_payload.get("assets"):
+        assets = _load_assets({}, report_payload)
     report = MigrationReport(
         scan_id=str(report_payload.get("scanId", payload.get("scanId", ""))),
         scenario_id=str(report_payload.get("scenarioId", scenario_raw.get("id", ""))),
@@ -49,8 +127,8 @@ def bundle_from_api_dict(payload: dict[str, Any]) -> ScanBundle:
         readiness_score=float(report_payload.get("readinessScore", 0)),
         coverage_confidence=float(report_payload.get("coverageConfidence", 0)),
         mosca=mosca,
-        assets=[],
-        remediation_backlog=[],
+        assets=assets if assets else [],
+        remediation_backlog=backlog if backlog else [],
         standards_summary=list(report_payload.get("standardsSummary", [])),
         honesty_notes=list(report_payload.get("honestyNotes", [])),
         compliance_pack=dict(report_payload.get("compliancePack", {})),
@@ -79,8 +157,8 @@ def bundle_from_api_dict(payload: dict[str, Any]) -> ScanBundle:
     return ScanBundle(
         scan_id=str(payload.get("scanId", report.scan_id)),
         scenario=scenario,
-        assets=[],
-        remediation_backlog=[],
+        assets=assets,
+        remediation_backlog=backlog,
         scoreboard=_placeholder_scoreboard(payload.get("scoreboard", {})),
         handshake_proof=handshake,
         report=report,
