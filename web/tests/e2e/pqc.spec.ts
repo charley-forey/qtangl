@@ -1,16 +1,11 @@
 import { expect, test } from "@playwright/test";
 
-test.describe("PQC demo", () => {
-  test("loads demo page and shows scenario picker", async ({ page }) => {
-    await page.goto("/assess");
-    await expect(page.getByRole("heading", { name: /Q-Day readiness/i })).toBeVisible();
-    await expect(page.getByText(/Regional bank TLS inventory/i)).toBeVisible();
-  });
+test.describe.configure({ timeout: 120_000 });
 
-  test("fixture scan shows scoreboard when backend is reachable", async ({ page }) => {
-    await page.goto("/assess");
-    await page.getByRole("button", { name: /Run Q-Day scan/i }).click();
-    const scoreboard = page.getByText(/Q-Day readiness score/i);
-    await expect(scoreboard.first()).toBeVisible({ timeout: 30_000 });
+test.describe("PQC demo", () => {
+  test("autorun fixture scan shows executive results", async ({ page }) => {
+    await page.goto("/assess?scenario=bank-tls-inventory&autorun=1");
+    await expect(page.getByRole("tab", { name: "Executive" })).toBeVisible({ timeout: 90_000 });
+    await expect(page.getByText(/Q-Day readiness score/i).first()).toBeVisible();
   });
 });

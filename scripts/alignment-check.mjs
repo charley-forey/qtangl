@@ -80,6 +80,23 @@ for (const row of coverageRows) {
   }
 }
 
+// Coverage row status must match shipped-capabilities registry when mapped
+const coverageByName = new Map(coverageRows.map((row) => [row.name, row.status]));
+for (const cap of Object.values(shipped.capabilities)) {
+  const rowName = cap.coverageRow;
+  if (!rowName) continue;
+  const coverageStatus = coverageByName.get(rowName);
+  if (!coverageStatus) {
+    issues.push(`Coverage matrix missing row for capability "${rowName}"`);
+    continue;
+  }
+  if (coverageStatus !== cap.status) {
+    issues.push(
+      `Coverage row "${rowName}" is "${coverageStatus}" but shipped-capabilities.json expects "${cap.status}"`
+    );
+  }
+}
+
 // Beta rows must not claim "PAT required" full repo scan without snippet caveat
 if (
   coverage.includes("Repository scan for weak crypto patterns (PAT required)") &&

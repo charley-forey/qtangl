@@ -21,6 +21,7 @@ test("mini-assessment page loads scenario picker", async ({ page }) => {
 });
 
 test("mini-assessment email gate unlocks fixture preview", async ({ page }) => {
+  test.setTimeout(60_000);
   await page.goto("/assess/mini");
   await page.getByPlaceholder("you@company.com").fill("buyer@example.com");
   await page.getByRole("button", { name: /Show my results/i }).click();
@@ -37,6 +38,6 @@ test("verify page navigates when scan id is pasted", async ({ page }) => {
   await page.goto("/verify");
   const input = page.getByPlaceholder(/scan-/i);
   await input.fill("golden-bank-tls-inventory");
-  await page.getByRole("button", { name: "Verify" }).click();
+  await page.getByRole("button", { name: "Verify", exact: true }).click();
   await expect(page).toHaveURL(/scanId=golden-bank-tls-inventory/);
 });

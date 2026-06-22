@@ -2861,6 +2861,20 @@
       }
     },
     {
+      "name": "GET /tenant/scans/{scan_id}/diff",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/scans/example/diff",
+        "description": "Tenant Scan Diff"
+      }
+    },
+    {
       "name": "POST /tenant/scans/{scan_id}/email",
       "request": {
         "method": "POST",

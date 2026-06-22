@@ -12,11 +12,11 @@ Fill in bracketed sections. Keep each section concise — this is a gatekeeper, 
 
 | Field | Value |
 |-------|-------|
-| Company legal name | [Qtangl, Inc. / LLC] |
-| UEI | [from SAM — optional at pitch stage] |
-| PI name | [Name] |
-| PI email | [email] |
-| PI title | [e.g., CTO & Co-Founder] |
+| Company legal name | Qtangl, LLC |
+| UEI | Pending SAM registration |
+| PI name | Charley [Last name] |
+| PI email | charley@qtangl.com |
+| PI title | Founder & CEO |
 | Company URL | https://qtangl.com |
 
 ---

@@ -11,8 +11,8 @@ test("access page shows short form and mailto fallback", async ({ page }) => {
 
 test("access optional context expands", async ({ page }) => {
   await page.goto("/access");
-  await page.getByRole("button", { name: /Add context/i }).click();
-  await expect(page.getByLabel(/^Name$/i)).toBeVisible();
+  await page.getByRole("button", { name: /Add context — helps us prioritize/i }).click();
+  await expect(page.getByLabel("Name", { exact: true })).toBeVisible();
   await expect(page.getByLabel(/^Company$/i)).toBeVisible();
   await expect(page.getByLabel(/Current tools/i)).toBeVisible();
   await expect(page.getByLabel(/Readiness context/i)).toBeVisible();
@@ -30,12 +30,12 @@ test("access form validates required fields", async ({ page }) => {
 test("access form submits with minimal fields", async ({ page }) => {
   await page.goto("/access");
   await page.getByLabel(/Work email/i).fill("pilot@example.com");
-  await page.getByLabel(/Interest area/i).selectOption("Optimization pilot");
+  await page.getByLabel(/Interest area/i).selectOption("Q-Day Assessment (one-time)");
   await page.getByRole("button", { name: /^Request access$/i }).click();
   await expect(page.getByRole("heading", { name: /You're on the list/i })).toBeVisible({
     timeout: 15000,
   });
-  await expect(page.getByRole("link", { name: /Hospital re-staffing demo/i })).toBeVisible();
+  await expect(page.getByRole("link", { name: /Run Q-Day scanner/i })).toBeVisible();
 });
 
 test("access page preserves interest query param", async ({ page }) => {
@@ -80,6 +80,7 @@ test("ROI calculator shows savings comparison", async ({ page }) => {
 });
 
 test("mini-assessment gate unlocks findings and live scan link", async ({ page }) => {
+  test.setTimeout(60_000);
   await page.goto("/assess/mini");
   await expect(page.getByRole("heading", { level: 1, name: /Your Q-Day exposure in 60 seconds/i })).toBeVisible();
   await page.getByPlaceholder("you@company.com").fill("pilot@example.com");

@@ -11,31 +11,22 @@ from app.pqc.pipeline import run_pqc_scan
 from app.pqc.safety import ScanSafetyError
 from app.pqc.sessions import get_session
 from app.queue.redis_queue import dequeue_blocking, load_job_payload
-from app.store.scan_jobs import complete_job, fail_job, get_job, get_job_payload, update_job_timeline
+from app.store.scan_jobs import (
+    complete_job,
+    fail_job,
+    get_job,
+    get_job_payload,
+    retry_pqc_scan_job,
+    update_job_timeline,
+)
 from app.pqc.models import TimelineEvent
 
 logger = logging.getLogger(__name__)
 
 
 def execute_pqc_scan_job(scan_id: str, payload: dict[str, Any], *, tenant_id: str) -> None:
-    max_retries = int(os.environ.get("QTANGL_WORKER_MAX_RETRIES", "3"))
-    last_error: Exception | None = None
     request_id = str(payload.get("requestId") or payload.get("request_id") or "")
-
-    for attempt in range(max_retries):
-        try:
-            _run_scan_once(scan_id, payload, tenant_id=tenant_id, request_id=request_id)
-            return
-        except ScanSafetyError as exc:
-            fail_job(scan_id, str(exc), tenant_id=tenant_id)
-            return
-        except Exception as exc:
-            last_error = exc
-            logger.warning("PQC job %s attempt %d failed: %s", scan_id, attempt + 1, exc)
-            if attempt < max_retries - 1:
-                time.sleep(min(30, 2**attempt))
-
-    fail_job(scan_id, str(last_error or "Unknown worker error"), tenant_id=tenant_id)
+    _run_scan_once(scan_id, payload, tenant_id=tenant_id, request_id=request_id)
 
 
 def _run_scan_once(
@@ -184,7 +175,22 @@ def process_next_job() -> bool:
     elif job.status != "running":
         return True
 
-    execute_pqc_scan_job(job_id, payload, tenant_id=tenant_id)
+    try:
+        execute_pqc_scan_job(job_id, payload, tenant_id=tenant_id)
+    except ScanSafetyError as exc:
+        fail_job(job_id, str(exc), tenant_id=tenant_id)
+    except Exception as exc:
+        attempts = int(payload.get("attempt", 1))
+        if retry_pqc_scan_job(
+            scan_id=job_id,
+            tenant_id=tenant_id,
+            payload=payload,
+            error=str(exc),
+        ):
+            logger.warning("PQC job %s failed (attempt %d), requeued", job_id, attempts)
+        else:
+            fail_job(job_id, str(exc), tenant_id=tenant_id)
+            logger.exception("PQC job %s failed permanently", job_id)
     return True
 
 
@@ -217,6 +223,12 @@ def main() -> None:
                 from app.monitoring.scheduler_state import record_scheduler_tick
 
                 record_scheduler_tick(enqueued=enqueued + cloud_enqueued)
+                logger.info(
+                    "scheduler_tick enqueued_scans=%d enqueued_cloud=%d total=%d",
+                    enqueued,
+                    cloud_enqueued,
+                    enqueued + cloud_enqueued,
+                )
                 if enqueued:
                     logger.info("Enqueued %d scheduled scan(s)", enqueued)
                 if cloud_enqueued:

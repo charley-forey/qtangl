@@ -1,5 +1,7 @@
 import { test, expect } from "@playwright/test";
 
+import { gotoAssessScanner } from "./helpers/assess";
+
 test.describe("Discovery depth", () => {
   test("compare hub still renders discovery chart", async ({ page }) => {
     await page.goto("/compare");
@@ -8,13 +10,14 @@ test.describe("Discovery depth", () => {
   });
 
   test("coverage page mentions discovery sources", async ({ page }) => {
-    await page.goto("/coverage");
+    await page.goto("/platform/coverage");
     await expect(page.getByText(/inventory sources/i)).toBeVisible();
   });
 
   test("assess wizard shows discovery scope step", async ({ page }) => {
-    await page.goto("/assess");
-    await expect(page.getByText(/Discovery scope/i)).toBeVisible();
+    await gotoAssessScanner(page);
+    await page.getByRole("button", { name: /Pick another scenario/i }).click();
+    await page.getByRole("button", { name: /Next: Scope/i }).click();
     await expect(page.getByText(/Host fleet/i)).toBeVisible();
     await expect(page.getByText(/Source code/i)).toBeVisible();
     await expect(page.getByText(/Container images/i)).toBeVisible();

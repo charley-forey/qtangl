@@ -10,13 +10,13 @@ Copy this into your project tracker or check boxes as you complete items. Update
 
 | ☐ | Task | Owner | Status | Date | Notes |
 |---|------|-------|--------|------|-------|
-| ☐ | Confirm U.S. for-profit entity (LLC or C-Corp) | | | | Stripe Atlas if needed: https://stripe.com/atlas |
-| ☐ | Confirm ≤500 employees | | | | |
-| ☐ | Confirm ≥50% U.S. citizen/PR ownership | | | | NSF/DHS/DoD requirement |
-| ☐ | Obtain EIN (if not already) | | | | |
-| ☐ | Designate Principal Investigator (PI) | | | | ≥20 hrs/week at company |
-| ☐ | Designate Corporate Official (CO) for DSIP | | | | Must certify proposals |
-| ☐ | Open dedicated federal funding folder / drive | | | | Proposals, registrations, PDFs |
+| ☐ | Confirm U.S. for-profit entity (LLC or C-Corp) | Founder | ◐ | 2026-06-21 | Qtangl LLC assumed — verify entity docs |
+| ☐ | Confirm ≤500 employees | Founder | ☑ | 2026-06-21 | Solo founder stage |
+| ☐ | Confirm ≥50% U.S. citizen/PR ownership | Founder | ☑ | 2026-06-21 | |
+| ☐ | Obtain EIN (if not already) | Founder | ◐ | 2026-06-21 | Confirm on file |
+| ☐ | Designate Principal Investigator (PI) | Founder | ☑ | 2026-06-21 | Charley |
+| ☐ | Designate Corporate Official (CO) for DSIP | Founder | ◐ | 2026-06-21 | Same as PI until hire |
+| ☐ | Open dedicated federal funding folder / drive | Founder | ☑ | 2026-06-21 | `roadmap/quantum-readiness/federal-funding/` |
 
 ---
 
@@ -57,8 +57,9 @@ Copy this into your project tracker or check boxes as you complete items. Update
 
 | ☐ | Deliverable | Template / source | Status | Date |
 |---|-------------|-------------------|--------|------|
-| ☐ | Federal one-pager (PDF) | [templates/federal-one-pager.md](./templates/federal-one-pager.md) | | |
-| ☐ | Live `/verify` link from dogfood scan | [Trust center](/trust) · `GET /pqc/dogfood/latest` | | |
+| ☐ | Federal one-pager (PDF) | [templates/federal-one-pager.md](./templates/federal-one-pager.md) | ◐ | 2026-06-21 | Draft filled; export PDF pending |
+| ☐ | Live `/verify` link from dogfood scan | [Trust center](/trust) · `GET /pqc/dogfood/latest` | ☑ | 2026-06-21 | Dogfood CI + trust center |
+| ☐ | Draft NSF Project Pitch (4 sections) | [templates/nsf-project-pitch.md](./templates/nsf-project-pitch.md) | ◐ | 2026-06-21 | Company info + technical draft filled |
 | ☐ | Security overview for diligence | [docs/compliance/security-overview.md](../../../docs/compliance/security-overview.md) | | |
 | ☐ | Trust center index complete | [12-platform-security-and-trust.md](../12-platform-security-and-trust.md) | | |
 | ☐ | Readiness-first public identity (homepage, nav, metadata) | Web copy | | CPM eyebrow; no Quantum Planning API on primary surfaces |

@@ -128,9 +128,11 @@ export default function DashboardScansTab({
     }
     let cancelled = false;
     setCompareLoading(true);
-    void fetchDashboardJson<{ scanDiff?: ScanDiff }>(`/tenant/scans/${encodeURIComponent(compareScanId)}`)
+    void fetchDashboardJson<{ report?: { scanDiff?: ScanDiff } }>(
+      `/tenant/scans/${encodeURIComponent(compareScanId)}`
+    )
       .then((payload) => {
-        if (!cancelled) setCompareDiff((payload.scanDiff as ScanDiff | undefined) ?? null);
+        if (!cancelled) setCompareDiff((payload.report?.scanDiff as ScanDiff | undefined) ?? null);
       })
       .catch(() => {
         if (!cancelled) setCompareDiff(null);

@@ -11,7 +11,8 @@ Thumbs.db
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-*.log
+*.egg-info/
+*.egg-info
 
 # Playwright test artifacts
 test-results/

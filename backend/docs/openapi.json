@@ -4,7 +4,7 @@
     "title": "Qtangl PQC Readiness API",
     "summary": "Post-quantum readiness platform: Assess, Monitor, Convert with signed evidence.",
     "description": "Tenant-scoped Monitor APIs, public verify/transparency endpoints, and PQC scan lifecycle. See https://www.qtangl.com/docs for authentication, RBAC, and error conventions.",
-    "version": "0.9.0"
+    "version": "0.9.1"
   },
   "paths": {
     "/optimize": {
@@ -5070,6 +5070,98 @@
                   "type": "object",
                   "additionalProperties": true,
                   "title": "Response Tenant Delete Scan Tenant Scans  Scan Id  Delete"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tenant/scans/{scan_id}/diff": {
+      "get": {
+        "tags": [
+          "tenant"
+        ],
+        "summary": "Tenant Scan Diff",
+        "operationId": "tenant_scan_diff_tenant_scans__scan_id__diff_get",
+        "parameters": [
+          {
+            "name": "scan_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Scan Id"
+            }
+          },
+          {
+            "name": "api_key",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Api Key"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          },
+          {
+            "name": "x-api-key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Api-Key"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Tenant Scan Diff Tenant Scans  Scan Id  Diff Get"
                 }
               }
             }
@@ -22230,6 +22322,18 @@
             "minLength": 2,
             "title": "Company"
           },
+          "domain": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 253
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Domain"
+          },
           "adminSecret": {
             "type": "string",
             "title": "Adminsecret"
@@ -22256,6 +22360,18 @@
             "maxLength": 200,
             "minLength": 2,
             "title": "Company"
+          },
+          "domain": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 253
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Domain"
           }
         },
         "type": "object",

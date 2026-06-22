@@ -229,6 +229,68 @@ def fail_job(
         )
 
 
+def retry_pqc_scan_job(
+    *,
+    scan_id: str,
+    tenant_id: str,
+    payload: dict[str, Any],
+    error: str,
+) -> bool:
+    """Re-enqueue a failed PQC scan once with backoff metadata (max 2 attempts)."""
+    attempt = int(payload.get("attempt", 1))
+    if attempt >= 2:
+        return False
+    next_payload = {**payload, "attempt": attempt + 1, "lastError": error}
+    store_job_payload(scan_id, next_payload)
+    backoff_seconds = min(30, 2 ** (attempt - 1))
+    time.sleep(backoff_seconds)
+    if persistence_enabled():
+        with scan_db_session(tenant_id=tenant_id) as session:
+            row = session.get(ScanJobRow, scan_id)
+            if row is None or row.tenant_id != tenant_id:
+                return False
+            row.status = "running"
+            row.error = error
+            row.payload_json = json.dumps(next_payload)
+            timeline_raw = json.loads(row.timeline_json or "[]")
+            timeline_raw.append(
+                {
+                    "key": "retry",
+                    "label": f"Retry attempt {attempt + 1}",
+                    "duration_ms": 0,
+                    "status": "running",
+                    "phase": "retry",
+                    "detail": f"attempt {attempt + 1}",
+                    "at": datetime.now(timezone.utc).isoformat(),
+                }
+            )
+            row.timeline_json = json.dumps(timeline_raw)
+            row.updated_at = datetime.now(timezone.utc)
+    else:
+        with _job_lock:
+            job = _memory_jobs.get(scan_id)
+            if not job or job.tenant_id != tenant_id:
+                return False
+            timeline = list(job.timeline)
+            timeline.append(
+                TimelineEvent(
+                    key="retry",
+                    label=f"Retry attempt {attempt + 1}",
+                    duration_ms=0,
+                    status="running",
+                )
+            )
+            _memory_jobs[scan_id] = replace(
+                job,
+                status="running",
+                error=error,
+                timeline=timeline,
+                updated_at=time.time(),
+            )
+    enqueue_job("pqc_scan", scan_id)
+    return True
+
+
 def save_scan_bundle(scan_id: str, bundle: ScanBundle, *, tenant_id: str = "sandbox") -> None:
     bundle = _prepare_bundle_for_storage(scan_id, bundle, tenant_id=tenant_id)
     if persistence_enabled():

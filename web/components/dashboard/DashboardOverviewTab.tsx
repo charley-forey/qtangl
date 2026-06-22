@@ -164,6 +164,44 @@ export default function DashboardOverviewTab({
         onOpenUpgrade={onOpenUpgrade}
         onDismiss={dismissBanner}
       />
+
+      {hasScanDiff ? (
+        <Card tone="panel" className="rounded-[var(--radius-xl)]">
+          <Eyebrow>Drift since last scan</Eyebrow>
+          <p className="mt-2 text-sm text-[var(--color-gray-400)]">
+            Monitor diffs each assessment against your prior baseline — new quantum-vulnerable assets, score movement,
+            and certificate regressions.
+          </p>
+          <div className="mt-4">
+            <ScanDiffPanel diff={scanDiff} />
+          </div>
+          <div className="mt-4 flex flex-wrap gap-3">
+            <Button variant="secondary" size="sm" onClick={() => onTabChange("scans")}>
+              View scan history
+            </Button>
+            <Button variant="secondary" size="sm" onClick={() => onTabChange("monitor")}>
+              Monitor settings
+            </Button>
+          </div>
+        </Card>
+      ) : summary.recentScans.length > 0 ? (
+        <Card tone="panel" className="rounded-[var(--radius-xl)]">
+          <Eyebrow>Drift baseline</Eyebrow>
+          <p className="mt-2 text-sm text-[var(--color-gray-400)]">
+            Run a second scan on the same target to unlock drift — readiness delta, new quantum-vulnerable assets, and
+            certificate regressions since your last assessment.
+          </p>
+          <div className="mt-4 flex flex-wrap gap-3">
+            <Button variant="secondary" size="sm" onClick={() => onTabChange("scans")}>
+              Run follow-up scan
+            </Button>
+            <Button variant="secondary" size="sm" onClick={() => onTabChange("monitor")}>
+              Set up scheduled Monitor
+            </Button>
+          </div>
+        </Card>
+      ) : null}
+
       {welcomeInvite ? (
         <div className="rounded-2xl border border-sky-500/30 bg-sky-500/10 px-4 py-3 text-sm text-sky-100">
           Welcome — you have joined this workspace. Explore the overview, then open Scans to review the latest
@@ -202,27 +240,6 @@ export default function DashboardOverviewTab({
           onRefresh={onRefreshSummary}
           onOpenUpgrade={onOpenUpgrade}
         />
-      ) : null}
-
-      {hasScanDiff ? (
-        <Card tone="panel" className="rounded-[var(--radius-xl)]">
-          <Eyebrow>Drift since last scan</Eyebrow>
-          <p className="mt-2 text-sm text-[var(--color-gray-400)]">
-            Monitor diffs each assessment against your prior baseline — new quantum-vulnerable assets, score movement,
-            and certificate regressions.
-          </p>
-          <div className="mt-4">
-            <ScanDiffPanel diff={scanDiff} />
-          </div>
-          <div className="mt-4 flex flex-wrap gap-3">
-            <Button variant="secondary" size="sm" onClick={() => onTabChange("scans")}>
-              View scan history
-            </Button>
-            <Button variant="secondary" size="sm" onClick={() => onTabChange("monitor")}>
-              Monitor settings
-            </Button>
-          </div>
-        </Card>
       ) : null}
 
       {detail?.scanId ? (

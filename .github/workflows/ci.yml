@@ -303,6 +303,16 @@ jobs:
           QTANGL_API_BASE_URL: http://127.0.0.1:8000
         run: npx playwright test tests/e2e/trust-golden-path.spec.ts --project=chromium
 
+      - name: E2E demo CTA smoke
+        env:
+          QTANGL_API_BASE_URL: http://127.0.0.1:8000
+        run: npx playwright test tests/e2e/demo-cta.spec.ts --project=chromium
+
+      - name: E2E PQC assess smoke
+        env:
+          QTANGL_API_BASE_URL: http://127.0.0.1:8000
+        run: npx playwright test tests/e2e/pqc.spec.ts --project=chromium
+
   sdk-typescript:
     name: SDK (TypeScript alpha)
     runs-on: ubuntu-latest

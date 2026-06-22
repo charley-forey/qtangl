@@ -30,7 +30,7 @@ uvicorn app.main:app --reload
 | `QTANGL_REPORT_SIGNING_KEY_B64` | Stable Ed25519 signing key (base64) |
 | `QTANGL_ENABLE_SCHEDULER` | `true` to enqueue due scheduled scans in the worker loop |
 | `QTANGL_SCHEDULER_INTERVAL_SEC` | Worker scheduler tick interval (default 60) |
-| `QTANGL_WORKER_MAX_RETRIES` | Scan job retries with backoff (default 3) |
+| *(none)* | PQC scan jobs retry once via Redis re-enqueue (max 2 attempts; see `retry_pqc_scan_job`) |
 | `QTANGL_ALERT_READINESS_DROP` | Alert when readiness drops by N points (default 5) |
 | `QTANGL_SMTP_HOST` / `PORT` / `USER` / `PASSWORD` / `FROM` | Report email delivery (no-op when unset) |
 | `QTANGL_STRIPE_SECRET_KEY` / `QTANGL_STRIPE_MONITOR_PRICE_ID` | Self-serve Monitor checkout |

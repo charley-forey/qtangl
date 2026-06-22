@@ -30,9 +30,9 @@ export const coveragePageCopy = {
     },
     {
       name: "GitHub code & dependencies",
-      status: "live" as const,
+      status: "beta" as const,
       description:
-        "Async code scan via CryptoScan/CryptoDeps orchestration — POST /tenant/coverage/code-scan. Internally validated at scale.",
+        "Async code scan via CryptoScan/CryptoDeps orchestration — POST /tenant/coverage/code-scan. Beta: snippet/dependency analysis; full PAT repo scan in progress.",
       href: "/docs/guides/code-scan-ci",
     },
     {
@@ -43,9 +43,9 @@ export const coveragePageCopy = {
     },
     {
       name: "Host sensor fleet",
-      status: "live" as const,
+      status: "beta" as const,
       description:
-        "Qtangl Unified Sensor — cert stores, libraries, listeners; mTLS enroll; Helm and offline upload.",
+        "Qtangl Unified Sensor — cert stores, libraries, listeners; mTLS enroll; Helm and offline upload (beta flag).",
       href: "/docs/guides/host-sensor-deploy",
     },
     {

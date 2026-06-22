@@ -14,13 +14,13 @@ Update weekly alongside [optimization_OLD_FUTURE/backlog/epics.md](../optimizati
 | ID | Epic | Status | Effort | Depends on |
 |----|------|--------|--------|------------|
 | K1 | Strategy & brand lock | `not-started` | S | — |
-| K2 | Website transformation | `in-progress` | M | K1 |
+| K2 | Website transformation | `done` | M | K1 |
 | K3 | Content & SEO engine | `not-started` | M | K1, K2 |
-| K4 | Product journey UX polish | `not-started` | M | B3, B4, K2 |
-| K5 | Lead magnets & self-serve funnel | `in-progress` | M | K2, H5 |
+| K4 | Product journey UX polish | `in-progress` | M | B3, B4, K2 |
+| K5 | Lead magnets & self-serve funnel | `done` | M | K2, H5 |
 | K6 | GTM execution (readiness-first) | `in-progress` | M | K2, B6 |
 | K7 | Partner program (Convert delivery) | `not-started` | M | K6 |
-| K8 | Public roadmap & docs sync | `not-started` | S | K2 |
+| K8 | Public roadmap & docs sync | `in-progress` | S | K2 |
 | K9 | Security & trust GTM (trust center, dogfood, SOC2) | `not-started` | M | G1–G5 |
 | K10 | Customer success & retention engine | `not-started` | M | K6, B3 |
 | K11 | Competitive intelligence & sales enablement | `not-started` | S | K1 |
@@ -95,12 +95,12 @@ Execute spec in [04-website-transformation.md](./04-website-transformation.md).
 
 ### Acceptance criteria
 
-- [ ] Homepage hero is readiness-first
-- [ ] Nav: Platform, Assess, Demo→assess, Pricing
-- [ ] `/platform`, `/assess`, `/monitor`, `/convert`, `/pricing` live
-- [ ] `/pqc` redirects to `/platform`
-- [ ] Optimization cross-link banner on `/technology`, `/demo/hospital`
-- [ ] Playwright: homepage CTA → `/assess`
+- [x] Homepage hero is readiness-first
+- [x] Nav: Platform, Assess, Demo→assess, Pricing
+- [x] `/platform`, `/assess`, `/monitor`, `/convert`, `/pricing` live
+- [x] `/pqc` redirects to `/platform`
+- [x] Optimization cross-link banner on `/technology`, `/demo/hospital`
+- [x] Playwright: homepage CTA → `/assess` (access + demo-cta in CI)
 
 ---
 
@@ -152,10 +152,10 @@ Mini-assessment, Stripe Monitor, onboarding emails.
 
 ### Acceptance criteria
 
-- [ ] Mini-assessment mode on `/assess/mini` with email gate
-- [ ] Sample CBOM downloadable from `/assess`
-- [ ] Stripe Monitor checkout on `/access` (when H5 ready)
-- [ ] Access form interest options include Assess/Monitor/Enterprise
+- [x] Mini-assessment mode on `/assess/mini` with email gate
+- [x] Sample CBOM downloadable from `/assess`
+- [x] Stripe Monitor checkout on `/access` (when H5 ready)
+- [x] Access form interest options include Assess/Monitor/Enterprise
 
 ---
 
@@ -198,9 +198,9 @@ Sync [web/lib/docs/roadmap.ts](../../web/lib/docs/roadmap.ts) and docs index to 
 
 ### Acceptance criteria
 
-- [ ] Public roadmap Now band: Q-Day scanner first
-- [ ] Docs index features PQC guide at top
-- [ ] weekly-review template checkbox for public sync
+- [x] Public roadmap Now band: Q-Day scanner first
+- [x] Docs index features PQC guide at top of Core Workflow
+- [x] weekly-review template checkbox for public sync (22-governance)
 
 ---
 
@@ -403,8 +403,8 @@ Accept external CycloneDX CBOMs (IBM CBOMkit, partner tools, customer exports), 
 
 ### Phase 2 — Product UX (Weeks 4–16)
 
-- [ ] **K4-001** Dashboard readiness-first layout → DashboardClient.tsx | Score hero on load
-- [ ] **K4-002** Promote ScanDiffPanel on dashboard → ScanDiffPanel.tsx | Visible when previous scan exists
+- [x] **K4-001** Dashboard readiness-first layout → DashboardOverviewTab.tsx | Drift card above fold; empty state for first scan
+- [x] **K4-002** Promote ScanDiffPanel on dashboard → ScanDiffPanel.tsx | Overview drift card + Scans compare fix
 - [ ] **K4-003** Remediation status edit in backlog UI → RemediationBacklog.tsx | Persists via API
 - [ ] **K4-004** What-if readiness widget → new component + remediation API | Projects score delta
 - [ ] **K4-005** Wire B3 scheduled scans to tenant settings UI → Track B3 | Configurable frequency

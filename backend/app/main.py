@@ -85,7 +85,7 @@ def cors_headers_for_request(request: Request) -> dict[str, str]:
 
 app = FastAPI(
     title="Qtangl PQC Readiness API",
-    version="0.9.0",
+    version="0.9.1",
     summary="Post-quantum readiness platform: Assess, Monitor, Convert with signed evidence.",
     description=(
         "Tenant-scoped Monitor APIs, public verify/transparency endpoints, and PQC scan lifecycle. "

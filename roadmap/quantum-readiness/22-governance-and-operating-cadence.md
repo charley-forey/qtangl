@@ -156,7 +156,7 @@ Record significant transformation decisions as ADRs in `roadmap/adrs/` (or the h
 - [ ] Weekly review includes Track K section
 - [ ] Each doc has a named owner
 - [ ] ADRs recorded for major decisions
-- [ ] Public roadmap synced quarterly
+- [ ] Public roadmap synced when product bands shift (`web/lib/docs/roadmap.ts`)
 
 ---
 

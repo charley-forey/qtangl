@@ -11,8 +11,8 @@ Export to PDF for agency intros, NIST COI, integrator partners, and SBIR support
 **Qtangl** · Cryptographic Posture Management (CPM)  
 **Tagline:** Assess. Monitor. Convert.  
 **URL:** https://qtangl.com/assess  
-**Contact:** [Name] · [email] · [phone]  
-**UEI:** [when available] · **CAGE:** [when available]
+**Contact:** Charley · charley@qtangl.com · [phone TBD]  
+**UEI:** [pending SAM registration] · **CAGE:** [pending SAM registration]
 
 ---
 

@@ -168,7 +168,7 @@ Granular checkbox backlog. Each item has an ID, epic link, acceptance criterion,
 
 - [x] **D2-001** Dedicated worker process `python -m app.worker` → `backend/app/worker.py` | BRPOP on `pqc_scan` queue
 - [x] **D2-002** Job payload in Postgres + Redis; `QTANGL_INLINE_JOBS` toggle → `backend/app/store/scan_jobs.py` | API enqueues when inline=false
-- [ ] **D2-003** Failed jobs retry once with backoff | Not yet
+- [x] **D2-003** Failed jobs retry once with backoff → `backend/app/store/scan_jobs.py`, `backend/app/worker.py` | Redis re-enqueue via `retry_pqc_scan_job`
 
 ### H1 — Tenant accounts
 
@@ -182,14 +182,14 @@ Granular checkbox backlog. Each item has an ID, epic link, acceptance criterion,
 
 ### D4–D5 — OpenAPI + SDKs
 
-- [ ] **D4-001** Export `backend/openapi.json` in CI | File generated on release
-- [ ] **D5-001** Create Python package skeleton `sdk/python/` | `pip install -e .` works
+- [x] **D4-001** Export `backend/openapi.json` in CI | `backend/scripts/export_openapi.py` + `check_openapi_sync.py` in CI
+- [x] **D5-001** Create Python package skeleton `sdk/python/` | `pip install -e .` works; v0.9.1 beta
 - [ ] **D5-002** Generate TS client from OpenAPI → `sdk/typescript/` | Used in web/lib/api.ts optional path
 
 ### B3 — Scheduled scans
 
-- [ ] **B3-001** Cron worker for scheduled PQC scans | Worker + DB schedule table
-- [ ] **B3-002** Diff report vs previous scan | Delta in API response
+- [x] **B3-001** Cron worker for scheduled PQC scans | Worker poll + `scheduled_scans` table + `QTANGL_ENABLE_SCHEDULER`
+- [x] **B3-002** Diff report vs previous scan | `scanDiff` on completed scans + `GET /tenant/scans/{id}/diff`
 
 ---
 
@@ -252,7 +252,7 @@ Granular checkbox backlog. Each item has an ID, epic link, acceptance criterion,
 ## Ongoing (every sprint)
 
 - [ ] **OPS-001** Weekly review using `templates/weekly-review-template.md` | Notes archived
-- [ ] **OPS-002** Update `backlog/epics.md` statuses | Current
+- [x] **OPS-002** Update `backlog/epics.md` statuses | K2/K5/K8 synced 2026-06-21
 - [ ] **OPS-003** Review `backlog/risk-register.md` triggers | No unmitigated critical
 - [ ] **OPS-004** Sync public roadmap bands quarterly → `web/lib/docs/roadmap.ts` | Bands match phase
 

@@ -60,7 +60,7 @@ npm run build
 Optional:
 
 ```bash
-# Web E2E (not in default CI yet — Phase 0 follow-up)
+# Web E2E (subset in CI — expand with demo-cta + pqc smoke; full suite: npm run test:e2e)
 cd web
 npm run test:e2e
 

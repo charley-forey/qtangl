@@ -43,7 +43,7 @@ from app.remediation.service import (
     upsert_remediation_status,
     verify_remediation_fix,
 )
-from app.pqc.serialize import serialize_bundle
+from app.pqc.serialize import serialize_bundle, serialize_report
 from app.sharing.service import create_share_link, list_share_links, revoke_share_link
 from app.store.scan_jobs import delete_job, get_job, list_jobs_for_tenant, load_scan_bundle
 
@@ -652,6 +652,31 @@ def tenant_scan_detail(scan_id: str, auth: AuthContext = Depends(require_auth_re
             statuses, len(job.bundle.remediation_backlog)
         )
     return payload
+
+
+@router.get("/scans/{scan_id}/diff")
+def tenant_scan_diff(scan_id: str, auth: AuthContext = Depends(require_auth_readonly)) -> dict:
+    job = get_job(scan_id, tenant_id=auth.tenant_id)
+    if job is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Scan not found.")
+    if not job.bundle:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Scan results not available.")
+    report = serialize_report(job.bundle.report)
+    scan_diff = report.get("scanDiff")
+    if not scan_diff:
+        return {
+            "status": "success",
+            "scanId": scan_id,
+            "previousScanId": None,
+            "scanDiff": None,
+            "message": "No prior scan for this target and scenario.",
+        }
+    return {
+        "status": "success",
+        "scanId": scan_id,
+        "previousScanId": scan_diff.get("previousScanId"),
+        "scanDiff": scan_diff,
+    }
 
 
 @router.delete("/scans/{scan_id}")

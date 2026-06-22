@@ -1,4 +1,4 @@
-"""Qtangl PQC Readiness API client (alpha)."""
+"""Qtangl PQC Readiness API client (beta)."""
 
 from qtangl.client import QtanglClient
 from qtangl.errors import QtanglApiError
@@ -6,7 +6,11 @@ from qtangl.idempotency import new_idempotency_key
 from qtangl.models import (
     CbomConflictResolveRequest,
     ErrorResponse,
+    ProgramCreateRequest,
+    ProgramUpdateRequest,
+    ProgramVerifyRequest,
     PqcScanRequest,
+    RemediationUpdateRequest,
     ScheduleCreateRequest,
     SchedulePatchRequest,
     TenantSettingsRequest,
