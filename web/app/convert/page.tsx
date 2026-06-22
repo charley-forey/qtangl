@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import ConvertPreview from "@/components/marketing/ConvertPreview";
+import CoverImage, { WIDE_COVER_SIZES } from "@/components/marketing/CoverImage";
 import LiveTodayFootnote from "@/components/marketing/LiveTodayFootnote";
 import ProductModeBanner from "@/components/marketing/ProductModeBanner";
 import FeatureCard from "@/components/marketing/FeatureCard";
@@ -58,7 +59,12 @@ export default function ConvertPage() {
         </div>
         <div className="mt-10 grid gap-6 md:grid-cols-2">
           {features.items.map((item) => (
-            <FeatureCard key={item.title} title={item.title}>
+            <FeatureCard
+              key={item.title}
+              title={item.title}
+              imageSrc={item.image}
+              imageAlt={item.imageAlt}
+            >
               <p>{item.description}</p>
             </FeatureCard>
           ))}
@@ -73,6 +79,16 @@ export default function ConvertPage() {
             {evidence.description}
           </p>
         </div>
+        {"image" in evidence && evidence.image ? (
+          <div className="relative mt-8 aspect-[4/3] w-full max-w-3xl overflow-hidden rounded-[var(--radius-xl)] border border-[var(--border)] bg-[#141414]">
+            <CoverImage
+              src={evidence.image}
+              alt={evidence.imageAlt ?? evidence.title}
+              sizes={WIDE_COVER_SIZES}
+              className="object-contain p-1"
+            />
+          </div>
+        ) : null}
         <div className="mt-8 flex flex-wrap gap-3">
           {evidence.actions.map((action) => (
             <Button

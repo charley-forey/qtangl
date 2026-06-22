@@ -27,6 +27,7 @@
     "test:dashboard-errors": "node --test tests/dashboard-errors.test.mjs",
     "test:bff-auth-headers": "node --test tests/bff-auth-headers.test.mjs",
     "generate:pwa-icons": "node scripts/generate-pwa-icons.mjs",
+    "optimize:marketing-images": "node scripts/optimize-marketing-images.mjs",
     "generate:comparison-pdf": "node scripts/generate-comparison-guide-pdf.mjs",
     "build:sdk": "npm run build --prefix ../sdk/typescript",
     "build:sdk-react": "npm run build --prefix ../sdk/react",

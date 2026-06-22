@@ -1,28 +1,37 @@
+import Image from "next/image";
+
+/** Card grids: 3-col desktop, 2-col tablet, full-width mobile. */
+export const CARD_COVER_SIZES = "(min-width: 1280px) 24vw, (min-width: 768px) 42vw, 100vw";
+
+/** Pricing / wide evidence blocks capped around reading width. */
+export const WIDE_COVER_SIZES = "(min-width: 768px) 48rem, 100vw";
+
 type CoverImageProps = {
   src: string;
   alt: string;
   className?: string;
   priority?: boolean;
+  sizes?: string;
 };
 
 /**
- * Blog card covers — in-flow sizing so aspect-ratio parents keep height.
- * (Absolute-only children inside aspect-[4/3] collapse to 0px in grid cards.)
+ * Marketing / blog card covers — next/image fill inside a relative aspect-ratio parent.
  */
 export default function CoverImage({
   src,
   alt,
   className = "object-cover",
   priority = false,
+  sizes = CARD_COVER_SIZES,
 }: CoverImageProps) {
   return (
-    // eslint-disable-next-line @next/next/no-img-element -- public SVG/PNG covers
-    <img
+    <Image
       src={src}
       alt={alt}
-      loading={priority ? "eager" : "lazy"}
-      decoding="async"
-      className={`block size-full ${className}`}
+      fill
+      sizes={sizes}
+      priority={priority}
+      className={className}
     />
   );
 }

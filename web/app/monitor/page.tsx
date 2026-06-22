@@ -63,7 +63,12 @@ export default function MonitorPage() {
         </div>
         <div className="mt-10 grid gap-6 md:grid-cols-2">
           {features.items.map((item) => (
-            <FeatureCard key={item.title} title={item.title}>
+            <FeatureCard
+              key={item.title}
+              title={item.title}
+              imageSrc={item.image}
+              imageAlt={item.imageAlt}
+            >
               <p>{item.description}</p>
             </FeatureCard>
           ))}

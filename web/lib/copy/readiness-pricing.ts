@@ -7,6 +7,8 @@ export type PricingTier = {
   cta: { label: string; href: string };
   featured?: boolean;
   liveToday?: readonly string[];
+  image?: string;
+  imageAlt?: string;
 };
 
 export const pricingPageCopy = {
@@ -38,6 +40,8 @@ export const pricingPageCopy = {
       ],
       cta: { label: "Free mini-assessment", href: "/assess/mini" },
       liveToday: ["Live TLS scan", "CBOM export", "Signed PDF + /verify"],
+      image: "/marketing/pricing-assess.webp",
+      imageAlt: "Black and white illustration of a baseline scan snapshot with report document.",
     },
     {
       name: "Q-Day Monitor",
@@ -53,6 +57,8 @@ export const pricingPageCopy = {
       cta: { label: "Request pilot", href: "/access" },
       featured: true,
       liveToday: ["Schedules + worker", "Webhook v2 + DLQ", "Code scan CI (beta flag)", "Host sensor fleet (beta flag)"],
+      image: "/marketing/pricing-monitor.webp",
+      imageAlt: "Black and white trend line rising over repeated scan data points.",
     },
     {
       name: "Q-Day Convert",
@@ -67,6 +73,8 @@ export const pricingPageCopy = {
       ],
       cta: { label: "Talk to sales", href: "/access" },
       liveToday: ["Remediation board", "Verify-fix API", "Jira push + status pull"],
+      image: "/marketing/pricing-convert.webp",
+      imageAlt: "Black and white backlog shrinking toward verified completion.",
     },
     {
       name: "Q-Day Enterprise",
@@ -86,6 +94,8 @@ export const pricingPageCopy = {
         "CMDB coverage widget + mTLS sensor",
         "Audit log API",
       ],
+      image: "/marketing/pricing-enterprise.webp",
+      imageAlt: "Black and white multi-domain constellation with compliance shield overlay.",
     },
   ] satisfies PricingTier[],
   footnote:

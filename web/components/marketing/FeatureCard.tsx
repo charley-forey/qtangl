@@ -45,7 +45,7 @@ export default function FeatureCard({
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(255,255,255,0.1),transparent_40%)]" />
       <div className="relative">
         {imageSrc ? (
-          <div className="mb-6 aspect-[4/3] w-full overflow-hidden rounded-[var(--radius-xl)] border border-[var(--border)] bg-[#141414]">
+          <div className="relative mb-6 aspect-[4/3] w-full overflow-hidden rounded-[var(--radius-xl)] border border-[var(--border)] bg-[#141414]">
             <CoverImage
               src={imageSrc}
               alt={resolvedImageAlt ?? title}

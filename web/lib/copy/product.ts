@@ -49,6 +49,37 @@ export const readinessDocsIndex = {
   },
 } as const;
 
+export const docsJourneyCards = [
+  {
+    title: "Assess workflow",
+    description: "Run a baseline scan and persist results.",
+    href: "/docs/guides/assess",
+    image: "/marketing/docs-assess-workflow.webp",
+    imageAlt: "Black and white workflow showing scan, persist, and export steps.",
+  },
+  {
+    title: "Report formats",
+    description: "PDF, bundle, executive, board, and auditor exports.",
+    href: "/docs/guides/report-formats",
+    image: "/marketing/docs-report-formats.webp",
+    imageAlt: "Black and white illustration of multiple report formats from one scan source.",
+  },
+  {
+    title: "Verify evidence",
+    description: "Independently check signed assessment proofs.",
+    href: "/docs/guides/verify",
+    image: "/marketing/docs-verify-evidence.webp",
+    imageAlt: "Black and white signature chain with independent verify node.",
+  },
+  {
+    title: "Monitor workflow",
+    description: "Scheduled re-scans, drift alerts, and remediation.",
+    href: "/docs/guides/monitor-workflow",
+    image: "/marketing/docs-monitor-workflow.webp",
+    imageAlt: "Black and white schedule loop: scan, diff, alert, remediate.",
+  },
+] as const;
+
 export const docsIndex = {
   eyebrow: measurement.label,
   title: "Qtangl planning API",

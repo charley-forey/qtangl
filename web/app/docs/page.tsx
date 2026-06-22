@@ -10,7 +10,7 @@ import { MAIN_CONTENT_ID } from "@/components/layout/PageShell";
 import FeatureCard from "@/components/marketing/FeatureCard";
 import Card from "@/components/ui/Card";
 import { pqcDocsCards } from "@/lib/constants";
-import { readinessDocsIndex } from "@/lib/copy/product";
+import { docsJourneyCards, readinessDocsIndex } from "@/lib/copy/product";
 import { docsSections } from "@/lib/docs/nav";
 import { docsSearchIndex } from "@/lib/docs/search-index-export";
 import { buildPageMetadata } from "@/lib/seo";
@@ -64,26 +64,16 @@ export default function DocsPage() {
         <DocsSection>
           <DocsHeading>Start here — PQC journey</DocsHeading>
           <div className="grid gap-4 sm:grid-cols-2">
-            <FeatureCard
-              title="Assess workflow"
-              description="Run a baseline scan and persist results."
-              href="/docs/guides/assess"
-            />
-            <FeatureCard
-              title="Report formats"
-              description="PDF, bundle, executive, board, and auditor exports."
-              href="/docs/guides/report-formats"
-            />
-            <FeatureCard
-              title="Verify evidence"
-              description="Independently check signed assessment proofs."
-              href="/docs/guides/verify"
-            />
-            <FeatureCard
-              title="Monitor workflow"
-              description="Scheduled re-scans, drift alerts, and remediation."
-              href="/docs/guides/monitor-workflow"
-            />
+            {docsJourneyCards.map((card) => (
+              <FeatureCard
+                key={card.href}
+                title={card.title}
+                description={card.description}
+                href={card.href}
+                imageSrc={card.image}
+                imageAlt={card.imageAlt}
+              />
+            ))}
           </div>
         </DocsSection>
 

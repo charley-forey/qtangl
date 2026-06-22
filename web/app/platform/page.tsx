@@ -48,6 +48,8 @@ export default function PlatformPage() {
               title={tier.title}
               href={tier.href}
               ctaLabel={tier.cta}
+              imageSrc={tier.image}
+              imageAlt={tier.imageAlt}
             >
               <p>{tier.description}</p>
             </FeatureCard>

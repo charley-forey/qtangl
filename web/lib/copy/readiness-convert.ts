@@ -21,18 +21,30 @@ export const convertPageCopy = {
       {
         title: "Prioritized playbooks",
         description: "Algorithm-specific remediation paths ranked by exposure and deadline pressure.",
+        image: "/marketing/convert-playbooks.webp",
+        imageAlt:
+          "Black and white ranked list with exposure bars and algorithm icons.",
       },
       {
         title: "Workshop cadence",
         description: "Executive, engineering, and GRC sessions — delivered as a services add-on, not in-product automation.",
+        image: "/marketing/convert-workshops.webp",
+        imageAlt:
+          "Black and white conference table with stakeholder silhouettes and shared dashboard.",
       },
       {
         title: "Partner introductions",
         description: "HSM, PKI, and SI partner referrals coordinated by Qtangl CS; partner portal on the roadmap.",
+        image: "/marketing/convert-partners.webp",
+        imageAlt:
+          "Black and white hub-and-spoke diagram connecting an organization to partner nodes.",
       },
       {
         title: "Re-scan verification",
         description: "Post-remediation scans with signed proof that weak crypto is gone.",
+        image: "/marketing/convert-rescan-verify.webp",
+        imageAlt:
+          "Black and white two-scan comparison with checkmark on resolved finding.",
       },
     ],
   },
@@ -41,6 +53,9 @@ export const convertPageCopy = {
     title: "Auditor packs your GRC team can defend",
     description:
       "Signed before/after reports, CBOM diffs, and verify links — not slide decks.",
+    image: "/qtangl-hndl-before-after-migration.svg",
+    imageAlt:
+      "Before and after PQC migration path: inventory, hybrid TLS pilot, and signed verify proof.",
     actions: [
       { href: "/verify", label: "Verify a report" },
       { href: "/trust", label: "Trust center", variant: "secondary" as const },

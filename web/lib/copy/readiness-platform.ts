@@ -28,6 +28,9 @@ export const platformPageCopy = {
         "One-time domain scan, Mosca HNDL risk, CycloneDX CBOM, executive PDF, and verify link.",
       href: "/assess",
       cta: "Explore Assess →",
+      image: "/marketing/platform-tier-assess.webp",
+      imageAlt:
+        "Black and white illustration of a radar grid scanning TLS endpoints on a domain map.",
     },
     {
       eyebrow: "Monitor",
@@ -36,6 +39,9 @@ export const platformPageCopy = {
         "Scheduled re-scans, crypto diff alerts, remediation board, and standards tracking.",
       href: "/monitor",
       cta: "Explore Monitor →",
+      image: "/marketing/platform-tier-monitor.webp",
+      imageAlt:
+        "Black and white illustration of a calendar timeline with recurring scan marks and diff alert flags.",
     },
     {
       eyebrow: "Convert",
@@ -44,6 +50,9 @@ export const platformPageCopy = {
         "Prioritized playbooks, workshop cadence, partner orchestration, and re-scan verification.",
       href: "/convert",
       cta: "Explore Convert →",
+      image: "/marketing/platform-tier-convert.webp",
+      imageAlt:
+        "Black and white illustration of a three-step ladder from inventory to backlog to verify seal.",
     },
   ],
   proof: {

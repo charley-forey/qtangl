@@ -21,18 +21,30 @@ export const assessPageCopy = {
       {
         title: "Live domain scan",
         description: "TLS handshake inventory with algorithm and key-size classification.",
+        image: "/marketing/assess-live-scan.webp",
+        imageAlt:
+          "Black and white diagram of TLS handshake inventory across network endpoints.",
       },
       {
         title: "Mosca HNDL timeline",
         description: "Harvest-now-decrypt-later exposure scored against your data retention horizon.",
+        image: "/marketing/assess-hndl-timeline.webp",
+        imageAlt:
+          "Black and white timeline showing harvest-now-decrypt-later exposure horizon.",
       },
       {
         title: "CycloneDX CBOM",
         description: "Machine-readable crypto bill of materials for your CMDB and GRC tools.",
+        image: "/marketing/assess-cbom-export.webp",
+        imageAlt:
+          "Black and white illustration of a structured document stack representing CBOM export.",
       },
       {
         title: "Signed executive PDF",
         description: "Board-ready summary with an independent verify link.",
+        image: "/marketing/assess-signed-pdf.webp",
+        imageAlt:
+          "Black and white illustration of a signed report with seal and verify link chain.",
       },
     ],
   },

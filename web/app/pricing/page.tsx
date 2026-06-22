@@ -8,6 +8,7 @@ import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
 import Eyebrow from "@/components/ui/Eyebrow";
 import LiveTodayFootnote from "@/components/marketing/LiveTodayFootnote";
+import CoverImage from "@/components/marketing/CoverImage";
 import JsonLd from "@/components/seo/JsonLd";
 import { pricingPageCopy } from "@/lib/copy/readiness-pricing";
 import { buildFaqJsonLd, buildPageMetadata } from "@/lib/seo";
@@ -51,6 +52,15 @@ export default function PricingPage() {
                 tier.featured ? "ring-1 ring-white/20" : "",
               ].join(" ")}
             >
+              {tier.image ? (
+                <div className="relative mb-6 aspect-[4/3] w-full overflow-hidden rounded-[var(--radius-xl)] border border-[var(--border)] bg-[#141414]">
+                  <CoverImage
+                    src={tier.image}
+                    alt={tier.imageAlt ?? tier.name}
+                    className="object-cover grayscale"
+                  />
+                </div>
+              ) : null}
               <Eyebrow>{tier.stage}</Eyebrow>
               <h2 className="heading-section mt-4">{tier.name}</h2>
               <p className="mt-2 text-2xl font-semibold tracking-tight text-white">{tier.price}</p>

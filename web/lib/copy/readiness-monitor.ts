@@ -23,18 +23,30 @@ export const monitorPageCopy = {
       {
         title: "Scheduled re-scans",
         description: "Weekly or monthly scans across your domain portfolio.",
+        image: "/marketing/monitor-scheduled-scans.webp",
+        imageAlt:
+          "Black and white calendar grid with scan pulses across a domain portfolio.",
       },
       {
         title: "Diff alerts",
         description: "New RSA-2048, deprecated curves, or cipher suite downgrades flagged immediately.",
+        image: "/marketing/monitor-diff-alerts.webp",
+        imageAlt:
+          "Black and white before-and-after TLS config bars highlighting a downgrade delta.",
       },
       {
         title: "Remediation board",
         description: "Prioritized backlog with owner, deadline, and re-scan verification status.",
+        image: "/marketing/monitor-remediation-board.webp",
+        imageAlt:
+          "Black and white kanban board with owner dots and deadline markers.",
       },
       {
         title: "Standards tracking",
         description: "NSM-10, CNSA 2.0, and NIST IR 8547 deadline tiers mapped to your inventory.",
+        image: "/marketing/monitor-standards-tracking.webp",
+        imageAlt:
+          "Black and white checklist grid mapped to tiered compliance deadline rungs.",
       },
     ],
   },

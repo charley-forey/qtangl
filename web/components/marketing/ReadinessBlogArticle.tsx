@@ -48,7 +48,7 @@ export default function ReadinessBlogArticle({
 
           {article.coverImage ? (
             <Card tone="feature" size="sm" className="relative overflow-hidden rounded-[var(--radius-feature)] p-0">
-              <div className="aspect-[16/9] w-full bg-[#141414]">
+              <div className="relative aspect-[16/9] w-full bg-[#141414]">
                 <CoverImage
                   src={article.coverImage}
                   alt={article.coverAlt}
