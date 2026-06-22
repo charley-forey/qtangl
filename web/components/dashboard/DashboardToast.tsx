@@ -32,7 +32,7 @@ export default function DashboardToast({
 
   return (
     <div
-      className={`fixed bottom-6 left-1/2 z-[70] max-w-md -translate-x-1/2 rounded-2xl border px-4 py-3 text-sm shadow-lg backdrop-blur ${toneClass}`}
+      className={`fixed left-1/2 top-20 z-[70] max-w-md -translate-x-1/2 rounded-2xl border px-4 py-3 text-sm shadow-lg backdrop-blur sm:top-24 ${toneClass}`}
       role="status"
       aria-live="polite"
     >

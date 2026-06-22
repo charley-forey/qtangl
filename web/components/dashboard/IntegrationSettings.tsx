@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import Eyebrow from "@/components/ui/Eyebrow";
 import { postDashboardJson } from "@/lib/dashboard-bff";
@@ -41,9 +41,13 @@ export default function IntegrationSettings({
   const [integrations, setIntegrations] = useState<Integration[]>([]);
   const [webhooks, setWebhooks] = useState<Webhook[]>([]);
   const [loaded, setLoaded] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
   const [testing, setTesting] = useState(false);
 
-  async function loadSettings() {
+  const loadSettings = useCallback(async () => {
+    setLoading(true);
+    setLoadError(null);
     try {
       const intPayload = await client.monitor.listIntegrations();
       const hookPayload = await client.monitor.listWebhooks();
@@ -59,9 +63,17 @@ export default function IntegrationSettings({
       }
       setLoaded(true);
     } catch (error) {
-      onMessage(error instanceof Error ? error.message : "Failed to load integrations.");
+      const message = error instanceof Error ? error.message : "Failed to load integrations.";
+      setLoadError(message);
+      onMessage(message);
+    } finally {
+      setLoading(false);
     }
-  }
+  }, [client, onMessage]);
+
+  useEffect(() => {
+    void loadSettings();
+  }, [loadSettings]);
 
   async function sendTestWebhook() {
     setTesting(true);
@@ -89,16 +101,27 @@ export default function IntegrationSettings({
     }
   }
 
-  if (!loaded) {
+  if (loading && !loaded) {
+    return <p className="text-sm text-[var(--color-gray-500)]">Loading integration settings…</p>;
+  }
+
+  if (loadError && !loaded) {
     return (
-      <button
-        type="button"
-        className="text-sm text-white underline underline-offset-4"
-        onClick={() => loadSettings()}
-      >
-        Load integration settings
-      </button>
+      <div className="space-y-2">
+        <p className="text-sm text-amber-400">{loadError}</p>
+        <button
+          type="button"
+          className="text-sm text-white underline underline-offset-4"
+          onClick={() => void loadSettings()}
+        >
+          Retry
+        </button>
+      </div>
     );
+  }
+
+  if (!loaded) {
+    return null;
   }
 
   return (

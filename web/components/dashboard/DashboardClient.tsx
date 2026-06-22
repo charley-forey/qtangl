@@ -38,6 +38,7 @@ import { trackDashboardEvent } from "@/lib/dashboard-analytics";
 import { getStoredTenantApiKey, setStoredTenantApiKey, tenantReportUrl } from "@/lib/tenant-api";
 import type { PqcScanResponse } from "@/lib/pqc";
 import { qtanglApiBaseUrl } from "@/lib/api";
+import { createBffFetchImpl } from "@/lib/qtangl-client";
 import { parseDashboardDeepLink, resolveDashboardTabFromDeepLink } from "@/lib/dashboard-deep-links";
 
 const ReportDrawer = dynamic(() => import("@/components/pqc/ReportDrawer"), { loading: () => null });
@@ -261,6 +262,8 @@ export default function DashboardClient() {
       }
     },
   });
+
+  const bffFetchImpl = useMemo(() => (bffMode ? createBffFetchImpl() : undefined), [bffMode]);
 
   const reportUrlForScan = useCallback(
     (scanId: string, format: "pdf" | "json" | "bundle" | "executive" | "board" | "auditor" = "pdf") =>
@@ -492,7 +495,7 @@ export default function DashboardClient() {
   );
 
   return savedKey ? (
-    <QtanglProvider apiKey={savedKey} baseUrl={qtanglApiBaseUrl}>
+    <QtanglProvider apiKey={savedKey} baseUrl={qtanglApiBaseUrl} fetchImpl={bffFetchImpl}>
       {dashboard}
     </QtanglProvider>
   ) : (

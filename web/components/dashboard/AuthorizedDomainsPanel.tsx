@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
@@ -31,13 +31,21 @@ export default function AuthorizedDomainsPanel({
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
 
-  const applyDomains = useCallback(
-    (next: string[]) => {
-      setDomains(next);
-      onDomainsChange?.(next);
-    },
-    [onDomainsChange]
-  );
+  const onDomainsChangeRef = useRef(onDomainsChange);
+  const onMessageRef = useRef(onMessage);
+
+  useEffect(() => {
+    onDomainsChangeRef.current = onDomainsChange;
+  }, [onDomainsChange]);
+
+  useEffect(() => {
+    onMessageRef.current = onMessage;
+  }, [onMessage]);
+
+  const applyDomains = useCallback((next: string[]) => {
+    setDomains(next);
+    onDomainsChangeRef.current?.(next);
+  }, []);
 
   const loadDomains = useCallback(async () => {
     setLoading(true);
@@ -47,12 +55,14 @@ export default function AuthorizedDomainsPanel({
       applyDomains(next);
       setBulkDraft(next.join("\n"));
     } catch (error) {
-      onMessage?.(error instanceof Error ? error.message : "Unable to load authorized domains.");
+      onMessageRef.current?.(
+        error instanceof Error ? error.message : "Unable to load authorized domains."
+      );
       applyDomains([]);
     } finally {
       setLoading(false);
     }
-  }, [applyDomains, onMessage]);
+  }, [applyDomains]);
 
   useEffect(() => {
     void loadDomains();

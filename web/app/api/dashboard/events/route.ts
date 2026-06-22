@@ -1,6 +1,7 @@
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
+import { buildBffUpstreamAuthHeaders } from "@/lib/auth/bff-auth-headers";
 import { qtanglApiBaseUrlServer, SESSION_ASSERTION_COOKIE, SESSION_KEY_COOKIE } from "@/lib/auth/workos";
 
 export const runtime = "nodejs";
@@ -15,12 +16,8 @@ export async function GET(request: NextRequest) {
 
   const upstreamHeaders: Record<string, string> = {
     Accept: "text/event-stream",
+    ...buildBffUpstreamAuthHeaders({ assertion, sessionKey }),
   };
-  if (assertion) {
-    upstreamHeaders["X-Qtangl-Session"] = assertion;
-  } else if (sessionKey) {
-    upstreamHeaders.Authorization = `Bearer ${sessionKey}`;
-  }
 
   const target = `${qtanglApiBaseUrlServer()}/tenant/dashboard/events`;
   const upstream = await fetch(target, {

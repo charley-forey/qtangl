@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 
+import { fetchDashboardJson } from "@/lib/dashboard-bff";
 import { fetchTenantJson } from "@/lib/tenant-api";
 
 type HostDrift = {
@@ -16,9 +17,11 @@ export default function HostDriftWidget({ apiKey }: { apiKey: string }) {
   const [drift, setDrift] = useState<HostDrift | null>(null);
 
   useEffect(() => {
-    fetchTenantJson<HostDrift & { status: string }>("/tenant/discovery/host-drift", apiKey)
-      .then(setDrift)
-      .catch(() => setDrift({ currentCount: 0 }));
+    const loader =
+      apiKey === "bff"
+        ? fetchDashboardJson<HostDrift & { status: string }>("/tenant/discovery/host-drift")
+        : fetchTenantJson<HostDrift & { status: string }>("/tenant/discovery/host-drift", apiKey);
+    loader.then(setDrift).catch(() => setDrift({ currentCount: 0 }));
   }, [apiKey]);
 
   if (!drift) {
