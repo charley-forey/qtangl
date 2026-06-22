@@ -36,7 +36,16 @@ export const readinessHomeNarrative = {
   qDayLink: { label: "Q-Day education hub →", href: "/q-day" },
 } as const;
 
-export const readinessCtaPanel = {
+export type MarketingCtaPanel = {
+  eyebrow: string;
+  title: string;
+  description: string;
+  primaryCta: { label: string; href: string };
+  secondaryCta: { label: string; href: string };
+  docsLink: { label: string; href: string };
+};
+
+export const readinessCtaPanel: MarketingCtaPanel = {
   eyebrow: "Q-Day readiness",
   title: "Ready for your first Q-Day assessment?",
   description:
@@ -44,7 +53,7 @@ export const readinessCtaPanel = {
   primaryCta: { label: "Run Q-Day scan", href: "/assess" },
   secondaryCta: { label: "Request pilot access", href: "/access" },
   docsLink: { label: "See a signed report", href: "/verify?token=sample-token" },
-} as const;
+};
 
 export const readinessJourneyPoints = [
   {

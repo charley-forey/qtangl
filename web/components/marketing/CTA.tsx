@@ -4,11 +4,9 @@ import Button from "@/components/ui/Button";
 import AnimatedBorderFrame from "@/components/ui/AnimatedBorderFrame";
 import Eyebrow from "@/components/ui/Eyebrow";
 import Glow from "@/components/ui/Glow";
-import { readinessCtaPanel } from "@/lib/copy/readiness-home";
+import { readinessCtaPanel, type MarketingCtaPanel } from "@/lib/copy/readiness-home";
 
-type CtaPanel = typeof readinessCtaPanel;
-
-export default function CTA({ panel = readinessCtaPanel }: { panel?: CtaPanel }) {
+export default function CTA({ panel = readinessCtaPanel }: { panel?: MarketingCtaPanel }) {
   return (
     <AnimatedBorderFrame className="overflow-hidden rounded-[var(--radius-feature)]">
       <Glow className="hero-orb right-[-3rem] top-[-4rem] h-36 w-36 bg-white/18" />
