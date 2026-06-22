@@ -65,12 +65,14 @@ export const platformPageCopy = {
       { href: "/trust", label: "Trust center", variant: "secondary" as const },
     ],
   },
-  maturity: {
-    eyebrow: "Maturity model",
-    title: "Where are you on the journey?",
-    description: "Stages 0–6 from unaware to verified — always propose the next stage plus one.",
-    href: "/journey",
-    cta: "Explore customer journey →",
+  cta: {
+    eyebrow: "Get started",
+    title: "See your crypto posture in one scan",
+    description:
+      "Point Qtangl at a domain. Get Mosca HNDL scoring, a CycloneDX CBOM, and a signed PDF your GRC team can verify — then grow into Monitor when you're ready for continuous drift tracking.",
+    primaryCta: { label: "Run Q-Day scan", href: "/assess" },
+    secondaryCta: { label: "Request pilot access", href: "/access" },
+    docsLink: { label: "Compare Qtangl to other PQC vendors →", href: "/compare" },
   },
   whyQtangl: {
     eyebrow: "Why Qtangl",

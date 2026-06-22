@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 
+import CTA from "@/components/marketing/CTA";
 import FeatureCard from "@/components/marketing/FeatureCard";
 import LiveTodayFootnote from "@/components/marketing/LiveTodayFootnote";
 import PlatformSampleEmbed from "@/components/marketing/PlatformSampleEmbed";
@@ -21,7 +21,7 @@ export const metadata: Metadata = buildPageMetadata({
 });
 
 export default function PlatformPage() {
-  const { hero, journey, tiers, proof, maturity, whyQtangl } = platformPageCopy;
+  const { hero, journey, tiers, proof, cta, whyQtangl } = platformPageCopy;
 
   return (
     <PageShell>
@@ -118,21 +118,7 @@ export default function PlatformPage() {
       </Section>
 
       <Section gap="tight" className="pb-0">
-        <div className="content-reading">
-          <Eyebrow>{maturity.eyebrow}</Eyebrow>
-          <h2 className="heading-section mt-4">{maturity.title}</h2>
-          <p className="mt-4 max-w-3xl text-base leading-8 text-[var(--color-gray-300)]">
-            {maturity.description}
-          </p>
-        </div>
-        <div className="mt-8">
-          <Link
-            href={maturity.href}
-            className="text-sm font-medium text-white underline-offset-4 hover:underline"
-          >
-            {maturity.cta}
-          </Link>
-        </div>
+        <CTA panel={cta} />
       </Section>
     </PageShell>
   );
