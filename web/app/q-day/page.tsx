@@ -19,7 +19,7 @@ export const metadata: Metadata = buildPageMetadata({
 });
 
 export default function QDayHubPage() {
-  const { hero, resources, deadlines, artifacts, solutions } = qDayHubCopy;
+  const { hero, resources, learning, deadlines, artifacts, solutions } = qDayHubCopy;
 
   return (
     <PageShell>
@@ -82,6 +82,27 @@ export default function QDayHubPage() {
               description={item.description}
               href={item.href}
               ctaLabel="Read guide →"
+            />
+          ))}
+        </div>
+      </Section>
+
+      <Section gap="tight">
+        <div className="content-reading">
+          <Eyebrow>{learning.eyebrow}</Eyebrow>
+          <h2 className="heading-section mt-4">{learning.title}</h2>
+          <p className="mt-4 max-w-3xl text-base leading-8 text-[var(--color-gray-300)]">
+            {learning.description}
+          </p>
+        </div>
+        <div className="mt-10 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+          {learning.items.map((item) => (
+            <FeatureCard
+              key={item.slug}
+              title={item.title}
+              description={item.description}
+              href={item.href}
+              ctaLabel="Read →"
             />
           ))}
         </div>

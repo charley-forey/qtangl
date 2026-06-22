@@ -115,6 +115,74 @@ export const qDayHubCopy = {
       },
     ] satisfies QDayResource[],
   },
+  learning: {
+    eyebrow: "Learn",
+    title: "Video companions and learning path",
+    description:
+      "Embedded YouTube explainers with original takeaways — plus a four-week curriculum from Shor's algorithm through migration evidence.",
+    items: [
+      {
+        slug: "learning-hub",
+        title: "Quantum crypto curriculum hub",
+        description: "All 15 video companions, five layers, diagrams, and checkpoints.",
+        href: "/learn/quantum-crypto",
+      },
+      {
+        slug: "learning-path",
+        title: "4-week learning path",
+        description: "Structured curriculum with videos, NIST links, and blog companions.",
+        href: "/blog/learning-quantum-crypto-4-week-path",
+      },
+      {
+        slug: "learn-foundations",
+        title: "Quantum crypto foundations (topic guide)",
+        description: "Narrative five-layer guide with watch/read links and PQC libraries.",
+        href: "/learn/topics/quantum-crypto-foundations",
+      },
+      {
+        slug: "learning-guide",
+        title: "Learning guide (printable)",
+        description: "Four-week tables, checkpoints, and video index — styled on-site or .md download.",
+        href: "/learn/quantum-crypto/guide",
+      },
+      {
+        slug: "video-shor",
+        title: "After minutephysics on Shor's",
+        description: "What CISOs must know about RSA and ECC — with embedded video.",
+        href: "/blog/video-companion-shors-algorithm-minutephysics",
+      },
+      {
+        slug: "video-veritasium",
+        title: "After Veritasium: Shor's to NIST",
+        description: "HNDL, NIST PQC standards, and migration urgency.",
+        href: "/blog/video-companion-quantum-power-veritasium",
+      },
+      {
+        slug: "video-moody",
+        title: "After NIST's Dustin Moody",
+        description: "12-month post-quantum strategy and 2035 timelines.",
+        href: "/blog/video-companion-dustin-moody-nist-strategy",
+      },
+      {
+        slug: "video-mosca",
+        title: "After Michele Mosca",
+        description: "Mosca inequality and crypto-agility for boards.",
+        href: "/blog/video-companion-mosca-intel-quantum-security",
+      },
+      {
+        slug: "video-menezes",
+        title: "After Alfred Menezes: ML-KEM & ML-DSA",
+        description: "Cryptography 101 course companion with embedded lecture.",
+        href: "/blog/video-companion-kyber-dilithium-menezes",
+      },
+      {
+        slug: "fips-primer",
+        title: "FIPS 203–205 in plain language",
+        description: "ML-KEM, ML-DSA, and SLH-DSA pillar article.",
+        href: "/blog/nist-fips-203-204-205-primer",
+      },
+    ] satisfies QDayResource[],
+  },
   deadlines: {
     eyebrow: "Deadlines",
     title: "Framework timeline",
@@ -224,8 +292,8 @@ export const qDayArticles = {
     ],
     videoId: "CJqJCpSxadE",
     videoTitle: "Q-Day Explained: The Quantum Threat to Encryption",
-    blogCompanionHref: "/blog/pqc-deadlines-2029",
-    blogCompanionTitle: "PQC deadlines in 2029 and beyond",
+    blogCompanionHref: "/blog/video-companion-q-day-explained",
+    blogCompanionTitle: "After Q-Day Explained: what mid-market CISOs should do this quarter",
     related: ["hndl", "deadlines", "readiness-score"],
   },
   hndl: {
@@ -315,8 +383,8 @@ export const qDayArticles = {
     ],
     videoId: "u4mVljNQnBw",
     videoTitle: "Why Your Encrypted Data Is Already Being Stolen",
-    blogCompanionHref: "/blog/harvest-now-decrypt-later-boards",
-    blogCompanionTitle: "Harvest-now-decrypt-later: what boards miss",
+    blogCompanionHref: "/blog/video-companion-hndl-jeremy-allison",
+    blogCompanionTitle: "After Jeremy Allison on HNDL: what your security team should do now",
     related: ["mosca-inequality", "what-is-q-day", "readiness-score"],
   },
   "mosca-inequality": {
@@ -340,6 +408,11 @@ export const qDayArticles = {
       },
     ],
     related: ["hndl", "deadlines", "readiness-score"],
+    externalSourceIds: ["mosca-inequality", "postquantum-hndl-article", "gqi-q-day-summary"],
+    videoId: "vWP4LF2hz80",
+    videoTitle: "Michele Mosca Public Lecture: As We Enter a New Quantum Era",
+    blogCompanionHref: "/blog/mosca-inequality-worked-examples",
+    blogCompanionTitle: "Mosca inequality worked examples by industry",
   },
   deadlines: {
     metadata: {
@@ -380,8 +453,10 @@ export const qDayArticles = {
       "gqi-q-day-summary",
       "cloudflare-pq-roadmap",
     ],
-    blogCompanionHref: "/blog/pqc-deadlines-2029",
-    blogCompanionTitle: "PQC deadlines in 2029 and beyond",
+    videoId: "-_QiWSTud7I",
+    videoTitle: "How to Build Your 12-Month Post-Quantum Strategy With NIST's Dustin Moody",
+    blogCompanionHref: "/blog/video-companion-dustin-moody-nist-strategy",
+    blogCompanionTitle: "After NIST's Dustin Moody: your 12-month post-quantum strategy",
     related: ["what-is-q-day", "cbom", "readiness-score"],
   },
   cbom: {

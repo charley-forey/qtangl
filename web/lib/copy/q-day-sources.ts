@@ -4,7 +4,10 @@ export type QDaySourceTag =
   | "deadlines"
   | "standards"
   | "video"
-  | "industry";
+  | "industry"
+  | "foundations"
+  | "hands-on"
+  | "policy";
 
 export type QDaySource = {
   id: string;
@@ -16,7 +19,7 @@ export type QDaySource = {
   tags: readonly QDaySourceTag[];
 };
 
-export const qDaySourcesLastVerified = "2026-06-04";
+export const qDaySourcesLastVerified = "2026-06-21";
 
 export const qDaySources: readonly QDaySource[] = [
   {
@@ -180,6 +183,222 @@ export const qDaySources: readonly QDaySource[] = [
     summary:
       "Dr. Michele Mosca's X + Y > Z framework for harvest-now-decrypt-later exposure planning.",
     tags: ["hndl", "q-day-basics"],
+  },
+  {
+    id: "video-minutephysics-shor",
+    title: "How Quantum Computers Break Encryption | Shor's Algorithm Explained",
+    url: "https://www.youtube.com/watch?v=lvTqbM5Dq4Q",
+    publisher: "minutephysics (YouTube)",
+    date: "2019",
+    summary:
+      "Accessible explainer on Shor's algorithm, period-finding, and why RSA breaks on a large quantum computer.",
+    tags: ["video", "foundations", "q-day-basics"],
+  },
+  {
+    id: "video-veritasium-quantum-power",
+    title: "What Makes Quantum Computers SO Powerful?",
+    url: "https://www.youtube.com/watch?v=-UrdExQW0cs",
+    publisher: "Veritasium (YouTube)",
+    date: "2023",
+    summary:
+      "Covers Shor's threat, harvest-now-decrypt-later, NIST PQC competition, and migration urgency.",
+    tags: ["video", "foundations", "q-day-basics", "standards"],
+  },
+  {
+    id: "video-pbs-shor",
+    title: "Hacking at Quantum Speed with Shor's Algorithm",
+    url: "https://www.youtube.com/watch?v=wUwZZaI5u0c",
+    publisher: "PBS Infinite Series (YouTube)",
+    date: "2017",
+    summary: "Deeper dive into the number theory and quantum Fourier transform behind Shor's algorithm.",
+    tags: ["video", "foundations"],
+  },
+  {
+    id: "video-physics-world-shor",
+    title: "What is Shor's factoring algorithm? (Peter Shor)",
+    url: "https://www.youtube.com/watch?v=hOlOY7NyMfs",
+    publisher: "Physics World (YouTube)",
+    date: "2015",
+    summary: "Peter Shor introduces his factoring algorithm and quantum computational advantage.",
+    tags: ["video", "foundations"],
+  },
+  {
+    id: "video-dustin-moody-nist",
+    title: "How to Build Your 12-Month Post-Quantum Strategy (Dustin Moody, NIST)",
+    url: "https://www.youtube.com/watch?v=-_QiWSTud7I",
+    publisher: "PQShield / Shielded podcast (YouTube)",
+    date: "2025",
+    summary:
+      "NIST PQC project lead on 2035 timelines, migration myths, crypto-agility, and practical next steps.",
+    tags: ["video", "policy", "deadlines", "standards"],
+  },
+  {
+    id: "video-rwpqc-nist-2026",
+    title: "NIST PQC Standards Update: On-Ramp Signatures and Global Roadmaps (RWPQC 2026)",
+    url: "https://www.youtube.com/watch?v=pbPoUE7MmQw",
+    publisher: "RWPQC 2026 (YouTube)",
+    date: "2026",
+    summary:
+      "Dustin Moody on FIPS 203–205 status, Falcon/HQC, on-ramp signatures, and 2035 deprecation tiers.",
+    tags: ["video", "standards", "deadlines", "policy"],
+  },
+  {
+    id: "video-mosca-public-lecture",
+    title: "Michele Mosca: As We Enter a New Quantum Era",
+    url: "https://www.youtube.com/watch?v=vWP4LF2hz80",
+    publisher: "Perimeter Institute (YouTube)",
+    date: "2015",
+    summary:
+      "Michele Mosca on quantum threats to cryptography, crypto-agility, and preparing cyber infrastructure.",
+    tags: ["video", "foundations", "hndl", "q-day-basics"],
+  },
+  {
+    id: "video-menezes-kyber-dilithium",
+    title: "Short course on Kyber (ML-KEM) and Dilithium (ML-DSA) — Alfred Menezes",
+    url: "https://www.youtube.com/watch?v=9NKm84vKALc",
+    publisher: "Cryptography 101 (YouTube)",
+    date: "2024",
+    summary:
+      "University-grade introduction to NIST-standardized lattice KEM and signature schemes.",
+    tags: ["video", "standards", "foundations"],
+  },
+  {
+    id: "video-cisa-pqc-transition",
+    title: "The Post-Quantum Cryptography Transition: Tackling a Huge Challenge",
+    url: "https://www.youtube.com/watch?v=z85LaInxjrg",
+    publisher: "YouTube",
+    date: "2024",
+    summary:
+      "Industry panel on NIST PQC standards, hybrid migration, HNDL, and DNS/routing roadmap implications.",
+    tags: ["video", "policy", "standards"],
+  },
+  {
+    id: "video-root-causes-moody-pqc",
+    title: "Root Causes 613: Status of the NIST PQC Contests (Dustin Moody)",
+    url: "https://www.sectigo.com/root-causes/root-causes-613-status-of-the-nist-pqc-contests",
+    publisher: "Sectigo Root Causes Podcast",
+    date: "2025",
+    summary:
+      "Dustin Moody on Falcon, HQC, on-ramp signatures, and ongoing NIST PQC evaluation criteria.",
+    tags: ["video", "standards", "policy"],
+  },
+  {
+    id: "postquantum-shor-article",
+    title: "Shor's Algorithm: A Quantum Threat to Modern Cryptography",
+    url: "https://postquantum.com/post-quantum/shors-algorithm-a-quantum-threat/",
+    publisher: "PostQuantum.com",
+    date: "2024",
+    summary:
+      "Written explainer for security professionals — RSA, ECC, Shor's steps, and PQC migration strategies.",
+    tags: ["foundations", "q-day-basics"],
+  },
+  {
+    id: "postquantum-hndl-article",
+    title: "What Is Harvest Now, Decrypt Later (HNDL)?",
+    url: "https://postquantum.com/quantum-security-reference/what-is-harvest-now-decrypt-later/",
+    publisher: "PostQuantum.com",
+    date: "2024",
+    summary: "Mosca theorem, HNDL urgency, and why migration must start before Q-Day headlines.",
+    tags: ["foundations", "hndl"],
+  },
+  {
+    id: "cryptography101-kyber-dilithium",
+    title: "Kyber and Dilithium — Cryptography 101 with Alfred Menezes",
+    url: "https://cryptography101.ca/kyber-dilithium/",
+    publisher: "Alfred Menezes / University of Waterloo",
+    date: "2024",
+    summary: "Full lecture series, slides, and course materials for ML-KEM and ML-DSA.",
+    tags: ["foundations", "standards"],
+  },
+  {
+    id: "cisa-pqc-initiative",
+    title: "CISA Post-Quantum Cryptography Initiative",
+    url: "https://www.cisa.gov/topics/risk-management/quantum",
+    publisher: "CISA",
+    date: "2024",
+    summary: "US government guidance on quantum risk, migration planning, and PQC adoption.",
+    tags: ["policy", "deadlines"],
+  },
+  {
+    id: "cisa-quantum-readiness-factsheet",
+    title: "CISA Quantum Readiness: Migration to Post-Quantum Cryptography",
+    url: "https://www.cisa.gov/resources-tools/resources/quantum-readiness-migration-post-quantum-cryptography",
+    publisher: "CISA",
+    date: "2024",
+    summary: "Executive factsheet on PQC migration steps for public and private sector organizations.",
+    tags: ["policy", "deadlines"],
+  },
+  {
+    id: "open-quantum-safe",
+    title: "Open Quantum Safe Project",
+    url: "https://openquantumsafe.org/",
+    publisher: "Open Quantum Safe",
+    date: "2024",
+    summary: "liboqs reference implementations, TLS integrations, and prototype PQC demos.",
+    tags: ["hands-on", "standards"],
+  },
+  {
+    id: "ibm-quantum-safe-openssl",
+    title: "Getting started with quantum-safe OpenSSL",
+    url: "https://developer.ibm.com/tutorials/awb-quantum-safe-openssl",
+    publisher: "IBM",
+    date: "2024",
+    summary: "Hands-on tutorial for quantum-safe TLS with OpenSSL and PQC algorithms.",
+    tags: ["hands-on", "standards"],
+  },
+  {
+    id: "pennylane-period-finding",
+    title: "Period finding: A problem at the heart of quantum computing",
+    url: "https://pennylane.ai/demos/tutorial_period_finding",
+    publisher: "PennyLane",
+    date: "2024",
+    summary: "Interactive demo explaining period-finding — the core of Shor's algorithm.",
+    tags: ["foundations", "hands-on"],
+  },
+  {
+    id: "nist-pqc-videos",
+    title: "NIST Post-Quantum Cryptography — Featured Videos",
+    url: "https://www.nist.gov/pqc",
+    publisher: "NIST",
+    date: "2024",
+    summary: "Official NIST explainers on PQC standards, migration, and the standardization journey.",
+    tags: ["video", "standards", "policy"],
+  },
+  {
+    id: "nccoe-migration-pqc",
+    title: "NCCoE Migration to Post-Quantum Cryptography Project",
+    url: "https://www.nccoe.nist.gov/applied-cryptography/migration-to-pqc",
+    publisher: "NIST NCCoE",
+    date: "2024",
+    summary: "Practical migration demos, crypto discovery guidance, and industry collaboration.",
+    tags: ["policy", "standards"],
+  },
+  {
+    id: "ibm-shor-tutorial",
+    title: "Shor's algorithm — IBM Quantum Documentation",
+    url: "https://quantum.cloud.ibm.com/docs/en/tutorials/shors-algorithm",
+    publisher: "IBM Quantum",
+    date: "2024",
+    summary: "Code-based tutorial on Shor's algorithm and resource requirements for breaking RSA.",
+    tags: ["foundations", "hands-on"],
+  },
+  {
+    id: "qtangl-crypto-flip-2026",
+    title: "Qtangl Crypto Flip orchestration guide",
+    url: "https://qtangl.com/docs/guides/crypto-flip",
+    publisher: "Qtangl",
+    date: "2026",
+    summary: "Orchestrate CLM, KMS, and infrastructure flips with signed before/after evidence.",
+    tags: ["industry"],
+  },
+  {
+    id: "qtangl-drift-2026",
+    title: "Qtangl unified crypto drift monitoring",
+    url: "https://qtangl.com/blog/crypto-drift-monitoring-2026",
+    publisher: "Qtangl",
+    date: "2026",
+    summary: "Unified snapshots across external, host, code, and CBOM discovery sources.",
+    tags: ["industry"],
   },
 ] as const;
 

@@ -6,6 +6,7 @@ import DecisionRouter from "@/components/learn/DecisionRouter";
 import HubSearch from "@/components/learn/HubSearch";
 import LearnHubToc from "@/components/learn/LearnHubToc";
 import LibraryResourceCard from "@/components/learn/LibraryResourceCard";
+import FeatureCard from "@/components/marketing/FeatureCard";
 import PageHero from "@/components/layout/PageHero";
 import PageShell from "@/components/layout/PageShell";
 import Section from "@/components/layout/Section";
@@ -84,6 +85,7 @@ export default async function LearnPage() {
         description={libraryHubCopy.description}
         actions={[
           { href: "/learn/library", label: "Open the full library" },
+          { href: "/learn/quantum-crypto", label: "Quantum crypto curriculum", variant: "secondary" as const },
           {
             href: "/learn/compare?ids=entropicalabs-openqaoa,dwavesystems-dwave-ocean-sdk,aws-amazon-braket-sdk-python,qiskit-qiskit-optimization",
             label: "Compare optimization tools",
@@ -92,6 +94,45 @@ export default async function LearnPage() {
         ]}
         contentClassName="max-w-4xl"
       />
+
+      <Section gap="tight" id="learn-quantum-crypto">
+        <Card tone="feature" size="lg" className="rounded-[var(--radius-feature)]">
+          <Eyebrow>New · Public curriculum</Eyebrow>
+          <h2 className="heading-section mt-4 !text-2xl">
+            Quantum cryptography: 15 video companions, five layers, free guide.
+          </h2>
+          <p className="mt-4 max-w-3xl text-sm leading-8 text-[var(--color-gray-300)]">
+            From Shor&apos;s algorithm through NIST FIPS 203–205 and hybrid TLS migration — with
+            embedded YouTube explainers, practitioner articles, and downloadable bibliography.
+          </p>
+          <div className="mt-8 grid gap-6 md:grid-cols-3">
+            <FeatureCard
+              title="Learning hub"
+              description="Full video grid, layer checkpoints, and diagram gallery."
+              href="/learn/quantum-crypto"
+              ctaLabel="Open curriculum →"
+              imageSrc="/learn/topics/quantum-crypto-foundations.png"
+              imageAlt="Quantum cryptography foundations curriculum"
+            />
+            <FeatureCard
+              title="Learning guide"
+              description="Four-week watchlist with tables, checkpoints, and full video index."
+              href="/learn/quantum-crypto/guide"
+              ctaLabel="Open guide →"
+              imageSrc="/learn/diagrams/migration-stack.png"
+              imageAlt="PQC migration stack diagram"
+            />
+            <FeatureCard
+              title="4-week path"
+              description="Week-by-week schedule with embedded videos and practitioner articles."
+              href="/blog/learning-quantum-crypto-4-week-path"
+              ctaLabel="Read schedule →"
+              imageSrc="/learn/diagrams/hndl-timeline.png"
+              imageAlt="HNDL timeline diagram"
+            />
+          </div>
+        </Card>
+      </Section>
 
       <Section gap="tight">
         <div className="grid gap-10 xl:grid-cols-[minmax(0,1fr)_220px]">
@@ -259,6 +300,12 @@ export default async function LearnPage() {
               className="inline-flex rounded-full border border-[var(--border)] px-5 py-3 text-sm font-medium text-[var(--color-gray-300)] transition hover:border-[var(--border-strong)] hover:text-white"
             >
               Q-Day hub
+            </Link>
+            <Link
+              href="/learn/quantum-crypto"
+              className="inline-flex rounded-full border border-[var(--border-strong)] bg-white/[0.08] px-5 py-3 text-sm font-medium text-white transition hover:bg-white/[0.12]"
+            >
+              Quantum crypto curriculum
             </Link>
             <Link
               href="/assess/mini"

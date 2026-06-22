@@ -24,6 +24,7 @@ export const footerNav = [
   { name: "Status", href: statusPageHref },
   { name: "Verify", href: "/verify" },
   { name: "Learn", href: "/learn" },
+  { name: "Quantum crypto curriculum", href: "/learn/quantum-crypto" },
   { name: "Blog", href: "/blog" },
   { name: "About", href: "/about" },
 ] as const;

@@ -8,6 +8,7 @@
     "learn:stale": "node ../scripts/learn-stale-check.mjs",
     "check:readiness-content": "node ../scripts/check-readiness-content-links.mjs",
     "generate:hndl-exports": "node scripts/generate-hndl-infographic-exports.mjs",
+    "generate:learning-diagram-exports": "node scripts/generate-learning-diagram-exports.mjs",
     "indexnow": "node ../scripts/submit-indexnow.mjs --priority",
     "indexnow:sitemap": "node ../scripts/submit-indexnow.mjs --sitemap",
     "generate:docs-index": "node scripts/build_docs_index.mjs",

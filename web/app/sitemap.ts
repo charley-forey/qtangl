@@ -3,6 +3,7 @@ import type { MetadataRoute } from "next";
 import { blogPosts } from "@/lib/copy/marketing";
 import { competitorCompareHref, competitorSlugs } from "@/lib/copy/competitors";
 import { frameworkGuideList } from "@/lib/copy/readiness-frameworks";
+import { readinessBlogSlugs } from "@/lib/copy/readiness-content-registry";
 import { qDayArticles } from "@/lib/copy/readiness-qday-hub";
 import { libraryRecipes } from "@/lib/copy/library-recipes";
 import { libraryTopicTeasers } from "@/lib/copy/library-topics";
@@ -58,15 +59,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/access",
     ...getAllDocsHrefs(),
     "/blog",
+    ...readinessBlogSlugs.map((slug) => `/blog/${slug}`),
     ...blogPosts
       .filter(
         (post) =>
-          ("readiness" in post && post.readiness === true) ||
-          ("hndl" in post && post.hndl === true) ||
-          ("featured" in post && post.featured === true)
+          !readinessBlogSlugs.includes(post.slug) &&
+          (("readiness" in post && post.readiness === true) ||
+            ("hndl" in post && post.hndl === true) ||
+            ("featured" in post && post.featured === true))
       )
       .map((post) => post.href),
     "/learn",
+    "/learn/quantum-crypto",
+    "/learn/quantum-crypto/guide",
     "/learn/library",
     "/learn/compare",
     "/learn/map",

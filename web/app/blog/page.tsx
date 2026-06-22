@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 
 import PageHero from "@/components/layout/PageHero";
 import PageShell from "@/components/layout/PageShell";
+import BlogVideoCompanionsSection from "@/components/blog/BlogVideoCompanionsSection";
 import FeatureCard from "@/components/marketing/FeatureCard";
 import Section from "@/components/layout/Section";
 import Eyebrow from "@/components/ui/Eyebrow";
@@ -79,6 +80,8 @@ export default function BlogPage() {
           </div>
         </Section>
       ) : null}
+
+      <BlogVideoCompanionsSection />
 
       {readinessPosts.length > 0 ? (
         <Section gap="tight" className="pb-0">

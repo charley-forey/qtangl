@@ -58,6 +58,16 @@ export const resourcesPageCopy = {
       href: "/q-day",
     },
     {
+      title: "Quantum crypto learning guide",
+      description: "Four-week video + reading curriculum with NIST bibliography — downloadable markdown.",
+      href: "/learn/quantum-crypto",
+    },
+    {
+      title: "Learn: quantum crypto foundations",
+      description: "Five-layer curriculum with embedded video companions and PQC library links.",
+      href: "/learn/quantum-crypto",
+    },
+    {
       title: "HNDL primer",
       description: "How ciphertext is copied today — collection vectors, Mosca calculator, and exposure estimator.",
       href: "/q-day/hndl",

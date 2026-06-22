@@ -58,6 +58,17 @@ export default async function LibraryTopicPage({ params }: TopicPageProps) {
         coverImage={topic.heroImagePath}
         coverAlt={`${topic.title} illustration`}
       >
+        {topic.slug === "quantum-crypto-foundations" ? (
+          <section>
+            <p>
+              <Link href="/learn/quantum-crypto" className="font-medium text-white underline underline-offset-4">
+                Open the full curriculum hub
+              </Link>{" "}
+              for the video companion grid, diagram gallery, and layer checkpoints — or continue with
+              the narrative guide below.
+            </p>
+          </section>
+        ) : null}
         {topic.sections.map((section) => (
           <section key={section.title}>
             <h2>{section.title}</h2>

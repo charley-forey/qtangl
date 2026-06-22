@@ -305,6 +305,7 @@ export const libraryTopics: LibraryTopic[] = [
         title: "Inventory before migration",
         body: [
           "You cannot migrate what you have not inventoried. Start with TLS endpoints, JWKS, SSH, STARTTLS, and third-party dependencies — then map findings to NSM-10, CMMC, or NIST IR 8547 tiers.",
+          "Start with the foundations curriculum at /learn/topics/quantum-crypto-foundations and the 4-week path at /blog/learning-quantum-crypto-4-week-path.",
         ],
       },
       {
@@ -355,7 +356,7 @@ export const libraryTopics: LibraryTopic[] = [
         title: "How ciphertext gets copied",
         body: [
           "Breach exfiltration, backups and archives, cloud misconfiguration, and bulk network collection are the dominant paths. Adversaries do not need to break RSA today — copying is faster than cryptanalysis.",
-          "See the practitioner guide at /blog/how-encrypted-data-is-harvested and the interactive collection matrix at /q-day/hndl.",
+          "See /blog/video-companion-hndl-jeremy-allison, /blog/hndl-collection-vectors-deep-dive, and /blog/how-encrypted-data-is-harvested.",
         ],
       },
       {
@@ -395,11 +396,65 @@ export const libraryTopics: LibraryTopic[] = [
         title: "Hybrid first",
         body: [
           "Pilot hybrid TLS on non-production paths, then expand. Qtangl captures handshake proof traces for auditor review.",
+          "Watch /blog/video-companion-kyber-dilithium-menezes and read /blog/nist-fips-203-204-205-primer before deploying.",
         ],
       },
     ],
     relatedResourceSlugs: ["open-quantum-safe-liboqs", "open-quantum-safe-openssl"],
     cta: { href: "/q-day/frameworks/ml-kem", label: "ML-KEM guide" },
+  },
+  {
+    slug: "quantum-crypto-foundations",
+    eyebrow: "Foundations",
+    title: "Quantum cryptography foundations: from Shor's to PQC",
+    description:
+      "Five-layer curriculum — threat, HNDL, NIST standards, migration, and evidence — with embedded videos and authoritative links.",
+    intro:
+      "Whether you are a CISO, security engineer, or curious developer, this guide sequences the best explainers and NIST references into a coherent learning path. Each layer links to video companions on our blog (with embedded YouTube players) and open-source PQC libraries in the Learn catalog.",
+    heroImagePath: "/learn/topics/quantum-crypto-foundations.png",
+    sections: [
+      {
+        title: "Layer 1 — Why quantum breaks RSA and ECC",
+        body: [
+          "Watch: /blog/video-companion-shors-algorithm-minutephysics and /blog/video-companion-quantum-power-veritasium. Read: /blog/shors-algorithm-explained-for-cisos and NIST's PQC overview at nist.gov/pqc.",
+          "Checkpoint: Can you explain why Shor's breaks RSA but AES-256 mostly survives?",
+        ],
+      },
+      {
+        title: "Layer 2 — Harvest now, decrypt later",
+        body: [
+          "Watch: /blog/video-companion-hndl-jeremy-allison and /blog/video-companion-mosca-intel-quantum-security. Read: /blog/mosca-inequality-worked-examples and the HNDL hub at /q-day/hndl.",
+          "Checkpoint: Apply X + Y > Z to one data class with the Mosca calculator.",
+        ],
+      },
+      {
+        title: "Layer 3 — NIST PQC standards",
+        body: [
+          "Watch: /blog/video-companion-pq-algorithms-nist and /blog/video-companion-kyber-dilithium-menezes. Read: /blog/nist-fips-203-204-205-primer and /q-day/frameworks/ml-kem.",
+          "Checkpoint: Name ML-KEM, ML-DSA, and SLH-DSA and what each replaces.",
+        ],
+      },
+      {
+        title: "Layer 4 — Migration in practice",
+        body: [
+          "Watch: /blog/video-companion-dustin-moody-nist-strategy and /blog/video-companion-cisa-quantum-readiness. Read: /blog/hybrid-tls-migration-guide and /blog/pqc-migration-phases-explained.",
+          "Checkpoint: Describe hybrid TLS and list three non-HTTPS crypto locations.",
+        ],
+      },
+      {
+        title: "Layer 5 — Crypto agility and evidence",
+        body: [
+          "Read: /blog/crypto-attack-surface-map, /blog/qkd-vs-post-quantum-cryptography, and /blog/reading-qtangl-cbom-export. Download: /downloads/quantum-crypto-learning-guide.md.",
+          "Checkpoint: Explain what a CBOM is and why re-scan proof matters.",
+        ],
+      },
+    ],
+    relatedResourceSlugs: [
+      "open-quantum-safe-liboqs",
+      "open-quantum-safe-openssl",
+      "pqclean-pqclean",
+    ],
+    cta: { href: "/learn/quantum-crypto", label: "Open learning hub" },
   },
 ] as const;
 
