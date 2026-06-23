@@ -57,7 +57,7 @@ export default function DashboardClient() {
   const checkoutParam = searchParams.get("checkout");
   const signupSuccessParam = searchParams.get("signup") === "success";
   const checkoutSuccess = checkoutParam ?? (signupSuccessParam ? "monitor" : null);
-  const { upgradeOpen, upgradeProduct, openUpgrade, closeUpgrade } = useUpgradeGate();
+  const { upgradeOpen, upgradeProduct, upgradeContext, openUpgrade, closeUpgrade } = useUpgradeGate();
   const {
     session: contextSession,
     checked,
@@ -454,6 +454,7 @@ export default function DashboardClient() {
       <UpgradeModal
         open={upgradeOpen}
         product={upgradeProduct}
+        context={upgradeContext}
         onClose={closeUpgrade}
         onMessage={showMessage}
         salesLed={Boolean(tenantSettings?.salesLed)}

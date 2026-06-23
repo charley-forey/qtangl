@@ -46,6 +46,9 @@ type Props = {
   onDismissScheduleRecommendation?: () => void;
   onOpenUpgrade?: (product: UpgradeProduct) => void;
   onRefresh?: () => void;
+  tier?: string;
+  maxSchedules?: number;
+  readinessScore?: number | null;
 };
 
 function matchesSourceFilter(scan: TenantScanSummary, filter: SourceFilter): boolean {
@@ -73,6 +76,9 @@ export default function DashboardScansTab({
   onDismissScheduleRecommendation,
   onOpenUpgrade,
   onRefresh,
+  tier = "free",
+  maxSchedules = 0,
+  readinessScore,
 }: Props) {
   const scans = bundle?.scans ?? [];
   const legalOk = isLegalAcceptanceCurrent(tenantSettings);
@@ -259,6 +265,9 @@ export default function DashboardScansTab({
       {legalOk && scans.length > 0 && schedulesActive === 0 ? (
         <ScheduleRecommendationCard
           scanAllowlist={allowlist}
+          tier={tier}
+          maxSchedules={maxSchedules}
+          readinessScore={readinessScore}
           dismissed={scheduleRecommendationDismissed}
           onDismiss={onDismissScheduleRecommendation}
           onMessage={onMessage}

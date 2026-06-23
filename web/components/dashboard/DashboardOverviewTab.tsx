@@ -232,6 +232,9 @@ export default function DashboardOverviewTab({
       {needsSchedule && !hasScanDiff ? (
         <ScheduleRecommendationCard
           scanAllowlist={(tenantSettings?.scanAllowlist as string[] | undefined) ?? []}
+          tier={(summary.me.entitlements as { tier?: string } | undefined)?.tier ?? "free"}
+          maxSchedules={(summary.me.entitlements as { maxSchedules?: number } | undefined)?.maxSchedules ?? 0}
+          readinessScore={summary.kpis.latestReadiness ?? detail?.readinessScore ?? null}
           dismissed={((tenantSettings?.coaching as { bannersDismissed?: string[] } | undefined)?.bannersDismissed ?? []).includes(
             "schedule-recommendation"
           )}
@@ -239,6 +242,7 @@ export default function DashboardOverviewTab({
           onMessage={onMessage}
           onRefresh={onRefreshSummary}
           onOpenUpgrade={onOpenUpgrade}
+          onOpenScans={() => onTabChange("scans")}
         />
       ) : null}
 

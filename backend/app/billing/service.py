@@ -878,6 +878,19 @@ def dashboard_self_serve_signup_enabled() -> bool:
     return os.getenv("QTANGL_DASHBOARD_SELF_SERVE_SIGNUP", "true").lower() in {"1", "true", "yes"}
 
 
+def internal_signup_tier(email: str) -> str | None:
+    """Tier granted on first dashboard signup for internal Qtangl emails (configurable)."""
+    from app.billing.entitlements import TIER_DEFAULTS
+
+    email_l = email.lower().strip()
+    if not email_l.endswith("@qtangl.com"):
+        return None
+    tier = os.getenv("QTANGL_INTERNAL_TIER", "enterprise").strip().lower()
+    if tier not in TIER_DEFAULTS:
+        tier = "enterprise"
+    return tier
+
+
 def provision_dashboard_workspace(*, user_id: str, email: str, name: str | None = None) -> dict[str, Any] | None:
     """First WorkOS sign-in from /dashboard — create free-tier tenant + admin membership."""
     if not dashboard_self_serve_signup_enabled():
@@ -890,11 +903,13 @@ def provision_dashboard_workspace(*, user_id: str, email: str, name: str | None 
     email_l = email.lower().strip()
     domain = email_l.split("@")[-1] if "@" in email_l else "workspace"
     company = (name or "").strip() or domain.split(".")[0].replace("-", " ").title() or "Workspace"
+    internal_tier = internal_signup_tier(email_l)
+    provision_tier = internal_tier or "free"
 
     core = _provision_tenant_core(
         email=email_l,
         company=company,
-        tier="free",
+        tier=provision_tier,
         source="dashboard_self_serve",
         user_id=user_id,
         auth_mode="magic_link",
@@ -907,6 +922,15 @@ def provision_dashboard_workspace(*, user_id: str, email: str, name: str | None 
             tenant_id=core["tenantId"],
             settings={"orgType": "internal_hq", "dogfoodMirrorEnabled": True},
         )
+        if internal_tier:
+            from app.audit.service import log_action
+
+            log_action(
+                tenant_id=core["tenantId"],
+                action="billing.internal_tier_granted",
+                actor="system",
+                detail={"email": email_l, "tier": internal_tier},
+            )
     return {
         "tenantId": core["tenantId"],
         "tenantName": core["tenantName"],

@@ -7,9 +7,16 @@ import { postDashboardJson } from "@/lib/dashboard-bff";
 
 export type UpgradeProduct = "assess" | "monitor" | "convert";
 
+export type UpgradeContext = {
+  source?: string;
+  domain?: string;
+  readinessScore?: number | null;
+};
+
 type Props = {
   open: boolean;
   product: UpgradeProduct;
+  context?: UpgradeContext | null;
   onClose: () => void;
   onMessage?: (message: string) => void;
   salesLed?: boolean;
@@ -28,6 +35,12 @@ const COPY: Record<
     title: "Upgrade to Monitor",
     body: "Scheduled re-scans, drift alerts, and remediation tracking require a Monitor subscription.",
     cta: "Subscribe to Monitor",
+    preview: [
+      "Weekly or bi-weekly automated re-scans per domain",
+      "Drift alerts when crypto posture changes",
+      "Webhook and Jira ticketing integrations",
+      "100 scans per month (vs 5 on Assess Free)",
+    ],
   },
   convert: {
     title: "Upgrade to Convert",
@@ -42,9 +55,17 @@ const COPY: Record<
   },
 };
 
-export default function UpgradeModal({ open, product, onClose, onMessage, salesLed }: Props) {
+function personalizedMonitorLine(context?: UpgradeContext | null): string | null {
+  if (!context?.domain || context.readinessScore == null) {
+    return null;
+  }
+  return `Your baseline on ${context.domain} scored ${context.readinessScore} — Monitor catches drift before your next audit.`;
+}
+
+export default function UpgradeModal({ open, product, context, onClose, onMessage, salesLed }: Props) {
   const [loading, setLoading] = useState(false);
   const copy = COPY[product];
+  const personalized = product === "monitor" ? personalizedMonitorLine(context) : null;
 
   const startCheckout = useCallback(async () => {
     if (product === "convert") {
@@ -102,6 +123,9 @@ export default function UpgradeModal({ open, product, onClose, onMessage, salesL
       >
         <h2 className="text-lg font-semibold text-white">{copy.title}</h2>
         <p className="mt-3 text-sm leading-7 text-[var(--color-gray-300)]">{copy.body}</p>
+        {personalized ? (
+          <p className="mt-3 text-sm leading-7 text-amber-100">{personalized}</p>
+        ) : null}
         {copy.preview && copy.preview.length > 0 ? (
           <ul className="mt-4 list-disc space-y-1 pl-5 text-xs text-[var(--color-gray-400)]">
             {copy.preview.map((item) => (

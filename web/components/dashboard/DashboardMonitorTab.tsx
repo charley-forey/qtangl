@@ -76,6 +76,11 @@ export default function DashboardMonitorTab({
   const maxScansPerMonth =
     summary.kpis.quotaLimit ??
     ((summary.me.entitlements as { maxScansPerMonth?: number } | undefined)?.maxScansPerMonth ?? null);
+  const entitlements = summary.me.entitlements as { tier?: string; maxSchedules?: number } | undefined;
+  const tier = entitlements?.tier ?? "free";
+  const maxSchedules = entitlements?.maxSchedules ?? 0;
+  const readinessScore =
+    summary.kpis.latestReadiness ?? summary.latestScanDetail?.readinessScore ?? null;
 
   return (
     <DashboardSection title="Monitor control tower" id="dashboard-monitor">
@@ -94,11 +99,15 @@ export default function DashboardMonitorTab({
       {(bundle?.schedules ?? []).length === 0 ? (
         <ScheduleRecommendationCard
           scanAllowlist={scanAllowlist}
+          tier={tier}
+          maxSchedules={maxSchedules}
+          readinessScore={readinessScore}
           dismissed={scheduleRecommendationDismissed}
           onDismiss={onDismissScheduleRecommendation}
           onMessage={onMessage}
           onRefresh={onRefresh}
           onOpenUpgrade={onOpenUpgrade}
+          onOpenScans={() => onTabChange?.("scans")}
         />
       ) : null}
 
@@ -207,6 +216,7 @@ export default function DashboardMonitorTab({
             onMessage={onMessage}
             onOpenUpgrade={onOpenUpgrade}
             maxScansPerMonth={maxScansPerMonth}
+            maxSchedules={maxSchedules}
           />
 
         </div>

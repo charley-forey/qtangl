@@ -60,6 +60,7 @@ export default function BillingHubPanel({
 
   const tier = entitlements?.tier ?? tierProp;
   const quotaLimit = entitlements?.maxScansPerMonth ?? null;
+  const scheduleLimit = entitlements?.maxSchedules ?? null;
   const quotaPct =
     quotaLimit && quotaLimit > 0 ? Math.min(100, Math.round((scansThisMonth / quotaLimit) * 100)) : null;
 
@@ -81,6 +82,20 @@ export default function BillingHubPanel({
               <span className="text-xs text-[var(--color-gray-400)]">{scansThisMonth} scans this month</span>
             )}
           </div>
+          {scheduleLimit === 0 ? (
+            <p className="mt-3 text-xs text-[var(--color-gray-400)]">
+              Scheduled monitoring: not included on Assess (Free).{" "}
+              {tier === "free" && onOpenUpgrade ? (
+                <button
+                  type="button"
+                  className="text-white underline underline-offset-4"
+                  onClick={() => onOpenUpgrade("monitor")}
+                >
+                  Upgrade Monitor
+                </button>
+              ) : null}
+            </p>
+          ) : null}
           <div className="mt-4 flex flex-wrap gap-2">
             {tier === "free" ? (
               <>

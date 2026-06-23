@@ -5,6 +5,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useQtanglClient } from "@qtangl/sdk-react";
 
 import CadencePicker from "@/components/dashboard/CadencePicker";
+import Button from "@/components/ui/Button";
 import { postDashboardJson } from "@/lib/dashboard-bff";
 import { handleDashboardApiError } from "@/lib/dashboard-errors";
 import { type ScheduledScan } from "@/lib/tenant-api";
@@ -23,12 +24,14 @@ export default function ScheduleManager({
   onMessage,
   onOpenUpgrade,
   maxScansPerMonth,
+  maxSchedules = 0,
 }: {
   schedules: ScheduledScan[];
   onRefresh: () => void;
   onMessage: (msg: string) => void;
   onOpenUpgrade?: (product: "monitor") => void;
   maxScansPerMonth?: number | null;
+  maxSchedules?: number;
 }) {
   const client = useQtanglClient();
   const [runsBySchedule, setRunsBySchedule] = useState<Record<string, ScheduleRun[]>>({});
@@ -37,6 +40,7 @@ export default function ScheduleManager({
   const [notifyEmail, setNotifyEmail] = useState("");
   const [createTarget, setCreateTarget] = useState("");
   const [creating, setCreating] = useState(false);
+  const schedulesAllowed = maxSchedules > 0;
 
   const loadRuns = useCallback(
     async (scheduleId: string) => {
@@ -107,6 +111,21 @@ export default function ScheduleManager({
     } finally {
       setCreating(false);
     }
+  }
+
+  if (!schedules.length && !schedulesAllowed) {
+    return (
+      <div className="space-y-3">
+        <p className="text-sm text-[var(--muted)]">
+          Scheduled monitoring is included on Monitor. Upgrade to automate weekly re-scans and drift alerts.
+        </p>
+        {onOpenUpgrade ? (
+          <Button type="button" size="sm" onClick={() => onOpenUpgrade("monitor")}>
+            See Monitor plans
+          </Button>
+        ) : null}
+      </div>
+    );
   }
 
   if (!schedules.length) {
