@@ -14,7 +14,13 @@ export function trackDashboardEvent(
     headers: { "Content-Type": "application/json" },
     credentials: "include",
     body: JSON.stringify({ event, properties: properties ?? {} }),
-  }).catch(() => {
-    /* analytics must not block UX */
-  });
+  })
+    .then((response) => {
+      if (!response.ok) {
+        return;
+      }
+    })
+    .catch(() => {
+      /* analytics must not block UX */
+    });
 }

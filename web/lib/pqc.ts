@@ -496,6 +496,11 @@ export function pqcReportDownloadUrl(
 }
 
 export async function getAuthorizedDomains(apiKey: string) {
+  if (apiKey === "bff") {
+    const { fetchDashboardJson } = await import("@/lib/dashboard-bff");
+    const payload = await fetchDashboardJson<{ domains?: string[] }>("/tenant/authorized-domains");
+    return { status: "success" as const, domains: payload.domains ?? [] };
+  }
   return fetchQtanglJson<{ status: "success"; domains: string[] }>("/tenant/authorized-domains", {
     apiKey,
   });

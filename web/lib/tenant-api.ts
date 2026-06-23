@@ -1,7 +1,7 @@
 import { QtanglApiError } from "@qtangl/sdk";
 
 import { qtanglApiBaseUrl } from "@/lib/api";
-import { createQtanglClient } from "@/lib/qtangl-client";
+import { createBffQtanglClient, createQtanglClient } from "@/lib/qtangl-client";
 
 const STORAGE_KEY = "qtangl-dashboard-api-key";
 
@@ -64,7 +64,7 @@ function parseBody(body: BodyInit | null | undefined): unknown {
 }
 
 export async function fetchTenantJson<T>(path: string, apiKey: string, init?: RequestInit): Promise<T> {
-  const client = createQtanglClient(apiKey);
+  const client = apiKey === "bff" ? createBffQtanglClient() : createQtanglClient(apiKey);
   try {
     return await client.request<T>({
       method: (init?.method ?? "GET").toUpperCase(),

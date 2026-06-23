@@ -33,14 +33,9 @@ const COPY: Record<
   },
   monitor: {
     title: "Upgrade to Monitor",
-    body: "Scheduled re-scans, drift alerts, and remediation tracking require a Monitor subscription.",
+    body: "Automated re-scans, drift alerts, and ticketing integrations for ongoing crypto posture.",
     cta: "Subscribe to Monitor",
-    preview: [
-      "Weekly or bi-weekly automated re-scans per domain",
-      "Drift alerts when crypto posture changes",
-      "Webhook and Jira ticketing integrations",
-      "100 scans per month (vs 5 on Assess Free)",
-    ],
+    preview: ["Weekly re-scans and drift alerts", "Webhook + Jira integrations", "100 scans/month"],
   },
   convert: {
     title: "Upgrade to Convert",
@@ -59,7 +54,7 @@ function personalizedMonitorLine(context?: UpgradeContext | null): string | null
   if (!context?.domain || context.readinessScore == null) {
     return null;
   }
-  return `Your baseline on ${context.domain} scored ${context.readinessScore} — Monitor catches drift before your next audit.`;
+  return `Baseline on ${context.domain}: ${context.readinessScore}/100 — Monitor tracks drift between audits.`;
 }
 
 export default function UpgradeModal({ open, product, context, onClose, onMessage, salesLed }: Props) {
@@ -124,10 +119,10 @@ export default function UpgradeModal({ open, product, context, onClose, onMessag
         <h2 className="text-lg font-semibold text-white">{copy.title}</h2>
         <p className="mt-3 text-sm leading-7 text-[var(--color-gray-300)]">{copy.body}</p>
         {personalized ? (
-          <p className="mt-3 text-sm leading-7 text-amber-100">{personalized}</p>
+          <p className="mt-2 text-sm text-amber-100/90">{personalized}</p>
         ) : null}
         {copy.preview && copy.preview.length > 0 ? (
-          <ul className="mt-4 list-disc space-y-1 pl-5 text-xs text-[var(--color-gray-400)]">
+          <ul className="mt-3 list-disc space-y-0.5 pl-5 text-xs text-[var(--color-gray-400)]">
             {copy.preview.map((item) => (
               <li key={item}>{item}</li>
             ))}

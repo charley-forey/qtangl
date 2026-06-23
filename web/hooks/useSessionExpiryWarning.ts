@@ -79,6 +79,7 @@ export function useSessionExpiryWarning(
         url.includes("/api/dashboard/") &&
         !url.includes("/api/dashboard/me") &&
         !url.includes("/api/dashboard/sign-out") &&
+        !url.includes("/api/dashboard/analytics") &&
         response.status === 401
       ) {
         void handleUnauthorized();

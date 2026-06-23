@@ -263,7 +263,10 @@ export default function DashboardClient() {
     },
   });
 
-  const bffFetchImpl = useMemo(() => (bffMode ? createBffFetchImpl() : undefined), [bffMode]);
+  const bffFetchImpl = useMemo(
+    () => (bffMode || savedKey === "bff" ? createBffFetchImpl() : undefined),
+    [bffMode, savedKey]
+  );
 
   const reportUrlForScan = useCallback(
     (scanId: string, format: "pdf" | "json" | "bundle" | "executive" | "board" | "auditor" = "pdf") =>
