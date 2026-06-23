@@ -29,6 +29,13 @@ DASHBOARD_EVENTS = frozenset(
         "dashboard_export",
         "passport_created",
         "evidence_retained",
+        "dashboard_tab_loaded",
+        "dashboard_batch_scan_started",
+        "dashboard_batch_scan_complete",
+        "dashboard_portfolio_click",
+        "copilot_prompt",
+        "nps_submitted",
+        "nps_dismissed",
     }
 )
 

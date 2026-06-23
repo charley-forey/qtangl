@@ -891,6 +891,42 @@ def internal_signup_tier(email: str) -> str | None:
     return tier
 
 
+_TIER_RANK: dict[str, int] = {"free": 0, "monitor": 1, "convert": 2, "enterprise": 3}
+
+
+def ensure_internal_dashboard_entitlements(*, tenant_id: str, email: str) -> dict[str, Any] | None:
+    """Uplift existing @qtangl.com workspaces to internal tier and assess on dashboard login."""
+    internal_tier = internal_signup_tier(email)
+    if not internal_tier:
+        return None
+
+    from app.billing.entitlements import mark_assess_paid, tenant_entitlements, upsert_subscription
+    from app.tenant.settings import get_tenant_billing_flags
+
+    ent = tenant_entitlements(tenant_id=tenant_id)
+    current_tier = str(ent.get("tier") or "free")
+    billing = get_tenant_billing_flags(tenant_id=tenant_id)
+    changed: dict[str, Any] = {}
+
+    if _TIER_RANK.get(current_tier, 0) < _TIER_RANK.get(internal_tier, 3):
+        upsert_subscription(tenant_id=tenant_id, tier=internal_tier, status="active")
+        changed["tier"] = internal_tier
+        from app.audit.service import log_action
+
+        log_action(
+            tenant_id=tenant_id,
+            action="billing.internal_tier_granted",
+            actor="system",
+            detail={"email": email.lower().strip(), "tier": internal_tier, "previousTier": current_tier},
+        )
+
+    if not billing.get("assessPaidAt"):
+        mark_assess_paid(tenant_id=tenant_id)
+        changed["assessPaid"] = True
+
+    return changed or None
+
+
 def provision_dashboard_workspace(*, user_id: str, email: str, name: str | None = None) -> dict[str, Any] | None:
     """First WorkOS sign-in from /dashboard — create free-tier tenant + admin membership."""
     if not dashboard_self_serve_signup_enabled():
@@ -924,7 +960,9 @@ def provision_dashboard_workspace(*, user_id: str, email: str, name: str | None 
         )
         if internal_tier:
             from app.audit.service import log_action
+            from app.billing.entitlements import mark_assess_paid
 
+            mark_assess_paid(tenant_id=core["tenantId"])
             log_action(
                 tenant_id=core["tenantId"],
                 action="billing.internal_tier_granted",

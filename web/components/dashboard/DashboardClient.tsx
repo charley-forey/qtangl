@@ -95,13 +95,17 @@ export default function DashboardClient() {
     setToast({ message, tone });
   }, []);
 
-  const loadTenantSettings = useCallback(async () => {
+  const loadTenantSettings = useCallback(async (): Promise<Record<string, unknown> | null> => {
     try {
       const payload = await fetchDashboardJson<{ settings: Record<string, unknown> }>("/tenant/settings");
-      if (payload.settings) setTenantSettings(payload.settings);
+      if (payload.settings) {
+        setTenantSettings(payload.settings);
+        return payload.settings;
+      }
     } catch {
       /* optional */
     }
+    return null;
   }, []);
 
   const reloadWorkspace = useCallback(async () => {
@@ -245,18 +249,20 @@ export default function DashboardClient() {
         const scanId = String(data.scanId ?? "");
         showMessage(`Scan complete — readiness ${data.readinessScore ?? "n/a"}`, "success");
         trackDashboardEvent("scan_complete", { scanId });
-        void loadSummary().then((updated) => {
+        void Promise.all([loadSummary(), loadTenantSettings()]).then(([updated, settings]) => {
           const diff = updated?.latestScanDetail?.scanDiff as { readinessDelta?: number } | null | undefined;
           const delta = diff?.readinessDelta ?? 0;
           if (delta !== 0) {
             setActiveTab("scans");
           }
+          const billing =
+            (settings?.billing as { trialScansUsed?: number; assessPaidAt?: string | null } | undefined) ?? {};
+          const trialLimit = Number(updated?.me?.entitlements?.trialScansRemaining ?? 1);
+          if (!billing.assessPaidAt && Number(billing.trialScansUsed ?? 0) >= trialLimit) {
+            openUpgrade("assess");
+          }
         });
         openReportDrawer(scanId);
-        const billing = (tenantSettings?.billing as { trialScansUsed?: number; assessPaidAt?: string | null }) ?? {};
-        if (!billing.assessPaidAt && Number(billing.trialScansUsed ?? 0) >= 0) {
-          openUpgrade("assess");
-        }
         invalidateTab("scans");
         invalidateTab("remediate");
       }

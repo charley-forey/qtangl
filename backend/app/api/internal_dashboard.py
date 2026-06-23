@@ -54,6 +54,9 @@ def dashboard_bootstrap(
     role = active["role"]
     auth_mode = active.get("authMode", "magic_link")
     tenant_name = active.get("tenantName", tenant_id)
+    from app.billing.service import ensure_internal_dashboard_entitlements
+
+    ensure_internal_dashboard_entitlements(tenant_id=tenant_id, email=email)
     with db_session() as session:
         tenant = session.get(Tenant, tenant_id)
         if tenant is not None:
