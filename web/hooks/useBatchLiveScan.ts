@@ -28,6 +28,8 @@ export function useBatchLiveScan(options: Options) {
   const [batch, setBatch] = useState<BatchScanEntry[]>([]);
   const [progressLabel, setProgressLabel] = useState<string | null>(null);
   const [scheduleSummary, setScheduleSummary] = useState<string | null>(null);
+  const [schedulesSkipped, setSchedulesSkipped] = useState<string[]>([]);
+  const [schedulesCreated, setSchedulesCreated] = useState(0);
   const pollTimer = useRef<number | null>(null);
 
   const clearPoll = useCallback(() => {
@@ -36,6 +38,16 @@ export function useBatchLiveScan(options: Options) {
       pollTimer.current = null;
     }
   }, []);
+
+  const resetBatch = useCallback(() => {
+    clearPoll();
+    setRunning(false);
+    setBatch([]);
+    setProgressLabel(null);
+    setScheduleSummary(null);
+    setSchedulesSkipped([]);
+    setSchedulesCreated(0);
+  }, [clearPoll]);
 
   const pollBatch = useCallback(
     (entries: BatchScanEntry[]) => {
@@ -79,6 +91,8 @@ export function useBatchLiveScan(options: Options) {
       setProgressLabel(`Starting ${domains.length} baseline scan(s)…`);
       setBatch([]);
       setScheduleSummary(null);
+      setSchedulesSkipped([]);
+      setSchedulesCreated(0);
       try {
         const payload: BatchLiveScanResult = await startBatchLiveScan({
           domains,
@@ -93,6 +107,8 @@ export function useBatchLiveScan(options: Options) {
         if (payload.scheduleSummary) {
           setScheduleSummary(payload.scheduleSummary);
         }
+        setSchedulesSkipped(payload.schedulesSkipped ?? []);
+        setSchedulesCreated(payload.schedules?.length ?? 0);
         trackDashboardEvent("dashboard_batch_scan_started", { count: entries.length });
         onMessage?.(payload.summary ?? `Started ${entries.length} scan(s).`);
         if (batchScanPending(entries)) {
@@ -122,7 +138,10 @@ export function useBatchLiveScan(options: Options) {
     batch,
     progressLabel,
     scheduleSummary,
+    schedulesSkipped,
+    schedulesCreated,
     runBatch,
+    resetBatch,
     clearPoll,
   };
 }

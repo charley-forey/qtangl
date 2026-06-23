@@ -8,6 +8,7 @@ import Eyebrow from "@/components/ui/Eyebrow";
 import CadencePicker from "@/components/dashboard/CadencePicker";
 import { startBatchSchedules } from "@/lib/batch-scan-client";
 import { handleDashboardApiError } from "@/lib/dashboard-errors";
+import { formatScheduleOutcome } from "@/lib/copy/baseline";
 import type { UpgradeProduct } from "@/components/dashboard/UpgradeModal";
 
 type Props = {
@@ -16,6 +17,7 @@ type Props = {
   useBff?: boolean;
   apiKey?: string;
   maxScansPerMonth?: number | null;
+  scansThisMonth?: number;
   onMessage?: (message: string) => void;
   onRefresh?: () => void;
   onOpenUpgrade?: (product: UpgradeProduct) => void;
@@ -27,6 +29,7 @@ export default function BatchSchedulePanel({
   useBff = true,
   apiKey,
   maxScansPerMonth,
+  scansThisMonth = 0,
   onMessage,
   onRefresh,
   onOpenUpgrade,
@@ -65,8 +68,13 @@ export default function BatchSchedulePanel({
         useBff,
         apiKey,
       });
-      setSummary(payload.summary);
-      onMessage?.(payload.summary);
+      const friendly = formatScheduleOutcome({
+        createdCount: payload.schedules?.length ?? payload.count ?? 0,
+        schedulesSkipped: payload.skipped,
+        cadenceHours,
+      });
+      setSummary(friendly ?? payload.summary);
+      onMessage?.(friendly ?? payload.summary);
       onRefresh?.();
     } catch (error) {
       const handled = handleDashboardApiError(error);
@@ -119,6 +127,7 @@ export default function BatchSchedulePanel({
             value={cadenceHours}
             onChange={setCadenceHours}
             maxScansPerMonth={maxScansPerMonth}
+            scansThisMonth={scansThisMonth}
             targetCount={selectedList.length}
           />
           <Button type="button" size="sm" disabled={running || selectedList.length === 0} onClick={() => void createSchedules()}>

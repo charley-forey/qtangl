@@ -1,31 +1,32 @@
 "use client";
 
+import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
 import Eyebrow from "@/components/ui/Eyebrow";
 import { fetchDashboardJson, patchDashboardJson, postDashboardJson } from "@/lib/dashboard-bff";
+import { DEFAULT_ATTESTATION } from "@/lib/copy/baseline";
 
 type Props = {
   canAdmin?: boolean;
   compact?: boolean;
+  scanAuthorizationRecorded?: boolean;
   onMessage?: (message: string) => void;
   onDomainsChange?: (domains: string[]) => void;
 };
 
-const DEFAULT_ATTESTATION =
-  "I am authorized to scan these domains on behalf of my organization.";
-
 export default function AuthorizedDomainsPanel({
   canAdmin = false,
   compact = false,
+  scanAuthorizationRecorded = false,
   onMessage,
   onDomainsChange,
 }: Props) {
   const [domains, setDomains] = useState<string[]>([]);
   const [newDomain, setNewDomain] = useState("");
-  const [attestation, setAttestation] = useState(DEFAULT_ATTESTATION);
+  const [attested, setAttested] = useState(scanAuthorizationRecorded);
   const [bulkDraft, setBulkDraft] = useState("");
   const [showBulkEdit, setShowBulkEdit] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -41,6 +42,12 @@ export default function AuthorizedDomainsPanel({
   useEffect(() => {
     onMessageRef.current = onMessage;
   }, [onMessage]);
+
+  useEffect(() => {
+    if (scanAuthorizationRecorded) {
+      setAttested(true);
+    }
+  }, [scanAuthorizationRecorded]);
 
   const applyDomains = useCallback((next: string[]) => {
     setDomains(next);
@@ -74,8 +81,8 @@ export default function AuthorizedDomainsPanel({
       onMessage?.("Enter a domain to authorize.");
       return;
     }
-    if (attestation.trim().length < 10) {
-      onMessage?.("Add an attestation confirming you are authorized to scan this domain.");
+    if (!attested) {
+      onMessage?.("Confirm you are authorized to scan domains for your organization.");
       return;
     }
     setSaving(true);
@@ -83,7 +90,7 @@ export default function AuthorizedDomainsPanel({
       const payload = await patchDashboardJson<{ domains?: string[] }>("/tenant/authorized-domains", {
         action: "add",
         domain,
-        attestation: attestation.trim(),
+        attestation: DEFAULT_ATTESTATION,
       });
       const next = payload.domains ?? [...domains, domain];
       applyDomains(next);
@@ -120,15 +127,15 @@ export default function AuthorizedDomainsPanel({
       .split(/[\n,]+/)
       .map((item) => item.trim())
       .filter(Boolean);
-    if (attestation.trim().length < 10) {
-      onMessage?.("Add an attestation confirming you are authorized to scan these domains.");
+    if (!attested) {
+      onMessage?.("Confirm you are authorized to scan domains for your organization.");
       return;
     }
     setSaving(true);
     try {
       const payload = await postDashboardJson<{ domains?: string[] }>("/tenant/authorized-domains", {
         domains: parsed,
-        attestation: attestation.trim(),
+        attestation: DEFAULT_ATTESTATION,
       });
       const next = payload.domains ?? parsed;
       applyDomains(next);
@@ -147,8 +154,8 @@ export default function AuthorizedDomainsPanel({
       <Eyebrow>Authorized scan domains</Eyebrow>
       <p className="mt-2 text-sm text-[var(--color-gray-400)]">
         {compact
-          ? "Domains your organization has attested for live production scanning. Add one at a time or upload a PEM bundle instead."
-          : "Domains your organization has attested for production scanning. Add domains as you discover endpoints — each baseline scan targets one domain at a time."}
+          ? "Domains approved for live production scanning. Add domains here — batch scans use this list."
+          : "Add domains as you discover endpoints. Each baseline scan targets one authorized domain."}
       </p>
       {loading ? (
         <p className="mt-3 text-xs text-[var(--color-gray-500)]">Loading…</p>
@@ -196,17 +203,40 @@ export default function AuthorizedDomainsPanel({
                     }
                   }}
                 />
-                <Button type="button" size="sm" disabled={saving} onClick={() => void addDomain()}>
+                <Button
+                  type="button"
+                  size="sm"
+                  disabled={saving || !attested}
+                  onClick={() => void addDomain()}
+                >
                   {saving ? "Saving…" : "Add domain"}
                 </Button>
               </div>
-              <textarea
-                value={attestation}
-                onChange={(e) => setAttestation(e.target.value)}
-                rows={2}
-                placeholder={DEFAULT_ATTESTATION}
-                className="w-full rounded-xl border border-[var(--border-subtle)] bg-transparent px-3 py-2 text-sm text-white"
-              />
+              {!scanAuthorizationRecorded ? (
+                <label className="flex items-start gap-2 text-xs text-[var(--color-gray-300)]">
+                  <input
+                    type="checkbox"
+                    className="mt-0.5"
+                    checked={attested}
+                    onChange={(event) => setAttested(event.target.checked)}
+                  />
+                  <span>
+                    I am authorized to scan domains added to this workspace on behalf of my organization.
+                    <span className="text-[var(--color-gray-500)]"> *</span>
+                  </span>
+                </label>
+              ) : null}
+              <p className="text-[10px] text-[var(--color-gray-600)]">
+                * Required to add domains. By using this service you agree to our{" "}
+                <Link href="/terms" className="underline hover:text-white">
+                  Terms
+                </Link>{" "}
+                and{" "}
+                <Link href="/privacy" className="underline hover:text-white">
+                  Privacy Policy
+                </Link>
+                .
+              </p>
               <button
                 type="button"
                 className="text-xs text-[var(--color-gray-500)] underline"
@@ -223,7 +253,12 @@ export default function AuthorizedDomainsPanel({
                     placeholder="example.com&#10;api.example.com"
                     className="w-full rounded-xl border border-[var(--border-subtle)] bg-transparent px-3 py-2 text-sm text-white"
                   />
-                  <Button type="button" size="sm" disabled={saving} onClick={() => void saveBulkDomains()}>
+                  <Button
+                    type="button"
+                    size="sm"
+                    disabled={saving || !attested}
+                    onClick={() => void saveBulkDomains()}
+                  >
                     {saving ? "Saving…" : "Replace full list"}
                   </Button>
                 </div>

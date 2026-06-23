@@ -13,6 +13,7 @@ type Props = {
   value: number;
   onChange: (hours: number) => void;
   maxScansPerMonth?: number | null;
+  scansThisMonth?: number;
   targetCount?: number;
 };
 
@@ -21,7 +22,13 @@ function presetForHours(hours: number): string {
   return match?.id ?? "custom";
 }
 
-export default function CadencePicker({ value, onChange, maxScansPerMonth, targetCount = 1 }: Props) {
+export default function CadencePicker({
+  value,
+  onChange,
+  maxScansPerMonth,
+  scansThisMonth = 0,
+  targetCount = 1,
+}: Props) {
   const [mode, setMode] = useState(() => presetForHours(value));
   const [customHours, setCustomHours] = useState(value);
 
@@ -30,13 +37,17 @@ export default function CadencePicker({ value, onChange, maxScansPerMonth, targe
     return Math.ceil(720 / value) * Math.max(1, targetCount);
   }, [targetCount, value]);
 
+  const projectedTotal = estimatedScans + scansThisMonth;
   const overQuota =
-    maxScansPerMonth != null && maxScansPerMonth > 0 && estimatedScans > maxScansPerMonth;
+    maxScansPerMonth != null && maxScansPerMonth > 0 && projectedTotal > maxScansPerMonth;
 
   function selectPreset(presetId: string, hours: number) {
     setMode(presetId);
     onChange(hours);
   }
+
+  const domainLabel =
+    targetCount === 1 ? "1 domain" : `${targetCount} domains`;
 
   return (
     <div className="space-y-2">
@@ -87,12 +98,11 @@ export default function CadencePicker({ value, onChange, maxScansPerMonth, targe
         <p className="text-xs text-[var(--color-gray-500)]">Every {value}h</p>
       )}
       <p className={`text-xs ${overQuota ? "text-amber-300" : "text-[var(--color-gray-500)]"}`}>
-        Est. {estimatedScans} scan{estimatedScans === 1 ? "" : "s"}/month
-        {targetCount > 1 ? ` across ${targetCount} targets` : ""}
+        If scheduled: ~{estimatedScans} run{estimatedScans === 1 ? "" : "s"}/month for {domainLabel}
         {maxScansPerMonth != null && maxScansPerMonth > 0
-          ? ` · quota ${maxScansPerMonth}/month`
+          ? ` · Your plan: ${scansThisMonth}/${maxScansPerMonth} scans used this month`
           : ""}
-        {overQuota ? " · exceeds monthly scan quota" : ""}
+        {overQuota ? " · projected total exceeds monthly quota" : ""}
       </p>
     </div>
   );

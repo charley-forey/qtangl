@@ -196,6 +196,13 @@ export default function DashboardTabRouter(props: Props) {
             onRefresh={() => onRefreshSummary?.()}
             tier={(summary.me.entitlements as { tier?: string } | undefined)?.tier ?? "free"}
             maxSchedules={(summary.me.entitlements as { maxSchedules?: number } | undefined)?.maxSchedules ?? 0}
+            maxScansPerMonth={
+              summary.kpis.quotaLimit ??
+              ((summary.me.entitlements as { maxScansPerMonth?: number } | undefined)?.maxScansPerMonth ?? null)
+            }
+            scansThisMonth={
+              summary.kpis.scansThisMonth ?? (summary.me.scansThisMonth as number | undefined) ?? 0
+            }
             readinessScore={
               summary.kpis.latestReadiness ?? summary.latestScanDetail?.readinessScore ?? null
             }

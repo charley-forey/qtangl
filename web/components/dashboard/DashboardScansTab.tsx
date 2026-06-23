@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import Card from "@/components/ui/Card";
 import Eyebrow from "@/components/ui/Eyebrow";
@@ -10,12 +10,13 @@ import DashboardOnboarding, { DashboardSection } from "@/components/dashboard/Da
 import AuthorizedDomainsPanel from "@/components/dashboard/AuthorizedDomainsPanel";
 import BatchScanPanel from "@/components/dashboard/BatchScanPanel";
 import BatchSchedulePanel from "@/components/dashboard/BatchSchedulePanel";
+import BaselineNextSteps from "@/components/dashboard/BaselineNextSteps";
 import ScheduleRecommendationCard from "@/components/dashboard/ScheduleRecommendationCard";
 import type { ScansTabBundle } from "@/lib/dashboard-state";
 import type { TenantScanSummary } from "@/lib/tenant-api";
 import { formatUtcDateTime } from "@/lib/format";
 import { trackDashboardEvent } from "@/lib/dashboard-analytics";
-import { fetchDashboardJson } from "@/lib/dashboard-bff";
+import { fetchDashboardJson, putDashboardJson } from "@/lib/dashboard-bff";
 
 import LegalAcceptancePanel from "@/components/dashboard/LegalAcceptancePanel";
 import type { UpgradeProduct } from "@/components/dashboard/UpgradeModal";
@@ -48,6 +49,8 @@ type Props = {
   onRefresh?: () => void;
   tier?: string;
   maxSchedules?: number;
+  maxScansPerMonth?: number | null;
+  scansThisMonth?: number;
   readinessScore?: number | null;
 };
 
@@ -78,6 +81,8 @@ export default function DashboardScansTab({
   onRefresh,
   tier = "free",
   maxSchedules = 0,
+  maxScansPerMonth,
+  scansThisMonth = 0,
   readinessScore,
 }: Props) {
   const scans = bundle?.scans ?? [];
@@ -86,10 +91,14 @@ export default function DashboardScansTab({
     ? scanAllowlist
     : ((tenantSettings?.scanAllowlist as string[] | undefined) ?? []);
   const industry = String(tenantSettings?.industry ?? "financial");
+  const billing = (tenantSettings?.billing as { scanAuthorizationAt?: string | null } | undefined) ?? {};
   const coaching = (tenantSettings?.coaching as { bannersDismissed?: string[] } | undefined) ?? {};
   const scheduleRecommendationDismissed = (coaching.bannersDismissed ?? []).includes("schedule-recommendation");
+  const baselineNextStepsDismissed = (coaching.bannersDismissed ?? []).includes("baseline-next-steps");
   const [selected, setSelected] = useState<Set<string>>(new Set());
-  const [showRunner, setShowRunner] = useState(true);
+  const [showRunner, setShowRunner] = useState(() => allowlist.length === 0 && scans.length === 0);
+  const [prefillMonitoring, setPrefillMonitoring] = useState(false);
+  const historyRef = useRef<HTMLDivElement>(null);
   const [sourceFilter, setSourceFilter] = useState<SourceFilter>("all");
   const [compareScanId, setCompareScanId] = useState<string | null>(null);
   const [compareDiff, setCompareDiff] = useState<ScanDiff | null>(null);
@@ -193,6 +202,36 @@ export default function DashboardScansTab({
     });
   }
 
+  const latestDoneScan = scans.find((scan) => scan.status === "done");
+
+  const scrollToAllowlist = useCallback(() => {
+    document.getElementById("scans-allowlist")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, []);
+
+  const scrollToHistory = useCallback(() => {
+    historyRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, []);
+
+  const handleEnableMonitoring = useCallback(() => {
+    if (maxSchedules <= 0) {
+      onOpenUpgrade?.("monitor");
+      return;
+    }
+    setPrefillMonitoring(true);
+    document.getElementById("batch-scan")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, [maxSchedules, onOpenUpgrade]);
+
+  const dismissBaselineNextSteps = useCallback(() => {
+    const next = {
+      ...(tenantSettings ?? {}),
+      coaching: {
+        ...coaching,
+        bannersDismissed: [...(coaching.bannersDismissed ?? []), "baseline-next-steps"],
+      },
+    };
+    void putDashboardJson("/tenant/settings", { settings: next }).then(() => onSettingsChange?.(next));
+  }, [coaching, onSettingsChange, tenantSettings]);
+
   return (
     <>
       {canWrite && !legalOk ? (
@@ -220,6 +259,7 @@ export default function DashboardScansTab({
           <AuthorizedDomainsPanel
             canAdmin={canWrite}
             compact={allowlist.length > 0}
+            scanAuthorizationRecorded={Boolean(billing.scanAuthorizationAt)}
             onMessage={onMessage}
             onDomainsChange={(domains) => {
               onSettingsChange?.({ ...(tenantSettings ?? {}), scanAllowlist: domains });
@@ -227,20 +267,31 @@ export default function DashboardScansTab({
           />
           {allowlist.length === 0 ? (
             <p className="mt-2 text-xs text-[var(--color-gray-500)]">
-              Add at least one domain before running a live production baseline, or upload a PEM certificate bundle below.
+              Add at least one domain, then run a baseline from the card below. For certificate-only baselines,
+              expand advanced options.
             </p>
           ) : null}
         </DashboardSection>
       ) : null}
 
       {canWrite && legalOk && allowlist.length >= 1 ? (
-        <DashboardSection title="Batch scan" id="batch-scan">
+        <DashboardSection title="Run baselines" id="batch-scan">
           <BatchScanPanel
             domains={allowlist}
             industry={industry}
             canWrite={canWrite}
             useBff={bffMode}
             apiKey={bffMode ? undefined : savedKey}
+            maxScansPerMonth={maxScansPerMonth}
+            scansThisMonth={scansThisMonth}
+            maxSchedules={maxSchedules}
+            schedulesActive={schedulesActive}
+            reportUrlForScan={reportUrlForScan}
+            onOpenReport={onOpenReport}
+            onBatchComplete={scrollToHistory}
+            onAddDomain={scrollToAllowlist}
+            onEnableMonitoring={handleEnableMonitoring}
+            prefillCreateSchedules={prefillMonitoring}
             onMessage={onMessage}
             onRefresh={onRefresh}
             onOpenUpgrade={onOpenUpgrade}
@@ -255,6 +306,8 @@ export default function DashboardScansTab({
             canWrite={canWrite}
             useBff={bffMode}
             apiKey={bffMode ? undefined : savedKey}
+            maxScansPerMonth={maxScansPerMonth}
+            scansThisMonth={scansThisMonth}
             onMessage={onMessage}
             onRefresh={onRefresh}
             onOpenUpgrade={onOpenUpgrade}
@@ -276,17 +329,32 @@ export default function DashboardScansTab({
         />
       ) : null}
 
+      {legalOk && latestDoneScan ? (
+        <BaselineNextSteps
+          latestScanId={latestDoneScan.scanId}
+          latestScanAt={latestDoneScan.updatedAt ?? latestDoneScan.createdAt}
+          dismissed={baselineNextStepsDismissed}
+          maxSchedules={maxSchedules}
+          schedulesActive={schedulesActive}
+          reportUrlForScan={reportUrlForScan}
+          onOpenReport={onOpenReport}
+          onDismiss={dismissBaselineNextSteps}
+          onAddDomain={scrollToAllowlist}
+          onEnableMonitoring={handleEnableMonitoring}
+        />
+      ) : null}
+
       {canWrite && legalOk && showRunner ? (
-        <DashboardSection title="Run baseline assessment" id="run-baseline">
+        <DashboardSection title="Advanced baseline options" id="run-baseline">
+          <p className="mb-3 text-sm text-[var(--color-gray-400)]">
+            Certificate upload and step-by-step wizard for air-gapped or custom scope runs.
+          </p>
           <div data-tour="scans-runner">
             <AssessRunnerPanel
               apiKey={bffMode ? "bff" : savedKey}
               useBff={bffMode}
-              canAdminDomains={canWrite}
+              canAdminDomains={false}
               onMessage={onMessage}
-              onDomainsChange={(domains) => {
-                onSettingsChange?.({ ...(tenantSettings ?? {}), scanAllowlist: domains });
-              }}
               onOpenUpgrade={onOpenUpgrade}
               onRefresh={onRefresh}
               initialInventory={[]}
@@ -295,13 +363,18 @@ export default function DashboardScansTab({
               backendMessage={null}
             />
             <button type="button" className="mt-2 text-xs underline" onClick={() => setShowRunner(false)}>
-              Hide runner
+              Hide advanced options
             </button>
           </div>
         </DashboardSection>
       ) : canWrite && legalOk ? (
-        <button type="button" className="text-sm underline" onClick={() => setShowRunner(true)}>
-          Run baseline assessment
+        <button
+          type="button"
+          className="text-sm underline"
+          data-tour="scans-runner"
+          onClick={() => setShowRunner(true)}
+        >
+          Advanced: certificate upload or step-by-step wizard
         </button>
       ) : null}
 
@@ -355,18 +428,19 @@ export default function DashboardScansTab({
       ) : null}
 
       <DashboardSection title="Scan history" id="dashboard-scans">
+        <div ref={historyRef}>
         {scans.length === 0 && !inProgressRow ? (
           <EmptyState
             title="No scans yet"
-            description="Run your first authorized baseline scan to populate readiness scores, evidence packs, and dashboard trends."
+            description="Run your first authorized baseline to populate readiness scores, evidence packs, and dashboard trends."
             action={
               canWrite && legalOk && allowlist.length > 0 ? (
                 <button
                   type="button"
                   className="rounded-full bg-white px-4 py-2 text-xs font-medium text-black"
-                  onClick={() => setShowRunner(true)}
+                  onClick={() => document.getElementById("batch-scan")?.scrollIntoView({ behavior: "smooth" })}
                 >
-                  Run baseline scan
+                  Run baseline
                 </button>
               ) : canWrite && !legalOk ? (
                 <p className="text-xs text-[var(--color-gray-500)]">Accept legal terms above first.</p>
@@ -432,6 +506,7 @@ export default function DashboardScansTab({
             </div>
           </Card>
         )}
+        </div>
       </DashboardSection>
     </>
   );
