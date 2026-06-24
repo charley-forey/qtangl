@@ -1,5 +1,6 @@
 import Card from "@/components/ui/Card";
 import Eyebrow from "@/components/ui/Eyebrow";
+import MarketingIcon from "@/components/marketing/MarketingIcon";
 import { valueProofItems } from "@/lib/copy/readiness-value";
 
 type ValueProofStripProps = {
@@ -20,7 +21,8 @@ export default function ValueProofStrip({
       <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {valueProofItems.map((item) => (
           <Card key={item.title} tone="ghost" className="rounded-[var(--radius-xl)]">
-            <p className="text-sm font-semibold text-white">{item.title}</p>
+            <MarketingIcon name={item.icon} className="h-7 w-7 text-[var(--color-gray-400)]" />
+            <p className="mt-4 text-sm font-semibold text-white">{item.title}</p>
             <p className="mt-3 text-sm leading-7 text-[var(--color-gray-400)]">{item.description}</p>
           </Card>
         ))}

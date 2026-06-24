@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 import Button from "@/components/ui/Button";
 import AnimatedBorderFrame from "@/components/ui/AnimatedBorderFrame";
 import Eyebrow from "@/components/ui/Eyebrow";
@@ -26,6 +28,16 @@ export default function Hero({ copy = readinessHero }: HeroProps) {
 
         <div className="pointer-events-none absolute inset-y-0 right-0 w-full lg:w-[58%]">
           <ParticleField className="opacity-70" density={10} />
+          <div className="absolute inset-0 hidden opacity-40 mix-blend-screen lg:block">
+            <Image
+              src="/marketing/home-hero-crypto-network.png"
+              alt=""
+              fill
+              priority
+              sizes="(min-width: 1024px) 58vw, 100vw"
+              className="object-cover object-right grayscale"
+            />
+          </div>
         </div>
 
         <div className="relative z-10 flex min-h-[28rem] flex-col justify-center sm:min-h-[30rem]">

@@ -21,6 +21,9 @@ export const readinessHeadlineDemo = {
     { label: "Readiness score", value: "62" },
     { label: "Coverage confidence", value: "High" },
   ],
+  image: "/marketing/docs-assess-workflow.webp",
+  imageAlt:
+    "Black and white workflow diagram from domain scan through CBOM export to signed verify link.",
   primaryCta: { label: "Open Q-Day scanner", href: "/assess" },
 } as const;
 
@@ -60,16 +63,25 @@ export const readinessJourneyPoints = [
     eyebrow: "Assess",
     title: "Baseline in one session",
     description: "Live scan, Mosca HNDL, CycloneDX CBOM, and signed PDF.",
+    icon: "assess" as const,
+    image: "/marketing/platform-tier-assess.webp",
+    imageAlt: "Black and white illustration of a radar grid scanning TLS endpoints.",
   },
   {
     eyebrow: "Monitor",
     title: "Catch drift early",
     description: "Scheduled re-scans, diff alerts, and a remediation board.",
+    icon: "monitor" as const,
+    image: "/marketing/platform-tier-monitor.webp",
+    imageAlt: "Black and white illustration of scheduled scans with diff alert flags.",
   },
   {
     eyebrow: "Convert",
     title: "Prove the fix",
     description: "Prioritized playbooks, re-scan verification, and auditor packs.",
+    icon: "convert" as const,
+    image: "/marketing/platform-tier-convert.webp",
+    imageAlt: "Black and white illustration of migration steps ending in a verify seal.",
   },
 ] as const;
 
@@ -80,6 +92,8 @@ export const readinessUseCases = [
     outcome: "NSM-10 and PCI-DSS mapping for external-facing crypto.",
     measurement: `${hndl.label} exposure · CBOM export · verify link`,
     demoHref: "/assess?scenario=bank-tls-inventory&autorun=1",
+    image: "/marketing/assess-live-scan.webp",
+    imageAlt: "Black and white diagram of TLS handshake inventory across network endpoints.",
   },
   {
     eyebrow: "Gov contractor",
@@ -87,6 +101,8 @@ export const readinessUseCases = [
     outcome: "CNSA 2.0 deadline tiers mapped to your TLS footprint.",
     measurement: "Control gaps · remediation backlog · signed report",
     demoHref: "/assess?scenario=gov-contractor-cmmc&autorun=1",
+    image: "/marketing/assess-signed-pdf.webp",
+    imageAlt: "Black and white illustration of a signed report with seal and verify link.",
   },
   {
     eyebrow: "Healthcare",
@@ -94,5 +110,7 @@ export const readinessUseCases = [
     outcome: "HIPAA-sensitive data paths with NIST IR 8547 alignment.",
     measurement: "Mosca timeline · priority queue · audit pack",
     demoHref: "/assess?scenario=healthcare-insurer-hndl&autorun=1",
+    image: "/marketing/assess-hndl-timeline.webp",
+    imageAlt: "Black and white timeline showing harvest-now-decrypt-later exposure horizon.",
   },
 ] as const;

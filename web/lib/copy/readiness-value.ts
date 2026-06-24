@@ -3,21 +3,25 @@ export const valueProofItems = [
     title: "Signed evidence",
     description:
       "Every report ships with a content hash and signature — auditors verify at /verify without trusting Qtangl alone.",
+    icon: "evidence" as const,
   },
   {
     title: "Continuous drift",
     description:
       "Monitor diffs each scan against the last baseline so regressions surface before the next audit cycle.",
+    icon: "drift" as const,
   },
   {
     title: "Honest scope",
     description:
       "Inventory aid and prioritization — not a formal attestation. We say what we do and do not claim.",
+    icon: "scope" as const,
   },
   {
     title: "Minutes, not months",
     description:
       "Live fixture scan in under ten minutes. Compare that to spreadsheet programs that decay on first deploy.",
+    icon: "velocity" as const,
   },
 ] as const;
 
