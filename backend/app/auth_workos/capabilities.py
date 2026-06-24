@@ -9,6 +9,10 @@ def compute_dashboard_capabilities(*, tenant_id: str, role: str) -> dict[str, bo
     role_l = (role or "executive").lower()
     if role_l == "viewer":
         role_l = "executive"
+    if role_l == "partner_admin":
+        role_l = "admin"
+    elif role_l == "partner_analyst":
+        role_l = "operator"
     can_admin = role_l == "admin"
     can_write = role_l in {"admin", "operator"}
     invite_blocked = check_team_invites_feature(tenant_id=tenant_id)

@@ -218,6 +218,7 @@ export default function DashboardTabRouter(props: Props) {
             bundle={tabBundle as MonitorTabBundle | null}
             summary={summary}
             savedKey={savedKey}
+            bffMode={bffMode}
             tenantSettings={tenantSettings}
             canAdmin={canAdmin}
             onMessage={onMessage}
@@ -301,7 +302,13 @@ export default function DashboardTabRouter(props: Props) {
       );
     }
     if (activeTab === "portfolio") {
-      return <MsspPortfolioPanel bundle={tabBundle as PortfolioTabBundle | null} onSwitchTenant={onPortfolioSwitch} />;
+      return (
+        <MsspPortfolioPanel
+          bundle={tabBundle as PortfolioTabBundle | null}
+          onSwitchTenant={onPortfolioSwitch}
+          canAdmin={canAdmin}
+        />
+      );
     }
     return null;
   }, [

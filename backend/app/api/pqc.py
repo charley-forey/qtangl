@@ -525,9 +525,9 @@ def download_report(
     branding = None
     if auth.tenant_id not in {"sandbox", ""}:
         try:
-            from app.tenant.settings import get_tenant_settings_raw
+            from app.branding.resolve import resolved_report_branding
 
-            branding = get_tenant_settings_raw(tenant_id=auth.tenant_id).get("reportBranding") or {}
+            branding = resolved_report_branding(tenant_id=auth.tenant_id)
         except Exception:
             branding = None
     statuses: list[dict[str, Any]] = []

@@ -13,6 +13,26 @@ async function statusRewrite(request: NextRequest) {
   return null;
 }
 
+function customDomainHeaders(request: NextRequest): Headers | null {
+  const host = request.headers.get("host")?.split(":")[0] ?? "";
+  if (!host || host === "localhost" || host.endsWith(".qtangl.com") || host === "qtangl.com") {
+    return null;
+  }
+  let map: Record<string, string> = {};
+  try {
+    const raw = process.env.QTANGL_CUSTOM_DOMAIN_MAP;
+    if (raw) map = JSON.parse(raw) as Record<string, string>;
+  } catch {
+    return null;
+  }
+  const tenantId = map[host];
+  if (!tenantId) return null;
+  const headers = new Headers(request.headers);
+  headers.set("x-qtangl-tenant-id", tenantId);
+  headers.set("x-qtangl-custom-domain", host);
+  return headers;
+}
+
 function pathUsesAuthKit(pathname: string): boolean {
   return (
     pathname === "/auth/callback" ||
@@ -28,6 +48,7 @@ export async function middleware(request: NextRequest) {
     return rewrite;
   }
 
+  const customHeaders = customDomainHeaders(request);
   const pathname = request.nextUrl.pathname;
   if (workosAuthKitReady() && pathUsesAuthKit(pathname)) {
     try {
@@ -36,11 +57,22 @@ export async function middleware(request: NextRequest) {
         // Session refresh only — do not force AuthKit login on marketing pages.
         middlewareAuth: { enabled: false, unauthenticatedPaths: [] },
       });
-      return await handler(request, {} as never);
+      const response = await handler(request, {} as never);
+      if (customHeaders) {
+        customHeaders.forEach((value, key) => response.headers.set(key, value));
+      }
+      return response;
     } catch (error) {
       console.error("AuthKit middleware error:", error);
+      if (customHeaders) {
+        return NextResponse.next({ request: { headers: customHeaders } });
+      }
       return NextResponse.next();
     }
+  }
+
+  if (customHeaders) {
+    return NextResponse.next({ request: { headers: customHeaders } });
   }
 
   return NextResponse.next();

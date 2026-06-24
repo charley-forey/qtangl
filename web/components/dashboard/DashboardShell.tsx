@@ -39,6 +39,7 @@ type Props = {
   tenantSettings?: Record<string, unknown> | null;
   onSettingsChange?: (settings: Record<string, unknown>) => void;
   eventsConnected?: boolean;
+  eventsDegraded?: boolean;
   children: React.ReactNode;
 };
 
@@ -61,6 +62,7 @@ export default function DashboardShell({
   tenantSettings,
   onSettingsChange,
   eventsConnected,
+  eventsDegraded,
   children,
   rolePolicy,
   sessionRole,
@@ -68,7 +70,11 @@ export default function DashboardShell({
   const me = summary.me;
   const latestScan = summary.recentScans.find((s) => s.readinessScore != null);
   const childrenCount = summary.portfolioSummary?.childrenCount ?? 0;
-  const showPortfolio = childrenCount > 0 || (dashboardSession?.memberships?.length ?? 0) > 1;
+  const roleKey = (sessionRole ?? dashboardSession?.role ?? "").toLowerCase();
+  const isCustomerRole = roleKey === "customer_executive" || roleKey === "customer_viewer";
+  const portfolioAllowed = !isCustomerRole && (rolePolicy?.tabs.includes("*") || rolePolicy?.tabs.includes("portfolio"));
+  const showPortfolio =
+    portfolioAllowed && (childrenCount > 0 || (dashboardSession?.memberships?.length ?? 0) > 1);
 
   return (
     <div className={density === "compact" ? "space-y-4" : "space-y-8"}>
@@ -113,6 +119,7 @@ export default function DashboardShell({
         apiOk
         scanProgress={scanProgress}
         eventsConnected={eventsConnected}
+        eventsDegraded={eventsDegraded}
       />
 
       <DashboardKpiStrip

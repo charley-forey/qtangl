@@ -7,7 +7,7 @@ import Eyebrow from "@/components/ui/Eyebrow";
 import Button from "@/components/ui/Button";
 import { fetchDashboardJson, postDashboardJson } from "@/lib/dashboard-bff";
 
-type Child = { tenantId: string; label: string };
+type Child = { childTenantId: string; label: string; childTenantName?: string };
 
 export default function MsspPortfolioSettings({ canAdmin }: { canAdmin: boolean }) {
   const [children, setChildren] = useState<Child[]>([]);
@@ -36,9 +36,9 @@ export default function MsspPortfolioSettings({ canAdmin }: { canAdmin: boolean 
       </p>
       <ul className="mt-4 space-y-2 text-sm">
         {children.map((child) => (
-          <li key={child.tenantId} className="flex justify-between border-t border-[var(--border-subtle)] pt-2">
-            <span>{child.label || child.tenantId}</span>
-            <span className="text-[var(--color-gray-500)]">{child.tenantId}</span>
+          <li key={child.childTenantId} className="flex justify-between border-t border-[var(--border-subtle)] pt-2">
+            <span>{(child.childTenantName ?? child.label) || child.childTenantId}</span>
+            <span className="text-[var(--color-gray-500)]">{child.childTenantId}</span>
           </li>
         ))}
       </ul>

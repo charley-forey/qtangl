@@ -3,7 +3,7 @@ from __future__ import annotations
 import json
 import os
 
-from fastapi import APIRouter, HTTPException, Request, status
+from fastapi import APIRouter, HTTPException, Query, Request, status
 from pydantic import BaseModel, Field
 
 from app.billing.service import (
@@ -48,6 +48,36 @@ class AssessSignupRequest(BaseModel):
     email: str = Field(min_length=3, max_length=320)
     company: str = Field(min_length=2, max_length=200)
     domain: str | None = Field(default=None, max_length=253)
+
+
+@router.get("/verify/branding")
+def public_verify_branding(scanId: str = Query(..., min_length=3, max_length=120)) -> dict:
+    """Public co-branding for verify page and share links (resolved MSSP parent + child)."""
+    from app.branding.resolve import resolve_branding
+    from app.store.scan_jobs import get_scan_tenant_id
+
+    tenant_id = get_scan_tenant_id(scanId)
+    if not tenant_id:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Scan not found.")
+    resolved = resolve_branding(tenant_id=tenant_id)
+    report = resolved.get("reportBranding") or {}
+    portal = resolved.get("portalBranding") or {}
+    partner_name = str(report.get("partnerDisplayName") or report.get("companyName") or "").strip()
+    logo_url = str(report.get("logoUrl") or portal.get("logoUrl") or "").strip()
+    header_text = str(portal.get("headerText") or partner_name or "").strip()
+    primary_color = str(portal.get("primaryColor") or report.get("primaryColor") or "").strip()
+    accent_color = str(portal.get("accentColor") or primary_color or "").strip()
+    return {
+        "status": "success",
+        "scanId": scanId,
+        "partnerDisplayName": partner_name,
+        "headerText": header_text,
+        "logoUrl": logo_url,
+        "primaryColor": primary_color,
+        "accentColor": accent_color,
+        "supportEmail": str(report.get("supportEmail") or "").strip(),
+        "footerText": str(report.get("footerText") or "").strip(),
+    }
 
 
 @router.post("/assess-signup")

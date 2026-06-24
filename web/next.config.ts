@@ -6,6 +6,7 @@ import type { NextConfig } from "next";
 const repoRoot = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
 
 const nextConfig: NextConfig = {
+  allowedDevOrigins: ["127.0.0.1"],
   transpilePackages: ["@qtangl/sdk", "@qtangl/sdk-react"],
   images: {
     formats: ["image/avif", "image/webp"],

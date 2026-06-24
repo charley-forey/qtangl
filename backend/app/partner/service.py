@@ -8,7 +8,7 @@ from typing import Any
 
 from app.db.config import persistence_enabled
 from app.db.engine import db_session
-from app.db.models import PartnerChildTenant as PartnerRow
+from app.db.models import PartnerChildTenant as PartnerRow, Tenant
 
 
 def list_child_tenants(*, parent_tenant_id: str) -> list[dict[str, Any]]:
@@ -17,6 +17,24 @@ def list_child_tenants(*, parent_tenant_id: str) -> list[dict[str, Any]]:
     with db_session() as session:
         rows = session.query(PartnerRow).filter(PartnerRow.parent_tenant_id == parent_tenant_id).all()
         return [_row_to_dict(row) for row in rows]
+
+
+def list_child_tenants_with_names(*, parent_tenant_id: str) -> list[dict[str, Any]]:
+    if not persistence_enabled():
+        return []
+    with db_session() as session:
+        rows = (
+            session.query(PartnerRow, Tenant.name)
+            .outerjoin(Tenant, Tenant.id == PartnerRow.child_tenant_id)
+            .filter(PartnerRow.parent_tenant_id == parent_tenant_id)
+            .all()
+        )
+        result: list[dict[str, Any]] = []
+        for row, tenant_name in rows:
+            item = _row_to_dict(row)
+            item["childTenantName"] = tenant_name or row.child_tenant_id
+            result.append(item)
+        return result
 
 
 def link_child_tenant(*, parent_tenant_id: str, child_tenant_id: str, label: str = "") -> dict[str, Any]:
@@ -31,6 +49,49 @@ def link_child_tenant(*, parent_tenant_id: str, child_tenant_id: str, label: str
             created_at=datetime.now(timezone.utc),
         )
         session.add(row)
+        session.flush()
+        return _row_to_dict(row)
+
+
+def unlink_child_tenant(*, parent_tenant_id: str, child_tenant_id: str) -> bool:
+    if not persistence_enabled():
+        return False
+    with db_session() as session:
+        row = (
+            session.query(PartnerRow)
+            .filter(
+                PartnerRow.parent_tenant_id == parent_tenant_id,
+                PartnerRow.child_tenant_id == child_tenant_id,
+            )
+            .one_or_none()
+        )
+        if row is None:
+            return False
+        session.delete(row)
+        session.flush()
+        return True
+
+
+def update_child_label(
+    *,
+    parent_tenant_id: str,
+    child_tenant_id: str,
+    label: str,
+) -> dict[str, Any] | None:
+    if not persistence_enabled():
+        return None
+    with db_session() as session:
+        row = (
+            session.query(PartnerRow)
+            .filter(
+                PartnerRow.parent_tenant_id == parent_tenant_id,
+                PartnerRow.child_tenant_id == child_tenant_id,
+            )
+            .one_or_none()
+        )
+        if row is None:
+            return None
+        row.label = label
         session.flush()
         return _row_to_dict(row)
 

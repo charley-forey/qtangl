@@ -25,6 +25,7 @@ export default function ScheduleManager({
   onOpenUpgrade,
   maxScansPerMonth,
   maxSchedules = 0,
+  onScheduleCreated,
 }: {
   schedules: ScheduledScan[];
   onRefresh: () => void;
@@ -32,6 +33,7 @@ export default function ScheduleManager({
   onOpenUpgrade?: (product: "monitor") => void;
   maxScansPerMonth?: number | null;
   maxSchedules?: number;
+  onScheduleCreated?: (target: string, cadenceHours: number) => void;
 }) {
   const client = useQtanglClient();
   const [runsBySchedule, setRunsBySchedule] = useState<Record<string, ScheduleRun[]>>({});
@@ -91,16 +93,18 @@ export default function ScheduleManager({
       return;
     }
     setCreating(true);
+    const target = createTarget.trim();
     try {
       await postDashboardJson("/tenant/schedules", {
         scenarioId: "production-baseline",
-        target: createTarget.trim(),
+        target,
         cadenceHours,
         notifyEmail: notifyEmail || null,
         jobType: "scan",
       });
       onMessage("Schedule created.");
       setCreateTarget("");
+      onScheduleCreated?.(target, cadenceHours);
       onRefresh();
     } catch (error) {
       const handled = handleDashboardApiError(error);

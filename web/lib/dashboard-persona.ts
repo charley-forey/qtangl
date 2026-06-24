@@ -10,14 +10,17 @@ export function normalizeDashboardRole(role: string | undefined | null): string 
 /** Derive dashboard layout persona from assigned membership role. */
 export function roleToPersona(role: string | undefined | null): DashboardPersona {
   const normalized = normalizeDashboardRole(role);
-  if (normalized === "admin") return "admin";
-  if (normalized === "operator") return "operator";
+  if (normalized === "admin" || normalized === "partner_admin") return "admin";
+  if (normalized === "operator" || normalized === "partner_analyst") return "operator";
+  if (normalized === "customer_executive" || normalized === "customer_viewer") return "executive";
   return "executive";
 }
 
 export function roleLabel(role: string | undefined | null): string {
   const normalized = normalizeDashboardRole(role);
-  if (normalized === "admin") return "Admin";
-  if (normalized === "operator") return "Operator";
+  if (normalized === "admin" || normalized === "partner_admin") return normalized === "partner_admin" ? "Partner admin" : "Admin";
+  if (normalized === "operator" || normalized === "partner_analyst") return normalized === "partner_analyst" ? "Partner analyst" : "Operator";
+  if (normalized === "customer_executive") return "Customer executive";
+  if (normalized === "customer_viewer") return "Customer viewer";
   return "Executive";
 }

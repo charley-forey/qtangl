@@ -10,6 +10,9 @@ type ReportBranding = {
   companyName?: string;
   logoUrl?: string;
   primaryColor?: string;
+  footerText?: string;
+  supportEmail?: string;
+  partnerDisplayName?: string;
 };
 
 export default function ReportBrandingPanel({
@@ -23,6 +26,9 @@ export default function ReportBrandingPanel({
     companyName: "",
     logoUrl: "",
     primaryColor: "",
+    footerText: "",
+    supportEmail: "",
+    partnerDisplayName: "",
   });
   const [saving, setSaving] = useState(false);
   const [loaded, setLoaded] = useState(false);
@@ -35,6 +41,9 @@ export default function ReportBrandingPanel({
           companyName: current.companyName ?? "",
           logoUrl: current.logoUrl ?? "",
           primaryColor: current.primaryColor ?? "",
+          footerText: current.footerText ?? "",
+          supportEmail: current.supportEmail ?? "",
+          partnerDisplayName: current.partnerDisplayName ?? "",
         });
         setLoaded(true);
       })
@@ -51,6 +60,9 @@ export default function ReportBrandingPanel({
           companyName: branding.companyName?.trim() ?? "",
           logoUrl: branding.logoUrl?.trim() ?? "",
           primaryColor: branding.primaryColor?.trim() ?? "",
+          footerText: branding.footerText?.trim() ?? "",
+          supportEmail: branding.supportEmail?.trim() ?? "",
+          partnerDisplayName: branding.partnerDisplayName?.trim() ?? "",
         },
       };
       await putDashboardJson("/tenant/settings", { settings: next });
@@ -71,8 +83,8 @@ export default function ReportBrandingPanel({
     <Card tone="panel">
       <Eyebrow>Report branding</Eyebrow>
       <p className="mt-2 text-sm text-[var(--color-gray-400)]">
-        Customize PDF exports with your company name and accent color. Logo URL support is reserved for white-label
-        pilots.
+        Customize PDF exports, verify pages, and digest emails. Child tenants inherit MSSP parent branding when fields
+        are left blank.
       </p>
       <div className="mt-4 grid gap-2 sm:grid-cols-2">
         <input
@@ -84,16 +96,37 @@ export default function ReportBrandingPanel({
         />
         <input
           type="text"
+          value={branding.partnerDisplayName ?? ""}
+          onChange={(event) => setBranding((prev) => ({ ...prev, partnerDisplayName: event.target.value }))}
+          placeholder="Partner display name (co-brand)"
+          className="rounded-full border border-[var(--border-strong)] bg-black px-4 py-2 text-sm text-white"
+        />
+        <input
+          type="text"
           value={branding.primaryColor ?? ""}
           onChange={(event) => setBranding((prev) => ({ ...prev, primaryColor: event.target.value }))}
           placeholder="#38bdf8 accent color"
           className="rounded-full border border-[var(--border-strong)] bg-black px-4 py-2 text-sm text-white"
         />
         <input
+          type="email"
+          value={branding.supportEmail ?? ""}
+          onChange={(event) => setBranding((prev) => ({ ...prev, supportEmail: event.target.value }))}
+          placeholder="Support email (PDF footer)"
+          className="rounded-full border border-[var(--border-strong)] bg-black px-4 py-2 text-sm text-white"
+        />
+        <input
           type="url"
           value={branding.logoUrl ?? ""}
           onChange={(event) => setBranding((prev) => ({ ...prev, logoUrl: event.target.value }))}
-          placeholder="Logo URL (optional)"
+          placeholder="Logo URL (HTTPS, optional)"
+          className="rounded-full border border-[var(--border-strong)] bg-black px-4 py-2 text-sm text-white sm:col-span-2"
+        />
+        <input
+          type="text"
+          value={branding.footerText ?? ""}
+          onChange={(event) => setBranding((prev) => ({ ...prev, footerText: event.target.value }))}
+          placeholder="PDF footer text (optional)"
           className="rounded-full border border-[var(--border-strong)] bg-black px-4 py-2 text-sm text-white sm:col-span-2"
         />
       </div>

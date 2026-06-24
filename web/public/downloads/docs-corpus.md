@@ -1,6 +1,6 @@
 # Qtangl Documentation Corpus
 
-> Generated 2026-06-21 | API v0.9.0 | https://qtangl.com/docs
+> Generated 2026-06-22 | API v0.9.1 | https://qtangl.com/docs
 
 # Qtangl Agent Context
 
@@ -67,13 +67,13 @@ Hybrid scheduling/routing (`POST /optimize`) is a **Labs expansion** — mention
 - [API conventions](https://qtangl.com/docs/operations/conventions)
 
 ### Core Workflow
+- [PQC scanner guide](https://qtangl.com/docs/guides/pqc-demo)
 - [Assess workflow](https://qtangl.com/docs/guides/assess)
 - [Monitor workflow](https://qtangl.com/docs/guides/monitor-workflow)
 - [Convert workflow](https://qtangl.com/docs/guides/convert)
 - [Report formats & exports](https://qtangl.com/docs/guides/report-formats)
 - [Report branding](https://qtangl.com/docs/guides/report-branding)
 - [Executive digest](https://qtangl.com/docs/guides/executive-digest)
-- [PQC scanner guide](https://qtangl.com/docs/guides/pqc-demo)
 - [Monitor setup](https://qtangl.com/docs/guides/monitor-setup)
 - [Dashboard SSO](https://qtangl.com/docs/guides/sso-setup)
 - [Dashboard team & roles](https://qtangl.com/docs/guides/dashboard-team-roles)

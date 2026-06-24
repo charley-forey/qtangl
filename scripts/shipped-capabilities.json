@@ -11,7 +11,7 @@
     "jira_push_pull": { "status": "live", "note": "When tenant configures Jira integration" },
     "portfolio_command_center": { "status": "live" },
     "audit_log_api": { "status": "live" },
-    "partner_child_tenants": { "status": "beta" },
+    "partner_child_tenants": { "status": "live" },
     "github_repo_scan": { "status": "beta", "coverageRow": "GitHub code & dependencies", "note": "Snippet/dependency analysis via API; full PAT repo scan in progress" },
     "host_sensor_fleet": { "status": "beta", "coverageRow": "Host sensor fleet", "note": "Unified sensor enroll + offline upload; fleet GA in progress" },
     "aws_acm_pull": { "status": "beta", "coverageRow": "AWS ACM / Azure / GCP pull" }

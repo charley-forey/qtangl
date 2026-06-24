@@ -1,5 +1,6 @@
 import { test, expect } from "@playwright/test";
 
+import { mockDashboardEvents, mockDashboardSession, mockDashboardTenantRoutes } from "./helpers/dashboard-bff-mocks";
 const summaryPayload = {
   me: {
     tenantId: "tenant-test",
@@ -45,51 +46,67 @@ const summaryPayload = {
 
 test.describe("Dashboard role gating", () => {
   test.beforeEach(async ({ page }) => {
-    await page.route("**/api/dashboard/tenant/dashboard/summary", async (route) => {
-      await route.fulfill({
-        status: 200,
-        contentType: "application/json",
-        body: JSON.stringify(summaryPayload),
-      });
+    await mockDashboardSession(page, {
+      email: "viewer@test.com",
+      tenantId: "tenant-test",
+      tenantName: "Test Co",
+      role: "viewer",
+      userId: "user-viewer",
+      capabilities: {
+        canAdmin: false,
+        canWrite: false,
+        canViewCompliance: true,
+        canManageKeys: false,
+        canInvite: false,
+      },
     });
-
-    await page.route("**/api/dashboard/me", async (route) => {
-      if (route.request().method() === "GET") {
-        await route.fulfill({
-          status: 200,
-          contentType: "application/json",
-          body: JSON.stringify({
-            authenticated: true,
-            authMethod: "workos",
-            session: {
-              email: "viewer@test.com",
-              tenantId: "tenant-test",
-              tenantName: "Test Co",
-              role: "viewer",
-              userId: "user-viewer",
-              memberships: [{ tenantId: "tenant-test", tenantName: "Test Co", role: "viewer" }],
-            },
-            capabilities: {
-              canAdmin: false,
-              canWrite: false,
-              canViewCompliance: true,
-              canManageKeys: false,
-              canInvite: false,
-            },
-          }),
-        });
-        return;
-      }
-      await route.continue();
-    });
+    await mockDashboardEvents(page);
+    await mockDashboardTenantRoutes(page, { summary: summaryPayload });
   });
 
   test("viewer sees overview and scans tabs only", async ({ page }) => {
+    await page.goto("/dashboard?tab=overview");    await expect(page.getByRole("tabpanel")).toBeVisible({ timeout: 15000 });
+    await expect(page.locator("#dashboard-tabs").getByRole("button", { name: "Overview" })).toBeVisible();
+    await expect(page.locator("#dashboard-tabs").getByRole("button", { name: "Scans" })).toBeVisible();
+    await expect(page.locator("#dashboard-tabs").getByRole("button", { name: "Monitor" })).toHaveCount(0);
+    await expect(page.locator("#dashboard-tabs").getByRole("button", { name: "Remediate" })).toHaveCount(0);
+  });
+
+  test("customer_viewer sees overview and scans only", async ({ page }) => {
+    await mockDashboardSession(page, {
+      email: "customer@test.com",
+      tenantId: "tenant-child",
+      tenantName: "Regional Bank",
+      role: "customer_viewer",
+      userId: "user-customer",
+      capabilities: { canAdmin: false, canWrite: false, canViewCompliance: true, canInvite: false },
+    });
     await page.goto("/dashboard");
     await expect(page.getByRole("tabpanel")).toBeVisible({ timeout: 15000 });
     await expect(page.getByRole("button", { name: "Overview" })).toBeVisible();
     await expect(page.getByRole("button", { name: "Scans" })).toBeVisible();
-    await expect(page.getByRole("button", { name: "Monitor" })).toHaveCount(0);
-    await expect(page.getByRole("button", { name: "Remediate" })).toHaveCount(0);
+    await expect(page.getByRole("button", { name: "Settings" })).toHaveCount(0);
+    await expect(page.getByRole("button", { name: "Portfolio" })).toHaveCount(0);
+  });
+
+  test("partner_admin sees portfolio tab", async ({ page }) => {
+    await mockDashboardSession(page, {
+      email: "partner@test.com",
+      tenantId: "parent-mssp",
+      tenantName: "Demo MSSP",
+      role: "partner_admin",
+      userId: "user-partner",
+      capabilities: { canAdmin: true, canWrite: true, canViewCompliance: true, canInvite: true },
+    });
+    await mockDashboardTenantRoutes(page, {
+      summary: {
+        ...summaryPayload,
+        me: { ...summaryPayload.me, role: "partner_admin", tenantId: "parent-mssp" },
+        portfolioSummary: { childrenCount: 2 },
+      },
+    });
+
+    await page.goto("/dashboard?tab=portfolio");
+    await expect(page.getByRole("button", { name: "Portfolio" })).toBeVisible({ timeout: 15000 });
   });
 });

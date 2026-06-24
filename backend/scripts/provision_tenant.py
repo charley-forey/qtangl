@@ -20,6 +20,7 @@ def main() -> int:
     parser.add_argument("--tier", default="monitor", choices=["free", "monitor", "convert", "enterprise"])
     parser.add_argument("--domains", default="", help="Comma-separated authorized domains")
     parser.add_argument("--key-label", default="pilot-primary")
+    parser.add_argument("--enable-host-sensor", action="store_true", help="Enable discovery.hostSensor in tenant settings")
     args = parser.parse_args()
 
     if not args.admin_secret:
@@ -39,6 +40,14 @@ def main() -> int:
     tenant = _post(f"{args.base_url}/admin/tenants", tenant_body, headers)
     tenant_id = tenant["tenantId"]
     print(f"Created tenant: {tenant_id} (tier={args.tier})")
+
+    if args.enable_host_sensor:
+        _put(
+            f"{args.base_url}/admin/tenants/{tenant_id}/settings",
+            {"settings": {"discovery": {"hostSensor": True, "codeScan": False, "binaryScan": False}}},
+            headers,
+        )
+        print("Enabled discovery.hostSensor")
 
     if args.domains.strip():
         domains = [d.strip() for d in args.domains.split(",") if d.strip()]

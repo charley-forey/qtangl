@@ -11,8 +11,10 @@ from app.discovery.constants import DISCOVERY_SCHEMA_HEADER, FINDINGS_RATE_LIMIT
 from app.discovery.fleet import (
     create_fleet,
     enroll_agent,
+    get_finding,
     ingest_findings,
     list_agents,
+    list_findings,
     list_fleets,
     record_heartbeat,
     revoke_agents,
@@ -68,6 +70,40 @@ def get_discovery_agents(
     auth: AuthContext = Depends(require_auth_readonly),
 ) -> dict:
     return {"status": "success", "agents": list_agents(tenant_id=auth.tenant_id, fleet_id=fleetId)}
+
+
+@router.get("/tenant/discovery/agents/{agent_id}/findings")
+def get_agent_findings(
+    agent_id: str,
+    limit: int = 50,
+    offset: int = 0,
+    auth: AuthContext = Depends(require_auth_readonly),
+) -> dict:
+    _require_host_sensor(auth)
+    findings, total = list_findings(
+        tenant_id=auth.tenant_id,
+        agent_id=agent_id,
+        limit=min(max(limit, 1), 200),
+        offset=max(offset, 0),
+    )
+    return {"status": "success", "agentId": agent_id, "findings": findings, "total": total}
+
+
+@router.get("/tenant/discovery/findings/{finding_id}")
+def get_host_finding_detail(finding_id: str, auth: AuthContext = Depends(require_auth_readonly)) -> dict:
+    _require_host_sensor(auth)
+    finding = get_finding(tenant_id=auth.tenant_id, finding_id=finding_id)
+    if finding is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Finding not found")
+    from app.remediation.program import list_program_items
+
+    program_item_id = None
+    items, _ = list_program_items(tenant_id=auth.tenant_id, limit=500)
+    for item in items:
+        if item.get("sourceType") == "host_finding" and item.get("sourceRef") == finding.get("findingId"):
+            program_item_id = item.get("id")
+            break
+    return {"status": "success", "finding": finding, "programItemId": program_item_id}
 
 
 @router.get("/tenant/discovery/summary")
@@ -181,11 +217,13 @@ def agent_findings(
         from app.cbom.service import ingest_scan_assets
         from app.discovery.fleet import list_agents as _agents
         from app.discovery.host_normalize import findings_to_assets
+        from app.discovery.program_sync import sync_program_items_for_findings
 
         agents = _agents(tenant_id=tenant_id)
         hostname = next((a["hostname"] for a in agents if a["agentId"] == agent_id), agent_id)
         assets = findings_to_assets(findings, agent_hostname=hostname)
         ingest_scan_assets(tenant_id=tenant_id, assets=assets, source_method="qtangl:host-sensor")
+        sync_program_items_for_findings(tenant_id=tenant_id, findings=findings)
     except Exception:
         pass
     return {"status": "success", **result}

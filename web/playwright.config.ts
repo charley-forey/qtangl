@@ -10,11 +10,12 @@ export default defineConfig({
     trace: "on-first-retry",
   },
   webServer: {
-    command: process.env.CI ? "npm run start" : "npm run dev",
+    command: "npm run dev",
     url: "http://127.0.0.1:3000",
     reuseExistingServer: !process.env.CI,
     env: {
       QTANGL_ACCESS_ALLOW_CONSOLE_FALLBACK: "true",
+      NEXT_PUBLIC_QTANGL_DASHBOARD_AUTH_WORKOS: "true",
     },
   },
   projects: [

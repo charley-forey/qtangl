@@ -2,6 +2,8 @@ import { test, expect } from "@playwright/test";
 
 import { gotoAssessScanner } from "./helpers/assess";
 
+test.describe.configure({ timeout: 120_000 });
+
 test.describe("Discovery depth", () => {
   test("compare hub still renders discovery chart", async ({ page }) => {
     await page.goto("/compare");

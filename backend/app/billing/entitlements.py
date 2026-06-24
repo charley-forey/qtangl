@@ -381,7 +381,14 @@ def tenant_entitlements(*, tenant_id: str) -> dict[str, Any]:
         except Exception as exc:
             logger.warning("tenant entitlements query failed tenant_id=%s: %s", tenant_id, exc)
     defaults = TIER_DEFAULTS.get(tier, TIER_DEFAULTS["monitor"])
-    return {"tier": tier, "status": status, **defaults}
+    entitlements = {"tier": tier, "status": status, **defaults}
+    try:
+        from app.partner.tiers import merge_partner_entitlements
+
+        entitlements = merge_partner_entitlements(tenant_id=tenant_id, entitlements=entitlements)
+    except Exception:
+        pass
+    return entitlements
 
 
 def upsert_subscription(

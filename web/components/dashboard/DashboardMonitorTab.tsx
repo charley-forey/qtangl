@@ -1,65 +1,42 @@
 "use client";
 
+import { useState } from "react";
+
 import dynamic from "next/dynamic";
 
 import Card from "@/components/ui/Card";
 import Eyebrow from "@/components/ui/Eyebrow";
-import BusinessUnitHeatmap from "@/components/dashboard/BusinessUnitHeatmap";
-import DashboardOnboarding, { DashboardSection } from "@/components/dashboard/DashboardOnboarding";
+import MonitorScheduleSuccessCard, {
+  type MonitorScheduleSuccess,
+} from "@/components/dashboard/MonitorScheduleSuccessCard";
+import MonitorRecentActivity from "@/components/dashboard/MonitorRecentActivity";
+import MonitorAdvancedSection from "@/components/dashboard/MonitorAdvancedSection";
 import MonitorHealthStrip from "@/components/dashboard/MonitorHealthStrip";
 import ScheduleRecommendationCard from "@/components/dashboard/ScheduleRecommendationCard";
-import WebhookDlqPanel from "@/components/dashboard/WebhookDlqPanel";
 import type { DashboardTabId } from "@/components/dashboard/DashboardTabs";
 import type { DashboardSummary, MonitorTabBundle } from "@/lib/dashboard-state";
 
-
-
-const IntegrationSettings = dynamic(() => import("@/components/dashboard/IntegrationSettings"));
-
 const ScheduleManager = dynamic(() => import("@/components/dashboard/ScheduleManager"));
 
-const MonitorCbomDriftSection = dynamic(() => import("@/components/dashboard/MonitorCbomDriftSection"));
-
-const DriftPortfolioPanel = dynamic(() => import("@/components/drift/DriftPortfolioPanel"));
-
-const HostDriftWidget = dynamic(() => import("@/components/drift/HostDriftWidget"));
-
-const AlertTimeline = dynamic(() => import("@/components/dashboard/AlertTimeline"));
-
-const DriftTimeline = dynamic(() => import("@/components/dashboard/DriftTimeline"));
-
-
-
 type Props = {
-
   bundle: MonitorTabBundle | null;
-
   summary: DashboardSummary;
-
   savedKey: string;
-
+  bffMode?: boolean;
   tenantSettings?: Record<string, unknown> | null;
-
   canAdmin?: boolean;
-
   onMessage: (message: string) => void;
-
   onRefresh: () => void;
-
   onTabChange?: (tab: string) => void;
-
   onOpenUpgrade?: (product: "monitor") => void;
-
   onDismissScheduleRecommendation?: () => void;
-
 };
-
-
 
 export default function DashboardMonitorTab({
   bundle,
   summary,
   savedKey,
+  bffMode = false,
   tenantSettings,
   canAdmin = false,
   onMessage,
@@ -68,7 +45,8 @@ export default function DashboardMonitorTab({
   onOpenUpgrade,
   onDismissScheduleRecommendation,
 }: Props) {
-  const cc = bundle?.commandCenter ?? summary.commandCenter;
+  const schedules = bundle?.schedules ?? [];
+  const hasSchedules = schedules.length > 0;
   const schedulerEnabled = Boolean(summary.health.schedulerEnabled ?? summary.me.schedulerEnabled);
   const scanAllowlist = (tenantSettings?.scanAllowlist as string[] | undefined) ?? [];
   const coaching = (tenantSettings?.coaching as { bannersDismissed?: string[] } | undefined) ?? {};
@@ -79,11 +57,11 @@ export default function DashboardMonitorTab({
   const entitlements = summary.me.entitlements as { tier?: string; maxSchedules?: number } | undefined;
   const tier = entitlements?.tier ?? "free";
   const maxSchedules = entitlements?.maxSchedules ?? 0;
-  const readinessScore =
-    summary.kpis.latestReadiness ?? summary.latestScanDetail?.readinessScore ?? null;
+  const readinessScore = summary.kpis.latestReadiness ?? summary.latestScanDetail?.readinessScore ?? null;
+  const [scheduleSuccess, setScheduleSuccess] = useState<MonitorScheduleSuccess | null>(null);
 
   return (
-    <DashboardSection title="Monitor control tower" id="dashboard-monitor">
+    <div className="space-y-6" id="dashboard-monitor">
       <MonitorHealthStrip summary={summary} schedulerEnabled={schedulerEnabled} />
 
       {!schedulerEnabled ? (
@@ -96,135 +74,80 @@ export default function DashboardMonitorTab({
         </Card>
       ) : null}
 
-      {(bundle?.schedules ?? []).length === 0 ? (
-        <ScheduleRecommendationCard
-          scanAllowlist={scanAllowlist}
-          tier={tier}
-          maxSchedules={maxSchedules}
-          readinessScore={readinessScore}
-          dismissed={scheduleRecommendationDismissed}
-          onDismiss={onDismissScheduleRecommendation}
-          onMessage={onMessage}
-          onRefresh={onRefresh}
-          onOpenUpgrade={onOpenUpgrade}
-          onOpenScans={() => onTabChange?.("scans")}
-        />
-      ) : null}
-
-      <div className="grid gap-4 lg:grid-cols-2">
-        <AlertTimeline
-          onNavigateTab={(tab) => onTabChange?.(tab as DashboardTabId)}
-        />
-
-        <DriftTimeline />
-
-      </div>
-
-
-
-      {cc?.businessUnits && Object.keys(cc.businessUnits).length > 0 ? (
-
-        <Card tone="panel">
-
-          <Eyebrow>Portfolio heatmap</Eyebrow>
-
-          <div className="mt-4">
-
-            <BusinessUnitHeatmap
-
-              businessUnits={cc.businessUnits}
-
-              deltas={cc.businessUnitDeltas}
-
-              onSelectUnit={() => onTabChange?.("monitor")}
-
-            />
-
-          </div>
-
-        </Card>
-
-      ) : null}
-
-
-
-      <Card tone="panel">
-
-        <Eyebrow>Webhook &amp; ticketing</Eyebrow>
-
-        <div className="mt-4">
-
-          <IntegrationSettings onMessage={onMessage} />
-
-        </div>
-
-      </Card>
-
-      {canAdmin ? (
-        <Card tone="panel">
-          <WebhookDlqPanel onMessage={onMessage} />
-        </Card>
-      ) : null}
-
-      <Card tone="panel">
-
-        <Eyebrow>CBOM aggregate</Eyebrow>
-
-        <p className="mt-2 text-sm text-[var(--color-gray-300)]">
-
-          Components: {bundle?.cbomAggregate?.componentCount ?? 0} · Open conflicts:{" "}
-
-          {bundle?.cbomAggregate?.openConflicts ?? 0}
-
-        </p>
-
-      </Card>
-
-      <Card tone="panel">
-
-        <MonitorCbomDriftSection />
-
-      </Card>
-
-      <Card tone="panel">
-
-        <Eyebrow>Host drift</Eyebrow>
-
-        <div className="mt-4">
-
-          <HostDriftWidget apiKey={savedKey} />
-
-        </div>
-
-      </Card>
-
-      <Card tone="panel">
-
-        <DriftPortfolioPanel />
-
-      </Card>
-
-      <Card tone="panel">
-
-        <Eyebrow>Scheduled monitoring</Eyebrow>
-
-        <div className="mt-4">
-
-          <ScheduleManager
-            schedules={bundle?.schedules ?? []}
-            onRefresh={onRefresh}
-            onMessage={onMessage}
-            onOpenUpgrade={onOpenUpgrade}
-            maxScansPerMonth={maxScansPerMonth}
+      {!hasSchedules ? (
+        maxSchedules > 0 && scheduleRecommendationDismissed ? (
+          <Card tone="panel">
+            <Eyebrow>Scheduled monitoring</Eyebrow>
+            <div className="mt-4">
+              <ScheduleManager
+                schedules={[]}
+                onRefresh={onRefresh}
+                onMessage={onMessage}
+                onOpenUpgrade={onOpenUpgrade}
+                maxScansPerMonth={maxScansPerMonth}
+                maxSchedules={maxSchedules}
+                onScheduleCreated={(target, cadenceHours) => {
+                  setScheduleSuccess({ target, cadenceHours });
+                }}
+              />
+            </div>
+          </Card>
+        ) : (
+          <ScheduleRecommendationCard
+            scanAllowlist={scanAllowlist}
+            tier={tier}
             maxSchedules={maxSchedules}
+            readinessScore={readinessScore}
+            dismissed={scheduleRecommendationDismissed}
+            onDismiss={onDismissScheduleRecommendation}
+            onMessage={onMessage}
+            onRefresh={onRefresh}
+            onOpenUpgrade={onOpenUpgrade}
+            onOpenScans={() => onTabChange?.("scans")}
+            onScheduleCreated={(target, cadenceHours) => {
+              setScheduleSuccess({ target, cadenceHours });
+            }}
           />
+        )
+      ) : (
+        <Card tone="panel">
+          <Eyebrow>Scheduled monitoring</Eyebrow>
+          <div className="mt-4">
+            <ScheduleManager
+              schedules={schedules}
+              onRefresh={onRefresh}
+              onMessage={onMessage}
+              onOpenUpgrade={onOpenUpgrade}
+              maxScansPerMonth={maxScansPerMonth}
+              maxSchedules={maxSchedules}
+              onScheduleCreated={(target, cadenceHours) => {
+                setScheduleSuccess({ target, cadenceHours });
+              }}
+            />
+          </div>
+        </Card>
+      )}
 
-        </div>
+      <MonitorScheduleSuccessCard
+        success={scheduleSuccess}
+        onDismiss={() => setScheduleSuccess(null)}
+        onTabChange={(tab) => onTabChange?.(tab)}
+      />
 
-      </Card>
+      <MonitorRecentActivity
+        hasSchedules={hasSchedules}
+        onNavigateTab={(tab) => onTabChange?.(tab as DashboardTabId)}
+      />
 
-    </DashboardSection>
-
+      <MonitorAdvancedSection
+        bundle={bundle}
+        summary={summary}
+        savedKey={savedKey}
+        bffMode={bffMode}
+        canAdmin={canAdmin}
+        onMessage={onMessage}
+        onTabChange={onTabChange}
+      />
+    </div>
   );
-
 }

@@ -117,8 +117,12 @@ def enroll_agent(
         fleet = next((f for f in fleets if _verify_token(enrollment_token, f.enrollment_token_hash)), None)
         if fleet is None:
             return None
-        if fleet.token_expires_at < _utcnow():
-            return None
+        expires = fleet.token_expires_at
+        if expires is not None:
+            if expires.tzinfo is None:
+                expires = expires.replace(tzinfo=timezone.utc)
+            if expires < _utcnow():
+                return None
         if fleet.token_uses >= fleet.token_max_uses:
             return None
         if enrollment_nonce and fleet.enrollment_nonce and enrollment_nonce != fleet.enrollment_nonce:
@@ -138,13 +142,15 @@ def enroll_agent(
         fleet.token_uses += 1
         fleet.enrollment_nonce = _new_nonce()
         session.flush()
-        cert = issue_agent_certificate(agent_id=agent_id, tenant_id=fleet.tenant_id)
-        return {
-            "agentId": agent_id,
-            "tenantId": fleet.tenant_id,
-            "fleetId": fleet.id,
-            **cert,
-        }
+        enrolled_tenant_id = fleet.tenant_id
+        enrolled_fleet_id = fleet.id
+    cert = issue_agent_certificate(agent_id=agent_id, tenant_id=enrolled_tenant_id)
+    return {
+        "agentId": agent_id,
+        "tenantId": enrolled_tenant_id,
+        "fleetId": enrolled_fleet_id,
+        **cert,
+    }
 
 
 def record_heartbeat(*, agent_id: str, tenant_id: str, sensor_version: str | None = None) -> bool:
@@ -296,3 +302,63 @@ def list_agents(*, tenant_id: str, fleet_id: str | None = None) -> list[dict[str
             }
             for a in q.all()
         ]
+
+
+def list_findings(
+    *,
+    tenant_id: str,
+    agent_id: str | None = None,
+    limit: int = 50,
+    offset: int = 0,
+) -> tuple[list[dict[str, Any]], int]:
+    if not persistence_enabled():
+        return [], 0
+    with db_session() as session:
+        q = session.query(HostFinding).filter(HostFinding.tenant_id == tenant_id)
+        if agent_id:
+            q = q.filter(HostFinding.agent_id == agent_id)
+        total = q.count()
+        rows = q.order_by(HostFinding.ingested_at.desc()).offset(offset).limit(limit).all()
+        return [_finding_to_dict(row) for row in rows], total
+
+
+def get_finding(*, tenant_id: str, finding_id: str) -> dict[str, Any] | None:
+    if not persistence_enabled():
+        return None
+    with db_session() as session:
+        row = (
+            session.query(HostFinding)
+            .filter(HostFinding.tenant_id == tenant_id, HostFinding.finding_id == finding_id)
+            .first()
+        )
+        if row is None:
+            row = session.get(HostFinding, finding_id)
+        if row is None or row.tenant_id != tenant_id:
+            return None
+        return _finding_to_dict(row, include_raw=True)
+
+
+def _finding_to_dict(row: HostFinding, *, include_raw: bool = False) -> dict[str, Any]:
+    parsed: dict[str, Any] = {}
+    try:
+        parsed = json.loads(row.raw_json) if row.raw_json else {}
+    except json.JSONDecodeError:
+        parsed = {}
+    out: dict[str, Any] = {
+        "id": row.id,
+        "findingId": row.finding_id,
+        "findingType": row.finding_type,
+        "agentId": row.agent_id,
+        "componentKey": row.component_key,
+        "ingestedAt": row.ingested_at.isoformat() if row.ingested_at else None,
+        "algorithm": parsed.get("algorithm"),
+        "location": parsed.get("location"),
+        "hostname": parsed.get("hostname"),
+        "confidence": parsed.get("confidence"),
+        "keySize": parsed.get("keySize"),
+        "fingerprint": parsed.get("fingerprint"),
+        "severity": parsed.get("metadata", {}).get("severity") if isinstance(parsed.get("metadata"), dict) else None,
+    }
+    if include_raw:
+        out["raw"] = parsed
+    return out

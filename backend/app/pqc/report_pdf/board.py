@@ -16,10 +16,12 @@ except ImportError:  # pragma: no cover
 
 from app.pqc.report_pdf.charts import mosca_timeline, readiness_gauge
 from app.pqc.report_pdf.common import (
-    company_name,
+    branding_display_name,
     exposure_range_text,
+    logo_flowable,
     nearest_deadline,
     page_header_footer,
+    pdf_footer_notes,
     qr_drawing,
     verify_url,
 )
@@ -39,12 +41,13 @@ def build_board_pdf(
     if not _HAS_REPORTLAB:
         raise RuntimeError("reportlab is required for PDF generation")
 
-    company = company_name(branding)
+    company = branding_display_name(branding)
     styles = pdf_styles(branding)
     body = styles["body"]
     muted = styles["muted"]
     title = styles["title"]
     issues = coherence_issues or []
+    footer_note = pdf_footer_notes(branding, verify_link=verify_url(report))
 
     buffer = io.BytesIO()
     doc = SimpleDocTemplate(
@@ -58,12 +61,19 @@ def build_board_pdf(
     )
 
     exec_sum = report.executive_summary or {}
-    story: list[Any] = [
-        Spacer(1, 0.4 * inch),
-        Paragraph("Q-Day Readiness — Board Brief", title),
-        Paragraph(f"<b>{report.target_domain}</b> · {report.generated_at[:10] if report.generated_at else ''}", body),
-        Paragraph(f"<b>Band:</b> {report.readiness_band or '—'} · <b>Score:</b> {report.readiness_score}/100", body),
-    ]
+    story: list[Any] = []
+    logo = logo_flowable(branding, max_height=0.6 * inch)
+    if logo:
+        story.append(logo)
+        story.append(Spacer(1, 0.12 * inch))
+    story.extend(
+        [
+            Spacer(1, 0.4 * inch if not logo else 0.1 * inch),
+            Paragraph("Q-Day Readiness — Board Brief", title),
+            Paragraph(f"<b>{report.target_domain}</b> · {report.generated_at[:10] if report.generated_at else ''}", body),
+            Paragraph(f"<b>Band:</b> {report.readiness_band or '—'} · <b>Score:</b> {report.readiness_score}/100", body),
+        ]
+    )
     story.extend(watermark_banner(issues if watermark else [], body))
     story.append(readiness_gauge(report.readiness_score))
     story.append(Spacer(1, 0.15 * inch))
@@ -129,7 +139,7 @@ def build_board_pdf(
             scan_id=report.scan_id,
             company=company,
             header_suffix="Board Brief",
-            footer_note=verify_url(report),
+            footer_note=footer_note,
             minimal=True,
         ),
         onLaterPages=lambda c, d: page_header_footer(
@@ -138,7 +148,7 @@ def build_board_pdf(
             scan_id=report.scan_id,
             company=company,
             header_suffix="Board Brief",
-            footer_note=verify_url(report),
+            footer_note=footer_note,
             minimal=True,
         ),
     )

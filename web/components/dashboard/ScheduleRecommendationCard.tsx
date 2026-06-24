@@ -20,6 +20,7 @@ type Props = {
   onRefresh?: () => void;
   onOpenScans?: () => void;
   onOpenUpgrade?: (product: "monitor", context?: UpgradeContext) => void;
+  onScheduleCreated?: (target: string, cadenceHours: number) => void;
 };
 
 export default function ScheduleRecommendationCard({
@@ -33,6 +34,7 @@ export default function ScheduleRecommendationCard({
   onRefresh,
   onOpenScans,
   onOpenUpgrade,
+  onScheduleCreated,
 }: Props) {
   const [creating, setCreating] = useState(false);
   const target = scanAllowlist[0];
@@ -58,6 +60,7 @@ export default function ScheduleRecommendationCard({
         jobType: "scan",
       });
       onMessage?.("Weekly monitoring enabled.");
+      onScheduleCreated?.(target!, 168);
       onRefresh?.();
     } catch (error) {
       const handled = handleDashboardApiError(error);

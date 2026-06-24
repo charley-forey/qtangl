@@ -37,21 +37,34 @@ def cover_section(
     styles: dict[str, ParagraphStyle],
     *,
     coherence_issues: list[str] | None = None,
+    branding: dict[str, Any] | None = None,
 ) -> list[Any]:
+    from app.pqc.report_pdf.common import branding_display_name, logo_flowable
+
     body = styles["body"]
     muted = styles["muted"]
     title = styles["title"]
     generated = report.generated_at[:10] if report.generated_at else ""
-    items: list[Any] = [
-        Spacer(1, 0.5 * inch),
-        Paragraph("Qtangl Q-Day Readiness Report", title),
-        Paragraph(f"<b>Scan ID:</b> {report.scan_id}", body),
-        Paragraph(f"<b>Target:</b> {report.target_domain}", body),
-        Paragraph(f"<b>Readiness band:</b> {report.readiness_band or '—'}", body),
-        Paragraph(f"<b>Readiness score:</b> {report.readiness_score}/100", body),
-        Paragraph(f"<b>Generated:</b> {generated}", body),
-        Paragraph(f"<b>Scan depth:</b> {report.scan_depth or 'standard'}", muted),
-    ]
+    display = branding_display_name(branding)
+    cover_title = f"{display} Q-Day Readiness Report" if display else "Qtangl Q-Day Readiness Report"
+    items: list[Any] = []
+    logo = logo_flowable(branding)
+    if logo:
+        items.append(logo)
+        items.append(Spacer(1, 0.15 * inch))
+    else:
+        items.append(Spacer(1, 0.5 * inch))
+    items.extend(
+        [
+            Paragraph(cover_title, title),
+            Paragraph(f"<b>Scan ID:</b> {report.scan_id}", body),
+            Paragraph(f"<b>Target:</b> {report.target_domain}", body),
+            Paragraph(f"<b>Readiness band:</b> {report.readiness_band or '—'}", body),
+            Paragraph(f"<b>Readiness score:</b> {report.readiness_score}/100", body),
+            Paragraph(f"<b>Generated:</b> {generated}", body),
+            Paragraph(f"<b>Scan depth:</b> {report.scan_depth or 'standard'}", muted),
+        ]
+    )
     items.extend(watermark_banner(coherence_issues or [], body))
     exp = exposure_range_text(report)
     if exp:

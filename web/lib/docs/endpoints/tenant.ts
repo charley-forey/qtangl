@@ -73,6 +73,29 @@ export const tenantEndpoints: Record<string, DocsEndpoint> = {
     ],
     examples: [{ label: "Delete scan", response: { status: "success", scanId: "scan_001", deleted: true } }],
   }),
+  "tenant-scan-diff": defineEndpoint("tenant-scan-diff", {
+    method: "GET",
+    path: "/tenant/scans/{scan_id}/diff",
+    summary: "Compare a scan with the prior run for the same target and scenario.",
+    auth: true,
+    role: ROLE_ANY,
+    responseFields: [
+      { name: "scanId", type: "string", required: true, description: "Current scan id." },
+      { name: "previousScanId", type: "string", required: false, description: "Prior scan id when a diff exists." },
+      { name: "scanDiff", type: "object", required: false, description: "Readiness delta, new findings, and drift causes." },
+    ],
+    examples: [
+      {
+        label: "Scan diff",
+        response: {
+          status: "success",
+          scanId: "scan_002",
+          previousScanId: "scan_001",
+          scanDiff: { readinessDelta: 4, newVulnerabilities: [] },
+        },
+      },
+    ],
+  }),
   "tenant-scan-report": defineEndpoint("tenant-scan-report", {
     method: "GET",
     path: "/tenant/scans/{scan_id}/report",

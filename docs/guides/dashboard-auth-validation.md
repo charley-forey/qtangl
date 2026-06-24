@@ -63,6 +63,14 @@ See [dashboard-team-roles.md](./dashboard-team-roles.md) for admin workflow deta
 
 - [ ] `pytest backend/tests/test_workos_auth.py`
 - [ ] `pytest backend/tests/test_tenant_dashboard.py`
+- [ ] `pytest backend/tests/test_partner_delegation_security.py`
+- [ ] `pytest backend/tests/test_partner_customer_api.py`
+- [ ] `pytest backend/tests/test_branding.py`
 - [ ] `npx playwright test web/tests/e2e/dashboard-authenticated.spec.ts`
 - [ ] `npx playwright test web/tests/e2e/dashboard-no-membership.spec.ts`
 - [ ] `npx playwright test web/tests/e2e/dashboard-logout.spec.ts`
+- [ ] `npx playwright test web/tests/e2e/dashboard-role-gating.spec.ts`
+- [ ] `npx playwright test web/tests/e2e/dashboard-portfolio.spec.ts`
+- [ ] `npx playwright test web/tests/e2e/discovery.spec.ts`
+- [ ] `npx playwright test web/tests/e2e/discovery-fleet.spec.ts`
+- [ ] `npx playwright test web/tests/e2e/remediation-program.spec.ts`

@@ -49,6 +49,55 @@ export const discoveryEndpoints: Record<string, DocsEndpoint> = {
     ],
     examples: [{ label: "Agents", response: { status: "success", agents: [{ agentId: "agent-1", status: "online" }] } }],
   }),
+  "discovery-agent-findings": defineEndpoint("discovery-agent-findings", {
+    method: "GET",
+    path: "/tenant/discovery/agents/{agent_id}/findings",
+    status: "ga",
+    summary: "List host sensor findings for an enrolled agent.",
+    auth: true,
+    role: ROLE_ANY,
+    queryParams: [
+      { name: "limit", type: "integer", required: false, default: "50", description: "Page size (max 200)." },
+      { name: "offset", type: "integer", required: false, default: "0", description: "Pagination offset." },
+    ],
+    responseFields: [
+      { name: "findings", type: "object[]", required: true, description: "Finding summaries with algorithm and location." },
+      { name: "total", type: "integer", required: true, description: "Total findings for agent." },
+    ],
+    examples: [
+      {
+        label: "Agent findings",
+        response: {
+          status: "success",
+          agentId: "agent-1",
+          findings: [{ findingId: "hf-001", algorithm: "RSA-2048", location: "/etc/ssl/cert.pem" }],
+          total: 1,
+        },
+      },
+    ],
+  }),
+  "discovery-finding-detail": defineEndpoint("discovery-finding-detail", {
+    method: "GET",
+    path: "/tenant/discovery/findings/{finding_id}",
+    status: "ga",
+    summary: "Get a single host finding with optional linked program item id.",
+    auth: true,
+    role: ROLE_ANY,
+    responseFields: [
+      { name: "finding", type: "object", required: true, description: "Parsed finding payload." },
+      { name: "programItemId", type: "string", required: false, description: "Remediation program item when synced." },
+    ],
+    examples: [
+      {
+        label: "Finding detail",
+        response: {
+          status: "success",
+          finding: { findingId: "hf-001", algorithm: "RSA-2048" },
+          programItemId: "prog-abc",
+        },
+      },
+    ],
+  }),
   "discovery-code-scan": defineEndpoint("discovery-code-scan", {
     method: "POST",
     path: "/tenant/coverage/code-scan",

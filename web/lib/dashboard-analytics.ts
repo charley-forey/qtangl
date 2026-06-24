@@ -24,3 +24,15 @@ export function trackDashboardEvent(
       /* analytics must not block UX */
     });
 }
+
+export function identifyDashboardTenant(tenantId: string, traits?: Record<string, string | number | boolean>) {
+  if (typeof window === "undefined" || !tenantId) return;
+  const posthog = (
+    window as Window & {
+      posthog?: {
+        identify: (id: string, props?: Record<string, string | number | boolean>) => void;
+      };
+    }
+  ).posthog;
+  posthog?.identify(tenantId, traits);
+}

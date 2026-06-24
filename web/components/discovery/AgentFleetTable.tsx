@@ -2,7 +2,8 @@
 
 import { useCallback, useEffect, useState } from "react";
 
-import { listAgents, revokeAgents, triggerHostScan } from "@/lib/discovery";
+import HostFindingDetail from "@/components/discovery/HostFindingDetail";
+import { listAgents, listHostFindings, revokeAgents, triggerHostScan } from "@/lib/discovery";
 
 const LATEST_SENSOR = "0.1.0";
 
@@ -17,23 +18,26 @@ type Agent = {
 };
 
 type AgentFleetTableProps = {
-  apiKey: string;
+  apiKey?: string;
+  useBff?: boolean;
 };
 
-export default function AgentFleetTable({ apiKey }: AgentFleetTableProps) {
+export default function AgentFleetTable({ apiKey = "", useBff = false }: AgentFleetTableProps) {
+  const auth = useBff ? { useBff: true as const } : { apiKey };
   const [agents, setAgents] = useState<Agent[]>([]);
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
+  const [detailFindingId, setDetailFindingId] = useState<string | null>(null);
 
   const load = useCallback(async () => {
     try {
-      const res = await listAgents(apiKey);
+      const res = await listAgents(auth);
       setAgents(res.agents ?? []);
     } catch (e) {
       setError(e instanceof Error ? e.message : "Failed to load agents");
     }
-  }, [apiKey]);
+  }, [useBff, apiKey]);
 
   useEffect(() => {
     void load();
@@ -50,15 +54,29 @@ export default function AgentFleetTable({ apiKey }: AgentFleetTableProps) {
 
   async function handleRevoke() {
     if (selected.size === 0) return;
-    const res = await revokeAgents(apiKey, [...selected]);
+    const res = await revokeAgents(auth, [...selected]);
     setMessage(`Revoked ${res.revoked} agent(s)`);
     setSelected(new Set());
     void load();
   }
 
-  async function handleFleetScan() {
-    await triggerHostScan(apiKey);
-    setMessage("Host fleet scan enqueued");
+  async function handleFleetSummary() {
+    await triggerHostScan(auth);
+    setMessage("Fleet summary refresh enqueued (findings arrive via sensor push on schedule).");
+  }
+
+  async function openFirstFinding(agentId: string) {
+    try {
+      const res = await listHostFindings(auth, agentId, { limit: 1 });
+      const first = res.findings?.[0];
+      if (first?.findingId) {
+        setDetailFindingId(first.findingId);
+      } else {
+        setMessage("No findings yet — ensure the sensor daemon is pushing inventory.");
+      }
+    } catch (e) {
+      setMessage(e instanceof Error ? e.message : "Could not load findings");
+    }
   }
 
   if (error) return <p className="text-sm text-red-400">{error}</p>;
@@ -68,12 +86,15 @@ export default function AgentFleetTable({ apiKey }: AgentFleetTableProps) {
 
   return (
     <div className="space-y-3">
+      <p className="text-xs text-[var(--muted)]" title="Findings are pushed by sensors on daemon start and every 24h.">
+        Sensors push findings on a schedule. Refresh fleet summary updates counts only.
+      </p>
       <div className="flex flex-wrap gap-2">
         <button type="button" className="btn btn-secondary text-xs" disabled={selected.size === 0} onClick={handleRevoke}>
           Revoke selected ({selected.size})
         </button>
-        <button type="button" className="btn btn-secondary text-xs" onClick={handleFleetScan}>
-          Trigger fleet scan
+        <button type="button" className="btn btn-secondary text-xs" onClick={handleFleetSummary} title="Enqueues a metadata job; does not pull findings from agents">
+          Refresh fleet summary
         </button>
       </div>
       {message && <p className="text-xs text-[var(--muted)]">{message}</p>}
@@ -99,9 +120,9 @@ export default function AgentFleetTable({ apiKey }: AgentFleetTableProps) {
                     <input type="checkbox" checked={selected.has(a.agentId)} onChange={() => toggle(a.agentId)} />
                   </td>
                   <td className="py-2 pr-4 font-medium">
-                    <a href={`/assess?host=${encodeURIComponent(a.hostname)}`} className="hover:underline">
+                    <button type="button" className="hover:underline" onClick={() => void openFirstFinding(a.agentId)}>
                       {a.hostname}
-                    </a>
+                    </button>
                   </td>
                   <td className="py-2 pr-4">{a.os}</td>
                   <td className={`py-2 pr-4 ${drift ? "text-amber-400" : ""}`}>
@@ -109,7 +130,19 @@ export default function AgentFleetTable({ apiKey }: AgentFleetTableProps) {
                     {drift && <span className="ml-1 text-[10px]">(update)</span>}
                   </td>
                   <td className="py-2 pr-4">{a.status}</td>
-                  <td className="py-2 pr-4">{a.findingsCount}</td>
+                  <td className="py-2 pr-4">
+                    {a.findingsCount > 0 ? (
+                      <button
+                        type="button"
+                        className="rounded-full bg-white/10 px-2 py-0.5 text-xs hover:bg-white/20"
+                        onClick={() => void openFirstFinding(a.agentId)}
+                      >
+                        {a.findingsCount}
+                      </button>
+                    ) : (
+                      <span className="text-[var(--muted)]">0</span>
+                    )}
+                  </td>
                   <td className="py-2">{a.lastSeenAt ? new Date(a.lastSeenAt).toLocaleString() : "—"}</td>
                 </tr>
               );
@@ -117,6 +150,9 @@ export default function AgentFleetTable({ apiKey }: AgentFleetTableProps) {
           </tbody>
         </table>
       </div>
+      {detailFindingId ? (
+        <HostFindingDetail findingId={detailFindingId} auth={auth} onClose={() => setDetailFindingId(null)} />
+      ) : null}
     </div>
   );
 }

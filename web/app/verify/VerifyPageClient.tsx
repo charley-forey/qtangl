@@ -10,6 +10,16 @@ import { qtanglApiBaseUrl } from "@/lib/api";
 import { createPublicQtanglClient } from "@/lib/qtangl-client";
 import { trackEvent } from "@/lib/analytics";
 
+type VerifyBranding = {
+  partnerDisplayName?: string;
+  headerText?: string;
+  logoUrl?: string;
+  primaryColor?: string;
+  accentColor?: string;
+  supportEmail?: string;
+  footerText?: string;
+};
+
 type VerifyResult = {
   valid?: boolean;
   alg?: string;
@@ -96,6 +106,7 @@ export default function VerifyPageClient() {
   const params = useSearchParams();
   const scanId = params.get("scanId") ?? "";
   const [result, setResult] = useState<VerifyResult | null>(null);
+  const [branding, setBranding] = useState<VerifyBranding | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [scanIdInput, setScanIdInput] = useState("");
   const [pastedJson, setPastedJson] = useState("");
@@ -135,12 +146,29 @@ export default function VerifyPageClient() {
   useEffect(() => {
     if (!scanId) {
       setResult(null);
+      setBranding(null);
       setError(null);
       return;
     }
     setResult(null);
+    setBranding(null);
     setError(null);
     const client = createPublicQtanglClient();
+    void fetch(`${qtanglApiBaseUrl}/public/verify/branding?scanId=${encodeURIComponent(scanId)}`)
+      .then(async (response) => {
+        if (!response.ok) {
+          return null;
+        }
+        return (await response.json()) as VerifyBranding;
+      })
+      .then((payload) => {
+        if (payload) {
+          setBranding(payload);
+        }
+      })
+      .catch(() => {
+        // Co-branding is optional; verification still proceeds.
+      });
     client
       .verifyScan(scanId)
       .then((payload) => {
@@ -171,12 +199,45 @@ export default function VerifyPageClient() {
     }
   }
 
+  const heroTitle = branding?.headerText || branding?.partnerDisplayName
+    ? `Verify ${branding.headerText || branding.partnerDisplayName} report`
+    : "Verify Q-Day report";
+  const heroDescription = branding?.partnerDisplayName
+    ? `Public verification of ${branding.partnerDisplayName} PQC readiness report signatures and content hashes.`
+    : "Recompute the SHA-256 content hash and validate the Qtangl report signature (ML-DSA-65 or Ed25519 fallback).";
+  const accent = branding?.accentColor || branding?.primaryColor;
+
   return (
     <PageShell>
+      {branding?.logoUrl || branding?.partnerDisplayName ? (
+        <div
+          className="border-b border-[var(--border-subtle)] px-[var(--gutter-mobile)] py-6 md:px-[var(--gutter-tablet)]"
+          style={accent ? { borderBottomColor: accent } : undefined}
+        >
+          <div className="mx-auto flex max-w-2xl items-center gap-4">
+            {branding.logoUrl ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={branding.logoUrl}
+                alt={branding.partnerDisplayName ?? "Partner logo"}
+                className="max-h-12 max-w-[220px] object-contain"
+              />
+            ) : null}
+            <div>
+              {branding.partnerDisplayName ? (
+                <p className="text-sm font-medium text-white">{branding.partnerDisplayName}</p>
+              ) : null}
+              {branding.headerText ? (
+                <p className="text-xs text-[var(--color-gray-500)]">{branding.headerText}</p>
+              ) : null}
+            </div>
+          </div>
+        </div>
+      ) : null}
       <PageHero
         eyebrow="Trust"
-        title="Verify Q-Day report"
-        description="Recompute the SHA-256 content hash and validate the Qtangl report signature (ML-DSA-65 or Ed25519 fallback)."
+        title={heroTitle}
+        description={heroDescription}
       />
       <Section>
         <div className="max-w-2xl space-y-6 text-sm text-[var(--color-gray-300)]">

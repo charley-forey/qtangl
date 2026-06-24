@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import io
 from typing import Any
 
 from app.pqc.models import MigrationReport
@@ -7,7 +8,7 @@ from app.pqc.models import MigrationReport
 try:
     from reportlab.lib.pagesizes import letter
     from reportlab.lib.units import inch
-    from reportlab.platypus import Spacer
+    from reportlab.platypus import Image, Spacer
 
     _HAS_REPORTLAB = True
 except ImportError:  # pragma: no cover
@@ -36,6 +37,52 @@ def verify_url(report: MigrationReport) -> str:
 
 def company_name(branding: dict[str, Any] | None) -> str:
     return str((branding or {}).get("companyName") or "").strip()
+
+
+def branding_display_name(branding: dict[str, Any] | None) -> str:
+    partner = str((branding or {}).get("partnerDisplayName") or "").strip()
+    if partner:
+        return partner
+    return company_name(branding)
+
+
+def pdf_footer_notes(branding: dict[str, Any] | None, *, verify_link: str = "") -> str:
+    parts: list[str] = []
+    footer = str((branding or {}).get("footerText") or "").strip()
+    support = str((branding or {}).get("supportEmail") or "").strip()
+    if footer:
+        parts.append(footer)
+    elif support:
+        parts.append(f"Support: {support}")
+    if verify_link:
+        parts.append(verify_link)
+    return " · ".join(parts)
+
+
+def logo_flowable(
+    branding: dict[str, Any] | None,
+    *,
+    max_width: float | None = None,
+    max_height: float | None = None,
+) -> Any | None:
+    if not _HAS_REPORTLAB:
+        return None
+    url = str((branding or {}).get("logoUrl") or "").strip()
+    if not url:
+        return None
+    try:
+        from app.branding.logo_fetch import fetch_logo_bytes
+
+        data = fetch_logo_bytes(url)
+        if not data:
+            return None
+        img = Image(io.BytesIO(data))
+        width_limit = max_width if max_width is not None else 2.0 * inch
+        height_limit = max_height if max_height is not None else 0.75 * inch
+        img._restrictSize(width_limit, height_limit)
+        return img
+    except Exception:
+        return None
 
 
 def page_header_footer(

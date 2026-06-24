@@ -22,6 +22,7 @@ const AuthorizedDomainsPanel = dynamic(() => import("@/components/dashboard/Auth
 const BillingHubPanel = dynamic(() => import("@/components/dashboard/BillingHubPanel"));
 const LegalCompliancePanel = dynamic(() => import("@/components/dashboard/LegalCompliancePanel"));
 const ReportBrandingPanel = dynamic(() => import("@/components/dashboard/ReportBrandingPanel"));
+const PortalAppearancePanel = dynamic(() => import("@/components/dashboard/PortalAppearancePanel"));
 const EvidenceVaultPanel = dynamic(() => import("@/components/pqc/EvidenceVaultPanel"));
 
 type Props = {
@@ -92,6 +93,7 @@ export default function DashboardSettingsTab({
             }
           />
           <ReportBrandingPanel onMessage={onMessage} onSettingsChange={onSettingsChange} />
+          <PortalAppearancePanel onMessage={onMessage} onSettingsChange={onSettingsChange} />
           <AuthorizedDomainsPanel
             canAdmin={canAdmin}
             onMessage={onMessage}

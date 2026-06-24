@@ -15,6 +15,7 @@ def build_weekly_digest_html(
     tenant_id: str,
     digest: dict[str, Any],
     child_summaries: list[dict[str, Any]] | None = None,
+    branding: dict[str, Any] | None = None,
 ) -> str:
     wins = digest.get("wins") or []
     risks = digest.get("risks") or []
@@ -23,11 +24,25 @@ def build_weekly_digest_html(
     narrative = digest.get("narrative") or ""
     headline = digest.get("headline") or "Weekly executive digest"
     since_board = digest.get("sinceLastBoardMeeting") or ""
+    brand = branding if isinstance(branding, dict) else {}
+    partner_name = str(brand.get("partnerDisplayName") or brand.get("companyName") or "Qtangl").strip()
+    logo_url = str(brand.get("logoUrl") or "").strip()
+    footer_text = str(brand.get("footerText") or "").strip()
+    support_email = str(brand.get("supportEmail") or "").strip()
+    accent = str(brand.get("primaryColor") or "#38bdf8").strip()
 
     def _list(items: list[str]) -> str:
         if not items:
             return "<p><em>None this period.</em></p>"
         return "<ul>" + "".join(f"<li>{html.escape(str(item))}</li>" for item in items) + "</ul>"
+
+    header_block = f"""
+    <div style="border-bottom:3px solid {html.escape(accent)};padding-bottom:12px;margin-bottom:20px;">
+      {f'<img src="{html.escape(logo_url)}" alt="" style="max-height:48px;max-width:220px;margin-bottom:8px;" />' if logo_url else ""}
+      <h1 style="margin:0;color:#111;">{html.escape(partner_name)}</h1>
+      <p style="margin:4px 0 0;color:#666;font-size:13px;">{html.escape(headline)}</p>
+    </div>
+    """
 
     child_block = ""
     if child_summaries:
@@ -49,10 +64,19 @@ def build_weekly_digest_html(
         </table>
         """
 
+    if footer_text and support_email:
+        footer_line = f"{html.escape(footer_text)} · Support: {html.escape(support_email)}"
+    elif footer_text:
+        footer_line = html.escape(footer_text)
+    elif support_email:
+        footer_line = f"Support: {html.escape(support_email)}"
+    else:
+        footer_line = html.escape("Qtangl weekly executive digest — do not forward externally.")
+
     return f"""<!DOCTYPE html>
 <html>
 <body style="font-family: system-ui, sans-serif; color: #111;">
-  <h1>{html.escape(headline)}</h1>
+  {header_block}
   <p><strong>Tenant:</strong> {html.escape(tenant_id)}</p>
   <p>{html.escape(narrative)}</p>
   <p><em>{html.escape(since_board)}</em></p>
@@ -65,7 +89,7 @@ def build_weekly_digest_html(
   <h2>Next week focus</h2>
   {_list([str(f) for f in focus])}
   {child_block}
-  <p style="color:#666;font-size:12px;">Qtangl weekly executive digest — do not forward externally.</p>
+  <p style="color:#666;font-size:12px;">{footer_line}</p>
 </body>
 </html>"""
 
@@ -76,6 +100,7 @@ def send_weekly_digest_email(
     tenant_id: str,
     digest: dict[str, Any],
     child_summaries: list[dict[str, Any]] | None = None,
+    branding: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     import smtplib
     from email.message import EmailMessage
@@ -89,6 +114,7 @@ def send_weekly_digest_email(
         tenant_id=tenant_id,
         digest=digest,
         child_summaries=child_summaries,
+        branding=branding,
     )
     port = int(os.environ.get("QTANGL_SMTP_PORT", "587"))
     user = os.environ.get("QTANGL_SMTP_USER", "")
@@ -149,6 +175,9 @@ def process_due_weekly_digests() -> int:
             if not recipients:
                 continue
             digest = weekly_executive_digest(tenant_id=row.tenant_id)
+            from app.branding.resolve import resolved_report_branding
+
+            branding = resolved_report_branding(tenant_id=row.tenant_id)
             children = list_child_tenants(parent_tenant_id=row.tenant_id)
             child_summaries: list[dict[str, Any]] = []
             if children:
@@ -174,6 +203,7 @@ def process_due_weekly_digests() -> int:
                     tenant_id=row.tenant_id,
                     digest=digest,
                     child_summaries=child_summaries,
+                    branding=branding,
                 )
                 if result.get("sent"):
                     sent += 1
@@ -240,7 +270,9 @@ def process_due_board_exports() -> int:
             if bundle_dict:
                 bundle = bundle_from_api_dict(bundle_dict)
                 report = bundle_report(bundle)
-                branding = settings.get("reportBranding") or {}
+                from app.branding.resolve import resolved_report_branding
+
+                branding = resolved_report_branding(tenant_id=row.tenant_id)
                 try:
                     pdf_bytes = board_pdf_bytes(
                         report,

@@ -27,6 +27,26 @@ export const DEFAULT_ROLE_POLICIES: Record<string, RolePolicy> = {
     widgets: ["*"],
     exports: ["*"],
   },
+  partner_admin: {
+    tabs: ["*"],
+    widgets: ["*"],
+    exports: ["*"],
+  },
+  partner_analyst: {
+    tabs: ["overview", "scans", "monitor", "remediate", "portfolio"],
+    widgets: ["kpi", "trend", "digest", "compliance", "insights", "forecast", "heatmap", "actions"],
+    exports: ["pdf", "board", "bundle"],
+  },
+  customer_executive: {
+    tabs: ["overview", "scans"],
+    widgets: ["kpi", "trend", "digest", "compliance"],
+    exports: ["pdf", "board"],
+  },
+  customer_viewer: {
+    tabs: ["overview", "scans"],
+    widgets: ["kpi", "trend", "digest"],
+    exports: ["pdf"],
+  },
 };
 
 export function resolveRolePolicy(
@@ -34,7 +54,8 @@ export function resolveRolePolicy(
   custom?: Record<string, RolePolicy> | null
 ): RolePolicy {
   const key = (role ?? "executive").toLowerCase();
-  const normalized = key === "viewer" ? "executive" : key;
+  let normalized = key;
+  if (key === "viewer") normalized = "executive";
   const merged = { ...DEFAULT_ROLE_POLICIES, ...(custom ?? {}) };
   return merged[normalized] ?? merged.executive ?? DEFAULT_ROLE_POLICIES.executive;
 }

@@ -698,14 +698,14 @@ def tenant_scan_report(
     if bundle_dict is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Scan report not found.")
 
+    from app.branding.resolve import resolved_report_branding
     from app.pqc.bundle_codec import bundle_from_api_dict
     from app.pqc.report_export import bundle_report, export_report_response
-    from app.tenant.settings import get_tenant_settings_raw
 
     bundle = bundle_from_api_dict(bundle_dict)
     report = bundle_report(bundle)
     statuses = list_remediation_status(tenant_id=auth.tenant_id, scan_id=scan_id)
-    branding = get_tenant_settings_raw(tenant_id=auth.tenant_id).get("reportBranding") or {}
+    branding = resolved_report_branding(tenant_id=auth.tenant_id)
 
     if format == "board":
         try:
@@ -734,14 +734,14 @@ def tenant_email_report(
     bundle_dict = load_scan_bundle(scan_id, tenant_id=auth.tenant_id)
     if bundle_dict is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Scan report not found.")
+    from app.branding.resolve import resolved_report_branding
     from app.pqc.bundle_codec import bundle_from_api_dict
     from app.pqc.report_export import board_pdf_bytes, bundle_report
-    from app.tenant.settings import get_tenant_settings_raw
 
     bundle = bundle_from_api_dict(bundle_dict)
     report = bundle_report(bundle)
     statuses = list_remediation_status(tenant_id=auth.tenant_id, scan_id=scan_id)
-    branding = get_tenant_settings_raw(tenant_id=auth.tenant_id).get("reportBranding") or {}
+    branding = resolved_report_branding(tenant_id=auth.tenant_id)
     import os
 
     base = os.environ.get("QTANGL_PUBLIC_URL", "https://www.qtangl.com")
@@ -2038,7 +2038,199 @@ def tenant_dashboard_tab(
 
 @router.get("/partner/portfolio-summary")
 def tenant_partner_portfolio_summary(auth: AuthContext = Depends(require_auth_readonly)) -> dict:
+    _require_partner_api_access(auth)
     return {"status": "success", **(_dashboard_tab_portfolio(tenant_id=auth.tenant_id))}
+
+
+@router.get("/partner/program")
+def tenant_partner_program(auth: AuthContext = Depends(require_auth_readonly)) -> dict:
+    from app.partner.service import list_child_tenants
+    from app.partner.tiers import PARTNER_TIER_LIMITS, partner_tier_for_tenant, partner_tier_limits
+
+    _require_partner_api_access(auth)
+    tier = partner_tier_for_tenant(tenant_id=auth.tenant_id)
+    limits = partner_tier_limits(tenant_id=auth.tenant_id)
+    children_count = len(list_child_tenants(parent_tenant_id=auth.tenant_id))
+    max_children = limits.get("maxChildren")
+    at_child_limit = max_children is not None and children_count >= int(max_children)
+    return {
+        "status": "success",
+        "partnerTier": tier,
+        "limits": limits,
+        "childrenCount": children_count,
+        "atChildLimit": at_child_limit,
+        "tierCatalog": {
+            name: {
+                "maxChildren": spec["maxChildren"],
+                "portalBranding": spec["portalBranding"],
+                "customDomain": spec["customDomain"],
+                "customerInvites": spec["customerInvites"],
+            }
+            for name, spec in PARTNER_TIER_LIMITS.items()
+        },
+    }
+
+
+@router.get("/partner/portfolio-board")
+def tenant_partner_portfolio_board(
+    format: str = "pdf",
+    auth: AuthContext = Depends(require_auth_readonly),
+):
+    from fastapi.responses import Response
+
+    from app.partner.portfolio_export import build_portfolio_board_pdf, portfolio_board_csv
+
+    _require_partner_api_access(auth)
+    _require_partner_tier(auth)
+    children = _dashboard_tab_portfolio(tenant_id=auth.tenant_id).get("children", [])
+    fmt = format.lower().strip()
+    if fmt == "csv":
+        content = portfolio_board_csv(child_summaries=children)
+        return Response(
+            content=content,
+            media_type="text/csv",
+            headers={"Content-Disposition": 'attachment; filename="portfolio-qbr.csv"'},
+        )
+    pdf_bytes = build_portfolio_board_pdf(parent_tenant_id=auth.tenant_id, child_summaries=children)
+    return Response(
+        content=pdf_bytes,
+        media_type="application/pdf",
+        headers={"Content-Disposition": 'attachment; filename="portfolio-board.pdf"'},
+    )
+
+
+class PartnerBulkDigestBody(BaseModel):
+    enabled: bool = True
+
+
+@router.post("/partner/bulk/weekly-digest")
+def tenant_partner_bulk_weekly_digest(
+    body: PartnerBulkDigestBody,
+    auth: AuthContext = Depends(require_auth_admin),
+) -> dict:
+    from app.partner.service import list_child_tenants
+    from app.tenant.settings import upsert_tenant_settings
+
+    _require_partner_api_access(auth)
+    _require_partner_tier(auth)
+    updated: list[str] = []
+    for child in list_child_tenants(parent_tenant_id=auth.tenant_id):
+        child_id = str(child.get("childTenantId", ""))
+        if not child_id:
+            continue
+        upsert_tenant_settings(tenant_id=child_id, settings={"weeklyDigestEnabled": body.enabled})
+        updated.append(child_id)
+    log_action(
+        tenant_id=auth.tenant_id,
+        action="partner.bulk_weekly_digest",
+        detail={"enabled": body.enabled, "childCount": len(updated)},
+    )
+    return {"status": "success", "updatedChildTenants": updated, "enabled": body.enabled}
+
+
+class PartnerBulkScheduleBody(BaseModel):
+    cadenceHours: int = Field(default=168, ge=24, le=8760)
+    scenarioId: str = Field(default="qtangl-baseline", max_length=64)
+
+
+@router.post("/partner/bulk/schedule-template")
+def tenant_partner_bulk_schedule_template(
+    body: PartnerBulkScheduleBody,
+    auth: AuthContext = Depends(require_auth_admin),
+) -> dict:
+    from app.monitoring.service import create_schedule, list_schedules
+    from app.partner.service import list_child_tenants
+    from app.tenant.settings import get_tenant_scan_allowlist
+
+    _require_partner_api_access(auth)
+    _require_partner_tier(auth)
+    created: list[dict[str, str]] = []
+    skipped: list[str] = []
+    for child in list_child_tenants(parent_tenant_id=auth.tenant_id):
+        child_id = str(child.get("childTenantId", ""))
+        if not child_id:
+            continue
+        if list_schedules(tenant_id=child_id):
+            skipped.append(child_id)
+            continue
+        domains = get_tenant_scan_allowlist(tenant_id=child_id)
+        if not domains:
+            skipped.append(child_id)
+            continue
+        schedule = create_schedule(
+            tenant_id=child_id,
+            scenario_id=body.scenarioId,
+            target=domains[0],
+            cadence_hours=body.cadenceHours,
+        )
+        created.append({"childTenantId": child_id, "scheduleId": str(schedule.get("id") or "")})
+    log_action(
+        tenant_id=auth.tenant_id,
+        action="partner.bulk_schedule_template",
+        detail={"createdCount": len(created), "skippedCount": len(skipped), "cadenceHours": body.cadenceHours},
+    )
+    return {"status": "success", "created": created, "skippedChildTenants": skipped}
+
+
+class PartnerDealRegistrationBody(BaseModel):
+    companyName: str = Field(min_length=1, max_length=255)
+    contactEmail: str = Field(min_length=3, max_length=320)
+    estimatedValue: str | None = Field(default=None, max_length=64)
+    notes: str | None = Field(default=None, max_length=2000)
+
+
+@router.post("/partner/deal-registration")
+def tenant_partner_deal_registration(
+    body: PartnerDealRegistrationBody,
+    auth: AuthContext = Depends(require_auth_write),
+) -> dict:
+    _require_partner_api_access(auth)
+    detail = {
+        "companyName": body.companyName,
+        "contactEmail": body.contactEmail,
+        "estimatedValue": body.estimatedValue,
+        "notes": body.notes,
+    }
+    log_action(
+        tenant_id=auth.tenant_id,
+        action="partner.deal_registered",
+        actor=auth.email or auth.user_id or "partner",
+        detail=detail,
+    )
+    ops_email = os.environ.get("QTANGL_PARTNER_OPS_EMAIL", "").strip()
+    if ops_email:
+        try:
+            from app.notifications.email import send_report_email
+
+            send_report_email(
+                to_email=ops_email,
+                scan_id="deal-reg",
+                target_domain=body.companyName,
+                report_url="https://www.qtangl.com/partners",
+                readiness_band="Deal registration",
+                subject_prefix="[Partner deal]",
+                body_extra=f"Partner tenant {auth.tenant_id}\nContact: {body.contactEmail}\nValue: {body.estimatedValue or 'n/a'}\n\n{body.notes or ''}",
+            )
+        except Exception:
+            pass
+    return {"status": "success", "registered": True, **detail}
+
+
+@router.get("/partner/usage-export")
+def tenant_partner_usage_export(auth: AuthContext = Depends(require_auth_readonly)):
+    from fastapi.responses import Response
+
+    from app.partner.portfolio_export import portfolio_board_csv
+
+    _require_partner_api_access(auth)
+    _require_partner_tier(auth)
+    children = _dashboard_tab_portfolio(tenant_id=auth.tenant_id).get("children", [])
+    content = portfolio_board_csv(child_summaries=children)
+    return Response(
+        content=content,
+        media_type="text/csv",
+        headers={"Content-Disposition": 'attachment; filename="partner-usage.csv"'},
+    )
 
 
 class DigestPreviewRequest(BaseModel):
@@ -2103,23 +2295,24 @@ def tenant_scans_bulk_export(
             bundle_dict = load_scan_bundle(scan_id, tenant_id=auth.tenant_id)
             if not bundle_dict:
                 continue
+            from app.branding.resolve import resolved_report_branding
             from app.pqc.bundle_codec import bundle_from_api_dict
             from app.pqc.report_export import bundle_report, enrich_report_for_export
-            from app.tenant.settings import get_tenant_settings_raw
 
+            brand = resolved_report_branding(tenant_id=auth.tenant_id)
             bundle = bundle_from_api_dict(bundle_dict)
             report = enrich_report_for_export(
                 bundle_report(bundle),
                 tenant_id=auth.tenant_id,
                 remediation_statuses=list_remediation_status(tenant_id=auth.tenant_id, scan_id=scan_id),
-                branding=(get_tenant_settings_raw(tenant_id=auth.tenant_id).get("reportBranding") or {}),
+                branding=brand,
             )
             archive.writestr(
                 f"{scan_id}/evidence.zip",
                 build_evidence_bundle(
                     report,
                     remediation_statuses=list_remediation_status(tenant_id=auth.tenant_id, scan_id=scan_id),
-                    branding=(get_tenant_settings_raw(tenant_id=auth.tenant_id).get("reportBranding") or {}),
+                    branding=brand,
                 ),
             )
     buffer.seek(0)
@@ -2264,9 +2457,33 @@ def tenant_compliance_posture(
 
 @router.get("/partner/children")
 def tenant_partner_children(auth: AuthContext = Depends(require_auth_readonly)) -> dict:
-    from app.partner.service import list_child_tenants
+    from app.partner.service import list_child_tenants_with_names
 
-    return {"status": "success", "children": list_child_tenants(parent_tenant_id=auth.tenant_id)}
+    _require_partner_api_access(auth)
+    return {
+        "status": "success",
+        "children": list_child_tenants_with_names(parent_tenant_id=auth.tenant_id),
+    }
+
+
+def _require_partner_tier(auth: AuthContext) -> None:
+    from app.billing.entitlements import tenant_entitlements
+
+    tier = str(tenant_entitlements(tenant_id=auth.tenant_id).get("tier", ""))
+    if tier not in {"enterprise", "convert"}:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Partner child management requires enterprise or convert tier.",
+        )
+
+
+def _require_partner_api_access(auth: AuthContext) -> None:
+    role = str(auth.role or "").lower()
+    if role in {"customer_executive", "customer_viewer"}:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Partner APIs are not available for customer roles.",
+        )
 
 
 @router.post("/partner/children")
@@ -2274,7 +2491,6 @@ def tenant_partner_link_child(
     body: dict[str, Any],
     auth: AuthContext = Depends(require_auth_write),
 ) -> dict:
-    from app.billing.entitlements import tenant_entitlements
     from app.db.config import persistence_enabled
     from app.db.engine import db_session
     from app.db.models import Tenant as TenantRow
@@ -2286,12 +2502,7 @@ def tenant_partner_link_child(
     if child_tenant_id == auth.tenant_id:
         raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail="Cannot link tenant to itself.")
 
-    tier = str(tenant_entitlements(tenant_id=auth.tenant_id).get("tier", ""))
-    if tier not in {"enterprise", "convert"}:
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="Partner child linking requires enterprise or convert tier.",
-        )
+    _require_partner_tier(auth)
 
     if persistence_enabled():
         with db_session() as session:
@@ -2311,6 +2522,110 @@ def tenant_partner_link_child(
         detail={"label": body.get("label", "")},
     )
     return {"status": "success", "child": child}
+
+
+@router.delete("/partner/children/{child_tenant_id}")
+def tenant_partner_unlink_child(
+    child_tenant_id: str,
+    auth: AuthContext = Depends(require_auth_admin),
+) -> dict:
+    from app.partner.service import partner_can_manage_tenant, unlink_child_tenant
+    from app.tenant.settings import upsert_tenant_settings
+
+    _require_partner_tier(auth)
+    if not partner_can_manage_tenant(parent_tenant_id=auth.tenant_id, child_tenant_id=child_tenant_id):
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Child tenant not linked.")
+
+    if not unlink_child_tenant(parent_tenant_id=auth.tenant_id, child_tenant_id=child_tenant_id):
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Child tenant not linked.")
+
+    upsert_tenant_settings(tenant_id=child_tenant_id, settings={"msspParentTenantId": ""})
+    log_action(
+        tenant_id=auth.tenant_id,
+        action="partner.child_unlinked",
+        resource_id=child_tenant_id,
+    )
+    return {"status": "success", "childTenantId": child_tenant_id}
+
+
+@router.patch("/partner/children/{child_tenant_id}")
+def tenant_partner_update_child_label(
+    child_tenant_id: str,
+    body: dict[str, Any],
+    auth: AuthContext = Depends(require_auth_admin),
+) -> dict:
+    from app.partner.service import partner_can_manage_tenant, update_child_label
+
+    _require_partner_tier(auth)
+    if not partner_can_manage_tenant(parent_tenant_id=auth.tenant_id, child_tenant_id=child_tenant_id):
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Child tenant not linked.")
+
+    label = str(body.get("label", "")).strip()
+    updated = update_child_label(
+        parent_tenant_id=auth.tenant_id,
+        child_tenant_id=child_tenant_id,
+        label=label,
+    )
+    if updated is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Child tenant not linked.")
+
+    log_action(
+        tenant_id=auth.tenant_id,
+        action="partner.child_label_updated",
+        resource_id=child_tenant_id,
+        detail={"label": label},
+    )
+    return {"status": "success", "child": updated}
+
+
+class PartnerProvisionChildBody(BaseModel):
+    customerName: str = Field(min_length=1, max_length=255)
+    label: str = Field(default="", max_length=255)
+    tier: str = Field(default="monitor", pattern="^(monitor|convert|enterprise|free)$")
+    primaryDomain: str | None = Field(default=None, max_length=255)
+    inviteEmail: str | None = Field(default=None, max_length=320)
+    inviteRole: str = Field(default="customer_executive", max_length=64)
+
+
+@router.post("/partner/provision-child")
+def tenant_partner_provision_child(
+    body: PartnerProvisionChildBody,
+    auth: AuthContext = Depends(require_auth_admin),
+) -> dict:
+    from app.partner.provision import provision_child_tenant
+    from app.partner.service import list_child_tenants
+    from app.partner.tiers import partner_tier_limits
+
+    _require_partner_tier(auth)
+    limits = partner_tier_limits(tenant_id=auth.tenant_id)
+    max_children = limits.get("maxChildren")
+    if max_children is not None:
+        current = len(list_child_tenants(parent_tenant_id=auth.tenant_id))
+        if current >= int(max_children):
+            raise HTTPException(
+                status_code=status.HTTP_402_PAYMENT_REQUIRED,
+                detail=f"Partner tier allows up to {max_children} customer workspaces.",
+            )
+    try:
+        result = provision_child_tenant(
+            parent_tenant_id=auth.tenant_id,
+            customer_name=body.customerName.strip(),
+            label=(body.label or body.customerName).strip(),
+            tier=body.tier,
+            primary_domain=body.primaryDomain,
+            invite_email=body.inviteEmail,
+            invite_role=body.inviteRole,
+            inviter_user_id=auth.user_id,
+        )
+    except ValueError as exc:
+        raise HTTPException(status_code=status.HTTP_402_PAYMENT_REQUIRED, detail=str(exc)) from exc
+    log_action(
+        tenant_id=auth.tenant_id,
+        action="partner.child_provisioned",
+        resource_id=result["childTenantId"],
+        detail={"customerName": body.customerName, "tier": body.tier, "inviteEmail": body.inviteEmail},
+    )
+    return {"status": "success", **result}
 
 
 class BillingCheckoutBody(BaseModel):

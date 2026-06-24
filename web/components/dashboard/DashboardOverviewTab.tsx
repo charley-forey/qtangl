@@ -96,6 +96,7 @@ export default function DashboardOverviewTab({
   const showWizard =
     forceOnboarding ||
     Boolean(onboardingRecord && !onboardingRecord.complete && !onboardingRecord.dismissed);
+  const isCustomerExecutive = (session?.role ?? "").toLowerCase() === "customer_executive";
 
   const layout = summary.layoutDefaults;
   const detail = summary.latestScanDetail;
@@ -208,6 +209,16 @@ export default function DashboardOverviewTab({
           assessment.
         </div>
       ) : null}
+
+      {isCustomerExecutive && summary.digest ? (
+        <Card tone="feature" className="border border-[var(--border-strong)]">
+          <Eyebrow>Your weekly posture brief</Eyebrow>
+          <div className="mt-3">
+            <ExecutiveDigestCard digest={summary.digest} />
+          </div>
+        </Card>
+      ) : null}
+
       {showWizard ? (
         <OnboardingWizard
           tenantName={String(summary.me.tenantName ?? summary.me.tenantId ?? "")}
@@ -285,9 +296,11 @@ export default function DashboardOverviewTab({
         <DashboardTrendSection points={summaryTrendPoints(summary)} />
       </DashboardWidgetGate>
 
-      <DashboardWidgetGate widgetId="digest" layout={layout} rolePolicy={rolePolicy}>
-        <ExecutiveDigestCard digest={summary.digest} />
-      </DashboardWidgetGate>
+      {!isCustomerExecutive ? (
+        <DashboardWidgetGate widgetId="digest" layout={layout} rolePolicy={rolePolicy}>
+          <ExecutiveDigestCard digest={summary.digest} />
+        </DashboardWidgetGate>
+      ) : null}
 
       <DashboardWidgetGate widgetId="actions" layout={layout} rolePolicy={rolePolicy}>
         <DashboardActionQueue

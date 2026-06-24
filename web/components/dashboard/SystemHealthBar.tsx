@@ -14,6 +14,7 @@ export default function SystemHealthBar({
   apiOk,
   scanProgress,
   eventsConnected,
+  eventsDegraded,
 }: {
   schedulerEnabled?: boolean;
   lastScanAt?: string | null;
@@ -22,6 +23,7 @@ export default function SystemHealthBar({
   apiOk?: boolean;
   scanProgress?: ScanProgressState | null;
   eventsConnected?: boolean;
+  eventsDegraded?: boolean;
 }) {
   const quotaPct =
     quotaLimit && quotaLimit > 0 && scansThisMonth != null
@@ -41,8 +43,14 @@ export default function SystemHealthBar({
         <StatusPill label={apiOk !== false ? "API connected" : "API error"} tone={apiOk !== false ? "success" : "critical"} />
         {eventsConnected != null ? (
           <StatusPill
-            label={eventsConnected ? "Live events" : "Events offline"}
-            tone={eventsConnected ? "success" : "warning"}
+            label={
+              eventsConnected
+                ? "Live events"
+                : eventsDegraded
+                  ? "Events reconnecting"
+                  : "Events offline"
+            }
+            tone={eventsConnected ? "success" : eventsDegraded ? "neutral" : "warning"}
           />
         ) : null}
         {lastScanAt ? (

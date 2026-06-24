@@ -6,6 +6,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { QtanglProvider } from "@qtangl/sdk-react";
 
 import Card from "@/components/ui/Card";
+import DashboardBrandingProvider from "@/components/dashboard/DashboardBrandingProvider";
 import DashboardSessionError from "@/components/dashboard/DashboardSessionError";
 import DashboardShell from "@/components/dashboard/DashboardShell";
 import DashboardTabRouter from "@/components/dashboard/DashboardTabRouter";
@@ -34,7 +35,7 @@ import TermsBumpModal from "@/components/dashboard/TermsBumpModal";
 import { useUpgradeGate } from "@/hooks/useUpgradeGate";
 import { useDashboardEvents } from "@/lib/dashboard-events";
 import { isTermsBumpRequired } from "@/lib/dashboard-legal";
-import { trackDashboardEvent } from "@/lib/dashboard-analytics";
+import { trackDashboardEvent, identifyDashboardTenant } from "@/lib/dashboard-analytics";
 import { getStoredTenantApiKey, setStoredTenantApiKey, tenantReportUrl } from "@/lib/tenant-api";
 import type { PqcScanResponse } from "@/lib/pqc";
 import { qtanglApiBaseUrl } from "@/lib/api";
@@ -181,10 +182,15 @@ export default function DashboardClient() {
   }, [activeTab, bffMode, loadTab, summary, scanIdParam]);
 
   useEffect(() => {
-    if (bffMode && summary) {
-      trackDashboardEvent("dashboard_loaded", { tab: activeTab });
-    }
-  }, [bffMode, summary?.me.tenantId, activeTab]);
+    const tenantId = summary?.me.tenantId;
+    if (!bffMode || typeof tenantId !== "string" || !tenantId) return;
+    const entitlements = summary.me.entitlements as { tier?: string; trialScansRemaining?: number } | undefined;
+    trackDashboardEvent("dashboard_loaded", { tab: activeTab });
+    identifyDashboardTenant(tenantId, {
+      tier: String(entitlements?.tier ?? "free"),
+      role: String(summary.me.role ?? ""),
+    });
+  }, [bffMode, summary, activeTab]);
 
   useEffect(() => {
     const tab = resolveDashboardTabFromDeepLink(deepLink);
@@ -232,7 +238,12 @@ export default function DashboardClient() {
     [loadReportScan, summary?.recentScans]
   );
 
-  const { connected: eventsConnected } = useDashboardEvents({
+  useEffect(() => {
+    if (!bffConnected || actionParam !== "report" || !summary) return;
+    openReportDrawer(scanIdParam || undefined);
+  }, [bffConnected, actionParam, scanIdParam, summary, openReportDrawer]);
+
+  const { connected: eventsConnected, eventsDegraded } = useDashboardEvents({
     enabled: bffMode && Boolean(summary),
     onEvent: (event) => {
       const data = event.data ?? {};
@@ -257,7 +268,8 @@ export default function DashboardClient() {
           }
           const billing =
             (settings?.billing as { trialScansUsed?: number; assessPaidAt?: string | null } | undefined) ?? {};
-          const trialLimit = Number(updated?.me?.entitlements?.trialScansRemaining ?? 1);
+          const entitlements = updated?.me?.entitlements as { trialScansRemaining?: number } | undefined;
+          const trialLimit = Number(entitlements?.trialScansRemaining ?? 1);
           if (!billing.assessPaidAt && Number(billing.trialScansUsed ?? 0) >= trialLimit) {
             openUpgrade("assess");
           }
@@ -358,6 +370,7 @@ export default function DashboardClient() {
   }
 
   const dashboard = (
+    <DashboardBrandingProvider tenantSettings={tenantSettings}>
     <div className={density === "compact" ? "space-y-4" : "space-y-8"}>
       {error && summary ? (
         <Card tone="ghost" className="border border-red-500/40 text-red-200">
@@ -406,6 +419,7 @@ export default function DashboardClient() {
           tenantSettings={tenantSettings}
           onSettingsChange={setTenantSettings}
           eventsConnected={bffMode ? eventsConnected : undefined}
+          eventsDegraded={bffMode ? eventsDegraded : undefined}
         >
           <DashboardTabRouter
             activeTab={activeTab}
@@ -502,6 +516,7 @@ export default function DashboardClient() {
         </div>
       ) : null}
     </div>
+    </DashboardBrandingProvider>
   );
 
   return savedKey ? (

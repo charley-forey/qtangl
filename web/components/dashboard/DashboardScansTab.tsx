@@ -245,7 +245,10 @@ export default function DashboardScansTab({
               requireScanAuthorization={Boolean(allowlist[0]?.trim())}
               domain={allowlist[0]?.trim() ?? ""}
               onAccepted={(billing) => {
-                onSettingsChange?.({ ...(tenantSettings ?? {}), billing });
+                onSettingsChange?.({
+                  ...(tenantSettings ?? {}),
+                  billing: { ...((tenantSettings?.billing as Record<string, unknown>) ?? {}), ...billing },
+                });
                 onMessage("Legal acceptance recorded.");
                 setShowRunner(true);
               }}

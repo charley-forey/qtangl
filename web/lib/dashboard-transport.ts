@@ -33,6 +33,9 @@ export async function fetchDashboardSummaryViaBff(): Promise<DashboardSummary> {
     integrationsSummary: DashboardSummary["integrationsSummary"];
     layoutDefaults: DashboardSummary["layoutDefaults"];
     membershipHealth: DashboardSummary["membershipHealth"];
+    recommendations?: DashboardSummary["recommendations"];
+    maturity?: DashboardSummary["maturity"];
+    portfolioSummary?: DashboardSummary["portfolioSummary"];
   }>("/tenant/dashboard/summary");
 
   return {
@@ -52,6 +55,9 @@ export async function fetchDashboardSummaryViaBff(): Promise<DashboardSummary> {
     integrationsSummary: payload.integrationsSummary ?? null,
     layoutDefaults: payload.layoutDefaults ?? { persona: "operator", pinned: [], hidden: [] },
     membershipHealth: payload.membershipHealth ?? [],
+    recommendations: payload.recommendations ?? [],
+    maturity: payload.maturity ?? null,
+    portfolioSummary: payload.portfolioSummary,
   };
 }
 

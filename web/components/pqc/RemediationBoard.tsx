@@ -421,7 +421,9 @@ function AutomationEvidence({
 
   return (
     <div className={`rounded-lg border px-3 py-2 text-xs ${tone}`}>
-      <span className="font-semibold capitalize">{result.status}</span>
+      <span className="font-semibold capitalize">
+        {result.status === "stub" ? "Preview (not live)" : result.status}
+      </span>
       {result.message ? <span className="ml-2">{result.message}</span> : null}
       {result.prUrl ? (
         <a href={result.prUrl} target="_blank" rel="noreferrer" className="ml-2 underline">

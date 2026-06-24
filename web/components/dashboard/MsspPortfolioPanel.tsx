@@ -1,8 +1,11 @@
 "use client";
 
+import { useState } from "react";
+
 import Card from "@/components/ui/Card";
 import Eyebrow from "@/components/ui/Eyebrow";
 import BusinessUnitHeatmap from "@/components/dashboard/BusinessUnitHeatmap";
+import MsspOnboardingWizard from "@/components/dashboard/MsspOnboardingWizard";
 import type { PortfolioTabBundle } from "@/lib/dashboard-state";
 import { switchActiveTenant } from "@/lib/dashboard-bff";
 import { trackDashboardEvent } from "@/lib/dashboard-analytics";
@@ -10,12 +13,30 @@ import { trackDashboardEvent } from "@/lib/dashboard-analytics";
 export default function MsspPortfolioPanel({
   bundle,
   onSwitchTenant,
+  canAdmin = false,
 }: {
   bundle?: PortfolioTabBundle | null;
   onSwitchTenant?: () => void;
+  canAdmin?: boolean;
 }) {
   const children = bundle?.children ?? [];
   const rollup = bundle?.rollup as { overallReadiness?: number; byBusinessUnit?: Record<string, number> } | null;
+  const [showWizard, setShowWizard] = useState(children.length === 0 && canAdmin);
+
+  if (children.length === 0 && showWizard && canAdmin) {
+    return (
+      <MsspOnboardingWizard
+        onComplete={() => {
+          setShowWizard(false);
+          onSwitchTenant?.();
+        }}
+        onOpenChild={async (tenantId) => {
+          await switchActiveTenant(tenantId);
+          onSwitchTenant?.();
+        }}
+      />
+    );
+  }
 
   if (!bundle && children.length === 0) {
     return (
@@ -23,6 +44,11 @@ export default function MsspPortfolioPanel({
         <p className="text-sm text-[var(--color-gray-400)]">
           Portfolio view appears when your organization manages multiple customer tenants (MSSP mode).
         </p>
+        {canAdmin ? (
+          <button type="button" className="mt-3 text-sm underline" onClick={() => setShowWizard(true)}>
+            Start MSSP onboarding wizard
+          </button>
+        ) : null}
       </Card>
     );
   }

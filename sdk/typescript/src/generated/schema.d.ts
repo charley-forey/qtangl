@@ -1047,6 +1047,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/tenant/scans/{scan_id}/diff": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Tenant Scan Diff */
+        get: operations["tenant_scan_diff_tenant_scans__scan_id__diff_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/tenant/scans/{scan_id}/report": {
         parameters: {
             query?: never;
@@ -4087,6 +4104,8 @@ export interface components {
             email: string;
             /** Company */
             company: string;
+            /** Domain */
+            domain?: string | null;
             /** Adminsecret */
             adminSecret: string;
         };
@@ -4096,6 +4115,8 @@ export interface components {
             email: string;
             /** Company */
             company: string;
+            /** Domain */
+            domain?: string | null;
         };
         /** MsspParentRequest */
         MsspParentRequest: {
@@ -7164,6 +7185,44 @@ export interface operations {
                 authorization?: string | null;
                 "x-api-key"?: string | null;
                 "X-Qtangl-Session"?: string | null;
+            };
+            path: {
+                scan_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    tenant_scan_diff_tenant_scans__scan_id__diff_get: {
+        parameters: {
+            query?: {
+                api_key?: string | null;
+            };
+            header?: {
+                authorization?: string | null;
+                "x-api-key"?: string | null;
             };
             path: {
                 scan_id: string;

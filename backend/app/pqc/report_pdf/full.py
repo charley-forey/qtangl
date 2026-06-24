@@ -17,7 +17,14 @@ except ImportError:  # pragma: no cover
     _HAS_REPORTLAB = False
 
 from app.pqc.report_pdf.charts import algorithm_breakdown, mosca_timeline, risk_quadrant, severity_chart
-from app.pqc.report_pdf.common import company_name, page_header_footer, qr_drawing, verify_url
+from app.pqc.report_pdf.common import (
+    branding_display_name,
+    company_name,
+    page_header_footer,
+    pdf_footer_notes,
+    qr_drawing,
+    verify_url,
+)
 from app.pqc.report_pdf.sections import (
     compliance_section,
     cover_section,
@@ -54,12 +61,13 @@ def build_pdf(
     if not _HAS_REPORTLAB:
         raise RuntimeError("reportlab is required for PDF generation")
 
-    company = company_name(branding)
+    company = branding_display_name(branding)
     styles = pdf_styles(branding)
     body = styles["body"]
     muted = styles["muted"]
     h2 = styles["h2"]
     issues = coherence_issues or []
+    footer_note = pdf_footer_notes(branding, verify_link=verify_url(report))
 
     buffer = io.BytesIO()
     header_label = f"{company} — Q-Day Readiness" if company else "Qtangl — Q-Day Readiness Report"
@@ -75,7 +83,7 @@ def build_pdf(
     )
 
     story: list[Any] = []
-    story.extend(cover_section(report, styles, coherence_issues=issues if watermark else None))
+    story.extend(cover_section(report, styles, coherence_issues=issues if watermark else None, branding=branding))
     story.append(PageBreak())
 
     story.extend(scope_authorization_section(report, styles))
@@ -182,10 +190,10 @@ def build_pdf(
     doc.build(
         story,
         onFirstPage=lambda c, d: page_header_footer(
-            c, d, scan_id=report.scan_id, company=company, footer_note=verify_url(report)
+            c, d, scan_id=report.scan_id, company=company, footer_note=footer_note
         ),
         onLaterPages=lambda c, d: page_header_footer(
-            c, d, scan_id=report.scan_id, company=company, footer_note=verify_url(report)
+            c, d, scan_id=report.scan_id, company=company, footer_note=footer_note
         ),
     )
     return buffer.getvalue()
