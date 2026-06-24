@@ -58,6 +58,12 @@ export async function middleware(request: NextRequest) {
         middlewareAuth: { enabled: false, unauthenticatedPaths: [] },
       });
       const response = await handler(request, {} as never);
+      if (!response) {
+        if (customHeaders) {
+          return NextResponse.next({ request: { headers: customHeaders } });
+        }
+        return NextResponse.next();
+      }
       if (customHeaders) {
         customHeaders.forEach((value, key) => response.headers.set(key, value));
       }
