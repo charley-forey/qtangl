@@ -62,7 +62,7 @@ jobs:
           PY
 
       - name: Upload live dogfood artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: live-dogfood-${{ matrix.target }}
           path: dogfood-*.json
@@ -94,7 +94,7 @@ jobs:
         run: python benchmarks/run_benchmark.py BM-006 --write
 
       - name: Upload scan artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: pqc-dogfood-bm-006
           path: backend/benchmarks/results/BM-006-pqc-scan.json
@@ -141,7 +141,7 @@ jobs:
           PY
 
       - name: Upload fixture verify artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: pqc-dogfood-fixture-verify
           path: backend/benchmarks/results/dogfood-verify-fixture.json
