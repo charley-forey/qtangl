@@ -1,0 +1,17 @@
+# Fast local development image (no liboqs build). Use backend/Dockerfile for production.
+FROM python:3.13-slim
+
+WORKDIR /app
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    gcc libpq-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY requirements.lock requirements-dev.lock ./
+RUN pip install --no-cache-dir -r requirements.lock -r requirements-dev.lock
+
+COPY alembic.ini ./
+COPY alembic ./alembic
+COPY app ./app
+
+EXPOSE 8000

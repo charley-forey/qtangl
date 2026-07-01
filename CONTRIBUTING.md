@@ -10,6 +10,8 @@ Thank you for helping build Qtangl. This guide matches what runs in [`.github/wo
 
 ## Local development
 
+See **[docs/DEVELOPMENT.md](docs/DEVELOPMENT.md)** for the full guide (env vars, Docker Compose, Windows notes, troubleshooting).
+
 ### Backend
 
 ```bash
@@ -31,6 +33,8 @@ pip-compile requirements-dev.txt -o requirements-dev.lock --constraint requireme
 ```
 
 Default API key for local demos: `qtangl-demo-key` (override with `QTANGL_API_KEY`).
+
+**Full stack (Postgres + Redis + worker):** `docker compose up --build` from repo root.
 
 ### Web
 
@@ -55,6 +59,11 @@ cd web
 npm ci
 npm run lint
 npm run build
+
+# README API version badge sync (when bumping backend/app/main.py version)
+node scripts/sync-readme-stats.mjs --write   # refresh auto-stats block
+node scripts/sync-readme-stats.mjs           # verify only (CI)
+node scripts/check-readme-links.mjs
 ```
 
 Optional:
@@ -72,28 +81,28 @@ npm run test:access
 
 - [ ] Backend tests pass locally
 - [ ] Web lint and build pass locally
-- [ ] No secrets or credentials in the diff (see [roadmap/security/secrets-runbook.md](roadmap/security/secrets-runbook.md))
+- [ ] No secrets or credentials in the diff (see [secrets-runbook.md](roadmap/optimization_OLD_FUTURE/security/secrets-runbook.md))
 - [ ] API or schema changes update docs under `web/app/docs/`
 - [ ] `npm run check:docs` passes (from `web/`)
 - [ ] `npm run generate:docs-index` and `generate:docs-export` run if nav/endpoints changed
 - [ ] Changelog entry in `web/lib/docs/changelog.ts` for user-visible doc changes
-- [ ] Roadmap action item ID referenced in PR description when applicable (see [roadmap/backlog/action-items.md](roadmap/backlog/action-items.md))
+- [ ] Roadmap action item ID referenced in PR description when applicable (see [action-items.md](roadmap/optimization_OLD_FUTURE/backlog/action-items.md))
 
 ## Branch protection (repository admins)
 
 After the first CI run on `main`, enable branch protection:
 
 1. GitHub → **Settings** → **Branches** → **Add rule** for `main`
-2. Require status checks: **Backend (pytest)**, **Web (lint + build)**, **Secret scan (gitleaks)**, **Benchmarks (BM-001, BM-003, BM-006)**
+2. Require status checks: **Backend (pytest)**, **Web (lint + build)**, **Secret scan (gitleaks)**, **Benchmarks (BM-001, BM-003, BM-006)**, **README stats sync**, **README link check**
 3. Require branches to be up to date before merging
 
 ## Implementation roadmap
 
 Engineering priorities and phased backlog: [roadmap/README.md](roadmap/README.md).
 
-Phase 0 (foundation) action items: [roadmap/backlog/action-items.md](roadmap/backlog/action-items.md).
+Phase 0 (foundation) action items: [action-items.md](roadmap/optimization_OLD_FUTURE/backlog/action-items.md).
 
-Security: [roadmap/security/threat-model.md](roadmap/security/threat-model.md), [roadmap/security/secrets-runbook.md](roadmap/security/secrets-runbook.md).
+Security: [threat-model.md](roadmap/optimization_OLD_FUTURE/security/threat-model.md), [secrets-runbook.md](roadmap/optimization_OLD_FUTURE/security/secrets-runbook.md).
 
 ## Agent / worktree workflow
 

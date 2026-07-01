@@ -435,6 +435,32 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITLEAKS_CONFIG: .gitleaks.toml
 
+  readme-stats:
+    name: README stats sync
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: "20"
+
+      - name: Verify README API version matches backend
+        run: node scripts/sync-readme-stats.mjs
+
+  readme-links:
+    name: README link check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: "20"
+
+      - name: Verify relative links in README and docs
+        run: node scripts/check-readme-links.mjs
+
   alignment:
     name: Marketing alignment gate
     runs-on: ubuntu-latest

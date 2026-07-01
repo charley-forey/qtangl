@@ -1,48 +1,98 @@
 # Qtangl Web
 
-Qtangl is a multi-page Next.js MVP for a quantum optimization platform focused on scheduling, routing, and resource allocation workflows.
+> **Canonical product overview:** [root README](../README.md) · **Architecture:** [docs/ARCHITECTURE.md](../docs/ARCHITECTURE.md) · **Development:** [docs/DEVELOPMENT.md](../docs/DEVELOPMENT.md)
+
+**Next.js 16** frontend for the Qtangl post-quantum readiness platform — marketing journey (Assess → Monitor → Convert), authenticated dashboard, public docs site, learn library, blog, and trust center.
+
+---
 
 ## Stack
 
-- Next.js App Router
-- TypeScript
-- Tailwind CSS
-- Framer Motion (used lightly)
+| Technology | Version |
+|------------|---------|
+| Next.js | 16 (App Router) |
+| React | 19 |
+| TypeScript | 5 |
+| Tailwind CSS | 4 |
+| WorkOS AuthKit | Dashboard SSO |
+| `@qtangl/sdk` + `@qtangl/sdk-react` | Monorepo file deps |
+
+---
 
 ## Local development
 
-From `web/`:
-
 ```bash
-npm install
+cp .env.example .env.local   # set NEXT_PUBLIC_QTANGL_API_BASE_URL=http://127.0.0.1:8000
+npm ci
 npm run dev
 ```
 
-The app runs at [http://localhost:3000](http://localhost:3000).
+App: http://localhost:3000
 
-## Project structure
+**Backend must be running** at the URL in `.env.local` (default demo key: `qtangl-demo-key`).
 
-- `app/` - landing page, docs, API reference, blog, sitemap, robots
-- `components/` - shared UI primitives and content blocks
-- `lib/` - centralized site copy and navigation config
-- `public/` - Qtangl logo and banner assets
+**Docker Compose API:** `docker compose up` from repo root, then `npm run dev` here.
 
-## Deploy to Vercel
+---
 
-This repo is intended to deploy from GitHub to Vercel.
+## Key routes
 
-Important: the Next.js app lives in `web/`, so when importing the GitHub repo into Vercel you must set:
+| Route | Purpose |
+|-------|---------|
+| `/assess`, `/assess/start` | Q-Day assessment funnel |
+| `/monitor`, `/convert` | Journey marketing |
+| `/dashboard` | Authenticated tenant workspace |
+| `/verify`, `/trust` | Evidence verification |
+| `/docs/*` | **Public** product documentation |
+| `/learn/*` | Quantum software library |
+| `/demo/hospital` | Optimization demo (expansion) |
 
-- **Root Directory:** `web`
+Primary nav: Platform · Assess · Monitor · Convert · Pricing · Docs
 
-`web/vercel.json` compiles the monorepo SDK packages during install (Vercel has no Python for OpenAPI codegen). Committed artifacts under `web/public/` and `web/content/` are used as-is on deploy.
+---
 
-Everything else can stay on the default Next.js settings.
+## Dashboard
 
-## Useful scripts
+Six tabs: **Overview** · **Scans** · **Monitor** · **Remediate** · **Settings** · **Portfolio** (MSSP)
+
+Auth: WorkOS SSO (primary) or legacy API key — see `web/.env.example`.
+
+---
+
+## Deploy (Vercel)
+
+Set **Root Directory: `web`**.
+
+`vercel.json` builds monorepo SDK packages on install.
+
+Required env: `NEXT_PUBLIC_QTANGL_API_BASE_URL=https://api.qtangl.com`, WorkOS vars, `QTANGL_BFF_SESSION_SECRET`.
+
+---
+
+## Scripts
 
 ```bash
 npm run dev
 npm run lint
-npm run build
+npm run build              # runs prebuild codegen
+npm run test:e2e           # Playwright
+npm run check:docs         # docs coverage gates
+npm run generate:docs-index
 ```
+
+---
+
+## Project structure
+
+```
+web/
+├── app/           # App Router pages
+├── components/    # React components (dashboard, pqc, docs, marketing)
+├── content/       # Learn library, readiness blog
+├── lib/           # Nav, copy, assess config, docs index
+├── public/        # Static assets, marketing screenshots
+├── scripts/       # Prebuild, docs gates
+└── tests/e2e/     # Playwright specs
+```
+
+> Public docs content lives here (`app/docs/`). Internal ops runbooks are in repo-root `docs/`.
