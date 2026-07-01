@@ -188,7 +188,7 @@ jobs:
           pip install -r requirements.lock -r requirements-dev.lock
           python -m pytest tests/test_pqc_safety.py -q --tb=short
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
           node-version: "20"
           cache: npm
@@ -213,7 +213,7 @@ jobs:
         with:
           python-version: "3.13"
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
           node-version: "20"
           cache: npm
@@ -355,7 +355,7 @@ jobs:
         with:
           python-version: "3.13"
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
           node-version: "20"
 
@@ -385,7 +385,7 @@ jobs:
         with:
           python-version: "3.13"
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
           node-version: "20"
           cache: npm
@@ -441,7 +441,7 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
           node-version: "20"
 
@@ -454,7 +454,7 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
           node-version: "20"
 
