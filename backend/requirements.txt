@@ -64,7 +64,7 @@ google-auth>=2.53.0
 
 # Optional Kubernetes cert-manager pull
 
-kubernetes>=29.0.0
+kubernetes>=36.0.2
 
 # Optional AWS KMS signing / ACM pull
 
