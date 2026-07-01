@@ -23,6 +23,7 @@ import {
 import { httpErrors } from "@/lib/docs/errors";
 import { endpointDocsHref } from "@/lib/docs/endpoint-paths";
 import { docsSearchIndex } from "@/lib/docs/search-index-export";
+import { endpointSupportsTryIt, resolveDocsRequestPath } from "@/lib/docs/try-it";
 import type { DocsEndpoint } from "@/lib/docs/types";
 
 type ReferenceEndpointPageProps = {
@@ -32,6 +33,7 @@ type ReferenceEndpointPageProps = {
 
 function buildTabs(endpoint: DocsEndpoint) {
   const example = endpoint.examples[0];
+  const requestPath = resolveDocsRequestPath(endpoint) ?? endpoint.path;
   const body =
     example?.request && typeof example.request === "object"
       ? (example.request as Record<string, unknown>)
@@ -39,21 +41,21 @@ function buildTabs(endpoint: DocsEndpoint) {
 
   if (endpoint.method === "GET") {
     return [
-      { id: "curl" as const, label: "curl", code: curlGet(endpoint.path) },
+      { id: "curl" as const, label: "curl", code: curlGet(requestPath) },
       {
         id: "javascript" as const,
         label: "JavaScript",
-        code: javascriptFetch(endpoint.path, "GET"),
+        code: javascriptFetch(requestPath, "GET"),
       },
       {
         id: "python" as const,
         label: "Python",
-        code: pythonRequests(endpoint.path, "GET"),
+        code: pythonRequests(requestPath, "GET"),
       },
       {
         id: "typescript" as const,
         label: "TypeScript",
-        code: typescriptFetch(endpoint.path, "GET"),
+        code: typescriptFetch(requestPath, "GET"),
       },
       {
         id: "response" as const,
@@ -72,22 +74,22 @@ function buildTabs(endpoint: DocsEndpoint) {
     {
       id: "curl" as const,
       label: "curl",
-      code: curlFn(endpoint.path, body ?? {}),
+      code: curlFn(requestPath, body ?? {}),
     },
     {
       id: "javascript" as const,
       label: "JavaScript",
-      code: javascriptFetch(endpoint.path, endpoint.method, body),
+      code: javascriptFetch(requestPath, endpoint.method, body),
     },
     {
       id: "python" as const,
       label: "Python",
-      code: pythonRequests(endpoint.path, endpoint.method, body),
+      code: pythonRequests(requestPath, endpoint.method, body),
     },
     {
       id: "typescript" as const,
       label: "TypeScript",
-      code: typescriptFetch(endpoint.path, endpoint.method, body),
+      code: typescriptFetch(requestPath, endpoint.method, body),
     },
     {
       id: "response" as const,
@@ -103,6 +105,8 @@ export default function ReferenceEndpointPage({
 }: ReferenceEndpointPageProps) {
   const pathname = endpointDocsHref(endpoint.id);
   const example = endpoint.examples[0];
+  const tryItPath = resolveDocsRequestPath(endpoint);
+  const showTryIt = endpointSupportsTryIt(endpoint) && tryItPath !== null;
   const filteredErrors = endpoint.errors
     ? httpErrors.filter((row) => endpoint.errors!.includes(row.code))
     : httpErrors;
@@ -163,13 +167,18 @@ export default function ReferenceEndpointPage({
 
         <DocsSection>
           <DocsHeading>Example</DocsHeading>
-          <DocsCodeTabs tabs={buildTabs(endpoint)} storageKey={`qtangl-${endpoint.id}-tab`} />
+          <DocsCodeTabs
+            tabs={buildTabs(endpoint)}
+            storageKey={`qtangl-${endpoint.id}-tab`}
+            defaultTab="response"
+          />
         </DocsSection>
 
-        {endpoint.id === "optimize" || endpoint.id === "pqc-scan" ? (
+        {showTryIt ? (
           <DocsTryIt
-            path={endpoint.path}
+            path={tryItPath}
             method={endpoint.method}
+            auth={endpoint.auth}
             body={
               example?.request && typeof example.request === "object"
                 ? (example.request as Record<string, unknown>)

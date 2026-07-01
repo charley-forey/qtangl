@@ -14,17 +14,26 @@ type Tab = {
 type DocsCodeTabsProps = {
   tabs: Tab[];
   storageKey?: string;
+  /** Tab selected on first visit when nothing is stored yet. */
+  defaultTab?: DocsCodeLanguage;
 };
 
-export default function DocsCodeTabs({ tabs, storageKey = "qtangl-docs-code-tab" }: DocsCodeTabsProps) {
-  const [active, setActive] = useState<Tab["id"]>(tabs[0]?.id ?? "curl");
+export default function DocsCodeTabs({
+  tabs,
+  storageKey = "qtangl-docs-code-tab",
+  defaultTab,
+}: DocsCodeTabsProps) {
+  const initialTab = defaultTab ?? tabs[0]?.id ?? "curl";
+  const [active, setActive] = useState<Tab["id"]>(initialTab);
 
   useEffect(() => {
     const saved = window.localStorage.getItem(storageKey) as DocsCodeLanguage | null;
     if (saved && tabs.some((tab) => tab.id === saved)) {
       setActive(saved);
+    } else if (defaultTab && tabs.some((tab) => tab.id === defaultTab)) {
+      setActive(defaultTab);
     }
-  }, [storageKey, tabs]);
+  }, [defaultTab, storageKey, tabs]);
 
   function select(id: DocsCodeLanguage) {
     setActive(id);

@@ -5,6 +5,16 @@ import {
   docsQuickstartResponse,
 } from "@/lib/copy/api-examples";
 import {
+  pqcHandshakeTraceResponse,
+  pqcInventoryResponse,
+  pqcScanFixtureRequest,
+  pqcScanFixtureResponse,
+  pqcScenarioResponseFields,
+  pqcScenariosResponse,
+  pqcStandardsResponse,
+  pqcTargetResponse,
+} from "@/lib/copy/pqc-api-examples";
+import {
   adminEndpoints,
   healthEndpoints,
   publicEndpoints,
@@ -620,7 +630,12 @@ const coreDocsEndpoints: Record<string, DocsEndpoint> = {
     title: "GET /pqc/inventory",
     summary: "Load bundled cryptographic asset inventory for the Q-Day scanner demo.",
     auth: true,
-    examples: [{ label: "Inventory", response: { status: "success", inventory: [] } }],
+    responseFields: [
+      { name: "status", type: '"success"', required: true, description: "Operation result." },
+      { name: "summary", type: "string", description: "Human-readable inventory load message." },
+      { name: "inventory[]", type: "CryptoAsset[]", required: true, description: "Fixture asset catalog." },
+    ],
+    examples: [{ label: "Inventory", response: pqcInventoryResponse }],
   },
   "pqc-scenarios": {
     id: "pqc-scenarios",
@@ -630,7 +645,8 @@ const coreDocsEndpoints: Record<string, DocsEndpoint> = {
     title: "GET /pqc/scenarios",
     summary: "List PQC scan scenarios (bank, gov contractor, healthcare).",
     auth: true,
-    examples: [{ label: "Scenarios", response: { status: "success", scenarios: [] } }],
+    responseFields: [...pqcScenarioResponseFields],
+    examples: [{ label: "Scenarios", response: pqcScenariosResponse }],
   },
   "pqc-target": {
     id: "pqc-target",
@@ -643,7 +659,12 @@ const coreDocsEndpoints: Record<string, DocsEndpoint> = {
     queryParams: [
       { name: "scenarioId", type: "string", required: false, default: "bank-tls-inventory", description: "Scenario id" },
     ],
-    examples: [{ label: "Target", response: { status: "success", target: {}, scenario: {} } }],
+    responseFields: [
+      { name: "status", type: '"success"', required: true, description: "Operation result." },
+      { name: "target", type: "ScanTarget", required: true, description: "Resolved scan target." },
+      { name: "scenario", type: "ScanScenario", required: true, description: "Full scenario metadata." },
+    ],
+    examples: [{ label: "Target", response: pqcTargetResponse }],
   },
   "pqc-handshake-trace": {
     id: "pqc-handshake-trace",
@@ -653,7 +674,11 @@ const coreDocsEndpoints: Record<string, DocsEndpoint> = {
     title: "GET /pqc/handshake-trace",
     summary: "Cached ML-KEM hybrid handshake trace for demo replay.",
     auth: true,
-    examples: [{ label: "Trace", response: { status: "success", trace: {} } }],
+    responseFields: [
+      { name: "status", type: '"success"', required: true, description: "Operation result." },
+      { name: "trace", type: "HandshakeTrace", required: true, description: "Captured or replayed ClientHello metadata." },
+    ],
+    examples: [{ label: "Trace", response: pqcHandshakeTraceResponse }],
   },
   "pqc-standards": {
     id: "pqc-standards",
@@ -663,7 +688,12 @@ const coreDocsEndpoints: Record<string, DocsEndpoint> = {
     title: "GET /pqc/standards",
     summary: "Compliance crosswalk (FIPS 203-205, CNSA 2.0, NSM-10, CMMC).",
     auth: true,
-    examples: [{ label: "Standards", response: { status: "success", standards: {} } }],
+    responseFields: [
+      { name: "status", type: '"success"', required: true, description: "Operation result." },
+      { name: "standards.frameworks[]", type: "Framework[]", description: "Named compliance frameworks." },
+      { name: "standards.mappings", type: "object", description: "Asset kind → framework id crosswalk." },
+    ],
+    examples: [{ label: "Standards", response: pqcStandardsResponse }],
   },
   "pqc-upload-bundle": {
     id: "pqc-upload-bundle",
@@ -697,8 +727,8 @@ const coreDocsEndpoints: Record<string, DocsEndpoint> = {
     examples: [
       {
         label: "Fixture scan",
-        request: { scenarioId: "bank-tls-inventory", useFixture: true },
-        response: { status: "success", scanId: "scan-...", scoreboard: {} },
+        request: pqcScanFixtureRequest,
+        response: pqcScanFixtureResponse,
       },
     ],
   },

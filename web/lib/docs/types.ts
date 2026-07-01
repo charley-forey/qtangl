@@ -69,6 +69,12 @@ export type DocsEndpoint = {
   pagination?: string;
   /** Per-format response notes (e.g. report format matrix). */
   formatMatrix?: DocsFieldRow[];
+  /** Resolved path for live try-it when `path` contains `{param}` placeholders. */
+  tryItPath?: string;
+  /** Extra query params merged into try-it and code sample URLs. */
+  tryItQuery?: Record<string, string>;
+  /** Set false to hide the try-it panel (e.g. admin-only destructive routes). */
+  tryIt?: boolean;
 };
 
 export type DocsSearchEntry = {
