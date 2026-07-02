@@ -68,42 +68,68 @@ export const maturityStages: readonly MaturityStage[] = [
 
 export const journeyPageCopy = {
   metadata: {
-    title: "Customer Journey",
+    title: "PQC Readiness Journey",
     description:
-      "From quantum crypto uncertainty to verified post-quantum readiness — Assess, Monitor, Convert with signed evidence.",
+      "See where your organization sits on the path to post-quantum readiness — from first crypto inventory to signed, auditor-ready proof — and what to do next at each stage.",
   },
   hero: {
-    eyebrow: "Customer journey",
-    title: "From first scan to proof of fix",
+    eyebrow: "Readiness roadmap",
+    title: "Find out where you are — and what to do next",
     description:
-      "The vulnerability list is the hook. Monitor + evidence is the product. Convert is the high-value sticky tier.",
+      "Every organization moves through the same stages on the way to post-quantum readiness: knowing what cryptography you run, fixing what's actually at risk, and proving it. Pick a stage below to see what's typical there and the next concrete step.",
   },
   insight: {
-    eyebrow: "Core insight",
-    title: "Never sell Stage 6 to a Stage 0 buyer",
+    eyebrow: "How to use this model",
+    title: "Don't skip stages",
     description:
-      "Always propose the next maturity stage plus one. Assessment hooks; Monitor and signed evidence retain.",
+      "Buying enterprise-grade verification tooling before you have a cryptographic inventory is like installing a vault door before you know which rooms need one. Start with Assess to see what you actually run, then add Monitor and Convert once you know where the risk is. The fastest path is usually the next stage up — not the top of the model.",
   },
   personas: [
     {
       title: "CISO / VP Security",
-      trigger: "Board asks: how much RSA/ECDSA before 2030?",
-      entry: "/assess → Assessment → Monitor",
+      situation:
+        "Your board or leadership are asking how much of your traffic still relies on RSA or ECDSA before 2030.",
+      nextStep: "Run a scan and bring a real inventory to that conversation.",
+      href: "/assess",
+      cta: "Start with Assess →",
     },
     {
       title: "Compliance / GRC lead",
-      trigger: "CMMC, PCI-DSS 4.0, or HIPAA audit",
-      entry: "Scenario packs → signed compliance pack",
+      situation:
+        "You're preparing for a CMMC, PCI-DSS 4.0, or HIPAA audit and need evidence, not a spreadsheet.",
+      nextStep: "Generate a signed compliance pack auditors can verify independently.",
+      href: "/trust",
+      cta: "See compliance packs →",
     },
     {
       title: "VP Engineering",
-      trigger: "Assigned to execute PQC migration",
-      entry: "CBOM → remediation board → re-scan verification",
+      situation:
+        "You've been handed the PQC migration and need to know what to fix first — and prove it stuck.",
+      nextStep: "Turn your CBOM into a prioritized remediation board, then re-scan to confirm the fix held.",
+      href: "/convert",
+      cta: "Explore Convert →",
     },
   ],
-  touchpoints: [
-    { channel: "Website", assess: "/assess", monitor: "/monitor", convert: "/convert" },
-    { channel: "Self-serve", assess: "/assess", monitor: "/access", convert: "/access" },
-    { channel: "Dashboard", assess: "Scan history", monitor: "Drift + schedules", convert: "Remediation board" },
+  faqs: [
+    {
+      question: "How long does it take to move from Stage 0 to Stage 3?",
+      answer:
+        "Most teams complete their first inventory (Stage 1) within a day of running a scan. Prioritizing the backlog and scheduling re-scans (Stages 2-3) typically takes two to six weeks, depending on how distributed your infrastructure is.",
+    },
+    {
+      question: "Do I need Monitor and Convert right away?",
+      answer:
+        "No — start with Assess. Monitor and Convert matter once you have a baseline and need to catch drift or prove remediation, which is usually a few weeks in, not day one.",
+    },
+    {
+      question: "What if I don't know my crypto inventory at all?",
+      answer:
+        "That's Stage 0, and it's the normal starting point. Run a free mini-assessment or a full scan — you don't need existing documentation to begin.",
+    },
+    {
+      question: "What actually counts as \"verified\" readiness?",
+      answer:
+        "Stage 6 means you have portfolio-wide evidence, a transparency log, and auditor-ready packs — not just that migrations happened, but that you can prove it to a third party.",
+    },
   ],
 } as const;

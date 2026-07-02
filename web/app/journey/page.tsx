@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 
 import MaturityModel from "@/components/marketing/MaturityModel";
 import PageHero from "@/components/layout/PageHero";
@@ -16,7 +17,7 @@ export const metadata: Metadata = buildPageMetadata({
 });
 
 export default function JourneyPage() {
-  const { hero, insight, personas, touchpoints } = journeyPageCopy;
+  const { hero, insight, personas, faqs } = journeyPageCopy;
 
   return (
     <PageShell>
@@ -45,41 +46,33 @@ export default function JourneyPage() {
       </Section>
 
       <Section gap="tight">
-        <Eyebrow>Personas</Eyebrow>
+        <Eyebrow>Which one sounds like you?</Eyebrow>
         <div className="mt-6 grid gap-4 md:grid-cols-3">
           {personas.map((persona) => (
             <Card key={persona.title} tone="feature" className="rounded-[var(--radius-xl)]">
               <p className="font-semibold text-white">{persona.title}</p>
-              <p className="mt-2 text-sm text-[var(--color-gray-400)]">Trigger: {persona.trigger}</p>
-              <p className="mt-3 text-sm leading-7 text-[var(--color-gray-300)]">Entry: {persona.entry}</p>
+              <p className="mt-3 text-sm leading-7 text-[var(--color-gray-300)]">{persona.situation}</p>
+              <p className="mt-3 text-sm leading-7 text-[var(--color-gray-400)]">{persona.nextStep}</p>
+              <Link
+                href={persona.href}
+                className="mt-4 inline-block text-sm font-medium text-white underline underline-offset-4"
+              >
+                {persona.cta}
+              </Link>
             </Card>
           ))}
         </div>
       </Section>
 
       <Section gap="tight" className="pb-0">
-        <Eyebrow>Touchpoints by channel</Eyebrow>
-        <div className="mt-6 overflow-x-auto">
-          <table className="min-w-full text-left text-sm">
-            <thead className="text-xs uppercase tracking-[0.14em] text-[var(--color-gray-500)]">
-              <tr>
-                <th className="pb-3 pr-4">Channel</th>
-                <th className="pb-3 pr-4">Assess</th>
-                <th className="pb-3 pr-4">Monitor</th>
-                <th className="pb-3">Convert</th>
-              </tr>
-            </thead>
-            <tbody className="text-[var(--color-gray-300)]">
-              {touchpoints.map((row) => (
-                <tr key={row.channel} className="border-t border-[var(--border-subtle)]">
-                  <td className="py-3 pr-4 font-medium text-white">{row.channel}</td>
-                  <td className="py-3 pr-4">{row.assess}</td>
-                  <td className="py-3 pr-4">{row.monitor}</td>
-                  <td className="py-3">{row.convert}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        <Eyebrow>Common questions</Eyebrow>
+        <div className="mt-6 grid gap-4 md:grid-cols-2">
+          {faqs.map((faq) => (
+            <Card key={faq.question} tone="ghost" className="rounded-[var(--radius-xl)]">
+              <p className="font-semibold text-white">{faq.question}</p>
+              <p className="mt-3 text-sm leading-7 text-[var(--color-gray-300)]">{faq.answer}</p>
+            </Card>
+          ))}
         </div>
       </Section>
     </PageShell>
