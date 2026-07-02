@@ -6,7 +6,7 @@ import Card from "@/components/ui/Card";
 import AnimatedBorderFrame from "@/components/ui/AnimatedBorderFrame";
 import Eyebrow from "@/components/ui/Eyebrow";
 import Glow from "@/components/ui/Glow";
-import { convertPageCopy } from "@/lib/copy/readiness-convert";
+import { convertPageCopy, convertTrustSignals } from "@/lib/copy/readiness-convert";
 
 export default function ConvertHeroSection() {
   const { hero } = convertPageCopy;
@@ -15,33 +15,13 @@ export default function ConvertHeroSection() {
     <AnimatedBorderFrame className="overflow-hidden rounded-[var(--radius-feature)]">
       <Glow className="hero-orb right-[-3rem] top-[-4rem] h-36 w-36 bg-white/12" />
       <Card tone="feature" size="lg" className="relative rounded-[var(--radius-feature)] border-0 bg-transparent">
-        <div className="grid gap-8 lg:grid-cols-[1fr_minmax(260px,380px)] lg:items-center">
+        <div className="grid gap-10 lg:grid-cols-[1fr_minmax(280px,420px)] lg:items-center lg:gap-12">
           <div>
             <Eyebrow>{hero.eyebrow}</Eyebrow>
             <h1 className="heading-display gradient-text mt-4">{hero.title}</h1>
-            <p className="mt-4 max-w-2xl text-base leading-8 text-[var(--color-gray-300)]">
+            <p className="mt-4 max-w-2xl text-base leading-8 text-[var(--color-gray-300)] sm:text-[length:var(--text-body-lg)]">
               {hero.description}
             </p>
-            <dl className="mt-8 grid grid-cols-3 gap-4 border-t border-[var(--border)] pt-8 sm:max-w-lg">
-              <div>
-                <dt className="text-label text-[var(--color-gray-500)]">{hero.kpis[0].label}</dt>
-                <dd className="mt-2 text-2xl font-semibold tracking-tight text-white">
-                  {hero.kpis[0].value}
-                </dd>
-              </div>
-              <div>
-                <dt className="text-label text-[var(--color-gray-500)]">{hero.kpis[1].label}</dt>
-                <dd className="mt-2 text-2xl font-semibold tracking-tight text-white">
-                  {hero.kpis[1].value}
-                </dd>
-              </div>
-              <div>
-                <dt className="text-label text-[var(--color-gray-500)]">{hero.kpis[2].label}</dt>
-                <dd className="mt-2 text-2xl font-semibold tracking-tight text-emerald-300">
-                  {hero.kpis[2].value}
-                </dd>
-              </div>
-            </dl>
             <div className="mt-8 flex flex-wrap gap-3">
               {hero.actions.map((action) => (
                 <Button
@@ -50,6 +30,13 @@ export default function ConvertHeroSection() {
                   variant={"variant" in action && action.variant === "secondary" ? "secondary" : "primary"}
                 >
                   {action.label}
+                </Button>
+              ))}
+            </div>
+            <div className="mt-6 flex flex-wrap gap-2">
+              {convertTrustSignals.map((signal) => (
+                <Button key={signal.label} href={signal.href} variant="secondary" size="sm">
+                  {signal.label}
                 </Button>
               ))}
             </div>

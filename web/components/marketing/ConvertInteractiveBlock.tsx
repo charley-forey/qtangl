@@ -30,22 +30,22 @@ export default function ConvertInteractiveBlock({
     <>
       {showProgram ? <ConvertProgramSimulator /> : null}
       {showInventory ? (
-        <div className="mt-6">
+        <div className="mt-[var(--convert-panel-gap)]">
           <ConvertInventoryEmbed />
         </div>
       ) : null}
       {showVerifyLoop ? (
-        <div className="mt-6">
+        <div className="mt-[var(--convert-panel-gap)]">
           <ConvertVerifyFixLoop />
         </div>
       ) : null}
       {showEvidence ? (
-        <div className="mt-6">
+        <div className="mt-[var(--convert-panel-gap)]">
           <ConvertEvidencePreview />
         </div>
       ) : null}
       {showMigrationDiagram ? (
-        <div className="mt-6">
+        <div className="mt-[var(--convert-panel-gap)]">
           <ConvertMigrationDiagram />
         </div>
       ) : null}

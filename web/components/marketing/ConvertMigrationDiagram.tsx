@@ -101,35 +101,46 @@ export default function ConvertMigrationDiagram() {
           ))}
         </div>
 
-        <div className="mt-8 hidden gap-4 lg:grid lg:grid-cols-3">
-          {STAGES.map((stage) => (
-            <div
-              key={stage.id}
-              id={`migration-stage-${stage.id}`}
-              className={[
-                "rounded-xl border-2 p-5 transition duration-500",
-                stage.color,
-                active === stage.id ? "ring-2 ring-white/20" : "opacity-70",
-              ].join(" ")}
-            >
-              <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--color-gray-400)]">
-                {stage.label}
-              </p>
-              <ul className="mt-4 space-y-2">
-                {stage.items.map((item) => (
-                  <li key={item} className="text-sm text-white">
-                    {item}
-                  </li>
-                ))}
-              </ul>
-              <p className="mt-4 text-xs leading-6 text-[var(--color-gray-500)]">{stage.note}</p>
-            </div>
-          ))}
+        <div className="relative mt-8 hidden lg:block">
+          <div className="grid grid-cols-3 gap-6">
+            {STAGES.map((stage, index) => (
+              <div key={stage.id} className="relative">
+                {index < STAGES.length - 1 ? (
+                  <span
+                    className="pointer-events-none absolute right-[-1.25rem] top-1/2 z-10 hidden -translate-y-1/2 text-2xl text-[var(--color-gray-600)] lg:inline"
+                    aria-hidden
+                  >
+                    →
+                  </span>
+                ) : null}
+                <div
+                  id={`migration-stage-${stage.id}`}
+                  className={[
+                    "h-full rounded-xl border-2 p-8 transition duration-500",
+                    stage.color,
+                    active === stage.id ? "ring-2 ring-white/20" : "opacity-70",
+                  ].join(" ")}
+                >
+                  <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--color-gray-400)]">
+                    {stage.label}
+                  </p>
+                  <ul className="mt-4 space-y-2">
+                    {stage.items.map((item) => (
+                      <li key={item} className="text-sm text-white">
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                  <p className="mt-4 text-xs leading-6 text-[var(--color-gray-500)]">{stage.note}</p>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
 
         <div className="mt-8 space-y-4 lg:hidden">
           {STAGES.filter((s) => s.id === active).map((stage) => (
-            <div key={stage.id} className={["rounded-xl border-2 p-5", stage.color].join(" ")}>
+            <div key={stage.id} className={["rounded-xl border-2 p-8", stage.color].join(" ")}>
               <p className="text-xs font-semibold uppercase tracking-[0.14em]">{stage.label}</p>
               <ul className="mt-3 space-y-2">
                 {stage.items.map((item) => (

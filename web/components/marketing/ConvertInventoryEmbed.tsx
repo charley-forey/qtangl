@@ -12,6 +12,7 @@ import type { CryptoAsset } from "@/lib/pqc";
 export default function ConvertInventoryEmbed() {
   const { selected } = useConvertDemo();
   const [assets, setAssets] = useState<CryptoAsset[]>([]);
+  const [flash, setFlash] = useState(false);
 
   useEffect(() => {
     fetch("/samples/sample-cbom-bank-tls-inventory.json")
@@ -62,6 +63,12 @@ export default function ConvertInventoryEmbed() {
     return ids;
   }, [selected]);
 
+  useEffect(() => {
+    setFlash(true);
+    const timer = window.setTimeout(() => setFlash(false), 500);
+    return () => window.clearTimeout(timer);
+  }, [remediatedAssetIds.size]);
+
   const displayAssets = useMemo(
     () =>
       assets.map((asset) => {
@@ -85,7 +92,13 @@ export default function ConvertInventoryEmbed() {
   const remediatedCount = displayAssets.filter((a) => a.pqc_ready).length;
 
   return (
-    <Card tone="panel" className="rounded-[var(--radius-xl)]">
+    <Card
+      tone="panel"
+      className={[
+        "rounded-[var(--radius-xl)] transition-colors duration-500",
+        flash ? "border-emerald-500/30" : "",
+      ].join(" ")}
+    >
       <Eyebrow>Inventory heatmap — synced with simulator</Eyebrow>
       <p className="mt-3 text-sm text-[var(--color-gray-400)]">
         Toggle remediation items above — matching assets transition to remediated state. Illustrative sample

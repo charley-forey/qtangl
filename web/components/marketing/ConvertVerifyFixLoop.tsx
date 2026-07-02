@@ -12,9 +12,22 @@ const STEPS: Array<{ id: string; label: string; tab: ConvertEvidenceTab }> = [
   { id: "proof", label: "Signed proof", tab: "verify" },
 ];
 
+function scrollToEvidence() {
+  const el = document.getElementById("convert-evidence");
+  if (!el) return;
+  const reduced =
+    typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  el.scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "start" });
+}
+
 export default function ConvertVerifyFixLoop() {
   const { evidenceTab, setEvidenceTab } = useConvertDemo();
   const activeStep = STEPS.find((s) => s.tab === evidenceTab)?.id ?? "finding";
+
+  function onStepClick(tab: ConvertEvidenceTab) {
+    setEvidenceTab(tab);
+    scrollToEvidence();
+  }
 
   return (
     <Card tone="panel" className="rounded-[var(--radius-xl)]">
@@ -32,7 +45,7 @@ export default function ConvertVerifyFixLoop() {
             <button
               type="button"
               role="listitem"
-              onClick={() => setEvidenceTab(step.tab)}
+              onClick={() => onStepClick(step.tab)}
               className={[
                 "rounded-full border px-4 py-2 text-xs font-medium transition",
                 activeStep === step.id

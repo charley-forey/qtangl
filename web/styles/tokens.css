@@ -75,6 +75,8 @@
   --section-space-loose-desktop: 8rem;
   --panel-gap-mobile: 1rem;
   --panel-gap-desktop: 1.5rem;
+  --convert-panel-gap: 1.5rem;
+  --convert-section-inner: 2rem;
   --card-pad-sm: 1rem;
   --card-pad-md: 1.5rem;
   --card-pad-lg: clamp(1.5rem, 2vw, 2rem);

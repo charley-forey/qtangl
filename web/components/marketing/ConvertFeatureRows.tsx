@@ -5,7 +5,7 @@ export default function ConvertFeatureRows() {
   const { items } = convertPageCopy.features;
 
   return (
-    <div className="space-y-16">
+    <div className="space-y-12 lg:space-y-16">
       {items.map((item, index) => {
         const imageFirst = index % 2 === 0;
         return (

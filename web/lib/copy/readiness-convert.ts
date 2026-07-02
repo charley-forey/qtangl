@@ -197,6 +197,55 @@ export const convertHonestyPanel = {
   ],
 } as const;
 
+export const convertTrustSignals = [
+  { label: "PQ-signed reports", href: "/trust" },
+  { label: "Verify sample report", href: "/verify?token=sample-token" },
+  { label: "Transparency log", href: "/trust" },
+] as const;
+
+export const convertCompareMonitor = {
+  monitor: {
+    title: "Monitor",
+    points: [
+      "Scheduled re-scans and drift alerts",
+      "Remediation board with owners",
+      "Webhook v2 for SIEM/GRC",
+    ],
+    href: "/monitor",
+    cta: "Explore Monitor",
+  },
+  convert: {
+    title: "Convert adds",
+    points: [
+      "Prioritized playbooks + migration waves",
+      "Verify-fix loops with signed proof",
+      "Auditor packs and program velocity",
+    ],
+    href: "/convert#convert-program",
+    cta: "Try the simulator",
+  },
+  compareLabel: "Full tier comparison on pricing →",
+  compareHref: "/pricing",
+} as const;
+
+export const convertSampleArtifact = {
+  label: "Download sample auditor pack",
+  filename: "qtangl-sample-auditor-pack.json",
+  description: "Illustrative signed report metadata and verify URL for GRC review.",
+} as const;
+
+export const convertStickyCta = {
+  message: "Migration program with verify-fix proof — illustrative previews on this page.",
+  primary: { label: "Request Convert pilot", href: "/access" },
+  secondary: { label: "Open dashboard", href: "/dashboard" },
+} as const;
+
+export const convertEvidenceCallout = {
+  beforeScore: 61.8,
+  afterScore: 74.2,
+  label: "Readiness after verify-fix (illustrative)",
+} as const;
+
 export const convertSectionNav = [
   { id: "convert-program", label: "Program" },
   { id: "convert-evidence", label: "Evidence" },
