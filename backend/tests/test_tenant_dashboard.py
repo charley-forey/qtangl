@@ -100,6 +100,28 @@ class TenantDashboardEndpointsTest(unittest.TestCase):
         scan_ids = {row["scanId"] for row in payload["recentScans"]}
         self.assertIn(scan_id, scan_ids)
 
+    def test_dashboard_summary_with_remediation_status_rows(self) -> None:
+        from app.remediation.service import upsert_remediation_status
+
+        scan_id = self._seed_scan()
+        upsert_remediation_status(
+            tenant_id="tenant-dash",
+            scan_id=scan_id,
+            remediation_id="rem-done",
+            status="done",
+        )
+        upsert_remediation_status(
+            tenant_id="tenant-dash",
+            scan_id=scan_id,
+            remediation_id="rem-open",
+            status="open",
+        )
+        response = self.client.get("/tenant/dashboard/summary", headers=self.headers)
+        self.assertEqual(response.status_code, 200)
+        velocity = response.json()["remediationVelocity"]
+        self.assertEqual(velocity["closedCount"], 1)
+        self.assertEqual(velocity["openCount"], 1)
+
     def test_dashboard_summary_extended_fields(self) -> None:
         self._seed_scan()
         response = self.client.get("/tenant/dashboard/summary", headers=self.headers)

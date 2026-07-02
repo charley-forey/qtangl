@@ -244,9 +244,11 @@ def remediation_velocity(*, tenant_id: str) -> dict[str, Any]:
             .filter(RemediationStatusRow.tenant_id == tenant_id)
             .all()
         )
-    closed = sum(1 for row in rows if row.status in {"done", "accepted_risk"})
-    open_count = sum(1 for row in rows if row.status in {"open", "in_progress"})
-    total = len(rows)
+        # Materialize status while the session is open — lazy loads fail after exit.
+        statuses = [row.status for row in rows]
+    closed = sum(1 for status in statuses if status in {"done", "accepted_risk"})
+    open_count = sum(1 for status in statuses if status in {"open", "in_progress"})
+    total = len(statuses)
     rate = round(100.0 * closed / total, 1) if total else None
     return {"closedCount": closed, "openCount": open_count, "completionRatePct": rate}
 
