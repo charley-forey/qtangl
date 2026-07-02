@@ -3,7 +3,7 @@ import { test, expect } from "@playwright/test";
 test.describe("Convert page", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto("/convert");
-    await page.waitForLoadState("networkidle");
+    await page.waitForLoadState("domcontentloaded");
   });
 
   test("hero and KPIs visible", async ({ page }) => {
@@ -13,9 +13,10 @@ test.describe("Convert page", () => {
   });
 
   test("simulator checkbox toggles projected score", async ({ page }) => {
-    const projected = page.locator("text=Projected (what-if)").locator("..").locator(".text-emerald-300");
+    const program = page.locator("#convert-program");
+    const projected = program.getByText("Projected (what-if)").locator("..").locator(".text-emerald-300");
     const before = await projected.textContent();
-    const checkbox = page.getByRole("checkbox", { name: /Include Rotate JWKS/i });
+    const checkbox = program.getByRole("checkbox", { name: /Include Rotate JWKS/i });
     await checkbox.click();
     const after = await projected.textContent();
     expect(before).not.toEqual(after);

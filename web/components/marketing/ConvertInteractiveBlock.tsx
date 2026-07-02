@@ -20,8 +20,8 @@ export function ConvertDemoProviderWrapper({ children }: { children: React.React
 }
 
 export default function ConvertInteractiveBlock({
-  showProgram = true,
-  showInventory = true,
+  showProgram = false,
+  showInventory = false,
   showEvidence = false,
   showVerifyLoop = false,
   showMigrationDiagram = false,
