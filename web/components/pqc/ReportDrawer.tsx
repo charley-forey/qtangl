@@ -33,7 +33,14 @@ export default function ReportDrawer({
   useEffect(() => {
     if (!open) return;
     const previousOverflow = document.body.style.overflow;
+    const previousFocus = document.activeElement as HTMLElement | null;
     document.body.style.overflow = "hidden";
+    const dialog = document.getElementById("report-drawer-panel");
+    const focusable = dialog?.querySelector<HTMLElement>(
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    );
+    focusable?.focus();
+
     function onKeyDown(event: KeyboardEvent) {
       if (event.key === "Escape") onClose();
     }
@@ -41,6 +48,7 @@ export default function ReportDrawer({
     return () => {
       document.body.style.overflow = previousOverflow;
       window.removeEventListener("keydown", onKeyDown);
+      previousFocus?.focus();
     };
   }, [open, onClose]);
 
@@ -57,6 +65,7 @@ export default function ReportDrawer({
         onClick={onClose}
       />
       <div
+        id="report-drawer-panel"
         role="dialog"
         aria-modal="true"
         aria-labelledby="report-drawer-title"

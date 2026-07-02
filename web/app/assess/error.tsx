@@ -10,7 +10,7 @@ export default function AssessError({
   reset: () => void;
 }) {
   return (
-    <div className="mx-auto max-w-lg px-6 py-24 text-center">
+    <div className="mx-auto max-w-lg px-6 py-24 text-center" role="alert">
       <h2 className="text-xl font-semibold text-white">Assessment scanner unavailable</h2>
       <p className="mt-4 text-sm leading-7 text-[var(--color-gray-400)]">
         {error.message || "Something went wrong while loading the scanner."}

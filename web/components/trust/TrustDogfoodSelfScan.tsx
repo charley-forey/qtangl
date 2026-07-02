@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import Card from "@/components/ui/Card";
 import Eyebrow from "@/components/ui/Eyebrow";
@@ -20,14 +20,40 @@ const fallbackScanId = process.env.NEXT_PUBLIC_DOGFOOD_SCAN_ID?.trim() || "";
 type Props = {
   showTargetsTable?: boolean;
   compact?: boolean;
+  deferLoad?: boolean;
 };
 
-export default function TrustDogfoodSelfScan({ showTargetsTable = false, compact = false }: Props) {
+export default function TrustDogfoodSelfScan({
+  showTargetsTable = false,
+  compact = false,
+  deferLoad = false,
+}: Props) {
   const [summary, setSummary] = useState<DogfoodSummary | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(!deferLoad);
+  const [shouldLoad, setShouldLoad] = useState(!deferLoad);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    if (!deferLoad) return;
+    const node = containerRef.current;
+    if (!node) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          setShouldLoad(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: "200px" }
+    );
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, [deferLoad]);
+
+  useEffect(() => {
+    if (!shouldLoad) return;
     let cancelled = false;
 
     async function load() {
@@ -79,7 +105,7 @@ export default function TrustDogfoodSelfScan({ showTargetsTable = false, compact
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [shouldLoad]);
 
   const latest = summary?.latest;
   const scanId = latest?.scanId ?? fallbackScanId;
@@ -88,6 +114,7 @@ export default function TrustDogfoodSelfScan({ showTargetsTable = false, compact
   const transparencyUrl = `${qtanglApiBaseUrl}/pqc/transparency/root`;
 
   return (
+    <div ref={containerRef}>
     <Card tone="panel" className="rounded-[var(--radius-xl)]">
       <Eyebrow>Dogfood — we scan ourselves</Eyebrow>
       {!compact ? (
@@ -223,5 +250,6 @@ export default function TrustDogfoodSelfScan({ showTargetsTable = false, compact
         </Link>
       </div>
     </Card>
+    </div>
   );
 }

@@ -27,6 +27,9 @@ export const ASSESS_EVENTS = {
   miniHandoff: "mini_to_assess_handoff",
   oqsPresetApplied: "assess_oqs_preset_applied",
   shareLinkCopied: "assess_share_link_copied",
+  landingCtaClick: "assess_landing_cta_click",
+  sectionView: "assess_section_view",
+  reportPrinted: "pqc_report_printed",
 } as const;
 
 /** PRD telemetry names → canonical event keys */

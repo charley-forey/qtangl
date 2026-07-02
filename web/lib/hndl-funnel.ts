@@ -22,6 +22,19 @@ export function buildAssessMiniHref({
   return `/assess/mini?${search.toString()}`;
 }
 
+export function appendAssessHandoffParams(
+  href: string,
+  funnel: ReturnType<typeof readMiniAssessmentFunnel>
+): string {
+  const url = new URL(href, "https://www.qtangl.com");
+  if (funnel.source) url.searchParams.set("source", funnel.source);
+  if (funnel.utmSource) url.searchParams.set("utm_source", funnel.utmSource);
+  if (funnel.utmMedium) url.searchParams.set("utm_medium", funnel.utmMedium);
+  if (funnel.utmCampaign) url.searchParams.set("utm_campaign", funnel.utmCampaign);
+  if (funnel.utmContent) url.searchParams.set("utm_content", funnel.utmContent);
+  return `${url.pathname}${url.search}`;
+}
+
 export function readMiniAssessmentFunnel(searchParams: URLSearchParams) {
   const source =
     searchParams.get("source") ??

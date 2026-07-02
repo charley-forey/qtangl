@@ -1,3 +1,5 @@
+import type { MarketingCtaPanel } from "@/lib/copy/readiness-home";
+
 export const assessPageCopy = {
   metadata: {
     title: "Q-Day Assessment",
@@ -8,10 +10,10 @@ export const assessPageCopy = {
     eyebrow: "Q-Day readiness",
     title: "Baseline your crypto in one session",
     description:
-      "See a sample report in one click, try a live scan on the Open Quantum Safe test server, or authorize your own domains for a production baseline.",
+      "Run a sample report in 30 seconds, try a live scan on the Open Quantum Safe test server, or authorize your own domains for a production baseline.",
     actions: [
-      { href: "/assess?scenario=bank-tls-inventory&autorun=1", label: "See sample bank report" },
-      { href: "/assess/start", label: "Scan my domain", variant: "secondary" as const },
+      { href: "#scanner", label: "Run sample in 30s" },
+      { href: "/assess?scenario=bank-tls-inventory&autorun=1", label: "See sample bank report", variant: "secondary" as const },
     ],
   },
   features: {
@@ -20,28 +22,32 @@ export const assessPageCopy = {
     items: [
       {
         title: "Live domain scan",
-        description: "TLS handshake inventory with algorithm and key-size classification.",
+        description:
+          "TLS handshake inventory with algorithm and key-size classification — the evidence your security team needs for CMMC and PCI audits.",
         image: "/marketing/assess-live-scan.webp",
         imageAlt:
           "Black and white diagram of TLS handshake inventory across network endpoints.",
       },
       {
         title: "Mosca HNDL timeline",
-        description: "Harvest-now-decrypt-later exposure scored against your data retention horizon.",
+        description:
+          "Harvest-now-decrypt-later exposure scored against your data retention horizon — board-ready context, not alarmism.",
         image: "/marketing/assess-hndl-timeline.webp",
         imageAlt:
           "Black and white timeline showing harvest-now-decrypt-later exposure horizon.",
       },
       {
         title: "CycloneDX CBOM",
-        description: "Machine-readable crypto bill of materials for your CMDB and GRC tools.",
+        description:
+          "Machine-readable crypto bill of materials for your CMDB and GRC tools — import into ServiceNow, Archer, or your SIEM.",
         image: "/marketing/assess-cbom-export.webp",
         imageAlt:
           "Black and white illustration of a structured document stack representing CBOM export.",
       },
       {
         title: "Signed executive PDF",
-        description: "Board-ready summary with an independent verify link.",
+        description:
+          "Board-ready summary with an independent verify link — auditors confirm signing integrity at /verify.",
         image: "/marketing/assess-signed-pdf.webp",
         imageAlt:
           "Black and white illustration of a signed report with seal and verify link chain.",
@@ -51,7 +57,8 @@ export const assessPageCopy = {
   scenarios: {
     eyebrow: "Scenarios",
     title: "Try a regulated scenario",
-    description: "Pre-loaded fixture targets for banking, government, and healthcare readiness workflows — no domain required.",
+    description:
+      "Pre-loaded fixture targets for banking, government, and healthcare readiness workflows — no domain required.",
     items: [
       { label: "Bank TLS inventory", href: "/assess?scenario=bank-tls-inventory&autorun=1" },
       { label: "Gov contractor CMMC", href: "/assess?scenario=gov-contractor-cmmc&autorun=1" },
@@ -65,4 +72,13 @@ export const assessPageCopy = {
     primary: { label: "Start authorized workspace", href: "/assess/start" },
     secondary: { label: "Request pilot", href: "/access" },
   },
+  ctaPanel: {
+    eyebrow: "Q-Day readiness",
+    title: "Ready for your own domains?",
+    description:
+      "Self-serve Assess workspace includes 5 scans per month and domain allowlisting. Sales-led pilots cover multi-domain estates and Monitor onboarding.",
+    primaryCta: { label: "Start authorized workspace", href: "/assess/start" },
+    secondaryCta: { label: "Request pilot", href: "/access" },
+    docsLink: { label: "Assessment API guide", href: "/docs/guides/assess" },
+  } satisfies MarketingCtaPanel,
 } as const;

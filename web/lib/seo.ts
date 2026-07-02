@@ -493,6 +493,90 @@ export function buildEvFleetDemoJsonLd(options: { description: string; videoUrl?
   };
 }
 
+export function buildAssessPageJsonLd() {
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Home", item: siteMetadata.url },
+          { "@type": "ListItem", position: 2, name: "Assess", item: absoluteUrl("/assess") },
+        ],
+      },
+      {
+        "@type": "SoftwareApplication",
+        name: "Qtangl Assess",
+        description: assessPageDescription(),
+        url: absoluteUrl("/assess"),
+        applicationCategory: "BusinessApplication",
+        operatingSystem: "Web",
+        offers: {
+          "@type": "Offer",
+          price: "0",
+          priceCurrency: "USD",
+          description: "Contact for enterprise pricing",
+        },
+        provider: {
+          "@type": "Organization",
+          name: siteMetadata.name,
+          url: siteMetadata.url,
+        },
+      },
+    ],
+  };
+}
+
+function assessPageDescription() {
+  return "Baseline quantum-vulnerable cryptography with live scans, Mosca HNDL risk, and signed CBOM exports.";
+}
+
+export function buildMiniAssessJsonLd() {
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebPage",
+        name: "Free mini-assessment",
+        url: absoluteUrl("/assess/mini"),
+        description: "Email-gated fixture preview of Q-Day readiness score and top findings.",
+        isPartOf: { "@id": `${siteMetadata.url}/#website` },
+      },
+      {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Home", item: siteMetadata.url },
+          { "@type": "ListItem", position: 2, name: "Assess", item: absoluteUrl("/assess") },
+          { "@type": "ListItem", position: 3, name: "Mini assessment", item: absoluteUrl("/assess/mini") },
+        ],
+      },
+    ],
+  };
+}
+
+export function buildMethodologyJsonLd() {
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "TechArticle",
+        name: "Q-Day readiness methodology",
+        url: absoluteUrl("/assess/methodology"),
+        description: "How Qtangl inventories quantum-vulnerable cryptography and scores Mosca HNDL exposure.",
+        isPartOf: { "@id": `${siteMetadata.url}/#website` },
+      },
+      {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Home", item: siteMetadata.url },
+          { "@type": "ListItem", position: 2, name: "Assess", item: absoluteUrl("/assess") },
+          { "@type": "ListItem", position: 3, name: "Methodology", item: absoluteUrl("/assess/methodology") },
+        ],
+      },
+    ],
+  };
+}
+
 export function buildPqcDemoJsonLd(options: { description: string; videoUrl?: string; url?: string }) {
   const pageUrl = options.url ?? absoluteUrl("/assess");
   const graph: Record<string, unknown>[] = [

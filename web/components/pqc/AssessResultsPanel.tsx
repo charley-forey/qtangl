@@ -110,32 +110,32 @@ export default function AssessResultsPanel({
           <ExecutivePriorities summary={scan.report?.executiveSummary} />
         </PqcSection>
         <div className="grid gap-4 lg:grid-cols-2">
-          <PqcSection title="Risk scoreboard">
-            <RiskScoreboardCard scoreboard={scan.scoreboard} />
-          </PqcSection>
-          <PqcSection title="Industry peer band">
-            <PublicPeerBandPanel
-              score={scan.scoreboard.qtangl.readiness_score}
-              industry={industry}
-            />
-          </PqcSection>
-        </div>
-        <div className="grid gap-4 lg:grid-cols-3">
           <PqcSection title="Readiness">
             <ReadinessGauge score={scan.scoreboard.qtangl.readiness_score} />
           </PqcSection>
-          <PqcSection title="Mosca timeline">
-            <MoscaTimeline mosca={scan.mosca} />
+          <PqcSection title="Risk scoreboard">
+            <RiskScoreboardCard scoreboard={scan.scoreboard} />
           </PqcSection>
+        </div>
+        <PqcSection title="Mosca timeline">
+          <MoscaTimeline mosca={scan.mosca} />
+        </PqcSection>
+        <div className="grid gap-4 lg:grid-cols-2">
           <PqcSection title="Severity mix">
             <SeverityDonut assets={assets} />
           </PqcSection>
+          {topAsset ? (
+            <PqcSection title="Top vulnerability">
+              <VulnerabilityCard asset={topAsset} explanation={explanations?.[topAsset.id]} />
+            </PqcSection>
+          ) : null}
         </div>
-        {topAsset && (
-          <PqcSection title="Top vulnerability">
-            <VulnerabilityCard asset={topAsset} explanation={explanations?.[topAsset.id]} />
-          </PqcSection>
-        )}
+        <PqcSection title="Industry peer band">
+          <PublicPeerBandPanel
+            score={scan.scoreboard.qtangl.readiness_score}
+            industry={industry}
+          />
+        </PqcSection>
         <PqcSection title="Remediation preview">
           <RemediationBacklog items={scan.remediationBacklog} limit={8} />
         </PqcSection>

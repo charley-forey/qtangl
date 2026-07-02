@@ -558,6 +558,21 @@ export function useAssessScan({
     [scanResponse?.scanId, searchParams, router, basePath, syncUrlEnabled, analyticsMode]
   );
 
+  const resetAssessment = useCallback(() => {
+    setScanResponse(null);
+    setScanTimeline([]);
+    setWizardCollapsed(false);
+    setWizardStep(1);
+    setShowCustomize(false);
+    changeIntent("sample");
+    setError(null);
+    setIsScanning(false);
+    setActiveTab("executive");
+    if (syncUrlEnabled) {
+      router.replace(basePath, { scroll: false });
+    }
+  }, [router, basePath, syncUrlEnabled, changeIntent]);
+
   const setBundleSession = useCallback(
     (
       sessionId: string,
@@ -630,5 +645,6 @@ export function useAssessScan({
     blockedDomain,
     upgradeProduct,
     clearUpgradeProduct: () => setUpgradeProduct(null),
+    resetAssessment,
   };
 }

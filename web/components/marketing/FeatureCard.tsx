@@ -15,6 +15,7 @@ type FeatureCardProps = {
   ctaLabel?: string;
   imageSrc?: string;
   imageAlt?: string;
+  imageLoading?: "eager" | "lazy";
   onLinkClick?: () => void;
 };
 
@@ -27,6 +28,7 @@ export default function FeatureCard({
   ctaLabel,
   imageSrc,
   imageAlt,
+  imageLoading = "lazy",
   onLinkClick,
 }: FeatureCardProps) {
   const titleId = useId();
@@ -49,6 +51,7 @@ export default function FeatureCard({
             <CoverImage
               src={imageSrc}
               alt={resolvedImageAlt ?? title}
+              priority={imageLoading === "eager"}
               className={
                 svgCover
                   ? "object-contain p-1 transition duration-500 group-hover:scale-[1.01]"

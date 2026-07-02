@@ -70,7 +70,7 @@ export function PqcTabs<T extends string>({
           id={`assess-tab-${tab.id}`}
           onClick={() => onChange(tab.id)}
           className={[
-            "rounded-full border px-4 py-2 text-sm font-medium transition",
+            "touch-target rounded-full border px-4 py-2 text-sm font-medium transition",
             active === tab.id
               ? "border-[var(--border-strong)] bg-white text-black"
               : "border-[var(--border)] bg-transparent text-[var(--color-gray-300)] hover:border-[var(--border-strong)] hover:text-white",

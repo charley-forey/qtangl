@@ -7,6 +7,7 @@ import {
   ASSESS_PRODUCTION_MODE_ENABLED,
 } from "@/lib/assess-config";
 import ProductModeBanner from "@/components/marketing/ProductModeBanner";
+import { useAssessPageContext } from "@/components/marketing/AssessPageShell";
 import type { UpgradeProduct } from "@/components/dashboard/UpgradeModal";
 import Card from "@/components/ui/Card";
 import type { CryptoAsset, Scenario } from "@/lib/pqc";
@@ -14,6 +15,8 @@ import { useQtanglApi } from "@/lib/qtangl-api-context";
 import { useUpgradeGate } from "@/hooks/useUpgradeGate";
 
 import AssessIntentPicker from "./AssessIntentPicker";
+import AssessFirstScanGuide from "./AssessFirstScanGuide";
+import AssessStickyResultsBar from "./AssessStickyResultsBar";
 import AssessMsspBanner from "./AssessMsspBanner";
 import AssessResultsPanel from "./AssessResultsPanel";
 import AssessScanError from "./AssessScanError";
@@ -59,7 +62,9 @@ export default function QDayCommandCenter({
   onRefresh,
 }: Props) {
   const resultsRef = useRef<HTMLDivElement>(null);
+  const completionAnnounced = useRef(false);
   const [reportOpen, setReportOpen] = useState(false);
+  const { setScanComplete } = useAssessPageContext();
   const { mode, apiKey, tenantApiKey, setTenantApiKey } = useQtanglApi();
   const { upgradeOpen, upgradeProduct: modalUpgradeProduct, openUpgrade, closeUpgrade } = useUpgradeGate();
   const isProduction = mode === "production" && ASSESS_PRODUCTION_MODE_ENABLED;
@@ -125,7 +130,17 @@ export default function QDayCommandCenter({
     blockedDomain,
     upgradeProduct: scanUpgradeProduct,
     clearUpgradeProduct,
+    resetAssessment,
   } = scan;
+
+  useEffect(() => {
+    if (scanResponse) {
+      setScanComplete(true);
+      if (!completionAnnounced.current) {
+        completionAnnounced.current = true;
+      }
+    }
+  }, [scanResponse, setScanComplete]);
 
   useEffect(() => {
     if (!scanUpgradeProduct) return;
@@ -243,6 +258,18 @@ export default function QDayCommandCenter({
 
       {scanResponse ? (
         <div ref={resultsRef}>
+          <div aria-live="polite" className="sr-only">
+            {scanResponse ? "Scan complete. Results are ready below." : ""}
+          </div>
+          {wizardCollapsed ? (
+            <AssessStickyResultsBar
+              scan={scanResponse}
+              reportStatus={reportStatus}
+              onNewAssessment={resetAssessment}
+              onGoToEvidence={() => changeTab("evidence")}
+            />
+          ) : null}
+          <AssessFirstScanGuide onGoToTab={changeTab} />
           <AssessResultsPanel
             scan={scanResponse}
             activeTab={activeTab}

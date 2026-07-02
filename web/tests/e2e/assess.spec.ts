@@ -10,8 +10,11 @@ test.describe("Assess page", () => {
     await page.goto("/assess");
     await expect(page.getByRole("heading", { name: /Baseline your crypto/i })).toBeVisible();
     await expect(page.getByRole("heading", { name: /Three paths to your baseline/i })).toBeVisible();
+    await expect(page.getByText(/Honest caveat/i)).toBeVisible();
+    await expect(page.getByRole("navigation", { name: /Assess page sections/i })).toBeVisible();
     await expect(page.getByRole("heading", { name: /Common questions/i })).toBeVisible();
-    await expect(page.getByRole("link", { name: /Download sample CBOM/i })).toBeVisible();
+    await page.getByRole("button", { name: /CycloneDX CBOM/i }).click();
+    await expect(page.getByRole("link", { name: /Download full sample CBOM/i })).toBeVisible();
   });
 
   test("intent picker shows three assessment paths", async ({ page }) => {

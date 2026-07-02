@@ -10,7 +10,7 @@ import Eyebrow from "@/components/ui/Eyebrow";
 import { initialAccessFormState } from "@/lib/access/form-state";
 import { trackEvent } from "@/lib/analytics";
 import { miniAssessmentCopy, miniAssessmentScenarios, sampleCbomPath, type MiniAssessmentScenario } from "@/lib/copy/readiness-value";
-import { readMiniAssessmentFunnel } from "@/lib/hndl-funnel";
+import { appendAssessHandoffParams, readMiniAssessmentFunnel } from "@/lib/hndl-funnel";
 
 const MINI_TO_ASSESS_SCENARIO: Record<string, string> = {
   bank: "bank-tls-inventory",
@@ -154,7 +154,10 @@ export default function MiniAssessmentClient() {
   }
 
   const assessScenario = MINI_TO_ASSESS_SCENARIO[selected.id] ?? "bank-tls-inventory";
-  const demoScanHref = `/assess?scenario=${encodeURIComponent(assessScenario)}&autorun=1`;
+  const demoScanHref = appendAssessHandoffParams(
+    `/assess?scenario=${encodeURIComponent(assessScenario)}&autorun=1&intent=sample`,
+    funnel
+  );
 
   return (
     <div className="space-y-6">

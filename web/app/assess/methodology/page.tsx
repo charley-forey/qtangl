@@ -1,12 +1,14 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
+import ContentQualityStrip from "@/components/marketing/ContentQualityStrip";
 import PageHero from "@/components/layout/PageHero";
 import PageShell from "@/components/layout/PageShell";
 import Section from "@/components/layout/Section";
 import ReferencesPanel from "@/components/pqc/ReferencesPanel";
+import JsonLd from "@/components/seo/JsonLd";
 import { PQC_GLOSSARY } from "@/lib/pqc-glossary";
-import { buildPageMetadata } from "@/lib/seo";
+import { buildMethodologyJsonLd, buildPageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildPageMetadata({
   path: "/assess/methodology",
@@ -116,6 +118,7 @@ export default function AssessMethodologyPage() {
             </ul>
           </section>
           <ReferencesPanel />
+          <ContentQualityStrip />
           <p>
             <Link href="/assess" className="text-white underline">
               Return to Q-Day assessment
@@ -123,6 +126,7 @@ export default function AssessMethodologyPage() {
           </p>
         </div>
       </Section>
+      <JsonLd data={buildMethodologyJsonLd()} />
     </PageShell>
   );
 }
