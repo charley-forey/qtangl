@@ -15,7 +15,8 @@ export default function ConvertAnchorNav() {
 
     const pinObserver = new IntersectionObserver(
       ([entry]) => setPinned(!entry.isIntersecting),
-      { rootMargin: "-4.5rem 0px 0px 0px", threshold: 0 }
+      // IntersectionObserver only accepts px or % in rootMargin (not rem).
+      { rootMargin: "-72px 0px 0px 0px", threshold: 0 }
     );
     pinObserver.observe(sentinel);
     return () => pinObserver.disconnect();
