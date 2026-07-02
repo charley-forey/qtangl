@@ -52,6 +52,14 @@ qtangl-verify report.json --api-base https://api.qtangl.com --json`}
               <code className="font-mono text-white">GET /pqc/verify/&#123;scanId&#125;</code> — online verify
             </li>
           </ul>
+          <p className="mt-4 text-sm leading-8 text-[var(--color-gray-300)]">
+            No API key required. Public verify and transparency routes share a default limit of{" "}
+            <strong className="text-white">60 requests per minute per client IP</strong>. See{" "}
+            <Link href="/docs/operations/rate-limits" className="text-white underline underline-offset-4">
+              Rate limits &amp; quotas
+            </Link>
+            .
+          </p>
         </DocsSection>
         <DocsSection>
           <DocsHeading>Full specification</DocsHeading>
@@ -81,6 +89,10 @@ qtangl-verify report.json --api-base https://api.qtangl.com --json`}
             ·{" "}
             <Link href="/docs/integrations/ci-cd" className="text-white underline underline-offset-4">
               CI/CD integration
+            </Link>{" "}
+            ·{" "}
+            <Link href="/docs/operations/rate-limits" className="text-white underline underline-offset-4">
+              Rate limits
             </Link>
           </p>
         </DocsSection>

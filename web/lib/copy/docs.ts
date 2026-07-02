@@ -130,7 +130,7 @@ export const docsGuideCopy = {
     rateLimits: {
       title: "Rate limits",
       description:
-        "MVP rate limiting is capped at 10 requests per minute per API key. This is enough for testing and pilot workflows without overcomplicating usage.",
+        "Rate limiting defaults to 300 requests per minute per API key on write routes. Read and polling endpoints are exempt; public verify routes use a separate per-IP limit.",
     },
     methodHonesty: {
       title: "Method honesty",
@@ -164,7 +164,7 @@ export const apiReferencePageCopy = {
   },
   errorCases: {
     title: "Error cases",
-    note: "MVP rate limit: 10 requests per minute per API key.",
+    note: "Default rate limit: 300 requests per minute per API key on write routes.",
   },
   methodHonesty: {
     title: "Method honesty",

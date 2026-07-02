@@ -177,9 +177,15 @@ export default function AuthenticationPage() {
           <p className="text-sm leading-8 text-[var(--color-gray-300)]">
             <code className="font-mono text-white">GET /health</code>,{" "}
             <code className="font-mono text-white">GET /pqc/verify/{"{scanId}"}</code>, transparency log
-            endpoints, and Readiness Index are public (rate-limited). All{" "}
-            <code className="font-mono text-white">/tenant/*</code> and mutating{" "}
-            <code className="font-mono text-white">/pqc/*</code> routes require a valid tenant key.
+            endpoints, and Readiness Index are public. They use a separate{" "}
+            <strong className="text-white">60 requests per minute per client IP</strong> limit — not your API key
+            budget. See{" "}
+            <Link href="/docs/operations/rate-limits" className="text-white underline underline-offset-4">
+              Rate limits &amp; quotas
+            </Link>
+            . All <code className="font-mono text-white">/tenant/*</code> and mutating{" "}
+            <code className="font-mono text-white">/pqc/*</code> routes require a valid tenant key (300/min on writes;
+            reads exempt).
           </p>
         </DocsSection>
       </DocsShell>
