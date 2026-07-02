@@ -26,8 +26,14 @@ const EFFORT_BANDS = [
   },
 ] as const;
 
-export default function ConvertExpectationsPanel({ maturityStage }: { maturityStage?: number }) {
-  if (maturityStage !== undefined && maturityStage < 2) {
+export default function ConvertExpectationsPanel({
+  maturityStage,
+  marketing = false,
+}: {
+  maturityStage?: number;
+  marketing?: boolean;
+}) {
+  if (!marketing && maturityStage !== undefined && maturityStage < 2) {
     return null;
   }
 

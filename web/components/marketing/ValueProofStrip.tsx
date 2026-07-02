@@ -3,14 +3,22 @@ import Eyebrow from "@/components/ui/Eyebrow";
 import MarketingIcon from "@/components/marketing/MarketingIcon";
 import { valueProofItems } from "@/lib/copy/readiness-value";
 
+type ProofItem = {
+  title: string;
+  description: string;
+  icon: "assess" | "monitor" | "convert" | "evidence" | "drift" | "scope" | "velocity";
+};
+
 type ValueProofStripProps = {
   eyebrow?: string;
   title?: string;
+  items?: readonly ProofItem[];
 };
 
 export default function ValueProofStrip({
   eyebrow = "Why teams choose Qtangl",
   title = "Evidence, drift, and honest scope",
+  items = valueProofItems,
 }: ValueProofStripProps) {
   return (
     <div>
@@ -19,7 +27,7 @@ export default function ValueProofStrip({
         <h2 className="heading-section mt-4">{title}</h2>
       </div>
       <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {valueProofItems.map((item) => (
+        {items.map((item) => (
           <Card key={item.title} tone="ghost" className="rounded-[var(--radius-xl)]">
             <MarketingIcon name={item.icon} className="h-7 w-7 text-[var(--color-gray-400)]" />
             <p className="mt-4 text-sm font-semibold text-white">{item.title}</p>

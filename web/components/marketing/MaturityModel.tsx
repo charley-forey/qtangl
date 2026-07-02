@@ -7,8 +7,8 @@ import Card from "@/components/ui/Card";
 import Eyebrow from "@/components/ui/Eyebrow";
 import { maturityStages } from "@/lib/copy/readiness-journey";
 
-export default function MaturityModel() {
-  const [selected, setSelected] = useState(1);
+export default function MaturityModel({ defaultStage = 1 }: { defaultStage?: number }) {
+  const [selected, setSelected] = useState(defaultStage);
 
   const stage = maturityStages.find((s) => s.stage === selected) ?? maturityStages[1];
   const nextStage = maturityStages.find((s) => s.stage === selected + 1);
