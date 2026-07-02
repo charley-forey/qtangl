@@ -42,6 +42,15 @@ test.describe("Monitor marketing page", () => {
     await expect(page.getByRole("link", { name: "Request Monitor pilot" }).last()).toBeVisible();
   });
 
+  test("workflow tour supports step navigation buttons", async ({ page }) => {
+    await page.getByRole("button", { name: "Next workflow step" }).first().click();
+    await expect(page.getByRole("heading", { name: /Re-inventory authorized targets/i })).toBeVisible();
+    await page.getByRole("button", { name: "Next workflow step" }).first().click();
+    await expect(page.getByRole("heading", { name: /Compare snapshot to snapshot/i })).toBeVisible();
+    await page.getByRole("button", { name: "Previous workflow step" }).first().click();
+    await expect(page.getByRole("heading", { name: /Re-inventory authorized targets/i })).toBeVisible();
+  });
+
   test("no horizontal overflow on mobile", async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto("/monitor");

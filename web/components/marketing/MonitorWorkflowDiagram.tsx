@@ -121,6 +121,25 @@ const PERSONAS = [
 ] as const;
 
 const STEP_INTERVAL_MS = 4200;
+const SWIPE_THRESHOLD_PX = 48;
+
+function ChevronIcon({ direction }: { direction: "left" | "right" }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className="h-4 w-4"
+      aria-hidden
+    >
+      {direction === "left" ? <path d="M15 18l-6-6 6-6" /> : <path d="M9 18l6-6-6-6" />}
+    </svg>
+  );
+}
 
 function WorkflowLiveSnippet({ stepId }: { stepId: StepId }) {
   const { scenario } = useMonitorScenario();
@@ -202,6 +221,7 @@ function WorkflowLiveSnippet({ stepId }: { stepId: StepId }) {
 
 export default function MonitorWorkflowDiagram() {
   const containerRef = useRef<HTMLDivElement>(null);
+  const touchStartX = useRef<number | null>(null);
   const { scenario } = useMonitorScenario();
   const [activeIndex, setActiveIndex] = useState(0);
   const [manual, setManual] = useState(false);
@@ -210,11 +230,30 @@ export default function MonitorWorkflowDiagram() {
 
   const active = STEPS[activeIndex];
 
-  const selectStep = useCallback((index: number) => {
+  const goToIndex = useCallback((index: number) => {
     setManual(true);
     setPlaying(false);
-    setActiveIndex(index);
+    setActiveIndex(Math.max(0, Math.min(STEPS.length - 1, index)));
   }, []);
+
+  const goNext = useCallback(() => {
+    setManual(true);
+    setPlaying(false);
+    setActiveIndex((current) => (current + 1) % STEPS.length);
+  }, []);
+
+  const goPrev = useCallback(() => {
+    setManual(true);
+    setPlaying(false);
+    setActiveIndex((current) => (current - 1 + STEPS.length) % STEPS.length);
+  }, []);
+
+  const selectStep = useCallback(
+    (index: number) => {
+      goToIndex(index);
+    },
+    [goToIndex]
+  );
 
   useEffect(() => {
     const el = containerRef.current;
@@ -242,6 +281,66 @@ export default function MonitorWorkflowDiagram() {
     return () => window.clearInterval(timer);
   }, [visible, manual, playing]);
 
+  useEffect(() => {
+    if (!visible) return;
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      const el = containerRef.current;
+      const target = event.target as HTMLElement | null;
+      if (!el || !target) return;
+      if (target.closest("input, textarea, select, [contenteditable='true']")) return;
+      if (target.closest("#drift-timeline, #personas, #alerts, #command-center")) return;
+      if (!el.contains(target)) return;
+
+      if (event.key === "ArrowLeft") {
+        event.preventDefault();
+        goPrev();
+      } else if (event.key === "ArrowRight") {
+        event.preventDefault();
+        goNext();
+      }
+    };
+
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [visible, goPrev, goNext]);
+
+  const onPanelKeyDown = useCallback(
+    (event: React.KeyboardEvent) => {
+      if (event.key === "ArrowLeft") {
+        event.preventDefault();
+        goPrev();
+      } else if (event.key === "ArrowRight") {
+        event.preventDefault();
+        goNext();
+      } else if (event.key === "Home") {
+        event.preventDefault();
+        goToIndex(0);
+      } else if (event.key === "End") {
+        event.preventDefault();
+        goToIndex(STEPS.length - 1);
+      }
+    },
+    [goPrev, goNext, goToIndex]
+  );
+
+  const onTouchStart = useCallback((event: React.TouchEvent) => {
+    touchStartX.current = event.touches[0]?.clientX ?? null;
+  }, []);
+
+  const onTouchEnd = useCallback(
+    (event: React.TouchEvent) => {
+      if (touchStartX.current === null) return;
+      const endX = event.changedTouches[0]?.clientX ?? touchStartX.current;
+      const delta = endX - touchStartX.current;
+      touchStartX.current = null;
+      if (Math.abs(delta) < SWIPE_THRESHOLD_PX) return;
+      if (delta < 0) goNext();
+      else goPrev();
+    },
+    [goNext, goPrev]
+  );
+
   const progress = STEPS.length > 1 ? (activeIndex / (STEPS.length - 1)) * 100 : 0;
 
   return (
@@ -251,28 +350,53 @@ export default function MonitorWorkflowDiagram() {
           tone="feature"
           size="lg"
           className="rounded-[var(--radius-feature)] border-0 bg-transparent"
-          role="group"
+          role="region"
+          aria-roledescription="carousel"
           aria-label="Monitor workflow: schedule, scan, diff, alert, dashboard and SIEM"
         >
           <div className="flex flex-wrap items-start justify-between gap-4">
             <div>
               <Eyebrow>Five-step loop</Eyebrow>
               <p className="mt-2 max-w-xl text-sm leading-7 text-[var(--color-gray-400)]">
-                Click a step or let the tour advance — each stage shows what Monitor does with illustrative
-                fixture data.
+                Use the arrows, swipe the card, or click a step — each stage shows what Monitor does with
+                illustrative fixture data.
               </p>
             </div>
-            <button
-              type="button"
-              onClick={() => {
-                setManual(false);
-                setPlaying((p) => !p);
-              }}
-              className="rounded-full border border-[var(--border)] px-3 py-1.5 text-xs font-medium text-[var(--color-gray-400)] transition hover:border-[var(--border-strong)] hover:text-white"
-            >
-              {playing && !manual ? "Pause tour" : "Play tour"}
-            </button>
+            <div className="flex flex-wrap items-center gap-2">
+              <div className="flex items-center gap-1">
+                <button
+                  type="button"
+                  onClick={goPrev}
+                  aria-label="Previous workflow step"
+                  className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-[var(--border)] text-[var(--color-gray-400)] transition hover:border-[var(--border-strong)] hover:text-white"
+                >
+                  <ChevronIcon direction="left" />
+                </button>
+                <button
+                  type="button"
+                  onClick={goNext}
+                  aria-label="Next workflow step"
+                  className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-[var(--border)] text-[var(--color-gray-400)] transition hover:border-[var(--border-strong)] hover:text-white"
+                >
+                  <ChevronIcon direction="right" />
+                </button>
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  setManual(false);
+                  setPlaying((p) => !p);
+                }}
+                className="rounded-full border border-[var(--border)] px-3 py-1.5 text-xs font-medium text-[var(--color-gray-400)] transition hover:border-[var(--border-strong)] hover:text-white"
+              >
+                {playing && !manual ? "Pause tour" : "Play tour"}
+              </button>
+            </div>
           </div>
+
+          <p className="sr-only" aria-live="polite" aria-atomic="true">
+            Step {active.step} of {STEPS.length}: {active.label}. {active.headline}
+          </p>
 
           <div className="relative mt-8 hidden sm:block">
             <div className="absolute left-6 right-6 top-5 h-px bg-[var(--border-subtle)]" aria-hidden />
@@ -332,9 +456,37 @@ export default function MonitorWorkflowDiagram() {
             ))}
           </div>
 
+          <div className="mt-6 flex items-center justify-between gap-3 sm:hidden">
+            <button
+              type="button"
+              onClick={goPrev}
+              aria-label="Previous workflow step"
+              className="inline-flex items-center gap-1 rounded-full border border-[var(--border)] px-3 py-1.5 text-xs font-medium text-[var(--color-gray-400)]"
+            >
+              <ChevronIcon direction="left" />
+              Prev
+            </button>
+            <p className="text-xs text-[var(--color-gray-500)]">
+              {active.step} / {STEPS.length}
+            </p>
+            <button
+              type="button"
+              onClick={goNext}
+              aria-label="Next workflow step"
+              className="inline-flex items-center gap-1 rounded-full border border-[var(--border)] px-3 py-1.5 text-xs font-medium text-[var(--color-gray-400)]"
+            >
+              Next
+              <ChevronIcon direction="right" />
+            </button>
+          </div>
+
           <div
+            tabIndex={0}
+            onKeyDown={onPanelKeyDown}
+            onTouchStart={onTouchStart}
+            onTouchEnd={onTouchEnd}
             className={[
-              "mt-8 grid overflow-hidden rounded-[var(--radius-xl)] border-2 motion-safe:transition-colors motion-safe:duration-500 lg:grid-cols-[1.05fr_0.95fr]",
+              "mt-8 grid overflow-hidden rounded-[var(--radius-xl)] border-2 outline-none motion-safe:transition-colors motion-safe:duration-500 focus-visible:ring-2 focus-visible:ring-white/30 lg:grid-cols-[1.05fr_0.95fr]",
               active.color,
             ].join(" ")}
           >
@@ -396,6 +548,28 @@ export default function MonitorWorkflowDiagram() {
                 </span>
               ) : null}
             </div>
+          </div>
+
+          <div className="mt-4 hidden items-center justify-between sm:flex">
+            <button
+              type="button"
+              onClick={goPrev}
+              className="inline-flex items-center gap-2 rounded-full border border-[var(--border)] px-4 py-2 text-sm font-medium text-[var(--color-gray-400)] transition hover:border-[var(--border-strong)] hover:text-white"
+            >
+              <ChevronIcon direction="left" />
+              Previous
+            </button>
+            <p className="text-sm text-[var(--color-gray-500)]">
+              Step {active.step} of {STEPS.length}
+            </p>
+            <button
+              type="button"
+              onClick={goNext}
+              className="inline-flex items-center gap-2 rounded-full border border-[var(--border)] px-4 py-2 text-sm font-medium text-[var(--color-gray-400)] transition hover:border-[var(--border-strong)] hover:text-white"
+            >
+              Next
+              <ChevronIcon direction="right" />
+            </button>
           </div>
 
           <div className="mt-8 grid gap-3 sm:grid-cols-3">
