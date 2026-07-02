@@ -17,9 +17,9 @@ test.describe("Convert page", () => {
     await program.scrollIntoViewIfNeeded();
     const projected = program.getByText("Projected (what-if)").locator("..").locator(".text-emerald-300");
     const before = await projected.textContent();
-    const checkbox = program.getByRole("checkbox", { name: /Include Rotate JWKS/i });
-    await checkbox.scrollIntoViewIfNeeded();
-    await checkbox.click({ force: true });
+    const toggle = program.getByRole("button", { name: /Include Rotate JWKS/i });
+    await toggle.scrollIntoViewIfNeeded();
+    await toggle.click({ force: true });
     const after = await projected.textContent();
     expect(before).not.toEqual(after);
   });

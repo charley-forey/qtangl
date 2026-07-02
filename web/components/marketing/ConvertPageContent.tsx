@@ -52,7 +52,6 @@ export default function ConvertPageContent() {
   return (
     <>
       <ConvertStickyCta />
-      <ConvertAnchorNav />
 
       <Section gap="tight" className="pt-6 sm:pt-8">
         <StateTransition>
@@ -63,6 +62,9 @@ export default function ConvertPageContent() {
         </div>
         <div className="mt-8 sm:mt-10">
           <ConvertJourneyStrip />
+        </div>
+        <div className="mt-8 sm:mt-10">
+          <ConvertAnchorNav />
         </div>
       </Section>
 

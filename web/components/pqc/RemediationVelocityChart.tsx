@@ -16,7 +16,7 @@ export default function RemediationVelocityChart({ points }: { points: readonly 
 
   if (useChart) {
     return (
-      <div className="h-36 w-full">
+      <div className="h-full w-full min-w-0">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={data}>
             <XAxis dataKey="label" tick={{ fill: "#9ca3af", fontSize: 10 }} />

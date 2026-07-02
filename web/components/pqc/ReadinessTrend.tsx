@@ -69,7 +69,7 @@ export default function ReadinessTrend({
 
   if (useChart) {
     return (
-      <div className="h-40 w-full">
+      <div className="h-full w-full min-w-0">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={chartData}>
             {showBands ? (
