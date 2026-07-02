@@ -112,7 +112,7 @@ function PeerBenchmarkCard() {
           title={`Median ${b.median}`}
         />
         <div
-          className="absolute top-1/2 h-6 w-1.5 -translate-y-1/2 rounded-full bg-white shadow-[0_0_10px_rgba(255,255,255,0.35)]"
+          className="absolute top-1/2 h-6 w-1.5 -translate-y-1/2 rounded-full bg-white shadow-[0_0_10px_rgba(255,255,255,0.35)] transition-all duration-500"
           style={{ left: `${(b.yourScore / max) * 100}%` }}
           title={`Your score ${b.yourScore}`}
         />
@@ -331,12 +331,14 @@ function AnalyticsPanel() {
           </div>
         </div>
 
-        <div className="mt-5 min-h-[11rem] flex-1">
+        <div className="mt-5 min-h-[12rem] flex-1">
           {tab === "trend" ? (
-            <ConvertChartFrame heightClass="h-44">
+            <ConvertChartFrame heightClass="h-48">
               <ReadinessTrend
                 points={[...convertPreviewTrend]}
                 forceChart
+                showBands
+                showLegend
                 forecast={{
                   current: convertPreviewBaseline.currentScore,
                   projected: projectedScore,
@@ -345,12 +347,12 @@ function AnalyticsPanel() {
             </ConvertChartFrame>
           ) : null}
           {tab === "velocity" ? (
-            <ConvertChartFrame heightClass="h-44">
-              <RemediationVelocityChart points={convertPreviewVelocity} />
+            <ConvertChartFrame heightClass="h-48">
+              <RemediationVelocityChart points={convertPreviewVelocity} forceChart />
             </ConvertChartFrame>
           ) : null}
           {tab === "deadlines" ? (
-            <div className="space-y-3 py-2">
+            <div className="py-1">
               <MigrationGantt />
             </div>
           ) : null}

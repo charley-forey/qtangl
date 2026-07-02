@@ -29,7 +29,7 @@ export default function QDayLearningStrip() {
       </div>
 
       <div className="grid gap-6 lg:grid-cols-2">
-        <MoscaCalculator />
+        <MoscaCalculator bridgeToAssess />
         <Card tone="panel" className="rounded-[var(--radius-xl)]">
           <Eyebrow>Example Mosca timeline</Eyebrow>
           <p className="mt-3 text-sm text-[var(--color-gray-400)]">

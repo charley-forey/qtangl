@@ -1,21 +1,55 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 
+import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
 import Eyebrow from "@/components/ui/Eyebrow";
 import { trackEvent } from "@/lib/analytics";
+import {
+  MOSCA_PARAM_X,
+  MOSCA_PARAM_Y,
+  MOSCA_PARAM_Z,
+  appendMoscaToParams,
+  moscaInequalityHolds,
+  readMoscaFromSearchParams,
+} from "@/lib/assess-mosca-url";
 
-export default function MoscaCalculator() {
-  const [dataYears, setDataYears] = useState(10);
-  const [migrationYears, setMigrationYears] = useState(5);
-  const [quantumYears, setQuantumYears] = useState(8);
+type MoscaCalculatorProps = {
+  bridgeToAssess?: boolean;
+};
 
-  const holds = dataYears + migrationYears > quantumYears;
+export default function MoscaCalculator({ bridgeToAssess = false }: MoscaCalculatorProps) {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const fromUrl = bridgeToAssess ? readMoscaFromSearchParams(searchParams) : null;
+
+  const [dataYears, setDataYears] = useState(fromUrl?.dataYears ?? 10);
+  const [migrationYears, setMigrationYears] = useState(fromUrl?.migrationYears ?? 5);
+  const [quantumYears, setQuantumYears] = useState(fromUrl?.quantumYears ?? 8);
+
+  const holds = moscaInequalityHolds({ dataYears, migrationYears, quantumYears });
 
   useEffect(() => {
     trackEvent("hndl_mosca_calc_run", { holds });
   }, [dataYears, migrationYears, quantumYears, holds]);
+
+  useEffect(() => {
+    if (!bridgeToAssess) return;
+    const inputs = readMoscaFromSearchParams(searchParams);
+    if (!inputs) return;
+    setDataYears(inputs.dataYears);
+    setMigrationYears(inputs.migrationYears);
+    setQuantumYears(inputs.quantumYears);
+  }, [bridgeToAssess, searchParams]);
+
+  function applyToScanner() {
+    const params = new URLSearchParams(searchParams.toString());
+    appendMoscaToParams(params, { dataYears, migrationYears, quantumYears });
+    trackEvent("assess_mosca_bridge_applied", { holds });
+    router.push(`/assess?${params.toString()}#scanner`);
+  }
 
   return (
     <Card tone="feature" size="lg" className="rounded-[var(--radius-feature)]">
@@ -69,6 +103,14 @@ export default function MoscaCalculator() {
           {holds ? "Inequality holds — HNDL exposure today." : "Inequality does not hold — lower immediate HNDL pressure."}
         </p>
       </div>
+      {bridgeToAssess ? (
+        <div className="mt-6 flex flex-wrap gap-3">
+          <Button onClick={applyToScanner}>Apply to scanner</Button>
+          <p className="self-center text-xs text-[var(--color-gray-500)]">
+            Syncs {MOSCA_PARAM_X}/{MOSCA_PARAM_Y}/{MOSCA_PARAM_Z} URL params for your assessment.
+          </p>
+        </div>
+      ) : null}
     </Card>
   );
 }

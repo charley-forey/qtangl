@@ -1,47 +1,61 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 import Card from "@/components/ui/Card";
 import Eyebrow from "@/components/ui/Eyebrow";
 import Button from "@/components/ui/Button";
 import {
   assessBoardReadoutPreview,
-  assessPdfPreviewSections,
   assessVerifyPreview,
 } from "@/lib/copy/readiness-assess-demos";
+import {
+  assessDeliverableCbomSample,
+  deliverableCbomHighlights,
+  deliverablePreviewSections,
+  type DeliverablePreviewKey,
+} from "@/lib/copy/assess-deliverable-preview";
 import { sampleCbomPath } from "@/lib/copy/readiness-value";
 import { trackAssessLandingCta, trackAssessVerifyLink } from "@/lib/analytics/assess-landing";
 
 type Tab = "pdf" | "cbom" | "verify" | "board";
 
-const SAMPLE_CBOM_SNIPPET = `{
-  "bomFormat": "CycloneDX",
-  "specVersion": "1.6",
-  "components": [
-    {
-      "type": "cryptographic-asset",
-      "name": "api.regional-bank.example:443",
-      "cryptoProperties": {
-        "assetType": "related-crypto-material",
-        "relatedCryptoMaterialProperties": {
-          "type": "public-key",
-          "algorithmRef": "RSA-2048"
-        }
-      }
-    }
-  ]
-}`;
+function highlightCbomJson(json: string, key: DeliverablePreviewKey | null): string {
+  if (!key) return json;
+  const needles = deliverableCbomHighlights[key];
+  return json
+    .split("\n")
+    .map((line) => {
+      const match = needles.some((needle) => line.includes(needle));
+      return match ? `>>> ${line}` : line;
+    })
+    .join("\n");
+}
 
 export default function AssessDeliverablePreview() {
   const [tab, setTab] = useState<Tab>("pdf");
+  const [selectedKey, setSelectedKey] = useState<DeliverablePreviewKey | null>("readiness");
+
+  const cbomJson = useMemo(
+    () => JSON.stringify(assessDeliverableCbomSample, null, 2),
+    []
+  );
+  const cbomDisplay = useMemo(
+    () => highlightCbomJson(cbomJson, tab === "cbom" ? selectedKey : null),
+    [cbomJson, selectedKey, tab]
+  );
+
+  function selectPdfItem(key: DeliverablePreviewKey) {
+    setSelectedKey(key);
+    setTab("cbom");
+  }
 
   return (
     <Card tone="panel" className="rounded-[var(--radius-xl)]">
       <Eyebrow>Deliverable preview — illustrative</Eyebrow>
       <p className="mt-3 text-sm leading-7 text-[var(--color-gray-400)]">
-        Every assessment exports board-ready PDF, CycloneDX CBOM, and a verify receipt auditors can check
-        independently — not a formal attestation.
+        Click a PDF outline item to highlight the matching CBOM field — every assessment exports board-ready
+        PDF, CycloneDX CBOM, and a verify receipt auditors can check independently.
       </p>
 
       <div className="mt-6 flex flex-wrap gap-2">
@@ -72,22 +86,45 @@ export default function AssessDeliverablePreview() {
       <div className="mt-4 overflow-x-auto rounded-xl border border-[var(--border-subtle)] bg-black/60 p-4">
         {tab === "pdf" ? (
           <div className="space-y-4 text-sm">
-            {assessPdfPreviewSections.map((section) => (
-              <div key={section.title}>
-                <p className="font-semibold text-white">{section.title}</p>
-                <ul className="mt-2 list-disc space-y-1 pl-5 text-[var(--color-gray-300)]">
-                  {section.items.map((item) => (
-                    <li key={item}>{item}</li>
+            {deliverablePreviewSections.map((section) => (
+              <div key={section.pdfTitle}>
+                <p className="font-semibold text-white">{section.pdfTitle}</p>
+                <ul className="mt-2 list-none space-y-1 pl-0 text-[var(--color-gray-300)]">
+                  {section.pdfItems.map((item) => (
+                    <li key={item.label}>
+                      <button
+                        type="button"
+                        onClick={() => selectPdfItem(item.key)}
+                        className={[
+                          "text-left underline decoration-dotted underline-offset-4 hover:text-white",
+                          selectedKey === item.key ? "text-white" : "",
+                        ].join(" ")}
+                      >
+                        {item.label}
+                      </button>
+                    </li>
                   ))}
                 </ul>
               </div>
             ))}
+            <p className="text-xs text-[var(--color-gray-500)]">
+              Selected item syncs with the CBOM tab — illustrative sample only.
+            </p>
           </div>
         ) : null}
 
         {tab === "cbom" ? (
           <div>
-            <pre className="text-xs leading-6 text-emerald-200/90">{SAMPLE_CBOM_SNIPPET}</pre>
+            <pre className="text-xs leading-6 text-emerald-200/90">
+              {cbomDisplay.split("\n").map((line, index) => (
+                <span
+                  key={`${index}-${line.slice(0, 12)}`}
+                  className={line.startsWith(">>>") ? "block bg-emerald-500/15 text-emerald-100" : "block"}
+                >
+                  {line.replace(/^>>> /, "")}
+                </span>
+              ))}
+            </pre>
             <Button
               href={sampleCbomPath}
               variant="secondary"

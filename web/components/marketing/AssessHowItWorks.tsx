@@ -28,48 +28,35 @@ export default function AssessHowItWorks() {
         <h2 className="heading-section mt-4">Three paths to your baseline</h2>
       </div>
 
-      <ol className="mt-8 hidden gap-4 lg:grid lg:grid-cols-4">
+      <ol className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {assessHowItWorks.map((item, index) => (
-          <li
-            key={item.step}
-            className="rounded-xl border border-[var(--border-subtle)] bg-black/20 px-4 py-5"
-          >
-            <p className="text-label">
-              <span aria-hidden>{STEP_ICONS[index]}</span> Step {item.step}
-            </p>
-            <p className="mt-2 text-sm font-semibold text-white">{item.title}</p>
-            <p className="mt-2 text-xs leading-6 text-[var(--color-gray-400)]">{item.detail}</p>
-            {item.step <= 2 ? (
-              <Link href="#scanner" className="mt-3 inline-block text-xs text-white underline">
-                Go to scanner
-              </Link>
-            ) : null}
-            {item.step === 3 ? (
-              <div className="mt-4 space-y-3">
-                <ReadinessGauge score={58.2} />
-                <MoscaTimeline mosca={sampleMosca} />
-              </div>
-            ) : null}
-            {item.step === 4 ? (
-              <Link href="#deliverables" className="mt-3 inline-block text-xs text-white underline">
-                Preview deliverables
-              </Link>
-            ) : null}
+          <li key={item.step}>
+            <Card tone="ghost" className="h-full rounded-[var(--radius-xl)]">
+              <p className="text-label">
+                <span aria-hidden>{STEP_ICONS[index]}</span> Step {item.step}
+              </p>
+              <p className="mt-2 text-sm font-semibold text-white">{item.title}</p>
+              <p className="mt-2 text-xs leading-6 text-[var(--color-gray-400)]">{item.detail}</p>
+              {item.step <= 2 ? (
+                <Link href="#scanner" className="mt-3 inline-block text-xs text-white underline">
+                  Go to scanner
+                </Link>
+              ) : null}
+              {item.step === 3 ? (
+                <div className="mt-4 space-y-3">
+                  <ReadinessGauge score={58.2} />
+                  <MoscaTimeline mosca={sampleMosca} />
+                </div>
+              ) : null}
+              {item.step === 4 ? (
+                <Link href="#deliverables" className="mt-3 inline-block text-xs text-white underline">
+                  Preview deliverables
+                </Link>
+              ) : null}
+            </Card>
           </li>
         ))}
       </ol>
-
-      <div className="mt-8 space-y-3 lg:hidden">
-        {assessHowItWorks.map((item, index) => (
-          <Card key={item.step} tone="ghost" className="rounded-[var(--radius-xl)]">
-            <p className="text-label">
-              <span aria-hidden>{STEP_ICONS[index]}</span> Step {item.step}
-            </p>
-            <p className="mt-2 text-sm font-semibold text-white">{item.title}</p>
-            <p className="mt-2 text-xs leading-6 text-[var(--color-gray-400)]">{item.detail}</p>
-          </Card>
-        ))}
-      </div>
 
       <p className="mt-6">
         <Button href="/assess/methodology" variant="secondary" size="sm">

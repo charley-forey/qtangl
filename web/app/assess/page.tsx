@@ -1,24 +1,24 @@
+import { Suspense } from "react";
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 
 import AssessHero from "@/components/marketing/AssessHero";
 import AssessLandingMarketing from "@/components/marketing/AssessLandingMarketing";
+import AssessMarketingErrorBoundary from "@/components/marketing/AssessMarketingErrorBoundary";
 import AssessPageShell, { AssessPageProvider } from "@/components/marketing/AssessPageShell";
-import ApiPreviewSection from "@/components/marketing/ApiPreviewSection";
 import CTA from "@/components/marketing/CTA";
 import ContentQualityStrip from "@/components/marketing/ContentQualityStrip";
-import QDayLearningStrip from "@/components/marketing/QDayLearningStrip";
 import AssessPhaseRibbon from "@/components/layout/AssessPhaseRibbon";
 import PageShell from "@/components/layout/PageShell";
 import Section from "@/components/layout/Section";
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
 import AssessScannerLoader from "@/components/pqc/AssessScannerLoader";
+import AssessMoscaContextBanner from "@/components/pqc/AssessMoscaContextBanner";
 import JsonLd from "@/components/seo/JsonLd";
-import StateTransition from "@/components/quantum/StateTransition";
 import { qtanglApiBaseUrl } from "@/lib/api";
 import { assessTrustSignals } from "@/lib/copy/readiness-assess-faq";
-import { assessApiPreview, assessOpsNote } from "@/lib/copy/readiness-assess-demos";
+import { assessOpsNote } from "@/lib/copy/readiness-assess-demos";
 import { assessPageCopy } from "@/lib/copy/readiness-assess";
 import { FALLBACK_SCENARIOS } from "@/lib/pqc-fallback";
 import { getPqcInventory, getPqcScenarios } from "@/lib/pqc";
@@ -35,11 +35,38 @@ import { assessFaqItems } from "@/lib/copy/readiness-assess-faq";
 const scannerDescription =
   "Live Q-Day assessment: inventory quantum-vulnerable cryptography, Mosca HNDL risk, and signed evidence exports.";
 
-export const metadata: Metadata = buildPageMetadata({
-  path: "/assess",
-  title: assessPageCopy.metadata.title,
-  description: assessPageCopy.metadata.description,
-});
+export async function generateMetadata({
+  searchParams,
+}: {
+  searchParams: Promise<{ mode?: string; scanId?: string }>;
+}): Promise<Metadata> {
+  const params = await searchParams;
+  const base = buildPageMetadata({
+    path: "/assess",
+    title: assessPageCopy.metadata.title,
+    description: assessPageCopy.metadata.description,
+  });
+
+  if (params.scanId) {
+    const scanId = params.scanId;
+    return {
+      ...base,
+      title: `Q-Day assessment — ${scanId}`,
+      openGraph: {
+        ...base.openGraph,
+        title: `Q-Day assessment — ${scanId}`,
+        images: [absoluteUrl(`/assess/og/${encodeURIComponent(scanId)}/opengraph-image`)],
+      },
+      twitter: {
+        ...base.twitter,
+        title: `Q-Day assessment — ${scanId}`,
+        images: [absoluteUrl(`/assess/og/${encodeURIComponent(scanId)}/opengraph-image`)],
+      },
+    };
+  }
+
+  return base;
+}
 
 async function prefetch() {
   try {
@@ -81,37 +108,23 @@ export default async function AssessPage({
       <AssessPageProvider>
         <AssessHero />
 
-        <Section gap="tight" id="learn" className="scroll-mt-28">
-          <StateTransition>
-            <QDayLearningStrip />
-          </StateTransition>
-        </Section>
-
         <AssessPhaseRibbon />
-
-        <Section gap="tight">
-          <StateTransition delay={0.04}>
-            <ApiPreviewSection
-              eyebrow={assessApiPreview.eyebrow}
-              title={assessApiPreview.title}
-              description={assessApiPreview.description}
-              docsHref={assessApiPreview.docsHref}
-            />
-          </StateTransition>
-        </Section>
 
         <AssessPageShell
           marketingBelow={
-            <>
+            <AssessMarketingErrorBoundary>
               <AssessLandingMarketing />
               <Section gap="tight" className="pb-0">
                 <CTA panel={assessPageCopy.ctaPanel} />
               </Section>
-            </>
+            </AssessMarketingErrorBoundary>
           }
         >
           <Section gap="tight" id="scanner" className="scroll-mt-28">
             <ContentQualityStrip />
+            <Suspense fallback={null}>
+              <AssessMoscaContextBanner />
+            </Suspense>
             <div className="mb-6 mt-6 flex flex-wrap gap-3">
               {assessTrustSignals.map((signal) => (
                 <Button key={signal.label} href={signal.href} variant="secondary" size="sm">

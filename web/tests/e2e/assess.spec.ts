@@ -17,6 +17,18 @@ test.describe("Assess page", () => {
     await expect(page.getByRole("link", { name: /Download full sample CBOM/i })).toBeVisible();
   });
 
+  test("scanner section appears above learn section", async ({ page }) => {
+    await page.goto("/assess");
+    const scannerY = await page.locator("#scanner").evaluate((el) => el.getBoundingClientRect().top);
+    const learnY = await page.locator("#learn").evaluate((el) => el.getBoundingClientRect().top);
+    expect(scannerY).toBeLessThan(learnY);
+  });
+
+  test("hero scenario pills are visible", async ({ page }) => {
+    await page.goto("/assess");
+    await expect(page.getByRole("button", { name: /Bank TLS inventory/i })).toBeVisible();
+  });
+
   test("intent picker shows three assessment paths", async ({ page }) => {
     await gotoAssessScanner(page);
     await expect(page.getByText(/See a sample report/i)).toBeVisible();

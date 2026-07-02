@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-import { assessPhaseRibbonItems, assessPhaseRibbonMobile } from "@/lib/copy/assess-phase-ribbon";
+import { assessPhaseRibbonItems } from "@/lib/copy/assess-phase-ribbon";
 
 type AssessPhaseRibbonProps = {
   className?: string;
@@ -40,28 +40,7 @@ export default function AssessPhaseRibbon({ className = "" }: AssessPhaseRibbonP
 
   const activeLabel =
     assessPhaseRibbonItems.find((item) => item.id === activeId)?.label ??
-    assessPhaseRibbonMobile.find((item) => item.id === activeId)?.label ??
     assessPhaseRibbonItems[0].label;
-
-  const renderLink = (id: string, label: string) => {
-    const isActive = id === activeId;
-    return (
-      <li key={id} className="shrink-0">
-        <a
-          href={`#${id}`}
-          className={[
-            "touch-target inline-flex min-h-[2.75rem] items-center rounded-full border px-3 py-1.5 text-xs uppercase tracking-[0.16em] transition-colors",
-            isActive
-              ? "border-[var(--border-strong)] bg-white/[0.08] text-white"
-              : "border-[var(--border)] text-[var(--color-gray-500)] hover:border-[var(--border-strong)] hover:text-[var(--color-gray-300)]",
-          ].join(" ")}
-          aria-current={isActive ? "location" : undefined}
-        >
-          {label}
-        </a>
-      </li>
-    );
-  };
 
   return (
     <div
@@ -75,11 +54,26 @@ export default function AssessPhaseRibbon({ className = "" }: AssessPhaseRibbonP
       <div className="mx-auto w-full max-w-[var(--container-wide)] px-[var(--gutter-mobile)] py-3 sm:px-[var(--gutter-tablet)] lg:px-[var(--gutter-desktop)]">
         <p className="text-label mb-2 md:hidden">{activeLabel}</p>
         <nav aria-label="Assess page sections">
-          <ul className="tech-scroll-fade hidden gap-2 overflow-x-auto pb-1 md:flex md:flex-wrap md:gap-3">
-            {assessPhaseRibbonItems.map((item) => renderLink(item.id, item.label))}
-          </ul>
-          <ul className="tech-scroll-fade flex gap-2 overflow-x-auto pb-1 md:hidden">
-            {assessPhaseRibbonMobile.map((item) => renderLink(item.id, item.label))}
+          <ul className="tech-scroll-fade flex gap-2 overflow-x-auto pb-1 md:flex-wrap md:gap-3">
+            {assessPhaseRibbonItems.map((item) => {
+              const isActive = item.id === activeId;
+              return (
+                <li key={item.id} className="shrink-0">
+                  <a
+                    href={`#${item.id}`}
+                    className={[
+                      "touch-target inline-flex min-h-[2.75rem] items-center rounded-full border px-3 py-1.5 text-xs uppercase tracking-[0.16em] transition-colors",
+                      isActive
+                        ? "border-[var(--border-strong)] bg-white/[0.08] text-white"
+                        : "border-[var(--border)] text-[var(--color-gray-500)] hover:border-[var(--border-strong)] hover:text-[var(--color-gray-300)]",
+                    ].join(" ")}
+                    aria-current={isActive ? "location" : undefined}
+                  >
+                    {item.label}
+                  </a>
+                </li>
+              );
+            })}
           </ul>
         </nav>
       </div>

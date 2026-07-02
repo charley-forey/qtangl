@@ -1,24 +1,28 @@
 import FeatureCard from "@/components/marketing/FeatureCard";
 import FrameworkCoverageStrip from "@/components/marketing/FrameworkCoverageStrip";
 import AssessCompareSection from "@/components/marketing/AssessCompareSection";
+import AssessConvertTeaserCompact from "@/components/marketing/AssessConvertTeaserCompact";
 import AssessDeliverablePreview from "@/components/marketing/AssessDeliverablePreview";
+import AssessDiscoveryTeaser from "@/components/marketing/AssessDiscoveryTeaser";
 import AssessFaqAccordion from "@/components/marketing/AssessFaqAccordion";
+import AssessFeatureFlagsStrip from "@/components/marketing/AssessFeatureFlagsStrip";
 import AssessHowItWorks from "@/components/marketing/AssessHowItWorks";
 import AssessMaturityTeaser from "@/components/marketing/AssessMaturityTeaser";
 import AssessMiniTeaser from "@/components/marketing/AssessMiniTeaser";
-import AssessMonitorTeaser from "@/components/marketing/AssessMonitorTeaser";
+import AssessMonitorTeaserCompact from "@/components/marketing/AssessMonitorTeaserCompact";
+import AssessPersonaPicker from "@/components/marketing/AssessPersonaPicker";
 import AssessSectionAnalytics from "@/components/marketing/AssessSectionAnalytics";
-import ConvertPreview from "@/components/marketing/ConvertPreview";
-import { ConvertDemoProviderWrapper } from "@/components/marketing/ConvertInteractiveBlock";
+import ApiPreviewSection from "@/components/marketing/ApiPreviewSection";
 import LiveTodayFootnote from "@/components/marketing/LiveTodayFootnote";
 import PlatformSampleEmbed from "@/components/marketing/PlatformSampleEmbed";
+import QDayLearningStrip from "@/components/marketing/QDayLearningStrip";
 import ValueProofStrip from "@/components/marketing/ValueProofStrip";
-import ContentQualityStrip from "@/components/marketing/ContentQualityStrip";
 import Section from "@/components/layout/Section";
 import Button from "@/components/ui/Button";
 import Eyebrow from "@/components/ui/Eyebrow";
 import StateTransition from "@/components/quantum/StateTransition";
 import TrustDogfoodSelfScan from "@/components/trust/TrustDogfoodSelfScan";
+import { assessApiPreview } from "@/lib/copy/readiness-assess-demos";
 import { assessPageCopy } from "@/lib/copy/readiness-assess";
 
 export default function AssessLandingMarketing() {
@@ -26,6 +30,27 @@ export default function AssessLandingMarketing() {
 
   return (
     <>
+      <Section gap="tight" id="learn" className="scroll-mt-28">
+        <StateTransition>
+          <QDayLearningStrip />
+        </StateTransition>
+      </Section>
+
+      <Section gap="tight">
+        <AssessPersonaPicker />
+      </Section>
+
+      <Section gap="tight">
+        <StateTransition delay={0.04}>
+          <ApiPreviewSection
+            eyebrow={assessApiPreview.eyebrow}
+            title={assessApiPreview.title}
+            description={assessApiPreview.description}
+            docsHref={assessApiPreview.docsHref}
+          />
+        </StateTransition>
+      </Section>
+
       <Section gap="tight">
         <AssessHowItWorks />
       </Section>
@@ -38,6 +63,7 @@ export default function AssessLandingMarketing() {
             <h2 className="heading-section mt-4">What every assessment exports</h2>
           </div>
           <div className="mt-8 space-y-6">
+            <AssessFeatureFlagsStrip />
             <AssessDeliverablePreview />
             <PlatformSampleEmbed />
             <ValueProofStrip />
@@ -48,7 +74,6 @@ export default function AssessLandingMarketing() {
                 "Public /verify for auditors",
               ]}
             />
-            <ContentQualityStrip />
           </div>
         </StateTransition>
       </Section>
@@ -76,7 +101,11 @@ export default function AssessLandingMarketing() {
       </Section>
 
       <Section gap="tight">
-        <AssessMonitorTeaser />
+        <AssessDiscoveryTeaser />
+      </Section>
+
+      <Section gap="tight">
+        <AssessMonitorTeaserCompact />
       </Section>
 
       <Section gap="tight">
@@ -117,9 +146,7 @@ export default function AssessLandingMarketing() {
       </Section>
 
       <Section gap="tight">
-        <ConvertDemoProviderWrapper>
-          <ConvertPreview />
-        </ConvertDemoProviderWrapper>
+        <AssessConvertTeaserCompact />
       </Section>
 
       <Section gap="tight">
@@ -135,9 +162,6 @@ export default function AssessLandingMarketing() {
         </div>
         <div className="mt-8">
           <AssessFaqAccordion />
-        </div>
-        <div className="mt-8">
-          <ContentQualityStrip />
         </div>
       </Section>
     </>

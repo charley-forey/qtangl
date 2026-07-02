@@ -3,6 +3,8 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
+import { isAssessPersona, personaDefaultTab } from "@/lib/assess-persona";
+import { appendMoscaToParams, readMoscaFromSearchParams } from "@/lib/assess-mosca-url";
 import {
   AUTORUN_SCENARIO_IDS,
   OQS_DEMO_HOST,
@@ -116,6 +118,11 @@ export function useAssessScan({
       const sid = overrides?.scanId ?? scanResponse?.scanId;
       if (sid) params.set("scanId", sid);
       if (activeTab !== "executive") params.set("tab", activeTab);
+      const persona = searchParams.get("persona");
+      if (isAssessPersona(persona)) params.set("persona", persona);
+      const mosca = readMoscaFromSearchParams(searchParams);
+      if (mosca) appendMoscaToParams(params, mosca);
+      if (searchParams.get("depth") === "lite") params.set("depth", "lite");
       if (!isProduction && searchParams.get("autorun") === "1") params.set("autorun", "1");
       router.replace(`${basePath}?${params.toString()}`, { scroll: false });
     },
@@ -167,7 +174,14 @@ export function useAssessScan({
     const session = searchParams.get("session");
     if (session) setBundleSessionId(session);
     const tabParam = searchParams.get("tab");
-    if (isAssessResultTab(tabParam)) setActiveTab(tabParam);
+    if (isAssessResultTab(tabParam)) {
+      setActiveTab(tabParam);
+    } else {
+      const personaParam = searchParams.get("persona");
+      if (isAssessPersona(personaParam)) {
+        setActiveTab(personaDefaultTab(personaParam));
+      }
+    }
     setUrlSynced(true);
   }, [searchParams, isProduction]);
 
@@ -408,7 +422,10 @@ export function useAssessScan({
         }
         setScanResponse(completed);
         setWizardCollapsed(true);
-        setActiveTab("executive");
+        const personaParam = searchParams.get("persona");
+        setActiveTab(
+          isAssessPersona(personaParam) ? personaDefaultTab(personaParam) : "executive"
+        );
         trackEvent("pqc_scan_completed", {
           scenarioId: activeScenarioId,
           assessMode: analyticsMode,
@@ -474,6 +491,7 @@ export function useAssessScan({
       industry,
       authorizedDomains,
       analyticsMode,
+      searchParams,
     ]
   );
 

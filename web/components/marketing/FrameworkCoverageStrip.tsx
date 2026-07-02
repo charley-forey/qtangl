@@ -34,14 +34,19 @@ export default function FrameworkCoverageStrip({ heading, intro }: FrameworkCove
                 <span className="text-[0.68rem] font-semibold uppercase tracking-[0.16em] text-[var(--color-gray-500)]">
                   {guide.eyebrow}
                 </span>
-                <span className="rounded-full bg-white/5 px-2.5 py-1 text-[0.65rem] font-medium text-[var(--color-gray-300)]">
+                <span
+                  className="rounded-full bg-white/5 px-2.5 py-1 text-[0.65rem] font-medium text-[var(--color-gray-300)]"
+                  title={`Compliance deadline: ${guide.deadline}`}
+                >
                   {guide.deadline}
                 </span>
               </div>
-              <p className="mt-3 text-sm font-semibold text-white group-hover:underline">
+              <p className="mt-3 text-sm font-semibold text-white group-hover:underline" title={guide.whyItMatters}>
                 {guide.title}
               </p>
-              <p className="mt-2 text-xs leading-6 text-[var(--color-gray-400)]">{guide.summary}</p>
+              <p className="mt-2 text-xs leading-6 text-[var(--color-gray-400)]" title={guide.qtanglMapping.join(" · ")}>
+                {guide.summary}
+              </p>
             </Link>
           </li>
         ))}
