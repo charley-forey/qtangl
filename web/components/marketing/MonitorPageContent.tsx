@@ -7,7 +7,6 @@ import FeatureCard from "@/components/marketing/FeatureCard";
 import FrameworkCoverageStrip from "@/components/marketing/FrameworkCoverageStrip";
 import LiveTodayFootnote from "@/components/marketing/LiveTodayFootnote";
 import MonitorAlertPreview from "@/components/marketing/MonitorAlertPreview";
-import MonitorAnchorNav from "@/components/marketing/MonitorAnchorNav";
 import MonitorAssessCompareStrip from "@/components/marketing/MonitorAssessCompareStrip";
 import MonitorCommandCenterPreview from "@/components/marketing/MonitorCommandCenterPreview";
 import MonitorDriftTimeline from "@/components/marketing/MonitorDriftTimeline";
@@ -54,7 +53,6 @@ export default function MonitorPageContent() {
     <MonitorScenarioProvider>
       <MonitorPageAnalytics />
       <MonitorStickyCta />
-      <MonitorAnchorNav />
 
       <Section gap="tight" className="pt-6 sm:pt-8">
         <MonitorHero />
