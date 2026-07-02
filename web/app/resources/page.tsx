@@ -27,6 +27,7 @@ export default function ResourcesPage() {
               title={card.title}
               description={card.description}
               href={card.href}
+              icon={card.icon}
               ctaLabel="Open →"
             />
           ))}

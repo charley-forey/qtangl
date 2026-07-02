@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ReactNode, useId } from "react";
 
 import CoverImage from "@/components/marketing/CoverImage";
+import MarketingIcon, { type MarketingIconName } from "@/components/marketing/MarketingIcon";
 import Eyebrow from "@/components/ui/Eyebrow";
 import Card from "@/components/ui/Card";
 import { isSvgCover } from "@/lib/cover-image";
@@ -13,6 +14,7 @@ type FeatureCardProps = {
   href?: string;
   children?: ReactNode;
   ctaLabel?: string;
+  icon?: MarketingIconName;
   imageSrc?: string;
   imageAlt?: string;
   imageLoading?: "eager" | "lazy";
@@ -26,6 +28,7 @@ export default function FeatureCard({
   href,
   children,
   ctaLabel,
+  icon,
   imageSrc,
   imageAlt,
   imageLoading = "lazy",
@@ -59,6 +62,9 @@ export default function FeatureCard({
               }
             />
           </div>
+        ) : null}
+        {icon && !imageSrc ? (
+          <MarketingIcon name={icon} className="h-7 w-7 text-[var(--color-gray-400)]" />
         ) : null}
         {eyebrow ? <Eyebrow>{eyebrow}</Eyebrow> : null}
         <h3 id={titleId} className="mt-3 text-xl font-semibold tracking-tight text-white">
