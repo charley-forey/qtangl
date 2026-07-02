@@ -28,6 +28,55 @@ export const monitorPageCopy = {
     { href: "#personas", label: "Personas" },
     { href: "#pilot", label: "Pilot" },
   ],
+  sectionNav: [
+    { id: "command-center", label: "Command center" },
+    { id: "drift-theater", label: "Drift theater" },
+    { id: "personas", label: "Personas" },
+    { id: "enterprise-proof", label: "Enterprise proof" },
+    { id: "pilot", label: "Pilot" },
+  ],
+  proofItems: [
+    {
+      icon: "drift" as const,
+      title: "Continuous drift diff",
+      description: "Scan-to-scan deltas for TLS, certs, host fleet, code, and CBOM — not a one-time snapshot.",
+    },
+    {
+      icon: "evidence" as const,
+      title: "Signed QBR exports",
+      description: "Executive digest and board PDF with verify links auditors can check independently.",
+    },
+    {
+      icon: "velocity" as const,
+      title: "SIEM-ready webhooks",
+      description: "qtangl-webhook-v2 payloads map to Slack, Teams, Splunk, and your GRC pipeline.",
+    },
+    {
+      icon: "scope" as const,
+      title: "Honest inventory aid",
+      description: "Quantifies quantum-vulnerable exposure and drift — not certification or formal attestation.",
+    },
+  ],
+  chapters: {
+    commandCenter: {
+      eyebrow: "Command center",
+      title: "Your crypto readiness SOC — illustrative preview",
+      description:
+        "Toggle industry scenarios to explore drift trends, multi-source deltas, and business-unit heatmaps. Connect your API key on the dashboard for live tenant data.",
+    },
+    driftTheater: {
+      eyebrow: "Drift theater",
+      title: "Scrub weeks, model schedules, route alerts",
+      description:
+        "Walk through scheduled re-scans, estimate quota usage, and preview webhook payloads before you enable Monitor on your estate.",
+    },
+    enterprise: {
+      eyebrow: "Enterprise proof",
+      title: "Built for board decks and MSSP rollups",
+      description:
+        "Persona views, peer benchmarks, framework deadlines, and remediation velocity — the proof procurement and leadership teams expect.",
+    },
+  },
   howItWorks: [
     {
       step: 1,

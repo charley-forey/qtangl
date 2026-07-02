@@ -20,7 +20,7 @@ export default function MonitorStickyCta() {
   if (!visible) return null;
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-40 border-t border-[var(--border)] bg-black/90 px-4 py-3 backdrop-blur-md">
+    <div className="fixed bottom-0 left-0 right-0 z-40 border-t border-[var(--border)] bg-black/92 px-[var(--gutter-mobile)] py-3 backdrop-blur-md">
       <div className="mx-auto flex max-w-[var(--container-wide)] flex-wrap items-center justify-between gap-3">
         <p className="text-sm text-[var(--color-gray-300)]">
           Continuous crypto drift monitoring — illustrative previews on this page.

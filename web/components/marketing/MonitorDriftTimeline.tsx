@@ -28,7 +28,7 @@ export default function MonitorDriftTimeline() {
   );
 
   return (
-    <Card tone="panel" className="rounded-[var(--radius-xl)]" id="drift-timeline">
+    <Card tone="panel" className="rounded-[var(--radius-xl)] p-5 sm:p-6 scroll-mt-32" id="drift-timeline">
       <Eyebrow>Drift timeline — scrub weekly scans</Eyebrow>
       <p className="mt-2 text-sm text-[var(--color-gray-400)]">
         Use the slider or arrow keys to walk through {weeks.length} weeks of scheduled re-scans.

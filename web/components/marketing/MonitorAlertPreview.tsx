@@ -33,7 +33,7 @@ export default function MonitorAlertPreview() {
   }
 
   return (
-    <Card tone="panel" className="rounded-[var(--radius-xl)]" id="alerts">
+    <Card tone="panel" className="rounded-[var(--radius-xl)] p-5 sm:p-6" id="alerts">
       <Eyebrow>Alert preview — Monitor tier</Eyebrow>
       <p className="mt-3 text-sm leading-7 text-[var(--color-gray-400)]">
         When a scheduled scan completes, Qtangl posts to Slack/Teams webhooks and sends structured{" "}

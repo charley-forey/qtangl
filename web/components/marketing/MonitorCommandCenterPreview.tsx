@@ -28,41 +28,42 @@ export default function MonitorCommandCenterPreview() {
   const currentDiff = scenario.weeks[weekIndex]?.diff ?? scenario.weeks[scenario.weeks.length - 1]!.diff;
 
   return (
-    <div id="command-center" className="scroll-mt-28 space-y-6">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+    <div className="space-y-6 sm:space-y-8">
+      <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
         <MonitorScenarioPicker />
         <MonitorLivePulse />
       </div>
 
       <MonitorHeroKpiStrip />
 
-      <div className="grid gap-4 lg:grid-cols-12">
-        <Card tone="panel" className="rounded-[var(--radius-xl)] lg:col-span-7">
+      <div className="grid gap-4 sm:gap-5 lg:grid-cols-12 lg:gap-6">
+        <Card tone="panel" className="rounded-[var(--radius-xl)] p-5 sm:p-6 lg:col-span-7">
           <Eyebrow>Readiness trend + forecast</Eyebrow>
-          <div className="mt-4">
+          <div className="mt-5">
             <MonitorReadinessChart
               points={trendPoints}
               forecast={scenario.forecast}
               anomalyIndex={weekIndex >= 4 ? 4 : undefined}
+              height={200}
             />
           </div>
         </Card>
 
-        <Card tone="panel" className="rounded-[var(--radius-xl)] lg:col-span-5">
+        <Card tone="panel" className="rounded-[var(--radius-xl)] p-5 sm:p-6 lg:col-span-5">
           <Eyebrow>Drift by source (7d)</Eyebrow>
-          <div className="mt-4">
+          <div className="mt-5">
             <MonitorDriftSourcesChart data={scenario.driftBySource} />
           </div>
         </Card>
 
-        <Card tone="panel" className="rounded-[var(--radius-xl)] lg:col-span-7">
+        <Card tone="panel" className="rounded-[var(--radius-xl)] p-5 sm:p-6 lg:col-span-7">
           <Eyebrow>Latest scan diff</Eyebrow>
-          <div className="mt-4">
+          <div className="mt-5">
             <ScanDiffPanel diff={currentDiff} />
           </div>
         </Card>
 
-        <div className="grid gap-4 sm:grid-cols-2 lg:col-span-5 lg:grid-cols-1">
+        <div className="grid gap-4 sm:gap-5 lg:col-span-5 lg:grid-cols-1">
           <SeverityDonut slices={scenario.severitySlices} />
           <AlgorithmBreakdown
             rows={scenario.algorithmRows}
@@ -77,7 +78,7 @@ export default function MonitorCommandCenterPreview() {
           />
         </div>
 
-        <div className="grid gap-4 lg:col-span-5">
+        <div className="lg:col-span-5">
           <MonitorEvidenceFreshness />
         </div>
 
@@ -91,9 +92,9 @@ export default function MonitorCommandCenterPreview() {
           />
         </div>
 
-        <Card tone="feature" className="rounded-[var(--radius-xl)] lg:col-span-6">
+        <Card tone="feature" className="rounded-[var(--radius-xl)] p-5 sm:p-6 lg:col-span-6">
           <Eyebrow>Scheduled monitoring</Eyebrow>
-          <dl className="mt-4 grid gap-4 sm:grid-cols-2">
+          <dl className="mt-5 grid gap-4 sm:grid-cols-2 sm:gap-5">
             <div>
               <dt className="text-xs uppercase tracking-[0.14em] text-[var(--color-gray-500)]">Target</dt>
               <dd className="mt-1 text-sm text-white">{scenario.target}</dd>

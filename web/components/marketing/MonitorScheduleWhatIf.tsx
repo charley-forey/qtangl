@@ -35,7 +35,7 @@ export default function MonitorScheduleWhatIf() {
   const quotaPct = Math.min(100, Math.round((100 * projectedScans) / QUOTA_SCANS_PER_MONTH));
 
   return (
-    <Card tone="panel" className="rounded-[var(--radius-xl)]">
+    <Card tone="panel" className="rounded-[var(--radius-xl)] p-5 sm:p-6">
       <Eyebrow>Schedule what-if</Eyebrow>
       <p className="mt-2 text-sm text-[var(--color-gray-400)]">
         Estimate scan quota usage before enabling schedules on your tenant.

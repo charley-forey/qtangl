@@ -34,7 +34,7 @@ export default function MonitorPersonaTabs() {
   }
 
   return (
-    <div id="personas" className="scroll-mt-28 space-y-6">
+    <div className="space-y-6 sm:space-y-8">
       <div className="content-reading">
         <Eyebrow>Personas</Eyebrow>
         <h2 className="heading-section mt-4">Built for how your team works</h2>

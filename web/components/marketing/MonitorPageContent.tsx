@@ -12,25 +12,25 @@ import MonitorAssessCompareStrip from "@/components/marketing/MonitorAssessCompa
 import MonitorCommandCenterPreview from "@/components/marketing/MonitorCommandCenterPreview";
 import MonitorDriftTimeline from "@/components/marketing/MonitorDriftTimeline";
 import MonitorFaq from "@/components/marketing/MonitorFaq";
-import MonitorHeroKpiStrip from "@/components/marketing/MonitorHeroKpiStrip";
+import MonitorHero from "@/components/marketing/MonitorHero";
 import MonitorIntegrationStrip from "@/components/marketing/MonitorIntegrationStrip";
 import MonitorJourneyStrip from "@/components/marketing/MonitorJourneyStrip";
 import MonitorPageAnalytics from "@/components/marketing/MonitorPageAnalytics";
 import MonitorPeerBenchmarkPreview from "@/components/marketing/MonitorPeerBenchmarkPreview";
 import MonitorPersonaTabs from "@/components/marketing/MonitorPersonaTabs";
+import MonitorProofStrip from "@/components/marketing/MonitorProofStrip";
 import MonitorRoiMini from "@/components/marketing/MonitorRoiMini";
 import MonitorScheduleWhatIf from "@/components/marketing/MonitorScheduleWhatIf";
 import MonitorRemediationSection from "@/components/marketing/MonitorRemediationSection";
+import MonitorSectionHeader from "@/components/marketing/MonitorSectionHeader";
 import { MonitorScenarioProvider } from "@/components/marketing/MonitorScenarioContext";
 import MonitorStickyCta from "@/components/marketing/MonitorStickyCta";
 import MonitorWorkflowDiagram from "@/components/marketing/MonitorWorkflowDiagram";
 import ProductModeBanner from "@/components/marketing/ProductModeBanner";
 import ValueProofStrip from "@/components/marketing/ValueProofStrip";
-import PageHero from "@/components/layout/PageHero";
 import Section from "@/components/layout/Section";
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
-import Eyebrow from "@/components/ui/Eyebrow";
 import {
   monitorDriftSummaryRequest,
   monitorDriftSummaryResponse,
@@ -38,8 +38,17 @@ import {
 import { monitorPageCopy } from "@/lib/copy/readiness-monitor";
 
 export default function MonitorPageContent() {
-  const { hero, trustSignals, howItWorks, compareAssess, features, framework, api, dashboard, cta, liveToday } =
-    monitorPageCopy;
+  const {
+    howItWorks,
+    compareAssess,
+    features,
+    framework,
+    api,
+    dashboard,
+    cta,
+    liveToday,
+    chapters,
+  } = monitorPageCopy;
 
   return (
     <MonitorScenarioProvider>
@@ -47,128 +56,106 @@ export default function MonitorPageContent() {
       <MonitorStickyCta />
       <MonitorAnchorNav />
 
-      <PageHero
-        eyebrow={hero.eyebrow}
-        title={hero.title}
-        description={hero.description}
-        actions={hero.actions}
-        actionsSlot={
-          <div className="mt-8 space-y-6">
-            <div className="flex flex-wrap gap-3">
-              {hero.actions.map((action) => (
-                <Button
-                  key={action.href}
-                  href={action.href}
-                  variant={"variant" in action && action.variant === "secondary" ? "secondary" : "primary"}
-                >
-                  {action.label}
-                </Button>
-              ))}
-            </div>
-            <div className="flex flex-wrap gap-2">
-              {trustSignals.map((signal) => (
-                <Button key={signal.label} href={signal.href} variant="secondary" size="sm">
-                  {signal.label}
-                </Button>
-              ))}
-            </div>
-          </div>
-        }
-      />
-
-      <Section gap="tight">
-        <MonitorJourneyStrip />
-      </Section>
-
-      <Section gap="tight">
-        <MonitorHeroKpiStrip />
-      </Section>
-
-      <Section gap="tight">
-        <div className="content-reading">
-          <Eyebrow>Monitor loop</Eyebrow>
-          <h2 className="heading-section mt-4">How continuous monitoring works</h2>
+      <Section gap="tight" className="pt-6 sm:pt-8">
+        <MonitorHero />
+        <div className="mt-8 sm:mt-10">
+          <MonitorJourneyStrip />
         </div>
-        <div className="mt-8">
+        <div className="mt-8 sm:mt-10">
+          <MonitorProofStrip />
+        </div>
+      </Section>
+
+      <Section gap="normal">
+        <MonitorSectionHeader
+          eyebrow="Monitor loop"
+          title="How continuous monitoring works"
+          description="Schedule → scan → diff → alert → dashboard or SIEM. Hover each step to see what happens at that stage."
+        />
+        <div className="mt-8 sm:mt-10">
           <MonitorWorkflowDiagram />
         </div>
       </Section>
 
-      <Section gap="tight">
-        <ProductModeBanner mode="preview" />
-        <MonitorCommandCenterPreview />
-        <LiveTodayFootnote features={[...liveToday]} />
+      <Section gap="loose" id="command-center" className="scroll-mt-32">
+        <MonitorSectionHeader
+          eyebrow={chapters.commandCenter.eyebrow}
+          title={chapters.commandCenter.title}
+          description={chapters.commandCenter.description}
+        />
+        <div className="mt-8 space-y-6 sm:mt-10 sm:space-y-8">
+          <ProductModeBanner mode="preview" />
+          <MonitorCommandCenterPreview />
+          <LiveTodayFootnote features={[...liveToday]} />
+        </div>
       </Section>
 
-      <Section gap="tight">
-        <MonitorDriftTimeline />
+      <Section gap="loose" id="drift-theater" className="scroll-mt-32">
+        <MonitorSectionHeader
+          eyebrow={chapters.driftTheater.eyebrow}
+          title={chapters.driftTheater.title}
+          description={chapters.driftTheater.description}
+        />
+        <div className="mt-8 space-y-6 sm:mt-10 sm:space-y-8">
+          <MonitorDriftTimeline />
+          <MonitorScheduleWhatIf />
+          <MonitorAlertPreview />
+        </div>
       </Section>
 
-      <Section gap="tight">
-        <MonitorScheduleWhatIf />
-      </Section>
-
-      <Section gap="tight">
-        <MonitorAlertPreview />
-      </Section>
-
-      <Section gap="tight">
+      <Section gap="loose" id="personas" className="scroll-mt-32">
         <MonitorPersonaTabs />
       </Section>
 
-      <Section gap="tight">
-        <MonitorRemediationSection />
-      </Section>
-
-      <Section gap="tight">
-        <FrameworkCoverageStrip heading={framework.heading} intro={framework.intro} />
-        <div className="mt-10">
+      <Section gap="loose" id="enterprise-proof" className="scroll-mt-32">
+        <MonitorSectionHeader
+          eyebrow={chapters.enterprise.eyebrow}
+          title={chapters.enterprise.title}
+          description={chapters.enterprise.description}
+        />
+        <div className="mt-8 space-y-6 sm:mt-10 sm:space-y-8">
+          <MonitorRemediationSection />
+          <MonitorPeerBenchmarkPreview />
+          <FrameworkCoverageStrip heading={framework.heading} intro={framework.intro} />
           <DeadlineTimeline />
         </div>
       </Section>
 
-      <Section gap="tight">
-        <MonitorPeerBenchmarkPreview />
-      </Section>
-
-      <Section gap="tight">
-        <div className="content-reading">
-          <Eyebrow>How it works</Eyebrow>
-          <h2 className="heading-section mt-4">From baseline to QBR-ready trends</h2>
-        </div>
-        <ol className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <Section gap="normal">
+        <MonitorSectionHeader
+          eyebrow="How it works"
+          title="From baseline to QBR-ready trends"
+        />
+        <ol className="mt-8 grid gap-4 sm:mt-10 sm:grid-cols-2 sm:gap-5 lg:grid-cols-4">
           {howItWorks.map((item) => (
             <li
               key={item.step}
-              className="rounded-xl border border-[var(--border-subtle)] bg-black/20 px-4 py-5"
+              className="rounded-[var(--radius-xl)] border border-[var(--border-subtle)] bg-black/25 px-5 py-6"
             >
               <p className="text-label">Step {item.step}</p>
-              <p className="mt-2 text-sm font-semibold text-white">{item.title}</p>
-              <p className="mt-2 text-xs leading-6 text-[var(--color-gray-400)]">{item.detail}</p>
+              <p className="mt-3 text-sm font-semibold text-white">{item.title}</p>
+              <p className="mt-2 text-sm leading-6 text-[var(--color-gray-400)]">{item.detail}</p>
             </li>
           ))}
         </ol>
       </Section>
 
-      <Section gap="tight">
-        <div className="content-reading">
-          <Eyebrow>{compareAssess.eyebrow}</Eyebrow>
-          <h2 className="heading-section mt-4">{compareAssess.title}</h2>
-        </div>
-        <div className="mt-8">
+      <Section gap="normal">
+        <MonitorSectionHeader eyebrow={compareAssess.eyebrow} title={compareAssess.title} />
+        <div className="mt-8 sm:mt-10">
           <MonitorAssessCompareStrip />
         </div>
       </Section>
 
-      <Section gap="tight">
+      <Section gap="normal">
         <MonitorIntegrationStrip />
       </Section>
 
-      <Section gap="tight">
+      <Section gap="normal">
         <MonitorRoiMini />
       </Section>
 
-      <Section gap="tight">
+      <Section gap="normal">
         <ApiPreviewSection
           eyebrow={api.eyebrow}
           title={api.title}
@@ -179,22 +166,17 @@ export default function MonitorPageContent() {
         />
       </Section>
 
-      <Section gap="tight">
-        <ValueProofStrip
-          eyebrow="Why Monitor"
-          title="Evidence, drift, and honest scope"
-        />
+      <Section gap="normal">
+        <ValueProofStrip eyebrow="Why Monitor" title="Evidence, drift, and honest scope" />
       </Section>
 
-      <Section gap="tight">
-        <div className="content-reading">
-          <Eyebrow>{features.eyebrow}</Eyebrow>
-          <h2 className="heading-section mt-4">{features.title}</h2>
-          {"opsNote" in features && features.opsNote ? (
-            <p className="mt-4 max-w-3xl text-sm text-[var(--color-gray-400)]">{features.opsNote}</p>
-          ) : null}
-        </div>
-        <div className="mt-10 grid gap-6 md:grid-cols-2">
+      <Section gap="normal">
+        <MonitorSectionHeader
+          eyebrow={features.eyebrow}
+          title={features.title}
+          description={features.opsNote}
+        />
+        <div className="mt-8 grid gap-6 sm:mt-10 md:grid-cols-2 md:gap-8">
           {features.items.map((item) => (
             <FeatureCard
               key={item.title}
@@ -205,7 +187,7 @@ export default function MonitorPageContent() {
               <p>{item.description}</p>
               {"docHref" in item && item.docHref ? (
                 <p className="mt-3">
-                  <a href={item.docHref} className="text-sm text-sky-400 underline">
+                  <a href={item.docHref} className="text-sm text-sky-400 underline underline-offset-4">
                     Read the guide →
                   </a>
                 </p>
@@ -215,15 +197,13 @@ export default function MonitorPageContent() {
         </div>
       </Section>
 
-      <Section gap="tight">
-        <div className="content-reading">
-          <Eyebrow>{dashboard.eyebrow}</Eyebrow>
-          <h2 className="heading-section mt-4">{dashboard.title}</h2>
-          <p className="mt-4 max-w-3xl text-base leading-8 text-[var(--color-gray-300)]">
-            {dashboard.description}
-          </p>
-        </div>
-        <div className="mt-8 flex flex-wrap gap-3">
+      <Section gap="normal">
+        <MonitorSectionHeader
+          eyebrow={dashboard.eyebrow}
+          title={dashboard.title}
+          description={dashboard.description}
+        />
+        <div className="mt-8 flex flex-wrap gap-3 sm:mt-10">
           <Button href={dashboard.href}>{dashboard.cta}</Button>
           <Button href="/access#monitor" variant="secondary">
             Request Monitor pilot
@@ -231,15 +211,15 @@ export default function MonitorPageContent() {
         </div>
       </Section>
 
-      <Section gap="tight">
+      <Section gap="normal">
         <ContentQualityStrip />
-        <div className="mt-8">
+        <div className="mt-8 sm:mt-10">
           <MonitorFaq />
         </div>
       </Section>
 
-      <Section gap="tight" className="pb-24" id="pilot">
-        <Card tone="feature" size="lg" className="rounded-[var(--radius-feature)]">
+      <Section gap="loose" className="pb-28 sm:pb-32" id="pilot">
+        <Card tone="feature" size="lg" className="rounded-[var(--radius-feature)] p-6 sm:p-8 lg:p-10">
           <h2 className="heading-section">{cta.title}</h2>
           <p className="mt-4 max-w-2xl text-base leading-8 text-[var(--color-gray-300)]">
             {cta.description}
