@@ -68,7 +68,7 @@ export default function MonitorPageContent() {
         <MonitorSectionHeader
           eyebrow="Monitor loop"
           title="How continuous monitoring works"
-          description="Schedule → scan → diff → alert → dashboard or SIEM. Hover each step to see what happens at that stage."
+          description="A five-step loop from scheduled re-scan to board-ready trends — click a step or watch the tour advance."
         />
         <div className="mt-8 sm:mt-10">
           <MonitorWorkflowDiagram />
