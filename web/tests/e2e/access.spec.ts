@@ -104,5 +104,5 @@ test("executive briefing gate unlocks content", async ({ page }) => {
 test("monitor page shows alert preview", async ({ page }) => {
   await page.goto("/monitor");
   await expect(page.getByText(/Alert preview — Monitor tier/i)).toBeVisible();
-  await expect(page.getByRole("button", { name: "Slack message" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Slack" })).toBeVisible();
 });

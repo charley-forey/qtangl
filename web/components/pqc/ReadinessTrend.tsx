@@ -1,7 +1,16 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
+import {
+  Line,
+  LineChart,
+  ReferenceArea,
+  ReferenceLine,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts";
 
 type TrendPoint = {
   scanId: string;
@@ -10,7 +19,19 @@ type TrendPoint = {
   readinessBand?: string;
 };
 
-export default function ReadinessTrend({ points }: { points: TrendPoint[] }) {
+type ReadinessTrendProps = {
+  points: TrendPoint[];
+  showBands?: boolean;
+  forecast?: { current: number; projected: number };
+  forceChart?: boolean;
+};
+
+export default function ReadinessTrend({
+  points,
+  showBands = false,
+  forecast,
+  forceChart = false,
+}: ReadinessTrendProps) {
   if (points.length < 2) {
     return (
       <p className="text-xs text-[var(--color-gray-500)]">
@@ -29,22 +50,48 @@ export default function ReadinessTrend({ points }: { points: TrendPoint[] }) {
     scanId: point.scanId,
   }));
 
-  const [useChart, setUseChart] = useState(false);
+  if (forecast) {
+    chartData.push({
+      label: "Forecast",
+      score: forecast.projected,
+      scanId: "forecast",
+    });
+  }
+
+  const [useChart, setUseChart] = useState(forceChart);
   useEffect(() => {
+    if (forceChart) {
+      setUseChart(true);
+      return;
+    }
     setUseChart(sorted.length >= 2 && typeof window !== "undefined" && window.innerWidth >= 640);
-  }, [sorted.length]);
+  }, [sorted.length, forceChart]);
 
   if (useChart) {
     return (
       <div className="h-40 w-full">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={chartData}>
+            {showBands ? (
+              <>
+                <ReferenceArea y1={0} y2={60} fill="#ef4444" fillOpacity={0.06} />
+                <ReferenceArea y1={60} y2={80} fill="#f59e0b" fillOpacity={0.06} />
+                <ReferenceArea y1={80} y2={100} fill="#22c55e" fillOpacity={0.06} />
+              </>
+            ) : null}
             <XAxis dataKey="label" tick={{ fill: "#9ca3af", fontSize: 10 }} />
             <YAxis domain={[0, 100]} tick={{ fill: "#9ca3af", fontSize: 10 }} width={28} />
             <Tooltip
               contentStyle={{ background: "#111", border: "1px solid #333", fontSize: 12 }}
               formatter={(value) => [value, "Readiness"]}
             />
+            {forecast ? (
+              <ReferenceLine
+                y={forecast.current}
+                stroke="#64748b"
+                strokeDasharray="3 3"
+              />
+            ) : null}
             <Line type="monotone" dataKey="score" stroke="var(--color-accent)" strokeWidth={2} dot />
           </LineChart>
         </ResponsiveContainer>
