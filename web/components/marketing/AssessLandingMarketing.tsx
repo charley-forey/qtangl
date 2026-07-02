@@ -9,6 +9,7 @@ import AssessMiniTeaser from "@/components/marketing/AssessMiniTeaser";
 import AssessMonitorTeaser from "@/components/marketing/AssessMonitorTeaser";
 import AssessSectionAnalytics from "@/components/marketing/AssessSectionAnalytics";
 import ConvertPreview from "@/components/marketing/ConvertPreview";
+import { ConvertDemoProviderWrapper } from "@/components/marketing/ConvertInteractiveBlock";
 import LiveTodayFootnote from "@/components/marketing/LiveTodayFootnote";
 import PlatformSampleEmbed from "@/components/marketing/PlatformSampleEmbed";
 import ValueProofStrip from "@/components/marketing/ValueProofStrip";
@@ -116,7 +117,9 @@ export default function AssessLandingMarketing() {
       </Section>
 
       <Section gap="tight">
-        <ConvertPreview />
+        <ConvertDemoProviderWrapper>
+          <ConvertPreview />
+        </ConvertDemoProviderWrapper>
       </Section>
 
       <Section gap="tight">
