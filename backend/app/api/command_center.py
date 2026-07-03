@@ -55,6 +55,7 @@ from app.command_center.store import (
     upsert_saved_view,
 )
 from app.command_center.trust import build_auditor_packet, build_transparency_view
+from app.pqc.bundle_codec import bundle_from_api_dict
 from app.monitoring.anomaly import detect_readiness_anomalies, forecast_readiness
 from app.remediation.service import simulate_post_migration_readiness
 from app.store.scan_jobs import list_jobs_for_tenant, load_scan_bundle
@@ -81,16 +82,22 @@ def _latest_report(auth: AuthContext):
     for job in jobs:
         if job.get("status") != "done":
             continue
-        bundle = load_scan_bundle(job["id"], tenant_id=auth.tenant_id)
-        if bundle and bundle.report:
-            return job["id"], bundle.report
+        bundle_dict = load_scan_bundle(job["scanId"], tenant_id=auth.tenant_id)
+        if not bundle_dict:
+            continue
+        bundle = bundle_from_api_dict(bundle_dict)
+        if bundle.report:
+            return job["scanId"], bundle.report
     return None, None
 
 
 @router.get("/scans/{scan_id}/graph", response_model=ScanGraphResponse)
 def tenant_scan_graph(scan_id: str, auth: AuthContext = Depends(require_auth_readonly)) -> ScanGraphResponse:
-    bundle = load_scan_bundle(scan_id, tenant_id=auth.tenant_id)
-    if bundle is None or bundle.report is None:
+    bundle_dict = load_scan_bundle(scan_id, tenant_id=auth.tenant_id)
+    if bundle_dict is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Scan not found")
+    bundle = bundle_from_api_dict(bundle_dict)
+    if bundle.report is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Scan not found")
     return build_scan_graph(scan_id=scan_id, report=bundle.report)
 
@@ -100,12 +107,16 @@ def tenant_hndl_exposure(
     scan_id: str | None = None,
     auth: AuthContext = Depends(require_auth_readonly),
 ) -> HndlExposureResponse:
-    sid, report = _latest_report(auth)
     if scan_id:
-        bundle = load_scan_bundle(scan_id, tenant_id=auth.tenant_id)
-        if bundle is None or bundle.report is None:
+        bundle_dict = load_scan_bundle(scan_id, tenant_id=auth.tenant_id)
+        if bundle_dict is None:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Scan not found")
+        bundle = bundle_from_api_dict(bundle_dict)
+        if bundle.report is None:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Scan not found")
         sid, report = scan_id, bundle.report
+    else:
+        sid, report = _latest_report(auth)
     if report is None:
         return HndlExposureResponse(scanId=None, totalAssets=0, exposedCount=0, items=[])
     return build_hndl_exposure(report=report, scan_id=sid)
@@ -243,7 +254,11 @@ def tenant_executive_narrative(auth: AuthContext = Depends(require_auth_readonly
         "kpis": {"latestReadiness": readiness},
         "remediationVelocity": velocity,
         "latestScanId": next(
-            (j["id"] for j in list_jobs_for_tenant(tenant_id=auth.tenant_id, limit=10) if j.get("status") == "done"),
+            (
+                j["scanId"]
+                for j in list_jobs_for_tenant(tenant_id=auth.tenant_id, limit=10)
+                if j.get("status") == "done"
+            ),
             None,
         ),
     }
@@ -307,10 +322,9 @@ def tenant_anomaly_explanations(auth: AuthContext = Depends(require_auth_readonl
 
 @router.get("/analytics/trajectory-forecast")
 def tenant_trajectory_forecast(auth: AuthContext = Depends(require_auth_readonly)) -> dict[str, Any]:
-    from app.api.tenant import _readiness_score_series
     from app.remediation.service import remediation_velocity
 
-    scores = _readiness_score_series(tenant_id=auth.tenant_id)
+    scores = _readiness_scores_for_tenant(tenant_id=auth.tenant_id)
     base = forecast_readiness(scores=scores)
     velocity = remediation_velocity(tenant_id=auth.tenant_id)
     optimistic = min(100.0, (scores[-1] if scores else 0) + velocity.get("closedLast30d", 0) * 2)

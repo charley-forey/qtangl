@@ -48,7 +48,7 @@ def build_inbox(*, tenant_id: str, owner: str, limit: int = 50) -> InboxResponse
             alerts = (
                 session.query(TenantAlert)
                 .filter(TenantAlert.tenant_id == tenant_id, TenantAlert.resolved_at.is_(None))
-                .order_by(TenantAlert.created_at.desc())
+                .order_by(TenantAlert.fired_at.desc())
                 .limit(100)
                 .all()
             )
@@ -77,12 +77,12 @@ def build_inbox(*, tenant_id: str, owner: str, limit: int = 50) -> InboxResponse
             continue
         items.append(
             InboxItem(
-                id=job["id"],
+                id=job["scanId"],
                 kind="scan",
-                title=f"Scan {job.get('targetDomain') or job['id']}",
+                title=f"Scan {job.get('targetDomain') or job['scanId']}",
                 status=job.get("status"),
                 owner=actor or None,
-                deepLink=f"/command-center?tab=scans&scan={job['id']}",
+                deepLink=f"/command-center?tab=scans&scan={job['scanId']}",
             )
         )
 
