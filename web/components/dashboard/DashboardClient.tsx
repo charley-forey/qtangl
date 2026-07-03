@@ -13,6 +13,7 @@ import DashboardTabRouter from "@/components/dashboard/DashboardTabRouter";
 import DashboardSkeleton from "@/components/dashboard/ui/DashboardSkeleton";
 import type { DashboardPersona } from "@/components/dashboard/DashboardPersonaToggle";
 import type { DashboardTabId } from "@/components/dashboard/DashboardTabs";
+import type { DashboardAlert } from "@/components/dashboard/NotificationCenter";
 import { useDashboardSession } from "@/components/dashboard/dashboard-session-context";
 import { usePublishDashboardHeaderExtras } from "@/components/dashboard/dashboard-header-extras";
 import { useDashboardSummary } from "@/hooks/useDashboardSummary";
@@ -48,6 +49,9 @@ const ReportDrawer = dynamic(() => import("@/components/pqc/ReportDrawer"), { lo
 const DashboardScanResultsGuide = dynamic(() => import("@/components/dashboard/DashboardScanResultsGuide"), {
   loading: () => null,
 });
+
+const EMPTY_ALERTS: DashboardAlert[] = [];
+const EMPTY_STRING_ARRAY: string[] = [];
 
 export default function DashboardClient() {
   const searchParams = useSearchParams();
@@ -295,15 +299,19 @@ export default function DashboardClient() {
     [bffMode, savedKey]
   );
 
+  const handleRunBaseline = useCallback(() => setActiveTab("scans"), []);
+  const handleExportBoard = useCallback(() => {
+    const latest = summary?.recentScans.find((s) => s.status === "done");
+    if (latest) window.open(reportUrlForScan(latest.scanId, "board"), "_blank", "noopener,noreferrer");
+    trackDashboardEvent("dashboard_export", { format: "board" });
+  }, [summary?.recentScans, reportUrlForScan]);
+  const handleConfigureSso = useCallback(() => setActiveTab("settings"), []);
+
   const commandActions = useDashboardCommandActions({
     onTabChange: setActiveTab,
-    onRunBaseline: () => setActiveTab("scans"),
-    onExportBoard: () => {
-      const latest = summary?.recentScans.find((s) => s.status === "done");
-      if (latest) window.open(reportUrlForScan(latest.scanId, "board"), "_blank", "noopener,noreferrer");
-      trackDashboardEvent("dashboard_export", { format: "board" });
-    },
-    onConfigureSso: () => setActiveTab("settings"),
+    onRunBaseline: handleRunBaseline,
+    onExportBoard: handleExportBoard,
+    onConfigureSso: handleConfigureSso,
   });
 
   const saveChecklist = useCallback(async (checklist: Record<string, boolean>) => {
@@ -362,12 +370,12 @@ export default function DashboardClient() {
   usePublishDashboardHeaderExtras({
     tier: (summary?.me.entitlements as { tier?: string } | undefined)?.tier,
     membershipHealth: summary?.membershipHealth,
-    alerts: summary?.alerts ?? [],
+    alerts: summary?.alerts ?? EMPTY_ALERTS,
     commandActions,
     density,
     persona,
     sessionRole,
-    notificationReadIds: (tenantSettings?.notificationReadIds as string[] | undefined) ?? [],
+    notificationReadIds: (tenantSettings?.notificationReadIds as string[] | undefined) ?? EMPTY_STRING_ARRAY,
     onSessionChange: handleSessionChange,
     onTabChange: handleTabChange,
     onMarkAlertsRead: handleMarkAlertsRead,
