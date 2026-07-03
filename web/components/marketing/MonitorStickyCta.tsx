@@ -34,7 +34,7 @@ export default function MonitorStickyCta() {
             Request Monitor pilot
           </Button>
           <Button
-            href="/dashboard"
+            href="/command-center"
             variant="secondary"
             size="sm"
             onClick={() => trackEvent("monitor_sticky_cta_click", { action: "dashboard" })}

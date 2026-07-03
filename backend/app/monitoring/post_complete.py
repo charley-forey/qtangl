@@ -188,7 +188,7 @@ def _enrich_completed_scan(scan_id: str, bundle: ScanBundle, *, tenant_id: str) 
             scan_diff=scan_diff,
             alerts=alerts,
             verify_url=f"{base}/verify?scanId={scan_id}",
-            evidence_zip_url=f"{base}/dashboard",
+            evidence_zip_url=f"{base}/command-center",
             tenant_id=tenant_id,
             signing_secret=str(settings.get("webhookSigningSecret", "")),
         )

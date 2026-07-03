@@ -21,28 +21,72 @@ import {
   type ConvertPreviewItem,
 } from "@/lib/copy/readiness-demos";
 
-const STATUS_LABELS: Record<ConvertPreviewItem["status"], string> = {
-  open: "Open",
-  in_progress: "In progress",
-  done: "Done",
-  accepted_risk: "Accepted risk",
-};
-
 const COLUMNS: Array<{
   key: ConvertPreviewItem["status"];
   label: string;
   accent: string;
   headerBg: string;
+  dot: string;
+  bar: string;
 }> = [
-  { key: "open", label: "Open", accent: "border-amber-500/40", headerBg: "bg-amber-950/25" },
+  {
+    key: "open",
+    label: "Open",
+    accent: "border-amber-500/40",
+    headerBg: "bg-amber-950/25",
+    dot: "bg-amber-400",
+    bar: "bg-amber-400/70",
+  },
   {
     key: "in_progress",
     label: "In progress",
     accent: "border-sky-500/40",
     headerBg: "bg-sky-950/25",
+    dot: "bg-sky-400",
+    bar: "bg-sky-400/70",
   },
-  { key: "done", label: "Done", accent: "border-emerald-500/40", headerBg: "bg-emerald-950/25" },
+  {
+    key: "done",
+    label: "Done",
+    accent: "border-emerald-500/40",
+    headerBg: "bg-emerald-950/25",
+    dot: "bg-emerald-400",
+    bar: "bg-emerald-400/70",
+  },
 ];
+
+const SEVERITY_STYLES: Record<
+  string,
+  { label: string; chip: string; stripe: string }
+> = {
+  high: {
+    label: "High",
+    chip: "bg-red-500/15 text-red-200 ring-red-500/30",
+    stripe: "bg-red-500/70",
+  },
+  medium: {
+    label: "Medium",
+    chip: "bg-amber-500/15 text-amber-200 ring-amber-500/30",
+    stripe: "bg-amber-500/70",
+  },
+  low: {
+    label: "Low",
+    chip: "bg-sky-500/15 text-sky-200 ring-sky-500/30",
+    stripe: "bg-sky-500/60",
+  },
+};
+
+function severityStyle(severity: string) {
+  return SEVERITY_STYLES[severity] ?? SEVERITY_STYLES.medium;
+}
+
+function columnItems(items: ConvertPreviewItem[], key: ConvertPreviewItem["status"]) {
+  return items.filter((item) =>
+    key === "done"
+      ? item.status === "done" || item.status === "accepted_risk"
+      : item.status === key
+  );
+}
 
 const WAVE_FILTERS = [
   ["all", "All waves"],
@@ -92,7 +136,14 @@ function CompletionRing({ pct }: { pct: number }) {
 
 function PeerBenchmarkCard() {
   const b = convertPreviewPeerBenchmark;
+  const min = Math.max(0, b.p25 - 8);
   const max = b.p75 + 5;
+  const span = max - min;
+  const pos = (v: number) => `${((v - min) / span) * 100}%`;
+
+  const aboveMedian = b.yourScore >= b.median;
+  const deltaMedian = Math.abs(b.yourScore - b.median).toFixed(1);
+
   return (
     <div className="rounded-[var(--radius-xl)] border border-[var(--border)] bg-gradient-to-br from-black/50 to-black/30 p-5 sm:p-6">
       <div className="flex items-start justify-between gap-3">
@@ -101,31 +152,67 @@ function PeerBenchmarkCard() {
           Opt-in cohort
         </span>
       </div>
+
+      <p className="mt-3 text-sm leading-6 text-[var(--color-gray-300)]">
+        You&apos;re{" "}
+        <span className={aboveMedian ? "font-semibold text-emerald-300" : "font-semibold text-amber-300"}>
+          {deltaMedian} pts {aboveMedian ? "above" : "below"} median
+        </span>{" "}
+        for your cohort.
+      </p>
+
       <div className="relative mt-5 h-4 rounded-full bg-white/[0.06]">
         <div
-          className="absolute inset-y-0 rounded-full bg-white/15"
-          style={{ left: `${(b.p25 / max) * 100}%`, width: `${((b.p75 - b.p25) / max) * 100}%` }}
+          className="absolute inset-y-0 rounded-full bg-gradient-to-r from-white/10 to-white/20"
+          style={{ left: pos(b.p25), width: `${((b.p75 - b.p25) / span) * 100}%` }}
         />
         <div
-          className="absolute top-1/2 h-5 w-1 -translate-y-1/2 rounded-full bg-[var(--color-accent)] shadow-[0_0_8px_rgba(56,189,248,0.5)]"
-          style={{ left: `${(b.median / max) * 100}%` }}
+          className="absolute top-1/2 h-5 w-1 -translate-y-1/2 -translate-x-1/2 rounded-full bg-[var(--color-accent)] shadow-[0_0_8px_rgba(56,189,248,0.5)]"
+          style={{ left: pos(b.median) }}
           title={`Median ${b.median}`}
         />
         <div
-          className="absolute top-1/2 h-6 w-1.5 -translate-y-1/2 rounded-full bg-white shadow-[0_0_10px_rgba(255,255,255,0.35)] transition-all duration-500"
-          style={{ left: `${(b.yourScore / max) * 100}%` }}
+          className="absolute top-1/2 flex h-7 w-7 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border-2 border-white bg-black shadow-[0_0_12px_rgba(255,255,255,0.35)] transition-all duration-500"
+          style={{ left: pos(b.yourScore) }}
           title={`Your score ${b.yourScore}`}
-        />
+        >
+          <span className="h-1.5 w-1.5 rounded-full bg-white" />
+        </div>
       </div>
-      <dl className="mt-4 grid grid-cols-4 gap-2 text-center">
+
+      <div className="relative mt-2 h-4">
+        {[
+          { label: "P25", value: b.p25 },
+          { label: "Med", value: b.median },
+          { label: "P75", value: b.p75 },
+        ].map((tick) => (
+          <span
+            key={tick.label}
+            className="absolute -translate-x-1/2 text-[0.6rem] uppercase tracking-wider text-[var(--color-gray-600)]"
+            style={{ left: pos(tick.value) }}
+          >
+            {tick.label}
+          </span>
+        ))}
+      </div>
+
+      <dl className="mt-3 grid grid-cols-4 gap-2 text-center">
         {[
           { label: "P25", value: b.p25 },
           { label: "Median", value: b.median },
           { label: "You", value: b.yourScore, highlight: true },
           { label: "P75", value: b.p75 },
         ].map((item) => (
-          <div key={item.label}>
-            <dt className="text-[0.65rem] uppercase tracking-wider text-[var(--color-gray-500)]">
+          <div
+            key={item.label}
+            className={[
+              "rounded-lg border px-1 py-1.5",
+              item.highlight
+                ? "border-white/20 bg-white/[0.06]"
+                : "border-transparent",
+            ].join(" ")}
+          >
+            <dt className="text-[0.6rem] uppercase tracking-wider text-[var(--color-gray-500)]">
               {item.label}
             </dt>
             <dd
@@ -148,34 +235,39 @@ function KanbanCard({ item }: { item: ConvertPreviewItem }) {
   const { selected, toggle } = useConvertDemo();
   const isSelected = selected.has(item.id);
   const wave = item.wave ?? 1;
+  const sev = severityStyle(item.severity);
 
   return (
     <button
       type="button"
       onClick={() => toggle(item.id)}
       className={[
-        "group w-full rounded-[var(--radius-lg)] border p-4 text-left transition duration-300",
+        "group relative w-full overflow-hidden rounded-[var(--radius-lg)] border pl-5 pr-4 py-4 text-left transition duration-300",
         isSelected
           ? "border-emerald-500/45 bg-emerald-950/20 shadow-[0_0_0_1px_rgba(52,211,153,0.15),inset_0_1px_0_rgba(255,255,255,0.06)]"
-          : "border-[var(--border)] bg-black/35 hover:border-[var(--border-strong)] hover:bg-black/50",
+          : "border-[var(--border)] bg-black/35 hover:-translate-y-0.5 hover:border-[var(--border-strong)] hover:bg-black/50 hover:shadow-[0_10px_30px_rgba(0,0,0,0.35)]",
       ].join(" ")}
       aria-label={`Include ${item.title} in what-if projection`}
       aria-pressed={isSelected}
     >
+      <span
+        className={["absolute inset-y-0 left-0 w-1", sev.stripe].join(" ")}
+        aria-hidden
+      />
       <div className="flex items-start gap-3">
         <span
           className={[
-            "mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded border transition",
+            "mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-md border text-[0.7rem] transition",
             isSelected
               ? "border-emerald-400/60 bg-emerald-500/20 text-emerald-200"
-              : "border-[var(--border-strong)] bg-black/40 text-transparent group-hover:border-white/30",
+              : "border-[var(--border-strong)] bg-black/40 text-transparent group-hover:border-white/30 group-hover:text-white/40",
           ].join(" ")}
           aria-hidden
         >
           ✓
         </span>
         <div className="min-w-0 flex-1">
-          <div className="flex flex-wrap items-center gap-2">
+          <div className="flex flex-wrap items-center gap-1.5">
             <span
               className={[
                 "rounded-full px-2 py-0.5 text-[0.65rem] font-semibold ring-1 ring-inset",
@@ -184,20 +276,29 @@ function KanbanCard({ item }: { item: ConvertPreviewItem }) {
             >
               Wave {wave}
             </span>
-            <span className="text-[0.65rem] text-[var(--color-gray-500)]">
-              {STATUS_LABELS[item.status]}
+            <span
+              className={[
+                "rounded-full px-2 py-0.5 text-[0.65rem] font-semibold ring-1 ring-inset",
+                sev.chip,
+              ].join(" ")}
+            >
+              {sev.label}
             </span>
           </div>
           <p className="mt-2 text-sm font-medium leading-snug text-white">{item.title}</p>
-          <div className="mt-3 flex items-center justify-between gap-2">
-            <span className="flex items-center gap-2 text-xs text-[var(--color-gray-500)]">
-              <span className="flex h-6 w-6 items-center justify-center rounded-full bg-white/10 text-[0.65rem] font-medium text-white">
+          <p className="mt-1.5 line-clamp-2 text-[0.7rem] leading-5 text-[var(--color-gray-500)] transition group-hover:text-[var(--color-gray-400)]">
+            {item.playbook}
+          </p>
+          <div className="mt-3 flex items-center justify-between gap-2 border-t border-[var(--border-subtle)] pt-3">
+            <span className="flex min-w-0 items-center gap-2 text-xs text-[var(--color-gray-400)]">
+              <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-white/10 text-[0.65rem] font-semibold text-white">
                 {ownerInitial(item.owner)}
               </span>
-              {item.owner}
+              <span className="truncate">{item.owner}</span>
             </span>
-            <span className="shrink-0 rounded-full bg-white/5 px-2 py-0.5 text-xs font-medium tabular-nums text-emerald-300">
+            <span className="flex shrink-0 items-center gap-1 rounded-full bg-emerald-500/10 px-2 py-0.5 text-xs font-semibold tabular-nums text-emerald-300 ring-1 ring-inset ring-emerald-500/20">
               +{item.impactPoints}
+              <span className="text-[0.6rem] font-normal text-emerald-400/70">pts</span>
             </span>
           </div>
         </div>
@@ -207,41 +308,51 @@ function KanbanCard({ item }: { item: ConvertPreviewItem }) {
 }
 
 function DesktopKanban({ filtered }: { filtered: ConvertPreviewItem[] }) {
+  const { selected } = useConvertDemo();
+
   return (
     <div className="hidden gap-4 md:grid md:grid-cols-3">
       {COLUMNS.map((col) => {
-        const items = filtered.filter((item) =>
-          col.key === "done"
-            ? item.status === "done" || item.status === "accepted_risk"
-            : item.status === col.key
-        );
+        const items = columnItems(filtered, col.key);
+        const selectedInCol = items.filter((i) => selected.has(i.id)).length;
+        const selectedPct = items.length ? (selectedInCol / items.length) * 100 : 0;
         return (
           <div
             key={col.key}
             className={[
-              "flex min-h-[14rem] flex-col rounded-[var(--radius-xl)] border",
+              "flex min-h-[16rem] flex-col rounded-[var(--radius-xl)] border bg-black/25",
               col.accent,
-              "bg-black/25",
             ].join(" ")}
           >
             <div
               className={[
-                "flex items-center justify-between rounded-t-[var(--radius-xl)] border-b border-[var(--border-subtle)] px-4 py-3",
+                "rounded-t-[var(--radius-xl)] border-b border-[var(--border-subtle)] px-4 pt-3 pb-3",
                 col.headerBg,
               ].join(" ")}
             >
-              <p className="text-xs font-semibold uppercase tracking-[0.14em] text-white">{col.label}</p>
-              <span className="rounded-full bg-black/40 px-2 py-0.5 text-xs tabular-nums text-[var(--color-gray-400)]">
-                {items.length}
-              </span>
+              <div className="flex items-center justify-between">
+                <p className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-white">
+                  <span className={["h-2 w-2 rounded-full", col.dot].join(" ")} aria-hidden />
+                  {col.label}
+                </p>
+                <span className="rounded-full bg-black/40 px-2 py-0.5 text-xs tabular-nums text-[var(--color-gray-300)]">
+                  {items.length}
+                </span>
+              </div>
+              <div className="mt-2.5 h-1 overflow-hidden rounded-full bg-black/40">
+                <div
+                  className={["h-full rounded-full transition-[width] duration-500", col.bar].join(" ")}
+                  style={{ width: `${selectedPct}%` }}
+                />
+              </div>
             </div>
             <div className="flex flex-1 flex-col gap-2.5 p-3">
               {items.length ? (
                 items.map((item) => <KanbanCard key={item.id} item={item} />)
               ) : (
-                <p className="flex flex-1 items-center justify-center text-xs text-[var(--color-gray-600)]">
-                  No items
-                </p>
+                <div className="flex flex-1 flex-col items-center justify-center gap-1 py-8 text-center">
+                  <span className="text-xs text-[var(--color-gray-600)]">No items in this stage</span>
+                </div>
               )}
             </div>
           </div>
@@ -257,11 +368,7 @@ function MobileKanbanAccordion({ filtered }: { filtered: ConvertPreviewItem[] })
   return (
     <div className="space-y-2.5 md:hidden">
       {COLUMNS.map((col) => {
-        const items = filtered.filter((item) =>
-          col.key === "done"
-            ? item.status === "done" || item.status === "accepted_risk"
-            : item.status === col.key
-        );
+        const items = columnItems(filtered, col.key);
         const open = openColumn === col.key;
         return (
           <div
@@ -278,7 +385,10 @@ function MobileKanbanAccordion({ filtered }: { filtered: ConvertPreviewItem[] })
               onClick={() => setOpenColumn(open ? null : col.key)}
               aria-expanded={open}
             >
-              <span className="text-sm font-semibold text-white">{col.label}</span>
+              <span className="flex items-center gap-2 text-sm font-semibold text-white">
+                <span className={["h-2 w-2 rounded-full", col.dot].join(" ")} aria-hidden />
+                {col.label}
+              </span>
               <span className="text-xs text-[var(--color-gray-400)]">
                 {items.length} · {open ? "−" : "+"}
               </span>
@@ -293,6 +403,53 @@ function MobileKanbanAccordion({ filtered }: { filtered: ConvertPreviewItem[] })
           </div>
         );
       })}
+    </div>
+  );
+}
+
+function BoardSummary({ filtered }: { filtered: ConvertPreviewItem[] }) {
+  const { selected, projectedScore } = useConvertDemo();
+  const selectedItems = filtered.filter((i) => selected.has(i.id));
+  const selectedPts = selectedItems.reduce((sum, i) => sum + i.impactPoints, 0);
+  const lift = projectedScore - convertPreviewBaseline.currentScore;
+
+  const waveCounts = [1, 2, 3].map((w) => ({
+    wave: w,
+    count: selectedItems.filter((i) => (i.wave ?? 1) === w).length,
+  }));
+
+  return (
+    <div className="mb-4 flex flex-col gap-3 rounded-[var(--radius-xl)] border border-[var(--border-subtle)] bg-black/30 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex items-center gap-4">
+        <div>
+          <p className="text-[0.65rem] uppercase tracking-[0.14em] text-[var(--color-gray-500)]">In what-if</p>
+          <p className="mt-0.5 text-sm font-semibold text-white">
+            {selectedItems.length} {selectedItems.length === 1 ? "item" : "items"}
+            <span className="ml-1.5 text-[var(--color-gray-500)]">· +{selectedPts} pts</span>
+          </p>
+        </div>
+        <div className="hidden items-center gap-1.5 sm:flex">
+          {waveCounts.map(({ wave, count }) => (
+            <span
+              key={wave}
+              className={[
+                "rounded-full px-2 py-0.5 text-[0.65rem] font-medium ring-1 ring-inset transition",
+                count > 0
+                  ? WAVE_COLORS[wave]
+                  : "bg-transparent text-[var(--color-gray-600)] ring-[var(--border)]",
+              ].join(" ")}
+            >
+              W{wave} · {count}
+            </span>
+          ))}
+        </div>
+      </div>
+      <div className="flex items-center gap-2 rounded-full border border-emerald-500/25 bg-emerald-950/20 px-3 py-1.5">
+        <span className="text-[0.65rem] uppercase tracking-wider text-emerald-300/80">Projected lift</span>
+        <span className="text-sm font-semibold tabular-nums text-emerald-300">
+          {lift > 0 ? `+${lift.toFixed(1)}` : lift.toFixed(1)}
+        </span>
+      </div>
     </div>
   );
 }
@@ -406,7 +563,7 @@ export default function ConvertProgramSimulator() {
               <p className="mt-3 max-w-2xl text-sm leading-7 text-[var(--color-gray-300)] sm:text-base">
                 Prioritized backlog with what-if projection. Toggle items to model readiness lift — full
                 workflow on the{" "}
-                <Link href="/dashboard" className="text-white underline underline-offset-4">
+                <Link href="/command-center" className="text-white underline underline-offset-4">
                   tenant dashboard
                 </Link>{" "}
                 with your API key.
@@ -528,8 +685,11 @@ export default function ConvertProgramSimulator() {
         <div className="lg:col-span-7">
           <div className="mb-4 flex items-center justify-between gap-3">
             <Eyebrow>Remediation board</Eyebrow>
-            <span className="text-xs text-[var(--color-gray-500)]">Click cards to include in projection</span>
+            <span className="hidden text-xs text-[var(--color-gray-500)] sm:inline">
+              Click cards to include in projection
+            </span>
           </div>
+          <BoardSummary filtered={filtered} />
           <MobileKanbanAccordion filtered={filtered} />
           <DesktopKanban filtered={filtered} />
         </div>

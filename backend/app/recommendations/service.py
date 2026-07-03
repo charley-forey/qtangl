@@ -89,7 +89,7 @@ def build_recommendations(
                 now_what="Run an authorized baseline scan on your production domain.",
                 source="onboarding_baseline",
                 priority=1,
-                deep_link="/dashboard?tab=scans",
+                deep_link="/command-center?tab=scans",
                 role_filter=["operator", "admin"],
             )
         )
@@ -102,7 +102,7 @@ def build_recommendations(
                 now_what="Create a weekly monitoring schedule for your primary target.",
                 source="onboarding_schedule",
                 priority=2,
-                deep_link="/dashboard?tab=monitor",
+                deep_link="/command-center?tab=monitor",
                 role_filter=["operator", "admin"],
             )
         )
@@ -117,7 +117,7 @@ def build_recommendations(
                 now_what="Invite Executive and Operator teammates.",
                 source="onboarding_invite",
                 priority=3,
-                deep_link="/dashboard?tab=settings",
+                deep_link="/command-center?tab=settings",
                 role_filter=["admin"],
             )
         )
@@ -135,7 +135,7 @@ def build_recommendations(
                 now_what="Complete one-time Assess checkout to unlock production scans.",
                 source="assess_payment",
                 priority=1,
-                deep_link="/dashboard?upgrade=assess",
+                deep_link="/command-center?upgrade=assess",
                 role_filter=["admin", "operator"],
             )
         )
@@ -152,7 +152,7 @@ def build_recommendations(
                 now_what="Upgrade to Monitor for higher scan limits.",
                 source="scan_quota",
                 priority=2,
-                deep_link="/dashboard?upgrade=monitor",
+                deep_link="/command-center?upgrade=monitor",
                 role_filter=["admin"],
             )
         )
@@ -169,7 +169,7 @@ def build_recommendations(
                 rem_id = ""
                 if idx < len(backlog):
                     rem_id = str(backlog[idx].get("id") or "")
-                deep_link = f"/dashboard?tab=remediate&scanId={target_scan_id}"
+                deep_link = f"/command-center?tab=remediate&scanId={target_scan_id}"
                 if rem_id:
                     deep_link += f"&remediationId={rem_id}"
                 recs.append(
@@ -199,7 +199,7 @@ def build_recommendations(
                             now_what="Review scan diff and prioritize degraded assets.",
                             source="readiness_drop",
                             priority=5,
-                            deep_link=f"/dashboard?tab=scans&scanId={target_scan_id}",
+                            deep_link=f"/command-center?tab=scans&scanId={target_scan_id}",
                             proof_type="scan_diff",
                             scan_id=target_scan_id,
                         )
@@ -208,7 +208,7 @@ def build_recommendations(
                 if new_qv > 0:
                     backlog = report.get("remediationBacklog") or []
                     rem_id = str(backlog[0].get("id") or "") if backlog else ""
-                    deep_link = f"/dashboard?tab=remediate&scanId={target_scan_id}"
+                    deep_link = f"/command-center?tab=remediate&scanId={target_scan_id}"
                     if rem_id:
                         deep_link += f"&remediationId={rem_id}"
                     recs.append(
@@ -238,7 +238,7 @@ def build_recommendations(
                                 now_what="Accelerate TLS and signing-key migration to close the gap.",
                                 source="benchmark_gap",
                                 priority=15,
-                                deep_link="/dashboard?tab=remediate",
+                                deep_link="/command-center?tab=remediate",
                                 proof_type="benchmark",
                                 scan_id=target_scan_id,
                             )
@@ -254,7 +254,7 @@ def build_recommendations(
                 now_what="Start verify-fix on one critical TLS finding, then talk to sales about Convert orchestration.",
                 source="convert_upgrade",
                 priority=6,
-                deep_link="/dashboard?tab=remediate&upgrade=convert",
+                deep_link="/command-center?tab=remediate&upgrade=convert",
                 proof_type="maturity",
                 role_filter=["admin", "operator", "executive"],
                 extra_id="stage3-convert",
@@ -269,7 +269,7 @@ def build_recommendations(
                 now_what=_maturity_next_action(maturity),
                 source="maturity_gap",
                 priority=20,
-                deep_link="/dashboard?tab=overview",
+                deep_link="/command-center?tab=overview",
                 proof_type="maturity",
                 extra_id=str(maturity["stage"]),
             )
@@ -294,7 +294,7 @@ def build_recommendations(
                 now_what="Schedule remediation sprint for this business unit.",
                 source="portfolio_high_risk",
                 priority=12,
-                deep_link="/dashboard?tab=monitor",
+                deep_link="/command-center?tab=monitor",
                 role_filter=["operator", "admin", "executive"],
                 extra_id=str(target.get("target", "")),
             )
@@ -309,7 +309,7 @@ def build_recommendations(
                 now_what="Open latest scan report and export board pack.",
                 source="executive_review",
                 priority=8,
-                deep_link=f"/dashboard?tab=scans&scanId={target_scan_id or ''}",
+                deep_link=f"/command-center?tab=scans&scanId={target_scan_id or ''}",
                 role_filter=["executive", "viewer"],
             )
         )
@@ -322,9 +322,9 @@ def build_recommendations(
         alert_id = str(alert.get("id") or rule)
         payload = alert.get("payload") or {}
         scan_id = payload.get("scanId") or payload.get("scan_id")
-        deep_link = str(alert.get("actionUrl") or "/dashboard?tab=overview")
-        if not deep_link.startswith("/dashboard"):
-            deep_link = "/dashboard?tab=overview"
+        deep_link = str(alert.get("actionUrl") or "/command-center?tab=overview")
+        if not deep_link.startswith("/command-center"):
+            deep_link = "/command-center?tab=overview"
         recs.append(
             _mk(
                 category="drift" if rule in {"readiness_drop", "new_quantum_vulnerable", "algorithm_degraded"} else "scan",

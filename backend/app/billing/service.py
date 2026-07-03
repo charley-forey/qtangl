@@ -222,7 +222,7 @@ def _monitor_welcome_email(
     token_info = create_onboarding_token(tenant_id=tenant_id, api_key=api_key, email=email)
     base = os.environ.get("QTANGL_PUBLIC_URL", "https://www.qtangl.com")
     onboarding_v2 = os.getenv("QTANGL_ONBOARDING_V2", "false").lower() in {"1", "true", "yes"}
-    retrieve_url = f"{base}/dashboard/login?onboarding={token_info['token']}"
+    retrieve_url = f"{base}/command-center/login?onboarding={token_info['token']}"
     assess_url = f"{base}/assess?onboarding={token_info['token']}&mode=production"
     headline = "Your Monitor subscription is active." if upgraded else "Your Monitor workspace is ready."
     if onboarding_v2:
@@ -830,7 +830,7 @@ def provision_assess_tenant(*, email: str, company: str, domain: str | None = No
     )
     base = os.environ.get("QTANGL_PUBLIC_URL", "https://www.qtangl.com")
     onboarding_v2 = os.getenv("QTANGL_ONBOARDING_V2", "false").lower() in {"1", "true", "yes"}
-    login_url = f"{base}/dashboard/login?onboarding={token_info['token']}"
+    login_url = f"{base}/command-center/login?onboarding={token_info['token']}"
     assess_url = f"{base}/assess?onboarding={token_info['token']}&mode=production"
     allowlist_seeded = _domain_allowlist_seeded(email=email, domain=domain)
     if onboarding_v2:

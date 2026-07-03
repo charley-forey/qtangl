@@ -10,8 +10,8 @@ import Section from "@/components/layout/Section";
 import { buildPageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildPageMetadata({
-  path: "/dashboard",
-  title: "Q-Day Monitor Dashboard",
+  path: "/command-center",
+  title: "Command Center",
   description:
     "Scheduled re-scans, crypto drift alerts, readiness trends, and remediation tracking for your Qtangl tenant.",
   noIndex: true,
@@ -23,7 +23,7 @@ export default function DashboardPage() {
       <Section gap="tight" className="pb-0 pt-6">
         <DashboardPageShell>
           <DashboardAuthGate requireSso={dashboardRequireSso()}>
-            <Suspense fallback={<p className="text-sm text-[var(--color-gray-500)]">Loading dashboard…</p>}>
+            <Suspense fallback={<p className="text-sm text-[var(--color-gray-500)]">Loading Command Center…</p>}>
               <DashboardClient />
             </Suspense>
           </DashboardAuthGate>

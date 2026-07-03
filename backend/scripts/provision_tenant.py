@@ -66,7 +66,7 @@ def main() -> int:
     print("\n--- Customer handoff ---")
     print(f"Tenant ID: {tenant_id}")
     print(f"API key (store securely): {key['apiKey']}")
-    print(f"Dashboard: https://www.qtangl.com/dashboard")
+    print(f"Dashboard: https://www.qtangl.com/command-center")
     print(f"Assess production: https://www.qtangl.com/assess?mode=production")
     return 0
 

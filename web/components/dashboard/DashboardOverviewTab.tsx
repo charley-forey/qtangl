@@ -27,6 +27,16 @@ import type { DashboardPersona } from "@/components/dashboard/DashboardPersonaTo
 import type { DashboardTabId } from "@/components/dashboard/DashboardTabs";
 import type { DashboardSummary } from "@/lib/dashboard-state";
 import { summaryTrendPoints } from "@/lib/dashboard-state";
+import { algorithmFamiliesFromItems } from "@/lib/algorithm-inventory";
+import { useCommandCenterV2 } from "@/hooks/useCommandCenterV2";
+import { ccFlags } from "@/lib/cc-feature-flags";
+import CommandCenterOverviewHero from "@/components/dashboard/CommandCenterOverviewHero";
+import CryptoDependencyGraphCard from "@/components/dashboard/CryptoDependencyGraphCard";
+import HndlLensCard from "@/components/dashboard/HndlLensCard";
+import SmartCadenceCard from "@/components/dashboard/SmartCadenceCard";
+import AssignmentInbox from "@/components/dashboard/AssignmentInbox";
+import DriftIntelPanel from "@/components/dashboard/DriftIntelPanel";
+import MilestoneCelebration from "@/components/dashboard/MilestoneCelebration";
 import DogfoodPostureCard from "@/components/dashboard/DogfoodPostureCard";
 import MaturityStageCard from "@/components/dashboard/MaturityStageCard";
 import { patchDashboardJson, putDashboardJson } from "@/lib/dashboard-bff";
@@ -98,6 +108,7 @@ export default function DashboardOverviewTab({
     Boolean(onboardingRecord && !onboardingRecord.complete && !onboardingRecord.dismissed);
   const isCustomerExecutive = (session?.role ?? "").toLowerCase() === "customer_executive";
 
+  const ccV2 = useCommandCenterV2();
   const layout = summary.layoutDefaults;
   const detail = summary.latestScanDetail;
   const scanDiff = detail?.scanDiff as ScanDiff | null | undefined;
@@ -121,15 +132,10 @@ export default function DashboardOverviewTab({
             ? "#facc15"
             : "#94a3b8",
   }));
-  const algorithmMap = new Map<string, number>();
-  for (const item of backlog) {
-    const key = String(item.title ?? item.severity ?? "unknown").split(" ")[0] ?? "unknown";
-    algorithmMap.set(key, (algorithmMap.get(key) ?? 0) + 1);
-  }
-  const algorithmRows = [...algorithmMap.entries()]
-    .map(([label, count]) => ({ label, count }))
-    .sort((a, b) => b.count - a.count)
-    .slice(0, 6);
+  const algorithmRows = algorithmFamiliesFromItems(backlog).map(({ family, count }) => ({
+    label: family,
+    count,
+  }));
 
   const toursCompleted =
     ((tenantSettings?.onboarding as { toursCompleted?: string[] } | undefined)?.toursCompleted ??
@@ -157,6 +163,18 @@ export default function DashboardOverviewTab({
 
   return (
     <div className="space-y-4">
+      {ccV2 ? (
+        <MilestoneCelebration
+          readinessScore={summary.kpis.latestReadiness ?? detail?.readinessScore ?? null}
+          tenantId={String(summary.me.tenantId ?? "")}
+        />
+      ) : null}
+      {ccV2 ? (
+        <CommandCenterOverviewHero
+          summary={summary}
+          tenantSettings={tenantSettings}
+        />
+      ) : null}
       <CoachingBanner
         summary={summary}
         tenantSettings={tenantSettings}
@@ -350,6 +368,21 @@ export default function DashboardOverviewTab({
       <DashboardWidgetGate widgetId="forecast" layout={layout} rolePolicy={rolePolicy}>
         <ForecastCard forecast={summary.forecast} />
       </DashboardWidgetGate>
+
+      {ccV2 && persona !== "executive" ? (
+        <div className="grid gap-3 lg:grid-cols-2">
+          <AssignmentInbox />
+          <SmartCadenceCard />
+        </div>
+      ) : null}
+
+      {ccV2 && detail?.scanId && ccFlags.graph ? (
+        <CryptoDependencyGraphCard scanId={detail.scanId} />
+      ) : null}
+
+      {ccV2 && detail?.scanId && ccFlags.hndl ? <HndlLensCard scanId={detail.scanId} /> : null}
+
+      {ccV2 && Boolean(tenantSettings?.benchmarkOptIn) ? <DriftIntelPanel /> : null}
 
       {persona === "executive" && reportUrlForScan ? (
         <BoardMeetingMode

@@ -78,12 +78,12 @@ export const notFoundCopy = {
     description:
       "The path isn't available in your workspace. Return to overview, open scans, or check system status.",
     actions: {
-      primary: { href: "/dashboard", label: "Dashboard overview" },
+      primary: { href: "/command-center", label: "Dashboard overview" },
       secondary: { href: "/assess", label: "Run new scan" },
       tertiary: { href: "/status", label: "System status" },
     },
     links: [
-      { href: "/dashboard", title: "Overview", description: "Readiness KPIs and latest scan" },
+      { href: "/command-center", title: "Overview", description: "Readiness KPIs and latest scan" },
       { href: "/assess", title: "Assess", description: "Run or revisit a scan" },
       { href: "/docs/guides/monitor-workflow", title: "Monitor guide", description: "Scheduled re-scans and drift" },
       { href: "/status", title: "Status", description: "Platform health and incidents" },

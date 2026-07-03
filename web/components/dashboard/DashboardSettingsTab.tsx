@@ -11,6 +11,8 @@ import { DashboardSection } from "@/components/dashboard/DashboardOnboarding";
 import type { DashboardPersona } from "@/components/dashboard/DashboardPersonaToggle";
 import type { SettingsTabBundle } from "@/lib/dashboard-state";
 import { postDashboardJson, putDashboardJson } from "@/lib/dashboard-bff";
+import { useCommandCenterV2 } from "@/hooks/useCommandCenterV2";
+import SectionHeader from "@/components/dashboard/ui/SectionHeader";
 
 const AlertSettings = dynamic(() => import("@/components/dashboard/AlertSettings"));
 const AuditLogPanel = dynamic(() => import("@/components/dashboard/AuditLogPanel"));
@@ -24,6 +26,12 @@ const LegalCompliancePanel = dynamic(() => import("@/components/dashboard/LegalC
 const ReportBrandingPanel = dynamic(() => import("@/components/dashboard/ReportBrandingPanel"));
 const PortalAppearancePanel = dynamic(() => import("@/components/dashboard/PortalAppearancePanel"));
 const EvidenceVaultPanel = dynamic(() => import("@/components/pqc/EvidenceVaultPanel"));
+const DraggableWidgetGrid = dynamic(() => import("@/components/dashboard/DraggableWidgetGrid"));
+const NotificationPreferencesPanel = dynamic(
+  () => import("@/components/dashboard/NotificationPreferencesPanel")
+);
+const AutoTrustPagePanel = dynamic(() => import("@/components/dashboard/AutoTrustPagePanel"));
+const WebhookBuilderPanel = dynamic(() => import("@/components/dashboard/WebhookBuilderPanel"));
 
 type Props = {
   bundle: SettingsTabBundle | null;
@@ -73,9 +81,11 @@ export default function DashboardSettingsTab({
   const settings = bundle?.settings ?? {};
   const [ssoPortalUrl, setSsoPortalUrl] = useState<string | null>(null);
   const boardSchedule = (settings.boardExportSchedule as Record<string, unknown>) ?? {};
+  const ccV2 = useCommandCenterV2();
 
   return (
-    <DashboardSection title="Settings" id="dashboard-settings">
+    <DashboardSection title="Command Center settings" id="dashboard-settings">
+      {ccV2 ? <SectionHeader title="Workspace" description="API keys, domains, and appearance" /> : null}
       {canManageKeys && bffMode ? <ApiKeysPanel role={sessionRole} /> : null}
 
       {canAdmin && bffMode ? (
@@ -129,6 +139,29 @@ export default function DashboardSettingsTab({
               Download tenant export
             </button>
           </Card>
+        </>
+      ) : null}
+
+      {ccV2 ? (
+        <>
+          <DraggableWidgetGrid
+            items={[
+              { id: "kpi", label: "KPI strip", node: <span className="text-xs text-gray-400">KPI strip</span> },
+              { id: "trend", label: "Readiness trend", node: <span className="text-xs text-gray-400">Trend</span> },
+              { id: "digest", label: "Executive digest", node: <span className="text-xs text-gray-400">Digest</span> },
+              { id: "insights", label: "Insights grid", node: <span className="text-xs text-gray-400">Insights</span> },
+              { id: "heatmap", label: "Business unit heatmap", node: <span className="text-xs text-gray-400">Heatmap</span> },
+            ]}
+            initialOrder={
+              ((tenantSettings ?? settings).dashboardLayout as { order?: string[] } | undefined)?.order
+            }
+            tenantSettings={tenantSettings ?? settings}
+            canWrite={canAdmin}
+            onSettingsChange={onSettingsChange}
+          />
+          <NotificationPreferencesPanel />
+          <AutoTrustPagePanel tenantSlug={tenantName} />
+          <WebhookBuilderPanel canWrite={canAdmin} onMessage={onMessage} />
         </>
       ) : null}
 

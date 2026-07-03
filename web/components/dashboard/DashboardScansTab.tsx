@@ -16,6 +16,8 @@ import type { ScansTabBundle } from "@/lib/dashboard-state";
 import type { TenantScanSummary } from "@/lib/tenant-api";
 import { formatUtcDateTime } from "@/lib/format";
 import { trackDashboardEvent } from "@/lib/dashboard-analytics";
+import { useCommandCenterV2 } from "@/hooks/useCommandCenterV2";
+import InsightCallout from "@/components/dashboard/ui/InsightCallout";
 import { fetchDashboardJson, putDashboardJson } from "@/lib/dashboard-bff";
 
 import LegalAcceptancePanel from "@/components/dashboard/LegalAcceptancePanel";
@@ -129,6 +131,22 @@ export default function DashboardScansTab({
     const merged = inProgressRow ? [inProgressRow, ...scans] : scans;
     return merged.filter((scan) => matchesSourceFilter(scan, sourceFilter));
   }, [inProgressRow, scans, sourceFilter]);
+
+  const ccV2 = useCommandCenterV2();
+  const [sortKey, setSortKey] = useState<"date" | "readiness">("date");
+  const sortedScans = useMemo(() => {
+    const list = [...displayScans];
+    if (sortKey === "readiness") {
+      list.sort((a, b) => (b.readinessScore ?? 0) - (a.readinessScore ?? 0));
+    }
+    return list;
+  }, [displayScans, sortKey]);
+
+  const lastScanAgeDays = useMemo(() => {
+    const latest = scans[0]?.createdAt;
+    if (!latest) return null;
+    return Math.floor((Date.now() - new Date(latest).getTime()) / (1000 * 60 * 60 * 24));
+  }, [scans]);
 
   useEffect(() => {
     if (latestDiff?.previousScanId && diffDelta !== 0) {
@@ -431,6 +449,12 @@ export default function DashboardScansTab({
       ) : null}
 
       <DashboardSection title="Scan history" id="dashboard-scans">
+        {ccV2 && lastScanAgeDays != null ? (
+          <InsightCallout tone={lastScanAgeDays > 14 ? "warning" : "neutral"}>
+            Last assessment was {lastScanAgeDays} day{lastScanAgeDays === 1 ? "" : "s"} ago
+            {schedulesActive === 0 ? " — consider a Monitor schedule for drift detection." : "."}
+          </InsightCallout>
+        ) : null}
         <div ref={historyRef}>
         {scans.length === 0 && !inProgressRow ? (
           <EmptyState
@@ -463,10 +487,20 @@ export default function DashboardScansTab({
                   onChange={(e) => setSourceFilter(e.target.value as SourceFilter)}
                 >
                   <option value="all">All sources</option>
-                  <option value="dashboard">Dashboard</option>
+                  <option value="dashboard">Command Center</option>
                   <option value="automation">Automation keys</option>
                   <option value="schedule">Scheduled</option>
                 </select>
+                {ccV2 ? (
+                  <select
+                    className="rounded border border-[var(--border-subtle)] bg-transparent px-2 py-1 text-xs text-white"
+                    value={sortKey}
+                    onChange={(e) => setSortKey(e.target.value as "date" | "readiness")}
+                  >
+                    <option value="date">Sort: date</option>
+                    <option value="readiness">Sort: readiness</option>
+                  </select>
+                ) : null}
                 {selected.size > 0 ? (
                   <button type="button" className="text-xs text-white underline" onClick={() => void bulkExport()}>
                     Download {selected.size} bundle(s)
@@ -476,7 +510,7 @@ export default function DashboardScansTab({
             </div>
             <div className="mt-4 hidden overflow-x-auto md:block">
               <ScanTable
-                scans={displayScans}
+                scans={sortedScans}
                 selected={selected}
                 diffByScan={diffByScan}
                 reportUrlForScan={reportUrlForScan}
@@ -490,7 +524,7 @@ export default function DashboardScansTab({
               />
             </div>
             <div className="mt-4 space-y-3 md:hidden">
-              {displayScans.map((scan) => (
+              {sortedScans.map((scan) => (
                 <ScanCard
                   key={scan.scanId}
                   scan={scan}

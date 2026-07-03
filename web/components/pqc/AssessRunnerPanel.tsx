@@ -51,7 +51,7 @@ export default function AssessRunnerPanel({
             backendMessage={backendMessage}
             apiBaseUrl=""
             compact
-            basePath="/dashboard"
+            basePath="/command-center"
             syncUrlEnabled={false}
             canAdminDomains={canAdminDomains}
             useBffForDomains={useBff}

@@ -53,7 +53,7 @@ export default function AssessScanError({
       {isLegalRequired ? (
         <p className="mt-3 text-xs leading-6 text-red-100/90">
           Accept the current Terms of Service on the Scans tab before running production baselines.{" "}
-          <Link href="/dashboard?tab=scans" className="underline text-white">
+          <Link href="/command-center?tab=scans" className="underline text-white">
             Go to legal acceptance
           </Link>
         </p>

@@ -2,6 +2,8 @@
 
 import Card from "@/components/ui/Card";
 import Eyebrow from "@/components/ui/Eyebrow";
+import TrajectoryForecastCard from "@/components/dashboard/TrajectoryForecastCard";
+import { ccFlags } from "@/lib/cc-feature-flags";
 
 type Forecast = {
   projected?: number;
@@ -10,6 +12,12 @@ type Forecast = {
 };
 
 export default function ForecastCard({ forecast }: { forecast: Forecast | null }) {
+  // Command Center v2: dual-projection trajectory (fetches its own data). Falls
+  // back to the inline single-projection bar when the flag is off.
+  if (ccFlags.v2) {
+    return <TrajectoryForecastCard />;
+  }
+
   if (!forecast || forecast.projected == null) {
     return null;
   }

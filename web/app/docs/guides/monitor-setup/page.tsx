@@ -75,7 +75,7 @@ QTANGL_SCHEDULER_INTERVAL_SEC=60`}
           <DocsHeading>5. Dashboard</DocsHeading>
           <p className="text-sm leading-8 text-[var(--color-gray-300)]">
             Configure schedules, alert thresholds, and webhook signing in{" "}
-            <Link href="/dashboard" className="text-white underline underline-offset-4">
+            <Link href="/command-center" className="text-white underline underline-offset-4">
               Dashboard
             </Link>
             . Failed webhook deliveries appear in the DLQ with one-click replay.

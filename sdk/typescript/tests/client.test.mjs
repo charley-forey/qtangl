@@ -99,7 +99,7 @@ test("transport surfaces structured 402 payment detail", async () => {
       JSON.stringify({
         detail: {
           code: "assess_payment_required",
-          upgradeUrl: "/dashboard?upgrade=assess",
+          upgradeUrl: "/command-center?upgrade=assess",
         },
       }),
       {

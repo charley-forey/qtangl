@@ -78,5 +78,5 @@ def provision_child_tenant(
         "link": link,
         "invite": invite_result,
         "welcomeEmail": welcome,
-        "deepLink": f"/dashboard?tab=portfolio",
+        "deepLink": f"/command-center?tab=portfolio",
     }

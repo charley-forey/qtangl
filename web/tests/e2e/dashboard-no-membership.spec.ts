@@ -20,7 +20,7 @@ test.describe("Dashboard no membership", () => {
   });
 
   test("shows no workspace linked card", async ({ page }) => {
-    await page.goto("/dashboard");
+    await page.goto("/command-center");
     await expect(page.getByText("No workspace linked")).toBeVisible({ timeout: 15000 });
     await expect(page.getByRole("link", { name: "Request pilot" })).toBeVisible();
   });

@@ -40,7 +40,7 @@ export default function DashboardAuthGate({
           This organization requires SSO for dashboard access.
         </p>
         <a
-          href="/dashboard/login"
+          href="/command-center/login"
           className="mt-4 inline-block rounded-full bg-white px-5 py-2 text-sm font-medium text-black"
         >
           Sign in with SSO

@@ -1900,6 +1900,108 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/tenant/partner/program": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Tenant Partner Program */
+        get: operations["tenant_partner_program_tenant_partner_program_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/tenant/partner/portfolio-board": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Tenant Partner Portfolio Board */
+        get: operations["tenant_partner_portfolio_board_tenant_partner_portfolio_board_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/tenant/partner/bulk/weekly-digest": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Tenant Partner Bulk Weekly Digest */
+        post: operations["tenant_partner_bulk_weekly_digest_tenant_partner_bulk_weekly_digest_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/tenant/partner/bulk/schedule-template": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Tenant Partner Bulk Schedule Template */
+        post: operations["tenant_partner_bulk_schedule_template_tenant_partner_bulk_schedule_template_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/tenant/partner/deal-registration": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Tenant Partner Deal Registration */
+        post: operations["tenant_partner_deal_registration_tenant_partner_deal_registration_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/tenant/partner/usage-export": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Tenant Partner Usage Export */
+        get: operations["tenant_partner_usage_export_tenant_partner_usage_export_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/tenant/dashboard/digest/preview": {
         parameters: {
             query?: never;
@@ -2066,6 +2168,41 @@ export interface paths {
         put?: never;
         /** Tenant Partner Link Child */
         post: operations["tenant_partner_link_child_tenant_partner_children_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/tenant/partner/children/{child_tenant_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Tenant Partner Unlink Child */
+        delete: operations["tenant_partner_unlink_child_tenant_partner_children__child_tenant_id__delete"];
+        options?: never;
+        head?: never;
+        /** Tenant Partner Update Child Label */
+        patch: operations["tenant_partner_update_child_label_tenant_partner_children__child_tenant_id__patch"];
+        trace?: never;
+    };
+    "/tenant/partner/provision-child": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Tenant Partner Provision Child */
+        post: operations["tenant_partner_provision_child_tenant_partner_provision_child_post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -2443,6 +2580,40 @@ export interface paths {
         };
         /** Get Discovery Agents */
         get: operations["get_discovery_agents_tenant_discovery_agents_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/tenant/discovery/agents/{agent_id}/findings": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Agent Findings */
+        get: operations["get_agent_findings_tenant_discovery_agents__agent_id__findings_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/tenant/discovery/findings/{finding_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Host Finding Detail */
+        get: operations["get_host_finding_detail_tenant_discovery_findings__finding_id__get"];
         put?: never;
         post?: never;
         delete?: never;
@@ -3205,6 +3376,46 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/integrations/slack/actions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Slack Inbound Action
+         * @description Inbound Slack interactive actions — ack/assign alerts.
+         */
+        post: operations["slack_inbound_action_integrations_slack_actions_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/integrations/teams/actions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Teams Inbound Action
+         * @description Inbound Microsoft Teams action payloads — same semantics as Slack.
+         */
+        post: operations["teams_inbound_action_integrations_teams_actions_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/admin/platform/summary": {
         parameters: {
             query?: never;
@@ -3427,6 +3638,387 @@ export interface paths {
         };
         /** Dashboard User Lookup */
         get: operations["dashboard_user_lookup_internal_dashboard_user_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/tenant/scans/{scan_id}/graph": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Tenant Scan Graph */
+        get: operations["tenant_scan_graph_tenant_scans__scan_id__graph_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/tenant/hndl/exposure": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Tenant Hndl Exposure */
+        get: operations["tenant_hndl_exposure_tenant_hndl_exposure_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/tenant/findings/{finding_id}/comments": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Tenant Finding Comments List */
+        get: operations["tenant_finding_comments_list_tenant_findings__finding_id__comments_get"];
+        put?: never;
+        /** Tenant Finding Comments Create */
+        post: operations["tenant_finding_comments_create_tenant_findings__finding_id__comments_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/tenant/findings/{finding_id}/comments/{comment_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Tenant Finding Comments Delete */
+        delete: operations["tenant_finding_comments_delete_tenant_findings__finding_id__comments__comment_id__delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/tenant/saved-views": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Tenant Saved Views List */
+        get: operations["tenant_saved_views_list_tenant_saved_views_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/tenant/saved-views/{view_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** Tenant Saved Views Upsert */
+        put: operations["tenant_saved_views_upsert_tenant_saved_views__view_id__put"];
+        post?: never;
+        /** Tenant Saved Views Delete */
+        delete: operations["tenant_saved_views_delete_tenant_saved_views__view_id__delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/tenant/inbox": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Tenant Inbox */
+        get: operations["tenant_inbox_tenant_inbox_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/tenant/war-rooms": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Tenant War Rooms List */
+        get: operations["tenant_war_rooms_list_tenant_war_rooms_get"];
+        put?: never;
+        /** Tenant War Rooms Create */
+        post: operations["tenant_war_rooms_create_tenant_war_rooms_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/tenant/ai/query": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Tenant Ai Query */
+        post: operations["tenant_ai_query_tenant_ai_query_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/tenant/ai/executive-narrative": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Tenant Executive Narrative */
+        get: operations["tenant_executive_narrative_tenant_ai_executive_narrative_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/tenant/ai/remediation-pr-draft": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Tenant Remediation Pr Draft */
+        post: operations["tenant_remediation_pr_draft_tenant_ai_remediation_pr_draft_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/tenant/ai/agentic-plan/{remediation_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Tenant Agentic Plan */
+        get: operations["tenant_agentic_plan_tenant_ai_agentic_plan__remediation_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/tenant/incidents/correlated": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Tenant Correlated Incidents */
+        get: operations["tenant_correlated_incidents_tenant_incidents_correlated_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/tenant/cadence/recommendation": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Tenant Cadence Recommendation */
+        get: operations["tenant_cadence_recommendation_tenant_cadence_recommendation_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/tenant/analytics/anomaly-explanations": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Tenant Anomaly Explanations */
+        get: operations["tenant_anomaly_explanations_tenant_analytics_anomaly_explanations_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/tenant/analytics/trajectory-forecast": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Tenant Trajectory Forecast */
+        get: operations["tenant_trajectory_forecast_tenant_analytics_trajectory_forecast_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/tenant/evidence/transparency": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Tenant Evidence Transparency */
+        get: operations["tenant_evidence_transparency_tenant_evidence_transparency_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/tenant/evidence/auditor-packet": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Tenant Auditor Packet */
+        post: operations["tenant_auditor_packet_tenant_evidence_auditor_packet_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/tenant/portfolio/rollup": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Tenant Portfolio Rollup */
+        get: operations["tenant_portfolio_rollup_tenant_portfolio_rollup_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/tenant/benchmarks/percentiles": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Tenant Benchmark Percentiles */
+        get: operations["tenant_benchmark_percentiles_tenant_benchmarks_percentiles_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/tenant/notification-preferences": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Tenant Notification Preferences Get */
+        get: operations["tenant_notification_preferences_get_tenant_notification_preferences_get"];
+        /** Tenant Notification Preferences Put */
+        put: operations["tenant_notification_preferences_put_tenant_notification_preferences_put"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/public/verify/branding": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Public Verify Branding
+         * @description Public co-branding for verify page and share links (resolved MSSP parent + child).
+         */
+        get: operations["public_verify_branding_public_verify_branding_get"];
         put?: never;
         post?: never;
         delete?: never;
@@ -3684,6 +4276,78 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        /** AgenticPlanResponse */
+        AgenticPlanResponse: {
+            /** Remediationid */
+            remediationId: string;
+            /** Steps */
+            steps: components["schemas"]["AgenticPlanStep"][];
+            /** Assumptions */
+            assumptions?: string[];
+        };
+        /** AgenticPlanStep */
+        AgenticPlanStep: {
+            /** Id */
+            id: string;
+            /** Label */
+            label: string;
+            /**
+             * Status
+             * @default pending
+             * @enum {string}
+             */
+            status: "pending" | "approved" | "completed" | "skipped";
+            /**
+             * Requiresapproval
+             * @default true
+             */
+            requiresApproval: boolean;
+        };
+        /** AiCitation */
+        AiCitation: {
+            /** Kind */
+            kind: string;
+            /** Ref */
+            ref: string;
+            /** Label */
+            label: string;
+        };
+        /** AiQueryRequest */
+        AiQueryRequest: {
+            /** Query */
+            query: string;
+            /**
+             * Persona
+             * @default operator
+             */
+            persona: string;
+        };
+        /** AiQueryResponse */
+        AiQueryResponse: {
+            /** Answer */
+            answer: string;
+            /** Intent */
+            intent: string;
+            /** Filters */
+            filters?: {
+                [key: string]: unknown;
+            };
+            /** Citations */
+            citations?: components["schemas"]["AiCitation"][];
+            /**
+             * Confidence
+             * @default medium
+             * @enum {string}
+             */
+            confidence: "low" | "medium" | "high";
+            /** Assumptions */
+            assumptions?: string[];
+            /**
+             * Guardrailpassed
+             * @default true
+             */
+            guardrailPassed: boolean;
+        };
         /** AirlineSolveRequest */
         AirlineSolveRequest: {
             /**
@@ -3725,6 +4389,17 @@ export interface components {
             company: string;
             /** Domain */
             domain?: string | null;
+        };
+        /** AuditorPacketResponse */
+        AuditorPacketResponse: {
+            /** Scanids */
+            scanIds: string[];
+            /** Bundleurls */
+            bundleUrls: string[];
+            /** Verifycli */
+            verifyCli: string;
+            /** Caveats */
+            caveats: string[];
         };
         /** AuthorizedDomainsAdminRequest */
         AuthorizedDomainsAdminRequest: {
@@ -3844,6 +4519,19 @@ export interface components {
             /** Scanids */
             scanIds?: string[];
         };
+        /** CadenceRecommendation */
+        CadenceRecommendation: {
+            /** Currentcadencehours */
+            currentCadenceHours?: number | null;
+            /** Recommendedcadencehours */
+            recommendedCadenceHours: number;
+            /** Volatilityscore */
+            volatilityScore: number;
+            /** Rationale */
+            rationale: string;
+            /** Assumptions */
+            assumptions?: string[];
+        };
         /** CbomConflictResolveRequest */
         CbomConflictResolveRequest: {
             /** Resolvedvalue */
@@ -3886,6 +4574,28 @@ export interface components {
             clientId?: string | null;
             /** Clientsecret */
             clientSecret?: string | null;
+        };
+        /** CorrelatedIncident */
+        CorrelatedIncident: {
+            /** Id */
+            id: string;
+            /** Title */
+            title: string;
+            /** Alertids */
+            alertIds: string[];
+            /** Correlationkeys */
+            correlationKeys: string[];
+            /** Severity */
+            severity: string;
+            /** Summary */
+            summary: string;
+            /** Createdat */
+            createdAt: string;
+        };
+        /** CorrelatedIncidentsResponse */
+        CorrelatedIncidentsResponse: {
+            /** Incidents */
+            incidents: components["schemas"]["CorrelatedIncident"][];
         };
         /** CreateTenantRequest */
         CreateTenantRequest: {
@@ -3951,6 +4661,56 @@ export interface components {
             /** Stopssessionid */
             stopsSessionId?: string | null;
         };
+        /** ExecutiveNarrativeResponse */
+        ExecutiveNarrativeResponse: {
+            /** Narrative */
+            narrative: string;
+            /** Citations */
+            citations?: components["schemas"]["AiCitation"][];
+            /**
+             * Confidence
+             * @default medium
+             * @enum {string}
+             */
+            confidence: "low" | "medium" | "high";
+            /** Assumptions */
+            assumptions?: string[];
+        };
+        /** FindingComment */
+        FindingComment: {
+            /** Id */
+            id: string;
+            /** Findingid */
+            findingId: string;
+            /** Scanid */
+            scanId?: string | null;
+            /** Author */
+            author: string;
+            /** Body */
+            body: string;
+            /** Mentions */
+            mentions?: string[];
+            /** Createdat */
+            createdAt: string;
+            /** Updatedat */
+            updatedAt?: string | null;
+        };
+        /** FindingCommentCreate */
+        FindingCommentCreate: {
+            /** Body */
+            body: string;
+            /** Mentions */
+            mentions?: string[];
+        };
+        /** FindingCommentListResponse */
+        FindingCommentListResponse: {
+            /** Findingid */
+            findingId: string;
+            /** Comments */
+            comments: components["schemas"]["FindingComment"][];
+            /** Total */
+            total: number;
+        };
         /** FlipApproveRequest */
         FlipApproveRequest: {
             /** Approvalnote */
@@ -4000,10 +4760,85 @@ export interface components {
              */
             skipApproval: boolean;
         };
+        /** GraphEdge */
+        GraphEdge: {
+            /** Source */
+            source: string;
+            /** Target */
+            target: string;
+            /**
+             * Kind
+             * @default depends_on
+             */
+            kind: string;
+        };
+        /** GraphNode */
+        GraphNode: {
+            /** Id */
+            id: string;
+            /** Label */
+            label: string;
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "host" | "service" | "cert" | "algorithm";
+            /**
+             * Quantumvulnerable
+             * @default false
+             */
+            quantumVulnerable: boolean;
+            /** Severity */
+            severity?: string | null;
+            /** Drilltarget */
+            drillTarget?: string | null;
+        };
         /** HTTPValidationError */
         HTTPValidationError: {
             /** Detail */
             detail?: components["schemas"]["ValidationError"][];
+        };
+        /** HndlAssetExposure */
+        HndlAssetExposure: {
+            /** Assetid */
+            assetId: string;
+            /** Host */
+            host?: string | null;
+            /** Algorithm */
+            algorithm?: string | null;
+            /** Exposurescore */
+            exposureScore: number;
+            /**
+             * Exposureband
+             * @enum {string}
+             */
+            exposureBand: "low" | "moderate" | "elevated" | "critical";
+            /** Hndlexposed */
+            hndlExposed: boolean;
+            /** Forwardsecrecy */
+            forwardSecrecy?: boolean | null;
+            /** Datasensitivity */
+            dataSensitivity?: string | null;
+            /** Verdict */
+            verdict?: string | null;
+        };
+        /** HndlExposureResponse */
+        HndlExposureResponse: {
+            /** Scanid */
+            scanId?: string | null;
+            /** Totalassets */
+            totalAssets: number;
+            /** Exposedcount */
+            exposedCount: number;
+            /** Items */
+            items: components["schemas"]["HndlAssetExposure"][];
+            /**
+             * Framing
+             * @default Exposure window quantification based on long-lived secrets and algorithm class — not a prediction of when cryptography breaks.
+             */
+            framing: string;
+            /** Assumptions */
+            assumptions?: string[];
         };
         /** HospitalSolveRequest */
         HospitalSolveRequest: {
@@ -4024,6 +4859,37 @@ export interface components {
             seed: number;
             /** Rostersessionid */
             rosterSessionId?: string | null;
+        };
+        /** InboxItem */
+        InboxItem: {
+            /** Id */
+            id: string;
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "remediation" | "alert" | "scan";
+            /** Title */
+            title: string;
+            /** Status */
+            status?: string | null;
+            /** Owner */
+            owner?: string | null;
+            /** Dueat */
+            dueAt?: string | null;
+            /** Deeplink */
+            deepLink?: string | null;
+            /** Severity */
+            severity?: string | null;
+        };
+        /** InboxResponse */
+        InboxResponse: {
+            /** Owner */
+            owner: string;
+            /** Items */
+            items: components["schemas"]["InboxItem"][];
+            /** Total */
+            total: number;
         };
         /** IntegrationConfigRequest */
         IntegrationConfigRequest: {
@@ -4123,6 +4989,32 @@ export interface components {
             /** Parenttenantid */
             parentTenantId: string;
         };
+        /** NotificationPreferences */
+        NotificationPreferences: {
+            /** Channels */
+            channels?: {
+                [key: string]: boolean;
+            };
+            /**
+             * Digestcadencehours
+             * @default 24
+             */
+            digestCadenceHours: number;
+            /** Quiethoursstart */
+            quietHoursStart?: number | null;
+            /** Quiethoursend */
+            quietHoursEnd?: number | null;
+            /**
+             * Minseverity
+             * @default medium
+             */
+            minSeverity: string;
+            /**
+             * Pushenabled
+             * @default false
+             */
+            pushEnabled: boolean;
+        };
         /** OidcConfigRequest */
         OidcConfigRequest: {
             /** Issuerurl */
@@ -4206,10 +5098,92 @@ export interface components {
                 [key: string]: unknown;
             } | null;
         };
+        /** PartnerBulkDigestBody */
+        PartnerBulkDigestBody: {
+            /**
+             * Enabled
+             * @default true
+             */
+            enabled: boolean;
+        };
+        /** PartnerBulkScheduleBody */
+        PartnerBulkScheduleBody: {
+            /**
+             * Cadencehours
+             * @default 168
+             */
+            cadenceHours: number;
+            /**
+             * Scenarioid
+             * @default qtangl-baseline
+             */
+            scenarioId: string;
+        };
+        /** PartnerDealRegistrationBody */
+        PartnerDealRegistrationBody: {
+            /** Companyname */
+            companyName: string;
+            /** Contactemail */
+            contactEmail: string;
+            /** Estimatedvalue */
+            estimatedValue?: string | null;
+            /** Notes */
+            notes?: string | null;
+        };
+        /** PartnerProvisionChildBody */
+        PartnerProvisionChildBody: {
+            /** Customername */
+            customerName: string;
+            /**
+             * Label
+             * @default
+             */
+            label: string;
+            /**
+             * Tier
+             * @default monitor
+             */
+            tier: string;
+            /** Primarydomain */
+            primaryDomain?: string | null;
+            /** Inviteemail */
+            inviteEmail?: string | null;
+            /**
+             * Inviterole
+             * @default customer_executive
+             */
+            inviteRole: string;
+        };
         /** PatchTenantRequest */
         PatchTenantRequest: {
             /** Tier */
             tier: string;
+        };
+        /** PeerPercentileResponse */
+        PeerPercentileResponse: {
+            /** Readinesspercentile */
+            readinessPercentile?: number | null;
+            /** Velocitypercentile */
+            velocityPercentile?: number | null;
+            /** Sector */
+            sector?: string | null;
+            /** Samplesize */
+            sampleSize: number;
+            /** Assumptions */
+            assumptions?: string[];
+        };
+        /** PortfolioRollupResponse */
+        PortfolioRollupResponse: {
+            /** Childcount */
+            childCount: number;
+            /** Avgreadiness */
+            avgReadiness?: number | null;
+            /** Tenants */
+            tenants: {
+                [key: string]: unknown;
+            }[];
+            /** Assumptions */
+            assumptions?: string[];
         };
         /** PortfolioTargetRequest */
         PortfolioTargetRequest: {
@@ -4332,6 +5306,28 @@ export interface components {
             /** Policyid */
             policyId?: string | null;
         };
+        /** RemediationPrDraftRequest */
+        RemediationPrDraftRequest: {
+            /** Remediationid */
+            remediationId: string;
+            /** Scanid */
+            scanId: string;
+        };
+        /** RemediationPrDraftResponse */
+        RemediationPrDraftResponse: {
+            /** Remediationid */
+            remediationId: string;
+            /** Title */
+            title: string;
+            /** Description */
+            description: string;
+            /** Files */
+            files?: {
+                [key: string]: string;
+            }[];
+            /** Checklist */
+            checklist?: string[];
+        };
         /** RemediationSimulationRequest */
         RemediationSimulationRequest: {
             /** Remediationids */
@@ -4370,6 +5366,68 @@ export interface components {
             id: string;
             /** Servicewindow */
             serviceWindow?: string | null;
+        };
+        /** SavedView */
+        SavedView: {
+            /** Name */
+            name: string;
+            /** Persona */
+            persona?: string | null;
+            filters: components["schemas"]["SavedViewFilters"];
+            /** Id */
+            id: string;
+            /** Createdat */
+            createdAt: string;
+            /** Updatedat */
+            updatedAt: string;
+        };
+        /** SavedViewCreate */
+        SavedViewCreate: {
+            /** Name */
+            name: string;
+            /** Persona */
+            persona?: string | null;
+            filters: components["schemas"]["SavedViewFilters"];
+        };
+        /** SavedViewFilters */
+        SavedViewFilters: {
+            /** Tab */
+            tab?: string | null;
+            /** Severity */
+            severity?: string | null;
+            /** Businessunit */
+            businessUnit?: string | null;
+            /** Scansource */
+            scanSource?: string | null;
+            /** Query */
+            query?: string | null;
+            /** Extra */
+            extra?: {
+                [key: string]: unknown;
+            };
+        };
+        /** SavedViewListResponse */
+        SavedViewListResponse: {
+            /** Views */
+            views: components["schemas"]["SavedView"][];
+        };
+        /** ScanGraphResponse */
+        ScanGraphResponse: {
+            /** Scanid */
+            scanId: string;
+            /** Nodes */
+            nodes: components["schemas"]["GraphNode"][];
+            /** Edges */
+            edges: components["schemas"]["GraphEdge"][];
+            /** Nodecount */
+            nodeCount: number;
+            /**
+             * Truncated
+             * @default false
+             */
+            truncated: boolean;
+            /** Assumptions */
+            assumptions?: string[];
         };
         /** ScheduleCreateRequest */
         ScheduleCreateRequest: {
@@ -4508,6 +5566,30 @@ export interface components {
                 [key: string]: unknown;
             };
         };
+        /** TransparencyEntry */
+        TransparencyEntry: {
+            /** Seq */
+            seq: number;
+            /** Contenthash */
+            contentHash: string;
+            /** Entryhash */
+            entryHash: string;
+            /** Scanid */
+            scanId?: string | null;
+            /** Createdat */
+            createdAt?: string | null;
+        };
+        /** TransparencyLogResponse */
+        TransparencyLogResponse: {
+            /** Roothash */
+            rootHash?: string | null;
+            /** Entries */
+            entries: components["schemas"]["TransparencyEntry"][];
+            /** Total */
+            total: number;
+            /** Verifyinstructions */
+            verifyInstructions: string;
+        };
         /** UnsubscribeRequest */
         UnsubscribeRequest: {
             /** Email */
@@ -4539,6 +5621,37 @@ export interface components {
             reportJson: {
                 [key: string]: unknown;
             };
+        };
+        /** WarRoom */
+        WarRoom: {
+            /** Id */
+            id: string;
+            /** Title */
+            title: string;
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "active" | "resolved";
+            /** Alertids */
+            alertIds: string[];
+            /** Assignees */
+            assignees: string[];
+            /** Sharetoken */
+            shareToken?: string | null;
+            /** Createdat */
+            createdAt: string;
+            /** Updatedat */
+            updatedAt: string;
+        };
+        /** WarRoomCreate */
+        WarRoomCreate: {
+            /** Title */
+            title: string;
+            /** Alertids */
+            alertIds?: string[];
+            /** Assignees */
+            assignees?: string[];
         };
         /** WebhookRequest */
         WebhookRequest: {
@@ -9457,6 +10570,233 @@ export interface operations {
             };
         };
     };
+    tenant_partner_program_tenant_partner_program_get: {
+        parameters: {
+            query?: {
+                api_key?: string | null;
+            };
+            header?: {
+                authorization?: string | null;
+                "x-api-key"?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    tenant_partner_portfolio_board_tenant_partner_portfolio_board_get: {
+        parameters: {
+            query?: {
+                format?: string;
+                api_key?: string | null;
+            };
+            header?: {
+                authorization?: string | null;
+                "x-api-key"?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    tenant_partner_bulk_weekly_digest_tenant_partner_bulk_weekly_digest_post: {
+        parameters: {
+            query?: {
+                api_key?: string | null;
+            };
+            header?: {
+                authorization?: string | null;
+                "x-api-key"?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PartnerBulkDigestBody"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    tenant_partner_bulk_schedule_template_tenant_partner_bulk_schedule_template_post: {
+        parameters: {
+            query?: {
+                api_key?: string | null;
+            };
+            header?: {
+                authorization?: string | null;
+                "x-api-key"?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PartnerBulkScheduleBody"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    tenant_partner_deal_registration_tenant_partner_deal_registration_post: {
+        parameters: {
+            query?: {
+                api_key?: string | null;
+                count_toward_rate_limit?: boolean;
+            };
+            header?: {
+                authorization?: string | null;
+                "x-api-key"?: string | null;
+                "X-Qtangl-Session"?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PartnerDealRegistrationBody"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    tenant_partner_usage_export_tenant_partner_usage_export_get: {
+        parameters: {
+            query?: {
+                api_key?: string | null;
+            };
+            header?: {
+                authorization?: string | null;
+                "x-api-key"?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     tenant_dashboard_digest_preview_tenant_dashboard_digest_preview_post: {
         parameters: {
             query?: {
@@ -9881,6 +11221,128 @@ export interface operations {
                 "application/json": {
                     [key: string]: unknown;
                 };
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    tenant_partner_unlink_child_tenant_partner_children__child_tenant_id__delete: {
+        parameters: {
+            query?: {
+                api_key?: string | null;
+            };
+            header?: {
+                authorization?: string | null;
+                "x-api-key"?: string | null;
+            };
+            path: {
+                child_tenant_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    tenant_partner_update_child_label_tenant_partner_children__child_tenant_id__patch: {
+        parameters: {
+            query?: {
+                api_key?: string | null;
+            };
+            header?: {
+                authorization?: string | null;
+                "x-api-key"?: string | null;
+            };
+            path: {
+                child_tenant_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    [key: string]: unknown;
+                };
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    tenant_partner_provision_child_tenant_partner_provision_child_post: {
+        parameters: {
+            query?: {
+                api_key?: string | null;
+            };
+            header?: {
+                authorization?: string | null;
+                "x-api-key"?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PartnerProvisionChildBody"];
             };
         };
         responses: {
@@ -10933,6 +12395,84 @@ export interface operations {
                 "x-api-key"?: string | null;
             };
             path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_agent_findings_tenant_discovery_agents__agent_id__findings_get: {
+        parameters: {
+            query?: {
+                limit?: number;
+                offset?: number;
+                api_key?: string | null;
+            };
+            header?: {
+                authorization?: string | null;
+                "x-api-key"?: string | null;
+            };
+            path: {
+                agent_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_host_finding_detail_tenant_discovery_findings__finding_id__get: {
+        parameters: {
+            query?: {
+                api_key?: string | null;
+            };
+            header?: {
+                authorization?: string | null;
+                "x-api-key"?: string | null;
+            };
+            path: {
+                finding_id: string;
+            };
             cookie?: never;
         };
         requestBody?: never;
@@ -12839,6 +14379,50 @@ export interface operations {
             };
         };
     };
+    slack_inbound_action_integrations_slack_actions_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+        };
+    };
+    teams_inbound_action_integrations_teams_actions_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+        };
+    };
     admin_platform_summary_admin_platform_summary_get: {
         parameters: {
             query?: never;
@@ -13415,6 +14999,952 @@ export interface operations {
             header?: {
                 "X-Qtangl-Bff-Secret"?: string | null;
             };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    tenant_scan_graph_tenant_scans__scan_id__graph_get: {
+        parameters: {
+            query?: {
+                api_key?: string | null;
+            };
+            header?: {
+                authorization?: string | null;
+                "x-api-key"?: string | null;
+            };
+            path: {
+                scan_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ScanGraphResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    tenant_hndl_exposure_tenant_hndl_exposure_get: {
+        parameters: {
+            query?: {
+                scan_id?: string | null;
+                api_key?: string | null;
+            };
+            header?: {
+                authorization?: string | null;
+                "x-api-key"?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HndlExposureResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    tenant_finding_comments_list_tenant_findings__finding_id__comments_get: {
+        parameters: {
+            query?: {
+                api_key?: string | null;
+            };
+            header?: {
+                authorization?: string | null;
+                "x-api-key"?: string | null;
+            };
+            path: {
+                finding_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FindingCommentListResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    tenant_finding_comments_create_tenant_findings__finding_id__comments_post: {
+        parameters: {
+            query?: {
+                scan_id?: string | null;
+                api_key?: string | null;
+                count_toward_rate_limit?: boolean;
+            };
+            header?: {
+                authorization?: string | null;
+                "x-api-key"?: string | null;
+                "X-Qtangl-Session"?: string | null;
+            };
+            path: {
+                finding_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["FindingCommentCreate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FindingCommentListResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    tenant_finding_comments_delete_tenant_findings__finding_id__comments__comment_id__delete: {
+        parameters: {
+            query?: {
+                api_key?: string | null;
+                count_toward_rate_limit?: boolean;
+            };
+            header?: {
+                authorization?: string | null;
+                "x-api-key"?: string | null;
+                "X-Qtangl-Session"?: string | null;
+            };
+            path: {
+                finding_id: string;
+                comment_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    tenant_saved_views_list_tenant_saved_views_get: {
+        parameters: {
+            query?: {
+                api_key?: string | null;
+            };
+            header?: {
+                authorization?: string | null;
+                "x-api-key"?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SavedViewListResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    tenant_saved_views_upsert_tenant_saved_views__view_id__put: {
+        parameters: {
+            query?: {
+                api_key?: string | null;
+                count_toward_rate_limit?: boolean;
+            };
+            header?: {
+                authorization?: string | null;
+                "x-api-key"?: string | null;
+                "X-Qtangl-Session"?: string | null;
+            };
+            path: {
+                view_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SavedViewCreate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SavedViewListResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    tenant_saved_views_delete_tenant_saved_views__view_id__delete: {
+        parameters: {
+            query?: {
+                api_key?: string | null;
+                count_toward_rate_limit?: boolean;
+            };
+            header?: {
+                authorization?: string | null;
+                "x-api-key"?: string | null;
+                "X-Qtangl-Session"?: string | null;
+            };
+            path: {
+                view_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    tenant_inbox_tenant_inbox_get: {
+        parameters: {
+            query?: {
+                owner?: string | null;
+                api_key?: string | null;
+            };
+            header?: {
+                authorization?: string | null;
+                "x-api-key"?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["InboxResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    tenant_war_rooms_list_tenant_war_rooms_get: {
+        parameters: {
+            query?: {
+                api_key?: string | null;
+            };
+            header?: {
+                authorization?: string | null;
+                "x-api-key"?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WarRoom"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    tenant_war_rooms_create_tenant_war_rooms_post: {
+        parameters: {
+            query?: {
+                api_key?: string | null;
+                count_toward_rate_limit?: boolean;
+            };
+            header?: {
+                authorization?: string | null;
+                "x-api-key"?: string | null;
+                "X-Qtangl-Session"?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["WarRoomCreate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WarRoom"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    tenant_ai_query_tenant_ai_query_post: {
+        parameters: {
+            query?: {
+                api_key?: string | null;
+            };
+            header?: {
+                authorization?: string | null;
+                "x-api-key"?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AiQueryRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AiQueryResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    tenant_executive_narrative_tenant_ai_executive_narrative_get: {
+        parameters: {
+            query?: {
+                api_key?: string | null;
+            };
+            header?: {
+                authorization?: string | null;
+                "x-api-key"?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ExecutiveNarrativeResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    tenant_remediation_pr_draft_tenant_ai_remediation_pr_draft_post: {
+        parameters: {
+            query?: {
+                api_key?: string | null;
+                count_toward_rate_limit?: boolean;
+            };
+            header?: {
+                authorization?: string | null;
+                "x-api-key"?: string | null;
+                "X-Qtangl-Session"?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RemediationPrDraftRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RemediationPrDraftResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    tenant_agentic_plan_tenant_ai_agentic_plan__remediation_id__get: {
+        parameters: {
+            query?: {
+                api_key?: string | null;
+            };
+            header?: {
+                authorization?: string | null;
+                "x-api-key"?: string | null;
+            };
+            path: {
+                remediation_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AgenticPlanResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    tenant_correlated_incidents_tenant_incidents_correlated_get: {
+        parameters: {
+            query?: {
+                api_key?: string | null;
+            };
+            header?: {
+                authorization?: string | null;
+                "x-api-key"?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CorrelatedIncidentsResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    tenant_cadence_recommendation_tenant_cadence_recommendation_get: {
+        parameters: {
+            query?: {
+                api_key?: string | null;
+            };
+            header?: {
+                authorization?: string | null;
+                "x-api-key"?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CadenceRecommendation"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    tenant_anomaly_explanations_tenant_analytics_anomaly_explanations_get: {
+        parameters: {
+            query?: {
+                api_key?: string | null;
+            };
+            header?: {
+                authorization?: string | null;
+                "x-api-key"?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    tenant_trajectory_forecast_tenant_analytics_trajectory_forecast_get: {
+        parameters: {
+            query?: {
+                api_key?: string | null;
+            };
+            header?: {
+                authorization?: string | null;
+                "x-api-key"?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    tenant_evidence_transparency_tenant_evidence_transparency_get: {
+        parameters: {
+            query?: {
+                limit?: number;
+                api_key?: string | null;
+            };
+            header?: {
+                authorization?: string | null;
+                "x-api-key"?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TransparencyLogResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    tenant_auditor_packet_tenant_evidence_auditor_packet_post: {
+        parameters: {
+            query?: {
+                api_key?: string | null;
+            };
+            header?: {
+                authorization?: string | null;
+                "x-api-key"?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    [key: string]: unknown;
+                };
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AuditorPacketResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    tenant_portfolio_rollup_tenant_portfolio_rollup_get: {
+        parameters: {
+            query?: {
+                api_key?: string | null;
+            };
+            header?: {
+                authorization?: string | null;
+                "x-api-key"?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PortfolioRollupResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    tenant_benchmark_percentiles_tenant_benchmarks_percentiles_get: {
+        parameters: {
+            query?: {
+                api_key?: string | null;
+            };
+            header?: {
+                authorization?: string | null;
+                "x-api-key"?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PeerPercentileResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    tenant_notification_preferences_get_tenant_notification_preferences_get: {
+        parameters: {
+            query?: {
+                api_key?: string | null;
+            };
+            header?: {
+                authorization?: string | null;
+                "x-api-key"?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NotificationPreferences"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    tenant_notification_preferences_put_tenant_notification_preferences_put: {
+        parameters: {
+            query?: {
+                api_key?: string | null;
+                count_toward_rate_limit?: boolean;
+            };
+            header?: {
+                authorization?: string | null;
+                "x-api-key"?: string | null;
+                "X-Qtangl-Session"?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["NotificationPreferences"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NotificationPreferences"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    public_verify_branding_public_verify_branding_get: {
+        parameters: {
+            query: {
+                scanId: string;
+            };
+            header?: never;
             path?: never;
             cookie?: never;
         };

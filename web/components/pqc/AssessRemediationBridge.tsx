@@ -24,7 +24,7 @@ export default function AssessRemediationBridge({ items, scanId }: AssessRemedia
         <Button href={csvHref} variant="secondary" size="sm">
           Export backlog CSV
         </Button>
-        <Button href={`/dashboard?scanId=${encodeURIComponent(scanId)}#remediation`} variant="secondary" size="sm">
+        <Button href={`/command-center?scanId=${encodeURIComponent(scanId)}#remediation`} variant="secondary" size="sm">
           Assign owner (dashboard)
         </Button>
         {criticalCount >= 3 ? (

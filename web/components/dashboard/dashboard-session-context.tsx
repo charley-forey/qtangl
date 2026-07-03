@@ -99,7 +99,7 @@ export function DashboardSessionProvider({ children }: { children: ReactNode }) 
       return;
     }
     void fetch("/api/auth/session", { method: "DELETE" }).finally(() => {
-      window.location.href = "/dashboard/login";
+      window.location.href = "/command-center/login";
     });
   }, [workosEnabled]);
 

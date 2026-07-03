@@ -4,7 +4,15 @@ import { useEffect, useState } from "react";
 
 import Card from "@/components/ui/Card";
 import Eyebrow from "@/components/ui/Eyebrow";
+import { ccFlags } from "@/lib/cc-feature-flags";
 import { fetchDashboardJson } from "@/lib/dashboard-bff";
+
+type PeerPercentiles = {
+  readinessPercentile?: number | null;
+  velocityPercentile?: number | null;
+  sector?: string | null;
+  sampleSize?: number;
+};
 
 type BenchmarkResponse = {
   benchmarkOptIn?: boolean;
@@ -31,12 +39,18 @@ function formatBand(band: string | undefined): string {
 
 export default function PeerBenchmarkSummary({ scanId }: { scanId: string | null }) {
   const [peer, setPeer] = useState<BenchmarkResponse | null>(null);
+  const [percentiles, setPercentiles] = useState<PeerPercentiles | null>(null);
 
   useEffect(() => {
     if (!scanId) return;
     fetchDashboardJson<BenchmarkResponse>("/tenant/benchmarks")
       .then(setPeer)
       .catch(() => setPeer(null));
+    if (ccFlags.v2) {
+      fetchDashboardJson<PeerPercentiles>("/tenant/benchmarks/percentiles")
+        .then(setPercentiles)
+        .catch(() => setPercentiles(null));
+    }
   }, [scanId]);
 
   const optedIn = Boolean(peer?.benchmarkOptIn);
@@ -76,6 +90,13 @@ export default function PeerBenchmarkSummary({ scanId }: { scanId: string | null
         Cohort size: {comparison?.sampleSize ?? peer?.index?.sampleSize ?? "—"}
         {comparison?.delta != null ? ` · ${comparison.delta >= 0 ? "+" : ""}${comparison.delta} vs median` : ""}
       </p>
+      {percentiles?.readinessPercentile != null ? (
+        <p className="mt-2 rounded-lg bg-black/40 px-3 py-2 text-xs text-sky-200">
+          You rank around the {Math.round(percentiles.readinessPercentile)}th percentile in{" "}
+          {percentiles.sector ?? "your sector"} (n={percentiles.sampleSize ?? "—"}). Estimated from anonymized cohorts —
+          directional, not exact.
+        </p>
+      ) : null}
     </Card>
   );
 }

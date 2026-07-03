@@ -46,6 +46,16 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       {
+        source: "/dashboard",
+        destination: "/command-center",
+        permanent: true,
+      },
+      {
+        source: "/dashboard/:path*",
+        destination: "/command-center/:path*",
+        permanent: true,
+      },
+      {
         source: "/:path*",
         has: [{ type: "host", value: "status.qtangl.com" }],
         destination: "https://www.qtangl.com/status",

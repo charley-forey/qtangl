@@ -46,7 +46,7 @@ export default function OpsShell({
               );
             })}
           </nav>
-          <Link href="/dashboard" className="mt-6 block text-xs text-[var(--color-gray-500)] underline">
+          <Link href="/command-center" className="mt-6 block text-xs text-[var(--color-gray-500)] underline">
             Back to dashboard
           </Link>
         </aside>

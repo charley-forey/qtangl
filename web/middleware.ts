@@ -36,7 +36,8 @@ function customDomainHeaders(request: NextRequest): Headers | null {
 function pathUsesAuthKit(pathname: string): boolean {
   return (
     pathname === "/auth/callback" ||
-    pathname.startsWith("/dashboard") ||
+    pathname.startsWith("/command-center") ||
+    pathname.startsWith("/command-center") ||
     pathname.startsWith("/api/dashboard") ||
     pathname.startsWith("/ops")
   );

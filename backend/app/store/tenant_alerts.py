@@ -268,20 +268,20 @@ def _action_url_for_rule(rule: str, payload: dict[str, Any]) -> str:
             params.append(f"scanId={scan_id}")
         if remediation_id:
             params.append(f"remediationId={remediation_id}")
-        return f"/dashboard?{'&'.join(params)}"
+        return f"/command-center?{'&'.join(params)}"
 
     if rule in {"new_quantum_vulnerable", "algorithm_degraded"}:
         return remediate_url()
     if rule in {"readiness_drop", "scan_diff_info"}:
         if scan_id:
-            return f"/dashboard?tab=scans&scanId={scan_id}"
-        return "/dashboard?tab=scans"
+            return f"/command-center?tab=scans&scanId={scan_id}"
+        return "/command-center?tab=scans"
     if rule.startswith("cbom_") or rule.startswith("drift_"):
         action = "&action=drift" if rule.startswith("drift_") else ""
-        return f"/dashboard?tab=monitor{action}"
+        return f"/command-center?tab=monitor{action}"
     if rule in {"cert_expiring_30d", "cert_expiring_assets"}:
         return remediate_url()
-    return "/dashboard?tab=overview"
+    return "/command-center?tab=overview"
 
 
 def _top_critical_remediation_id(bundle_report: dict[str, Any] | None) -> str | None:

@@ -26,7 +26,7 @@ export default function ExecutiveDigestGuidePage() {
         <ol className="list-decimal space-y-2 pl-5 text-sm leading-7 text-[var(--color-gray-300)]">
           <li>
             Open{" "}
-            <Link href="/dashboard" className="text-white underline underline-offset-4">
+            <Link href="/command-center" className="text-white underline underline-offset-4">
               Dashboard
             </Link>{" "}
             as an <code className="font-mono text-white">admin</code>.

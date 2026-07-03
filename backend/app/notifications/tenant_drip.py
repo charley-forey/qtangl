@@ -103,7 +103,7 @@ def process_due_tenant_drip_emails() -> int:
             ("day7", 7, "Invite your team", "Add Executive and Operator teammates for accountability."),
         ]
 
-        opt_out_url = f"{base}/dashboard?tab=settings&action=drip-opt-out"
+        opt_out_url = f"{base}/command-center?tab=settings&action=drip-opt-out"
 
         for key, min_day, subject, body in campaigns:
             if age_days >= min_day and key not in drip_sent:
@@ -114,7 +114,7 @@ def process_due_tenant_drip_emails() -> int:
                     drip_sent.add(key)
                     continue
                 try:
-                    dashboard_url = f"{base}/dashboard"
+                    dashboard_url = f"{base}/command-center"
                     html = _render_drip_html(
                         key=key,
                         body=body,

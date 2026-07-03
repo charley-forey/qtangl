@@ -2,7 +2,7 @@ import { expect, test } from "@playwright/test";
 
 test.describe("Dashboard", () => {
   test("dashboard page loads with sign-in hero", async ({ page }) => {
-    await page.goto("/dashboard");
+    await page.goto("/command-center");
     await expect(page.getByRole("heading", { name: /post-quantum workspace|Q-Day command center/i })).toBeVisible();
     await expect(page.getByText(/Sign in|workspace/i).first()).toBeVisible();
   });
@@ -16,7 +16,7 @@ test.describe("Dashboard", () => {
   });
 
   test("trend empty state copy when logged out", async ({ page }) => {
-    await page.goto("/dashboard");
+    await page.goto("/command-center");
     await expect(page.getByText(/sample data|Sign in/i).first()).toBeVisible();
   });
 });

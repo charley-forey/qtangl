@@ -83,7 +83,7 @@ const coreMarketingRoutes: SiteRouteEntry[] = [
   { href: "/learn/compare", title: "Learn compare", section: "Learn" },
   { href: "/learn/map", title: "Ecosystem map", section: "Learn" },
   { href: "/learn/whats-new", title: "What's new in Learn", section: "Learn" },
-  { href: "/dashboard", title: "Dashboard", section: "Product", keywords: ["monitor", "workspace"] },
+  { href: "/command-center", title: "Dashboard", section: "Product", keywords: ["monitor", "workspace"] },
 ];
 
 function normalizePath(pathname: string): string {

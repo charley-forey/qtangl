@@ -130,7 +130,7 @@ export default function PartnerPortalClient({ portfolioBundle, program, onRefres
           ) : (
             <span className="text-[var(--color-gray-400)]">{childCount} customer workspaces</span>
           )}
-          <Link href="/dashboard?tab=portfolio" className="text-sky-300 underline">
+          <Link href="/command-center?tab=portfolio" className="text-sky-300 underline">
             Open full dashboard portfolio tab
           </Link>
         </div>
@@ -208,7 +208,7 @@ export default function PartnerPortalClient({ portfolioBundle, program, onRefres
                 <span className="text-sm text-[var(--color-gray-500)]">Portal branding — Advanced tier</span>
               }
             >
-              <Link href="/dashboard?tab=settings" className="text-sm text-sky-300 underline">
+              <Link href="/command-center?tab=settings" className="text-sm text-sky-300 underline">
                 Configure portal branding
               </Link>
             </TierGate>

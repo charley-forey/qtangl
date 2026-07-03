@@ -17,7 +17,7 @@ function decodeJwtPayload(token: string): Record<string, unknown> {
 
 export async function GET(request: Request) {
   if (!oidcConfigured()) {
-    return NextResponse.redirect(`${appBaseUrl()}/dashboard?sso=unconfigured`);
+    return NextResponse.redirect(`${appBaseUrl()}/command-center?sso=unconfigured`);
   }
   const url = new URL(request.url);
   const code = url.searchParams.get("code");
@@ -25,7 +25,7 @@ export async function GET(request: Request) {
   const cookieStore = await cookies();
   const expectedState = cookieStore.get("qtangl_oidc_state")?.value;
   if (!code || !state || state !== expectedState) {
-    return NextResponse.redirect(`${appBaseUrl()}/dashboard?sso=error`);
+    return NextResponse.redirect(`${appBaseUrl()}/command-center?sso=error`);
   }
   cookieStore.delete("qtangl_oidc_state");
 
@@ -42,7 +42,7 @@ export async function GET(request: Request) {
     }),
   });
   if (!tokenRes.ok) {
-    return NextResponse.redirect(`${appBaseUrl()}/dashboard?sso=token_error`);
+    return NextResponse.redirect(`${appBaseUrl()}/command-center?sso=token_error`);
   }
   const tokens = (await tokenRes.json()) as TokenResponse;
   const claims = tokens.id_token ? decodeJwtPayload(tokens.id_token) : {};
@@ -61,5 +61,5 @@ export async function GET(request: Request) {
     maxAge: 60 * 60 * 8,
     path: "/",
   });
-  return NextResponse.redirect(`${appBaseUrl()}/dashboard`);
+  return NextResponse.redirect(`${appBaseUrl()}/command-center`);
 }

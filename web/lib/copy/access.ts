@@ -139,7 +139,7 @@ export const accessSuccessCopy = {
       { label: "See Assess tier", href: "/assess" },
     ],
     "Q-Day Monitor (annual)": [
-      { label: "Open dashboard", href: "/dashboard" },
+      { label: "Open dashboard", href: "/command-center" },
       { label: "See Monitor tier", href: "/monitor" },
       { label: "See pricing", href: "/pricing" },
     ],

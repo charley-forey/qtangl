@@ -14,7 +14,7 @@ const steps = [
     step: "1",
     title: "Create your workspace",
     description: "Sign in with your work email. We provision a free Assess workspace on first login — no API key paste.",
-    href: "/dashboard/login",
+    href: "/command-center/login",
     cta: "Sign in with email",
   },
   {
@@ -48,7 +48,7 @@ export default function DashboardOnboarding() {
           <p className="mt-2 text-xs leading-6 text-[var(--color-gray-400)]">
             Use the same work email you want on reports. First sign-in creates your tenant automatically.
           </p>
-          <Button href="/dashboard/login" className="mt-5 w-full px-8 py-3 text-base sm:w-auto">
+          <Button href="/command-center/login" className="mt-5 w-full px-8 py-3 text-base sm:w-auto">
             Sign in to get started
           </Button>
         </div>

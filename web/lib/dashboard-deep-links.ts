@@ -33,7 +33,7 @@ export function buildDashboardDeepLink(opts: {
   if (opts.scanId) params.set("scanId", opts.scanId);
   if (opts.remediationId) params.set("remediationId", opts.remediationId);
   if (opts.action) params.set("action", opts.action);
-  return `/dashboard?${params.toString()}`;
+  return `/command-center?${params.toString()}`;
 }
 
 export function parseDashboardDeepLink(searchParams: URLSearchParams): ParsedDeepLink {
@@ -58,7 +58,7 @@ export function navigateDashboardDeepLink(
   onTabChange?: (tab: DashboardTabId) => void
 ) {
   if (!url) return;
-  if (url.startsWith("/dashboard")) {
+  if (url.startsWith("/command-center") || url.startsWith("/command-center")) {
     router.push(url);
     try {
       const parsed = parseDashboardDeepLink(new URL(url, window.location.origin).searchParams);
@@ -70,7 +70,7 @@ export function navigateDashboardDeepLink(
     return;
   }
   if (url.startsWith("?")) {
-    router.push(`/dashboard${url}`);
+    router.push(`/command-center${url}`);
     return;
   }
   router.push(url);

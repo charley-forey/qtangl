@@ -24,10 +24,10 @@ function NavbarAccountMenuInner() {
     return (
       <div className="flex items-center gap-2">
         <a
-          href="/dashboard"
+          href="/command-center"
           className="hidden max-w-[10rem] truncate text-sm text-[var(--color-gray-300)] transition hover:text-white sm:inline-block lg:max-w-none"
         >
-          {session.tenantName ?? "Dashboard"}
+          {session.tenantName ?? "Command Center"}
         </a>
         <button
           type="button"
@@ -42,7 +42,7 @@ function NavbarAccountMenuInner() {
 
   return (
     <a
-      href="/dashboard/login"
+      href="/command-center/login"
       className="text-sm font-medium text-[var(--color-gray-300)] transition hover:text-white"
     >
       Sign in
@@ -88,11 +88,11 @@ function NavbarMobileAccountActionsInner({ onNavigate }: { onNavigate?: () => vo
 
   return (
     <a
-      href="/dashboard/login"
+      href="/command-center/login"
       onClick={onNavigate}
       className="touch-target block rounded-xl border border-[var(--border)] px-3 py-3 text-sm text-white hover:bg-white/[0.04]"
     >
-      Sign in to dashboard
+      Sign in to Command Center
     </a>
   );
 }

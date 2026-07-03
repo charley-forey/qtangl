@@ -12,6 +12,10 @@ import { DashboardSection } from "@/components/dashboard/DashboardOnboarding";
 import FrameworkDeadlineRoadmap from "@/components/dashboard/FrameworkDeadlineRoadmap";
 import type { DashboardTabId } from "@/components/dashboard/DashboardTabs";
 import type { RemediateTabBundle } from "@/lib/dashboard-state";
+import { useCommandCenterV2 } from "@/hooks/useCommandCenterV2";
+import { RemediationVelocityChart } from "@/components/dashboard/charts/CommandCenterCharts";
+import CcGantt, { type GanttItem } from "@/components/dashboard/charts/CcGantt";
+import CcSankey, { type SankeyLink, type SankeyNode } from "@/components/dashboard/charts/CcSankey";
 
 const RemediationWhatIf = dynamic(() => import("@/components/pqc/RemediationWhatIf"));
 const PeerComparisonPanel = dynamic(() => import("@/components/pqc/PeerComparisonPanel"));
@@ -54,9 +58,96 @@ export default function DashboardRemediateTab({
   const [selectedScanId, setSelectedScanId] = useState(scanIdParam ?? allScans[0]?.scanId ?? "");
   const remediation = bundle?.remediationScan;
   const velocity = bundle?.remediationVelocity;
+  const ccV2 = useCommandCenterV2();
+
+  const items = remediation?.items ?? [];
+  const statuses = remediation?.statuses ?? [];
+  const statusMap = new Map(statuses.map((s) => [s.remediationId, (s.status ?? "open").toLowerCase()]));
+  const DONE = new Set(["done", "closed", "verified", "resolved", "complete"]);
+
+  // Honest SLA heuristic: high/critical items still open are past their
+  // recommended remediation window. We do not have a formal per-item SLA clock.
+  const slaAtRisk = items.filter((item) => {
+    const status = statusMap.get(item.id) ?? "open";
+    const sev = (item.severity ?? "").toLowerCase();
+    return !DONE.has(status) && (sev === "critical" || sev === "high");
+  });
+
+  const currentYear = new Date().getFullYear();
+  const SEVERITY_WINDOW: Record<string, number> = { critical: 1, high: 3, medium: 6, low: 10 };
+  const ganttItems: GanttItem[] = items.slice(0, 12).map((item) => {
+    const sev = (item.severity ?? "medium").toLowerCase();
+    const status = statusMap.get(item.id) ?? "open";
+    return {
+      id: item.id,
+      label: item.title,
+      startYear: currentYear,
+      endYear: currentYear + (SEVERITY_WINDOW[sev] ?? 6),
+      progressPct: DONE.has(status) ? 100 : 0,
+    };
+  });
+
+  const severities = Array.from(new Set(items.map((i) => (i.severity ?? "medium").toLowerCase())));
+  const flowStatuses = ["open", "in_progress", "done"];
+  const sankeyNodes: SankeyNode[] = [
+    ...severities.map((s) => ({ name: s })),
+    ...flowStatuses.map((s) => ({ name: s.replace("_", " ") })),
+  ];
+  const sankeyLinks: SankeyLink[] = [];
+  severities.forEach((sev, sevIdx) => {
+    flowStatuses.forEach((flow, flowIdx) => {
+      const count = items.filter((item) => {
+        const itemSev = (item.severity ?? "medium").toLowerCase();
+        if (itemSev !== sev) return false;
+        const status = statusMap.get(item.id) ?? "open";
+        if (flow === "done") return DONE.has(status);
+        if (flow === "in_progress") return status === "in_progress" || status === "in-progress";
+        return !DONE.has(status) && status !== "in_progress" && status !== "in-progress";
+      }).length;
+      if (count > 0) {
+        sankeyLinks.push({ source: sevIdx, target: severities.length + flowIdx, value: count });
+      }
+    });
+  });
 
   return (
     <DashboardSection title="Remediation" id="dashboard-remediate">
+      {ccV2 && velocity ? (
+        <Card tone="panel" className="p-4">
+          <Eyebrow>Remediation velocity</Eyebrow>
+          <div className="mt-3">
+            <RemediationVelocityChart closed={velocity.closedCount ?? 0} open={velocity.openCount ?? 0} />
+          </div>
+        </Card>
+      ) : null}
+
+      {ccV2 && slaAtRisk.length > 0 ? (
+        <Card tone="ghost" className="border border-amber-500/30 bg-amber-500/10 p-4">
+          <div className="flex items-center justify-between">
+            <Eyebrow>SLA watch</Eyebrow>
+            <span className="rounded-full bg-amber-500/20 px-2 py-0.5 text-[10px] font-medium uppercase tracking-wide text-amber-200">
+              {slaAtRisk.length} past target
+            </span>
+          </div>
+          <p className="mt-2 text-xs text-amber-100">
+            {slaAtRisk.length} high/critical item{slaAtRisk.length > 1 ? "s are" : " is"} still open beyond the recommended
+            remediation window. This is a prioritization signal, not a contractual SLA.
+          </p>
+        </Card>
+      ) : null}
+
+      {ccV2 && items.length > 0 ? (
+        <Card tone="panel" className="p-4">
+          <Eyebrow>Migration timeline &amp; flow</Eyebrow>
+          <p className="mt-1 text-[10px] text-[var(--color-gray-500)]">
+            Timeline windows are severity-based recommendations; flow shows current remediation status distribution.
+          </p>
+          <div className="mt-4 space-y-6">
+            <CcGantt items={ganttItems} />
+            <CcSankey nodes={sankeyNodes} links={sankeyLinks} />
+          </div>
+        </Card>
+      ) : null}
       {!remediationProgramEnabled ? (
         <Card tone="panel">
           <Eyebrow>Convert program features</Eyebrow>
@@ -95,7 +186,7 @@ export default function DashboardRemediateTab({
             value={selectedScanId}
             onChange={(e) => {
               setSelectedScanId(e.target.value);
-              router.push(`/dashboard?tab=remediate&scanId=${encodeURIComponent(e.target.value)}`);
+              router.push(`/command-center?tab=remediate&scanId=${encodeURIComponent(e.target.value)}`);
               onTabChange?.("remediate");
             }}
           >

@@ -2,6 +2,11 @@
 
 import { useEffect, useRef, useState } from "react";
 
+import { ccFlags } from "@/lib/cc-feature-flags";
+import { fetchDashboardJson } from "@/lib/dashboard-bff";
+import { trackDashboardEvent } from "@/lib/dashboard-telemetry";
+import type { SavedView, SavedViewFilters } from "@/components/dashboard/SavedViewsBar";
+
 export type CommandAction = {
   id: string;
   label: string;
@@ -11,12 +16,24 @@ export type CommandAction = {
 
 export default function DashboardCommandPalette({
   actions,
+  filterActions = [],
+  onApplySavedView,
 }: {
   actions: CommandAction[];
+  filterActions?: CommandAction[];
+  onApplySavedView?: (filters: SavedViewFilters) => void;
 }) {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
+  const [savedViews, setSavedViews] = useState<SavedView[]>([]);
   const dialogRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!open || !ccFlags.savedViews || savedViews.length > 0) return;
+    void fetchDashboardJson<{ views: SavedView[] }>("/tenant/saved-views")
+      .then((data) => setSavedViews(data.views))
+      .catch(() => setSavedViews([]));
+  }, [open, savedViews.length]);
 
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
@@ -52,9 +69,17 @@ export default function DashboardCommandPalette({
     return () => document.removeEventListener("keydown", trap);
   }, [open]);
 
-  const filtered = actions.filter((a) =>
-    a.label.toLowerCase().includes(query.toLowerCase())
-  );
+  const savedViewActions: CommandAction[] = savedViews.map((view) => ({
+    id: `saved-view-${view.id}`,
+    label: `View: ${view.name}`,
+    onSelect: () => {
+      onApplySavedView?.(view.filters);
+      trackDashboardEvent({ event: "cc_saved_view_applied", properties: { viewId: view.id } });
+    },
+  }));
+
+  const combined = [...filterActions, ...savedViewActions, ...actions];
+  const filtered = combined.filter((a) => a.label.toLowerCase().includes(query.toLowerCase()));
 
   if (!open) {
     return (

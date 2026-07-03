@@ -72,7 +72,7 @@ export default function TrustDogfoodPage() {
           </p>
           <div className="mt-4 flex flex-wrap justify-center gap-4">
             <Link
-              href="/dashboard"
+              href="/command-center"
               className="rounded-full bg-white px-5 py-2 text-sm font-medium text-black"
             >
               Start free workspace

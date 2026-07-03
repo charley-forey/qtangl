@@ -4,9 +4,13 @@ import { useEffect, useState } from "react";
 
 import RemediationCopilotDrawer from "@/components/dashboard/RemediationCopilotDrawer";
 import VerifyFixPanel from "@/components/dashboard/VerifyFixPanel";
+import { useCommandCenterV2 } from "@/hooks/useCommandCenterV2";
+import VerifyStatusPill, { verifyStatusFromResult } from "@/components/dashboard/ui/VerifyStatusPill";
+import type { VerifyResult } from "@/lib/remediation-types";
 import InfoTip from "@/components/pqc/InfoTip";
 import { fetchTenantJson, postTenantJson } from "@/lib/tenant-api";
 import { trackDashboardEvent } from "@/lib/dashboard-analytics";
+import { trackDashboardEvent as trackCcEvent } from "@/lib/dashboard-telemetry";
 
 type RemediationItem = {
   id: string;
@@ -21,14 +25,6 @@ type StatusRow = {
   notes?: string | null;
   targetDate?: string | null;
   verifyScanId?: string | null;
-};
-
-type VerifyResult = {
-  verified: boolean;
-  verifyScanId?: string | null;
-  beforeStatus?: string;
-  afterStatus?: string;
-  reason?: string;
 };
 
 const STATUSES = ["open", "in_progress", "done", "accepted_risk"] as const;
@@ -59,6 +55,7 @@ export default function RemediationBoard({
   actionParam?: string;
   allScans?: Array<{ scanId: string; label: string }>;
 }) {
+  const ccV2 = useCommandCenterV2();
   const [statuses, setStatuses] = useState<Record<string, string>>(() => {
     const map: Record<string, string> = {};
     for (const row of initialStatuses) {
@@ -219,6 +216,28 @@ export default function RemediationBoard({
     }
   }
 
+  async function draftAiPr(remediationId: string) {
+    setAutomatingId(remediationId);
+    setPushMessage(null);
+    try {
+      const result = await postTenantJson<{
+        title?: string;
+        description?: string;
+        files?: Array<{ path: string; content: string }>;
+        checklist?: string[];
+      }>("/tenant/ai/remediation-pr-draft", apiKey, { remediationId, scanId });
+      trackCcEvent({ event: "cc_ai_pr_draft", properties: { remediationId } });
+      const files = (result.files ?? []).map((f) => f.path).join(", ");
+      setPushMessage(
+        `AI draft ready: ${result.title ?? remediationId}. Files: ${files || "—"}. Review before merge.`
+      );
+    } catch (error) {
+      setPushMessage(error instanceof Error ? error.message : "AI PR draft failed.");
+    } finally {
+      setAutomatingId(null);
+    }
+  }
+
   async function verifyFix(remediationId: string) {
     if (!verifyScanId) {
       setPushMessage("Select a verification scan first.");
@@ -323,6 +342,14 @@ export default function RemediationBoard({
               <button
                 type="button"
                 disabled={automatingId === item.id}
+                className="text-xs text-violet-300 underline underline-offset-4 disabled:opacity-50"
+                onClick={() => void draftAiPr(item.id)}
+              >
+                AI PR bundle
+              </button>
+              <button
+                type="button"
+                disabled={automatingId === item.id}
                 className="text-xs text-sky-300 underline underline-offset-4 disabled:opacity-50"
                 onClick={() => runAutomation(item.id, "github_pr")}
               >
@@ -390,7 +417,19 @@ export default function RemediationBoard({
           {automationResults[item.id] ? (
             <AutomationEvidence result={automationResults[item.id]!} />
           ) : null}
-          {verifyPanelOpen === item.id || (actionParam === "verify" && highlightId === item.id) ? (
+          {ccV2 ? (
+            <VerifyStatusPill
+              status={verifyStatusFromResult(verifyResults[item.id], statuses[item.id])}
+              result={verifyResults[item.id]}
+              remediationId={item.id}
+              verifyScanId={verifyScanId}
+              verifying={verifyingId === item.id}
+              onVerify={verifyFix}
+              onSelectScan={setVerifyScanId}
+              scanOptions={allScans.filter((s) => s.scanId !== scanId)}
+              scanId={scanId}
+            />
+          ) : verifyPanelOpen === item.id || (actionParam === "verify" && highlightId === item.id) ? (
             <VerifyFixPanel
               remediationId={item.id}
               verifyScanId={verifyScanId}

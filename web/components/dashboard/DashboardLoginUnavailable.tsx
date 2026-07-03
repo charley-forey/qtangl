@@ -29,7 +29,7 @@ export default function DashboardLoginUnavailable() {
         .
       </p>
       <Link
-        href="/dashboard"
+        href="/command-center"
         className="mt-8 inline-block rounded-full border border-zinc-700 px-4 py-2 text-sm text-white hover:border-zinc-500"
       >
         Back to dashboard

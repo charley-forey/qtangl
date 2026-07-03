@@ -551,6 +551,34 @@
       }
     },
     {
+      "name": "POST /integrations/slack/actions",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/integrations/slack/actions",
+        "description": "Slack Inbound Action"
+      }
+    },
+    {
+      "name": "POST /integrations/teams/actions",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/integrations/teams/actions",
+        "description": "Teams Inbound Action"
+      }
+    },
+    {
       "name": "GET /internal/dashboard/bootstrap",
       "request": {
         "method": "GET",
@@ -1209,6 +1237,20 @@
       }
     },
     {
+      "name": "GET /public/verify/branding",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/public/verify/branding",
+        "description": "Public Verify Branding"
+      }
+    },
+    {
       "name": "POST /public/workos/webhook",
       "request": {
         "method": "POST",
@@ -1248,6 +1290,34 @@
         ],
         "url": "{{baseUrl}}/r/example/report",
         "description": "Shared Report Download"
+      }
+    },
+    {
+      "name": "GET /tenant/ai/agentic-plan/{remediation_id}",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/ai/agentic-plan/example",
+        "description": "Tenant Agentic Plan"
+      }
+    },
+    {
+      "name": "GET /tenant/ai/executive-narrative",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/ai/executive-narrative",
+        "description": "Tenant Executive Narrative"
       }
     },
     {
@@ -1293,6 +1363,34 @@
       }
     },
     {
+      "name": "POST /tenant/ai/query",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/ai/query",
+        "description": "Tenant Ai Query"
+      }
+    },
+    {
+      "name": "POST /tenant/ai/remediation-pr-draft",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/ai/remediation-pr-draft",
+        "description": "Tenant Remediation Pr Draft"
+      }
+    },
+    {
       "name": "POST /tenant/alerts/read-all",
       "request": {
         "method": "POST",
@@ -1335,6 +1433,20 @@
       }
     },
     {
+      "name": "GET /tenant/analytics/anomaly-explanations",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/analytics/anomaly-explanations",
+        "description": "Tenant Anomaly Explanations"
+      }
+    },
+    {
       "name": "GET /tenant/analytics/forecast",
       "request": {
         "method": "GET",
@@ -1374,6 +1486,20 @@
         ],
         "url": "{{baseUrl}}/tenant/analytics/track",
         "description": "Tenant Track Event"
+      }
+    },
+    {
+      "name": "GET /tenant/analytics/trajectory-forecast",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/analytics/trajectory-forecast",
+        "description": "Tenant Trajectory Forecast"
       }
     },
     {
@@ -1503,6 +1629,20 @@
       }
     },
     {
+      "name": "GET /tenant/benchmarks/percentiles",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/benchmarks/percentiles",
+        "description": "Tenant Benchmark Percentiles"
+      }
+    },
+    {
       "name": "POST /tenant/billing/checkout",
       "request": {
         "method": "POST",
@@ -1542,6 +1682,20 @@
         ],
         "url": "{{baseUrl}}/tenant/billing/portal",
         "description": "Tenant Billing Portal"
+      }
+    },
+    {
+      "name": "GET /tenant/cadence/recommendation",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/cadence/recommendation",
+        "description": "Tenant Cadence Recommendation"
       }
     },
     {
@@ -1741,6 +1895,20 @@
       }
     },
     {
+      "name": "GET /tenant/discovery/agents/{agent_id}/findings",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/discovery/agents/example/findings",
+        "description": "Get Agent Findings"
+      }
+    },
+    {
       "name": "POST /tenant/discovery/binary-scan",
       "request": {
         "method": "POST",
@@ -1794,6 +1962,20 @@
         ],
         "url": "{{baseUrl}}/tenant/discovery/code-targets",
         "description": "Post Code Target"
+      }
+    },
+    {
+      "name": "GET /tenant/discovery/findings/{finding_id}",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/discovery/findings/example",
+        "description": "Get Host Finding Detail"
       }
     },
     {
@@ -2105,6 +2287,34 @@
       }
     },
     {
+      "name": "POST /tenant/evidence/auditor-packet",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/evidence/auditor-packet",
+        "description": "Tenant Auditor Packet"
+      }
+    },
+    {
+      "name": "GET /tenant/evidence/transparency",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/evidence/transparency",
+        "description": "Tenant Evidence Transparency"
+      }
+    },
+    {
       "name": "POST /tenant/evidence/{scan_id}/retain",
       "request": {
         "method": "POST",
@@ -2130,6 +2340,48 @@
         ],
         "url": "{{baseUrl}}/tenant/export",
         "description": "Tenant Export Data"
+      }
+    },
+    {
+      "name": "GET /tenant/findings/{finding_id}/comments",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/findings/example/comments",
+        "description": "Tenant Finding Comments List"
+      }
+    },
+    {
+      "name": "POST /tenant/findings/{finding_id}/comments",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/findings/example/comments",
+        "description": "Tenant Finding Comments Create"
+      }
+    },
+    {
+      "name": "DELETE /tenant/findings/{finding_id}/comments/{comment_id}",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/findings/example/comments/example",
+        "description": "Tenant Finding Comments Delete"
       }
     },
     {
@@ -2214,6 +2466,48 @@
         ],
         "url": "{{baseUrl}}/tenant/flips/example/retry",
         "description": "Flips Retry"
+      }
+    },
+    {
+      "name": "GET /tenant/hndl/exposure",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/hndl/exposure",
+        "description": "Tenant Hndl Exposure"
+      }
+    },
+    {
+      "name": "GET /tenant/inbox",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/inbox",
+        "description": "Tenant Inbox"
+      }
+    },
+    {
+      "name": "GET /tenant/incidents/correlated",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/incidents/correlated",
+        "description": "Tenant Correlated Incidents"
       }
     },
     {
@@ -2469,6 +2763,34 @@
       }
     },
     {
+      "name": "GET /tenant/notification-preferences",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/notification-preferences",
+        "description": "Tenant Notification Preferences Get"
+      }
+    },
+    {
+      "name": "PUT /tenant/notification-preferences",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/notification-preferences",
+        "description": "Tenant Notification Preferences Put"
+      }
+    },
+    {
       "name": "POST /tenant/offboard",
       "request": {
         "method": "POST",
@@ -2525,6 +2847,34 @@
       }
     },
     {
+      "name": "POST /tenant/partner/bulk/schedule-template",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/partner/bulk/schedule-template",
+        "description": "Tenant Partner Bulk Schedule Template"
+      }
+    },
+    {
+      "name": "POST /tenant/partner/bulk/weekly-digest",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/partner/bulk/weekly-digest",
+        "description": "Tenant Partner Bulk Weekly Digest"
+      }
+    },
+    {
       "name": "GET /tenant/partner/children",
       "request": {
         "method": "GET",
@@ -2553,6 +2903,62 @@
       }
     },
     {
+      "name": "DELETE /tenant/partner/children/{child_tenant_id}",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/partner/children/example",
+        "description": "Tenant Partner Unlink Child"
+      }
+    },
+    {
+      "name": "PATCH /tenant/partner/children/{child_tenant_id}",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/partner/children/example",
+        "description": "Tenant Partner Update Child Label"
+      }
+    },
+    {
+      "name": "POST /tenant/partner/deal-registration",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/partner/deal-registration",
+        "description": "Tenant Partner Deal Registration"
+      }
+    },
+    {
+      "name": "GET /tenant/partner/portfolio-board",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/partner/portfolio-board",
+        "description": "Tenant Partner Portfolio Board"
+      }
+    },
+    {
       "name": "GET /tenant/partner/portfolio-summary",
       "request": {
         "method": "GET",
@@ -2564,6 +2970,48 @@
         ],
         "url": "{{baseUrl}}/tenant/partner/portfolio-summary",
         "description": "Tenant Partner Portfolio Summary"
+      }
+    },
+    {
+      "name": "GET /tenant/partner/program",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/partner/program",
+        "description": "Tenant Partner Program"
+      }
+    },
+    {
+      "name": "POST /tenant/partner/provision-child",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/partner/provision-child",
+        "description": "Tenant Partner Provision Child"
+      }
+    },
+    {
+      "name": "GET /tenant/partner/usage-export",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/partner/usage-export",
+        "description": "Tenant Partner Usage Export"
       }
     },
     {
@@ -2620,6 +3068,20 @@
         ],
         "url": "{{baseUrl}}/tenant/portfolio/command-center",
         "description": "Tenant Portfolio Command Center"
+      }
+    },
+    {
+      "name": "GET /tenant/portfolio/rollup",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/portfolio/rollup",
+        "description": "Tenant Portfolio Rollup"
       }
     },
     {
@@ -2791,6 +3253,48 @@
       }
     },
     {
+      "name": "GET /tenant/saved-views",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/saved-views",
+        "description": "Tenant Saved Views List"
+      }
+    },
+    {
+      "name": "DELETE /tenant/saved-views/{view_id}",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/saved-views/example",
+        "description": "Tenant Saved Views Delete"
+      }
+    },
+    {
+      "name": "PUT /tenant/saved-views/{view_id}",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/saved-views/example",
+        "description": "Tenant Saved Views Upsert"
+      }
+    },
+    {
       "name": "GET /tenant/scans",
       "request": {
         "method": "GET",
@@ -2886,6 +3390,20 @@
         ],
         "url": "{{baseUrl}}/tenant/scans/example/email",
         "description": "Tenant Email Report"
+      }
+    },
+    {
+      "name": "GET /tenant/scans/{scan_id}/graph",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/scans/example/graph",
+        "description": "Tenant Scan Graph"
       }
     },
     {
@@ -3166,6 +3684,34 @@
         ],
         "url": "{{baseUrl}}/tenant/sso/portal-link",
         "description": "Tenant Sso Portal Link"
+      }
+    },
+    {
+      "name": "GET /tenant/war-rooms",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/war-rooms",
+        "description": "Tenant War Rooms List"
+      }
+    },
+    {
+      "name": "POST /tenant/war-rooms",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/war-rooms",
+        "description": "Tenant War Rooms Create"
       }
     },
     {

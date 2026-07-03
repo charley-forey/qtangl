@@ -19,6 +19,6 @@ def check_legal_acceptance(*, tenant_id: str) -> dict[str, Any] | None:
             "code": "legal_acceptance_required",
             "termsVersionRequired": terms_required,
             "termsAcceptedVersion": accepted_version,
-            "upgradeUrl": "/dashboard?tab=scans",
+            "upgradeUrl": "/command-center?tab=scans",
         }
     return None

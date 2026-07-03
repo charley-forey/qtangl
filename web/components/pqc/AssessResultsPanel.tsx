@@ -273,13 +273,13 @@ export default function AssessResultsPanel({
         {isProduction || tenantApiKey ? (
           <PqcSection title="Your workspace">
             <Link
-              href={`/dashboard?scanId=${encodeURIComponent(scan.scanId)}`}
+              href={`/command-center?scanId=${encodeURIComponent(scan.scanId)}`}
               className="inline-flex rounded-full border border-white bg-white px-5 py-2 text-sm font-medium text-black"
             >
               View in Dashboard
             </Link>
             <Link
-              href={`/dashboard?scanId=${encodeURIComponent(scan.scanId)}#schedules`}
+              href={`/command-center?scanId=${encodeURIComponent(scan.scanId)}#schedules`}
               className="ml-3 text-sm text-white underline"
             >
               Schedule weekly re-scan

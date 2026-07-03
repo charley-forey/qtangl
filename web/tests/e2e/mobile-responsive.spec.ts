@@ -9,7 +9,7 @@ const primaryRoutes = [
   "/trust",
   "/pricing",
   "/docs",
-  "/dashboard",
+  "/command-center",
 ] as const;
 
 async function assertNoHorizontalOverflow(page: import("@playwright/test").Page) {

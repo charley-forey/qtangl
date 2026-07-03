@@ -312,3 +312,35 @@ def safe_append_after_sign(
     except Exception:
         pass
     return append_entry(str(content_hash), signature_block, tenant_id=tenant_id)
+
+
+def list_recent_entries(*, limit: int = 50) -> list[dict[str, Any]]:
+    """Return recent transparency log entries for tenant Command Center viewer."""
+    try:
+        from app.db.engine import db_session
+        from app.db.models import EvidenceLogEntry
+    except Exception:
+        return []
+
+    try:
+        with db_session() as session:
+            rows = (
+                session.query(EvidenceLogEntry)
+                .order_by(EvidenceLogEntry.seq.desc())
+                .limit(limit)
+                .all()
+            )
+            return [
+                {
+                    "seq": row.seq,
+                    "content_hash": row.content_hash,
+                    "entry_hash": row.entry_hash,
+                    "scan_id": None,
+                    "created_at": row.signed_at or None,
+                    "tenant_id": row.tenant_id,
+                }
+                for row in rows
+            ]
+    except Exception as exc:
+        logger.debug("list_recent_entries failed: %s", exc)
+        return []

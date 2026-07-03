@@ -1,14 +1,22 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import Card from "@/components/ui/Card";
 import Eyebrow from "@/components/ui/Eyebrow";
 import BusinessUnitHeatmap from "@/components/dashboard/BusinessUnitHeatmap";
 import MsspOnboardingWizard from "@/components/dashboard/MsspOnboardingWizard";
 import type { PortfolioTabBundle } from "@/lib/dashboard-state";
-import { switchActiveTenant } from "@/lib/dashboard-bff";
+import { ccFlags } from "@/lib/cc-feature-flags";
+import { fetchDashboardJson, switchActiveTenant } from "@/lib/dashboard-bff";
 import { trackDashboardEvent } from "@/lib/dashboard-analytics";
+import PartnerQbrExportButton from "@/components/dashboard/PartnerQbrExportButton";
+
+type PortfolioRollup = {
+  childCount: number;
+  avgReadiness?: number | null;
+  tenants?: Array<Record<string, unknown>>;
+};
 
 export default function MsspPortfolioPanel({
   bundle,
@@ -22,6 +30,14 @@ export default function MsspPortfolioPanel({
   const children = bundle?.children ?? [];
   const rollup = bundle?.rollup as { overallReadiness?: number; byBusinessUnit?: Record<string, number> } | null;
   const [showWizard, setShowWizard] = useState(children.length === 0 && canAdmin);
+  const [apiRollup, setApiRollup] = useState<PortfolioRollup | null>(null);
+
+  useEffect(() => {
+    if (!ccFlags.portfolio) return;
+    void fetchDashboardJson<PortfolioRollup>("/tenant/portfolio/rollup")
+      .then(setApiRollup)
+      .catch(() => setApiRollup(null));
+  }, []);
 
   if (children.length === 0 && showWizard && canAdmin) {
     return (
@@ -65,7 +81,12 @@ export default function MsspPortfolioPanel({
       <div className="grid gap-4 sm:grid-cols-4">
         <Card tone="panel">
           <Eyebrow>Aggregate readiness</Eyebrow>
-          <p className="mt-2 text-3xl font-semibold text-white">{bundle?.aggregateReadiness ?? rollup?.overallReadiness ?? "—"}</p>
+          <p className="mt-2 text-3xl font-semibold text-white">
+            {bundle?.aggregateReadiness ?? rollup?.overallReadiness ?? apiRollup?.avgReadiness ?? "—"}
+          </p>
+          {apiRollup?.childCount != null ? (
+            <p className="mt-1 text-[10px] text-[var(--color-gray-500)]">across {apiRollup.childCount} tenants</p>
+          ) : null}
         </Card>
         <Card tone="panel">
           <Eyebrow>Below threshold</Eyebrow>
@@ -80,6 +101,16 @@ export default function MsspPortfolioPanel({
           <p className="mt-2 text-3xl font-semibold text-sky-200">{bundle?.totalOpenAlerts ?? 0}</p>
         </Card>
       </div>
+
+      {ccFlags.portfolio ? (
+        <Card tone="panel" className="p-4">
+          <Eyebrow>Partner exports</Eyebrow>
+          <p className="mt-1 text-xs text-[var(--color-gray-500)]">Branded QBR and board packs for your portfolio.</p>
+          <div className="mt-3">
+            <PartnerQbrExportButton />
+          </div>
+        </Card>
+      ) : null}
 
       {Object.keys(businessUnits).length > 0 ? (
         <BusinessUnitHeatmap businessUnits={businessUnits} />

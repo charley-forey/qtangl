@@ -6,7 +6,7 @@ import type { DashboardAlert } from "@/components/dashboard/NotificationCenter";
 import type { DashboardSession } from "@/lib/dashboard-bff";
 import type { DashboardSummary, ScanProgressState } from "@/lib/dashboard-state";
 import DashboardWorkspaceHeader from "@/components/dashboard/DashboardWorkspaceHeader";
-import DashboardRoleBadge from "@/components/dashboard/DashboardRoleBadge";
+import CommandCenterHeader from "@/components/dashboard/CommandCenterHeader";
 import NotificationCenter from "@/components/dashboard/NotificationCenter";
 import ReadinessCopilotDrawer from "@/components/dashboard/ReadinessCopilotDrawer";
 import NpsMicroSurvey from "@/components/dashboard/NpsMicroSurvey";
@@ -17,6 +17,7 @@ import DashboardTabs from "@/components/dashboard/DashboardTabs";
 import EvidenceToolbar from "@/components/dashboard/EvidenceToolbar";
 import type { DashboardCommandAction } from "@/hooks/useDashboardCommandActions";
 import type { RolePolicy } from "@/lib/dashboard-role-policies";
+import { useCommandCenterV2 } from "@/hooks/useCommandCenterV2";
 
 type Props = {
   summary: DashboardSummary;
@@ -75,9 +76,10 @@ export default function DashboardShell({
   const portfolioAllowed = !isCustomerRole && (rolePolicy?.tabs.includes("*") || rolePolicy?.tabs.includes("portfolio"));
   const showPortfolio =
     portfolioAllowed && (childrenCount > 0 || (dashboardSession?.memberships?.length ?? 0) > 1);
+  const ccV2 = useCommandCenterV2();
 
   return (
-    <div className={density === "compact" ? "space-y-4" : "space-y-8"}>
+    <div className={`motion-reduce:transition-none ${density === "compact" ? "space-y-4" : "space-y-8"}`}>
       {sessionWarning ? (
         <div className="rounded-[var(--radius-xl)] border border-amber-500/40 bg-amber-500/10 px-4 py-3 text-sm text-amber-100">
           {sessionWarning}
@@ -85,30 +87,49 @@ export default function DashboardShell({
       ) : null}
 
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <DashboardWorkspaceHeader
-          tier={(me.entitlements as { tier?: string } | undefined)?.tier}
-          membershipHealth={summary.membershipHealth}
-          onSessionChange={onSessionChange}
-        />
-        <div className="flex flex-wrap items-center gap-2">
-          <DashboardRoleBadge role={sessionRole ?? dashboardSession?.role} />
-          <ReadinessCopilotDrawer persona={persona === "executive" ? "executive" : "operator"} />
-          <NotificationCenter
+        {ccV2 ? (
+          <CommandCenterHeader
+            tier={(me.entitlements as { tier?: string } | undefined)?.tier}
+            membershipHealth={summary.membershipHealth}
+            onSessionChange={onSessionChange}
+            sessionRole={sessionRole ?? dashboardSession?.role}
+            persona={persona}
             alerts={alerts}
-            onMarkRead={onMarkAlertsRead}
-            onNavigateTab={onTabChange}
-            onRefresh={onRefreshAlerts}
+            commandActions={commandActions}
+            density={density}
             notificationReadIds={(tenantSettings?.notificationReadIds as string[] | undefined) ?? []}
+            onTabChange={onTabChange}
+            onMarkAlertsRead={onMarkAlertsRead}
+            onRefreshAlerts={onRefreshAlerts}
+            onDensityToggle={onDensityToggle}
           />
-          <DashboardCommandPalette actions={commandActions} />
-          <button
-            type="button"
-            className="rounded-full border border-[var(--border-subtle)] px-3 py-1 text-xs text-[var(--color-gray-400)]"
-            onClick={onDensityToggle}
-          >
-            {density === "compact" ? "Comfortable" : "Compact"}
-          </button>
-        </div>
+        ) : (
+          <>
+            <DashboardWorkspaceHeader
+              tier={(me.entitlements as { tier?: string } | undefined)?.tier}
+              membershipHealth={summary.membershipHealth}
+              onSessionChange={onSessionChange}
+            />
+            <div className="flex flex-wrap items-center gap-2">
+              <ReadinessCopilotDrawer persona={persona === "executive" ? "executive" : "operator"} />
+              <NotificationCenter
+                alerts={alerts}
+                onMarkRead={onMarkAlertsRead}
+                onNavigateTab={onTabChange}
+                onRefresh={onRefreshAlerts}
+                notificationReadIds={(tenantSettings?.notificationReadIds as string[] | undefined) ?? []}
+              />
+              <DashboardCommandPalette actions={commandActions} />
+              <button
+                type="button"
+                className="rounded-full border border-[var(--border-subtle)] px-3 py-1 text-xs text-[var(--color-gray-400)]"
+                onClick={onDensityToggle}
+              >
+                {density === "compact" ? "Comfortable" : "Compact"}
+              </button>
+            </div>
+          </>
+        )}
       </div>
 
       <SystemHealthBar

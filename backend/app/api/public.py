@@ -110,7 +110,7 @@ def public_monitor_signup(body: MonitorSignupRequest) -> dict:
         email=body.email,
         company=body.company,
         domain=body.domain,
-        success_url=f"{base}/dashboard/login?signup=success",
+        success_url=f"{base}/command-center/login?signup=success",
         cancel_url=f"{base}/access?signup=cancelled",
     )
     if not session.get("ok"):
@@ -170,7 +170,7 @@ def public_redeem_onboarding_key(token: str, peek: bool = False) -> dict:
         )
     base = os.environ.get("QTANGL_PUBLIC_URL", "https://www.qtangl.com")
     onboarding_v2 = os.getenv("QTANGL_ONBOARDING_V2", "false").lower() in {"1", "true", "yes"}
-    login_url = f"{base}/dashboard/login?onboarding={token}"
+    login_url = f"{base}/command-center/login?onboarding={token}"
     assess_url = f"{base}/assess?onboarding={token}&mode=production"
     if onboarding_v2 and not peek:
         return {
@@ -194,7 +194,7 @@ def public_redeem_onboarding_key(token: str, peek: bool = False) -> dict:
     payload: dict = {
         "status": "success",
         "tenantId": result["tenantId"],
-        "dashboardUrl": f"{base}/dashboard",
+        "dashboardUrl": f"{base}/command-center",
         "assessUrl": assess_url,
         "loginUrl": login_url,
         "email": result.get("email"),

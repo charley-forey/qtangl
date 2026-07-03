@@ -30,7 +30,7 @@ export default async function DashboardLoginPage({
     if (legacyKeyAuthEnabled()) {
       redirect(`/dashboard${params.onboarding ? `?onboarding=${params.onboarding}` : ""}`);
     }
-    redirect("/dashboard");
+    redirect("/command-center");
   }
 
   if (!workosAuthKitReady()) {
@@ -50,12 +50,12 @@ export default async function DashboardLoginPage({
 
   const { getSignInUrl } = await import("@workos-inc/authkit-nextjs");
   const returnPath = params.onboarding
-    ? `/dashboard?onboarding=${encodeURIComponent(params.onboarding)}&session=refresh`
+    ? `/command-center?onboarding=${encodeURIComponent(params.onboarding)}&session=refresh`
     : params.signup === "success"
-      ? "/dashboard?signup=success&checkout=monitor&session=refresh"
+      ? "/command-center?signup=success&checkout=monitor&session=refresh"
       : params.invite === "1" || searchParamsHasInvite(params)
-        ? "/dashboard?welcome=invite&session=refresh"
-        : "/dashboard?session=refresh";
+        ? "/command-center?welcome=invite&session=refresh"
+        : "/command-center?session=refresh";
   const signInUrl = await getSignInUrl({ redirectUri: undefined, state: returnPath });
   redirect(signInUrl);
 }

@@ -19,7 +19,7 @@ test("unwrapApiDetail reads FastAPI structured 402 payloads", () => {
   const parsed = unwrapApiDetail({
     detail: {
       code: "assess_payment_required",
-      upgradeUrl: "/dashboard?upgrade=assess",
+      upgradeUrl: "/command-center?upgrade=assess",
     },
   });
   assert.equal(parsed?.code, "assess_payment_required");

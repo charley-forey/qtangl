@@ -31,4 +31,4 @@ export async function clearQtanglSessionCookieStore(): Promise<void> {
   }
 }
 
-export const DASHBOARD_LOGIN_PATH = "/dashboard/login";
+export const DASHBOARD_LOGIN_PATH = "/command-center/login";

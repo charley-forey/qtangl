@@ -1,13 +1,26 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
 import Eyebrow from "@/components/ui/Eyebrow";
 import type { UpgradeContext } from "@/components/dashboard/UpgradeModal";
-import { postDashboardJson } from "@/lib/dashboard-bff";
+import { ccFlags } from "@/lib/cc-feature-flags";
+import { fetchDashboardJson, postDashboardJson } from "@/lib/dashboard-bff";
 import { handleDashboardApiError } from "@/lib/dashboard-errors";
+import { trackDashboardEvent } from "@/lib/dashboard-telemetry";
+
+type CadenceRecommendation = {
+  recommendedCadenceHours: number;
+  rationale: string;
+};
+
+function formatCadence(hours: number): string {
+  if (hours % 168 === 0) return `${hours / 168} week${hours / 168 > 1 ? "s" : ""}`;
+  if (hours % 24 === 0) return `${hours / 24} day${hours / 24 > 1 ? "s" : ""}`;
+  return `${hours} hours`;
+}
 
 type Props = {
   scanAllowlist?: string[];
@@ -37,8 +50,18 @@ export default function ScheduleRecommendationCard({
   onScheduleCreated,
 }: Props) {
   const [creating, setCreating] = useState(false);
+  const [cadenceRec, setCadenceRec] = useState<CadenceRecommendation | null>(null);
   const target = scanAllowlist[0];
   const schedulesAllowed = maxSchedules > 0;
+
+  useEffect(() => {
+    if (!ccFlags.v2 || dismissed || !target || !schedulesAllowed) return;
+    void fetchDashboardJson<CadenceRecommendation>("/tenant/cadence/recommendation")
+      .then(setCadenceRec)
+      .catch(() => setCadenceRec(null));
+  }, [dismissed, target, schedulesAllowed]);
+
+  const recommendedCadence = cadenceRec?.recommendedCadenceHours ?? 168;
 
   if (dismissed || !target) {
     return null;
@@ -56,11 +79,12 @@ export default function ScheduleRecommendationCard({
       await postDashboardJson("/tenant/schedules", {
         scenarioId: "production-baseline",
         target,
-        cadenceHours: 168,
+        cadenceHours: recommendedCadence,
         jobType: "scan",
       });
-      onMessage?.("Weekly monitoring enabled.");
-      onScheduleCreated?.(target!, 168);
+      trackDashboardEvent({ event: "cc_cadence_applied", properties: { cadenceHours: recommendedCadence } });
+      onMessage?.(`Monitoring enabled — re-scans every ${formatCadence(recommendedCadence)}.`);
+      onScheduleCreated?.(target!, recommendedCadence);
       onRefresh?.();
     } catch (error) {
       const handled = handleDashboardApiError(error);
@@ -109,7 +133,7 @@ export default function ScheduleRecommendationCard({
       <div className="mt-3 flex flex-wrap gap-2">
         {schedulesAllowed ? (
           <Button type="button" size="sm" disabled={creating} onClick={() => void enableWeekly()}>
-            {creating ? "Creating…" : "Enable weekly schedule"}
+            {creating ? "Creating…" : `Enable ${formatCadence(recommendedCadence)} schedule`}
           </Button>
         ) : (
           <>
@@ -124,6 +148,9 @@ export default function ScheduleRecommendationCard({
           </>
         )}
       </div>
+      {schedulesAllowed && cadenceRec ? (
+        <p className="mt-2 text-xs text-amber-100/80">{cadenceRec.rationale}</p>
+      ) : null}
       {!schedulesAllowed && tier === "free" ? (
         <p className="mt-2 text-xs text-[var(--color-gray-500)]">
           Scheduled monitoring is included on Monitor — not on Assess (Free).

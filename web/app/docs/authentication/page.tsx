@@ -139,7 +139,7 @@ export default function AuthenticationPage() {
           <DocsHeading>Dashboard sign-in & team roles</DocsHeading>
           <p className="text-sm leading-8 text-[var(--color-gray-300)]">
             Humans sign in at{" "}
-            <Link href="/dashboard" className="text-white underline underline-offset-4">
+            <Link href="/command-center" className="text-white underline underline-offset-4">
               /dashboard
             </Link>{" "}
             via WorkOS (email magic link or enterprise SSO). First sign-in can self-provision a free Assess workspace

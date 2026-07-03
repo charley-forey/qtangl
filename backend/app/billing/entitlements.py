@@ -109,7 +109,7 @@ def check_batch_production_scan_access(
                 "trialUsed": trial_used,
                 "trialLimit": trial_limit,
                 "requested": count,
-                "upgradeUrl": "/dashboard?upgrade=assess",
+                "upgradeUrl": "/command-center?upgrade=assess",
                 "checkoutProduct": "assess",
             }
         return {
@@ -118,7 +118,7 @@ def check_batch_production_scan_access(
             "trialRemaining": trial_remaining,
             "requested": count,
             "message": f"Trial allows {trial_remaining} more scan(s); batch requested {count}.",
-            "upgradeUrl": "/dashboard?upgrade=assess",
+            "upgradeUrl": "/command-center?upgrade=assess",
             "checkoutProduct": "assess",
         }
     return None

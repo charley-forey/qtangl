@@ -53,7 +53,7 @@ export default function DashboardTabs({
   if (isMobile) {
     return (
       <label className="block" id="dashboard-tabs">
-        <span className="sr-only">Dashboard section</span>
+        <span className="sr-only">Command Center section</span>
         <select
           value={active}
           onChange={(e) => onChange(e.target.value as DashboardTabId)}
@@ -73,7 +73,7 @@ export default function DashboardTabs({
     <nav
       id="dashboard-tabs"
       className="flex flex-wrap gap-2 border-b border-[var(--border-subtle)] pb-3"
-      aria-label="Dashboard sections"
+      aria-label="Command Center sections"
     >
       {visibleTabs.map((tab) => (
         <button

@@ -265,7 +265,7 @@ def ingest_from_discovery_result(
             source_type=source_type,
             source_ref=fid,
             title=str(f.get("title") or f.get("summary") or fid),
-            deep_link=f"/dashboard?discoveryJob={job_id}",
+            deep_link=f"/command-center?discoveryJob={job_id}",
         )
         count += 1
     return count

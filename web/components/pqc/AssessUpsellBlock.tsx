@@ -124,14 +124,14 @@ export default function AssessUpsellBlock({
           <Button href="/monitor" variant="secondary" size="sm">
             Monitor overview
           </Button>
-          <Button href="/dashboard#integrations" variant="secondary" size="sm">
+          <Button href="/command-center#integrations" variant="secondary" size="sm">
             Slack drift alerts
           </Button>
           <Button href="/convert" variant="secondary" size="sm">
             Convert program
           </Button>
           <Link
-            href="/dashboard"
+            href="/command-center"
             className="inline-flex h-10 items-center px-2 text-sm text-[var(--color-gray-400)] underline underline-offset-4 hover:text-white"
           >
             Connect tenant key

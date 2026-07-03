@@ -1,8 +1,10 @@
 "use client";
 
+import { useEffect, useState } from "react";
+
 import Card from "@/components/ui/Card";
-import Eyebrow from "@/components/ui/Eyebrow";
 import StatusPill from "@/components/dashboard/ui/StatusPill";
+import { useCommandCenterV2 } from "@/hooks/useCommandCenterV2";
 
 import type { ScanProgressState } from "@/lib/dashboard-state";
 
@@ -25,6 +27,22 @@ export default function SystemHealthBar({
   eventsConnected?: boolean;
   eventsDegraded?: boolean;
 }) {
+  const ccV2 = useCommandCenterV2();
+  const [opsHealth, setOpsHealth] = useState<{
+    schedulerStale?: boolean;
+    redis?: boolean;
+    workerQueueEnabled?: boolean;
+    scheduler?: { lastTickAt?: string };
+  } | null>(null);
+
+  useEffect(() => {
+    if (!ccV2) return;
+    void fetch("/api/dashboard/health")
+      .then((r) => r.json())
+      .then((body) => setOpsHealth(body))
+      .catch(() => setOpsHealth({ schedulerStale: true }));
+  }, [ccV2]);
+
   const quotaPct =
     quotaLimit && quotaLimit > 0 && scansThisMonth != null
       ? Math.round((scansThisMonth / quotaLimit) * 100)
@@ -63,6 +81,25 @@ export default function SystemHealthBar({
             label={`Quota ${quotaPct}%`}
             tone={quotaPct >= 90 ? "warning" : "neutral"}
           />
+        ) : null}
+        {ccV2 && opsHealth ? (
+          <>
+            <StatusPill
+              label={opsHealth.redis ? "Redis up" : "Redis down"}
+              tone={opsHealth.redis ? "success" : "critical"}
+            />
+            <StatusPill
+              label={opsHealth.workerQueueEnabled ? "Worker queue" : "Inline jobs"}
+              tone={opsHealth.workerQueueEnabled ? "success" : "warning"}
+            />
+            {opsHealth.schedulerStale ? (
+              <StatusPill label="Scheduler degraded" tone="critical" />
+            ) : opsHealth.scheduler?.lastTickAt ? (
+              <span className="text-[var(--color-gray-400)]">
+                Scheduler tick: {new Date(opsHealth.scheduler.lastTickAt).toLocaleString()}
+              </span>
+            ) : null}
+          </>
         ) : null}
         {scanProgress && ["queued", "running"].includes(scanProgress.status) ? (
           <StatusPill

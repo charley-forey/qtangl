@@ -21,7 +21,7 @@ export default function DashboardLanding() {
             Sign in with your work email or enterprise SSO. Your team admin can invite colleagues from
             Settings after the first login.
           </p>
-          <Button href="/dashboard/login" className="mt-4">
+          <Button href="/command-center/login" className="mt-4">
             Sign in to workspace
           </Button>
         </Card>

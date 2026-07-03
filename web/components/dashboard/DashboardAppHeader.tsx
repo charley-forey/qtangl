@@ -11,7 +11,7 @@ export default function DashboardAppHeader() {
     <>
       <header className="header-shell header-hairline fixed inset-x-0 top-0 z-50 bg-black/90 backdrop-blur">
         <div className="mx-auto flex w-full max-w-[var(--container-wide)] items-center justify-between gap-4 px-5 py-3.5 sm:px-8">
-          <Link href="/dashboard" className="flex items-center gap-3">
+          <Link href="/command-center" className="flex items-center gap-3">
             <Image src="/logo-mark.svg" alt="Qtangl" width={28} height={28} />
             <span className="brand-wordmark text-sm">Qtangl</span>
           </Link>

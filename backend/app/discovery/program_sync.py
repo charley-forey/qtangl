@@ -37,7 +37,7 @@ def sync_program_items_for_findings(
                 source_type="host_finding",
                 source_ref=fid,
                 title=title,
-                deep_link=f"/dashboard?tab=remediate&programItemId={program_id}",
+                deep_link=f"/command-center?tab=remediate&programItemId={program_id}",
                 actor="host-sensor",
             )
             linked.append({"findingId": fid, "programItemId": program_id})

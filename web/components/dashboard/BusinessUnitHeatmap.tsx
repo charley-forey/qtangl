@@ -1,7 +1,17 @@
 "use client";
 
+import { useState } from "react";
+
 import Card from "@/components/ui/Card";
 import Eyebrow from "@/components/ui/Eyebrow";
+import CcTreemap from "@/components/dashboard/charts/CcTreemap";
+import { ccFlags } from "@/lib/cc-feature-flags";
+
+function treemapFill(score: number): string {
+  if (score >= 80) return "#10b981";
+  if (score >= 60) return "#f59e0b";
+  return "#ef4444";
+}
 
 export default function BusinessUnitHeatmap({
   businessUnits,
@@ -13,6 +23,7 @@ export default function BusinessUnitHeatmap({
   onSelectUnit?: (unit: string) => void;
 }) {
   const entries = Object.entries(businessUnits).sort(([, a], [, b]) => a - b);
+  const [mode, setMode] = useState<"grid" | "treemap">("grid");
   if (entries.length === 0) {
     return null;
   }
@@ -25,7 +36,35 @@ export default function BusinessUnitHeatmap({
 
   return (
     <Card tone="panel">
-      <Eyebrow>Business unit readiness</Eyebrow>
+      <div className="flex items-center justify-between">
+        <Eyebrow>Business unit readiness</Eyebrow>
+        {ccFlags.v2 ? (
+          <div className="flex gap-1 text-[10px]">
+            <button
+              type="button"
+              className={`rounded-full px-2 py-1 ${mode === "grid" ? "bg-sky-500/20 text-sky-300" : "text-gray-500"}`}
+              onClick={() => setMode("grid")}
+            >
+              Grid
+            </button>
+            <button
+              type="button"
+              className={`rounded-full px-2 py-1 ${mode === "treemap" ? "bg-sky-500/20 text-sky-300" : "text-gray-500"}`}
+              onClick={() => setMode("treemap")}
+            >
+              Treemap
+            </button>
+          </div>
+        ) : null}
+      </div>
+      {ccFlags.v2 && mode === "treemap" ? (
+        <div className="mt-4">
+          <CcTreemap
+            data={entries.map(([unit, score]) => ({ name: unit, value: score, fill: treemapFill(score) }))}
+            onCellClick={onSelectUnit}
+          />
+        </div>
+      ) : (
       <div className="mt-4 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
         {entries.map(([unit, score]) => (
           <button
@@ -42,6 +81,7 @@ export default function BusinessUnitHeatmap({
           </button>
         ))}
       </div>
+      )}
     </Card>
   );
 }

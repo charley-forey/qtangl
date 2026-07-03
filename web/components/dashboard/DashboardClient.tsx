@@ -36,6 +36,7 @@ import { useUpgradeGate } from "@/hooks/useUpgradeGate";
 import { useDashboardEvents } from "@/lib/dashboard-events";
 import { isTermsBumpRequired } from "@/lib/dashboard-legal";
 import { trackDashboardEvent, identifyDashboardTenant } from "@/lib/dashboard-analytics";
+import { trackDashboardEvent as trackCcEvent } from "@/lib/dashboard-telemetry";
 import { getStoredTenantApiKey, setStoredTenantApiKey, tenantReportUrl } from "@/lib/tenant-api";
 import type { PqcScanResponse } from "@/lib/pqc";
 import { qtanglApiBaseUrl } from "@/lib/api";
@@ -186,6 +187,7 @@ export default function DashboardClient() {
     if (!bffMode || typeof tenantId !== "string" || !tenantId) return;
     const entitlements = summary.me.entitlements as { tier?: string; trialScansRemaining?: number } | undefined;
     trackDashboardEvent("dashboard_loaded", { tab: activeTab });
+    trackCcEvent({ event: "cc_tab_viewed", properties: { tab: activeTab } });
     identifyDashboardTenant(tenantId, {
       tier: String(entitlements?.tier ?? "free"),
       role: String(summary.me.role ?? ""),

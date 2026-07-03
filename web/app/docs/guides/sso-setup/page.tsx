@@ -60,7 +60,7 @@ AUTH_DASHBOARD_REQUIRE_SSO=true
               Security architecture
             </Link>{" "}
             ·{" "}
-            <Link href="/dashboard" className="text-white underline underline-offset-4">
+            <Link href="/command-center" className="text-white underline underline-offset-4">
               Dashboard
             </Link>
           </p>

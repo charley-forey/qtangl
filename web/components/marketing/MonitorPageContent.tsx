@@ -227,7 +227,7 @@ export default function MonitorPageContent() {
             <Button href={cta.secondary.href} variant="secondary">
               {cta.secondary.label}
             </Button>
-            <Button href="/dashboard" variant="secondary">
+            <Button href="/command-center" variant="secondary">
               Open tenant dashboard
             </Button>
           </div>

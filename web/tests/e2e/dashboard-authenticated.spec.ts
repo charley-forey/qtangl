@@ -42,7 +42,7 @@ const summaryPayload = {
       soWhat: "Crypto posture can drift between audits.",
       nowWhat: "Create a weekly monitoring schedule.",
       source: "onboarding_schedule",
-      proof: { deepLink: "/dashboard?tab=monitor" },
+      proof: { deepLink: "/command-center?tab=monitor" },
     },
   ],
   maturity: { stage: 2, name: "Prioritized", tier: "Assess + workshop", progressPct: 33 },
@@ -102,28 +102,28 @@ test.describe("Dashboard authenticated (mocked BFF)", () => {
   });
 
   test("overview renders KPI strip from summary", async ({ page }) => {
-    await page.goto("/dashboard?tab=overview");
+    await page.goto("/command-center?tab=overview");
     await expect(page.getByRole("tabpanel")).toBeVisible({ timeout: 15000 });
     await expect(page.getByText("78").first()).toBeVisible();
     await expect(page.getByText("Executive digest")).toBeVisible();
   });
 
   test("overview shows personalized recommendations", async ({ page }) => {
-    await page.goto("/dashboard?tab=overview");
+    await page.goto("/command-center?tab=overview");
     await expect(page.getByText("Recommended next steps")).toBeVisible({ timeout: 15000 });
     await expect(page.getByText("Monitoring schedule not configured")).toBeVisible();
     await expect(page.getByText("Crypto-agility maturity")).toBeVisible();
   });
 
   test("monitor tab collapses advanced monitoring by default", async ({ page }) => {
-    await page.goto("/dashboard?tab=monitor");
+    await page.goto("/command-center?tab=monitor");
     await expect(page.getByText("Recent activity")).toBeVisible({ timeout: 15000 });
     await expect(page.getByText("Advanced monitoring")).toBeVisible();
     await expect(page.getByText("Host sensor fleet")).not.toBeVisible();
   });
 
   test("action=report deep link opens report drawer", async ({ page }) => {
-    await page.goto("/dashboard?tab=overview&action=report&scanId=scan-1");
+    await page.goto("/command-center?tab=overview&action=report&scanId=scan-1");
     await expect(page.getByRole("dialog", { name: "Migration report" })).toBeVisible({ timeout: 15000 });
   });
 });

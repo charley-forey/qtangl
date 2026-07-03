@@ -11,7 +11,7 @@ export const monitorPageCopy = {
       "Your command center for continuous PQC readiness — scheduled re-scans, drift diffs, SIEM alerts, and QBR-ready exports. Board meetings deserve trends, not point-in-time snapshots.",
     actions: [
       { href: "/access#monitor", label: "Request Monitor pilot" },
-      { href: "/dashboard", label: "Open dashboard", variant: "secondary" as const },
+      { href: "/command-center", label: "Open dashboard", variant: "secondary" as const },
     ],
   },
   trustSignals: [
@@ -111,7 +111,7 @@ export const monitorPageCopy = {
     monitor: {
       title: "Monitor",
       points: ["Scheduled re-scans", "Drift diff + alerts", "Trend + QBR exports"],
-      href: "/dashboard?tab=monitor",
+      href: "/command-center?tab=monitor",
       cta: "Open dashboard",
     },
     compareHref: "/compare",
@@ -186,7 +186,7 @@ export const monitorPageCopy = {
     title: "One view of readiness over time",
     description:
       "Readiness score trends, open findings, and remediation velocity — the metrics your QBR needs.",
-    href: "/dashboard",
+    href: "/command-center",
     cta: "View dashboard →",
   },
   cta: {

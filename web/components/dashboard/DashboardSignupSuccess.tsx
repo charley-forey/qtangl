@@ -20,7 +20,7 @@ export default function DashboardSignupSuccess() {
           Did not receive it? Check spam, or sign in below with the same work email you used at checkout.
         </p>
         <div className="mt-6 flex flex-wrap gap-3">
-          <Button href="/dashboard/login?session=refresh">
+          <Button href="/command-center/login?session=refresh">
             Sign in to your workspace
           </Button>
           <Link

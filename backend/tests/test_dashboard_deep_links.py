@@ -23,4 +23,4 @@ def test_drift_alert_monitor_link():
 
 def test_readiness_drop_scans_link():
     url = _action_url_for_rule("readiness_drop", {"scanId": "scan-9"})
-    assert url == "/dashboard?tab=scans&scanId=scan-9"
+    assert url == "/command-center?tab=scans&scanId=scan-9"

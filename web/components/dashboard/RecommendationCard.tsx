@@ -29,7 +29,7 @@ export default function RecommendationCard({
   onAction?: (deepLink: string) => void;
   onDismiss?: (id: string) => void;
 }) {
-  const deepLink = recommendation.proof?.deepLink ?? "/dashboard";
+  const deepLink = recommendation.proof?.deepLink ?? "/command-center";
 
   return (
     <Card tone="ghost" className="border border-[var(--border-subtle)]">

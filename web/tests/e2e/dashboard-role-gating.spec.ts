@@ -65,7 +65,7 @@ test.describe("Dashboard role gating", () => {
   });
 
   test("viewer sees overview and scans tabs only", async ({ page }) => {
-    await page.goto("/dashboard?tab=overview");    await expect(page.getByRole("tabpanel")).toBeVisible({ timeout: 15000 });
+    await page.goto("/command-center?tab=overview");    await expect(page.getByRole("tabpanel")).toBeVisible({ timeout: 15000 });
     await expect(page.locator("#dashboard-tabs").getByRole("button", { name: "Overview" })).toBeVisible();
     await expect(page.locator("#dashboard-tabs").getByRole("button", { name: "Scans" })).toBeVisible();
     await expect(page.locator("#dashboard-tabs").getByRole("button", { name: "Monitor" })).toHaveCount(0);
@@ -81,7 +81,7 @@ test.describe("Dashboard role gating", () => {
       userId: "user-customer",
       capabilities: { canAdmin: false, canWrite: false, canViewCompliance: true, canInvite: false },
     });
-    await page.goto("/dashboard");
+    await page.goto("/command-center");
     await expect(page.getByRole("tabpanel")).toBeVisible({ timeout: 15000 });
     await expect(page.getByRole("button", { name: "Overview" })).toBeVisible();
     await expect(page.getByRole("button", { name: "Scans" })).toBeVisible();
@@ -106,7 +106,7 @@ test.describe("Dashboard role gating", () => {
       },
     });
 
-    await page.goto("/dashboard?tab=portfolio");
+    await page.goto("/command-center?tab=portfolio");
     await expect(page.getByRole("button", { name: "Portfolio" })).toBeVisible({ timeout: 15000 });
   });
 });

@@ -19,7 +19,7 @@ export async function resolveOpsEmail(): Promise<string | null> {
 export async function requireOpsEmail(): Promise<string> {
   const email = await resolveOpsEmail();
   if (!isQtanglOpsEmail(email)) {
-    redirect("/dashboard/login");
+    redirect("/command-center/login");
   }
   return email!;
 }

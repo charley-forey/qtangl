@@ -148,7 +148,7 @@ test.describe("Discovery fleet findings (mocked BFF)", () => {
     });
   });
   test("agent findings open HostFindingDetail drawer", async ({ page }) => {
-    await page.goto("/dashboard?tab=monitor");
+    await page.goto("/command-center?tab=monitor");
     await expect(page.getByRole("tabpanel")).toBeVisible({ timeout: 15000 });
     await expect(page.getByText("Enrolled agents")).toBeVisible({ timeout: 10000 });
     await page.getByRole("button", { name: "2", exact: true }).click();

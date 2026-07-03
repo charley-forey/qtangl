@@ -52,7 +52,7 @@ export default function ConvertVerifyBlogPage() {
             </p>
           </section>
           <div className="flex flex-wrap gap-3 pt-4">
-            <Button href="/dashboard">Open dashboard</Button>
+            <Button href="/command-center">Open dashboard</Button>
             <Button href="/convert" variant="secondary">
               Convert tier overview
             </Button>

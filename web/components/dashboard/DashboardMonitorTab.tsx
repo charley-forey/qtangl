@@ -15,6 +15,13 @@ import MonitorHealthStrip from "@/components/dashboard/MonitorHealthStrip";
 import ScheduleRecommendationCard from "@/components/dashboard/ScheduleRecommendationCard";
 import type { DashboardTabId } from "@/components/dashboard/DashboardTabs";
 import type { DashboardSummary, MonitorTabBundle } from "@/lib/dashboard-state";
+import { useCommandCenterV2 } from "@/hooks/useCommandCenterV2";
+import { ccFlags } from "@/lib/cc-feature-flags";
+import CommandCenterMonitorInsights from "@/components/dashboard/CommandCenterMonitorInsights";
+import CommandCenterJourneyBanner from "@/components/dashboard/CommandCenterJourneyBanner";
+import CorrelatedIncidentsPanel from "@/components/dashboard/CorrelatedIncidentsPanel";
+import AnomalyInsightCallouts from "@/components/dashboard/AnomalyInsightCallouts";
+import WarRoomPanel from "@/components/dashboard/WarRoomPanel";
 
 const ScheduleManager = dynamic(() => import("@/components/dashboard/ScheduleManager"));
 
@@ -59,10 +66,29 @@ export default function DashboardMonitorTab({
   const maxSchedules = entitlements?.maxSchedules ?? 0;
   const readinessScore = summary.kpis.latestReadiness ?? summary.latestScanDetail?.readinessScore ?? null;
   const [scheduleSuccess, setScheduleSuccess] = useState<MonitorScheduleSuccess | null>(null);
+  const ccV2 = useCommandCenterV2();
 
   return (
     <div className="space-y-6" id="dashboard-monitor">
+      {ccV2 ? (
+        <CommandCenterJourneyBanner
+          summary={summary}
+          tenantSettings={tenantSettings}
+          onOpenUpgrade={
+            onOpenUpgrade
+              ? (product) => {
+                  if (product === "monitor") onOpenUpgrade("monitor");
+                }
+              : undefined
+          }
+          onTabChange={(tab) => onTabChange?.(tab)}
+        />
+      ) : null}
       <MonitorHealthStrip summary={summary} schedulerEnabled={schedulerEnabled} />
+      {ccV2 ? <CommandCenterMonitorInsights /> : null}
+      {ccV2 ? <AnomalyInsightCallouts /> : null}
+      {ccV2 && ccFlags.correlation ? <CorrelatedIncidentsPanel /> : null}
+      {ccV2 && ccFlags.warRoom ? <WarRoomPanel canWrite={canAdmin} /> : null}
 
       {!schedulerEnabled ? (
         <Card tone="ghost" className="border border-amber-500/30 bg-amber-500/10">

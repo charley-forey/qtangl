@@ -6,6 +6,8 @@ import Card from "@/components/ui/Card";
 import Eyebrow from "@/components/ui/Eyebrow";
 import { fetchDashboardJson } from "@/lib/dashboard-bff";
 import { formatUtcDateTime } from "@/lib/format";
+import { useCommandCenterV2 } from "@/hooks/useCommandCenterV2";
+import VerifyStatusPill from "@/components/dashboard/ui/VerifyStatusPill";
 
 type VaultSummary = {
   active?: number;
@@ -24,6 +26,7 @@ type Props = {
 };
 
 export default function EvidenceFreshnessCard({ bffMode = true, latestScanId }: Props) {
+  const ccV2 = useCommandCenterV2();
   const [vault, setVault] = useState<VaultSummary | null>(null);
   const [passports, setPassports] = useState<PassportSummary | null>(null);
   const [loading, setLoading] = useState(false);
@@ -87,9 +90,16 @@ export default function EvidenceFreshnessCard({ bffMode = true, latestScanId }: 
             <span>Passport views</span>
             <span className="text-white">{passportViews}</span>
           </li>
-          <li className="flex justify-between gap-2">
+          <li className="flex items-center justify-between gap-2">
             <span>Verify chain</span>
-            <span className="text-[var(--color-gray-400)]">{verifyStatus}</span>
+            {ccV2 ? (
+              <VerifyStatusPill
+                status={latestScanId ? "verified" : "unknown"}
+                result={latestScanId ? { verified: true, verifyScanId: latestScanId } : undefined}
+              />
+            ) : (
+              <span className="text-[var(--color-gray-400)]">{verifyStatus}</span>
+            )}
           </li>
         </ul>
       )}

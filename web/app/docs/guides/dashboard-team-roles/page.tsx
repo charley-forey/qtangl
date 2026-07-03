@@ -76,7 +76,7 @@ export default function DashboardTeamRolesGuidePage() {
         <ol className="list-decimal space-y-2 pl-5 text-sm leading-7 text-[var(--color-gray-300)]">
           <li>
             Sign in at{" "}
-            <Link href="/dashboard" className="text-white underline underline-offset-4">
+            <Link href="/command-center" className="text-white underline underline-offset-4">
               qtangl.com/dashboard
             </Link>{" "}
             as an <code className="font-mono text-white">admin</code>.
@@ -289,7 +289,7 @@ export default function DashboardTeamRolesGuidePage() {
             Billing &amp; onboarding
           </Link>{" "}
           ·{" "}
-          <Link href="/dashboard" className="text-white underline underline-offset-4">
+          <Link href="/command-center" className="text-white underline underline-offset-4">
             Dashboard
           </Link>
         </p>

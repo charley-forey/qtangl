@@ -45,7 +45,7 @@ export default function HostSensorDeployGuidePage() {
           <DocsHeading>1. Create a fleet</DocsHeading>
           <p className="text-sm leading-8 text-[var(--color-gray-300)]">
             Open{" "}
-            <Link href="/dashboard" className="text-white underline underline-offset-4">
+            <Link href="/command-center" className="text-white underline underline-offset-4">
               Dashboard → Integrations → Discovery depth
             </Link>
             , create a fleet, and copy the enrollment token. Tokens expire in 72 hours (max 100 enrollments).

@@ -210,7 +210,7 @@ function MarketingNotFound() {
 
 export default function NotFoundRecovery() {
   const pathname = usePathname() ?? "";
-  const isDashboard = pathname.startsWith("/dashboard") && !pathname.startsWith("/dashboard/login");
+  const isDashboard = pathname.startsWith("/command-center") && !pathname.startsWith("/command-center/login");
 
   if (isDashboard) {
     return <DashboardNotFound />;

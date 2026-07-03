@@ -36,3 +36,38 @@ async def jira_webhook(request: Request) -> dict[str, Any]:
             actor="jira_webhook",
         )
     return {"status": "ok", "mappedStatus": mapped}
+
+
+@router.post("/integrations/slack/actions")
+async def slack_inbound_action(request: Request) -> dict[str, Any]:
+    """Inbound Slack interactive actions — ack/assign alerts."""
+    body = await request.json()
+    action = str(body.get("action") or body.get("callback_id") or "")
+    tenant_id = str(body.get("tenantId") or request.headers.get("X-Qtangl-Tenant", ""))
+    alert_id = str(body.get("alertId") or body.get("alert_id") or "")
+    assignee = str(body.get("assignee") or body.get("user", {}).get("name", ""))
+    if not tenant_id or not alert_id:
+        return {"status": "ignored"}
+    if action in {"ack", "acknowledge", "mark_read"}:
+        from app.store.tenant_alerts import mark_alert_read
+
+        mark_alert_read(tenant_id=tenant_id, alert_id=alert_id)
+        return {"status": "ok", "action": "ack"}
+    if action in {"assign", "assign_alert"}:
+        from app.audit.service import log_action
+
+        log_action(
+            tenant_id=tenant_id,
+            action="slack_assign_alert",
+            actor=assignee or "slack",
+            resource_id=alert_id,
+            detail={"assignee": assignee},
+        )
+        return {"status": "ok", "action": "assign", "assignee": assignee}
+    return {"status": "ignored", "reason": "unknown_action"}
+
+
+@router.post("/integrations/teams/actions")
+async def teams_inbound_action(request: Request) -> dict[str, Any]:
+    """Inbound Microsoft Teams action payloads — same semantics as Slack."""
+    return await slack_inbound_action(request)

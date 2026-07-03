@@ -17,14 +17,14 @@ const OPTIONS = [
     label: "Host fleet",
     detail: "Qtangl Unified Sensor on enrolled endpoints",
     locked: true,
-    href: "/dashboard",
+    href: "/command-center",
   },
   {
     key: "codeRepos",
     label: "Source code",
     detail: "CryptoScan + dependency reachability on repos",
     locked: true,
-    href: "/dashboard",
+    href: "/command-center",
   },
   {
     key: "containerImages",

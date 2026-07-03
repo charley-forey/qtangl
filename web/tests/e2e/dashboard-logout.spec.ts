@@ -4,7 +4,7 @@ test.describe("Dashboard sign out", () => {
   test.beforeEach(async ({ page }) => {
     await page.route("**/api/dashboard/sign-out", async (route) => {
       const headers: Record<string, string> = {
-        Location: "/dashboard/login",
+        Location: "/command-center/login",
         "Set-Cookie": [
           "qtangl_session_assertion=; Path=/; Max-Age=0",
           "qtangl_session_key=; Path=/; Max-Age=0",
@@ -76,7 +76,7 @@ test.describe("Dashboard sign out", () => {
       });
     });
 
-    await page.goto("/dashboard");
+    await page.goto("/command-center");
     await expect(page.getByRole("button", { name: "Sign out" })).toBeVisible({ timeout: 15000 });
 
     await page.getByRole("button", { name: "Sign out" }).click();

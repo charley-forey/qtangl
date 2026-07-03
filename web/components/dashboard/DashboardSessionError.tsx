@@ -13,7 +13,7 @@ const REASON_COPY: Record<
   no_membership: {
     title: "No workspace linked",
     body: "Your account signed in successfully, but no organization membership was found. Sign out, then use Sign in to get started again — first login now auto-creates a free workspace. Or ask your admin for an invite.",
-    cta: { label: "Sign in again", href: "/dashboard/login" },
+    cta: { label: "Sign in again", href: "/command-center/login" },
   },
   bff_secret_missing: {
     title: "Dashboard auth misconfigured",
@@ -27,7 +27,7 @@ const REASON_COPY: Record<
   workos_user_missing: {
     title: "Sign in required",
     body: "Sign in with your organization account to access the dashboard.",
-    cta: { label: "Sign in", href: "/dashboard/login" },
+    cta: { label: "Sign in", href: "/command-center/login" },
   },
 };
 
@@ -83,7 +83,7 @@ export default function DashboardSessionError({
           </Button>
           <SignOutButton />
           {workosEnabled ? (
-            <Button href="/dashboard/login" size="sm">
+            <Button href="/command-center/login" size="sm">
               Sign in again
             </Button>
           ) : null}

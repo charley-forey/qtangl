@@ -76,7 +76,7 @@ def _run_scan_once(
                 to_email=str(notify_email),
                 scan_id=scan_id,
                 target_domain=bundle.report.target_domain,
-                report_url=f"{base}/dashboard",
+                report_url=f"{base}/command-center",
                 readiness_band=bundle.report.readiness_band,
             )
     except ScanSafetyError:

@@ -92,7 +92,7 @@ test.describe("Dashboard MSSP portfolio (mocked BFF)", () => {
   });
 
   test("portfolio tab shows customer tenants", async ({ page }) => {
-    await page.goto("/dashboard?tab=portfolio");
+    await page.goto("/command-center?tab=portfolio");
     await expect(page.getByText("Customer tenants")).toBeVisible({ timeout: 15000 });
     await expect(page.getByRole("cell", { name: "Demo Bank" })).toBeVisible();
     await expect(page.getByRole("cell", { name: "Demo Insurer" })).toBeVisible();

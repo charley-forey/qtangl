@@ -111,7 +111,7 @@ export const convertPersonaCopy = [
       "Verify-fix API and Jira when configured",
       "Playbook steps per finding type",
     ],
-    cta: { label: "Open tenant dashboard", href: "/dashboard" },
+    cta: { label: "Open tenant dashboard", href: "/command-center" },
     anchor: "#convert-program",
   },
 ] as const;
@@ -237,7 +237,7 @@ export const convertSampleArtifact = {
 export const convertStickyCta = {
   message: "Migration program with verify-fix proof — illustrative previews on this page.",
   primary: { label: "Request Convert pilot", href: "/access" },
-  secondary: { label: "Open dashboard", href: "/dashboard" },
+  secondary: { label: "Open dashboard", href: "/command-center" },
 } as const;
 
 export const convertEvidenceCallout = {

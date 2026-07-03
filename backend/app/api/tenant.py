@@ -369,7 +369,7 @@ def _dashboard_alerts(*, tenant_id: str) -> list[dict[str, Any]]:
                 "source": "anomaly",
                 "type": "readiness_drop",
                 "message": message,
-                "actionUrl": "/dashboard?tab=overview",
+                "actionUrl": "/command-center?tab=overview",
                 **anomaly,
             }
         )
@@ -384,7 +384,7 @@ def _dashboard_alerts(*, tenant_id: str) -> list[dict[str, Any]]:
                     "source": "quota",
                     "type": "scan_quota",
                     "severity": "high",
-                    "actionUrl": "/dashboard?upgrade=monitor",
+                    "actionUrl": "/command-center?upgrade=monitor",
                     **scan_quota,
                 }
             )
@@ -399,7 +399,7 @@ def _dashboard_alerts(*, tenant_id: str) -> list[dict[str, Any]]:
                     "source": "quota",
                     "type": "schedule_quota",
                     "severity": "medium",
-                    "actionUrl": "/dashboard?upgrade=monitor",
+                    "actionUrl": "/command-center?upgrade=monitor",
                     **schedule_quota,
                 }
             )
@@ -758,7 +758,7 @@ def tenant_email_report(
         to_email=body.email,
         scan_id=scan_id,
         target_domain=report.target_domain,
-        report_url=f"{base}/dashboard",
+        report_url=f"{base}/command-center",
         readiness_band=report.readiness_band,
         subject_prefix="[Board pack]" if body.format == "board" else "[Report]",
         attachment=attachment,
@@ -2713,8 +2713,8 @@ def tenant_billing_checkout(
         return {"status": "error", "code": "stripe_unconfigured", "message": "Stripe is not configured."}
 
     base = os.environ.get("QTANGL_PUBLIC_URL", "https://www.qtangl.com").rstrip("/")
-    success = body.successUrl or f"{base}/dashboard?checkout={body.product}&session=refresh"
-    cancel = body.cancelUrl or f"{base}/dashboard?checkout=cancelled"
+    success = body.successUrl or f"{base}/command-center?checkout={body.product}&session=refresh"
+    cancel = body.cancelUrl or f"{base}/command-center?checkout=cancelled"
 
     customer_id = None
     if persistence_enabled():
@@ -2771,7 +2771,7 @@ def tenant_billing_portal(auth: AuthContext = Depends(require_auth_readonly)) ->
     if customer_id:
         session_result = create_billing_portal_session(
             customer_id=customer_id,
-            return_url=f"{base}/dashboard",
+            return_url=f"{base}/command-center",
         )
         if session_result.get("ok"):
             return {

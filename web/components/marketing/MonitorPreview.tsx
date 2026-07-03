@@ -20,7 +20,7 @@ export default function MonitorPreview() {
         <Eyebrow>Live preview — Monitor tier</Eyebrow>
         <p className="mt-3 text-sm leading-7 text-[var(--color-gray-400)]">
           Sample drift from a weekly re-scan. Connect your tenant key on the{" "}
-          <Link href="/dashboard" className="text-white underline underline-offset-4">
+          <Link href="/command-center" className="text-white underline underline-offset-4">
             dashboard
           </Link>{" "}
           for real data.

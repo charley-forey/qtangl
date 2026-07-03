@@ -10,7 +10,7 @@ export const nav = [
 ] as const;
 
 export const footerNav = [
-  { name: "Dashboard", href: "/dashboard" },
+  { name: "Command Center", href: "/command-center" },
   { name: "Assess start", href: "/assess/start" },
   { name: "Access", href: "/access" },
   { name: "Journey", href: "/journey" },

@@ -38,7 +38,7 @@ export default function MonitorBoardPackPreview() {
           Illustrative preview — export real board packs from your tenant dashboard.
         </p>
         <div className="mt-6">
-          <Button href="/dashboard" variant="secondary" size="sm">
+          <Button href="/command-center" variant="secondary" size="sm">
             Export from dashboard →
           </Button>
         </div>

@@ -226,7 +226,7 @@ test.describe("Assess page", () => {
         body: JSON.stringify({
           detail: {
             code: "assess_payment_required",
-            upgradeUrl: "/dashboard?upgrade=assess",
+            upgradeUrl: "/command-center?upgrade=assess",
             checkoutProduct: "assess",
           },
         }),

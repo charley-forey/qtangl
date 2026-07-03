@@ -75,7 +75,7 @@ export default function ScanResultsGuide({ scan }: ScanResultsGuideProps) {
       </ol>
 
       <div className="mt-6 flex flex-wrap gap-3">
-        <Button href="/dashboard" variant="secondary" size="sm">
+        <Button href="/command-center" variant="secondary" size="sm">
           Open dashboard
         </Button>
         <Button

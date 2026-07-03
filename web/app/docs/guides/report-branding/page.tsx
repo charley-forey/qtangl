@@ -25,7 +25,7 @@ export default function ReportBrandingGuidePage() {
         <DocsHeading>Dashboard UI</DocsHeading>
         <p className="text-sm leading-8 text-[var(--color-gray-300)]">
           Open{" "}
-          <Link href="/dashboard" className="text-white underline underline-offset-4">
+          <Link href="/command-center" className="text-white underline underline-offset-4">
             Dashboard
           </Link>{" "}
           → <strong className="font-medium text-white">Settings</strong> →{" "}

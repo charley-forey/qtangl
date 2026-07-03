@@ -765,3 +765,47 @@ class MergeConflict(Base):
     status: Mapped[str] = mapped_column(String(16), default="open")
     resolved_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_utcnow)
+
+
+class FindingCommentRow(Base):
+    __tablename__ = "finding_comments"
+    __table_args__ = (Index("ix_finding_comments_tenant_finding", "tenant_id", "finding_id"),)
+
+    id: Mapped[str] = mapped_column(String(80), primary_key=True)
+    tenant_id: Mapped[str] = mapped_column(String(64), ForeignKey("tenants.id"), index=True)
+    finding_id: Mapped[str] = mapped_column(String(80), index=True)
+    scan_id: Mapped[str | None] = mapped_column(String(80), nullable=True)
+    author: Mapped[str] = mapped_column(String(255), nullable=False)
+    body: Mapped[str] = mapped_column(Text, nullable=False)
+    mentions_json: Mapped[str] = mapped_column(Text, default="[]")
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_utcnow)
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_utcnow, onupdate=_utcnow)
+
+
+class SavedViewRow(Base):
+    __tablename__ = "saved_views"
+    __table_args__ = (Index("ix_saved_views_tenant_user", "tenant_id", "user_id"),)
+
+    id: Mapped[str] = mapped_column(String(80), primary_key=True)
+    tenant_id: Mapped[str] = mapped_column(String(64), ForeignKey("tenants.id"), index=True)
+    user_id: Mapped[str | None] = mapped_column(String(64), nullable=True, index=True)
+    name: Mapped[str] = mapped_column(String(120), nullable=False)
+    persona: Mapped[str | None] = mapped_column(String(32), nullable=True)
+    filters_json: Mapped[str] = mapped_column(Text, default="{}")
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_utcnow)
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_utcnow, onupdate=_utcnow)
+
+
+class WarRoomRow(Base):
+    __tablename__ = "war_rooms"
+    __table_args__ = (Index("ix_war_rooms_tenant_status", "tenant_id", "status"),)
+
+    id: Mapped[str] = mapped_column(String(80), primary_key=True)
+    tenant_id: Mapped[str] = mapped_column(String(64), ForeignKey("tenants.id"), index=True)
+    title: Mapped[str] = mapped_column(String(200), nullable=False)
+    status: Mapped[str] = mapped_column(String(16), default="active")
+    alert_ids_json: Mapped[str] = mapped_column(Text, default="[]")
+    assignees_json: Mapped[str] = mapped_column(Text, default="[]")
+    share_token: Mapped[str | None] = mapped_column(String(64), nullable=True, unique=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_utcnow)
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_utcnow, onupdate=_utcnow)

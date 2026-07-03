@@ -52,7 +52,7 @@ test.describe("Dashboard accessibility", () => {
   ]) {
     test(`overview has no serious axe violations (${viewport.name})`, async ({ page }) => {
       await page.setViewportSize({ width: viewport.width, height: viewport.height });
-      await page.goto("/dashboard");
+      await page.goto("/command-center");
       const results = await new AxeBuilder({ page }).analyze();
       const serious = results.violations.filter((v) => v.impact === "serious" || v.impact === "critical");
       expect(serious).toEqual([]);
