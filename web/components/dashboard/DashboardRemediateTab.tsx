@@ -7,6 +7,7 @@ import { useState } from "react";
 import ConvertExpectationsPanel from "@/components/dashboard/ConvertExpectationsPanel";
 import Card from "@/components/ui/Card";
 import Eyebrow from "@/components/ui/Eyebrow";
+import EmptyState from "@/components/dashboard/ui/EmptyState";
 import RemediationBoard from "@/components/pqc/RemediationBoard";
 import { DashboardSection } from "@/components/dashboard/DashboardOnboarding";
 import FrameworkDeadlineRoadmap from "@/components/dashboard/FrameworkDeadlineRoadmap";
@@ -218,14 +219,24 @@ export default function DashboardRemediateTab({
             <PeerComparisonPanel apiKey={savedKey} />
           </div>
         </Card>
-      ) : (
+      ) : scanIdParam ? (
         <Card tone="ghost">
-          <p className="text-sm text-[var(--color-gray-400)]">
-            {scanIdParam
-              ? "Loading remediation data for selected scan…"
-              : "Run a scan to populate remediation priorities."}
-          </p>
+          <p className="text-sm text-[var(--color-gray-400)]">Loading remediation data for selected scan…</p>
         </Card>
+      ) : (
+        <EmptyState
+          title="No remediation data yet"
+          description="Run a scan to generate a prioritized remediation board with owners, status, and re-scan verification."
+          action={
+            <button
+              type="button"
+              className="rounded-full bg-white px-4 py-2 text-xs font-medium text-black"
+              onClick={() => onTabChange?.("scans")}
+            >
+              Go to Scans
+            </button>
+          }
+        />
       )}
       {velocity ? (
         <Card tone="panel">

@@ -14,6 +14,7 @@ import DashboardSkeleton from "@/components/dashboard/ui/DashboardSkeleton";
 import type { DashboardPersona } from "@/components/dashboard/DashboardPersonaToggle";
 import type { DashboardTabId } from "@/components/dashboard/DashboardTabs";
 import { useDashboardSession } from "@/components/dashboard/dashboard-session-context";
+import { usePublishDashboardHeaderExtras } from "@/components/dashboard/dashboard-header-extras";
 import { useDashboardSummary } from "@/hooks/useDashboardSummary";
 import { useDashboardTab } from "@/hooks/useDashboardTab";
 import { useDashboardCommandActions } from "@/hooks/useDashboardCommandActions";
@@ -323,6 +324,57 @@ export default function DashboardClient() {
     [sessionRole, tenantSettings?.rolePolicies]
   );
 
+  const handleTabChange = useCallback((tab: DashboardTabId) => {
+    setActiveTab(tab);
+    trackDashboardEvent("dashboard_tab_changed", { tab });
+  }, []);
+
+  const handleDensityToggle = useCallback(() => {
+    setDensity((prev) => {
+      const next = prev === "compact" ? "comfortable" : "compact";
+      localStorage.setItem("qtangl_dashboard_density", next);
+      return next;
+    });
+  }, []);
+
+  const handleSessionChange = useCallback(
+    (session: DashboardSession) => {
+      setDashboardSession(session);
+      void reloadWorkspace();
+    },
+    [reloadWorkspace]
+  );
+
+  const handleMarkAlertsRead = useCallback(
+    async (ids: string[]) => {
+      const next = {
+        ...(tenantSettings ?? {}),
+        notificationReadIds: [...((tenantSettings?.notificationReadIds as string[]) ?? []), ...ids],
+      };
+      await putDashboardJson("/tenant/settings", { settings: next });
+      setTenantSettings(next);
+    },
+    [tenantSettings]
+  );
+
+  const handleRefreshAlerts = useCallback(() => void loadSummary(), [loadSummary]);
+
+  usePublishDashboardHeaderExtras({
+    tier: (summary?.me.entitlements as { tier?: string } | undefined)?.tier,
+    membershipHealth: summary?.membershipHealth,
+    alerts: summary?.alerts ?? [],
+    commandActions,
+    density,
+    persona,
+    sessionRole,
+    notificationReadIds: (tenantSettings?.notificationReadIds as string[] | undefined) ?? [],
+    onSessionChange: handleSessionChange,
+    onTabChange: handleTabChange,
+    onMarkAlertsRead: handleMarkAlertsRead,
+    onRefreshAlerts: handleRefreshAlerts,
+    onDensityToggle: handleDensityToggle,
+  });
+
   if (!checked) {
     return (
       <Card tone="ghost">
@@ -389,35 +441,12 @@ export default function DashboardClient() {
           persona={persona}
           activeTab={activeTab}
           density={density}
-          alerts={summary.alerts}
-          commandActions={commandActions}
           scanProgress={scanProgress}
           sessionWarning={expiring ? sessionWarning : null}
           reportUrlForScan={reportUrlForScan}
           rolePolicy={rolePolicy}
           sessionRole={sessionRole}
-          onTabChange={(tab) => {
-            setActiveTab(tab);
-            trackDashboardEvent("dashboard_tab_changed", { tab });
-          }}
-          onDensityToggle={() => {
-            const next = density === "compact" ? "comfortable" : "compact";
-            setDensity(next);
-            localStorage.setItem("qtangl_dashboard_density", next);
-          }}
-          onSessionChange={(session) => {
-            setDashboardSession(session);
-            void reloadWorkspace();
-          }}
-          onMarkAlertsRead={async (ids) => {
-            const next = {
-              ...(tenantSettings ?? {}),
-              notificationReadIds: [...((tenantSettings?.notificationReadIds as string[]) ?? []), ...ids],
-            };
-            await putDashboardJson("/tenant/settings", { settings: next });
-            setTenantSettings(next);
-          }}
-          onRefreshAlerts={() => void loadSummary()}
+          onTabChange={handleTabChange}
           tenantSettings={tenantSettings}
           onSettingsChange={setTenantSettings}
           eventsConnected={bffMode ? eventsConnected : undefined}

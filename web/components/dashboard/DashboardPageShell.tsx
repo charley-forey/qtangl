@@ -4,7 +4,7 @@ import type { ReactNode } from "react";
 
 import { useDashboardSession } from "@/components/dashboard/dashboard-session-context";
 
-/** Lightweight wrapper — session UI lives in DashboardClient / NavbarAccountMenu. */
+/** Lightweight wrapper — session UI lives in DashboardAppHeader. */
 export default function DashboardPageShell({ children }: { children: ReactNode }) {
   const { checked } = useDashboardSession();
 

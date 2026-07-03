@@ -6,6 +6,7 @@ import Eyebrow from "@/components/ui/Eyebrow";
 import RecommendationCard, {
   type DashboardRecommendation,
 } from "@/components/dashboard/RecommendationCard";
+import EmptyState from "@/components/dashboard/ui/EmptyState";
 import { fetchDashboardJson } from "@/lib/dashboard-bff";
 import { navigateDashboardDeepLink } from "@/lib/dashboard-deep-links";
 import { trackDashboardEvent } from "@/lib/dashboard-analytics";
@@ -22,7 +23,15 @@ export default function DashboardActionQueue({
   const router = useRouter();
 
   if (!recommendations.length) {
-    return null;
+    return (
+      <div className="space-y-3" data-tour="action-queue">
+        <Eyebrow>Recommended next steps</Eyebrow>
+        <EmptyState
+          title="Nothing needs attention"
+          description="You're all caught up — check back after your next scan for new recommendations."
+        />
+      </div>
+    );
   }
 
   async function dismiss(id: string) {

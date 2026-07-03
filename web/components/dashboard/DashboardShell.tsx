@@ -2,22 +2,14 @@
 
 import type { DashboardPersona } from "@/components/dashboard/DashboardPersonaToggle";
 import type { DashboardTabId } from "@/components/dashboard/DashboardTabs";
-import type { DashboardAlert } from "@/components/dashboard/NotificationCenter";
 import type { DashboardSession } from "@/lib/dashboard-bff";
 import type { DashboardSummary, ScanProgressState } from "@/lib/dashboard-state";
-import DashboardWorkspaceHeader from "@/components/dashboard/DashboardWorkspaceHeader";
-import CommandCenterHeader from "@/components/dashboard/CommandCenterHeader";
-import NotificationCenter from "@/components/dashboard/NotificationCenter";
-import ReadinessCopilotDrawer from "@/components/dashboard/ReadinessCopilotDrawer";
 import NpsMicroSurvey from "@/components/dashboard/NpsMicroSurvey";
-import DashboardCommandPalette from "@/components/dashboard/DashboardCommandPalette";
 import SystemHealthBar from "@/components/dashboard/SystemHealthBar";
 import DashboardKpiStrip from "@/components/dashboard/DashboardKpiStrip";
 import DashboardTabs from "@/components/dashboard/DashboardTabs";
 import EvidenceToolbar from "@/components/dashboard/EvidenceToolbar";
-import type { DashboardCommandAction } from "@/hooks/useDashboardCommandActions";
 import type { RolePolicy } from "@/lib/dashboard-role-policies";
-import { useCommandCenterV2 } from "@/hooks/useCommandCenterV2";
 
 type Props = {
   summary: DashboardSummary;
@@ -25,18 +17,12 @@ type Props = {
   persona: DashboardPersona;
   activeTab: DashboardTabId;
   density: "comfortable" | "compact";
-  alerts: DashboardAlert[];
-  commandActions: DashboardCommandAction[];
   scanProgress: ScanProgressState | null;
   sessionWarning?: string | null;
   reportUrlForScan: (scanId: string, format?: "pdf" | "json" | "bundle" | "executive" | "board" | "auditor") => string;
   rolePolicy?: RolePolicy;
   sessionRole?: string;
   onTabChange: (tab: DashboardTabId) => void;
-  onDensityToggle: () => void;
-  onSessionChange: (session: DashboardSession) => void;
-  onMarkAlertsRead: (ids: string[]) => void;
-  onRefreshAlerts?: () => void;
   tenantSettings?: Record<string, unknown> | null;
   onSettingsChange?: (settings: Record<string, unknown>) => void;
   eventsConnected?: boolean;
@@ -50,16 +36,10 @@ export default function DashboardShell({
   persona,
   activeTab,
   density,
-  alerts,
-  commandActions,
   scanProgress,
   sessionWarning,
   reportUrlForScan,
   onTabChange,
-  onDensityToggle,
-  onSessionChange,
-  onMarkAlertsRead,
-  onRefreshAlerts,
   tenantSettings,
   onSettingsChange,
   eventsConnected,
@@ -76,7 +56,6 @@ export default function DashboardShell({
   const portfolioAllowed = !isCustomerRole && (rolePolicy?.tabs.includes("*") || rolePolicy?.tabs.includes("portfolio"));
   const showPortfolio =
     portfolioAllowed && (childrenCount > 0 || (dashboardSession?.memberships?.length ?? 0) > 1);
-  const ccV2 = useCommandCenterV2();
 
   return (
     <div className={`motion-reduce:transition-none ${density === "compact" ? "space-y-4" : "space-y-8"}`}>
@@ -85,52 +64,6 @@ export default function DashboardShell({
           {sessionWarning}
         </div>
       ) : null}
-
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        {ccV2 ? (
-          <CommandCenterHeader
-            tier={(me.entitlements as { tier?: string } | undefined)?.tier}
-            membershipHealth={summary.membershipHealth}
-            onSessionChange={onSessionChange}
-            sessionRole={sessionRole ?? dashboardSession?.role}
-            persona={persona}
-            alerts={alerts}
-            commandActions={commandActions}
-            density={density}
-            notificationReadIds={(tenantSettings?.notificationReadIds as string[] | undefined) ?? []}
-            onTabChange={onTabChange}
-            onMarkAlertsRead={onMarkAlertsRead}
-            onRefreshAlerts={onRefreshAlerts}
-            onDensityToggle={onDensityToggle}
-          />
-        ) : (
-          <>
-            <DashboardWorkspaceHeader
-              tier={(me.entitlements as { tier?: string } | undefined)?.tier}
-              membershipHealth={summary.membershipHealth}
-              onSessionChange={onSessionChange}
-            />
-            <div className="flex flex-wrap items-center gap-2">
-              <ReadinessCopilotDrawer persona={persona === "executive" ? "executive" : "operator"} />
-              <NotificationCenter
-                alerts={alerts}
-                onMarkRead={onMarkAlertsRead}
-                onNavigateTab={onTabChange}
-                onRefresh={onRefreshAlerts}
-                notificationReadIds={(tenantSettings?.notificationReadIds as string[] | undefined) ?? []}
-              />
-              <DashboardCommandPalette actions={commandActions} />
-              <button
-                type="button"
-                className="rounded-full border border-[var(--border-subtle)] px-3 py-1 text-xs text-[var(--color-gray-400)]"
-                onClick={onDensityToggle}
-              >
-                {density === "compact" ? "Comfortable" : "Compact"}
-              </button>
-            </div>
-          </>
-        )}
-      </div>
 
       <SystemHealthBar
         schedulerEnabled={Boolean(me.schedulerEnabled ?? summary.health.schedulerEnabled)}
@@ -144,6 +77,7 @@ export default function DashboardShell({
       />
 
       <DashboardKpiStrip
+        activeTab={activeTab}
         kpis={{
           latestReadiness: summary.kpis.latestReadiness ?? (me.latestReadinessScore as number | null | undefined),
           latestBand: summary.kpis.latestBand ?? latestScan?.readinessBand,

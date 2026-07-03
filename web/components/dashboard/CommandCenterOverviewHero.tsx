@@ -2,9 +2,9 @@
 
 import { buildDashboardDeepLink } from "@/lib/dashboard-deep-links";
 import MetricCard from "@/components/dashboard/ui/MetricCard";
+import Sparkline from "@/components/dashboard/ui/Sparkline";
 import InsightCallout from "@/components/dashboard/ui/InsightCallout";
 import {
-  TrendLine,
   SeverityDonutV2,
   AlgorithmFamilyBars,
 } from "@/components/dashboard/charts/CommandCenterCharts";
@@ -27,11 +27,9 @@ export default function CommandCenterOverviewHero({
   const detail = summary.latestScanDetail;
   const backlog = detail?.openCriticalItems ?? [];
   const readiness = summary.kpis.latestReadiness ?? detail?.readinessScore ?? null;
-  const trend = summaryTrendPoints(summary).map((p) => ({
-    date: new Date(p.createdAt).toLocaleDateString(undefined, { month: "short", day: "numeric" }),
-    score: p.readinessScore,
-    scanId: p.scanId,
-  }));
+  const readinessTrendValues = summaryTrendPoints(summary)
+    .slice(-10)
+    .map((p) => p.readinessScore);
   const severityData = severityBreakdown(backlog);
   const algoData = algorithmFamiliesFromItems(backlog);
 
@@ -50,6 +48,9 @@ export default function CommandCenterOverviewHero({
           drillHref={buildDashboardDeepLink({ tab: "scans" })}
           drillTab="overview"
           drillMetric="readiness"
+          sparkline={
+            readinessTrendValues.length >= 2 ? <Sparkline values={readinessTrendValues} /> : undefined
+          }
         />
         <MetricCard
           label="Open criticals"
@@ -76,15 +77,6 @@ export default function CommandCenterOverviewHero({
           drillMetric="schedules"
         />
       </div>
-
-      {trend.length >= 2 ? (
-        <Card tone="panel" className="p-4">
-          <Eyebrow>Readiness trend</Eyebrow>
-          <div className="mt-3">
-            <TrendLine data={trend} />
-          </div>
-        </Card>
-      ) : null}
 
       <div className="grid gap-4 lg:grid-cols-2">
         <Card tone="panel" className="p-4">
