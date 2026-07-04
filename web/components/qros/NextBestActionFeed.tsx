@@ -1,42 +1,21 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 import Card from "@/components/ui/Card";
 import Button from "@/components/ui/Button";
 import EmptyState from "@/components/dashboard/ui/EmptyState";
-import { fetchNextActions } from "@/lib/qros-api";
-import type { NextBestAction } from "@/lib/qros-types";
+import { fetchNextActions, mutateNbaAction } from "@/lib/qros-api";
+import { useQrosQuery } from "@/lib/qros-hooks";
 import { trackDashboardEvent } from "@/lib/dashboard-telemetry";
 
 export default function NextBestActionFeed() {
   const router = useRouter();
-  const [actions, setActions] = useState<NextBestAction[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    let cancelled = false;
-    setLoading(true);
-    fetchNextActions()
-      .then((rows) => {
-        if (!cancelled) setActions(rows);
-      })
-      .catch(() => {
-        if (!cancelled) setError("Unable to load prioritized actions.");
-      })
-      .finally(() => {
-        if (!cancelled) setLoading(false);
-      });
-    return () => {
-      cancelled = true;
-    };
-  }, []);
+  const { data: actions, loading, error, reload } = useQrosQuery(fetchNextActions, []);
 
   if (loading) {
     return (
-      <Card tone="panel" className="animate-pulse p-6">
+      <Card tone="panel" className="animate-pulse p-6" aria-busy="true">
         <div className="h-4 w-40 rounded bg-white/10" />
         <div className="mt-4 space-y-3">
           <div className="h-12 rounded bg-white/5" />
@@ -50,7 +29,7 @@ export default function NextBestActionFeed() {
     return <EmptyState title="Action queue unavailable" description={error} />;
   }
 
-  if (!actions.length) {
+  if (!actions?.length) {
     return (
       <EmptyState
         title="No urgent actions"
@@ -67,7 +46,7 @@ export default function NextBestActionFeed() {
           <p className="text-xs text-[var(--color-gray-400)]">Ranked by risk-reduction per effort</p>
         </div>
       </div>
-      <ol className="space-y-3">
+      <ol className="space-y-3" aria-label="Prioritized actions">
         {actions.slice(0, 6).map((action, index) => (
           <li
             key={action.id}
@@ -80,20 +59,39 @@ export default function NextBestActionFeed() {
               <p className="mt-1 text-sm font-medium text-white">{action.title}</p>
               <p className="mt-1 text-xs text-[var(--color-gray-400)]">{action.impact}</p>
             </div>
-            <Button
-              type="button"
-              variant="secondary"
-              className="shrink-0"
-              onClick={() => {
-                trackDashboardEvent({
-                  event: "cc_qros_nba_action",
-                  properties: { actionId: action.id, kind: action.kind },
-                });
-                if (action.deepLink) router.push(action.deepLink);
-              }}
-            >
-              {action.cta?.label ?? "Open"}
-            </Button>
+            <div className="flex shrink-0 flex-wrap gap-2">
+              <Button
+                type="button"
+                variant="ghost"
+                onClick={() => {
+                  void mutateNbaAction(action.id, "snooze").then(() => reload());
+                }}
+              >
+                Snooze
+              </Button>
+              <Button
+                type="button"
+                variant="ghost"
+                onClick={() => {
+                  void mutateNbaAction(action.id, "dismiss").then(() => reload());
+                }}
+              >
+                Dismiss
+              </Button>
+              <Button
+                type="button"
+                variant="secondary"
+                onClick={() => {
+                  trackDashboardEvent({
+                    event: "cc_qros_nba_action",
+                    properties: { actionId: action.id, kind: action.kind },
+                  });
+                  if (action.deepLink) router.push(action.deepLink);
+                }}
+              >
+                {action.cta?.label ?? "Open"}
+              </Button>
+            </div>
           </li>
         ))}
       </ol>

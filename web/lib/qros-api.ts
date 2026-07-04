@@ -75,6 +75,46 @@ export async function configurePushBriefing(channels: string[], cadenceHours = 2
   });
 }
 
+export async function exportBoardDeckPdf(): Promise<Blob> {
+  const response = await fetch("/api/dashboard/tenant/qros/board-deck?format=pdf", {
+    method: "POST",
+    credentials: "include",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({}),
+  });
+  if (!response.ok) throw new Error("PDF export failed");
+  return response.blob();
+}
+
+export async function mutateNbaAction(actionId: string, op: "snooze" | "dismiss" | "assign", owner?: string) {
+  return fetchDashboardJson<{ status: string }>(
+    `/tenant/qros/next-actions/${encodeURIComponent(actionId)}/mutate`,
+    { method: "POST", body: JSON.stringify({ op, owner }) }
+  );
+}
+
+export async function installMarketplaceTile(tileId: string) {
+  const payload = await fetchDashboardJson<{ tiles: MarketplaceTile[] }>(
+    `/tenant/qros/marketplace/tiles/${encodeURIComponent(tileId)}/install`,
+    { method: "POST", body: JSON.stringify({ tileId }) }
+  );
+  return payload.tiles ?? [];
+}
+
+export async function uninstallMarketplaceTile(tileId: string) {
+  await fetch(`/api/dashboard/tenant/qros/marketplace/tiles/${encodeURIComponent(tileId)}/install`, {
+    method: "DELETE",
+    credentials: "include",
+  });
+}
+
+export async function sendPushBriefingNow(channels: string[]) {
+  return fetchDashboardJson<{ status: string; delivery?: { delivered: number } }>(
+    "/tenant/qros/push-briefing/send",
+    { method: "POST", body: JSON.stringify({ channels, cadenceHours: 24 }) }
+  );
+}
+
 export function lensToQuery(lens: GlobalLens): string {
   const params = new URLSearchParams();
   if (lens.businessUnit) params.set("bu", lens.businessUnit);

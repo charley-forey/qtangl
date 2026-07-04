@@ -402,3 +402,13 @@ class PushBriefingRequest(BaseModel):
     channels: list[str] = Field(default_factory=lambda: ["email"])
     cadenceHours: int = 24
 
+
+class NbaActionRequest(BaseModel):
+    op: Literal["snooze", "dismiss", "assign"] = "dismiss"
+    owner: str | None = None
+    snoozeHours: int = Field(default=24, ge=1, le=168)
+
+
+class MarketplaceInstallRequest(BaseModel):
+    tileId: str = Field(min_length=1, max_length=64)
+

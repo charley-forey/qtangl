@@ -15,7 +15,8 @@ import type {
 
 export type { DashboardSummary } from "@/lib/dashboard-state";
 
-export async function fetchDashboardSummaryViaBff(): Promise<DashboardSummary> {
+export async function fetchDashboardSummaryViaBff(lensQuery?: string): Promise<DashboardSummary> {
+  const suffix = lensQuery ? `?${lensQuery}` : "";
   const payload = await fetchDashboardJson<{
     me: Record<string, unknown>;
     kpis: DashboardSummary["kpis"];
@@ -36,7 +37,7 @@ export async function fetchDashboardSummaryViaBff(): Promise<DashboardSummary> {
     recommendations?: DashboardSummary["recommendations"];
     maturity?: DashboardSummary["maturity"];
     portfolioSummary?: DashboardSummary["portfolioSummary"];
-  }>("/tenant/dashboard/summary");
+  }>("/tenant/dashboard/summary" + suffix);
 
   return {
     me: payload.me ?? {},

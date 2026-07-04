@@ -61,10 +61,10 @@ export default function PostureCommandBar({ kpis, summary, activeTab, onTabChang
         ) : null}
       </div>
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-6">
-        <button type="button" className="text-left" onClick={() => drill("readiness", "overview")}>
+        <button type="button" className="text-left" aria-label="Drill into readiness" onClick={() => drill("readiness", "overview")}>
           <KpiCard label="Readiness" value={readiness} hint={kpis.latestBand ?? undefined} delta={delta} />
         </button>
-        <button type="button" className="text-left" onClick={() => drill("critical", "remediate")}>
+        <button type="button" className="text-left" aria-label="Drill into open critical findings" onClick={() => drill("critical", "remediate")}>
           <KpiCard
             label="Open critical"
             value={kpis.openCritical ?? 0}

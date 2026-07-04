@@ -85,6 +85,71 @@ export async function mockDashboardEvents(page: Page) {
   });
 }
 
+export async function mockDashboardQrosRoutes(page: Page) {
+  let nbaSnoozed = false;
+  const nextActions = {
+    actions: [
+      {
+        id: "nba-test-1",
+        kind: "schedule",
+        title: "Enable weekly monitor cadence",
+        impact: "Keeps inventory evidence fresh between audits.",
+        effort: "low",
+        score: 0.9,
+        deepLink: "/command-center?tab=monitor",
+        cta: { label: "Open monitor" },
+      },
+    ],
+  };
+
+  const briefing = {
+    persona: "operator",
+    headline: "Portfolio readiness is stable at 78.",
+    bullets: ["1 open critical finding needs owner assignment.", "Next scheduled scan in 7 days."],
+    methodNote: "Inventory aid — not a formal audit.",
+  };
+
+  await page.route("**/api/dashboard/tenant/qros/**", async (route) => {
+    const url = route.request().url();
+    const method = route.request().method();
+    if (url.includes("/next-actions") && method === "GET") {
+      return route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify(nbaSnoozed ? { actions: [] } : nextActions),
+      });
+    }
+    if (url.includes("/next-actions") && url.includes("/mutate") && method === "POST") {
+      nbaSnoozed = true;
+      return route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({ status: "ok" }) });
+    }
+    if (url.includes("/morning-briefing")) {
+      return route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify(briefing) });
+    }
+    if (url.includes("/runway")) {
+      return route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify({
+          framing: "Migration runway — not Q-Day prediction.",
+          milestones: [{ id: "m1", date: "Q3 2026", label: "Inventory complete", description: "Baseline signed." }],
+          scenarios: [{ id: "accelerate", label: "Accelerate TLS" }],
+        }),
+      });
+    }
+    if (url.includes("/marketplace/tiles")) {
+      return route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify({
+          tiles: [{ id: "tile-1", name: "MSSP overlay", publisher: "Partner", category: "monitoring", description: "Test tile", installed: false }],
+        }),
+      });
+    }
+    return route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({ status: "success" }) });
+  });
+}
+
 export async function mockDashboardTenantRoutes(
   page: Page,
   handlers: {
@@ -95,6 +160,9 @@ export async function mockDashboardTenantRoutes(
 ) {
   await page.route("**/api/dashboard/tenant/**", async (route) => {
     const url = route.request().url();
+    if (url.includes("/tenant/qros/")) {
+      return route.continue();
+    }
     if (handlers.summary && url.includes("/tenant/dashboard/summary")) {
       return route.fulfill({
         status: 200,
@@ -135,6 +203,9 @@ export async function mockDashboardTenantRoutes(
     }
     if (url.includes("/tenant/alerts")) {
       return route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({ alerts: [] }) });
+    }
+    if (url.includes("/tenant/war-rooms")) {
+      return route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify([]) });
     }
     return route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({ status: "success" }) });
   });

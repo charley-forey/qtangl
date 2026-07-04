@@ -14,12 +14,12 @@ export function useDashboardSummary() {
   const [scanProgress, setScanProgress] = useState<ScanProgressState | null>(null);
   const loadedAtRef = useRef<number | null>(null);
 
-  const loadSummary = useCallback(async (): Promise<DashboardSummary | null> => {
+  const loadSummary = useCallback(async (lensQuery?: string): Promise<DashboardSummary | null> => {
     const started = performance.now();
     setLoading(true);
     setError(null);
     try {
-      const payload = await fetchDashboardSummaryViaBff();
+      const payload = await fetchDashboardSummaryViaBff(lensQuery);
       setSummary(payload);
       loadedAtRef.current = Date.now();
       trackDashboardEvent("dashboard_loaded", {

@@ -1,33 +1,34 @@
 "use client";
 
-import { useEffect, useState } from "react";
-
-import Card from "@/components/ui/Card";
 import Button from "@/components/ui/Button";
+import Card from "@/components/ui/Card";
 import EmptyState from "@/components/dashboard/ui/EmptyState";
-import { fetchMarketplaceTiles } from "@/lib/qros-api";
-import type { MarketplaceTile } from "@/lib/qros-types";
+import { fetchMarketplaceTiles, installMarketplaceTile, uninstallMarketplaceTile } from "@/lib/qros-api";
+import { useQrosQuery } from "@/lib/qros-hooks";
 import { trackDashboardEvent } from "@/lib/dashboard-telemetry";
 
 export default function TileMarketplacePanel() {
-  const [tiles, setTiles] = useState<MarketplaceTile[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { data: tiles, loading, error, reload } = useQrosQuery(fetchMarketplaceTiles, []);
 
-  useEffect(() => {
-    fetchMarketplaceTiles()
-      .then(setTiles)
-      .finally(() => setLoading(false));
-  }, []);
+  const toggle = async (tileId: string, installed: boolean) => {
+    if (installed) {
+      await uninstallMarketplaceTile(tileId);
+    } else {
+      await installMarketplaceTile(tileId);
+      trackDashboardEvent({ event: "cc_qros_marketplace_install", properties: { tileId } });
+    }
+    reload();
+  };
 
   if (loading) {
     return (
-      <Card tone="panel" className="animate-pulse p-6">
+      <Card tone="panel" className="animate-pulse p-6" aria-busy="true">
         <div className="h-4 w-32 rounded bg-white/10" />
       </Card>
     );
   }
 
-  if (!tiles.length) {
+  if (error || !tiles?.length) {
     return <EmptyState title="No tiles available" description="Partner extensions will appear in the marketplace catalog." />;
   }
 
@@ -35,7 +36,7 @@ export default function TileMarketplacePanel() {
     <Card tone="panel" className="p-5">
       <h2 className="text-sm font-semibold text-white">Tile marketplace</h2>
       <p className="mt-1 text-xs text-[var(--color-gray-400)]">Install partner and MSSP extension tiles into your workspace.</p>
-      <ul className="mt-4 space-y-3">
+      <ul className="mt-4 space-y-3" aria-label="Marketplace tiles">
         {tiles.map((tile) => (
           <li
             key={tile.id}
@@ -51,12 +52,9 @@ export default function TileMarketplacePanel() {
             <Button
               type="button"
               variant={tile.installed ? "ghost" : "secondary"}
-              disabled={tile.installed}
-              onClick={() =>
-                trackDashboardEvent({ event: "cc_qros_marketplace_install", properties: { tileId: tile.id } })
-              }
+              onClick={() => void toggle(tile.id, tile.installed)}
             >
-              {tile.installed ? "Installed" : "Install"}
+              {tile.installed ? "Uninstall" : "Install"}
             </Button>
           </li>
         ))}

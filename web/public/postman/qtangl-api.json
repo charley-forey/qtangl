@@ -3463,6 +3463,34 @@
       }
     },
     {
+      "name": "DELETE /tenant/qros/marketplace/tiles/{tile_id}/install",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/qros/marketplace/tiles/example/install",
+        "description": "Tenant Qros Marketplace Uninstall"
+      }
+    },
+    {
+      "name": "POST /tenant/qros/marketplace/tiles/{tile_id}/install",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/qros/marketplace/tiles/example/install",
+        "description": "Tenant Qros Marketplace Install"
+      }
+    },
+    {
       "name": "GET /tenant/qros/morning-briefing",
       "request": {
         "method": "GET",
@@ -3491,6 +3519,20 @@
       }
     },
     {
+      "name": "POST /tenant/qros/next-actions/{action_id}/mutate",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/qros/next-actions/example/mutate",
+        "description": "Tenant Qros Nba Mutate"
+      }
+    },
+    {
       "name": "POST /tenant/qros/push-briefing",
       "request": {
         "method": "POST",
@@ -3502,6 +3544,20 @@
         ],
         "url": "{{baseUrl}}/tenant/qros/push-briefing",
         "description": "Tenant Qros Push Briefing"
+      }
+    },
+    {
+      "name": "POST /tenant/qros/push-briefing/send",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/qros/push-briefing/send",
+        "description": "Tenant Qros Push Briefing Send"
       }
     },
     {

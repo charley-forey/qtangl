@@ -27,9 +27,15 @@ from app.command_center.qros import (
     build_next_actions,
     build_runway,
     execute_agentic_action,
+    install_marketplace_tile,
     list_marketplace_tiles,
+    load_nba_state,
+    mutate_nba_state,
     simulate_scenario,
+    uninstall_marketplace_tile,
 )
+from app.command_center.qros_pdf import build_qros_board_pdf
+from app.command_center.qros_push import deliver_morning_briefing
 from app.command_center.schemas import (
     AgenticPlanResponse,
     AgenticActionRequest,
@@ -48,7 +54,9 @@ from app.command_center.schemas import (
     InboxResponse,
     MarketplaceResponse,
     MarketplaceTile,
+    MarketplaceInstallRequest,
     MorningBriefingResponse,
+    NbaActionRequest,
     NextBestActionResponse,
     NotificationPreferences,
     PeerPercentileResponse,
@@ -428,7 +436,10 @@ def tenant_notification_preferences_put(
     return body
 
 
-def _qros_summary_snapshot(*, tenant_id: str) -> dict[str, Any]:
+def _qros_summary_snapshot(*, tenant_id: str, role: str = "operator") -> dict[str, Any]:
+    from app.recommendations.service import build_recommendations
+    from app.remediation.service import remediation_velocity
+
     jobs = list_jobs_for_tenant(tenant_id=tenant_id, limit=20)
     latest = next((j for j in jobs if j.get("readinessScore") is not None), None)
     prior = next(
@@ -446,6 +457,8 @@ def _qros_summary_snapshot(*, tenant_id: str) -> dict[str, Any]:
     scores = _readiness_scores_for_tenant(tenant_id=tenant_id)
     forecast = forecast_readiness(scores=scores) if scores else {}
     alerts = list_alerts(tenant_id=tenant_id, since_days=14, include_resolved=False)
+    velocity = remediation_velocity(tenant_id=tenant_id)
+    recommendations = build_recommendations(tenant_id=tenant_id, role=role)
     return {
         "kpis": {
             "latestReadiness": latest.get("readinessScore") if latest else None,
@@ -453,9 +466,11 @@ def _qros_summary_snapshot(*, tenant_id: str) -> dict[str, Any]:
             "openCritical": open_critical,
         },
         "alerts": alerts,
-        "recommendations": [],
+        "recommendations": recommendations,
+        "remediationVelocity": velocity,
         "forecast": forecast,
         "maturity": {},
+        "latestScanId": latest.get("scanId") if latest else None,
     }
 
 
@@ -463,7 +478,9 @@ def _qros_summary_snapshot(*, tenant_id: str) -> dict[str, Any]:
 def tenant_qros_next_actions(
     auth: AuthContext = Depends(require_auth_readonly),
 ) -> NextBestActionResponse:
-    summary = _qros_summary_snapshot(tenant_id=auth.tenant_id)
+    settings = get_tenant_settings_raw(tenant_id=auth.tenant_id)
+    dismissed, snoozed = load_nba_state(settings=settings)
+    summary = _qros_summary_snapshot(tenant_id=auth.tenant_id, role=auth.role or "operator")
     owner = auth.email or auth.user_id or "operator"
     actions = build_next_actions(
         tenant_id=auth.tenant_id,
@@ -472,6 +489,9 @@ def tenant_qros_next_actions(
         alerts=summary.get("alerts"),
         readiness=summary["kpis"].get("latestReadiness"),
         open_critical=int(summary["kpis"].get("openCritical") or 0),
+        remediation_velocity=summary.get("remediationVelocity"),
+        snoozed_ids=snoozed,
+        dismissed_ids=dismissed,
     )
     from datetime import UTC, datetime
 
@@ -481,12 +501,36 @@ def tenant_qros_next_actions(
     )
 
 
+@router.post("/qros/next-actions/{action_id}/mutate")
+def tenant_qros_nba_mutate(
+    action_id: str,
+    body: NbaActionRequest,
+    auth: AuthContext = Depends(require_auth_write),
+) -> dict[str, Any]:
+    settings = get_tenant_settings_raw(tenant_id=auth.tenant_id)
+    nba_state = mutate_nba_state(
+        settings=settings,
+        action_id=action_id,
+        op=body.op,
+        owner=body.owner or auth.email,
+        snooze_hours=body.snoozeHours,
+    )
+    upsert_tenant_settings(tenant_id=auth.tenant_id, settings={"qrosNbaState": nba_state})
+    log_action(
+        tenant_id=auth.tenant_id,
+        actor=auth.email or "operator",
+        action=f"qros_nba_{body.op}",
+        resource_id=action_id,
+    )
+    return {"status": "success", "actionId": action_id, "op": body.op}
+
+
 @router.get("/qros/morning-briefing", response_model=MorningBriefingResponse)
 def tenant_qros_morning_briefing(
     persona: str = Query(default="operator"),
     auth: AuthContext = Depends(require_auth_readonly),
 ) -> MorningBriefingResponse:
-    summary = _qros_summary_snapshot(tenant_id=auth.tenant_id)
+    summary = _qros_summary_snapshot(tenant_id=auth.tenant_id, role=auth.role or "operator")
     owner = auth.email or auth.user_id or "operator"
     return MorningBriefingResponse(**build_morning_briefing(
         tenant_id=auth.tenant_id,
@@ -498,7 +542,7 @@ def tenant_qros_morning_briefing(
 
 @router.get("/qros/runway", response_model=RunwayResponse)
 def tenant_qros_runway(auth: AuthContext = Depends(require_auth_readonly)) -> RunwayResponse:
-    summary = _qros_summary_snapshot(tenant_id=auth.tenant_id)
+    summary = _qros_summary_snapshot(tenant_id=auth.tenant_id, role=auth.role or "operator")
     return RunwayResponse(**build_runway(summary=summary))
 
 
@@ -507,7 +551,7 @@ def tenant_qros_scenario_simulate(
     body: ScenarioSimRequest,
     auth: AuthContext = Depends(require_auth_readonly),
 ) -> ScenarioSimResponse:
-    summary = _qros_summary_snapshot(tenant_id=auth.tenant_id)
+    summary = _qros_summary_snapshot(tenant_id=auth.tenant_id, role=auth.role or "operator")
     return ScenarioSimResponse(**simulate_scenario(scenario_id=body.scenarioId, summary=summary))
 
 
@@ -527,18 +571,30 @@ def tenant_qros_digital_twin(
     return DigitalTwinResponse(**build_digital_twin(graph=graph, selected_node_id=selected_node_id))
 
 
-@router.post("/qros/board-deck", response_model=BoardDeckResponse)
-def tenant_qros_board_deck(auth: AuthContext = Depends(require_auth_readonly)) -> BoardDeckResponse:
-    summary = _qros_summary_snapshot(tenant_id=auth.tenant_id)
+@router.post("/qros/board-deck")
+def tenant_qros_board_deck(
+    format: str | None = Query(default=None, alias="format"),
+    auth: AuthContext = Depends(require_auth_readonly),
+):
+    from fastapi.responses import Response
+
+    summary = _qros_summary_snapshot(tenant_id=auth.tenant_id, role=auth.role or "operator")
     narrative_resp = build_executive_narrative(
         tenant_id=auth.tenant_id,
         summary={
             "kpis": summary["kpis"],
-            "remediationVelocity": {},
-            "latestScanId": None,
+            "remediationVelocity": summary.get("remediationVelocity") or {},
+            "latestScanId": summary.get("latestScanId"),
         },
     )
     payload = build_board_deck_payload(summary=summary, narrative=narrative_resp.narrative)
+    if format == "pdf":
+        pdf_bytes = build_qros_board_pdf(title=payload["title"], slides=payload["slides"])
+        return Response(
+            content=pdf_bytes,
+            media_type="application/pdf",
+            headers={"Content-Disposition": 'attachment; filename="qros-executive-brief.pdf"'},
+        )
     return BoardDeckResponse(**payload)
 
 
@@ -552,7 +608,13 @@ def tenant_qros_agentic_execute(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="approved=true required for non-dry-run execution",
         )
-    result = execute_agentic_action(action=body.action, payload=body.payload, dry_run=body.dryRun)
+    result = execute_agentic_action(
+        action=body.action,
+        payload=body.payload,
+        dry_run=body.dryRun,
+        tenant_id=auth.tenant_id,
+        actor_email=auth.email,
+    )
     if not body.dryRun and body.approved:
         log_action(
             tenant_id=auth.tenant_id,
@@ -569,6 +631,61 @@ def tenant_qros_marketplace_tiles(auth: AuthContext = Depends(require_auth_reado
     installed = settings.get("installedTiles") or []
     tiles = [MarketplaceTile(**t) for t in list_marketplace_tiles(installed_ids=installed)]
     return MarketplaceResponse(tiles=tiles)
+
+
+@router.post("/qros/marketplace/tiles/{tile_id}/install")
+def tenant_qros_marketplace_install(
+    tile_id: str,
+    auth: AuthContext = Depends(require_auth_write),
+) -> MarketplaceResponse:
+    settings = get_tenant_settings_raw(tenant_id=auth.tenant_id)
+    installed = install_marketplace_tile(
+        installed_ids=list(settings.get("installedTiles") or []),
+        tile_id=tile_id,
+    )
+    upsert_tenant_settings(tenant_id=auth.tenant_id, settings={"installedTiles": installed})
+    tiles = [MarketplaceTile(**t) for t in list_marketplace_tiles(installed_ids=installed)]
+    return MarketplaceResponse(tiles=tiles)
+
+
+@router.delete("/qros/marketplace/tiles/{tile_id}/install", status_code=status.HTTP_204_NO_CONTENT)
+def tenant_qros_marketplace_uninstall(
+    tile_id: str,
+    auth: AuthContext = Depends(require_auth_write),
+) -> None:
+    settings = get_tenant_settings_raw(tenant_id=auth.tenant_id)
+    installed = uninstall_marketplace_tile(
+        installed_ids=list(settings.get("installedTiles") or []),
+        tile_id=tile_id,
+    )
+    upsert_tenant_settings(tenant_id=auth.tenant_id, settings={"installedTiles": installed})
+
+
+@router.post("/qros/push-briefing/send")
+def tenant_qros_push_briefing_send(
+    body: PushBriefingRequest,
+    auth: AuthContext = Depends(require_auth_write),
+) -> dict[str, Any]:
+    summary = _qros_summary_snapshot(tenant_id=auth.tenant_id, role=auth.role or "operator")
+    owner = auth.email or auth.user_id or "operator"
+    briefing = build_morning_briefing(
+        tenant_id=auth.tenant_id,
+        persona="operator",
+        owner=owner,
+        summary=summary,
+    )
+    delivery = deliver_morning_briefing(
+        tenant_id=auth.tenant_id,
+        briefing=briefing,
+        channels=body.channels,
+    )
+    log_action(
+        tenant_id=auth.tenant_id,
+        actor=auth.email or "operator",
+        action="qros_push_briefing_sent",
+        resource_id=str(delivery.get("delivered", 0)),
+    )
+    return {"status": "success", "delivery": delivery}
 
 
 @router.post("/qros/push-briefing")

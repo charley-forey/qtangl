@@ -94,6 +94,16 @@ export default function DashboardClient() {
   const [bffConnected, setBffConnected] = useState(false);
 
   const bffBootstrappedKeyRef = useRef<string | null>(null);
+  const lensSummaryBootstrappedRef = useRef(false);
+
+  const lensQuery = useMemo(() => {
+    const params = new URLSearchParams();
+    for (const key of ["bu", "framework", "severity", "env", "q"]) {
+      const value = searchParams.get(key);
+      if (value) params.set(key, value);
+    }
+    return params.toString();
+  }, [searchParams]);
 
   const { summary, loading, error, scanProgress, loadSummary, patchScan } = useDashboardSummary();
   const { bundle: tabBundle, loading: tabLoading, error: tabError, loadTab, invalidateTab } = useDashboardTab(activeTab);
@@ -118,14 +128,14 @@ export default function DashboardClient() {
   const reloadWorkspace = useCallback(async () => {
     bffBootstrappedKeyRef.current = null;
     await refreshSession();
-    await Promise.all([loadSummary(), loadTenantSettings()]);
+    await Promise.all([loadSummary(lensQuery || undefined), loadTenantSettings()]);
     invalidateTab();
-  }, [invalidateTab, loadSummary, loadTenantSettings, refreshSession]);
+  }, [invalidateTab, lensQuery, loadSummary, loadTenantSettings, refreshSession]);
 
   const retrySessionAndSummary = useCallback(async () => {
     await refreshSession();
-    await loadSummary();
-  }, [refreshSession, loadSummary]);
+    await loadSummary(lensQuery || undefined);
+  }, [lensQuery, refreshSession, loadSummary]);
 
   const { expiring, message: sessionWarning } = useSessionExpiryWarning(
     bffConnected,
@@ -136,9 +146,17 @@ export default function DashboardClient() {
     setBffMode(true);
     setSavedKey("bff");
     await refreshSession();
-    await Promise.all([loadSummary(), loadTenantSettings()]);
+    await Promise.all([loadSummary(lensQuery || undefined), loadTenantSettings()]);
     setBffConnected(true);
-  }, [loadSummary, loadTenantSettings, refreshSession]);
+  }, [lensQuery, loadSummary, loadTenantSettings, refreshSession]);
+
+  useEffect(() => {
+    if (!bffConnected || !lensSummaryBootstrappedRef.current) {
+      if (bffConnected) lensSummaryBootstrappedRef.current = true;
+      return;
+    }
+    void loadSummary(lensQuery || undefined);
+  }, [bffConnected, lensQuery, loadSummary]);
 
   useEffect(() => {
     if (contextSession) setDashboardSession(contextSession);

@@ -2,6 +2,7 @@ import { test, expect } from "@playwright/test";
 
 import {
   mockDashboardEvents,
+  mockDashboardQrosRoutes,
   mockDashboardSession,
   mockDashboardTenantRoutes,
 } from "./helpers/dashboard-bff-mocks";
@@ -86,7 +87,7 @@ test.describe("Dashboard authenticated (mocked BFF)", () => {
       summary: summaryPayload,
       settings: {
         scanAllowlist: ["example.com"],
-        billing: { termsAcceptedAt: "2026-06-01" },
+        billing: { termsAcceptedAt: "2026-06-01", termsVersion: "2026-06-08" },
         onboarding: { toursCompleted: ["overview", "monitor", "scans", "remediate"] },
       },
       tabRoutes: {
@@ -99,20 +100,45 @@ test.describe("Dashboard authenticated (mocked BFF)", () => {
         },
       },
     });
+    await mockDashboardQrosRoutes(page);
   });
 
-  test("overview renders KPI strip from summary", async ({ page }) => {
+  test("overview renders posture command bar from summary", async ({ page }) => {
     await page.goto("/command-center?tab=overview");
     await expect(page.getByRole("tabpanel")).toBeVisible({ timeout: 15000 });
+    await expect(page.getByLabel("Posture command bar")).toBeVisible();
     await expect(page.getByText("78").first()).toBeVisible();
-    await expect(page.getByText("Executive digest")).toBeVisible();
   });
 
-  test("overview shows personalized recommendations", async ({ page }) => {
+  test("overview shows QROS morning briefing and NBA feed", async ({ page }) => {
     await page.goto("/command-center?tab=overview");
+    await expect(page.getByText("Morning briefing")).toBeVisible({ timeout: 15000 });
+    await expect(page.getByText("Next best actions")).toBeVisible();
+    await expect(page.getByText("Enable weekly monitor cadence")).toBeVisible();
+  });
+
+  test("overview shows personalized recommendations in details", async ({ page }) => {
+    await page.goto("/command-center?tab=overview");
+    await expect(page.getByRole("tabpanel")).toBeVisible({ timeout: 15000 });
+    await page.getByRole("button", { name: "Show details" }).click();
     await expect(page.getByText("Recommended next steps")).toBeVisible({ timeout: 15000 });
     await expect(page.getByText("Monitoring schedule not configured")).toBeVisible();
     await expect(page.getByText("Crypto-agility maturity")).toBeVisible();
+  });
+
+  test("global lens filters sync to URL", async ({ page }) => {
+    await page.goto("/command-center?tab=overview");
+    await expect(page.getByRole("tabpanel")).toBeVisible({ timeout: 15000 });
+    await page.getByLabel("Framework").selectOption("CMMC");
+    await expect(page).toHaveURL(/framework=CMMC/);
+    await expect(page.getByLabel("Global lens filters")).toBeVisible();
+  });
+
+  test("NBA snooze removes action from feed", async ({ page }) => {
+    await page.goto("/command-center?tab=overview");
+    await expect(page.getByText("Enable weekly monitor cadence")).toBeVisible({ timeout: 15000 });
+    await page.getByRole("button", { name: "Snooze" }).click();
+    await expect(page.getByText("Enable weekly monitor cadence")).not.toBeVisible({ timeout: 10000 });
   });
 
   test("monitor tab collapses advanced monitoring by default", async ({ page }) => {

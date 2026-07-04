@@ -8,6 +8,7 @@ import type { DashboardSummary } from "@/lib/dashboard-state";
 import PostureCommandBar from "@/components/qros/PostureCommandBar";
 import GlobalLensBar from "@/components/qros/GlobalLensBar";
 import AmbientCopilotBar from "@/components/qros/AmbientCopilotBar";
+import QrosLensUrlSync from "@/components/qros/QrosLensUrlSync";
 import { QrosLensProvider } from "@/lib/qros-lens-context";
 
 type Props = {
@@ -29,6 +30,7 @@ export default function QrosShell({
 }: Props) {
   return (
     <QrosLensProvider>
+      <QrosLensUrlSync />
       <div className="space-y-4">
         <PostureCommandBar kpis={kpis} summary={summary} activeTab={activeTab} onTabChange={onTabChange} />
         <GlobalLensBar />

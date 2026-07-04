@@ -1,12 +1,36 @@
 "use client";
 
+import { useRouter, useSearchParams } from "next/navigation";
+
 import { useQrosLens } from "@/lib/qros-lens-context";
+import { lensToQuery } from "@/lib/qros-api";
 
 const FRAMEWORKS = ["CMMC", "NIST", "PCI", "SOC2"];
 const SEVERITIES = ["critical", "high", "medium", "low"];
 
 export default function GlobalLensBar() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const { lens, setLens, resetLens } = useQrosLens();
+
+  const syncUrl = (next: typeof lens) => {
+    const params = new URLSearchParams(searchParams.toString());
+    const keys = ["bu", "framework", "severity", "env", "q"] as const;
+    keys.forEach((k) => params.delete(k));
+    const q = lensToQuery(next);
+    if (q) {
+      new URLSearchParams(q).forEach((v, k) => params.set(k, v));
+    }
+    router.replace(`?${params.toString()}`, { scroll: false });
+  };
+
+  const patch = (partial: Partial<typeof lens>) => {
+    setLens(partial);
+  };
+
+  const commitLensUrl = (next: typeof lens) => {
+    syncUrl(next);
+  };
 
   return (
     <section
@@ -20,7 +44,8 @@ export default function GlobalLensBar() {
         <input
           id="lens-bu"
           value={lens.businessUnit ?? ""}
-          onChange={(e) => setLens({ businessUnit: e.target.value || null })}
+          onChange={(e) => patch({ businessUnit: e.target.value || null })}
+          onBlur={(e) => commitLensUrl({ ...lens, businessUnit: e.target.value || null })}
           placeholder="All"
           className="mt-1 block w-full min-w-[8rem] rounded-lg border border-[var(--border-subtle)] bg-black px-3 py-1.5 text-sm text-white"
         />
@@ -32,7 +57,11 @@ export default function GlobalLensBar() {
         <select
           id="lens-fw"
           value={lens.framework ?? ""}
-          onChange={(e) => setLens({ framework: e.target.value || null })}
+          onChange={(e) => {
+            const next = { ...lens, framework: e.target.value || null };
+            patch({ framework: e.target.value || null });
+            commitLensUrl(next);
+          }}
           className="mt-1 block w-full min-w-[8rem] rounded-lg border border-[var(--border-subtle)] bg-black px-3 py-1.5 text-sm text-white"
         >
           <option value="">All</option>
@@ -50,7 +79,11 @@ export default function GlobalLensBar() {
         <select
           id="lens-sev"
           value={lens.severity ?? ""}
-          onChange={(e) => setLens({ severity: e.target.value || null })}
+          onChange={(e) => {
+            const next = { ...lens, severity: e.target.value || null };
+            patch({ severity: e.target.value || null });
+            commitLensUrl(next);
+          }}
           className="mt-1 block w-full min-w-[8rem] rounded-lg border border-[var(--border-subtle)] bg-black px-3 py-1.5 text-sm text-white"
         >
           <option value="">All</option>
@@ -68,14 +101,18 @@ export default function GlobalLensBar() {
         <input
           id="lens-env"
           value={lens.environment ?? ""}
-          onChange={(e) => setLens({ environment: e.target.value || null })}
+          onChange={(e) => patch({ environment: e.target.value || null })}
+          onBlur={(e) => commitLensUrl({ ...lens, environment: e.target.value || null })}
           placeholder="prod"
           className="mt-1 block w-full min-w-[8rem] rounded-lg border border-[var(--border-subtle)] bg-black px-3 py-1.5 text-sm text-white"
         />
       </div>
       <button
         type="button"
-        onClick={resetLens}
+        onClick={() => {
+          resetLens();
+          commitLensUrl({ businessUnit: null, framework: null, severity: null, environment: null, query: null });
+        }}
         className="rounded-full border border-[var(--border-subtle)] px-3 py-1.5 text-xs text-[var(--color-gray-300)] hover:text-white"
       >
         Reset lens

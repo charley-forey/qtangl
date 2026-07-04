@@ -4024,6 +4024,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/tenant/qros/next-actions/{action_id}/mutate": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Tenant Qros Nba Mutate */
+        post: operations["tenant_qros_nba_mutate_tenant_qros_next_actions__action_id__mutate_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/tenant/qros/morning-briefing": {
         parameters: {
             query?: never;
@@ -4137,6 +4154,41 @@ export interface paths {
         get: operations["tenant_qros_marketplace_tiles_tenant_qros_marketplace_tiles_get"];
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/tenant/qros/marketplace/tiles/{tile_id}/install": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Tenant Qros Marketplace Install */
+        post: operations["tenant_qros_marketplace_install_tenant_qros_marketplace_tiles__tile_id__install_post"];
+        /** Tenant Qros Marketplace Uninstall */
+        delete: operations["tenant_qros_marketplace_uninstall_tenant_qros_marketplace_tiles__tile_id__install_delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/tenant/qros/push-briefing/send": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Tenant Qros Push Briefing Send */
+        post: operations["tenant_qros_push_briefing_send_tenant_qros_push_briefing_send_post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -5037,19 +5089,6 @@ export interface components {
             /** Cancelurl */
             cancelUrl?: string | null;
         };
-        /** BoardDeckResponse */
-        BoardDeckResponse: {
-            /** Title */
-            title: string;
-            /** Generatedat */
-            generatedAt: string;
-            /** Slides */
-            slides: {
-                [key: string]: string;
-            }[];
-            /** Formats */
-            formats: string[];
-        };
         /** Body_upload_bundle_pqc_upload_bundle_post */
         Body_upload_bundle_pqc_upload_bundle_post: {
             /** File */
@@ -5668,6 +5707,22 @@ export interface components {
         MsspParentRequest: {
             /** Parenttenantid */
             parentTenantId: string;
+        };
+        /** NbaActionRequest */
+        NbaActionRequest: {
+            /**
+             * Op
+             * @default dismiss
+             * @enum {string}
+             */
+            op: "snooze" | "dismiss" | "assign";
+            /** Owner */
+            owner?: string | null;
+            /**
+             * Snoozehours
+             * @default 24
+             */
+            snoozeHours: number;
         };
         /** NextBestAction */
         NextBestAction: {
@@ -16753,6 +16808,50 @@ export interface operations {
             };
         };
     };
+    tenant_qros_nba_mutate_tenant_qros_next_actions__action_id__mutate_post: {
+        parameters: {
+            query?: {
+                api_key?: string | null;
+                count_toward_rate_limit?: boolean;
+            };
+            header?: {
+                authorization?: string | null;
+                "x-api-key"?: string | null;
+                "X-Qtangl-Session"?: string | null;
+            };
+            path: {
+                action_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["NbaActionRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     tenant_qros_morning_briefing_tenant_qros_morning_briefing_get: {
         parameters: {
             query?: {
@@ -16900,6 +16999,7 @@ export interface operations {
     tenant_qros_board_deck_tenant_qros_board_deck_post: {
         parameters: {
             query?: {
+                format?: string | null;
                 api_key?: string | null;
             };
             header?: {
@@ -16917,7 +17017,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["BoardDeckResponse"];
+                    "application/json": unknown;
                 };
             };
             /** @description Validation Error */
@@ -16992,6 +17092,122 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["MarketplaceResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    tenant_qros_marketplace_install_tenant_qros_marketplace_tiles__tile_id__install_post: {
+        parameters: {
+            query?: {
+                api_key?: string | null;
+                count_toward_rate_limit?: boolean;
+            };
+            header?: {
+                authorization?: string | null;
+                "x-api-key"?: string | null;
+                "X-Qtangl-Session"?: string | null;
+            };
+            path: {
+                tile_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MarketplaceResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    tenant_qros_marketplace_uninstall_tenant_qros_marketplace_tiles__tile_id__install_delete: {
+        parameters: {
+            query?: {
+                api_key?: string | null;
+                count_toward_rate_limit?: boolean;
+            };
+            header?: {
+                authorization?: string | null;
+                "x-api-key"?: string | null;
+                "X-Qtangl-Session"?: string | null;
+            };
+            path: {
+                tile_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    tenant_qros_push_briefing_send_tenant_qros_push_briefing_send_post: {
+        parameters: {
+            query?: {
+                api_key?: string | null;
+                count_toward_rate_limit?: boolean;
+            };
+            header?: {
+                authorization?: string | null;
+                "x-api-key"?: string | null;
+                "X-Qtangl-Session"?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PushBriefingRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
                 };
             };
             /** @description Validation Error */
