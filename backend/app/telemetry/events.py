@@ -39,6 +39,64 @@ DASHBOARD_EVENTS = frozenset(
     }
 )
 
+COMMAND_CENTER_EVENTS = frozenset(
+    {
+        "cc_tab_viewed",
+        "cc_metric_drilled",
+        "cc_chart_interacted",
+        "cc_verify_opened",
+        "cc_verify_result",
+        "cc_onboarding_step",
+        "cc_upgrade_cta_clicked",
+        "cc_upgrade_started",
+        "cc_schedule_created",
+        "cc_alert_resolved",
+        "cc_health_degraded_shown",
+        "cc_forecast_viewed",
+        "cc_cadence_recommended",
+        "cc_cadence_applied",
+        "cc_incident_expanded",
+        "cc_anomaly_viewed",
+        "cc_inbox_opened",
+        "cc_inbox_item_clicked",
+        "cc_comment_added",
+        "cc_comment_deleted",
+        "cc_war_room_created",
+        "cc_transparency_viewed",
+        "cc_auditor_packet_created",
+        "cc_saved_view_applied",
+        "cc_saved_view_saved",
+        "cc_saved_view_deleted",
+        "cc_widget_reordered",
+        "cc_milestone_celebrated",
+        "cc_drift_intel_viewed",
+        "cc_notification_prefs_saved",
+        "cc_mobile_triage_action",
+        "cc_webhook_saved",
+        "cc_nl_query_submitted",
+        "cc_executive_narrative_viewed",
+        "cc_trust_page_shared",
+        "cc_partner_qbr_export",
+        "cc_ai_pr_draft",
+        "cc_agentic_plan_viewed",
+        "cc_qros_nba_action",
+        "cc_qros_lens_applied",
+        "cc_qros_runway_scenario",
+        "cc_qros_board_export",
+        "cc_qros_agentic_approved",
+        "cc_qros_marketplace_install",
+    }
+)
+
+PARTNER_EVENTS = frozenset(
+    {
+        "partner_bulk_digest",
+        "partner_bulk_schedule",
+        "partner_deal_registered",
+        "partner_portfolio_board_export",
+    }
+)
+
 PRD_EVENTS = frozenset(
     {
         "schedule_created",
@@ -62,6 +120,8 @@ PRD_EVENTS = frozenset(
         "tenant_drip_sent",
     }
     | DASHBOARD_EVENTS
+    | COMMAND_CENTER_EVENTS
+    | PARTNER_EVENTS
 )
 
 

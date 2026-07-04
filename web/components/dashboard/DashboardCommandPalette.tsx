@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { ccFlags } from "@/lib/cc-feature-flags";
 import { fetchDashboardJson } from "@/lib/dashboard-bff";
 import { trackDashboardEvent } from "@/lib/dashboard-telemetry";
-import type { SavedView, SavedViewFilters } from "@/components/dashboard/SavedViewsBar";
+import type { SavedView, SavedViewFilters } from "@/lib/saved-views";
 
 export type CommandAction = {
   id: string;

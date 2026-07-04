@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 
 import dynamic from "next/dynamic";
 
+import { useCommandCenterV2 } from "@/hooks/useCommandCenterV2";
 import Card from "@/components/ui/Card";
 import Eyebrow from "@/components/ui/Eyebrow";
 import { monitorCopy } from "@/lib/copy/monitor";
@@ -41,7 +42,9 @@ export default function MonitorAdvancedSection({
 }: Props) {
   const [open, setOpen] = useState(false);
   const cc = bundle?.commandCenter ?? summary.commandCenter;
-  const hasHeatmap = Boolean(cc?.businessUnits && Object.keys(cc.businessUnits).length > 0);
+  const ccV2 = useCommandCenterV2();
+  const hasHeatmap =
+    !ccV2 && Boolean(cc?.businessUnits && Object.keys(cc.businessUnits).length > 0);
   const fleetKey = bffMode ? { useBff: true as const } : { apiKey: savedKey };
 
   useEffect(() => {

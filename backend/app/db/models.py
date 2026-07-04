@@ -809,3 +809,56 @@ class WarRoomRow(Base):
     share_token: Mapped[str | None] = mapped_column(String(64), nullable=True, unique=True)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_utcnow)
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_utcnow, onupdate=_utcnow)
+
+
+class DemoResourceRow(Base):
+    __tablename__ = "demo_resources"
+    __table_args__ = (Index("ix_demo_resources_tenant", "tenant_id"),)
+
+    id: Mapped[str] = mapped_column(String(80), primary_key=True)
+    tenant_id: Mapped[str] = mapped_column(String(64), index=True)
+    label: Mapped[str] = mapped_column(String(200), nullable=False)
+    kind: Mapped[str] = mapped_column(String(32), nullable=False)
+    host: Mapped[str] = mapped_column(String(255), nullable=False)
+    port: Mapped[int | None] = mapped_column(nullable=True)
+    business_unit: Mapped[str] = mapped_column(String(64), default="default")
+    posture: Mapped[str] = mapped_column(String(16), default="classical")
+    compliance_target: Mapped[str] = mapped_column(String(32), default="general")
+    enabled: Mapped[bool] = mapped_column(default=True)
+    active_events_json: Mapped[str] = mapped_column(Text, default="[]")
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_utcnow)
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_utcnow, onupdate=_utcnow)
+
+
+class DemoSnapshotRow(Base):
+    __tablename__ = "demo_snapshots"
+    __table_args__ = (Index("ix_demo_snapshots_tenant_captured", "tenant_id", "captured_at"),)
+
+    id: Mapped[str] = mapped_column(String(80), primary_key=True)
+    tenant_id: Mapped[str] = mapped_column(String(64), index=True)
+    scan_id: Mapped[str] = mapped_column(String(80), index=True)
+    captured_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_utcnow)
+    readiness_score: Mapped[float] = mapped_column(default=0.0)
+    readiness_band: Mapped[str] = mapped_column(String(64), default="")
+    severity_counts_json: Mapped[str] = mapped_column(Text, default="{}")
+    hndl_exposed: Mapped[int] = mapped_column(default=0)
+    per_resource_json: Mapped[str] = mapped_column(Text, default="[]")
+    alerts_json: Mapped[str] = mapped_column(Text, default="[]")
+    signature_json: Mapped[str] = mapped_column(Text, default="{}")
+    bundle_json: Mapped[str] = mapped_column(Text, default="{}")
+    narration: Mapped[str] = mapped_column(Text, default="")
+    scene_id: Mapped[str | None] = mapped_column(String(64), nullable=True)
+    campaign_id: Mapped[str | None] = mapped_column(String(80), nullable=True)
+
+
+class DemoCampaignRow(Base):
+    __tablename__ = "demo_campaigns"
+    __table_args__ = (Index("ix_demo_campaigns_tenant", "tenant_id"),)
+
+    id: Mapped[str] = mapped_column(String(80), primary_key=True)
+    tenant_id: Mapped[str] = mapped_column(String(64), index=True)
+    name: Mapped[str] = mapped_column(String(200), nullable=False)
+    steps_json: Mapped[str] = mapped_column(Text, default="[]")
+    playback_state_json: Mapped[str] = mapped_column(Text, default="{}")
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_utcnow)
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_utcnow, onupdate=_utcnow)

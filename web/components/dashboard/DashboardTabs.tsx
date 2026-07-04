@@ -4,15 +4,23 @@ import { useEffect, useState } from "react";
 
 import type { RolePolicy } from "@/lib/dashboard-role-policies";
 import { tabAllowed } from "@/lib/dashboard-role-policies";
+import { useCommandCenterV2 } from "@/hooks/useCommandCenterV2";
 
 export type DashboardTabId = "overview" | "scans" | "monitor" | "remediate" | "settings" | "portfolio";
 
-const TABS: Array<{ id: DashboardTabId; label: string }> = [
+const LEGACY_TABS: Array<{ id: DashboardTabId; label: string }> = [
   { id: "overview", label: "Overview" },
   { id: "scans", label: "Scans" },
   { id: "monitor", label: "Monitor" },
   { id: "remediate", label: "Remediate" },
   { id: "settings", label: "Settings" },
+];
+
+const QROS_TABS: Array<{ id: DashboardTabId; label: string }> = [
+  { id: "overview", label: "Posture" },
+  { id: "scans", label: "Assess" },
+  { id: "monitor", label: "Monitor" },
+  { id: "remediate", label: "Remediate" },
 ];
 
 export default function DashboardTabs({
@@ -28,13 +36,19 @@ export default function DashboardTabs({
   persona?: string;
   rolePolicy?: RolePolicy;
 }) {
+  const ccV2 = useCommandCenterV2();
+  const baseTabs = ccV2 ? QROS_TABS : LEGACY_TABS;
   const tabs = showPortfolio
-    ? [...TABS, { id: "portfolio" as const, label: "Portfolio" }]
-    : TABS;
+    ? [...baseTabs, { id: "portfolio" as const, label: "Portfolio" }]
+    : baseTabs;
 
   let visibleTabs =
     persona === "executive"
-      ? tabs.filter((t) => ["overview", "scans", "settings", "portfolio"].includes(t.id))
+      ? tabs.filter((t) =>
+          ccV2
+            ? ["overview", "scans", "portfolio"].includes(t.id)
+            : ["overview", "scans", "settings", "portfolio"].includes(t.id)
+        )
       : tabs;
 
   if (rolePolicy) {

@@ -20,26 +20,48 @@ from app.command_center.correlation import group_alerts
 from app.command_center.graph import build_scan_graph
 from app.command_center.hndl import build_hndl_exposure
 from app.command_center.inbox import build_inbox
+from app.command_center.qros import (
+    build_board_deck_payload,
+    build_digital_twin,
+    build_morning_briefing,
+    build_next_actions,
+    build_runway,
+    execute_agentic_action,
+    list_marketplace_tiles,
+    simulate_scenario,
+)
 from app.command_center.schemas import (
     AgenticPlanResponse,
+    AgenticActionRequest,
+    AgenticActionResponse,
     AiQueryRequest,
     AiQueryResponse,
     AuditorPacketResponse,
+    BoardDeckResponse,
     CadenceRecommendation,
     CorrelatedIncidentsResponse,
+    DigitalTwinResponse,
     ExecutiveNarrativeResponse,
     FindingCommentCreate,
     FindingCommentListResponse,
     HndlExposureResponse,
     InboxResponse,
+    MarketplaceResponse,
+    MarketplaceTile,
+    MorningBriefingResponse,
+    NextBestActionResponse,
     NotificationPreferences,
     PeerPercentileResponse,
     PortfolioRollupResponse,
+    PushBriefingRequest,
     RemediationPrDraftRequest,
     RemediationPrDraftResponse,
+    RunwayResponse,
     SavedViewCreate,
     SavedViewListResponse,
     ScanGraphResponse,
+    ScenarioSimRequest,
+    ScenarioSimResponse,
     TransparencyLogResponse,
     WarRoom,
     WarRoomCreate,
@@ -404,3 +426,170 @@ def tenant_notification_preferences_put(
         settings={"notificationPreferences": body.model_dump()},
     )
     return body
+
+
+def _qros_summary_snapshot(*, tenant_id: str) -> dict[str, Any]:
+    jobs = list_jobs_for_tenant(tenant_id=tenant_id, limit=20)
+    latest = next((j for j in jobs if j.get("readinessScore") is not None), None)
+    prior = next(
+        (j for j in jobs if j.get("readinessScore") is not None and j != latest),
+        None,
+    )
+    delta = None
+    if latest and prior:
+        delta = int(latest["readinessScore"]) - int(prior["readinessScore"])
+    open_critical = 0
+    if latest:
+        bundle = load_scan_bundle(latest["scanId"], tenant_id=tenant_id)
+        report = (bundle or {}).get("report") or {}
+        open_critical = int(report.get("openCriticalCount") or 0)
+    scores = _readiness_scores_for_tenant(tenant_id=tenant_id)
+    forecast = forecast_readiness(scores=scores) if scores else {}
+    alerts = list_alerts(tenant_id=tenant_id, since_days=14, include_resolved=False)
+    return {
+        "kpis": {
+            "latestReadiness": latest.get("readinessScore") if latest else None,
+            "delta": delta,
+            "openCritical": open_critical,
+        },
+        "alerts": alerts,
+        "recommendations": [],
+        "forecast": forecast,
+        "maturity": {},
+    }
+
+
+@router.get("/qros/next-actions", response_model=NextBestActionResponse)
+def tenant_qros_next_actions(
+    auth: AuthContext = Depends(require_auth_readonly),
+) -> NextBestActionResponse:
+    summary = _qros_summary_snapshot(tenant_id=auth.tenant_id)
+    owner = auth.email or auth.user_id or "operator"
+    actions = build_next_actions(
+        tenant_id=auth.tenant_id,
+        owner=owner,
+        recommendations=summary.get("recommendations"),
+        alerts=summary.get("alerts"),
+        readiness=summary["kpis"].get("latestReadiness"),
+        open_critical=int(summary["kpis"].get("openCritical") or 0),
+    )
+    from datetime import UTC, datetime
+
+    return NextBestActionResponse(
+        actions=actions,
+        generatedAt=datetime.now(tz=UTC).isoformat(),
+    )
+
+
+@router.get("/qros/morning-briefing", response_model=MorningBriefingResponse)
+def tenant_qros_morning_briefing(
+    persona: str = Query(default="operator"),
+    auth: AuthContext = Depends(require_auth_readonly),
+) -> MorningBriefingResponse:
+    summary = _qros_summary_snapshot(tenant_id=auth.tenant_id)
+    owner = auth.email or auth.user_id or "operator"
+    return MorningBriefingResponse(**build_morning_briefing(
+        tenant_id=auth.tenant_id,
+        persona=persona,
+        owner=owner,
+        summary=summary,
+    ))
+
+
+@router.get("/qros/runway", response_model=RunwayResponse)
+def tenant_qros_runway(auth: AuthContext = Depends(require_auth_readonly)) -> RunwayResponse:
+    summary = _qros_summary_snapshot(tenant_id=auth.tenant_id)
+    return RunwayResponse(**build_runway(summary=summary))
+
+
+@router.post("/qros/scenario/simulate", response_model=ScenarioSimResponse)
+def tenant_qros_scenario_simulate(
+    body: ScenarioSimRequest,
+    auth: AuthContext = Depends(require_auth_readonly),
+) -> ScenarioSimResponse:
+    summary = _qros_summary_snapshot(tenant_id=auth.tenant_id)
+    return ScenarioSimResponse(**simulate_scenario(scenario_id=body.scenarioId, summary=summary))
+
+
+@router.get("/qros/digital-twin/{scan_id}", response_model=DigitalTwinResponse)
+def tenant_qros_digital_twin(
+    scan_id: str,
+    selected_node_id: str | None = Query(default=None, alias="selectedNodeId"),
+    auth: AuthContext = Depends(require_auth_readonly),
+) -> DigitalTwinResponse:
+    bundle_dict = load_scan_bundle(scan_id, tenant_id=auth.tenant_id)
+    if bundle_dict is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Scan not found")
+    bundle = bundle_from_api_dict(bundle_dict)
+    if bundle.report is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Scan not found")
+    graph = build_scan_graph(scan_id=scan_id, report=bundle.report).model_dump()
+    return DigitalTwinResponse(**build_digital_twin(graph=graph, selected_node_id=selected_node_id))
+
+
+@router.post("/qros/board-deck", response_model=BoardDeckResponse)
+def tenant_qros_board_deck(auth: AuthContext = Depends(require_auth_readonly)) -> BoardDeckResponse:
+    summary = _qros_summary_snapshot(tenant_id=auth.tenant_id)
+    narrative_resp = build_executive_narrative(
+        tenant_id=auth.tenant_id,
+        summary={
+            "kpis": summary["kpis"],
+            "remediationVelocity": {},
+            "latestScanId": None,
+        },
+    )
+    payload = build_board_deck_payload(summary=summary, narrative=narrative_resp.narrative)
+    return BoardDeckResponse(**payload)
+
+
+@router.post("/qros/agentic/execute", response_model=AgenticActionResponse)
+def tenant_qros_agentic_execute(
+    body: AgenticActionRequest,
+    auth: AuthContext = Depends(require_auth_write),
+) -> AgenticActionResponse:
+    if not body.dryRun and not body.approved:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="approved=true required for non-dry-run execution",
+        )
+    result = execute_agentic_action(action=body.action, payload=body.payload, dry_run=body.dryRun)
+    if not body.dryRun and body.approved:
+        log_action(
+            tenant_id=auth.tenant_id,
+            actor=auth.email or "operator",
+            action=f"qros_agentic_{body.action}",
+            resource_id=str(body.payload.get("remediationId") or body.payload.get("scanId") or ""),
+        )
+    return AgenticActionResponse(**result)
+
+
+@router.get("/qros/marketplace/tiles", response_model=MarketplaceResponse)
+def tenant_qros_marketplace_tiles(auth: AuthContext = Depends(require_auth_readonly)) -> MarketplaceResponse:
+    settings = get_tenant_settings_raw(tenant_id=auth.tenant_id)
+    installed = settings.get("installedTiles") or []
+    tiles = [MarketplaceTile(**t) for t in list_marketplace_tiles(installed_ids=installed)]
+    return MarketplaceResponse(tiles=tiles)
+
+
+@router.post("/qros/push-briefing")
+def tenant_qros_push_briefing(
+    body: PushBriefingRequest,
+    auth: AuthContext = Depends(require_auth_write),
+) -> dict[str, Any]:
+    upsert_tenant_settings(
+        tenant_id=auth.tenant_id,
+        settings={
+            "pushBriefing": {
+                "channels": body.channels,
+                "cadenceHours": body.cadenceHours,
+                "enabled": True,
+            }
+        },
+    )
+    log_action(
+        tenant_id=auth.tenant_id,
+        actor=auth.email or "operator",
+        action="qros_push_briefing_configured",
+        resource_id=",".join(body.channels),
+    )
+    return {"status": "success", "channels": body.channels, "cadenceHours": body.cadenceHours}

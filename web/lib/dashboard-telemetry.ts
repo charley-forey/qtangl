@@ -40,7 +40,13 @@ export type DashboardTelemetryEvent =
   | { event: "cc_trust_page_shared"; properties: { url: string } }
   | { event: "cc_partner_qbr_export"; properties: { format: string; childTenantId: string } }
   | { event: "cc_ai_pr_draft"; properties: { remediationId: string } }
-  | { event: "cc_agentic_plan_viewed"; properties: { remediationId: string } };
+  | { event: "cc_agentic_plan_viewed"; properties: { remediationId: string } }
+  | { event: "cc_qros_nba_action"; properties: { actionId: string; kind: string } }
+  | { event: "cc_qros_lens_applied"; properties: { viewId: string } }
+  | { event: "cc_qros_runway_scenario"; properties: { scenarioId: string } }
+  | { event: "cc_qros_board_export"; properties: { format: string } }
+  | { event: "cc_qros_agentic_approved"; properties: { action: string } }
+  | { event: "cc_qros_marketplace_install"; properties: { tileId: string } };
 
 let telemetryDisabled = false;
 

@@ -253,6 +253,14 @@ def main() -> None:
                 except Exception:
                     logger.debug("drip tick skipped", exc_info=True)
                 try:
+                    from app.demo.config import demo_enabled
+                    from app.demo.service import maybe_run_cadence_tick
+
+                    if demo_enabled():
+                        maybe_run_cadence_tick()
+                except Exception:
+                    logger.debug("demo cadence tick skipped", exc_info=True)
+                try:
                     from app.notifications.tenant_drip import (
                         process_daily_alert_digests,
                         process_due_tenant_drip_emails,

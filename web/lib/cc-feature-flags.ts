@@ -13,6 +13,7 @@ function flag(name: string, defaultOn = true): boolean {
 
 export const ccFlags = {
   v2: flag("NEXT_PUBLIC_QTANGL_CC_V2", true),
+  qros: flag("NEXT_PUBLIC_QTANGL_CC_V2", true),
   graph: flag("NEXT_PUBLIC_QTANGL_CC_GRAPH", true),
   hndl: flag("NEXT_PUBLIC_QTANGL_CC_HNDL", true),
   nlQuery: flag("NEXT_PUBLIC_QTANGL_CC_NL_QUERY", true),

@@ -17,6 +17,11 @@ import { useCommandCenterV2 } from "@/hooks/useCommandCenterV2";
 import { RemediationVelocityChart } from "@/components/dashboard/charts/CommandCenterCharts";
 import CcGantt, { type GanttItem } from "@/components/dashboard/charts/CcGantt";
 import CcSankey, { type SankeyLink, type SankeyNode } from "@/components/dashboard/charts/CcSankey";
+import ScenarioSimulatorPanel from "@/components/qros/ScenarioSimulatorPanel";
+import BoardNarrativeExport from "@/components/qros/BoardNarrativeExport";
+import AgenticActionPanel from "@/components/qros/AgenticActionPanel";
+import DigitalTwinPanel from "@/components/qros/DigitalTwinPanel";
+import UnifiedWorkQueue from "@/components/qros/UnifiedWorkQueue";
 
 const RemediationWhatIf = dynamic(() => import("@/components/pqc/RemediationWhatIf"));
 const PeerComparisonPanel = dynamic(() => import("@/components/pqc/PeerComparisonPanel"));
@@ -113,6 +118,15 @@ export default function DashboardRemediateTab({
 
   return (
     <DashboardSection title="Remediation" id="dashboard-remediate">
+      {ccV2 ? (
+        <div className="grid gap-4 lg:grid-cols-2">
+          <UnifiedWorkQueue />
+          <ScenarioSimulatorPanel />
+          <BoardNarrativeExport />
+          <AgenticActionPanel remediationId={remediationIdParam} scanId={selectedScanId || null} />
+          <DigitalTwinPanel scanId={selectedScanId || null} />
+        </div>
+      ) : null}
       {ccV2 && velocity ? (
         <Card tone="panel" className="p-4">
           <Eyebrow>Remediation velocity</Eyebrow>

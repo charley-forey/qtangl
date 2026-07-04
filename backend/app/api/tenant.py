@@ -1706,9 +1706,15 @@ def tenant_track_event(body: TrackEventRequest, auth: AuthContext = Depends(requ
     from app.telemetry.events import is_allowed_event, track_event
 
     if not is_allowed_event(body.event):
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Unknown analytics event")
+        logger = __import__("logging").getLogger("qtangl.api")
+        logger.info(
+            "analytics track dropped unknown event tenant=%s event=%s",
+            auth.tenant_id,
+            body.event,
+        )
+        return {"status": "accepted", "event": body.event, "tracked": False}
     track_event(body.event, tenant_id=auth.tenant_id, properties=body.properties)
-    return {"status": "success", "event": body.event}
+    return {"status": "success", "event": body.event, "tracked": True}
 
 
 def _remediation_velocity_summary(*, tenant_id: str) -> dict[str, Any]:
@@ -1905,18 +1911,23 @@ def _dashboard_tab_scans(*, tenant_id: str) -> dict[str, Any]:
 
 def _dashboard_tab_monitor(*, tenant_id: str) -> dict[str, Any]:
     schedules = list_schedules(tenant_id=tenant_id) if persistence_enabled() else []
-    cbom: dict[str, Any] = {}
+    cbom_aggregate: dict[str, Any] | None = None
     try:
-        from app.cbom.service import aggregate_cbom
+        from app.cbom.service import get_aggregate
 
-        cbom = aggregate_cbom(tenant_id=tenant_id) or {}
+        aggregate = get_aggregate(tenant_id=tenant_id, sync_scan=False)
+        cbom_aggregate = {
+            "componentCount": aggregate.get("componentCount", 0),
+            "openConflicts": aggregate.get("openConflicts", 0),
+            "readiness": aggregate.get("readiness"),
+        }
     except Exception:
-        cbom = {}
+        cbom_aggregate = None
     return {
         "schedules": schedules,
         "schedulesSummary": _schedules_summary(tenant_id=tenant_id),
         "integrationsSummary": _integrations_summary(tenant_id=tenant_id),
-        "cbomAggregate": cbom.get("aggregate"),
+        "cbomAggregate": cbom_aggregate,
         "commandCenter": __import__("app.portfolio.service", fromlist=["portfolio_command_center"]).portfolio_command_center(
             tenant_id=tenant_id
         ),

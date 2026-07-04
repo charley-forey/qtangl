@@ -192,7 +192,10 @@ class TenantDashboardEndpointsTest(unittest.TestCase):
             headers=self.headers,
             json={"event": "not_a_real_event"},
         )
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, 200)
+        payload = response.json()
+        self.assertEqual(payload["status"], "accepted")
+        self.assertFalse(payload["tracked"])
 
     def test_dashboard_summary_with_bff_session(self) -> None:
         self._seed_scan()

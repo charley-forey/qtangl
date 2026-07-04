@@ -292,3 +292,113 @@ class NotificationPreferences(BaseModel):
     quietHoursEnd: int | None = Field(default=None, ge=0, le=23)
     minSeverity: str = "medium"
     pushEnabled: bool = False
+
+
+# --- QROS (Quantum Readiness Operating System) ---
+
+
+class NextBestAction(BaseModel):
+    id: str
+    kind: str
+    title: str
+    impact: str
+    effort: str = "medium"
+    score: int = 0
+    owner: str | None = None
+    deepLink: str | None = None
+    cta: dict[str, str] = Field(default_factory=dict)
+
+
+class NextBestActionResponse(BaseModel):
+    actions: list[NextBestAction]
+    generatedAt: str
+
+
+class MorningBriefingResponse(BaseModel):
+    generatedAt: str
+    persona: str
+    headline: str
+    bullets: list[str]
+    nextActions: list[NextBestAction]
+    methodNote: str
+
+
+class RunwayMilestone(BaseModel):
+    id: str
+    label: str
+    date: str
+    kind: str
+    description: str
+
+
+class RunwayScenario(BaseModel):
+    id: str
+    label: str
+    readinessDelta: int
+    description: str
+
+
+class RunwayResponse(BaseModel):
+    milestones: list[RunwayMilestone]
+    scenarios: list[RunwayScenario]
+    framing: str
+
+
+class ScenarioSimRequest(BaseModel):
+    scenarioId: str = "baseline"
+
+
+class ScenarioSimResponse(BaseModel):
+    scenarioId: str
+    projectedReadiness: float
+    confidenceBand: dict[str, float]
+    assumptions: list[str]
+
+
+class DigitalTwinResponse(BaseModel):
+    graph: dict[str, Any]
+    selectedNodeId: str | None = None
+    blastRadius: list[str]
+    simulationNote: str
+
+
+class BoardDeckResponse(BaseModel):
+    title: str
+    generatedAt: str
+    slides: list[dict[str, str]]
+    formats: list[str]
+
+
+class AgenticActionRequest(BaseModel):
+    action: str = Field(min_length=1, max_length=64)
+    payload: dict[str, Any] = Field(default_factory=dict)
+    dryRun: bool = True
+    approved: bool = False
+
+
+class AgenticActionResponse(BaseModel):
+    action: str
+    dryRun: bool
+    status: str
+    steps: list[str]
+    payload: dict[str, Any] = Field(default_factory=dict)
+    guardrails: list[str] = Field(default_factory=list)
+
+
+class MarketplaceTile(BaseModel):
+    id: str
+    name: str
+    publisher: str
+    description: str
+    category: str
+    installed: bool = False
+
+
+class MarketplaceResponse(BaseModel):
+    tiles: list[MarketplaceTile]
+
+
+class PushBriefingRequest(BaseModel):
+    channels: list[str] = Field(default_factory=lambda: ["email"])
+    cadenceHours: int = 24
+

@@ -257,7 +257,7 @@ def require_api_key(
     authorization: str | None = Header(default=None),
     x_api_key: str | None = Header(default=None),
 ) -> str:
-    return require_auth(authorization=authorization, x_api_key=x_api_key).token
+    return require_auth(authorization=authorization, x_api_key=x_api_key, api_key=None).token
 
 
 def require_api_key_readonly(
@@ -268,6 +268,7 @@ def require_api_key_readonly(
     return require_auth(
         authorization=authorization,
         x_api_key=x_api_key,
+        api_key=None,
         count_toward_rate_limit=False,
     ).token
 

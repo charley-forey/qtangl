@@ -73,7 +73,7 @@ export async function fetchTabBundle(tab: string, opts?: { scanId?: string }): P
     if (!cbomAggregate) {
       try {
         const aggPayload = await fetchDashboardJson<{ aggregate?: Record<string, unknown> }>(
-          "/tenant/cbom/aggregate"
+          "/pqc/cbom/aggregate"
         );
         const aggregate = aggPayload.aggregate;
         cbomAggregate = {

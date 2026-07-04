@@ -39,6 +39,15 @@ import DriftIntelPanel from "@/components/dashboard/DriftIntelPanel";
 import MilestoneCelebration from "@/components/dashboard/MilestoneCelebration";
 import DogfoodPostureCard from "@/components/dashboard/DogfoodPostureCard";
 import MaturityStageCard from "@/components/dashboard/MaturityStageCard";
+import QrosWorkspaceLayout from "@/components/qros/QrosWorkspaceLayout";
+import NextBestActionFeed from "@/components/qros/NextBestActionFeed";
+import AdaptiveMorningBriefing from "@/components/qros/AdaptiveMorningBriefing";
+import MigrationRunway from "@/components/qros/MigrationRunway";
+import UnifiedWorkQueue from "@/components/qros/UnifiedWorkQueue";
+import InsightDecisionCard from "@/components/qros/InsightDecisionCard";
+import PushEverywherePanel from "@/components/qros/PushEverywherePanel";
+import TileMarketplacePanel from "@/components/qros/TileMarketplacePanel";
+import { SeverityDonutV2, AlgorithmFamilyBars } from "@/components/dashboard/charts/CommandCenterCharts";
 import { patchDashboardJson, putDashboardJson } from "@/lib/dashboard-bff";
 import { isQtanglHqTenant } from "@/lib/dogfood";
 import type { RolePolicy } from "@/lib/dashboard-role-policies";
@@ -161,20 +170,8 @@ export default function DashboardOverviewTab({
     onSettingsChange?.(next);
   }
 
-  return (
-    <div className="space-y-4">
-      {ccV2 ? (
-        <MilestoneCelebration
-          readinessScore={summary.kpis.latestReadiness ?? detail?.readinessScore ?? null}
-          tenantId={String(summary.me.tenantId ?? "")}
-        />
-      ) : null}
-      {ccV2 ? (
-        <CommandCenterOverviewHero
-          summary={summary}
-          tenantSettings={tenantSettings}
-        />
-      ) : null}
+  const detailsContent = (
+    <>
       <CoachingBanner
         summary={summary}
         tenantSettings={tenantSettings}
@@ -277,15 +274,38 @@ export default function DashboardOverviewTab({
 
       {detail?.scanId ? (
         <div className="grid gap-3 lg:grid-cols-2">
-          <SeverityDonut
-            slices={severityCounts}
-            insight={
-              severityCounts.find((s) => s.label === "critical")?.value
-                ? "Critical findings should be prioritized for Q-Day migration planning."
-                : undefined
-            }
-          />
-          <AlgorithmBreakdown rows={algorithmRows} />
+          {ccV2 ? (
+            <>
+              <Card tone="panel" className="p-4">
+                <Eyebrow>Severity breakdown</Eyebrow>
+                <div className="mt-3">
+                  <SeverityDonutV2
+                    data={severityCounts.map((s) => ({ name: s.label, value: s.value }))}
+                  />
+                </div>
+              </Card>
+              <Card tone="panel" className="p-4">
+                <Eyebrow>Algorithm exposure</Eyebrow>
+                <div className="mt-3">
+                  <AlgorithmFamilyBars
+                    data={algorithmRows.map((r) => ({ family: r.label, count: r.count }))}
+                  />
+                </div>
+              </Card>
+            </>
+          ) : (
+            <>
+              <SeverityDonut
+                slices={severityCounts}
+                insight={
+                  severityCounts.find((s) => s.label === "critical")?.value
+                    ? "Critical findings should be prioritized for Q-Day migration planning."
+                    : undefined
+                }
+              />
+              <AlgorithmBreakdown rows={algorithmRows} />
+            </>
+          )}
         </div>
       ) : null}
 
@@ -314,7 +334,7 @@ export default function DashboardOverviewTab({
         <DashboardTrendSection points={summaryTrendPoints(summary)} />
       </DashboardWidgetGate>
 
-      {!isCustomerExecutive ? (
+      {!isCustomerExecutive && !ccV2 ? (
         <DashboardWidgetGate widgetId="digest" layout={layout} rolePolicy={rolePolicy}>
           <ExecutiveDigestCard digest={summary.digest} />
         </DashboardWidgetGate>
@@ -345,7 +365,7 @@ export default function DashboardOverviewTab({
         <EvidenceFreshnessCard bffMode={bffMode} latestScanId={detail.scanId} />
       ) : null}
 
-      {persona === "executive" && detail?.scanId ? (
+      {persona === "executive" && detail?.scanId && !ccV2 ? (
         <ExecutivePriorities
           summary={{
             readinessBand: detail.readinessBand ?? undefined,
@@ -369,20 +389,11 @@ export default function DashboardOverviewTab({
         <ForecastCard forecast={summary.forecast} />
       </DashboardWidgetGate>
 
-      {ccV2 && persona !== "executive" ? (
-        <div className="grid gap-3 lg:grid-cols-2">
-          <AssignmentInbox />
-          <SmartCadenceCard />
-        </div>
-      ) : null}
-
       {ccV2 && detail?.scanId && ccFlags.graph ? (
         <CryptoDependencyGraphCard scanId={detail.scanId} />
       ) : null}
 
       {ccV2 && detail?.scanId && ccFlags.hndl ? <HndlLensCard scanId={detail.scanId} /> : null}
-
-      {ccV2 && Boolean(tenantSettings?.benchmarkOptIn) ? <DriftIntelPanel /> : null}
 
       {persona === "executive" && reportUrlForScan ? (
         <BoardMeetingMode
@@ -391,21 +402,6 @@ export default function DashboardOverviewTab({
           tenantSettings={tenantSettings}
           onSettingsChange={onSettingsChange}
         />
-      ) : null}
-
-      {persona === "executive" ? (
-        <RoiCalculatorCard
-          readinessScore={detail?.readinessScore ?? summary.kpis.latestReadiness}
-          openCritical={summary.kpis.openCritical}
-          industry={String(tenantSettings?.industry ?? "financial")}
-          onOpenUpgrade={() => onOpenUpgrade?.("assess")}
-        />
-      ) : null}
-
-      {persona === "executive" ? (
-        <DashboardWidgetGate widgetId="ai-explain" layout={layout} rolePolicy={rolePolicy}>
-          <ExecutiveAiExplainCard scanId={detail?.scanId ?? null} />
-        </DashboardWidgetGate>
       ) : null}
 
       <DashboardWidgetGate widgetId="insights" layout={layout} rolePolicy={rolePolicy}>
@@ -431,6 +427,88 @@ export default function DashboardOverviewTab({
           />
         </DashboardWidgetGate>
       ) : null}
+
+      {!ccV2 && persona !== "executive" ? (
+        <div className="grid gap-3 lg:grid-cols-2">
+          <AssignmentInbox />
+          <SmartCadenceCard />
+        </div>
+      ) : null}
+
+      {!ccV2 && persona === "executive" ? (
+        <>
+          <RoiCalculatorCard
+            readinessScore={detail?.readinessScore ?? summary.kpis.latestReadiness}
+            openCritical={summary.kpis.openCritical}
+            industry={String(tenantSettings?.industry ?? "financial")}
+            onOpenUpgrade={() => onOpenUpgrade?.("assess")}
+          />
+          <DashboardWidgetGate widgetId="ai-explain" layout={layout} rolePolicy={rolePolicy}>
+            <ExecutiveAiExplainCard scanId={detail?.scanId ?? null} />
+          </DashboardWidgetGate>
+        </>
+      ) : null}
+
+      {!ccV2 && Boolean(tenantSettings?.benchmarkOptIn) ? <DriftIntelPanel /> : null}
+    </>
+  );
+
+  return (
+    <div className="space-y-4">
+      {ccV2 ? (
+        <MilestoneCelebration
+          readinessScore={summary.kpis.latestReadiness ?? detail?.readinessScore ?? null}
+          tenantId={String(summary.me.tenantId ?? "")}
+        />
+      ) : null}
+      {!ccV2 ? (
+        <CommandCenterOverviewHero summary={summary} tenantSettings={tenantSettings} />
+      ) : null}
+      {ccV2 ? (
+        <QrosWorkspaceLayout
+          summary={
+            <div className="grid gap-4 lg:grid-cols-2">
+              <AdaptiveMorningBriefing persona={persona} />
+              <NextBestActionFeed />
+              <MigrationRunway />
+              <UnifiedWorkQueue />
+              {detail?.scanId ? (
+                <InsightDecisionCard
+                  title="Latest inventory posture"
+                  whatChanged={
+                    summary.kpis.delta != null
+                      ? `Readiness moved ${summary.kpis.delta >= 0 ? "up" : "down"} ${Math.abs(summary.kpis.delta)} points.`
+                      : "Baseline established from latest scan."
+                  }
+                  whyItMatters="Prioritize quantum-vulnerable assets with documented owners before compliance deadlines."
+                  nextAction="Review open critical findings and assign remediation owners."
+                  ctaLabel="Open remediate workspace"
+                  onCta={() => onTabChange("remediate")}
+                  scanId={detail.scanId}
+                />
+              ) : null}
+            </div>
+          }
+          details={detailsContent}
+          advanced={
+            <>
+              <SmartCadenceCard />
+              <DriftIntelPanel />
+              <RoiCalculatorCard
+                readinessScore={detail?.readinessScore ?? summary.kpis.latestReadiness}
+                openCritical={summary.kpis.openCritical}
+                industry={String(tenantSettings?.industry ?? "financial")}
+                onOpenUpgrade={() => onOpenUpgrade?.("assess")}
+              />
+              <ExecutiveAiExplainCard scanId={detail?.scanId ?? null} />
+              <PushEverywherePanel />
+              <TileMarketplacePanel />
+            </>
+          }
+        />
+      ) : (
+        detailsContent
+      )}
     </div>
   );
 }

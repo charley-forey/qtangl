@@ -271,6 +271,328 @@
       }
     },
     {
+      "name": "POST /demo/campaign",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/demo/campaign",
+        "description": "Demo Save Campaign"
+      }
+    },
+    {
+      "name": "POST /demo/campaign/{campaign_id}/pause",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/demo/campaign/example/pause",
+        "description": "Demo Pause Campaign"
+      }
+    },
+    {
+      "name": "POST /demo/campaign/{campaign_id}/play",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/demo/campaign/example/play",
+        "description": "Demo Play Campaign"
+      }
+    },
+    {
+      "name": "POST /demo/campaign/{campaign_id}/scrub",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/demo/campaign/example/scrub",
+        "description": "Demo Scrub Campaign"
+      }
+    },
+    {
+      "name": "GET /demo/campaign/{campaign_id}/state",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/demo/campaign/example/state",
+        "description": "Demo Campaign State"
+      }
+    },
+    {
+      "name": "GET /demo/campaigns",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/demo/campaigns",
+        "description": "Demo Campaigns"
+      }
+    },
+    {
+      "name": "POST /demo/chaos",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/demo/chaos",
+        "description": "Demo Chaos"
+      }
+    },
+    {
+      "name": "GET /demo/compliance",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/demo/compliance",
+        "description": "Demo Compliance"
+      }
+    },
+    {
+      "name": "GET /demo/events",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/demo/events",
+        "description": "Demo Events"
+      }
+    },
+    {
+      "name": "GET /demo/graph",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/demo/graph",
+        "description": "Demo Graph"
+      }
+    },
+    {
+      "name": "POST /demo/inject",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/demo/inject",
+        "description": "Demo Inject"
+      }
+    },
+    {
+      "name": "GET /demo/narration",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/demo/narration",
+        "description": "Demo Narration"
+      }
+    },
+    {
+      "name": "GET /demo/portfolio",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/demo/portfolio",
+        "description": "Demo Portfolio"
+      }
+    },
+    {
+      "name": "POST /demo/reassess",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/demo/reassess",
+        "description": "Demo Reassess"
+      }
+    },
+    {
+      "name": "GET /demo/resources",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/demo/resources",
+        "description": "Demo List Resources"
+      }
+    },
+    {
+      "name": "POST /demo/resources",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/demo/resources",
+        "description": "Demo Create Resource"
+      }
+    },
+    {
+      "name": "DELETE /demo/resources/{resource_id}",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/demo/resources/example",
+        "description": "Demo Delete Resource"
+      }
+    },
+    {
+      "name": "PATCH /demo/resources/{resource_id}",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/demo/resources/example",
+        "description": "Demo Patch Resource"
+      }
+    },
+    {
+      "name": "POST /demo/scene/{scene_id}",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/demo/scene/example",
+        "description": "Demo Apply Scene"
+      }
+    },
+    {
+      "name": "GET /demo/scenes",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/demo/scenes",
+        "description": "Demo Scenes"
+      }
+    },
+    {
+      "name": "GET /demo/status",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/demo/status",
+        "description": "Demo Status"
+      }
+    },
+    {
+      "name": "GET /demo/trend",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/demo/trend",
+        "description": "Demo Trend"
+      }
+    },
+    {
+      "name": "GET /demo/verify/{snapshot_id}",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/demo/verify/example",
+        "description": "Demo Verify"
+      }
+    },
+    {
       "name": "POST /discovery/agent/enroll",
       "request": {
         "method": "POST",
@@ -3082,6 +3404,132 @@
         ],
         "url": "{{baseUrl}}/tenant/portfolio/rollup",
         "description": "Tenant Portfolio Rollup"
+      }
+    },
+    {
+      "name": "POST /tenant/qros/agentic/execute",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/qros/agentic/execute",
+        "description": "Tenant Qros Agentic Execute"
+      }
+    },
+    {
+      "name": "POST /tenant/qros/board-deck",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/qros/board-deck",
+        "description": "Tenant Qros Board Deck"
+      }
+    },
+    {
+      "name": "GET /tenant/qros/digital-twin/{scan_id}",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/qros/digital-twin/example",
+        "description": "Tenant Qros Digital Twin"
+      }
+    },
+    {
+      "name": "GET /tenant/qros/marketplace/tiles",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/qros/marketplace/tiles",
+        "description": "Tenant Qros Marketplace Tiles"
+      }
+    },
+    {
+      "name": "GET /tenant/qros/morning-briefing",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/qros/morning-briefing",
+        "description": "Tenant Qros Morning Briefing"
+      }
+    },
+    {
+      "name": "GET /tenant/qros/next-actions",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/qros/next-actions",
+        "description": "Tenant Qros Next Actions"
+      }
+    },
+    {
+      "name": "POST /tenant/qros/push-briefing",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/qros/push-briefing",
+        "description": "Tenant Qros Push Briefing"
+      }
+    },
+    {
+      "name": "GET /tenant/qros/runway",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/qros/runway",
+        "description": "Tenant Qros Runway"
+      }
+    },
+    {
+      "name": "POST /tenant/qros/scenario/simulate",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/qros/scenario/simulate",
+        "description": "Tenant Qros Scenario Simulate"
       }
     },
     {

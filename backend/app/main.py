@@ -26,6 +26,7 @@ from app.api.remediation_program import router as remediation_program_router
 from app.api.crypto_flip import router as crypto_flip_router
 from app.api.integrations_webhook import router as integrations_webhook_router
 from app.api.command_center import router as command_center_router
+from app.api.demo import router as demo_router
 from app.api.internal_dashboard import router as internal_dashboard_router
 from app.db.config import inline_jobs, persistence_enabled, redis_enabled, use_worker_queue
 from app.db.engine import init_db, ping_db
@@ -56,6 +57,21 @@ logger = logging.getLogger(__name__)
 @asynccontextmanager
 async def lifespan(_: FastAPI):
     init_db()
+    from app.demo.config import demo_enabled
+    from app.demo.scheduler import start_demo_scheduler
+
+    if demo_enabled():
+        from app.demo.service import ensure_seeded, reassess_demo
+
+        ensure_seeded()
+        try:
+            from app.demo.store import latest_snapshot
+
+            if latest_snapshot() is None:
+                reassess_demo(reason="bootstrap")
+        except Exception:
+            logger.debug("Demo bootstrap reassess skipped", exc_info=True)
+        start_demo_scheduler()
     yield
 
 
@@ -149,6 +165,7 @@ app.include_router(integrations_webhook_router)
 app.include_router(admin_router)
 app.include_router(internal_dashboard_router)
 app.include_router(command_center_router)
+app.include_router(demo_router)
 app.include_router(public_router)
 
 

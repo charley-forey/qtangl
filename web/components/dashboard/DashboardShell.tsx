@@ -9,6 +9,8 @@ import SystemHealthBar from "@/components/dashboard/SystemHealthBar";
 import DashboardKpiStrip from "@/components/dashboard/DashboardKpiStrip";
 import DashboardTabs from "@/components/dashboard/DashboardTabs";
 import EvidenceToolbar from "@/components/dashboard/EvidenceToolbar";
+import QrosShell from "@/components/qros/QrosShell";
+import { useCommandCenterV2 } from "@/hooks/useCommandCenterV2";
 import type { RolePolicy } from "@/lib/dashboard-role-policies";
 
 type Props = {
@@ -56,6 +58,16 @@ export default function DashboardShell({
   const portfolioAllowed = !isCustomerRole && (rolePolicy?.tabs.includes("*") || rolePolicy?.tabs.includes("portfolio"));
   const showPortfolio =
     portfolioAllowed && (childrenCount > 0 || (dashboardSession?.memberships?.length ?? 0) > 1);
+  const ccV2 = useCommandCenterV2();
+  const kpiData = {
+    latestReadiness: summary.kpis.latestReadiness ?? (me.latestReadinessScore as number | null | undefined),
+    latestBand: summary.kpis.latestBand ?? latestScan?.readinessBand,
+    delta: summary.kpis.delta,
+    openCritical: summary.kpis.openCritical ?? (me.openCriticalCount as number | undefined),
+    nextScheduleAt: summary.kpis.nextScheduleAt ?? summary.schedulesSummary.nextRunAt ?? null,
+    scansThisMonth: summary.kpis.scansThisMonth ?? (me.scansThisMonth as number | undefined),
+    quotaLimit: summary.kpis.quotaLimit ?? (me.entitlements as { maxScansPerMonth?: number })?.maxScansPerMonth ?? null,
+  };
 
   return (
     <div className={`motion-reduce:transition-none ${density === "compact" ? "space-y-4" : "space-y-8"}`}>
@@ -76,30 +88,40 @@ export default function DashboardShell({
         eventsDegraded={eventsDegraded}
       />
 
-      <DashboardKpiStrip
-        activeTab={activeTab}
-        kpis={{
-          latestReadiness: summary.kpis.latestReadiness ?? (me.latestReadinessScore as number | null | undefined),
-          latestBand: summary.kpis.latestBand ?? latestScan?.readinessBand,
-          delta: summary.kpis.delta,
-          openCritical: summary.kpis.openCritical ?? (me.openCriticalCount as number | undefined),
-          nextScheduleAt: summary.kpis.nextScheduleAt ?? summary.schedulesSummary.nextRunAt ?? null,
-          scansThisMonth: summary.kpis.scansThisMonth ?? (me.scansThisMonth as number | undefined),
-          quotaLimit: summary.kpis.quotaLimit ?? (me.entitlements as { maxScansPerMonth?: number })?.maxScansPerMonth ?? null,
-        }}
-      />
-
-      <DashboardTabs
-        active={activeTab}
-        onChange={onTabChange}
-        showPortfolio={showPortfolio}
-        persona={persona}
-        rolePolicy={rolePolicy}
-      />
-
-      <div role="tabpanel" aria-live="polite" aria-label={`${activeTab} tab`}>
-        {children}
-      </div>
+      {ccV2 ? (
+        <QrosShell
+          summary={summary}
+          kpis={kpiData}
+          activeTab={activeTab}
+          persona={persona === "executive" ? "executive" : "operator"}
+          onTabChange={onTabChange}
+        >
+          <DashboardTabs
+            active={activeTab}
+            onChange={onTabChange}
+            showPortfolio={showPortfolio}
+            persona={persona}
+            rolePolicy={rolePolicy}
+          />
+          <div role="tabpanel" aria-live="polite" aria-label={`${activeTab} tab`} className="mt-6">
+            {children}
+          </div>
+        </QrosShell>
+      ) : (
+        <>
+          <DashboardKpiStrip activeTab={activeTab} kpis={kpiData} />
+          <DashboardTabs
+            active={activeTab}
+            onChange={onTabChange}
+            showPortfolio={showPortfolio}
+            persona={persona}
+            rolePolicy={rolePolicy}
+          />
+          <div role="tabpanel" aria-live="polite" aria-label={`${activeTab} tab`}>
+            {children}
+          </div>
+        </>
+      )}
 
       <EvidenceToolbar scanId={latestScan?.scanId ?? null} reportUrlForScan={reportUrlForScan} />
 
