@@ -94,11 +94,6 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       {
-        source: "/demo/:path*",
-        destination: "/assess",
-        permanent: true,
-      },
-      {
         source: "/labs",
         destination: "/platform",
         permanent: true,
