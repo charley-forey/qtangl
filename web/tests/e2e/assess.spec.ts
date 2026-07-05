@@ -190,6 +190,13 @@ test.describe("Assess page", () => {
     await expect(page).toHaveURL(/\/assess\/mini/);
   });
 
+  test("/demo/live serves Live Crypto Range control panel", async ({ page }) => {
+    const response = await page.goto("/demo/live");
+    expect(response?.status()).toBeLessThan(400);
+    await expect(page).toHaveURL(/\/demo\/live$/);
+    await expect(page.getByText(/Live Crypto Range/i)).toBeVisible();
+  });
+
   test("public demo shows production customer footer", async ({ page }) => {
     await gotoAssessScanner(page);
     await expect(page.getByText(/Production customers:/i)).toBeVisible();
