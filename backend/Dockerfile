@@ -36,6 +36,7 @@ RUN pip install --no-cache-dir liboqs-python \
     && python -c "import oqs; sigs=set(oqs.get_enabled_sig_mechanisms()); oqs.Signature('ML-DSA-65'); print('liboqs-python PQC ready | ML-DSA-65 OK | SLH-DSA', 'OK' if 'SLH_DSA_PURE_SHA2_128S' in sigs else 'unavailable')"
 
 COPY app ./app
+COPY scripts ./scripts
 COPY alembic ./alembic
 COPY alembic.ini .
 

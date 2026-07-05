@@ -161,6 +161,16 @@ python backend/scripts/verify_production_rollout.py --full
 
 See [`docs/runbooks/release-acceptance-checklist.md`](../../docs/runbooks/release-acceptance-checklist.md), [`docs/runbooks/dogfood-production-enablement.md`](../../docs/runbooks/dogfood-production-enablement.md), and [`docs/runbooks/trust-visibility-go-live.md`](../../docs/runbooks/trust-visibility-go-live.md).
 
+## Seed Command Center monitor estate (internal HQ)
+
+After deploy (API or worker shell; `WORKDIR` is `/app`):
+
+```bash
+python scripts/seed_monitor_estate.py --email charley@qtangl.com
+```
+
+Dry run: append `--dry-run`. Requires `DATABASE_URL`. Live schedule ticks still need worker + `QTANGL_ENABLE_SCHEDULER=true` + `REDIS_URL`.
+
 ## Report unavailable (`scan_not_found`, `bundle_not_persisted`)
 
 After deploy, the assess UI calls `POST /pqc/scan/{scanId}/persist` with the scan JSON so reports work even if the worker missed a DB write.

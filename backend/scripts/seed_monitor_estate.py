@@ -1,13 +1,17 @@
 #!/usr/bin/env python3
 """Seed a monitor estate for an internal HQ tenant: allowlist, portfolio, schedules, baselines.
 
-Example (Railway shell with DATABASE_URL set):
+Example (Railway API/worker shell — WORKDIR is /app):
+
+  python scripts/seed_monitor_estate.py --email charley@qtangl.com
+
+Local repo root:
 
   python backend/scripts/seed_monitor_estate.py --email charley@qtangl.com
 
 Dry run:
 
-  python backend/scripts/seed_monitor_estate.py --email charley@qtangl.com --dry-run
+  python scripts/seed_monitor_estate.py --email charley@qtangl.com --dry-run
 """
 
 from __future__ import annotations
