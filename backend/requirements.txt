@@ -44,7 +44,7 @@ PyJWT[crypto]>=2.13.0
 
 sqlalchemy>=2.0.50
 
-redis>=5.0.0
+redis>=8.0.1
 
 psycopg[binary]>=3.3.4
 
