@@ -28,7 +28,7 @@ qiskit-ibm-runtime
 
 cryptography>=50.0.0
 
-bcrypt>=4.1.0
+bcrypt>=5.0.0
 
 reportlab
 
