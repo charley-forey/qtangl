@@ -743,6 +743,21 @@ export const platformExtendedEndpoints: Record<string, DocsEndpoint> = {
       notes: ["Inspect the delivery result for actual outcomes; saving channel preferences alone does not verify delivery."],
     },
   ),
+  "tenant-qros-push-briefing-get": stub(
+    "tenant-qros-push-briefing-get",
+    "GET",
+    "/tenant/qros/push-briefing",
+    "Read saved briefing delivery preferences and the last scheduled outcome.",
+    true,
+    {
+      schemaUrl: "https://api.qtangl.com/docs#/tenant/tenant_qros_push_briefing_preferences_tenant_qros_push_briefing_get",
+      role: "viewer | operator | admin",
+      notes: [
+        "Returns this tenant's channels, email recipients, cadenceHours, enabled state, firstRunAt, requiresSave, and nullable lastDelivery. Reading does not send or schedule a briefing.",
+        "Legacy preferences remain disabled until saved again. Last-delivery counts may be null; outcomeUnknown means acceptance could not be confirmed and must not be interpreted as zero deliveries.",
+      ],
+    },
+  ),
   "tenant-qros-push-briefing-post": stub(
     "tenant-qros-push-briefing-post",
     "POST",
@@ -752,7 +767,7 @@ export const platformExtendedEndpoints: Record<string, DocsEndpoint> = {
     {
       schemaUrl: "https://api.qtangl.com/docs#/tenant/tenant_qros_push_briefing_tenant_qros_push_briefing_post",
       role: "operator | admin",
-      notes: ["This endpoint only stores preferences. It does not create a scheduled delivery job."],
+      notes: ["Saves channels, explicit email recipients, cadenceHours (1–168), and enabled state. Scheduled delivery requires persistent storage, a healthy scheduler, and valid destinations. Disabled preferences may omit recipients; identical saves preserve the schedule. Saving does not send immediately."],
     },
   ),
   "public-demo-status-get": stub(
