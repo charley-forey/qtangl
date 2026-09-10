@@ -55,6 +55,28 @@ export default function WebhooksDocsPage() {
       </DocsSection>
 
       <DocsSection>
+        <DocsHeading>Scheduled briefing delivery</DocsHeading>
+        <p className="text-sm leading-8 text-[var(--color-gray-300)]">
+          In the command center, open Advanced → Push everywhere. Select channels, enter explicit email
+          recipients, choose an interval from 1 to 168 hours, enable scheduled delivery, and save preferences.
+          Older preferences require saving again before scheduling starts. Saving requires persistent storage;
+          enabling delivery also requires a healthy scheduler. Send briefing now sends the current form once
+          without saving its settings.
+        </p>
+        <p className="text-sm leading-8 text-[var(--color-gray-300)]">
+          In Settings → Integrations, subscribe Slack destinations to <code>briefing.slack</code>, Teams
+          destinations to <code>briefing.teams</code>, and generic webhook destinations to <code>briefing.webhook</code>.
+          Email delivery uses the explicitly listed recipients, rather than a webhook subscription.
+        </p>
+        <p className="text-sm leading-8 text-[var(--color-gray-300)]">
+          Review the first scheduled time and last recorded outcome in the panel. Partial and failed outcomes
+          are not successful delivery to every destination. An uncertain attempt is not automatically replayed,
+          because a destination may already have accepted it. Use the webhook payload&apos;s <code>deliveryId</code>
+          to deduplicate at the receiver; transport retries do not guarantee exactly-once delivery.
+        </p>
+      </DocsSection>
+
+      <DocsSection>
         <DocsHeading>Payload fields (SIEM v2)</DocsHeading>
         <DocsFieldTable fields={eventFields} />
       </DocsSection>
