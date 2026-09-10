@@ -96,3 +96,43 @@ def test_empty_portfolio_score_is_unavailable(monkeypatch):
     monkeypatch.setattr(service, "list_portfolio", lambda **kw: [])
     monkeypatch.setattr(service, "list_jobs_for_tenant", lambda **kw: [])
     assert service.readiness_rollup(tenant_id="empty")["overallReadiness"] is None
+
+
+def test_malformed_and_ambiguous_portfolio_targets_do_not_break_rollup(monkeypatch):
+    from app.portfolio import service
+
+    monkeypatch.setattr(service, "list_portfolio", lambda **kw: [
+        {"target": "https://[bad", "businessUnit": "Invalid"},
+        {"target": "a.example", "businessUnit": "First"},
+        {"target": "https://A.EXAMPLE./", "businessUnit": "Second"},
+    ])
+    monkeypatch.setattr(service, "list_jobs_for_tenant", lambda **kw: [
+        {"scanId": "bad", "status": "done"}, {"scanId": "valid", "status": "done"},
+    ])
+    monkeypatch.setattr(service, "load_scan_bundle", lambda scan_id, **kw: {
+        "report": {"targetDomain": "https://[bad" if scan_id == "bad" else "a.example", "readinessScore": 50}
+    })
+    result = service.readiness_rollup(tenant_id="tenant-only")
+    assert result["overallReadiness"] == 50
+    assert result["byBusinessUnit"] == {"unassigned": 50}
+    assert len(result["scans"]) == 1
+
+
+def test_digest_uses_all_current_targets_when_first_25_scores_are_missing(monkeypatch):
+    from app.portfolio import service
+    from app.recommendations import service as recommendations
+
+    monkeypatch.setattr(service, "list_portfolio", lambda **kw: [])
+    monkeypatch.setattr(service, "list_jobs_for_tenant", lambda **kw: [
+        {"scanId": str(index), "status": "done"} for index in range(26)
+    ])
+    monkeypatch.setattr(service, "load_scan_bundle", lambda scan_id, **kw: {
+        "report": {"targetDomain": f"host-{scan_id}.example", "readinessScore": 80 if scan_id == "25" else None}
+    })
+    monkeypatch.setattr(recommendations, "recommendation_action_strings", lambda **kw: [])
+    rollup = service.readiness_rollup(tenant_id="tenant-only")
+    assert len(rollup["scans"]) == 26
+    assert rollup["overallReadiness"] == 80
+    digest = service.weekly_executive_digest(tenant_id="tenant-only")
+    assert digest["headline"] == "Portfolio readiness is 80.0."
+    assert "host-25.example" in digest["wins"][0]

@@ -10,6 +10,13 @@ from app.pqc.safety import normalize_host
 from app.store.scan_jobs import list_jobs_for_tenant, load_scan_bundle
 
 
+def _target_host(target: str) -> str:
+    try:
+        return normalize_host(target)
+    except ValueError:
+        return ""
+
+
 def list_portfolio(*, tenant_id: str) -> list[dict[str, Any]]:
     if not persistence_enabled():
         return []
@@ -47,7 +54,9 @@ def readiness_rollup(*, tenant_id: str) -> dict[str, Any]:
     """Average the latest report per target, using older reports only for deltas."""
     units_by_target: dict[str, set[str]] = {}
     for item in list_portfolio(tenant_id=tenant_id):
-        units_by_target.setdefault(normalize_host(item["target"]), set()).add(item["businessUnit"])
+        host = _target_host(item["target"])
+        if host:
+            units_by_target.setdefault(host, set()).add(item["businessUnit"])
     scans = list_jobs_for_tenant(tenant_id=tenant_id, limit=50)
     by_unit: dict[str, list[float]] = {}
 
@@ -65,7 +74,7 @@ def readiness_rollup(*, tenant_id: str) -> dict[str, Any]:
         score = float(raw_score) if isinstance(raw_score, (int, float)) and not isinstance(raw_score, bool) else None
         if score is not None and (not isfinite(score) or not 0 <= score <= 100):
             score = None
-        target = normalize_host(str(report.get("targetDomain") or ""))
+        target = _target_host(str(report.get("targetDomain") or ""))
         if not target:
             continue
         if target in latest_by_target:
@@ -109,7 +118,7 @@ def readiness_rollup(*, tenant_id: str) -> dict[str, Any]:
         "overallReadiness": overall,
         "byBusinessUnit": rollup,
         "businessUnitDeltas": bu_deltas,
-        "scans": entries[:25],
+        "scans": entries,
         "scoreScope": "Latest completed report per target within the 50 most recent scan jobs; equal weight per scored target.",
     }
 
