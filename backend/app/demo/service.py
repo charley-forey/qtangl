@@ -55,10 +55,18 @@ def _hndl_exposed(assets: list[dict[str, Any]]) -> int:
 
 
 def _per_resource_status(bundle: dict[str, Any], resources: list[DemoResource]) -> list[dict[str, Any]]:
-    asset_map = {str(a.get("id")): a for a in bundle.get("assets") or []}
+    by_id: dict[str, list[dict[str, Any]]] = {}
+    by_endpoint: dict[tuple[str, Any, Any], list[dict[str, Any]]] = {}
+    for asset in bundle.get("assets") or []:
+        by_id.setdefault(str(asset.get("id")), []).append(asset)
+        endpoint = (str(asset.get("host") or "").lower().rstrip("."), asset.get("port"), asset.get("kind"))
+        by_endpoint.setdefault(endpoint, []).append(asset)
     rows = []
     for resource in resources:
-        asset = asset_map.get(resource.id)
+        matches = by_id.get(resource.id) or by_endpoint.get(
+            (resource.host.lower().rstrip("."), resource.port, resource.kind), []
+        )
+        asset = matches[0] if resource.enabled and len(matches) == 1 else None
         vuln = (asset or {}).get("vulnerability") or {}
         rows.append(
             {
@@ -73,7 +81,8 @@ def _per_resource_status(bundle: dict[str, Any], resources: list[DemoResource]) 
                 "activeEvents": resource.active_events,
                 "severity": vuln.get("severity", "unknown"),
                 "status": vuln.get("status", "unknown"),
-                "readinessScore": bundle.get("report", {}).get("readinessScore"),
+                # The signed score describes the full report, not this resource.
+                "readinessScore": None,
             }
         )
     return rows
