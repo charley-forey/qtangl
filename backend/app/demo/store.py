@@ -197,7 +197,7 @@ def save_snapshot(payload: dict[str, Any]) -> dict[str, Any]:
 
 def list_snapshots(*, limit: int = 50) -> list[dict[str, Any]]:
     if not persistence_enabled():
-        return list(reversed(_MEM_SNAPSHOTS[-limit:]))
+        return list(_MEM_SNAPSHOTS[-limit:])
     from app.db.models import DemoSnapshotRow
 
     with db_session() as session:

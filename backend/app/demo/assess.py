@@ -13,7 +13,7 @@ from app.pqc.serialize import serialize_bundle
 
 def resources_to_uploaded_rows(resources: list[DemoResource] | None = None) -> list[dict[str, Any]]:
     rows = resources if resources is not None else list_resources(enabled_only=True)
-    return [resource_to_uploaded_row(resource) for resource in rows]
+    return [resource_to_uploaded_row(resource) for resource in rows if resource.enabled]
 
 
 def run_demo_assessment(

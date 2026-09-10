@@ -44,25 +44,16 @@ def build_compliance_scorecard(*, scan_id: str | None = None) -> dict[str, Any]:
 def build_portfolio_rollup(*, limit: int = 30) -> dict[str, Any]:
     resources = list_resources(enabled_only=True)
     snaps = list_snapshots(limit=limit)
-    by_unit_scores: dict[str, list[float]] = {}
     by_unit_assets: dict[str, int] = {}
     for resource in resources:
         by_unit_assets[resource.business_unit] = by_unit_assets.get(resource.business_unit, 0) + 1
-    per_resource = (snaps[-1].get("perResourceStatus") if snaps else []) or []
-    for row in per_resource:
-        unit = str(row.get("businessUnit") or "default")
-        score = row.get("readinessScore")
-        if score is not None:
-            by_unit_scores.setdefault(unit, []).append(float(score))
     units = []
     for unit, asset_count in sorted(by_unit_assets.items()):
-        scores = by_unit_scores.get(unit, [])
-        avg = round(sum(scores) / len(scores), 1) if scores else None
         units.append(
             {
                 "businessUnit": unit,
                 "assetCount": asset_count,
-                "readinessScore": avg,
+                "readinessScore": None,
                 "readinessDelta": None,
             }
         )

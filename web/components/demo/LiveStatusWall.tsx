@@ -111,18 +111,22 @@ export default function LiveStatusWall() {
 
         <div className="grid gap-4 lg:grid-cols-3">
           <div className="rounded-[var(--radius-lg)] border border-white/10 bg-black/30 p-4 lg:col-span-2">
-            <p className="text-sm font-semibold">Readiness trend</p>
+            <p className="text-sm font-semibold">Full report readiness trend</p>
             <div className="mt-3">
               <ReadinessTrend points={trend} showBands forceChart height={240} />
             </div>
           </div>
           <div className="rounded-[var(--radius-lg)] border border-white/10 bg-black/30 p-4">
-            <p className="text-sm font-semibold">Severity mix</p>
+            <p className="text-sm font-semibold">Full report severity mix</p>
+            <p className="mt-1 text-xs text-[var(--color-gray-400)]">
+              Includes baseline scenario assets plus enabled demo resources.
+            </p>
             <div className="mt-3">
               <SeverityCountsDonut counts={snapshot?.severityCounts ?? {}} />
             </div>
             {snapshot ? (
               <div className="mt-4 text-sm">
+                <p className="text-xs text-[var(--color-gray-400)]">Full report readiness</p>
                 <p className="text-3xl font-semibold">{snapshot.readinessScore}</p>
                 <p className="text-[var(--color-gray-400)]">{snapshot.readinessBand}</p>
               </div>
