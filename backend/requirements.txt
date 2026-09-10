@@ -46,7 +46,7 @@ rfc3161ng>=0.1.0
 
 PyJWT[crypto]>=2.13.0
 
-sqlalchemy>=2.0.50
+sqlalchemy>=2.0.51
 
 redis>=5.0.0
 
