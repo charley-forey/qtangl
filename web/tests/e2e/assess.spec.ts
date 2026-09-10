@@ -6,6 +6,31 @@ import { gotoAssessAutorun, gotoAssessScanner, waitForAssessScanner } from "./he
 test.describe.configure({ timeout: 120_000 });
 
 test.describe("Assess page", () => {
+  test.beforeAll(async ({ request }) => {
+    const apiBaseUrl = process.env.NEXT_PUBLIC_QTANGL_API_BASE_URL;
+    expect(apiBaseUrl, "Assess integration tests require a local fixture API configured before the web build").toMatch(
+      /^http:\/\/(127\.0\.0\.1|localhost):\d+\/?$/
+    );
+    const health = await request.get(`${apiBaseUrl}/health`, { timeout: 10_000 });
+    expect(health.ok(), "The local fixture API must be ready before browser tests").toBe(true);
+  });
+
+  test.beforeEach(async ({ page }) => {
+    // Explicit live-error mocks below override this guard; all real scans stay offline.
+    await page.route("**/pqc/**", async (route) => {
+      const request = route.request();
+      const url = new URL(request.url());
+      const local = ["127.0.0.1", "localhost"].includes(url.hostname);
+      const fixture = request.method() !== "POST" || url.pathname !== "/pqc/scan"
+        || request.postDataJSON()?.useFixture === true;
+      if (!local || !fixture) {
+        await route.abort("blockedbyclient");
+        throw new Error(`Blocked non-fixture or remote PQC request: ${request.method()} ${url.origin}${url.pathname}`);
+      }
+      await route.continue();
+    });
+  });
+
   test("landing sections render", async ({ page }) => {
     await page.goto("/assess");
     await expect(page.getByRole("heading", { name: /Baseline your crypto/i })).toBeVisible();
@@ -19,6 +44,8 @@ test.describe("Assess page", () => {
 
   test("scanner section appears above learn section", async ({ page }) => {
     await page.goto("/assess");
+    await expect(page.locator("#scanner")).toBeVisible();
+    await expect(page.locator("#learn")).toBeVisible();
     const scannerY = await page.locator("#scanner").evaluate((el) => el.getBoundingClientRect().top);
     const learnY = await page.locator("#learn").evaluate((el) => el.getBoundingClientRect().top);
     expect(scannerY).toBeLessThan(learnY);
@@ -86,23 +113,30 @@ test.describe("Assess page", () => {
   test("technical tab shows handshake proof", async ({ page }) => {
     await gotoAssessAutorun(page, "scenario=bank-tls-inventory&autorun=1");
     await page.getByRole("tab", { name: "Technical" }).click();
-    await expect(page.getByText(/handshake proof/i)).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Post-quantum handshake proof", exact: true })).toBeVisible();
   });
 
   test("executive tab shows peer band", async ({ page }) => {
     await gotoAssessAutorun(page, "scenario=bank-tls-inventory&autorun=1");
-    await expect(page.getByText(/Industry peer band/i)).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Industry peer band", exact: true })).toBeVisible();
   });
 
-  test("evidence tab includes board export", async ({ page }) => {
+  test("evidence tab downloads a board PDF", async ({ page, request }) => {
     await gotoAssessAutorun(page, "scenario=bank-tls-inventory&autorun=1");
     await page.getByRole("tab", { name: "Evidence" }).click();
-    await expect(page.getByRole("link", { name: /^Board$/i })).toBeVisible();
+    const board = page.getByRole("link", { name: "Board PDF (2pp)", exact: true });
+    await expect(board).toHaveAttribute("href", /format=board/);
+    const exportUrl = new URL((await board.getAttribute("href"))!, page.url());
+    expect(["127.0.0.1", "localhost"]).toContain(exportUrl.hostname);
+    const response = await request.get(exportUrl.href);
+    expect(response.ok()).toBe(true);
+    expect(response.headers()["content-type"]).toContain("application/pdf");
+    expect((await response.body()).subarray(0, 5).toString()).toBe("%PDF-");
   });
 
   test("executive tab shows Mosca timeline", async ({ page }) => {
     await gotoAssessAutorun(page, "scenario=bank-tls-inventory&autorun=1");
-    await expect(page.getByText(/Mosca timeline/i)).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Mosca timeline", exact: true })).toBeVisible();
   });
 
   test("tab navigation switches to compliance", async ({ page }) => {
@@ -119,13 +153,13 @@ test.describe("Assess page", () => {
 
   test("upsell block shows Monitor CTA post-scan", async ({ page }) => {
     await gotoAssessAutorun(page, "scenario=bank-tls-inventory&autorun=1");
-    await expect(page.getByRole("link", { name: /Request Monitor pilot/i })).toBeVisible();
+    await expect(page.locator("[data-assess-upsell]").getByRole("link", { name: "Request Monitor pilot", exact: true })).toBeVisible();
   });
 
   test("evidence tab includes verify link with scanId", async ({ page }) => {
     await gotoAssessAutorun(page, "scenario=bank-tls-inventory&autorun=1");
     await page.getByRole("tab", { name: "Evidence" }).click();
-    const verifyLink = page.getByRole("link", { name: /verify/i }).first();
+    const verifyLink = page.locator("#assess-panel-evidence").getByRole("link", { name: /^\/verify\?scanId=/ });
     await expect(verifyLink).toBeVisible();
     await expect(verifyLink).toHaveAttribute("href", /scanId=/);
   });
@@ -134,25 +168,41 @@ test.describe("Assess page", () => {
     await gotoAssessScanner(page);
     await page.getByRole("button", { name: /Pick another scenario/i }).click();
     await page.getByRole("button", { name: /Next: Scope/i }).click();
-    await expect(page.getByText(/External discovery|agentless baseline/i)).toBeVisible();
+    await expect(page.getByText(/External discovery runs on every assessment\./i)).toBeVisible();
     await expect(page.getByRole("link", { name: /Dashboard/i }).first()).toBeVisible();
   });
 
   test("my-domain path shows authorized workspace guidance", async ({ page }) => {
     await gotoAssessScanner(page);
     await page.getByRole("button", { name: /Scan my organization/i }).click();
-    await expect(page.getByRole("link", { name: /Create free Assess workspace/i })).toBeVisible();
-    await expect(page.getByRole("link", { name: /Request sales-led pilot/i })).toBeVisible();
+    await expect(page.locator("#scanner").getByRole("link", { name: "Start authorized workspace", exact: true })).toHaveAttribute("href", "/assess/start");
+    await expect(page.locator("#scanner").getByRole("link", { name: "Request a pilot", exact: true })).toHaveAttribute("href", "/access");
   });
 
   test("autorun shows progress banner", async ({ page }) => {
-    await page.goto("/assess?scenario=bank-tls-inventory&autorun=1");
-    await expect(page.getByRole("status")).toContainText(/Running demo scan/i, { timeout: 15_000 });
+    let releaseResponse!: () => void;
+    const pending = new Promise<void>((resolve) => { releaseResponse = resolve; });
+    await page.route("**/pqc/scan", async (route) => {
+      expect(route.request().postDataJSON().useFixture).toBe(true);
+      expect(["127.0.0.1", "localhost"]).toContain(new URL(route.request().url()).hostname);
+      const response = await route.fetch();
+      await pending;
+      await route.fulfill({ response });
+    });
+    try {
+      await page.goto("/assess?scenario=bank-tls-inventory&autorun=1&intent=sample&useFixture=true");
+      await expect(page.getByRole("status").filter({ hasText: "Running demo scan" })).toBeVisible({ timeout: 15_000 });
+    } finally {
+      releaseResponse();
+    }
     await expect(page.getByRole("tab", { name: "Executive" })).toBeVisible({ timeout: 60_000 });
   });
 
   test("scanId hydration restores executive results", async ({ page }) => {
-    await page.goto("/assess?scanId=golden-bank-tls-inventory");
+    await gotoAssessAutorun(page, "scenario=bank-tls-inventory&autorun=1");
+    await expect.poll(() => new URL(page.url()).searchParams.get("scanId")).toBeTruthy();
+    const scanId = new URL(page.url()).searchParams.get("scanId")!;
+    await page.goto(`/assess?scanId=${encodeURIComponent(scanId)}`);
     await expect(page.getByRole("tab", { name: "Executive" })).toBeVisible({ timeout: 60_000 });
     await expect(page.getByText(/Q-Day readiness score/i).first()).toBeVisible();
   });
@@ -160,7 +210,7 @@ test.describe("Assess page", () => {
   test("evidence tab shows export format links", async ({ page }) => {
     await gotoAssessAutorun(page, "scenario=bank-tls-inventory&autorun=1");
     await page.getByRole("tab", { name: "Evidence" }).click();
-    await expect(page.getByRole("link", { name: /^PDF$/i })).toBeVisible();
+    await expect(page.getByRole("link", { name: "Full PDF", exact: true })).toHaveAttribute("href", /format=pdf/);
     await expect(page.getByRole("link", { name: /^CBOM$/i })).toBeVisible();
     await expect(page.getByRole("button", { name: /Copy share link/i })).toBeVisible();
   });

@@ -1,25 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-function buildBffUpstreamAuthHeaders(options) {
-  const headers = {};
-  if (options.assertion) {
-    headers["X-Qtangl-Session"] = options.assertion;
-  }
-  if (options.sessionKey) {
-    headers.Authorization = `Bearer ${options.sessionKey}`;
-  }
-  return headers;
-}
-
-function bffAuthForwardMode(assertion, sessionKey) {
-  const hasAssertion = Boolean(assertion);
-  const hasSessionKey = Boolean(sessionKey);
-  if (hasAssertion && hasSessionKey) return "both";
-  if (hasAssertion) return "assertion";
-  if (hasSessionKey) return "sessionKey";
-  return null;
-}
+import { buildBffUpstreamAuthHeaders, bffAuthForwardMode } from "../lib/auth/bff-auth-headers.ts";
 
 test("buildBffUpstreamAuthHeaders sends both credentials when present", () => {
   const headers = buildBffUpstreamAuthHeaders({

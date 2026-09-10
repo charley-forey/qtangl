@@ -56,7 +56,7 @@ export default function CompliancePanel({ pack, summary }: CompliancePanelProps)
       )}
 
       {controlThemes.length > 0 && (
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto" tabIndex={0} role="region" aria-label="Control mapping">
           <p className="text-xs uppercase tracking-[0.18em] text-[var(--color-gray-500)]">
             Control mapping
           </p>

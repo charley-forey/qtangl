@@ -37,7 +37,7 @@ export default function SystemHealthBar({
     schedulerStale?: boolean;
     redis?: boolean;
     workerQueueEnabled?: boolean;
-    scheduler?: { lastTickAt?: string };
+    scheduler?: { lastTickAt?: number | null };
   } | null>(null);
   const [detailOpen, setDetailOpen] = useState(false);
   const closeDetail = useCallback(() => setDetailOpen(false), []);
@@ -79,7 +79,7 @@ export default function SystemHealthBar({
       signals.push({ label: "Scheduler degraded", tone: "critical" });
     } else if (opsHealth.scheduler?.lastTickAt) {
       signals.push({
-        label: `Scheduler tick: ${new Date(opsHealth.scheduler.lastTickAt).toLocaleString()}`,
+        label: `Scheduler tick: ${new Date(opsHealth.scheduler.lastTickAt * 1000).toLocaleString()}`,
         tone: "neutral",
       });
     }

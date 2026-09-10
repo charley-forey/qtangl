@@ -136,7 +136,15 @@ def build_next_actions(
 def load_nba_state(*, settings: dict[str, Any]) -> tuple[set[str], set[str]]:
     state = settings.get("qrosNbaState") or {}
     dismissed = set(state.get("dismissed") or [])
-    snoozed = set((state.get("snoozed") or {}).keys())
+    snoozed = set()
+    now = datetime.now(tz=UTC)
+    for action_id, until in (state.get("snoozed") or {}).items():
+        try:
+            expiry = datetime.fromisoformat(until)
+            if expiry.tzinfo is not None and expiry > now:
+                snoozed.add(action_id)
+        except (TypeError, ValueError):
+            continue
     return dismissed, snoozed
 
 
@@ -225,7 +233,7 @@ def build_runway(*, summary: dict[str, Any]) -> dict[str, Any]:
             "label": "Today",
             "date": today.isoformat(),
             "kind": "marker",
-            "description": "Current posture baseline",
+            "description": "Planning date; not a measurement of current posture",
         }
     ]
 
@@ -249,18 +257,18 @@ def build_runway(*, summary: dict[str, Any]) -> dict[str, Any]:
                 "label": maturity.get("nextStageName"),
                 "date": (today + timedelta(days=90)).isoformat(),
                 "kind": "maturity",
-                "description": f"Next maturity stage: {maturity.get('nextStageName')}",
+                "description": f"Illustrative 90-day planning horizon for {maturity.get('nextStageName')}; not a measured completion date",
             }
         )
 
     milestones.append(
         {
             "id": "hndl-window",
-            "label": "Long-lived secret exposure window",
+            "label": "Illustrative five-year retention horizon",
             "date": (today + timedelta(days=365 * 5)).isoformat(),
             "kind": "exposure",
             "description": (
-                "Harvest-now-decrypt-later exposure framing — not a Q-Day prediction."
+                "Planning example assumes five-year data retention; not measured exposure or a Q-Day prediction."
             ),
         }
     )
@@ -272,17 +280,20 @@ def build_runway(*, summary: dict[str, Any]) -> dict[str, Any]:
                 "id": "baseline",
                 "label": "Current pace",
                 "readinessDelta": 0,
-                "description": "Continue existing remediation velocity",
+                "description": "Keep the latest readiness score unchanged for comparison",
             },
             {
                 "id": "accelerated",
                 "label": "Accelerated program",
-                "readinessDelta": 12,
-                "description": "Close critical backlog within 90 days",
+                "readinessDelta": (
+                    simulate_scenario(scenario_id="accelerated", summary=summary)["projectedReadiness"]
+                    - simulate_scenario(scenario_id="baseline", summary=summary)["projectedReadiness"]
+                ),
+                "description": "Illustrative uplift based on recorded remediation closures",
             },
         ],
         "framing": (
-            "Exposure windows and compliance deadlines — not a prediction of when cryptography breaks."
+            "Illustrative planning horizons and available trajectory targets — not compliance deadlines or a prediction of when cryptography breaks."
         ),
     }
 
@@ -300,7 +311,10 @@ def simulate_scenario(*, scenario_id: str, summary: dict[str, Any]) -> dict[str,
         "projectedReadiness": projected,
         "confidenceBand": {"low": max(0, projected - 8), "high": min(100, projected + 5)},
         "assumptions": [
-            "Projection based on remediation velocity and open critical count",
+            "Illustrative scenario adjustment to latest readiness; not a validated forecast",
+            "Accelerated adjustment uses recorded remediation closures; critical count is not modeled",
+            "The band is a fixed illustrative range, not a statistical confidence interval",
+            *(["No measured readiness available; a zero baseline is assumed"] if kpis.get("latestReadiness") is None else []),
             "Inventory aid — not a formal audit",
         ],
     }
@@ -362,7 +376,7 @@ def execute_agentic_action(
 
     if dry_run:
         steps = {
-            "draft_pr": ["Validate remediation item", "Draft PR description", "Open PR (requires approval)"],
+            "draft_pr": ["Generate illustrative remediation draft", "Manually validate configuration and review files before use"],
             "file_ticket": ["Map finding to integration", "Create ticket draft", "Submit (requires approval)"],
             "schedule_scan": ["Validate authorized domains", "Create schedule", "Confirm cadence"],
         }
@@ -437,15 +451,30 @@ def execute_agentic_action(
         }
 
     if action == "schedule_scan":
-        from app.monitoring.service import create_schedule
+        from fastapi import HTTPException
+        from app.monitoring.batch_schedules import create_batch_schedules
+        from app.pqc.safety import resolve_scannable
+        from app.store.scan_jobs import load_scan_bundle
 
-        target = str(payload.get("target") or payload.get("targetDomain") or "")
-        cadence = int(payload.get("cadenceHours") or 168)
+        if not scan_id:
+            return _agentic_error(action, payload, "Select a completed inventory scan before scheduling")
+        bundle = load_scan_bundle(scan_id, tenant_id=tenant_id)
+        if not bundle:
+            return _agentic_error(action, payload, "Scan not found")
+        report = bundle.get("report") or {}
+        target = report.get("targetDomain")
+        scenario_id = report.get("scenarioId")
+        if not target or not scenario_id:
+            return _agentic_error(action, payload, "Selected scan has no domain target or scenario to schedule")
+        cadence = payload.get("cadenceHours", 168)
+        if isinstance(cadence, bool) or not isinstance(cadence, int) or not 1 <= cadence <= 8760:
+            return _agentic_error(action, payload, "cadenceHours must be an integer between 1 and 8760")
         try:
-            sched = create_schedule(
+            authorized = resolve_scannable(str(target), port=443, tenant_id=tenant_id)
+            result = create_batch_schedules(
                 tenant_id=tenant_id,
-                scenario_id=str(payload.get("scenarioId") or "production-baseline"),
-                target=target or None,
+                scenario_id=str(scenario_id),
+                targets=[authorized.host],
                 cadence_hours=cadence,
                 notify_email=actor_email,
             )
@@ -453,11 +482,13 @@ def execute_agentic_action(
                 "action": action,
                 "dryRun": False,
                 "status": "completed",
-                "steps": ["Schedule created"],
+                "steps": [f"{result['summary']}: {authorized.host}"],
                 "payload": payload,
-                "result": sched,
+                "result": result,
                 "guardrails": _agentic_guardrails(),
             }
+        except HTTPException as exc:
+            return _agentic_error(action, payload, str(exc.detail))
         except Exception as exc:
             return _agentic_error(action, payload, str(exc))
 
@@ -512,17 +543,18 @@ MARKETPLACE_TILES: list[dict[str, Any]] = [
 ]
 
 
-def install_marketplace_tile(*, installed_ids: list[str], tile_id: str) -> list[str]:
-    ids = list(installed_ids or [])
+def install_marketplace_tile(*, installed_ids: list[str] | None, tile_id: str) -> list[str]:
+    ids = [tile["id"] for tile in list_marketplace_tiles(installed_ids=installed_ids) if tile["installed"]]
     if tile_id not in ids:
         ids.append(tile_id)
     return ids
 
 
 def list_marketplace_tiles(*, installed_ids: list[str] | None = None) -> list[dict[str, Any]]:
-    installed = set(installed_ids or [])
-    default_installed = {t["id"] for t in MARKETPLACE_TILES if t.get("installed")}
-    installed |= default_installed
+    installed = (
+        {t["id"] for t in MARKETPLACE_TILES if t.get("installed")}
+        if installed_ids is None else set(installed_ids)
+    )
     tiles = []
     for tile in MARKETPLACE_TILES:
         row = dict(tile)
@@ -531,5 +563,8 @@ def list_marketplace_tiles(*, installed_ids: list[str] | None = None) -> list[di
     return tiles
 
 
-def uninstall_marketplace_tile(*, installed_ids: list[str], tile_id: str) -> list[str]:
-    return [tid for tid in (installed_ids or []) if tid != tile_id]
+def uninstall_marketplace_tile(*, installed_ids: list[str] | None, tile_id: str) -> list[str]:
+    return [
+        tile["id"] for tile in list_marketplace_tiles(installed_ids=installed_ids)
+        if tile["installed"] and tile["id"] != tile_id
+    ]

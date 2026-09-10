@@ -8,6 +8,8 @@
 
 ## Start here
 
+Current validation and execution plan: [September 2026 validation and evolution](./quantum-readiness/2026-09-validation-and-evolution.md).
+
 | Goal | Document |
 |------|----------|
 | **Company repositioning (Track K)** | [quantum-readiness/README.md](./quantum-readiness/README.md) |

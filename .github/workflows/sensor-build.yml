@@ -30,9 +30,3 @@ jobs:
         if: matrix.goos == 'linux'
         working-directory: sensor
         run: go test ./...
-      - name: cosign sign (release channel)
-        if: matrix.goos == 'linux' && github.ref == 'refs/heads/main'
-        continue-on-error: true
-        run: |
-          echo "cosign sign-blob qtangl-sensor --bundle sensor.sig" 
-          echo "Transparency log entry recorded on release tag"

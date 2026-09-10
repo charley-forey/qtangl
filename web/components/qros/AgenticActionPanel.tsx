@@ -13,33 +13,52 @@ type Props = {
 };
 
 export default function AgenticActionPanel({ remediationId, scanId }: Props) {
-  const [preview, setPreview] = useState<{ steps: string[]; guardrails: string[] } | null>(null);
+  const [preview, setPreview] = useState<{ action: string; payload: { remediationId?: string | null; scanId?: string | null }; steps: string[]; guardrails: string[] } | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [status, setStatus] = useState<string | null>(null);
+  const [output, setOutput] = useState<Record<string, unknown> | null>(null);
   const [loading, setLoading] = useState(false);
 
   const previewAction = async (action: string) => {
     setLoading(true);
+    setPreview(null);
+    setError(null);
+    setStatus(null);
+    setOutput(null);
     try {
+      const payload = { remediationId, scanId };
       const result = await executeAgenticAction({
         action,
-        payload: { remediationId, scanId },
+        payload,
         dryRun: true,
       });
-      setPreview({ steps: result.steps, guardrails: result.guardrails });
+      if (result.status !== "preview") throw new Error(`Preview unavailable (${result.status}).`);
+      setPreview({ action, payload, steps: result.steps, guardrails: result.guardrails });
+    } catch (error) {
+      setError(error instanceof Error ? error.message : "Unable to preview this action.");
     } finally {
       setLoading(false);
     }
   };
 
-  const approve = async (action: string) => {
+  const approve = async () => {
+    if (!preview || loading) return;
     setLoading(true);
+    setError(null);
     try {
-      await executeAgenticAction({
-        action,
-        payload: { remediationId, scanId },
+      const result = await executeAgenticAction({
+        action: preview.action,
+        payload: preview.payload,
         dryRun: false,
         approved: true,
       });
-      trackDashboardEvent({ event: "cc_qros_agentic_approved", properties: { action } });
+      if (result.status === "failed") throw new Error(result.error ? `Action failed: ${result.error}` : "Action failed. Review the selected scan or remediation and try again.");
+      setStatus(`Action outcome: ${result.status}`);
+      setOutput(result.result ?? null);
+      trackDashboardEvent({ event: "cc_qros_agentic_approved", properties: { action: preview.action } });
+      setPreview(null);
+    } catch (error) {
+      setError(error instanceof Error ? error.message : "Unable to execute this action.");
     } finally {
       setLoading(false);
     }
@@ -59,6 +78,14 @@ export default function AgenticActionPanel({ remediationId, scanId }: Props) {
           Preview scan schedule
         </Button>
       </div>
+      {error ? <p role="alert" className="mt-3 text-sm text-red-300">{error}</p> : null}
+      {status ? <p role="status" className="mt-3 text-sm text-sky-300">{status}</p> : null}
+      {output ? (
+        <details className="mt-3 text-xs text-[var(--color-gray-300)]" open>
+          <summary>Action result — review before applying</summary>
+          <pre className="mt-2 max-h-64 overflow-auto whitespace-pre-wrap break-words rounded border border-[var(--border-subtle)] p-3">{JSON.stringify(output, null, 2)}</pre>
+        </details>
+      ) : null}
       {preview ? (
         <div className="mt-4 text-xs text-[var(--color-gray-300)]">
           <p className="font-medium text-white">Steps</p>
@@ -67,7 +94,10 @@ export default function AgenticActionPanel({ remediationId, scanId }: Props) {
               <li key={s}>{s}</li>
             ))}
           </ol>
-          <Button type="button" className="mt-3" disabled={loading} onClick={() => void approve("draft_pr")}>
+          <ul className="mt-2 list-disc pl-4" aria-label="Action guardrails">
+            {preview.guardrails.map((guardrail) => <li key={guardrail}>{guardrail}</li>)}
+          </ul>
+          <Button type="button" className="mt-3" disabled={loading} onClick={() => void approve()}>
             Approve & execute (audit logged)
           </Button>
         </div>

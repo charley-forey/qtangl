@@ -1,12 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-/** Mirrors lib/dashboard-legal.ts for CI without TS import. */
-function isLegalAcceptanceCurrent(tenantSettings) {
-  const billing = tenantSettings?.billing ?? {};
-  const termsRequired = String(tenantSettings?.termsVersionRequired ?? "2026-06-08");
-  return Boolean(billing.termsAcceptedAt && billing.termsVersion === termsRequired);
-}
+import { isLegalAcceptanceCurrent } from "../lib/dashboard-legal.ts";
 
 test("isLegalAcceptanceCurrent returns true when terms match required version", () => {
   const settings = {

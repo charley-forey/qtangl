@@ -2,6 +2,7 @@
 
 import {
   createContext,
+  Suspense,
   useCallback,
   useContext,
   useEffect,
@@ -37,8 +38,30 @@ type DashboardSessionContextValue = {
 
 const DashboardSessionContext = createContext<DashboardSessionContextValue | null>(null);
 
-export function DashboardSessionProvider({ children }: { children: ReactNode }) {
+function DashboardSessionUrlSync({
+  refreshSession,
+  setChecked,
+}: {
+  refreshSession: () => Promise<DashboardMeResponse>;
+  setChecked: (checked: boolean) => void;
+}) {
   const searchParams = useSearchParams();
+
+  useEffect(() => {
+    void refreshSession().finally(() => {
+      setChecked(true);
+      if (searchParams.get("session") === "refresh") {
+        const url = new URL(window.location.href);
+        url.searchParams.delete("session");
+        window.history.replaceState(window.history.state, "", url.pathname + url.search + url.hash);
+      }
+    });
+  }, [searchParams, refreshSession, setChecked]);
+
+  return null;
+}
+
+export function DashboardSessionProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<DashboardSession | null>(null);
   const [checked, setChecked] = useState(false);
   const [sessionReady, setSessionReady] = useState(false);
@@ -49,7 +72,9 @@ export function DashboardSessionProvider({ children }: { children: ReactNode }) 
   const [workosEnabled, setWorkosEnabled] = useState(workosClientAuthEnabled());
 
   const refreshSession = useCallback(async (): Promise<DashboardMeResponse> => {
-    const onboardingFromUrl = searchParams.get("onboarding");
+    const onboardingFromUrl = typeof window === "undefined"
+      ? null
+      : new URLSearchParams(window.location.search).get("onboarding");
     if (onboardingFromUrl && typeof window !== "undefined") {
       sessionStorage.setItem("qtangl_onboarding_token", onboardingFromUrl);
     }
@@ -88,7 +113,7 @@ export function DashboardSessionProvider({ children }: { children: ReactNode }) 
     setCredentialsReady(payload.authenticated && payload.credentialsReady === true);
     setSessionReady(true);
     return payload;
-  }, [searchParams]);
+  }, []);
 
   const signOut = useCallback(() => {
     if (typeof window !== "undefined") {
@@ -104,10 +129,6 @@ export function DashboardSessionProvider({ children }: { children: ReactNode }) 
   }, [workosEnabled]);
 
   useEffect(() => {
-    refreshSession().finally(() => setChecked(true));
-  }, [refreshSession]);
-
-  useEffect(() => {
     if (!session?.userId || typeof window === "undefined") return;
     const posthog = (
       window as Window & {
@@ -120,16 +141,6 @@ export function DashboardSessionProvider({ children }: { children: ReactNode }) 
       email: session.email,
     });
   }, [session?.userId, session?.tenantId, session?.role, session?.email]);
-
-  useEffect(() => {
-    if (searchParams.get("session") === "refresh") {
-      refreshSession().finally(() => {
-        const url = new URL(window.location.href);
-        url.searchParams.delete("session");
-        window.history.replaceState({}, "", url.pathname + url.search);
-      });
-    }
-  }, [searchParams, refreshSession]);
 
   const value = useMemo(
     () => ({
@@ -159,7 +170,12 @@ export function DashboardSessionProvider({ children }: { children: ReactNode }) 
   );
 
   return (
-    <DashboardSessionContext.Provider value={value}>{children}</DashboardSessionContext.Provider>
+    <DashboardSessionContext.Provider value={value}>
+      <Suspense fallback={null}>
+        <DashboardSessionUrlSync refreshSession={refreshSession} setChecked={setChecked} />
+      </Suspense>
+      {children}
+    </DashboardSessionContext.Provider>
   );
 }
 

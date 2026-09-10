@@ -31,6 +31,8 @@ export function defineEndpoint(
     errors: input.errors ?? (input.auth ? [401, 403, 404, 422, 429, 500, 503] : [404, 422, 429, 500]),
     examples: input.examples ?? [{ label: "Success", response: { status: "success" } }],
     notes: input.notes,
+    schemaUrl: input.schemaUrl,
+    tryIt: input.tryIt,
     contentType: input.contentType,
     idempotency: input.idempotency,
     pagination: input.pagination,

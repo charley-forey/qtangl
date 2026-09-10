@@ -34,7 +34,8 @@ const violations = [];
 for (const file of walk(webRoot)) {
   const rel = path.relative(webRoot, file).replaceAll("\\", "/");
   if (allowPaths.has(rel)) continue;
-  const text = fs.readFileSync(file, "utf8");
+  // Redirect sources preserve old URLs; destinations and links must use current routes.
+  const text = fs.readFileSync(file, "utf8").replace(/\bsource:\s*"\/demo\/pqc(?:\/[^"\n]*)?"/g, "");
   if (!text.includes(needle)) continue;
   violations.push(rel);
 }

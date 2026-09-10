@@ -2,6 +2,8 @@
 from __future__ import annotations
 
 import json
+import os
+import platform
 import subprocess
 from pathlib import Path
 from typing import Any
@@ -100,12 +102,10 @@ def _emit_python_models(openapi: dict) -> str:
 
 def generate_typescript() -> None:
     TS_OUT.parent.mkdir(parents=True, exist_ok=True)
-    cmd = (
-        f'npx --yes openapi-typescript@7.6.1 "{OPENAPI}" -o "{TS_OUT}"'
-    )
-    import platform
-
-    subprocess.run(cmd, check=True, cwd=ROOT, shell=platform.system() == "Windows")
+    cmd = ["npx", "--yes", "openapi-typescript@7.6.1", str(OPENAPI), "-o", str(TS_OUT)]
+    # npm run --prefix exports the SDK directory as npx's global install prefix.
+    env = {key: value for key, value in os.environ.items() if key.lower() != "npm_config_prefix"}
+    subprocess.run(cmd, check=True, cwd=ROOT, shell=platform.system() == "Windows", env=env)
 
 
 def generate_python() -> None:

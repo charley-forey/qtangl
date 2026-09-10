@@ -98,4 +98,7 @@ class ReportPdfExportTest(unittest.TestCase):
         if isinstance(body, memoryview):
             body = body.tobytes()
         self.assertTrue(body.startswith(b"%PDF"))
+
+
+if __name__ == "__main__":
     unittest.main()

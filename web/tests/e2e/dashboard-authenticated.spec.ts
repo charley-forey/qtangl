@@ -1,4 +1,5 @@
 import { test, expect } from "@playwright/test";
+import AxeBuilder from "@axe-core/playwright";
 
 import {
   mockDashboardEvents,
@@ -110,6 +111,32 @@ test.describe("Dashboard authenticated (mocked BFF)", () => {
     await expect(page.getByText("78").first()).toBeVisible();
   });
 
+  test("dependency graph mounts and renders nodes with normal motion", async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: "no-preference" });
+    await page.route("**/api/dashboard/tenant/qros/digital-twin/scan-1*", async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify({
+          graph: {
+            nodes: [
+              { id: "host-1", label: "example.com", kind: "host" },
+              { id: "algo-1", label: "RSA", kind: "algorithm" },
+            ],
+            edges: [{ source: "host-1", target: "algo-1" }],
+          },
+          blastRadius: [],
+          simulationNote: "Inventory relationships only.",
+        }),
+      });
+    });
+    await page.goto("/command-center?tab=remediate&scanId=scan-1&ccv2=1");
+    const graph = page.getByRole("img", { name: "Crypto dependency graph with 2 nodes" });
+    await expect(graph).toBeVisible({ timeout: 15000 });
+    await expect(graph.locator("circle")).toHaveCount(2);
+    await expect(graph.locator("line")).toHaveCount(1);
+  });
+
   test("overview shows QROS morning briefing and NBA feed", async ({ page }) => {
     await page.goto("/command-center?tab=overview");
     await expect(page.getByText("Morning briefing")).toBeVisible({ timeout: 15000 });
@@ -139,6 +166,69 @@ test.describe("Dashboard authenticated (mocked BFF)", () => {
     await expect(page.getByText("Enable weekly monitor cadence")).toBeVisible({ timeout: 15000 });
     await page.getByRole("button", { name: "Snooze" }).click();
     await expect(page.getByText("Enable weekly monitor cadence")).not.toBeVisible({ timeout: 10000 });
+  });
+
+  test("system health renders scheduler Unix seconds as a current date", async ({ page }) => {
+    await page.route("**/api/dashboard/health", (route) => route.fulfill({
+      status: 200, contentType: "application/json", body: JSON.stringify({
+        redis: true, workerQueueEnabled: true, schedulerStale: false,
+        scheduler: { lastTickAt: 1789014152 },
+      }),
+    }));
+    await page.goto("/command-center?tab=overview&ccv2=1");
+    await page.getByRole("button", { name: /All systems normal|System degraded|System issue detected/ }).click();
+    await expect(page.getByText(/^Scheduler tick:/)).toContainText("2026");
+  });
+
+  for (const width of [390, 1280]) {
+    test(`authenticated overview accessibility at ${width}px`, async ({ page }) => {
+      await page.setViewportSize({ width, height: 844 });
+      await page.goto("/command-center?tab=overview");
+      await expect(page.getByLabel("Posture command bar")).toBeVisible();
+      const results = await new AxeBuilder({ page }).analyze();
+      expect(results.violations.filter((v) => v.impact === "serious" || v.impact === "critical")).toEqual([]);
+    });
+  }
+
+  test("failed snooze keeps the action and shows a retryable error", async ({ page }) => {
+    await page.route("**/api/dashboard/tenant/qros/next-actions/*/mutate", (route) =>
+      route.fulfill({ status: 503, contentType: "application/json", body: JSON.stringify({ detail: "Unavailable" }) })
+    );
+    await page.goto("/command-center?tab=overview");
+    await page.getByRole("button", { name: "Snooze", exact: true }).click();
+    await expect(page.getByRole("alert").filter({ hasText: "Unable to update this action" })).toBeVisible();
+    await expect(page.getByText("Enable weekly monitor cadence")).toBeVisible();
+    await expect(page.getByRole("button", { name: "Snooze", exact: true })).toBeEnabled();
+  });
+
+  test("approval executes the previewed scan action and reports failure", async ({ page }) => {
+    const requests: Array<{ action: string; dryRun: boolean; approved: boolean; payload: unknown }> = [];
+    await page.route("**/api/dashboard/tenant/qros/agentic/execute", async (route) => {
+      const body = route.request().postDataJSON();
+      requests.push(body);
+      await route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({
+        status: body.dryRun ? "preview" : "failed",
+        steps: ["Schedule a scan"], guardrails: ["Human approval required"],
+      }) });
+    });
+    await page.goto("/command-center?tab=remediate&scanId=scan-1&ccv2=1");
+    await page.getByRole("button", { name: "Preview scan schedule" }).click();
+    await expect(page.getByLabel("Action guardrails")).toContainText("Human approval required");
+    await page.getByRole("button", { name: "Approve & execute (audit logged)" }).click();
+    await expect(page.getByRole("alert").filter({ hasText: "Action failed" })).toBeVisible();
+    expect(requests).toHaveLength(2);
+    expect(requests[0]).toMatchObject({ action: "schedule_scan", dryRun: true });
+    expect(requests[1]).toMatchObject({ action: "schedule_scan", dryRun: false, approved: true, payload: requests[0].payload });
+  });
+
+  test("scenario failures remain visible and allow retry", async ({ page }) => {
+    await page.route("**/api/dashboard/tenant/qros/scenario/simulate", (route) =>
+      route.fulfill({ status: 503, contentType: "application/json", body: JSON.stringify({ detail: "Unavailable" }) })
+    );
+    await page.goto("/command-center?tab=remediate&scanId=scan-1&ccv2=1");
+    await page.getByRole("button", { name: "Conservative", exact: true }).click();
+    await expect(page.getByRole("alert").filter({ hasText: "Unable to simulate" })).toBeVisible();
+    await expect(page.getByRole("button", { name: "Conservative", exact: true })).toBeEnabled();
   });
 
   test("monitor tab collapses advanced monitoring by default", async ({ page }) => {

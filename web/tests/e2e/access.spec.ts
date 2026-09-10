@@ -1,5 +1,60 @@
 import { test, expect } from "@playwright/test";
 
+for (const { path, heading } of [
+  { path: "/convert", heading: "Prove the fix with signed evidence" },
+  { path: "/platform", heading: "Assess. Monitor. Convert." },
+  { path: "/journey", heading: "Find out where you are — and what to do next" },
+  { path: "/docs/reference/tenant/qros-runway-get", heading: "GET /tenant/qros/runway" },
+]) {
+  test(`${path} renders without JavaScript`, async ({ browser, baseURL }) => {
+    const context = await browser.newContext({ baseURL, javaScriptEnabled: false });
+    try {
+      const page = await context.newPage();
+      const response = await page.goto(path);
+      expect(response?.status()).toBe(200);
+      const title = page.getByRole("heading", { level: 1, name: heading, exact: true });
+      await expect(title).toBeVisible();
+      const transparentAncestors = await title.evaluate((element) => {
+        const hidden: string[] = [];
+        for (let current: Element | null = element; current; current = current.parentElement) {
+          if (Number.parseFloat(getComputedStyle(current).opacity) === 0) {
+            hidden.push(current.tagName);
+          }
+        }
+        return hidden;
+      });
+      expect(transparentAncestors, "Public headings must not wait for JavaScript to become opaque").toEqual([]);
+      if (path.startsWith("/docs/")) {
+        await expect(page.getByRole("link", { name: /Request and response schemas in OpenAPI/i })).toBeVisible();
+      }
+    } finally {
+      await context.close();
+    }
+  });
+}
+
+test("session query handoff survives client navigation", async ({ page }) => {
+  const onboardingTokens: Array<string | null> = [];
+  await page.route("**/api/dashboard/me**", async (route) => {
+    onboardingTokens.push(new URL(route.request().url()).searchParams.get("onboarding"));
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({ authenticated: false, reason: "workos_user_missing" }),
+    });
+  });
+  await page.goto("/journey?onboarding=first-token");
+  await expect.poll(() => onboardingTokens.includes("first-token")).toBe(true);
+  await page.evaluate(() => {
+    window.history.pushState({}, "", "/journey?onboarding=second-token&session=refresh#next");
+  });
+  await expect.poll(() => onboardingTokens.includes("second-token")).toBe(true);
+  await expect.poll(() => new URL(page.url()).searchParams.has("session")).toBe(false);
+  expect(new URL(page.url()).searchParams.get("onboarding")).toBe("second-token");
+  expect(new URL(page.url()).hash).toBe("#next");
+  await expect.poll(() => page.evaluate(() => sessionStorage.getItem("qtangl_onboarding_token"))).toBe("second-token");
+});
+
 test("access page shows short form and mailto fallback", async ({ page }) => {
   await page.goto("/access");
   await expect(page.getByRole("heading", { name: /Request pilot access/i, level: 1 })).toBeVisible();
@@ -61,8 +116,9 @@ test("readiness nav links resolve", async ({ page }) => {
 
 test("journey page shows maturity model", async ({ page }) => {
   await page.goto("/journey");
-  await expect(page.getByRole("heading", { level: 1, name: /From first scan to proof of fix/i })).toBeVisible();
-  await expect(page.getByRole("button", { name: /3\. Monitored/i })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 1, name: /Find out where you are — and what to do next/i })).toBeVisible();
+  await page.getByRole("button", { name: /^3\. Monitored$/i }).click();
+  await expect(page.getByText("Stage 3 — Monitored", { exact: true })).toBeVisible();
 });
 
 test("resources hub links to ROI and FAQ", async ({ page }) => {
@@ -79,16 +135,22 @@ test("ROI calculator shows savings comparison", async ({ page }) => {
   await expect(page.getByText(/^With Qtangl Monitor$/i)).toBeVisible();
 });
 
-test("mini-assessment gate unlocks findings and live scan link", async ({ page }) => {
+test("mini-assessment gate separates authorized baseline and fixture demo", async ({ page }) => {
   test.setTimeout(60_000);
   await page.goto("/assess/mini");
   await expect(page.getByRole("heading", { level: 1, name: /Your Q-Day exposure in 60 seconds/i })).toBeVisible();
   await page.getByPlaceholder("you@company.com").fill("pilot@example.com");
   await page.getByRole("button", { name: /Show my results/i }).click();
   await expect(page.getByText(/Top 5 findings/i)).toBeVisible({ timeout: 15000 });
-  const liveScan = page.getByRole("link", { name: /Run live scan/i });
-  await expect(liveScan).toBeVisible();
-  await expect(liveScan).toHaveAttribute("href", /autorun=1/);
+  const baseline = page.getByRole("link", { name: "Start authorized baseline", exact: true });
+  await expect(baseline).toBeVisible();
+  await expect(baseline).toHaveAttribute("href", "/assess/start");
+  const fixtureDemo = page.getByRole("link", { name: "Try full demo (fixture)", exact: true });
+  await expect(fixtureDemo).toBeVisible();
+  const fixtureUrl = new URL((await fixtureDemo.getAttribute("href"))!, page.url());
+  expect(fixtureUrl.pathname).toBe("/assess");
+  expect(fixtureUrl.searchParams.get("autorun")).toBe("1");
+  expect(fixtureUrl.searchParams.get("intent")).toBe("sample");
 });
 
 test("executive briefing gate unlocks content", async ({ page }) => {

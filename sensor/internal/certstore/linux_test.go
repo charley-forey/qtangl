@@ -1,3 +1,5 @@
+//go:build linux
+
 package certstore
 
 import (
@@ -17,9 +19,10 @@ MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQC
 
 func TestScanLinuxEmptyDir(t *testing.T) {
 	dir := t.TempDir()
-	old := linuxCertDirs
+	oldDirs, oldNSS, oldJava := linuxCertDirs, nssPaths, javaCacerts
 	linuxCertDirs = []string{dir}
-	defer func() { linuxCertDirs = old }()
+	nssPaths, javaCacerts = nil, nil
+	defer func() { linuxCertDirs, nssPaths, javaCacerts = oldDirs, oldNSS, oldJava }()
 	_ = os.WriteFile(filepath.Join(dir, "test.crt"), []byte("not a cert"), 0644)
 	findings := scanLinux("testhost")
 	if len(findings) != 0 {

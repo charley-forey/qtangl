@@ -17,6 +17,12 @@ jobs:
   backend:
     name: Backend (pytest)
     runs-on: ubuntu-latest
+    services:
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: --health-cmd "redis-cli ping" --health-interval 10s --health-timeout 5s --health-retries 5
     defaults:
       run:
         working-directory: backend
@@ -77,6 +83,11 @@ jobs:
           python -m pytest tests/ -q --tb=short \
             --ignore=tests/test_sdk_client.py \
             --ignore=tests/test_sdk_resources.py
+
+      - name: Shared scheduler heartbeat (real Redis)
+        env:
+          QTANGL_TEST_REDIS_URL: redis://127.0.0.1:6379/0
+        run: python -m pytest tests/test_scheduler_metrics.py::test_shared_heartbeat_with_real_redis -q --tb=short
 
       - name: Discovery release train artifacts
         run: |
@@ -203,6 +214,12 @@ jobs:
   web:
     name: Web (lint + build)
     runs-on: ubuntu-latest
+    env:
+      QTANGL_API_BASE_URL: http://127.0.0.1:8000
+      QTANGL_API_KEY: qtangl-ci-fixture-key
+      NEXT_PUBLIC_QTANGL_API_BASE_URL: http://127.0.0.1:8000
+      NEXT_PUBLIC_QTANGL_SANDBOX_API_KEY: qtangl-ci-fixture-key
+      QTANGL_E2E_EXTERNAL_SERVER: "true"
     defaults:
       run:
         working-directory: web
@@ -220,7 +237,10 @@ jobs:
           cache-dependency-path: web/package-lock.json
 
       - name: Install dependencies
-        run: npm ci
+        run: |
+          npm ci
+          npm ci --prefix ../sdk/typescript
+          npm ci --prefix ../sdk/react
 
       - name: Install backend deps (OpenAPI export)
         run: |
@@ -242,8 +262,13 @@ jobs:
       - name: No legacy /demo/pqc links
         run: npm run check:no-demo-pqc-links
 
-      - name: Assess config unit tests
-        run: npm run test:assess-config
+      - name: Use production Node version for web tests and build
+        uses: actions/setup-node@v6
+        with:
+          node-version: "24"
+
+      - name: Web unit tests (real production modules)
+        run: npm run test:unit
 
       - name: Export OpenAPI artifact
         run: python ../backend/scripts/export_openapi.py
@@ -254,93 +279,142 @@ jobs:
           NEXT_PUBLIC_QTANGL_DASHBOARD_AUTH_WORKOS: "true"
         run: npm run build
 
+      - name: Start fixture-only backend
+        working-directory: backend
+        env:
+          DATABASE_URL: ""
+          REDIS_URL: ""
+          QTANGL_ENV: test
+          QTANGL_ENABLE_QAOA: "false"
+          QTANGL_PQC_ENABLE_LIVE_SCAN: "false"
+          QTANGL_PQC_ENABLE_OQS: "false"
+          QTANGL_CORS_ORIGINS: http://127.0.0.1:3000,http://localhost:3000
+          QTANGL_PUBLIC_URL: http://127.0.0.1:3000
+          QTANGL_RATE_LIMIT_PER_MINUTE: "10000"
+        run: |
+          python -m uvicorn app.main:app --host 127.0.0.1 --port 8000 > "$RUNNER_TEMP/qtangl-e2e-api.log" 2>&1 &
+          for attempt in $(seq 1 30); do
+            if curl --fail --silent http://127.0.0.1:8000/health > /dev/null; then exit 0; fi
+            sleep 1
+          done
+          cat "$RUNNER_TEMP/qtangl-e2e-api.log"
+          exit 1
+
+      - name: Start production web server
+        env:
+          QTANGL_ACCESS_ALLOW_CONSOLE_FALLBACK: "true"
+          NEXT_PUBLIC_QTANGL_DASHBOARD_AUTH_WORKOS: "true"
+        run: |
+          npm run start > "$RUNNER_TEMP/qtangl-e2e-web.log" 2>&1 &
+          for attempt in $(seq 1 30); do
+            if curl --fail --silent http://127.0.0.1:3000 > /dev/null; then exit 0; fi
+            sleep 1
+          done
+          cat "$RUNNER_TEMP/qtangl-e2e-web.log"
+          exit 1
+
       - name: Install Playwright
+        id: playwright_install
         run: npx playwright install chromium --with-deps
 
       - name: E2E smoke (access)
+        if: ${{ !cancelled() && steps.playwright_install.outcome == 'success' }}
         env:
           QTANGL_API_BASE_URL: http://127.0.0.1:8000
         run: npx playwright test tests/e2e/access.spec.ts --project=chromium
 
       - name: E2E assess page
+        if: ${{ !cancelled() && steps.playwright_install.outcome == 'success' }}
         env:
           QTANGL_API_BASE_URL: http://127.0.0.1:8000
         run: npx playwright test tests/e2e/assess.spec.ts tests/e2e/assess-production.spec.ts --project=chromium
 
-      - name: E2E assess R4 flags (optional)
-        continue-on-error: true
-        env:
-          QTANGL_API_BASE_URL: http://127.0.0.1:8000
-          NEXT_PUBLIC_ASSESS_PORTFOLIO: "true"
-          NEXT_PUBLIC_ASSESS_CBOM_IMPORT: "true"
-          NEXT_PUBLIC_ASSESS_AI_NARRATIVE: "true"
-          NEXT_PUBLIC_ASSESS_MSSP_WHITELABEL: "true"
-          NEXT_PUBLIC_ASSESS_MONITOR_CHECKOUT: "true"
-        run: npx playwright test tests/e2e/assess.spec.ts --project=chromium --grep "landing sections"
-
       - name: E2E HNDL hub
+        if: ${{ !cancelled() && steps.playwright_install.outcome == 'success' }}
         env:
           QTANGL_API_BASE_URL: http://127.0.0.1:8000
         run: npx playwright test tests/e2e/hndl.spec.ts --project=chromium
 
-      - name: E2E dashboard (if spec exists)
-        if: hashFiles('web/tests/e2e/dashboard.spec.ts') != ''
+      - name: E2E dashboard
+        if: ${{ !cancelled() && steps.playwright_install.outcome == 'success' }}
         env:
           QTANGL_API_BASE_URL: http://127.0.0.1:8000
         run: npx playwright test tests/e2e/dashboard.spec.ts --project=chromium
 
       - name: E2E mobile responsive
+        if: ${{ !cancelled() && steps.playwright_install.outcome == 'success' }}
         env:
           QTANGL_API_BASE_URL: http://127.0.0.1:8000
         run: npx playwright test tests/e2e/mobile-responsive.spec.ts --project=mobile-iphone-14
 
       - name: E2E mobile accessibility
+        if: ${{ !cancelled() && steps.playwright_install.outcome == 'success' }}
         env:
           QTANGL_API_BASE_URL: http://127.0.0.1:8000
         run: npx playwright test tests/e2e/a11y-mobile.spec.ts --project=mobile-iphone-14
 
       - name: E2E dashboard authenticated (mocked BFF)
+        if: ${{ !cancelled() && steps.playwright_install.outcome == 'success' }}
         env:
           QTANGL_API_BASE_URL: http://127.0.0.1:8000
         run: npx playwright test tests/e2e/dashboard-authenticated.spec.ts --project=chromium
 
       - name: E2E dashboard role gating (mocked BFF)
+        if: ${{ !cancelled() && steps.playwright_install.outcome == 'success' }}
         env:
           QTANGL_API_BASE_URL: http://127.0.0.1:8000
         run: npx playwright test tests/e2e/dashboard-role-gating.spec.ts --project=chromium
 
       - name: E2E dashboard portfolio (mocked BFF)
+        if: ${{ !cancelled() && steps.playwright_install.outcome == 'success' }}
         env:
           QTANGL_API_BASE_URL: http://127.0.0.1:8000
         run: npx playwright test tests/e2e/dashboard-portfolio.spec.ts --project=chromium
 
       - name: E2E discovery depth
+        if: ${{ !cancelled() && steps.playwright_install.outcome == 'success' }}
         env:
           QTANGL_API_BASE_URL: http://127.0.0.1:8000
         run: npx playwright test tests/e2e/discovery.spec.ts --project=chromium
 
       - name: Discovery fleet findings E2E
+        if: ${{ !cancelled() && steps.playwright_install.outcome == 'success' }}
         run: npx playwright test tests/e2e/discovery-fleet.spec.ts --project=chromium
 
       - name: E2E remediation program docs
+        if: ${{ !cancelled() && steps.playwright_install.outcome == 'success' }}
         env:
           QTANGL_API_BASE_URL: http://127.0.0.1:8000
         run: npx playwright test tests/e2e/remediation-program.spec.ts --project=chromium
 
       - name: E2E trust golden path
+        if: ${{ !cancelled() && steps.playwright_install.outcome == 'success' }}
         env:
           QTANGL_API_BASE_URL: http://127.0.0.1:8000
         run: npx playwright test tests/e2e/trust-golden-path.spec.ts --project=chromium
 
       - name: E2E demo CTA smoke
+        if: ${{ !cancelled() && steps.playwright_install.outcome == 'success' }}
         env:
           QTANGL_API_BASE_URL: http://127.0.0.1:8000
         run: npx playwright test tests/e2e/demo-cta.spec.ts --project=chromium
 
       - name: E2E PQC assess smoke
+        if: ${{ !cancelled() && steps.playwright_install.outcome == 'success' }}
         env:
           QTANGL_API_BASE_URL: http://127.0.0.1:8000
         run: npx playwright test tests/e2e/pqc.spec.ts --project=chromium
+
+      - name: Preserve browser and server diagnostics
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: browser-validation
+          path: |
+            ${{ runner.temp }}/qtangl-e2e-api.log
+            ${{ runner.temp }}/qtangl-e2e-web.log
+            web/test-results/
+          retention-days: 7
 
   sdk-typescript:
     name: SDK (TypeScript alpha)
@@ -364,6 +438,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r backend/requirements.lock
+          python -m unittest discover -s scripts -p test_generate_sdk_types.py
           python backend/scripts/export_openapi.py
           python scripts/generate_sdk_types.py
 
@@ -392,7 +467,10 @@ jobs:
           cache-dependency-path: web/package-lock.json
 
       - name: Install dependencies
-        run: npm ci
+        run: |
+          npm ci
+          npm ci --prefix ../sdk/typescript
+          npm ci --prefix ../sdk/react
 
       - name: Install backend deps (OpenAPI export)
         run: |

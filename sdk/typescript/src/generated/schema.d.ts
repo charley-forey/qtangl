@@ -3367,7 +3367,7 @@ export interface paths {
         put?: never;
         /**
          * Jira Webhook
-         * @description Optional fast-path for Jira issue_updated events.
+         * @description Authenticated relay for Jira issue_updated events; not a native webhook verifier.
          */
         post: operations["jira_webhook_integrations_jira_webhook_post"];
         delete?: never;
@@ -3387,7 +3387,7 @@ export interface paths {
         put?: never;
         /**
          * Slack Inbound Action
-         * @description Inbound Slack interactive actions — ack/assign alerts.
+         * @description Authenticated Slack relay; native Slack signatures are not verified here.
          */
         post: operations["slack_inbound_action_integrations_slack_actions_post"];
         delete?: never;
@@ -3407,7 +3407,7 @@ export interface paths {
         put?: never;
         /**
          * Teams Inbound Action
-         * @description Inbound Microsoft Teams action payloads — same semantics as Slack.
+         * @description Authenticated Teams relay; native Bot Framework JWTs are not accepted.
          */
         post: operations["teams_inbound_action_integrations_teams_actions_post"];
         delete?: never;
@@ -15194,8 +15194,15 @@ export interface operations {
     };
     jira_webhook_integrations_jira_webhook_post: {
         parameters: {
-            query?: never;
-            header?: never;
+            query?: {
+                api_key?: string | null;
+                count_toward_rate_limit?: boolean;
+            };
+            header?: {
+                authorization?: string | null;
+                "x-api-key"?: string | null;
+                "X-Qtangl-Session"?: string | null;
+            };
             path?: never;
             cookie?: never;
         };
@@ -15210,14 +15217,30 @@ export interface operations {
                     "application/json": {
                         [key: string]: unknown;
                     };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
                 };
             };
         };
     };
     slack_inbound_action_integrations_slack_actions_post: {
         parameters: {
-            query?: never;
-            header?: never;
+            query?: {
+                api_key?: string | null;
+                count_toward_rate_limit?: boolean;
+            };
+            header?: {
+                authorization?: string | null;
+                "x-api-key"?: string | null;
+                "X-Qtangl-Session"?: string | null;
+            };
             path?: never;
             cookie?: never;
         };
@@ -15234,12 +15257,28 @@ export interface operations {
                     };
                 };
             };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
         };
     };
     teams_inbound_action_integrations_teams_actions_post: {
         parameters: {
-            query?: never;
-            header?: never;
+            query?: {
+                api_key?: string | null;
+                count_toward_rate_limit?: boolean;
+            };
+            header?: {
+                authorization?: string | null;
+                "x-api-key"?: string | null;
+                "X-Qtangl-Session"?: string | null;
+            };
             path?: never;
             cookie?: never;
         };
@@ -15254,6 +15293,15 @@ export interface operations {
                     "application/json": {
                         [key: string]: unknown;
                     };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
                 };
             };
         };

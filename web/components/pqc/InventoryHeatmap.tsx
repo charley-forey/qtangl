@@ -58,7 +58,7 @@ export default function InventoryHeatmap({
 
   return (
     <div className="space-y-4">
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto" tabIndex={0} role="region" aria-label="Algorithm by severity heatmap">
         <table className="w-full min-w-[20rem] border-collapse text-xs">
           <caption className="sr-only">Algorithm by severity heatmap</caption>
           <thead>

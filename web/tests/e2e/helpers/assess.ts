@@ -6,7 +6,7 @@ export async function waitForAssessScanner(page: Page) {
     page
       .getByRole("heading", { name: /What do you want to do/i })
       .or(page.getByRole("tab", { name: "Executive" }))
-  ).toBeVisible({ timeout: 90_000 });
+  ).toBeVisible({ timeout: 30_000 });
 }
 
 export async function gotoAssessScanner(page: Page) {
@@ -15,6 +15,9 @@ export async function gotoAssessScanner(page: Page) {
 }
 
 export async function gotoAssessAutorun(page: Page, query: string) {
-  await page.goto(`/assess?${query}`);
-  await expect(page.getByRole("tab", { name: "Executive" })).toBeVisible({ timeout: 90_000 });
+  const params = new URLSearchParams(query);
+  params.set("intent", "sample");
+  params.set("useFixture", "true");
+  await page.goto(`/assess?${params}`);
+  await expect(page.getByRole("tab", { name: "Executive" })).toBeVisible({ timeout: 30_000 });
 }

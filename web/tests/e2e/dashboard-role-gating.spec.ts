@@ -64,15 +64,16 @@ test.describe("Dashboard role gating", () => {
     await mockDashboardTenantRoutes(page, { summary: summaryPayload });
   });
 
-  test("viewer sees overview and scans tabs only", async ({ page }) => {
-    await page.goto("/command-center?tab=overview");    await expect(page.getByRole("tabpanel")).toBeVisible({ timeout: 15000 });
-    await expect(page.locator("#dashboard-tabs").getByRole("button", { name: "Overview" })).toBeVisible();
-    await expect(page.locator("#dashboard-tabs").getByRole("button", { name: "Scans" })).toBeVisible();
+  test("viewer sees posture and assess tabs only", async ({ page }) => {
+    await page.goto("/command-center?tab=overview");
+    await expect(page.getByRole("tabpanel")).toBeVisible({ timeout: 15000 });
+    await expect(page.locator("#dashboard-tabs").getByRole("button", { name: "Posture" })).toBeVisible();
+    await expect(page.locator("#dashboard-tabs").getByRole("button", { name: "Assess" })).toBeVisible();
     await expect(page.locator("#dashboard-tabs").getByRole("button", { name: "Monitor" })).toHaveCount(0);
     await expect(page.locator("#dashboard-tabs").getByRole("button", { name: "Remediate" })).toHaveCount(0);
   });
 
-  test("customer_viewer sees overview and scans only", async ({ page }) => {
+  test("customer_viewer sees posture and assess only", async ({ page }) => {
     await mockDashboardSession(page, {
       email: "customer@test.com",
       tenantId: "tenant-child",
@@ -83,8 +84,8 @@ test.describe("Dashboard role gating", () => {
     });
     await page.goto("/command-center");
     await expect(page.getByRole("tabpanel")).toBeVisible({ timeout: 15000 });
-    await expect(page.getByRole("button", { name: "Overview" })).toBeVisible();
-    await expect(page.getByRole("button", { name: "Scans" })).toBeVisible();
+    await expect(page.getByRole("button", { name: "Posture" })).toBeVisible();
+    await expect(page.getByRole("button", { name: "Assess" })).toBeVisible();
     await expect(page.getByRole("button", { name: "Settings" })).toHaveCount(0);
     await expect(page.getByRole("button", { name: "Portfolio" })).toHaveCount(0);
   });

@@ -342,7 +342,7 @@ cd sensor
 go build -o qtangl-sensor ./cmd/qtangl-sensor
 
 # Enroll (token from dashboard → Settings → Discovery)
-./qtangl-sensor --enroll ENROLLMENT_TOKEN --api-url http://127.0.0.1:8000
+./qtangl-sensor --enroll ENROLLMENT_TOKEN --api http://127.0.0.1:8000
 
 # Scan and push
 ./qtangl-sensor --push
@@ -442,6 +442,7 @@ cd web
 npm ci
 npm run lint
 npm run build
+npm run test:unit            # Node.js 24, matching Vercel; imports production modules
 npm run test:access
 npm run test:assess-config
 npm run test:e2e              # full Playwright

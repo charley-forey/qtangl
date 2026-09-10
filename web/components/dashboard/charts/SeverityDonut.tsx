@@ -22,14 +22,13 @@ export default function SeverityDonut({
   }
 
   let offset = 0;
-  const gradient = slices
-    .map((slice) => {
-      const pct = (slice.value / total) * 100;
-      const start = offset;
-      offset += pct;
-      return `${slice.color} ${start}% ${offset}%`;
-    })
-    .join(", ");
+  const stops: string[] = [];
+  for (const slice of slices) {
+    const start = offset;
+    offset += (slice.value / total) * 100;
+    stops.push(`${slice.color} ${start}% ${offset}%`);
+  }
+  const gradient = stops.join(", ");
 
   return (
     <Card tone="ghost" className="border border-[var(--border-subtle)] p-4">
