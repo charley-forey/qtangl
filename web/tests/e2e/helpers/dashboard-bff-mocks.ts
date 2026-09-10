@@ -112,6 +112,12 @@ export async function mockDashboardQrosRoutes(page: Page) {
   await page.route("**/api/dashboard/tenant/qros/**", async (route) => {
     const url = route.request().url();
     const method = route.request().method();
+    if (url.endsWith("/qros/push-briefing") && method === "GET") {
+      return route.fulfill({ json: {
+        channels: ["email"], recipients: [], cadenceHours: 24, enabled: false,
+        firstRunAt: null, requiresSave: false, lastDelivery: null,
+      } });
+    }
     if (url.includes("/next-actions") && method === "GET") {
       return route.fulfill({
         status: 200,
