@@ -48,6 +48,8 @@ Operational follow-up: track volume utilization and growth, test backup/restore,
 
 Worker logs establish that scheduling resumed after recovery: seven scans queued at 04:22:32 UTC and a scan completed at 04:23:49 UTC on September 10. Email delivery repeatedly timed out; delivery is not verified. The API cannot see the worker's process-local heartbeat, so shared heartbeat visibility is being repaired. Sensor Windows CI confirmed an undefined Linux-only function; a non-Linux stub and isolated Linux tests are ready for cross-platform CI. Removed a placeholder workflow step that merely echoed signing commands and falsely stated a transparency entry existed; signed sensor release artifacts still need a real release/signing workflow.
 
+Sensor CI at `82aa97d` passed Linux, Windows and macOS amd64 builds and Linux unit tests. Shared heartbeat unit checks pass (13 tests); the real Redis check is opt-in and wired to an isolated CI service. Corrected the dashboard's Unix-seconds conversion for heartbeat dates. Public pages were forced into client-only rendering by the global session provider; a local Suspense boundary and no-JavaScript regression checks address that issue. CI browser checks now use the production build. Assessment integration previously had neither a local API process nor the browser API URL/key configured; CI now starts a local backend with live scans disabled and a dedicated fixture key.
+
 ## Prioritized roadmap
 
 | Horizon | Deliverable | Proposed acceptance gate |

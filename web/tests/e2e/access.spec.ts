@@ -1,5 +1,41 @@
 import { test, expect } from "@playwright/test";
 
+test("public journey and API reference render without JavaScript", async ({ browser, baseURL }) => {
+  const context = await browser.newContext({ baseURL, javaScriptEnabled: false });
+  try {
+    const page = await context.newPage();
+    await page.goto("/journey");
+    await expect(page.getByRole("heading", { level: 1, name: /Find out where you are — and what to do next/i })).toBeVisible();
+    await page.goto("/docs/reference/tenant/qros-runway-get");
+    await expect(page.getByRole("heading", { level: 1, name: "GET /tenant/qros/runway", exact: true })).toBeVisible();
+    await expect(page.getByRole("link", { name: /Request and response schemas in OpenAPI/i })).toBeVisible();
+  } finally {
+    await context.close();
+  }
+});
+
+test("session query handoff survives client navigation", async ({ page }) => {
+  const onboardingTokens: Array<string | null> = [];
+  await page.route("**/api/dashboard/me**", async (route) => {
+    onboardingTokens.push(new URL(route.request().url()).searchParams.get("onboarding"));
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({ authenticated: false, reason: "workos_user_missing" }),
+    });
+  });
+  await page.goto("/journey?onboarding=first-token");
+  await expect.poll(() => onboardingTokens.includes("first-token")).toBe(true);
+  await page.evaluate(() => {
+    window.history.pushState({}, "", "/journey?onboarding=second-token&session=refresh#next");
+  });
+  await expect.poll(() => onboardingTokens.includes("second-token")).toBe(true);
+  await expect.poll(() => new URL(page.url()).searchParams.has("session")).toBe(false);
+  expect(new URL(page.url()).searchParams.get("onboarding")).toBe("second-token");
+  expect(new URL(page.url()).hash).toBe("#next");
+  await expect.poll(() => page.evaluate(() => sessionStorage.getItem("qtangl_onboarding_token"))).toBe("second-token");
+});
+
 test("access page shows short form and mailto fallback", async ({ page }) => {
   await page.goto("/access");
   await expect(page.getByRole("heading", { name: /Request pilot access/i, level: 1 })).toBeVisible();

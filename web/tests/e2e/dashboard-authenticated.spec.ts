@@ -168,6 +168,18 @@ test.describe("Dashboard authenticated (mocked BFF)", () => {
     await expect(page.getByText("Enable weekly monitor cadence")).not.toBeVisible({ timeout: 10000 });
   });
 
+  test("system health renders scheduler Unix seconds as a current date", async ({ page }) => {
+    await page.route("**/api/dashboard/health", (route) => route.fulfill({
+      status: 200, contentType: "application/json", body: JSON.stringify({
+        redis: true, workerQueueEnabled: true, schedulerStale: false,
+        scheduler: { lastTickAt: 1789014152 },
+      }),
+    }));
+    await page.goto("/command-center?tab=overview&ccv2=1");
+    await page.getByRole("button", { name: /All systems normal|System degraded|System issue detected/ }).click();
+    await expect(page.getByText(/^Scheduler tick:/)).toContainText("2026");
+  });
+
   for (const width of [390, 1280]) {
     test(`authenticated overview accessibility at ${width}px`, async ({ page }) => {
       await page.setViewportSize({ width, height: 844 });

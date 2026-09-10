@@ -189,10 +189,15 @@ def health_ready() -> dict[str, object]:
     stale = False
     last_tick = metrics.get("lastTickAt")
     interval = float(metrics.get("intervalSec") or 60)
-    if metrics.get("schedulerEnabled") and last_tick:
+    if metrics.get("schedulerEnabled"):
+        import math
         import time
 
-        stale = (time.time() - float(last_tick)) > (interval * 2)
+        try:
+            tick_age = time.time() - float(last_tick)
+            stale = not math.isfinite(tick_age) or tick_age < 0 or tick_age > (interval * 2)
+        except (TypeError, ValueError):
+            stale = True
     return {
         "status": "ready" if ready and not stale else "degraded",
         "database": db_ok,
