@@ -10,12 +10,12 @@ type PortfolioTarget = {
   target?: string;
   label?: string;
   businessUnit?: string;
-  latestReadinessScore?: number;
+  latestReadinessScore?: number | null;
 };
 
 type PortfolioResponse = {
   targets?: PortfolioTarget[];
-  rollup?: { overallReadiness?: number; targetCount?: number };
+  rollup?: { overallReadiness?: number | null; targetCount?: number; scoreScope?: string };
 };
 
 export default function AssessPortfolioPanel({ apiKey }: { apiKey?: string }) {
@@ -66,11 +66,11 @@ export default function AssessPortfolioPanel({ apiKey }: { apiKey?: string }) {
 
   return (
     <div className="space-y-3">
-      {data?.rollup?.overallReadiness != null ? (
-        <p className="text-sm text-[var(--color-gray-300)]">
-          Portfolio rollup: <span className="text-white">{data.rollup.overallReadiness}</span> across{" "}
-          {targets.length} target(s)
-        </p>
+      <p className="text-sm text-[var(--color-gray-300)]">
+        Portfolio readiness: <span className="text-white">{data?.rollup?.overallReadiness ?? "Readiness unavailable"}</span>
+      </p>
+      {data?.rollup?.scoreScope ? (
+        <p className="text-xs text-[var(--color-gray-400)]">{data.rollup.scoreScope}</p>
       ) : null}
       <ul className="space-y-2">
         {targets.slice(0, 8).map((item) => (
@@ -80,7 +80,7 @@ export default function AssessPortfolioPanel({ apiKey }: { apiKey?: string }) {
           >
             <span className="text-white">{item.label ?? item.target}</span>
             <span className="text-[var(--color-gray-400)]">
-              {item.latestReadinessScore != null ? item.latestReadinessScore : "—"}
+              {item.latestReadinessScore != null ? item.latestReadinessScore : "Readiness unavailable"}
             </span>
           </li>
         ))}

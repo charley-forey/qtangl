@@ -59,9 +59,10 @@ export type DashboardSummary = {
   trend: Array<{ date: string; score: number; scanId: string; band?: string }>;
   digest: WeeklyDigest | null;
   commandCenter: {
-    businessUnits: Record<string, number>;
+    businessUnits: Record<string, number | null>;
+    scoreScope?: string;
     businessUnitDeltas?: Record<string, number | null>;
-    highRiskTargets?: Array<{ target: string; readinessScore: number }>;
+    highRiskTargets?: Array<{ target: string; readinessScore: number | null }>;
     recommendedActions?: string[];
   } | null;
   alerts: DashboardAlert[];
@@ -148,7 +149,7 @@ export type SettingsTabBundle = {
 export type PortfolioTabBundle = {
   children: Array<Record<string, unknown>>;
   rollup: Record<string, unknown> | null;
-  aggregateReadiness: number;
+  aggregateReadiness: number | null;
   customersBelowThreshold: number;
   atRiskCount: number;
   totalOpenAlerts?: number;

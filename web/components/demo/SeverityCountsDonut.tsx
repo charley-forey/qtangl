@@ -38,6 +38,17 @@ export default function SeverityCountsDonut({ counts }: { counts: Record<string,
           <span className="text-xl font-semibold text-white">{total}</span>
         </div>
       </div>
+      <ul aria-label="Severity counts" className="mt-3 space-y-1 text-xs text-[var(--color-gray-300)]">
+        {chartData.map((entry) => (
+          <li key={entry.name} className="flex items-center justify-between gap-3">
+            <span className="flex items-center gap-2 capitalize">
+              <span aria-hidden="true" className="h-2 w-2 rounded-full" style={{ backgroundColor: entry.fill }} />
+              {entry.name}
+            </span>
+            <span className="font-mono">{entry.value}</span>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }

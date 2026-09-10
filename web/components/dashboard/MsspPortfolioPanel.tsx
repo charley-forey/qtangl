@@ -28,7 +28,7 @@ export default function MsspPortfolioPanel({
   canAdmin?: boolean;
 }) {
   const children = bundle?.children ?? [];
-  const rollup = bundle?.rollup as { overallReadiness?: number; byBusinessUnit?: Record<string, number> } | null;
+  const rollup = bundle?.rollup as { overallReadiness?: number | null; scoreScope?: string } | null;
   const [showWizard, setShowWizard] = useState(children.length === 0 && canAdmin);
   const [apiRollup, setApiRollup] = useState<PortfolioRollup | null>(null);
 
@@ -69,10 +69,11 @@ export default function MsspPortfolioPanel({
     );
   }
 
-  const businessUnits: Record<string, number> = {};
+  const businessUnits: Record<string, number | null> = {};
   for (const child of children) {
     const name = String(child.childTenantName ?? child.tenantName ?? child.childTenantId ?? "customer");
-    const score = Number(child.latestReadiness ?? child.latestReadinessScore ?? 0);
+    const rawScore = child.latestReadiness !== undefined ? child.latestReadiness : child.latestReadinessScore;
+    const score = typeof rawScore === "number" && Number.isFinite(rawScore) ? rawScore : null;
     if (name) businessUnits[name] = score;
   }
 
@@ -80,9 +81,9 @@ export default function MsspPortfolioPanel({
     <div className="space-y-4">
       <div className="grid gap-4 sm:grid-cols-4">
         <Card tone="panel">
-          <Eyebrow>Aggregate readiness</Eyebrow>
+          <Eyebrow>Customer tenant readiness</Eyebrow>
           <p className="mt-2 text-3xl font-semibold text-white">
-            {bundle?.aggregateReadiness ?? rollup?.overallReadiness ?? apiRollup?.avgReadiness ?? "—"}
+            {(bundle ? bundle.aggregateReadiness : apiRollup?.avgReadiness) ?? "Readiness unavailable"}
           </p>
           {apiRollup?.childCount != null ? (
             <p className="mt-1 text-[10px] text-[var(--color-gray-500)]">across {apiRollup.childCount} tenants</p>
@@ -102,6 +103,14 @@ export default function MsspPortfolioPanel({
         </Card>
       </div>
 
+      {rollup ? (
+        <Card tone="panel">
+          <Eyebrow>Target portfolio readiness</Eyebrow>
+          <p className="mt-2 text-3xl font-semibold text-white">{rollup.overallReadiness ?? "Readiness unavailable"}</p>
+          {rollup.scoreScope ? <p className="mt-2 text-xs text-[var(--color-gray-400)]">{rollup.scoreScope}</p> : null}
+        </Card>
+      ) : null}
+
       {ccFlags.portfolio ? (
         <Card tone="panel" className="p-4">
           <Eyebrow>Partner exports</Eyebrow>
@@ -113,7 +122,7 @@ export default function MsspPortfolioPanel({
       ) : null}
 
       {Object.keys(businessUnits).length > 0 ? (
-        <BusinessUnitHeatmap businessUnits={businessUnits} />
+        <BusinessUnitHeatmap businessUnits={businessUnits} title="Customer tenant readiness" />
       ) : null}
 
       {children.length > 0 ? (
