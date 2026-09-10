@@ -30,6 +30,7 @@ Success means a user can follow **authorized baseline â†’ explainable findings â
 ## Verified results and production repair
 
 - Final backend run: **475 passed, 2 skipped**; includes the legacy database upgrade repair and scheduling authorization/quota checks.
+- Clean CI at `436f6fd`: **487 passed, 2 skipped**, followed by successful OpenAPI sync and SDK dogfood checks. This includes the authenticated callback changes and regenerated dependency locks.
 - Web unit checks: **24 passed**, importing actual production code, including HTTP 204 deletion and failed-request handling.
 - SDK checks: Python **3 passed**, TypeScript **6 passed**, React **2 passed**. Removed both SDKs' unnecessary dependency on the web application; refreshed all affected locks.
 - Lint error gate passed after six baseline errors were fixed. Existing non-blocking warnings remain.
@@ -38,6 +39,7 @@ Success means a user can follow **authorized baseline â†’ explainable findings â
 - Vercel preview for commit `1c5d3e2` built successfully. A clean local install and the 24 real-module unit checks also completed. Production publication and browser regressions remain release gates.
 - Clean CI exposed SDK generation using a Windows-only subprocess command, missing PDF dependencies in the lockfile, and 73 missing API reference entries. These are being repaired before another release run.
 - Regenerated backend locks with four security upgrades passed `pip-audit` with no known vulnerabilities and 45 focused compatibility tests, including portfolio PDF merging.
+- Frontend lock audit now reports zero vulnerabilities after patched Next.js 16.3.4, sharp 0.35.4 and compatible transitive updates. AuthKit resolved to 2.17.0 within its existing range; fresh build/auth browser checks remain required. No forced upgrades or overrides were used.
 - Slack, Teams and Jira custom JSON callbacks now require operator/admin authentication and enforce tenant identity; 23 security regressions pass. Native provider signature/JWT verification is not implemented: callers must use an authenticated relay.
 - API catalog coverage now passes for 307 backend route declarations (304 documented unique entries plus three internal exclusions). Added 73 missing references with canonical schema links, authenticated relay limitations, and no invented example responses.
 - Local browser run: graph, briefing and recommendations passed; ten other cases failed during startup/loading or with a non-application response, `This human wandered off.` A direct HTTP request reproduced that response. Desktop/mobile accessibility and full dashboard behavior therefore remain unverified pending clean CI execution; do not count this run as a passing browser gate.
@@ -53,6 +55,12 @@ Operational follow-up: track volume utilization and growth, test backup/restore,
 | Days 61â€“90 | Repeatable onboarding and board reporting, measured customer outcomes | Compare pilot baseline with time to first evidence, time to verified remediation, repeat use and delivery reliability; expand only capabilities used successfully by pilots |
 
 These are proposed targets and sequencing, not promises of dates or achieved results. Reuse existing engineering and product tracks in this directory; do not add another speculative platform layer.
+
+### Scope filtering acceptance
+
+The next complete filtering increment must select original scan/asset records before computing metrics. Business units should use portfolio target assignments with exact normalized host matching; framework selection should use canonical asset `standardsRefs`. Runtime deployment environment is not a customer asset environment and must not be used as one. Do not filter capped display summaries or alter signed reports.
+
+Use the same resolved scope for summary, tab bundles, graph and next actions. Include scope in client cache keys and ignore stale responses. Unmapped action sources need an explicit unscoped state, not an invented assignment. Verify sibling domains, two business units, unassigned targets, framework intersection, repeated scans, no matches, back/reset navigation, tenant isolation and slow previous requests. A no-match scope must show unavailable metrics and empty results consistently.
 
 ## Experience and data standards
 

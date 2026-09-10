@@ -263,19 +263,23 @@ jobs:
         run: npm run build
 
       - name: Install Playwright
+        id: playwright_install
         run: npx playwright install chromium --with-deps
 
       - name: E2E smoke (access)
+        if: ${{ !cancelled() && steps.playwright_install.outcome == 'success' }}
         env:
           QTANGL_API_BASE_URL: http://127.0.0.1:8000
         run: npx playwright test tests/e2e/access.spec.ts --project=chromium
 
       - name: E2E assess page
+        if: ${{ !cancelled() && steps.playwright_install.outcome == 'success' }}
         env:
           QTANGL_API_BASE_URL: http://127.0.0.1:8000
         run: npx playwright test tests/e2e/assess.spec.ts tests/e2e/assess-production.spec.ts --project=chromium
 
       - name: E2E assess R4 flags (optional)
+        if: ${{ !cancelled() && steps.playwright_install.outcome == 'success' }}
         continue-on-error: true
         env:
           QTANGL_API_BASE_URL: http://127.0.0.1:8000
@@ -287,65 +291,77 @@ jobs:
         run: npx playwright test tests/e2e/assess.spec.ts --project=chromium --grep "landing sections"
 
       - name: E2E HNDL hub
+        if: ${{ !cancelled() && steps.playwright_install.outcome == 'success' }}
         env:
           QTANGL_API_BASE_URL: http://127.0.0.1:8000
         run: npx playwright test tests/e2e/hndl.spec.ts --project=chromium
 
-      - name: E2E dashboard (if spec exists)
-        if: hashFiles('web/tests/e2e/dashboard.spec.ts') != ''
+      - name: E2E dashboard
+        if: ${{ !cancelled() && steps.playwright_install.outcome == 'success' }}
         env:
           QTANGL_API_BASE_URL: http://127.0.0.1:8000
         run: npx playwright test tests/e2e/dashboard.spec.ts --project=chromium
 
       - name: E2E mobile responsive
+        if: ${{ !cancelled() && steps.playwright_install.outcome == 'success' }}
         env:
           QTANGL_API_BASE_URL: http://127.0.0.1:8000
         run: npx playwright test tests/e2e/mobile-responsive.spec.ts --project=mobile-iphone-14
 
       - name: E2E mobile accessibility
+        if: ${{ !cancelled() && steps.playwright_install.outcome == 'success' }}
         env:
           QTANGL_API_BASE_URL: http://127.0.0.1:8000
         run: npx playwright test tests/e2e/a11y-mobile.spec.ts --project=mobile-iphone-14
 
       - name: E2E dashboard authenticated (mocked BFF)
+        if: ${{ !cancelled() && steps.playwright_install.outcome == 'success' }}
         env:
           QTANGL_API_BASE_URL: http://127.0.0.1:8000
         run: npx playwright test tests/e2e/dashboard-authenticated.spec.ts --project=chromium
 
       - name: E2E dashboard role gating (mocked BFF)
+        if: ${{ !cancelled() && steps.playwright_install.outcome == 'success' }}
         env:
           QTANGL_API_BASE_URL: http://127.0.0.1:8000
         run: npx playwright test tests/e2e/dashboard-role-gating.spec.ts --project=chromium
 
       - name: E2E dashboard portfolio (mocked BFF)
+        if: ${{ !cancelled() && steps.playwright_install.outcome == 'success' }}
         env:
           QTANGL_API_BASE_URL: http://127.0.0.1:8000
         run: npx playwright test tests/e2e/dashboard-portfolio.spec.ts --project=chromium
 
       - name: E2E discovery depth
+        if: ${{ !cancelled() && steps.playwright_install.outcome == 'success' }}
         env:
           QTANGL_API_BASE_URL: http://127.0.0.1:8000
         run: npx playwright test tests/e2e/discovery.spec.ts --project=chromium
 
       - name: Discovery fleet findings E2E
+        if: ${{ !cancelled() && steps.playwright_install.outcome == 'success' }}
         run: npx playwright test tests/e2e/discovery-fleet.spec.ts --project=chromium
 
       - name: E2E remediation program docs
+        if: ${{ !cancelled() && steps.playwright_install.outcome == 'success' }}
         env:
           QTANGL_API_BASE_URL: http://127.0.0.1:8000
         run: npx playwright test tests/e2e/remediation-program.spec.ts --project=chromium
 
       - name: E2E trust golden path
+        if: ${{ !cancelled() && steps.playwright_install.outcome == 'success' }}
         env:
           QTANGL_API_BASE_URL: http://127.0.0.1:8000
         run: npx playwright test tests/e2e/trust-golden-path.spec.ts --project=chromium
 
       - name: E2E demo CTA smoke
+        if: ${{ !cancelled() && steps.playwright_install.outcome == 'success' }}
         env:
           QTANGL_API_BASE_URL: http://127.0.0.1:8000
         run: npx playwright test tests/e2e/demo-cta.spec.ts --project=chromium
 
       - name: E2E PQC assess smoke
+        if: ${{ !cancelled() && steps.playwright_install.outcome == 'success' }}
         env:
           QTANGL_API_BASE_URL: http://127.0.0.1:8000
         run: npx playwright test tests/e2e/pqc.spec.ts --project=chromium

@@ -18,6 +18,7 @@ class GeneratorCommandTest(unittest.TestCase):
                      patch.object(generator, "OPENAPI", source), \
                      patch.object(generator, "TS_OUT", output), \
                      patch.object(generator.platform, "system", return_value=system), \
+                     patch.dict(generator.os.environ, {"PATH": "tool-path", "npm_config_prefix": directory, "NPM_CONFIG_PREFIX": directory}, clear=True), \
                      patch.object(generator.subprocess, "run") as run:
                     generator.generate_typescript()
                     run.assert_called_once_with(
@@ -25,6 +26,7 @@ class GeneratorCommandTest(unittest.TestCase):
                         check=True,
                         cwd=generator.ROOT,
                         shell=system == "Windows",
+                        env={"PATH": "tool-path"},
                     )
                     self.assertTrue(output.parent.is_dir())
 

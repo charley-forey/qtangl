@@ -61,8 +61,9 @@ test("readiness nav links resolve", async ({ page }) => {
 
 test("journey page shows maturity model", async ({ page }) => {
   await page.goto("/journey");
-  await expect(page.getByRole("heading", { level: 1, name: /From first scan to proof of fix/i })).toBeVisible();
-  await expect(page.getByRole("button", { name: /3\. Monitored/i })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 1, name: /Find out where you are — and what to do next/i })).toBeVisible();
+  await page.getByRole("button", { name: /^3\. Monitored$/i }).click();
+  await expect(page.getByText("Stage 3 — Monitored", { exact: true })).toBeVisible();
 });
 
 test("resources hub links to ROI and FAQ", async ({ page }) => {
@@ -79,16 +80,22 @@ test("ROI calculator shows savings comparison", async ({ page }) => {
   await expect(page.getByText(/^With Qtangl Monitor$/i)).toBeVisible();
 });
 
-test("mini-assessment gate unlocks findings and live scan link", async ({ page }) => {
+test("mini-assessment gate separates authorized baseline and fixture demo", async ({ page }) => {
   test.setTimeout(60_000);
   await page.goto("/assess/mini");
   await expect(page.getByRole("heading", { level: 1, name: /Your Q-Day exposure in 60 seconds/i })).toBeVisible();
   await page.getByPlaceholder("you@company.com").fill("pilot@example.com");
   await page.getByRole("button", { name: /Show my results/i }).click();
   await expect(page.getByText(/Top 5 findings/i)).toBeVisible({ timeout: 15000 });
-  const liveScan = page.getByRole("link", { name: /Run live scan/i });
-  await expect(liveScan).toBeVisible();
-  await expect(liveScan).toHaveAttribute("href", /autorun=1/);
+  const baseline = page.getByRole("link", { name: "Start authorized baseline", exact: true });
+  await expect(baseline).toBeVisible();
+  await expect(baseline).toHaveAttribute("href", "/assess/start");
+  const fixtureDemo = page.getByRole("link", { name: "Try full demo (fixture)", exact: true });
+  await expect(fixtureDemo).toBeVisible();
+  const fixtureUrl = new URL((await fixtureDemo.getAttribute("href"))!, page.url());
+  expect(fixtureUrl.pathname).toBe("/assess");
+  expect(fixtureUrl.searchParams.get("autorun")).toBe("1");
+  expect(fixtureUrl.searchParams.get("intent")).toBe("sample");
 });
 
 test("executive briefing gate unlocks content", async ({ page }) => {
