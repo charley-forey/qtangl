@@ -12,10 +12,6 @@ colorama==0.4.6
     # via
     #   -c requirements.lock
     #   pytest
-greenlet==3.5.1
-    # via
-    #   -c requirements.lock
-    #   sqlalchemy
 iniconfig==2.3.0
     # via pytest
 mako==1.3.12

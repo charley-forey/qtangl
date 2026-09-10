@@ -35,9 +35,14 @@ Success means a user can follow **authorized baseline â†’ explainable findings â
 - Lint error gate passed after six baseline errors were fixed. Existing non-blocking warnings remain.
 - README links, marketing alignment and trust-copy gates passed; README stats refreshed.
 - Production incident: PostgreSQL exhausted its 500 MB volume and crash-looped. Expanded only that volume to 1000 MB within the existing Hobby plan. Recovery completed and public `/health/ready` returned HTTP 200 with database and Redis healthy. No data was deleted, no credentials changed, and no plan upgraded. Usage after recovery was approximately 529 MB. Railway operation: `860f24d1-6f50-46ff-8bcf-9cd1962a4b57`; database deployment: `875cb9bc-e1e7-41ba-a66a-080f13ebb952`.
-- Remaining release gates: clean web production build and browser regressions. Local npm extraction was incomplete, so it does not constitute a successful install/build check. Application changes are not yet deployed.
+- Vercel preview for commit `1c5d3e2` built successfully. A clean local install and the 24 real-module unit checks also completed. Production publication and browser regressions remain release gates.
+- Clean CI exposed SDK generation using a Windows-only subprocess command, missing PDF dependencies in the lockfile, and 73 missing API reference entries. These are being repaired before another release run.
+- Regenerated backend locks with four security upgrades passed `pip-audit` with no known vulnerabilities and 45 focused compatibility tests, including portfolio PDF merging.
+- Slack, Teams and Jira custom JSON callbacks now require operator/admin authentication and enforce tenant identity; 23 security regressions pass. Native provider signature/JWT verification is not implemented: callers must use an authenticated relay.
+- API catalog coverage now passes for 307 backend route declarations (304 documented unique entries plus three internal exclusions). Added 73 missing references with canonical schema links, authenticated relay limitations, and no invented example responses.
+- Local browser run: graph, briefing and recommendations passed; ten other cases failed during startup/loading or with a non-application response, `This human wandered off.` A direct HTTP request reproduced that response. Desktop/mobile accessibility and full dashboard behavior therefore remain unverified pending clean CI execution; do not count this run as a passing browser gate.
 
-Operational follow-up: track volume utilization and growth, test backup/restore, and define capacity alerts before the next exhaustion event. Healthy database connectivity does not itself verify worker/scheduler execution.
+Operational follow-up: track volume utilization and growth, test backup/restore, and define capacity alerts before the next exhaustion event. Healthy database connectivity does not itself verify worker/scheduler execution. Inspect the existing leading-space ` QTANGL_ENV` variable and migrate it to the intended configuration after validating production requirements.
 
 ## Prioritized roadmap
 

@@ -142,6 +142,11 @@ export default function ReferenceEndpointPage({
         <DocsSection>
           <DocsHeading>Summary</DocsHeading>
           <p className="text-sm leading-8 text-[var(--color-gray-300)]">{endpoint.summary}</p>
+          {endpoint.schemaUrl ? (
+            <a href={endpoint.schemaUrl} className="text-sm text-sky-300 underline underline-offset-4">
+              Request and response schemas in OpenAPI →
+            </a>
+          ) : null}
           {endpoint.rateLimit ? (
             <p className="text-sm text-[var(--color-gray-500)]">Rate limit: {endpoint.rateLimit}</p>
           ) : null}
@@ -165,14 +170,16 @@ export default function ReferenceEndpointPage({
           </DocsCallout>
         ) : null}
 
-        <DocsSection>
-          <DocsHeading>Example</DocsHeading>
-          <DocsCodeTabs
-            tabs={buildTabs(endpoint)}
-            storageKey={`qtangl-${endpoint.id}-tab`}
-            defaultTab="response"
-          />
-        </DocsSection>
+        {endpoint.examples.length > 0 ? (
+          <DocsSection>
+            <DocsHeading>Example</DocsHeading>
+            <DocsCodeTabs
+              tabs={buildTabs(endpoint)}
+              storageKey={`qtangl-${endpoint.id}-tab`}
+              defaultTab="response"
+            />
+          </DocsSection>
+        ) : null}
 
         {showTryIt ? (
           <DocsTryIt

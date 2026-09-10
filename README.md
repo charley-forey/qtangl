@@ -43,7 +43,7 @@ Qtangl helps organizations inventory quantum-vulnerable cryptography, monitor dr
 | Metric | Value |
 |--------|-------|
 | **API version** | `0.9.1` (from `backend/app/main.py`) |
-| **Backend test modules** | ~131 |
+| **Backend test modules** | ~132 |
 | **Playwright E2E specs** | ~28 |
 | **Alembic migrations** | 20+ |
 | **Stats refreshed** | 2026-09-10 |

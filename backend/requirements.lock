@@ -6,6 +6,14 @@
 #
 absl-py==2.4.0
     # via ortools
+aiohappyeyeballs==2.7.1
+    # via aiohttp
+aiohttp==3.14.3
+    # via kubernetes
+aiosignal==1.4.0
+    # via aiohttp
+alembic==1.18.4
+    # via -r requirements.txt
 annotated-doc==0.0.4
     # via fastapi
 annotated-types==0.7.0
@@ -15,12 +23,29 @@ anyio==4.13.0
     #   httpx
     #   starlette
     #   watchfiles
-alembic==1.18.4
+attrs==26.1.0
+    # via aiohttp
+azure-core==1.41.0
+    # via
+    #   azure-identity
+    #   azure-keyvault-certificates
+azure-identity==1.25.3
     # via -r requirements.txt
+azure-keyvault-certificates==4.11.2
+    # via -r requirements.txt
+bcrypt==5.0.0
+    # via -r requirements.txt
+boto3==1.43.91
+    # via -r requirements.txt
+botocore==1.43.91
+    # via
+    #   boto3
+    #   s3transfer
 certifi==2026.5.20
     # via
     #   httpcore
     #   httpx
+    #   kubernetes
     #   requests
 cffi==2.0.0
     # via cryptography
@@ -34,24 +59,52 @@ colorama==0.4.6
     # via
     #   click
     #   uvicorn
-bcrypt==5.0.0
-cryptography==48.0.0
+cryptography==50.0.0
     # via
     #   -r requirements.txt
+    #   azure-identity
+    #   google-auth
+    #   msal
+    #   pyjwt
     #   pyspnego
     #   requests-ntlm
+    #   rfc3161ng
 dill==0.4.1
     # via qiskit
 docplex==2.32.264
     # via
     #   -r requirements.txt
     #   qiskit-optimization
+durationpy==0.11
+    # via kubernetes
 faker==40.19.1
     # via -r requirements.txt
 fastapi==0.136.3
     # via -r requirements.txt
-greenlet==3.5.1
-    # via sqlalchemy
+frozenlist==1.8.0
+    # via
+    #   aiohttp
+    #   aiosignal
+google-api-core==2.36.0
+    # via google-cloud-certificate-manager
+google-auth==2.58.0
+    # via
+    #   -r requirements.txt
+    #   google-api-core
+    #   google-cloud-certificate-manager
+google-cloud-certificate-manager==1.14.0
+    # via -r requirements.txt
+googleapis-common-protos==1.75.3
+    # via
+    #   google-api-core
+    #   grpcio-status
+grpcio==1.83.1
+    # via
+    #   google-api-core
+    #   google-cloud-certificate-manager
+    #   grpcio-status
+grpcio-status==1.83.1
+    # via google-api-core
 h11==0.16.0
     # via
     #   httpcore
@@ -73,12 +126,31 @@ idna==3.17
     #   anyio
     #   httpx
     #   requests
+    #   yarl
 immutabledict==4.3.1
     # via ortools
+isodate==0.7.2
+    # via azure-keyvault-certificates
+jmespath==1.1.0
+    # via
+    #   boto3
+    #   botocore
+kubernetes==36.0.3
+    # via -r requirements.txt
 mako==1.3.12
     # via alembic
 markupsafe==3.0.2
     # via mako
+msal==1.38.0
+    # via
+    #   azure-identity
+    #   msal-extensions
+msal-extensions==1.3.1
+    # via azure-identity
+multidict==6.8.0
+    # via
+    #   aiohttp
+    #   yarl
 networkx==3.6.1
     # via qiskit-optimization
 numpy==2.4.6
@@ -92,22 +164,50 @@ numpy==2.4.6
     #   rustworkx
     #   samplomatic
     #   scipy
+oauthlib==3.3.1
+    # via requests-oauthlib
+opentelemetry-api==1.44.0
+    # via google-api-core
 orjson==3.11.9
     # via samplomatic
 ortools==9.15.6755
     # via -r requirements.txt
 pandas==3.0.3
     # via ortools
-pillow==12.2.0
-    # via reportlab
+pillow==12.3.0
+    # via
+    #   -r requirements.txt
+    #   reportlab
+propcache==0.5.2
+    # via
+    #   aiohttp
+    #   yarl
+proto-plus==1.28.4
+    # via
+    #   google-api-core
+    #   google-cloud-certificate-manager
 protobuf==6.33.6
-    # via ortools
+    # via
+    #   google-api-core
+    #   google-cloud-certificate-manager
+    #   googleapis-common-protos
+    #   grpcio-status
+    #   ortools
+    #   proto-plus
 psutil==7.2.2
     # via qiskit-aer
 psycopg==3.3.4
     # via -r requirements.txt
 psycopg-binary==3.3.4
     # via psycopg
+pyasn1==0.6.4
+    # via
+    #   pyasn1-modules
+    #   rfc3161ng
+pyasn1-modules==0.4.2
+    # via
+    #   google-auth
+    #   rfc3161ng
 pybase64==1.4.3
     # via
     #   ibm-quantum-schemas
@@ -124,21 +224,32 @@ pydantic==2.13.4
 pydantic-core==2.46.4
     # via pydantic
 pyjwt==2.13.0
-    # via ibm-cloud-sdk-core
+    # via
+    #   -r requirements.txt
+    #   ibm-cloud-sdk-core
+    #   msal
+    #   pyjwt
+pypdf==6.18.0
+    # via -r requirements.txt
 pyspnego==0.12.1
     # via requests-ntlm
 python-dateutil==2.9.0.post0
     # via
+    #   botocore
     #   ibm-cloud-sdk-core
+    #   kubernetes
     #   pandas
     #   qiskit-aer
     #   qiskit-ibm-runtime
+    #   rfc3161ng
 python-dotenv==1.2.2
     # via uvicorn
-python-multipart==0.0.29
+python-multipart==0.0.31
     # via -r requirements.txt
 pyyaml==6.0.3
-    # via uvicorn
+    # via
+    #   kubernetes
+    #   uvicorn
 qiskit==2.4.1
     # via
     #   -r requirements.txt
@@ -159,15 +270,27 @@ reportlab==4.5.1
     # via -r requirements.txt
 requests==2.34.2
     # via
+    #   azure-core
+    #   google-api-core
     #   ibm-cloud-sdk-core
+    #   kubernetes
+    #   msal
     #   qiskit-ibm-runtime
     #   requests-ntlm
+    #   requests-oauthlib
+    #   rfc3161ng
 requests-ntlm==1.3.0
     # via qiskit-ibm-runtime
+requests-oauthlib==2.0.0
+    # via kubernetes
+rfc3161ng==2.1.3
+    # via -r requirements.txt
 rustworkx==0.17.1
     # via
     #   qiskit
     #   samplomatic
+s3transfer==0.19.2
+    # via boto3
 samplomatic==0.19.0
     # via
     #   ibm-quantum-schemas
@@ -180,6 +303,7 @@ scipy==1.17.1
 six==1.17.0
     # via
     #   docplex
+    #   kubernetes
     #   python-dateutil
 sqlalchemy==2.0.50
     # via
@@ -187,14 +311,21 @@ sqlalchemy==2.0.50
     #   alembic
 sspilib==0.5.0
     # via pyspnego
-starlette==1.2.0
-    # via fastapi
+starlette==1.3.1
+    # via
+    #   -r requirements.txt
+    #   fastapi
 stevedore==5.8.0
     # via qiskit
 typing-extensions==4.15.0
     # via
     #   alembic
+    #   azure-core
+    #   azure-identity
+    #   azure-keyvault-certificates
     #   fastapi
+    #   grpcio
+    #   opentelemetry-api
     #   ortools
     #   pydantic
     #   pydantic-core
@@ -212,15 +343,21 @@ tzdata==2026.2
     #   psycopg
 urllib3==2.7.0
     # via
+    #   botocore
     #   ibm-cloud-sdk-core
+    #   kubernetes
     #   qiskit-ibm-runtime
     #   requests
 uvicorn==0.48.0
     # via -r requirements.txt
 watchfiles==1.2.0
     # via uvicorn
+websocket-client==1.9.2
+    # via kubernetes
 websockets==16.0
     # via uvicorn
+yarl==1.24.5
+    # via aiohttp
 
 # The following packages are considered to be unsafe in a requirements file:
 # setuptools

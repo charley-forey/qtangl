@@ -61,6 +61,8 @@ export type DocsEndpoint = {
   errors?: number[];
   examples: DocsEndpointExample[];
   notes?: string[];
+  /** Canonical request/response schema for reference entries without examples. */
+  schemaUrl?: string;
   /** Primary response content type when not application/json. */
   contentType?: string;
   /** Whether Idempotency-Key header is supported. */

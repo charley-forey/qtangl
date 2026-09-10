@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+import platform
 import subprocess
 from pathlib import Path
 from typing import Any
@@ -100,11 +101,7 @@ def _emit_python_models(openapi: dict) -> str:
 
 def generate_typescript() -> None:
     TS_OUT.parent.mkdir(parents=True, exist_ok=True)
-    cmd = (
-        f'npx --yes openapi-typescript@7.6.1 "{OPENAPI}" -o "{TS_OUT}"'
-    )
-    import platform
-
+    cmd = ["npx", "--yes", "openapi-typescript@7.6.1", str(OPENAPI), "-o", str(TS_OUT)]
     subprocess.run(cmd, check=True, cwd=ROOT, shell=platform.system() == "Windows")
 
 

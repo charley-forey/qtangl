@@ -1,4 +1,5 @@
 import { test, expect } from "@playwright/test";
+import AxeBuilder from "@axe-core/playwright";
 
 import {
   mockDashboardEvents,
@@ -166,6 +167,16 @@ test.describe("Dashboard authenticated (mocked BFF)", () => {
     await page.getByRole("button", { name: "Snooze" }).click();
     await expect(page.getByText("Enable weekly monitor cadence")).not.toBeVisible({ timeout: 10000 });
   });
+
+  for (const width of [390, 1280]) {
+    test(`authenticated overview accessibility at ${width}px`, async ({ page }) => {
+      await page.setViewportSize({ width, height: 844 });
+      await page.goto("/command-center?tab=overview");
+      await expect(page.getByLabel("Posture command bar")).toBeVisible();
+      const results = await new AxeBuilder({ page }).analyze();
+      expect(results.violations.filter((v) => v.impact === "serious" || v.impact === "critical")).toEqual([]);
+    });
+  }
 
   test("failed snooze keeps the action and shows a retryable error", async ({ page }) => {
     await page.route("**/api/dashboard/tenant/qros/next-actions/*/mutate", (route) =>
