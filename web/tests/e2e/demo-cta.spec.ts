@@ -115,7 +115,8 @@ test("live status retains report data after a failed refresh and recovers on ret
 
   failRefresh = true;
   await page.evaluate(() => {
-    const source = (window as Window & { demoTestEvents: EventTarget }).demoTestEvents;
+    const source = Reflect.get(window, "demoTestEvents");
+    if (!(source instanceof EventTarget)) throw new Error("Demo event source was not initialized");
     source.dispatchEvent(new MessageEvent("snapshot", { data: "{}" }));
   });
   const error = page.getByRole("alert").filter({ hasText: "Unable to refresh live status." });
