@@ -50,7 +50,7 @@ export default function PushEverywherePanel() {
     };
     setNotice(null);
     setError(null);
-    if (!preferences.channels.length || (preferences.channels.includes("email") && !preferences.recipients.length)) {
+    if (!preferences.channels.length || ((sendNow || preferences.enabled) && preferences.channels.includes("email") && !preferences.recipients.length)) {
       setError("Select a delivery channel and provide recipients when email is selected.");
       return;
     }
@@ -106,7 +106,7 @@ export default function PushEverywherePanel() {
               ))}
             </div>
             <label className="block text-xs text-[var(--color-gray-300)]">Email recipients
-              <input type="email" multiple value={recipients} required={config.channels.includes("email")} onChange={(event) => { setRecipients(event.target.value); edit({}); }} aria-describedby="briefing-recipients-help" className={fieldClass} />
+              <input type="email" multiple value={recipients} onChange={(event) => { setRecipients(event.target.value); edit({}); }} aria-describedby="briefing-recipients-help" className={fieldClass} />
             </label>
             <p id="briefing-recipients-help" className="text-xs text-[var(--color-gray-400)]">Separate email addresses with commas.</p>
             <label className="block text-xs text-[var(--color-gray-300)]">Delivery interval (hours)

@@ -258,6 +258,10 @@ test.describe("Dashboard authenticated (mocked BFF)", () => {
         return route.fulfill({ json: { ...preferences, requiresSave: true, firstRunAt: null, lastDelivery: { status: "sending", delivered: null, attempted: null, attemptedAt: "2026-09-10T12:00:00Z", outcomeUnknown: true } } });
       }
       expect(request.method()).toBe("POST");
+      if (!request.url().endsWith("/send") && request.postDataJSON().enabled === false) {
+        expect(request.postDataJSON()).toEqual({ channels: ["email"], recipients: [], cadenceHours: 48, enabled: false });
+        return route.fulfill({ json: request.postDataJSON() });
+      }
       expect(request.postDataJSON()).toEqual({ channels: ["email"], recipients: ["buyer@example.com", "ops@example.com"], cadenceHours: 48, enabled: true });
       if (request.url().endsWith("/send")) {
         sendCount += 1;
@@ -298,6 +302,13 @@ test.describe("Dashboard authenticated (mocked BFF)", () => {
     await panel.getByRole("button", { name: "Send briefing now" }).click();
     await expect(panel.getByRole("alert")).toContainText("Partial delivery. 1 of 2 destinations delivered.");
     await expect(panel.getByRole("status")).toHaveCount(0);
+    await panel.getByRole("checkbox", { name: "Enable scheduled delivery" }).uncheck();
+    await recipients.fill("");
+    await panel.getByRole("button", { name: "Save preferences" }).click();
+    await expect(panel.getByRole("status")).toContainText("Scheduled delivery is off");
+    await panel.getByRole("button", { name: "Send briefing now" }).click();
+    await expect(panel.getByRole("alert")).toContainText("provide recipients");
+    expect(sendCount).toBe(2);
     expect(pageErrors).toEqual([]);
   });
 });
