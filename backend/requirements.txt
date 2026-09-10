@@ -62,7 +62,7 @@ azure-keyvault-certificates>=4.8.0
 
 # Optional GCP Certificate Manager pull
 
-google-cloud-certificate-manager>=1.0.0
+google-cloud-certificate-manager>=1.14.0
 
 google-auth>=2.53.0
 
