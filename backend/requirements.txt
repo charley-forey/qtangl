@@ -52,7 +52,7 @@ redis>=5.0.0
 
 psycopg[binary]>=3.3.4
 
-alembic>=1.18.4
+alembic>=1.18.5
 
 # Optional cloud CBOM pull
 
