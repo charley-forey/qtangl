@@ -86,7 +86,11 @@ def deliver_morning_briefing(
         if result.get("sent"):
             delivered += 1
         else:
-            errors.append(f"email: {result.get('reason') or 'delivery_failed'}")
+            errors.append(
+                "Email delivery is unavailable until SMTP is configured."
+                if result.get("reason") == "smtp_unconfigured"
+                else "Email delivery failed. Check notification settings."
+            )
     for url, channel in destinations.items():
         body = payload
         if channel == "teams":
@@ -108,7 +112,7 @@ def deliver_morning_briefing(
         if result.get("sent"):
             delivered += 1
         else:
-            errors.append(f"{channel}: {result.get('reason') or 'delivery_failed'}")
+            errors.append(f"{channel}: delivery failed. Check the destination configuration.")
     return {"delivered": delivered, "attempted": len(destinations) + len(emails), "errors": errors}
 
 

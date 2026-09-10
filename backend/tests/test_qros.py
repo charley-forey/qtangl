@@ -12,6 +12,7 @@ from fastapi.testclient import TestClient
 from app.main import app
 from app.api import command_center
 from app.command_center.qros import build_runway, execute_agentic_action, load_nba_state, simulate_scenario
+from app.notifications.webhooks import is_slack_webhook
 
 
 class QrosBriefingDeliveryTests(unittest.TestCase):
@@ -89,12 +90,12 @@ class QrosBriefingDeliveryTests(unittest.TestCase):
         briefing = {"headline": "Inventory update", "bullets": ["Two findings need review"], "methodNote": "Inventory aid, not a formal audit"}
         subscriptions = {"briefing.slack": ["https://hooks.slack.com/services/test"], "briefing.teams": ["https://workflow.example/teams"]}
         with patch.object(qros_push, "active_webhook_urls", side_effect=lambda **kw: list(subscriptions.get(kw["event"], []))), patch.object(
-            qros_push, "deliver_webhook", side_effect=lambda url, payload, **kw: {"sent": "slack.com" in url, "reason": "test_failure"}
+            qros_push, "deliver_webhook", side_effect=lambda url, payload, **kw: {"sent": is_slack_webhook(url), "reason": "test_failure"}
         ) as deliver, patch.object(qros_push, "send_simple_email", return_value={"sent": True}) as email:
             result = qros_push.deliver_morning_briefing(tenant_id="tenant", briefing=briefing, channels=["email", "slack", "teams"], recipients=["owner@example.com", "owner@example.com"], signing_secret="test-signing-secret")
         self.assertEqual(result["delivered"], 2)
         self.assertEqual(result["attempted"], 3)
-        self.assertEqual(result["errors"], ["teams: test_failure"])
+        self.assertEqual(result["errors"], ["teams: delivery failed. Check the destination configuration."])
         email.assert_called_once()
         self.assertEqual(email.call_args.kwargs["to_email"], "owner@example.com")
         self.assertIn(briefing["methodNote"], email.call_args.kwargs["body"])
@@ -103,6 +104,24 @@ class QrosBriefingDeliveryTests(unittest.TestCase):
         card = teams.args[1]["attachments"][0]["content"]
         self.assertEqual(card["type"], "AdaptiveCard")
         self.assertEqual([line["text"] for line in card["body"]], [briefing["headline"], "• Two findings need review", briefing["methodNote"]])
+
+    def test_delivery_errors_never_expose_transport_exception_details(self):
+        from app.command_center import qros_push
+
+        sensitive_reason = "Traceback: POST https://private.example/hook?token=secret failed at /srv/internal/transport.py"
+        for email_reason, expected_email_error in (
+            (sensitive_reason, "Email delivery failed. Check notification settings."),
+            ("smtp_unconfigured", "Email delivery is unavailable until SMTP is configured."),
+        ):
+            with self.subTest(email_reason=email_reason), patch.object(qros_push, "active_webhook_urls", return_value=["https://receiver.example/hook"]), patch.object(
+                qros_push, "deliver_webhook", return_value={"sent": False, "reason": sensitive_reason}
+            ), patch.object(qros_push, "send_simple_email", return_value={"sent": False, "reason": email_reason}):
+                result = qros_push.deliver_morning_briefing(
+                    tenant_id="tenant", briefing={}, channels=["email", "webhook"], recipients=["owner@example.com"],
+                )
+            self.assertEqual(result, {"delivered": 0, "attempted": 2, "errors": [
+                expected_email_error, "webhook: delivery failed. Check the destination configuration.",
+            ]})
 
     def test_all_explicit_webhook_destinations_are_delivered_once(self):
         from app.command_center import qros_push
