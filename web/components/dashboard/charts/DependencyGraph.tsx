@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import {
   forceCenter,
   forceLink,
@@ -10,7 +10,7 @@ import {
   type SimulationNodeDatum,
 } from "d3-force";
 
-import { ChartEmptyState, ChartLoadingState } from "@/components/dashboard/charts/ChartStates";
+import { ChartEmptyState } from "@/components/dashboard/charts/ChartStates";
 import { trackDashboardEvent } from "@/lib/dashboard-telemetry";
 
 export type DependencyGraphNode = SimulationNodeDatum & {
@@ -40,7 +40,6 @@ export default function DependencyGraph({
   height?: number;
 }) {
   const svgRef = useRef<SVGSVGElement>(null);
-  const [ready, setReady] = useState(false);
   const reducedMotion =
     typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -120,14 +119,12 @@ export default function DependencyGraph({
       simulation.tick(120);
       tick();
     }
-    setReady(true);
     return () => {
       simulation.stop();
     };
   }, [capped, height, onNodeClick, reducedMotion]);
 
   if (!nodes.length) return <ChartEmptyState message="Run a scan to map crypto dependencies." />;
-  if (!ready && !reducedMotion) return <ChartLoadingState label="Building dependency graph…" />;
 
   return (
     <svg
