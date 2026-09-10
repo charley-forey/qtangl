@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "pretest:unit": "npm run build:tsc --prefix ../sdk/typescript",
+    "test:unit": "node --experimental-strip-types --import ./tests/register.mjs --test tests/*.test.mjs",
     "generate:library": "python ../scripts/build_library_index.py",
     "generate:library-drafts": "python ../scripts/draft_library_editorial.py",
     "learn:stale": "node ../scripts/learn-stale-check.mjs",

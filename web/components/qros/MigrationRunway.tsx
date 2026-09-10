@@ -12,11 +12,22 @@ import { trackDashboardEvent } from "@/lib/dashboard-telemetry";
 export default function MigrationRunway() {
   const { data: runway, loading, error } = useQrosQuery(fetchRunway, []);
   const [projection, setProjection] = useState<number | null>(null);
+  const [simulating, setSimulating] = useState(false);
+  const [scenarioError, setScenarioError] = useState<string | null>(null);
 
   const runScenario = async (scenarioId: string) => {
     trackDashboardEvent({ event: "cc_qros_runway_scenario", properties: { scenarioId } });
-    const result = await simulateScenario(scenarioId);
-    setProjection(result.projectedReadiness);
+    setSimulating(true);
+    setScenarioError(null);
+    setProjection(null);
+    try {
+      const result = await simulateScenario(scenarioId);
+      setProjection(result.projectedReadiness);
+    } catch {
+      setScenarioError("Unable to simulate this scenario. Please try again.");
+    } finally {
+      setSimulating(false);
+    }
   };
 
   if (loading) {
@@ -51,14 +62,15 @@ export default function MigrationRunway() {
       </div>
       <div className="mt-4 flex flex-wrap gap-2">
         {scenarios.map((s) => (
-          <Button key={s.id} type="button" variant="secondary" onClick={() => void runScenario(s.id)}>
+          <Button key={s.id} type="button" variant="secondary" disabled={simulating} onClick={() => void runScenario(s.id)}>
             {s.label}
           </Button>
         ))}
       </div>
+      {scenarioError ? <p role="alert" className="mt-3 text-sm text-red-300">{scenarioError}</p> : null}
       {projection != null ? (
         <p className="mt-3 text-sm text-sky-200" aria-live="polite">
-          Projected readiness: {projection.toFixed(0)} / 100
+          Illustrative readiness: {projection.toFixed(0)} / 100 — not a validated forecast
         </p>
       ) : null}
     </Card>

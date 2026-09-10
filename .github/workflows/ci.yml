@@ -220,7 +220,10 @@ jobs:
           cache-dependency-path: web/package-lock.json
 
       - name: Install dependencies
-        run: npm ci
+        run: |
+          npm ci
+          npm ci --prefix ../sdk/typescript
+          npm ci --prefix ../sdk/react
 
       - name: Install backend deps (OpenAPI export)
         run: |
@@ -242,8 +245,13 @@ jobs:
       - name: No legacy /demo/pqc links
         run: npm run check:no-demo-pqc-links
 
-      - name: Assess config unit tests
-        run: npm run test:assess-config
+      - name: Use production Node version for web tests and build
+        uses: actions/setup-node@v6
+        with:
+          node-version: "24"
+
+      - name: Web unit tests (real production modules)
+        run: npm run test:unit
 
       - name: Export OpenAPI artifact
         run: python ../backend/scripts/export_openapi.py
@@ -392,7 +400,10 @@ jobs:
           cache-dependency-path: web/package-lock.json
 
       - name: Install dependencies
-        run: npm ci
+        run: |
+          npm ci
+          npm ci --prefix ../sdk/typescript
+          npm ci --prefix ../sdk/react
 
       - name: Install backend deps (OpenAPI export)
         run: |

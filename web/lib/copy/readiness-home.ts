@@ -6,20 +6,20 @@ export const readinessHero = {
   eyebrow: "Cryptographic posture management",
   title: "Assess. Monitor. Convert.",
   subhead:
-    "Discover quantum-vulnerable cryptography across your estate, build a CycloneDX CBOM inventory, and prove migration progress with signed evidence auditors verify independently.",
+    "Find quantum-vulnerable cryptography in your authorized scope, prioritize migration work, and show what changed with signed evidence reviewers can verify independently.",
   primaryCta: { label: "Run Q-Day scan", href: "/assess" },
-  secondaryCta: { label: "Verify a report", href: "/verify?token=sample-token" },
+  secondaryCta: { label: "Verify a report", href: "/verify" },
 } as const;
 
 export const readinessHeadlineDemo = {
-  eyebrow: "Headline demo",
-  title: "Q-Day inventory in 8 minutes",
+  eyebrow: "Sample assessment",
+  title: "From crypto inventory to a clear next step",
   description:
-    "Domain scan → CycloneDX CBOM + executive PDF → verify link your auditors can check independently.",
+    "Explore illustrative findings, a CycloneDX CBOM, and signed reports. These sample figures do not describe your estate. Qtangl is an inventory aid, not a formal audit.",
   stats: [
-    { label: "Q-vulnerable endpoints", value: "47" },
-    { label: "Readiness score", value: "62" },
-    { label: "Coverage confidence", value: "High" },
+    { label: "Example vulnerable endpoints", value: "47" },
+    { label: "Example readiness score", value: "62 / 100" },
+    { label: "Data source", value: "Sample" },
   ],
   image: "/marketing/docs-assess-workflow.webp",
   imageAlt:

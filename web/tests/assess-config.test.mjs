@@ -1,35 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-/** Mirrors assess-config.ts constants for CI without TS import. */
-const ASSESS_RESULT_TABS = [
-  "executive",
-  "compliance",
-  "inventory",
-  "remediation",
-  "technical",
-  "evidence",
-];
-
-const AUTORUN_SCENARIO_IDS = new Set([
-  "bank-tls-inventory",
-  "gov-contractor-cmmc",
-  "healthcare-insurer-hndl",
-]);
-
-const SCENARIO_INDUSTRY = {
-  "bank-tls-inventory": "financial",
-  "gov-contractor-cmmc": "government",
-  "healthcare-insurer-hndl": "healthcare",
-};
-
-function isAssessResultTab(value) {
-  return value != null && ASSESS_RESULT_TABS.includes(value);
-}
-
-function scenarioIndustry(scenarioId) {
-  return SCENARIO_INDUSTRY[scenarioId] ?? "financial";
-}
+import { AUTORUN_SCENARIO_IDS, isAssessResultTab, scenarioIndustry } from "../lib/assess-config.ts";
 
 test("isAssessResultTab accepts known tabs", () => {
   assert.equal(isAssessResultTab("executive"), true);

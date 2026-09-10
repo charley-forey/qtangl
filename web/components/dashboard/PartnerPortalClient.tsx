@@ -178,6 +178,7 @@ export default function PartnerPortalClient({ portfolioBundle, program, onRefres
           <div className="mt-4 flex flex-col gap-2">
             <a
               href="/api/dashboard/tenant/partner/portfolio-board?format=pdf"
+              download
               className="text-sm text-sky-300 underline"
               onClick={() => trackDashboardEvent("partner_portfolio_board_export", { format: "pdf" })}
             >
@@ -185,6 +186,7 @@ export default function PartnerPortalClient({ portfolioBundle, program, onRefres
             </a>
             <a
               href="/api/dashboard/tenant/partner/portfolio-board?format=csv"
+              download
               className="text-sm text-sky-300 underline"
               onClick={() => trackDashboardEvent("partner_portfolio_board_export", { format: "csv" })}
             >
@@ -197,7 +199,7 @@ export default function PartnerPortalClient({ portfolioBundle, program, onRefres
                 <span className="text-sm text-[var(--color-gray-500)]">Usage export CSV — Advanced tier</span>
               }
             >
-              <a href="/api/dashboard/tenant/partner/usage-export" className="text-sm text-sky-300 underline">
+              <a href="/api/dashboard/tenant/partner/usage-export" download className="text-sm text-sky-300 underline">
                 Usage export CSV
               </a>
             </TierGate>

@@ -10,15 +10,17 @@ import { trackDashboardEvent } from "@/lib/dashboard-telemetry";
 export default function BoardNarrativeExport() {
   const [preview, setPreview] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const generate = async () => {
     setLoading(true);
+    setError(null);
     try {
       const deck = await exportBoardDeck();
       trackDashboardEvent({ event: "cc_qros_board_export", properties: { format: "json" } });
       setPreview(deck.slides.map((s) => `${s.title}: ${s.body}`).join("\n\n"));
     } catch {
-      setPreview("Unable to generate board narrative.");
+      setError("Unable to generate board narrative. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -26,6 +28,7 @@ export default function BoardNarrativeExport() {
 
   const downloadPdf = async () => {
     setLoading(true);
+    setError(null);
     try {
       const blob = await exportBoardDeckPdf();
       trackDashboardEvent({ event: "cc_qros_board_export", properties: { format: "pdf" } });
@@ -35,6 +38,8 @@ export default function BoardNarrativeExport() {
       a.download = "qros-executive-brief.pdf";
       a.click();
       URL.revokeObjectURL(url);
+    } catch {
+      setError("Unable to download the PDF. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -54,6 +59,7 @@ export default function BoardNarrativeExport() {
           Download PDF
         </Button>
       </div>
+      {error ? <p role="alert" className="mt-3 text-sm text-red-300">{error}</p> : null}
       {preview ? (
         <pre className="mt-4 max-h-48 overflow-auto whitespace-pre-wrap rounded-[var(--radius-lg)] border border-[var(--border-subtle)] bg-black/40 p-3 text-xs text-[var(--color-gray-300)]">
           {preview}

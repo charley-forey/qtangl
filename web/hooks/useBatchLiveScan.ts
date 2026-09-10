@@ -50,7 +50,7 @@ export function useBatchLiveScan(options: Options) {
   }, [clearPoll]);
 
   const pollBatch = useCallback(
-    (entries: BatchScanEntry[]) => {
+    function poll(entries: BatchScanEntry[]) {
       void (async () => {
         if (!batchScanPending(entries)) {
           setProgressLabel("All batch scans complete.");
@@ -63,7 +63,7 @@ export function useBatchLiveScan(options: Options) {
           const next = await pollBatchScanStatuses(entries, { useBff, apiKey });
           setBatch(next);
           if (batchScanPending(next)) {
-            pollTimer.current = window.setTimeout(() => pollBatch(next), 3000);
+            pollTimer.current = window.setTimeout(() => poll(next), 3000);
           } else {
             const completed = next.filter((entry) => entry.status === "done").length;
             setProgressLabel(`Batch complete — ${completed}/${next.length} scan(s) finished.`);

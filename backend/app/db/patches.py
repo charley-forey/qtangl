@@ -1,4 +1,4 @@
-"""Idempotent column patches for databases created before Alembic migration 002."""
+"""Idempotent patches for legacy databases initialized with create_all()."""
 
 from __future__ import annotations
 
@@ -29,11 +29,30 @@ def apply_schema_patches(engine: Engine) -> None:
     tables = set(inspector.get_table_names())
     dialect = engine.dialect.name
 
+    if "tenants" in tables:
+        tenant_cols = {column["name"] for column in inspector.get_columns("tenants")}
+        tenant_additions: list[tuple[str, str]] = []
+        if "workos_org_id" not in tenant_cols:
+            tenant_additions.append(("workos_org_id", "VARCHAR(128)"))
+        if "auth_mode" not in tenant_cols:
+            tenant_additions.append(("auth_mode", "VARCHAR(32) NOT NULL DEFAULT 'magic_link'"))
+        _add_columns(engine, "tenants", tenant_additions)
+        from app.db.models import Tenant
+
+        for index in Tenant.__table__.indexes:
+            index.create(engine, checkfirst=True)
+
     if "api_keys" in tables:
         key_cols = {column["name"] for column in inspector.get_columns("api_keys")}
         key_additions: list[tuple[str, str]] = []
         if "role" not in key_cols:
             key_additions.append(("role", "VARCHAR(16) DEFAULT 'admin'"))
+        if "key_prefix" not in key_cols:
+            key_additions.append(("key_prefix", "VARCHAR(16)"))
+        if "created_by_user_id" not in key_cols:
+            key_additions.append(("created_by_user_id", "VARCHAR(64)"))
+        if "last_used_at" not in key_cols:
+            key_additions.append(("last_used_at", "TIMESTAMP WITH TIME ZONE" if dialect == "postgresql" else "DATETIME"))
         _add_columns(engine, "api_keys", key_additions)
 
     if "scan_jobs" not in tables:

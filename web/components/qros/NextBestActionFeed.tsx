@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 import Card from "@/components/ui/Card";
 import Button from "@/components/ui/Button";
@@ -12,6 +13,21 @@ import { trackDashboardEvent } from "@/lib/dashboard-telemetry";
 export default function NextBestActionFeed() {
   const router = useRouter();
   const { data: actions, loading, error, reload } = useQrosQuery(fetchNextActions, []);
+  const [saving, setSaving] = useState(false);
+  const [mutationError, setMutationError] = useState<string | null>(null);
+
+  const updateAction = async (id: string, op: "snooze" | "dismiss") => {
+    setSaving(true);
+    setMutationError(null);
+    try {
+      await mutateNbaAction(id, op);
+      reload();
+    } catch {
+      setMutationError("Unable to update this action. Please try again.");
+    } finally {
+      setSaving(false);
+    }
+  };
 
   if (loading) {
     return (
@@ -33,7 +49,7 @@ export default function NextBestActionFeed() {
     return (
       <EmptyState
         title="No urgent actions"
-        description="Posture is stable. Run a scan or enable monitor schedules to keep evidence fresh."
+        description="No actions are currently shown. Run a scan or review snoozed work to keep evidence fresh."
       />
     );
   }
@@ -43,9 +59,10 @@ export default function NextBestActionFeed() {
       <div className="mb-4 flex items-center justify-between gap-2">
         <div>
           <h2 className="text-sm font-semibold text-white">Next best actions</h2>
-          <p className="text-xs text-[var(--color-gray-400)]">Ranked by risk-reduction per effort</p>
+          <p className="text-xs text-[var(--color-gray-400)]">Suggested priorities based on current inventory and workflow rules</p>
         </div>
       </div>
+      {mutationError ? <p role="alert" className="mb-3 text-sm text-red-300">{mutationError}</p> : null}
       <ol className="space-y-3" aria-label="Prioritized actions">
         {actions.slice(0, 6).map((action, index) => (
           <li
@@ -63,18 +80,16 @@ export default function NextBestActionFeed() {
               <Button
                 type="button"
                 variant="ghost"
-                onClick={() => {
-                  void mutateNbaAction(action.id, "snooze").then(() => reload());
-                }}
+                disabled={saving}
+                onClick={() => void updateAction(action.id, "snooze")}
               >
                 Snooze
               </Button>
               <Button
                 type="button"
                 variant="ghost"
-                onClick={() => {
-                  void mutateNbaAction(action.id, "dismiss").then(() => reload());
-                }}
+                disabled={saving}
+                onClick={() => void updateAction(action.id, "dismiss")}
               >
                 Dismiss
               </Button>

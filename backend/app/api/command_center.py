@@ -493,6 +493,10 @@ def tenant_qros_next_actions(
         snoozed_ids=snoozed,
         dismissed_ids=dismissed,
     )
+    assigned = (settings.get("qrosNbaState") or {}).get("assigned") or {}
+    for action in actions:
+        if assigned.get(action["id"]):
+            action["owner"] = assigned[action["id"]]
     from datetime import UTC, datetime
 
     return NextBestActionResponse(
@@ -628,7 +632,7 @@ def tenant_qros_agentic_execute(
 @router.get("/qros/marketplace/tiles", response_model=MarketplaceResponse)
 def tenant_qros_marketplace_tiles(auth: AuthContext = Depends(require_auth_readonly)) -> MarketplaceResponse:
     settings = get_tenant_settings_raw(tenant_id=auth.tenant_id)
-    installed = settings.get("installedTiles") or []
+    installed = settings.get("installedTiles")
     tiles = [MarketplaceTile(**t) for t in list_marketplace_tiles(installed_ids=installed)]
     return MarketplaceResponse(tiles=tiles)
 
@@ -640,7 +644,7 @@ def tenant_qros_marketplace_install(
 ) -> MarketplaceResponse:
     settings = get_tenant_settings_raw(tenant_id=auth.tenant_id)
     installed = install_marketplace_tile(
-        installed_ids=list(settings.get("installedTiles") or []),
+        installed_ids=settings.get("installedTiles"),
         tile_id=tile_id,
     )
     upsert_tenant_settings(tenant_id=auth.tenant_id, settings={"installedTiles": installed})
@@ -655,7 +659,7 @@ def tenant_qros_marketplace_uninstall(
 ) -> None:
     settings = get_tenant_settings_raw(tenant_id=auth.tenant_id)
     installed = uninstall_marketplace_tile(
-        installed_ids=list(settings.get("installedTiles") or []),
+        installed_ids=settings.get("installedTiles"),
         tile_id=tile_id,
     )
     upsert_tenant_settings(tenant_id=auth.tenant_id, settings={"installedTiles": installed})

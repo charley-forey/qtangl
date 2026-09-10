@@ -22,11 +22,9 @@ export default function PostureCommandBar({ kpis, summary, activeTab, onTabChang
   const delta =
     kpis.delta != null ? `${kpis.delta >= 0 ? "+" : ""}${kpis.delta} vs prior` : undefined;
   const trend = summary.trend?.slice(-8).map((p) => p.score) ?? [];
-  const nextDeadline = kpis.nextScheduleAt
-    ? formatUtcDateTime(kpis.nextScheduleAt)
-    : summary.forecast?.projected != null
-      ? `Projected ${summary.forecast.projected}`
-      : "—";
+  const projectedReadiness = summary.forecast?.projected != null
+    ? `${summary.forecast.projected} / 100`
+    : "Unavailable";
 
   const drill = (metric: string, tab: DashboardTabId) => {
     trackDashboardEvent({
@@ -67,7 +65,7 @@ export default function PostureCommandBar({ kpis, summary, activeTab, onTabChang
         <button type="button" className="text-left" aria-label="Drill into open critical findings" onClick={() => drill("critical", "remediate")}>
           <KpiCard
             label="Open critical"
-            value={kpis.openCritical ?? 0}
+            value={kpis.openCritical ?? "Unavailable"}
             tone={(kpis.openCritical ?? 0) > 0 ? "critical" : "default"}
           />
         </button>
@@ -79,8 +77,8 @@ export default function PostureCommandBar({ kpis, summary, activeTab, onTabChang
             </div>
           </div>
         </button>
-        <button type="button" className="text-left" onClick={() => drill("deadline", "remediate")}>
-          <KpiCard label="Next deadline" value={nextDeadline} hint="Trajectory / compliance" />
+        <button type="button" className="text-left" onClick={() => drill("forecast", "remediate")}>
+          <KpiCard label="Projected readiness" value={projectedReadiness} hint="Scenario estimate, not a deadline" />
         </button>
         <button type="button" className="text-left" onClick={() => drill("schedule", "monitor")}>
           <KpiCard

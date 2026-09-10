@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import Link from "next/link";
 
 import Button from "@/components/ui/Button";
 import { trackEvent } from "@/lib/analytics";
@@ -160,12 +161,12 @@ export default function ReportDrawer({
             >
               Verify signature independently →
             </a>
-            <a
+            <Link
               href="/docs/reference/pqc/passport"
               className="block text-[var(--color-gray-400)] underline underline-offset-4 hover:text-white"
             >
               Share via Readiness Passport (dashboard) →
-            </a>
+            </Link>
           </div>
 
           {notes.length > 0 ? (

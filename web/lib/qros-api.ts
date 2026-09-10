@@ -49,7 +49,7 @@ export async function executeAgenticAction(opts: {
   dryRun?: boolean;
   approved?: boolean;
 }) {
-  return fetchDashboardJson<{ status: string; steps: string[]; guardrails: string[] }>(
+  return fetchDashboardJson<{ status: string; steps: string[]; guardrails: string[]; result?: Record<string, unknown>; error?: string }>(
     "/tenant/qros/agentic/execute",
     {
       method: "POST",
@@ -102,9 +102,8 @@ export async function installMarketplaceTile(tileId: string) {
 }
 
 export async function uninstallMarketplaceTile(tileId: string) {
-  await fetch(`/api/dashboard/tenant/qros/marketplace/tiles/${encodeURIComponent(tileId)}/install`, {
+  await fetchDashboardJson(`/tenant/qros/marketplace/tiles/${encodeURIComponent(tileId)}/install`, {
     method: "DELETE",
-    credentials: "include",
   });
 }
 

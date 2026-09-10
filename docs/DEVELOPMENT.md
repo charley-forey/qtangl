@@ -442,6 +442,7 @@ cd web
 npm ci
 npm run lint
 npm run build
+npm run test:unit            # Node.js 24, matching Vercel; imports production modules
 npm run test:access
 npm run test:assess-config
 npm run test:e2e              # full Playwright
