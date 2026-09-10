@@ -20,7 +20,7 @@ export default function AssessCompareSection() {
       </div>
 
       <Card tone="feature" className="rounded-[var(--radius-xl)]">
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto" tabIndex={0} role="region" aria-label="Assessment comparison">
           <table className="w-full min-w-[20rem] text-left text-sm">
             <thead>
               <tr className="border-b border-[var(--border-subtle)] text-xs uppercase tracking-wider text-[var(--color-gray-500)]">

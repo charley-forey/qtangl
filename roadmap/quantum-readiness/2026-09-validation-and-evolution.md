@@ -37,7 +37,7 @@ Success means a user can follow **authorized baseline → explainable findings �
 - README links, marketing alignment and trust-copy gates passed; README stats refreshed.
 - Production incident: PostgreSQL exhausted its 500 MB volume and crash-looped. Expanded only that volume to 1000 MB within the existing Hobby plan. Recovery completed and public `/health/ready` returned HTTP 200 with database and Redis healthy. No data was deleted, no credentials changed, and no plan upgraded. Usage after recovery was approximately 529 MB. Railway operation: `860f24d1-6f50-46ff-8bcf-9cd1962a4b57`; database deployment: `875cb9bc-e1e7-41ba-a66a-080f13ebb952`.
 - Vercel preview for commit `1c5d3e2` built successfully. A clean local install and the 24 real-module unit checks also completed. Production publication and browser regressions remain release gates.
-- Clean CI exposed SDK generation using a Windows-only subprocess command, missing PDF dependencies in the lockfile, and 73 missing API reference entries. These are being repaired before another release run.
+- Clean CI exposed SDK generation using a Windows-only subprocess command, missing PDF dependencies in the lockfile, and 73 missing API reference entries. These repairs now pass their CI gates.
 - Regenerated backend locks with four security upgrades passed `pip-audit` with no known vulnerabilities and 45 focused compatibility tests, including portfolio PDF merging.
 - Frontend lock audit now reports zero vulnerabilities after patched Next.js 16.3.4, sharp 0.35.4 and compatible transitive updates. AuthKit resolved to 2.17.0 within its existing range; fresh build/auth browser checks remain required. No forced upgrades or overrides were used.
 - Slack, Teams and Jira custom JSON callbacks now require operator/admin authentication and enforce tenant identity; 23 security regressions pass. Native provider signature/JWT verification is not implemented: callers must use an authenticated relay.
@@ -82,3 +82,11 @@ Run fixture scans in tests; never widen live-scan authorization to make a demo p
 Before release, inspect the final diff, generated OpenAPI/SDK sync, relevant tests, production build and dependency gates. Publish through the existing GitHub/Vercel/Railway setup and confirm the deployed revision, health and a safe smoke journey. Record unavailable services and failed checks explicitly; a successful build alone is not end-to-end validation.
 
 External guidance: [NIST explains the uncertain timing of the quantum threat and why migration planning matters now](https://www.nist.gov/cybersecurity-and-privacy/what-post-quantum-cryptography). [W3C guidance for complex images](https://www.w3.org/WAI/tutorials/images/complex/) supports providing textual information for charts rather than relying only on their appearance.
+
+## Latest release check — db83c74
+
+Backend CI: **499 passed, 3 skipped**, plus **1 real Redis integration test passed**. SDK, security, CodeQL, content, sensor and Lighthouse jobs passed. Vercel preview built; the API reference now contains its heading and body in the initial HTML.
+
+Browser checks exercised all groups: all **14 authenticated dashboard tests passed**, including graph rendering, action outcomes and scheduler dates. Assessment integration completed **33 passing tests, 2 failures and 1 flaky test**, including an actual fixture scan and PDF download. Mobile responsive checks passed (12 tests). Remaining failures identified a journey page unavailable without JavaScript, keyboard-inaccessible horizontally scrolling tables, stale role/navigation assertions and ambiguous assessment links. These are being repaired; main publication remains gated on the next complete run.
+
+CI now keeps one production web server alive across browser groups and preserves server diagnostics. Repeated server shutdowns coincided with a Next.js image-cache error; verify the error is absent in retained logs. The optional runtime-only R4 flag step was a duplicate landing check and did not exercise compiled flags, so it was removed. Enabled-flag coverage requires a separately built variant and remains outstanding.

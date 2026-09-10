@@ -44,6 +44,8 @@ test.describe("Assess page", () => {
 
   test("scanner section appears above learn section", async ({ page }) => {
     await page.goto("/assess");
+    await expect(page.locator("#scanner")).toBeVisible();
+    await expect(page.locator("#learn")).toBeVisible();
     const scannerY = await page.locator("#scanner").evaluate((el) => el.getBoundingClientRect().top);
     const learnY = await page.locator("#learn").evaluate((el) => el.getBoundingClientRect().top);
     expect(scannerY).toBeLessThan(learnY);
@@ -157,7 +159,7 @@ test.describe("Assess page", () => {
   test("evidence tab includes verify link with scanId", async ({ page }) => {
     await gotoAssessAutorun(page, "scenario=bank-tls-inventory&autorun=1");
     await page.getByRole("tab", { name: "Evidence" }).click();
-    const verifyLink = page.getByRole("link", { name: /verify/i }).first();
+    const verifyLink = page.locator("#assess-panel-evidence").getByRole("link", { name: /^\/verify\?scanId=/ });
     await expect(verifyLink).toBeVisible();
     await expect(verifyLink).toHaveAttribute("href", /scanId=/);
   });
@@ -173,8 +175,8 @@ test.describe("Assess page", () => {
   test("my-domain path shows authorized workspace guidance", async ({ page }) => {
     await gotoAssessScanner(page);
     await page.getByRole("button", { name: /Scan my organization/i }).click();
-    await expect(page.getByRole("link", { name: "Start authorized workspace", exact: true })).toHaveAttribute("href", "/assess/start");
-    await expect(page.getByRole("link", { name: "Request a pilot", exact: true })).toHaveAttribute("href", "/access");
+    await expect(page.locator("#scanner").getByRole("link", { name: "Start authorized workspace", exact: true })).toHaveAttribute("href", "/assess/start");
+    await expect(page.locator("#scanner").getByRole("link", { name: "Request a pilot", exact: true })).toHaveAttribute("href", "/access");
   });
 
   test("autorun shows progress banner", async ({ page }) => {

@@ -1,18 +1,24 @@
 import { test, expect } from "@playwright/test";
 
-test("public journey and API reference render without JavaScript", async ({ browser, baseURL }) => {
-  const context = await browser.newContext({ baseURL, javaScriptEnabled: false });
-  try {
-    const page = await context.newPage();
-    await page.goto("/journey");
-    await expect(page.getByRole("heading", { level: 1, name: /Find out where you are — and what to do next/i })).toBeVisible();
-    await page.goto("/docs/reference/tenant/qros-runway-get");
-    await expect(page.getByRole("heading", { level: 1, name: "GET /tenant/qros/runway", exact: true })).toBeVisible();
-    await expect(page.getByRole("link", { name: /Request and response schemas in OpenAPI/i })).toBeVisible();
-  } finally {
-    await context.close();
-  }
-});
+for (const { path, heading } of [
+  { path: "/journey", heading: "Find out where you are — and what to do next" },
+  { path: "/docs/reference/tenant/qros-runway-get", heading: "GET /tenant/qros/runway" },
+]) {
+  test(`${path} renders without JavaScript`, async ({ browser, baseURL }) => {
+    const context = await browser.newContext({ baseURL, javaScriptEnabled: false });
+    try {
+      const page = await context.newPage();
+      const response = await page.goto(path);
+      expect(response?.status()).toBe(200);
+      await expect(page.getByRole("heading", { level: 1, name: heading, exact: true })).toBeVisible();
+      if (path.startsWith("/docs/")) {
+        await expect(page.getByRole("link", { name: /Request and response schemas in OpenAPI/i })).toBeVisible();
+      }
+    } finally {
+      await context.close();
+    }
+  });
+}
 
 test("session query handoff survives client navigation", async ({ page }) => {
   const onboardingTokens: Array<string | null> = [];

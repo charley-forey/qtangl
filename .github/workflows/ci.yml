@@ -219,6 +219,7 @@ jobs:
       QTANGL_API_KEY: qtangl-ci-fixture-key
       NEXT_PUBLIC_QTANGL_API_BASE_URL: http://127.0.0.1:8000
       NEXT_PUBLIC_QTANGL_SANDBOX_API_KEY: qtangl-ci-fixture-key
+      QTANGL_E2E_EXTERNAL_SERVER: "true"
     defaults:
       run:
         working-directory: web
@@ -286,6 +287,7 @@ jobs:
           QTANGL_ENV: test
           QTANGL_ENABLE_QAOA: "false"
           QTANGL_PQC_ENABLE_LIVE_SCAN: "false"
+          QTANGL_PQC_ENABLE_OQS: "false"
           QTANGL_CORS_ORIGINS: http://127.0.0.1:3000,http://localhost:3000
           QTANGL_PUBLIC_URL: http://127.0.0.1:3000
           QTANGL_RATE_LIMIT_PER_MINUTE: "10000"
@@ -296,6 +298,19 @@ jobs:
             sleep 1
           done
           cat "$RUNNER_TEMP/qtangl-e2e-api.log"
+          exit 1
+
+      - name: Start production web server
+        env:
+          QTANGL_ACCESS_ALLOW_CONSOLE_FALLBACK: "true"
+          NEXT_PUBLIC_QTANGL_DASHBOARD_AUTH_WORKOS: "true"
+        run: |
+          npm run start > "$RUNNER_TEMP/qtangl-e2e-web.log" 2>&1 &
+          for attempt in $(seq 1 30); do
+            if curl --fail --silent http://127.0.0.1:3000 > /dev/null; then exit 0; fi
+            sleep 1
+          done
+          cat "$RUNNER_TEMP/qtangl-e2e-web.log"
           exit 1
 
       - name: Install Playwright
@@ -313,18 +328,6 @@ jobs:
         env:
           QTANGL_API_BASE_URL: http://127.0.0.1:8000
         run: npx playwright test tests/e2e/assess.spec.ts tests/e2e/assess-production.spec.ts --project=chromium
-
-      - name: E2E assess R4 flags (optional)
-        if: ${{ !cancelled() && steps.playwright_install.outcome == 'success' }}
-        continue-on-error: true
-        env:
-          QTANGL_API_BASE_URL: http://127.0.0.1:8000
-          NEXT_PUBLIC_ASSESS_PORTFOLIO: "true"
-          NEXT_PUBLIC_ASSESS_CBOM_IMPORT: "true"
-          NEXT_PUBLIC_ASSESS_AI_NARRATIVE: "true"
-          NEXT_PUBLIC_ASSESS_MSSP_WHITELABEL: "true"
-          NEXT_PUBLIC_ASSESS_MONITOR_CHECKOUT: "true"
-        run: npx playwright test tests/e2e/assess.spec.ts --project=chromium --grep "landing sections"
 
       - name: E2E HNDL hub
         if: ${{ !cancelled() && steps.playwright_install.outcome == 'success' }}
@@ -401,6 +404,17 @@ jobs:
         env:
           QTANGL_API_BASE_URL: http://127.0.0.1:8000
         run: npx playwright test tests/e2e/pqc.spec.ts --project=chromium
+
+      - name: Preserve browser and server diagnostics
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: browser-validation
+          path: |
+            ${{ runner.temp }}/qtangl-e2e-api.log
+            ${{ runner.temp }}/qtangl-e2e-web.log
+            web/test-results/
+          retention-days: 7
 
   sdk-typescript:
     name: SDK (TypeScript alpha)

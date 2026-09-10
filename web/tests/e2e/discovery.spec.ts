@@ -13,7 +13,10 @@ test.describe("Discovery depth", () => {
 
   test("coverage page mentions discovery sources", async ({ page }) => {
     await page.goto("/platform/coverage");
-    await expect(page.getByText(/inventory sources/i)).toBeVisible();
+    await expect(page.getByRole("heading", { level: 1, name: "What Qtangl can inventory today", exact: true })).toBeVisible();
+    for (const name of ["External TLS / JWKS / SSH / email", "GitHub code & dependencies", "Host sensor fleet"]) {
+      await expect(page.getByRole("heading", { level: 2, name, exact: true })).toBeVisible();
+    }
   });
 
   test("assess wizard shows discovery scope step", async ({ page }) => {

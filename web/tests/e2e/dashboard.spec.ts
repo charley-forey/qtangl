@@ -1,10 +1,10 @@
 import { expect, test } from "@playwright/test";
 
 test.describe("Dashboard", () => {
-  test("dashboard page loads with sign-in hero", async ({ page }) => {
+  test("dashboard directs signed-out visitors to sign in", async ({ page }) => {
     await page.goto("/command-center");
-    await expect(page.getByRole("heading", { name: /post-quantum workspace|Q-Day command center/i })).toBeVisible();
-    await expect(page.getByText(/Sign in|workspace/i).first()).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Sign in required", exact: true })).toBeVisible();
+    await expect(page.getByRole("link", { name: "Sign in", exact: true })).toHaveAttribute("href", "/command-center/login");
   });
 
   test("auth health endpoint returns JSON", async ({ request }) => {

@@ -23,7 +23,7 @@ export default function AssessDiscoveryTeaser() {
         No single discovery method covers your full estate. Qtangl combines TLS, JWKS, SSH, and upload paths —
         illustrative coverage for Assess tier.
       </p>
-      <div className="mt-6 overflow-x-auto">
+      <div className="mt-6 overflow-x-auto" tabIndex={0} role="region" aria-label="Discovery sources">
         <table className="w-full min-w-[20rem] text-left text-xs">
           <caption className="sr-only">Qtangl discovery method coverage</caption>
           <thead>

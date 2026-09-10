@@ -151,7 +151,7 @@ export default function InventoryTable({
           </button>
         )}
       </div>
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto" tabIndex={0} role="region" aria-label="Cryptographic inventory">
         <table className="w-full min-w-[640px] text-left text-xs">
           <thead>
             <tr className="border-b border-[var(--color-border)] text-[var(--color-gray-500)]">
