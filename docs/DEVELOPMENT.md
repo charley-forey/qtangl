@@ -342,7 +342,7 @@ cd sensor
 go build -o qtangl-sensor ./cmd/qtangl-sensor
 
 # Enroll (token from dashboard → Settings → Discovery)
-./qtangl-sensor --enroll ENROLLMENT_TOKEN --api-url http://127.0.0.1:8000
+./qtangl-sensor --enroll ENROLLMENT_TOKEN --api http://127.0.0.1:8000
 
 # Scan and push
 ./qtangl-sensor --push

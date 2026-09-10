@@ -46,6 +46,8 @@ Success means a user can follow **authorized baseline â†’ explainable findings â
 
 Operational follow-up: track volume utilization and growth, test backup/restore, and define capacity alerts before the next exhaustion event. Healthy database connectivity does not itself verify worker/scheduler execution. Inspect the existing leading-space ` QTANGL_ENV` variable and migrate it to the intended configuration after validating production requirements.
 
+Worker logs establish that scheduling resumed after recovery: seven scans queued at 04:22:32 UTC and a scan completed at 04:23:49 UTC on September 10. Email delivery repeatedly timed out; delivery is not verified. The API cannot see the worker's process-local heartbeat, so shared heartbeat visibility is being repaired. Sensor Windows CI confirmed an undefined Linux-only function; a non-Linux stub and isolated Linux tests are ready for cross-platform CI. Removed a placeholder workflow step that merely echoed signing commands and falsely stated a transparency entry existed; signed sensor release artifacts still need a real release/signing workflow.
+
 ## Prioritized roadmap
 
 | Horizon | Deliverable | Proposed acceptance gate |
