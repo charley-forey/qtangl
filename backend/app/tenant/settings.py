@@ -207,7 +207,7 @@ def upsert_tenant_settings(*, tenant_id: str, settings: dict[str, Any]) -> dict[
         return settings
     now = datetime.now(timezone.utc)
     with db_session() as session:
-        row = session.get(TenantSettingsRow, tenant_id)
+        row = session.query(TenantSettingsRow).filter_by(tenant_id=tenant_id).with_for_update().one_or_none()
         existing = dict(DEFAULT_SETTINGS)
         if row is not None:
             existing.update(decrypt_json_blob(row.settings_json or "{}"))

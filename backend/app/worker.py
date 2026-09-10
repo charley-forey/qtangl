@@ -234,6 +234,14 @@ def main() -> None:
                 if cloud_enqueued:
                     logger.info("Enqueued %d scheduled cloud pull(s)", cloud_enqueued)
                 try:
+                    from app.command_center.briefing_schedule import process_due_briefings
+
+                    briefing_sent = process_due_briefings()
+                    if briefing_sent:
+                        logger.info("Sent %d scheduled briefing delivery(s)", briefing_sent)
+                except Exception:
+                    logger.warning("briefing tick failed", exc_info=True)
+                try:
                     from app.notifications.digest_email import process_due_board_exports, process_due_weekly_digests
 
                     digest_sent = process_due_weekly_digests()

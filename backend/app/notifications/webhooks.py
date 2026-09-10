@@ -8,6 +8,7 @@ import time
 import urllib.error
 import urllib.request
 from typing import Any
+from urllib.parse import urlparse
 
 from app.notifications.webhook_dlq import (
     get_dead_letter,
@@ -24,6 +25,22 @@ _MAX_RETRIES = 3
 _BACKOFF_SEC = [0.5, 1.0, 2.0]
 
 
+def is_slack_webhook(url: str) -> bool:
+    if any(character.isspace() for character in url):
+        return False
+    try:
+        parsed = urlparse(url)
+        return (
+            parsed.scheme == "https"
+            and parsed.hostname in {"hooks.slack.com", "hooks.slack-gov.com"}
+            and parsed.username is None
+            and parsed.password is None
+            and parsed.port in {None, 443}
+        )
+    except ValueError:
+        return False
+
+
 def deliver_webhook(
     url: str,
     payload: dict[str, Any],
@@ -33,7 +50,7 @@ def deliver_webhook(
 ) -> dict[str, Any]:
     """POST JSON to tenant webhook URL with optional HMAC signing and retries."""
     body_payload = payload
-    if "hooks.slack.com" in url:
+    if is_slack_webhook(url):
         body_payload = _slack_payload(payload)
     body = json.dumps(body_payload).encode("utf-8")
     headers = {"Content-Type": "application/json", "User-Agent": "Qtangl-Webhook/2.0"}
@@ -68,6 +85,9 @@ def deliver_webhook(
 
 
 def _slack_payload(payload: dict[str, Any]) -> dict[str, Any]:
+    if payload.get("event") == "qros_morning_briefing":
+        lines = [payload.get("headline"), *(payload.get("bullets") or []), payload.get("methodNote")]
+        return {"text": "\n".join(line for line in lines if isinstance(line, str) and line.strip())}
     text = payload.get("message") or payload.get("event", "scan.complete")
     alerts = payload.get("alerts") or []
     if alerts:
