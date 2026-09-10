@@ -422,6 +422,7 @@ export default function DashboardOverviewTab({
         <DashboardWidgetGate widgetId="heatmap" layout={layout} rolePolicy={rolePolicy}>
           <BusinessUnitHeatmap
             businessUnits={summary.commandCenter.businessUnits}
+            scoreScope={summary.commandCenter.scoreScope}
             deltas={summary.commandCenter.businessUnitDeltas}
             onSelectUnit={() => onTabChange("monitor")}
           />

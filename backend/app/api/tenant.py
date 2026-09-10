@@ -2021,7 +2021,7 @@ def _dashboard_tab_portfolio(*, tenant_id: str) -> dict[str, Any]:
     return {
         "children": child_summaries,
         "rollup": rollup,
-        "aggregateReadiness": round(sum(scores) / len(scores), 1) if scores else 0,
+        "aggregateReadiness": round(sum(scores) / len(scores), 1) if scores else None,
         "customersBelowThreshold": below_threshold,
         "atRiskCount": below_threshold,
         "totalOpenAlerts": total_open_alerts,

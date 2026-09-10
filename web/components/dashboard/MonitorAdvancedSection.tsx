@@ -99,6 +99,7 @@ export default function MonitorAdvancedSection({
               <div className="mt-4">
                 <BusinessUnitHeatmap
                   businessUnits={cc!.businessUnits!}
+                  scoreScope={cc!.scoreScope}
                   deltas={cc!.businessUnitDeltas}
                   onSelectUnit={() => onTabChange?.("monitor")}
                 />

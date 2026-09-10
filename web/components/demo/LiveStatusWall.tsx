@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import AlertFeed from "@/components/demo/AlertFeed";
 import ComplianceScorecard from "@/components/demo/ComplianceScorecard";
@@ -34,26 +34,35 @@ export default function LiveStatusWall() {
   const [narration, setNarration] = useState("");
   const [sceneTitle, setSceneTitle] = useState<string | null>(null);
   const [connected, setConnected] = useState(false);
+  const [refreshError, setRefreshError] = useState(false);
+  const refreshGeneration = useRef(0);
 
   const refresh = useCallback(async () => {
-    const [nextStatus, nextTrend, nextGraph, nextCompliance, nextPortfolio, nextNarration] = await Promise.all([
-      fetchDemoStatus(),
-      fetchDemoTrend(30),
-      fetchDemoGraph(),
-      fetchDemoCompliance(),
-      fetchDemoPortfolio(),
-      fetchDemoNarration(),
-    ]);
-    setStatus(nextStatus);
-    setTrend(trendToReadinessPoints(nextTrend.points));
-    setGraph(nextGraph);
-    setCompliance(nextCompliance);
-    setPortfolio(nextPortfolio);
-    setNarration(nextNarration.narration);
+    const generation = ++refreshGeneration.current;
+    try {
+      const [nextStatus, nextTrend, nextGraph, nextCompliance, nextPortfolio, nextNarration] = await Promise.all([
+        fetchDemoStatus(),
+        fetchDemoTrend(30),
+        fetchDemoGraph(),
+        fetchDemoCompliance(),
+        fetchDemoPortfolio(),
+        fetchDemoNarration(),
+      ]);
+      if (generation !== refreshGeneration.current) return;
+      setStatus(nextStatus);
+      setTrend(trendToReadinessPoints(nextTrend.points));
+      setGraph(nextGraph);
+      setCompliance(nextCompliance);
+      setPortfolio(nextPortfolio);
+      setNarration(nextNarration.narration);
+      setRefreshError(false);
+    } catch {
+      if (generation === refreshGeneration.current) setRefreshError(true);
+    }
   }, []);
 
   useEffect(() => {
-    void refresh().catch(() => undefined);
+    void refresh();
   }, [refresh]);
 
   const { connected: sseConnected } = useDemoEvents({
@@ -102,6 +111,17 @@ export default function LiveStatusWall() {
             </a>
           </div>
         </div>
+
+        {refreshError ? (
+          <div role="alert" className="rounded-[var(--radius-lg)] border border-amber-400/30 bg-amber-500/10 px-4 py-3 text-sm">
+            <p>
+              Unable to refresh live status. {status ? "Showing the last available data." : "Live data is currently unavailable."}
+            </p>
+            <button type="button" className="mt-2 underline underline-offset-4" onClick={() => void refresh()}>
+              Retry refresh
+            </button>
+          </div>
+        ) : null}
 
         {sceneTitle ? (
           <div className="rounded-[var(--radius-lg)] border border-fuchsia-400/30 bg-fuchsia-500/10 px-4 py-3 text-sm">

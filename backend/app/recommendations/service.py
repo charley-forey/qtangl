@@ -290,7 +290,11 @@ def build_recommendations(
             _mk(
                 category="remediation",
                 what=f"High-risk unit: {target.get('target', 'portfolio target')}",
-                so_what=f"Readiness {target.get('readinessScore', '—')} below portfolio threshold.",
+                so_what=(
+                    f"Readiness {target['readinessScore']} below portfolio threshold."
+                    if target.get("readinessScore") is not None
+                    else "Readiness score unavailable; review the latest high-risk report."
+                ),
                 now_what="Schedule remediation sprint for this business unit.",
                 source="portfolio_high_risk",
                 priority=12,
