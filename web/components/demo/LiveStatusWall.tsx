@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import AlertFeed from "@/components/demo/AlertFeed";
 import ComplianceScorecard from "@/components/demo/ComplianceScorecard";
@@ -35,8 +35,10 @@ export default function LiveStatusWall() {
   const [sceneTitle, setSceneTitle] = useState<string | null>(null);
   const [connected, setConnected] = useState(false);
   const [refreshError, setRefreshError] = useState(false);
+  const refreshGeneration = useRef(0);
 
   const refresh = useCallback(async () => {
+    const generation = ++refreshGeneration.current;
     try {
       const [nextStatus, nextTrend, nextGraph, nextCompliance, nextPortfolio, nextNarration] = await Promise.all([
         fetchDemoStatus(),
@@ -46,6 +48,7 @@ export default function LiveStatusWall() {
         fetchDemoPortfolio(),
         fetchDemoNarration(),
       ]);
+      if (generation !== refreshGeneration.current) return;
       setStatus(nextStatus);
       setTrend(trendToReadinessPoints(nextTrend.points));
       setGraph(nextGraph);
@@ -54,7 +57,7 @@ export default function LiveStatusWall() {
       setNarration(nextNarration.narration);
       setRefreshError(false);
     } catch {
-      setRefreshError(true);
+      if (generation === refreshGeneration.current) setRefreshError(true);
     }
   }, []);
 
