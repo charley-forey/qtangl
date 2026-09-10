@@ -56,7 +56,7 @@ alembic>=1.18.4
 
 # Optional cloud CBOM pull
 
-azure-identity>=1.16.0
+azure-identity>=1.25.3
 
 azure-keyvault-certificates>=4.8.0
 
