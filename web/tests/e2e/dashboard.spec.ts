@@ -4,7 +4,7 @@ test.describe("Dashboard", () => {
   test("dashboard directs signed-out visitors to sign in", async ({ page }) => {
     await page.goto("/command-center");
     await expect(page.getByRole("heading", { name: "Sign in required", exact: true })).toBeVisible();
-    await expect(page.getByRole("link", { name: "Sign in", exact: true })).toHaveAttribute("href", "/command-center/login");
+    await expect(page.locator("#main-content").getByRole("link", { name: "Sign in", exact: true })).toHaveAttribute("href", "/command-center/login");
   });
 
   test("auth health endpoint returns JSON", async ({ request }) => {
