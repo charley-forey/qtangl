@@ -25,7 +25,7 @@ test("mini-assessment email gate unlocks fixture preview", async ({ page }) => {
   await page.goto("/assess/mini");
   await page.getByPlaceholder("you@company.com").fill("buyer@example.com");
   await page.getByRole("button", { name: /Show my results/i }).click();
-  await expect(page.getByText(/Readiness score/i)).toBeVisible({ timeout: 15_000 });
+  await expect(page.getByText("Readiness score", { exact: true })).toBeVisible({ timeout: 15_000 });
   await expect(page.getByRole("link", { name: /Download sample CBOM/i })).toBeVisible();
 });
 
