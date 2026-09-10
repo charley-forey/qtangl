@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
 import Button from "@/components/ui/Button";
@@ -20,7 +20,15 @@ type MoscaCalculatorProps = {
   bridgeToAssess?: boolean;
 };
 
-export default function MoscaCalculator({ bridgeToAssess = false }: MoscaCalculatorProps) {
+export default function MoscaCalculator(props: MoscaCalculatorProps) {
+  return (
+    <Suspense fallback={<p className="text-sm text-[var(--color-gray-400)]">Loading Mosca calculator…</p>}>
+      <MoscaCalculatorContent {...props} />
+    </Suspense>
+  );
+}
+
+function MoscaCalculatorContent({ bridgeToAssess = false }: MoscaCalculatorProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const fromUrl = bridgeToAssess ? readMoscaFromSearchParams(searchParams) : null;

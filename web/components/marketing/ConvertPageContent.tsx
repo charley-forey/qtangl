@@ -54,9 +54,7 @@ export default function ConvertPageContent() {
       <ConvertStickyCta />
 
       <Section gap="tight" className="pt-6 sm:pt-8">
-        <StateTransition>
-          <ConvertHeroSection />
-        </StateTransition>
+        <ConvertHeroSection />
         <div className="mt-8 sm:mt-10">
           <ConvertHeroKpiStrip />
         </div>

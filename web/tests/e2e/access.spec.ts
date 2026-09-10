@@ -1,6 +1,8 @@
 import { test, expect } from "@playwright/test";
 
 for (const { path, heading } of [
+  { path: "/convert", heading: "Prove the fix with signed evidence" },
+  { path: "/platform", heading: "Assess. Monitor. Convert." },
   { path: "/journey", heading: "Find out where you are — and what to do next" },
   { path: "/docs/reference/tenant/qros-runway-get", heading: "GET /tenant/qros/runway" },
 ]) {
@@ -10,7 +12,18 @@ for (const { path, heading } of [
       const page = await context.newPage();
       const response = await page.goto(path);
       expect(response?.status()).toBe(200);
-      await expect(page.getByRole("heading", { level: 1, name: heading, exact: true })).toBeVisible();
+      const title = page.getByRole("heading", { level: 1, name: heading, exact: true });
+      await expect(title).toBeVisible();
+      const transparentAncestors = await title.evaluate((element) => {
+        const hidden: string[] = [];
+        for (let current: Element | null = element; current; current = current.parentElement) {
+          if (Number.parseFloat(getComputedStyle(current).opacity) === 0) {
+            hidden.push(current.tagName);
+          }
+        }
+        return hidden;
+      });
+      expect(transparentAncestors, "Public headings must not wait for JavaScript to become opaque").toEqual([]);
       if (path.startsWith("/docs/")) {
         await expect(page.getByRole("link", { name: /Request and response schemas in OpenAPI/i })).toBeVisible();
       }

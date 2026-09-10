@@ -1,3 +1,5 @@
+import { Suspense } from "react";
+
 import FeatureCard from "@/components/marketing/FeatureCard";
 import FrameworkCoverageStrip from "@/components/marketing/FrameworkCoverageStrip";
 import AssessCompareSection from "@/components/marketing/AssessCompareSection";
@@ -37,7 +39,9 @@ export default function AssessLandingMarketing() {
       </Section>
 
       <Section gap="tight">
-        <AssessPersonaPicker />
+        <Suspense fallback={null}>
+          <AssessPersonaPicker />
+        </Suspense>
       </Section>
 
       <Section gap="tight">
