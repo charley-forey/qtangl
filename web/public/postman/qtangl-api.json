@@ -3533,6 +3533,20 @@
       }
     },
     {
+      "name": "GET /tenant/qros/push-briefing",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{QTANGL_API_KEY}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tenant/qros/push-briefing",
+        "description": "Tenant Qros Push Briefing Preferences"
+      }
+    },
+    {
       "name": "POST /tenant/qros/push-briefing",
       "request": {
         "method": "POST",

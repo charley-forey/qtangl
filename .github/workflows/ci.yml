@@ -18,6 +18,15 @@ jobs:
     name: Backend (pytest)
     runs-on: ubuntu-latest
     services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: qtangl_test
+          POSTGRES_PASSWORD: qtangl_test
+          POSTGRES_DB: qtangl_briefing_test
+        ports:
+          - 5432:5432
+        options: --health-cmd "pg_isready -U qtangl_test -d qtangl_briefing_test" --health-interval 5s --health-timeout 5s --health-retries 10
       redis:
         image: redis:7-alpine
         ports:
@@ -88,6 +97,13 @@ jobs:
         env:
           QTANGL_TEST_REDIS_URL: redis://127.0.0.1:6379/0
         run: python -m pytest tests/test_scheduler_metrics.py::test_shared_heartbeat_with_real_redis -q --tb=short
+
+      - name: Briefing concurrency (isolated PostgreSQL)
+        env:
+          DATABASE_URL: ""
+          QTANGL_DATABASE_URL: ""
+          QTANGL_TEST_POSTGRES_URL: postgresql+psycopg://qtangl_test:qtangl_test@127.0.0.1:5432/qtangl_briefing_test
+        run: python -m pytest tests/test_briefing_postgres.py -q --tb=short
 
       - name: Discovery release train artifacts
         run: |

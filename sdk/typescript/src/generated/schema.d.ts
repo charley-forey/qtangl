@@ -4202,7 +4202,8 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get?: never;
+        /** Tenant Qros Push Briefing Preferences */
+        get: operations["tenant_qros_push_briefing_preferences_tenant_qros_push_briefing_get"];
         put?: never;
         /** Tenant Qros Push Briefing */
         post: operations["tenant_qros_push_briefing_tenant_qros_push_briefing_post"];
@@ -6063,12 +6064,19 @@ export interface components {
         /** PushBriefingRequest */
         PushBriefingRequest: {
             /** Channels */
-            channels?: string[];
+            channels?: ("email" | "slack" | "teams" | "webhook")[];
+            /** Recipients */
+            recipients?: string[];
             /**
              * Cadencehours
              * @default 24
              */
             cadenceHours: number;
+            /**
+             * Enabled
+             * @default false
+             */
+            enabled: boolean;
         };
         /** RemediationAutomateRequest */
         RemediationAutomateRequest: {
@@ -17246,6 +17254,42 @@ export interface operations {
                 "application/json": components["schemas"]["PushBriefingRequest"];
             };
         };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    tenant_qros_push_briefing_preferences_tenant_qros_push_briefing_get: {
+        parameters: {
+            query?: {
+                api_key?: string | null;
+            };
+            header?: {
+                authorization?: string | null;
+                "x-api-key"?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             /** @description Successful Response */
             200: {

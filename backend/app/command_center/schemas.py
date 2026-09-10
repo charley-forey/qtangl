@@ -2,9 +2,9 @@
 
 from __future__ import annotations
 
-from typing import Any, Literal
+from typing import Annotated, Any, Literal
 
-from pydantic import BaseModel, Field
+from pydantic import AfterValidator, BaseModel, Field, model_validator
 
 
 # --- Scan dependency graph ---
@@ -398,9 +398,38 @@ class MarketplaceResponse(BaseModel):
     tiles: list[MarketplaceTile]
 
 
+def _briefing_recipient(value: str) -> str:
+    from email.errors import HeaderParseError
+    from email.headerregistry import Address
+
+    value = value.strip()
+    if not value.isascii() or len(value) > 254 or "\r" in value or "\n" in value:
+        raise ValueError("Use a valid ASCII email address.")
+    try:
+        address = Address(addr_spec=value)
+    except (ValueError, IndexError, HeaderParseError) as exc:
+        raise ValueError("Use a valid email address.") from exc
+    if not address.username or not address.domain or address.addr_spec != value:
+        raise ValueError("Use an email address without a display name.")
+    return value
+
+
+BriefingRecipient = Annotated[str, AfterValidator(_briefing_recipient)]
+
+
 class PushBriefingRequest(BaseModel):
-    channels: list[str] = Field(default_factory=lambda: ["email"])
-    cadenceHours: int = 24
+    channels: list[Literal["email", "slack", "teams", "webhook"]] = Field(default_factory=lambda: ["email"], min_length=1, max_length=4)
+    recipients: list[BriefingRecipient] = Field(default_factory=list, max_length=50)
+    cadenceHours: int = Field(default=24, ge=1, le=168)
+    enabled: bool = False
+
+    @model_validator(mode="after")
+    def validate_recipients(self):
+        self.channels = list(dict.fromkeys(self.channels))
+        self.recipients = list(dict.fromkeys(self.recipients))
+        if self.enabled and "email" in self.channels and not self.recipients:
+            raise ValueError("Email delivery requires at least one recipient.")
+        return self
 
 
 class NbaActionRequest(BaseModel):

@@ -25828,6 +25828,87 @@
             }
           }
         }
+      },
+      "get": {
+        "tags": [
+          "tenant"
+        ],
+        "summary": "Tenant Qros Push Briefing Preferences",
+        "operationId": "tenant_qros_push_briefing_preferences_tenant_qros_push_briefing_get",
+        "parameters": [
+          {
+            "name": "api_key",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Api Key"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          },
+          {
+            "name": "x-api-key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Api-Key"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Tenant Qros Push Briefing Preferences Tenant Qros Push Briefing Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/demo/status": {
@@ -31017,15 +31098,38 @@
         "properties": {
           "channels": {
             "items": {
+              "type": "string",
+              "enum": [
+                "email",
+                "slack",
+                "teams",
+                "webhook"
+              ]
+            },
+            "type": "array",
+            "maxItems": 4,
+            "minItems": 1,
+            "title": "Channels"
+          },
+          "recipients": {
+            "items": {
               "type": "string"
             },
             "type": "array",
-            "title": "Channels"
+            "maxItems": 50,
+            "title": "Recipients"
           },
           "cadenceHours": {
             "type": "integer",
+            "maximum": 168.0,
+            "minimum": 1.0,
             "title": "Cadencehours",
             "default": 24
+          },
+          "enabled": {
+            "type": "boolean",
+            "title": "Enabled",
+            "default": false
           }
         },
         "type": "object",

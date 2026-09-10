@@ -35,7 +35,7 @@ from app.command_center.qros import (
     uninstall_marketplace_tile,
 )
 from app.command_center.qros_pdf import build_qros_board_pdf
-from app.command_center.qros_push import deliver_morning_briefing
+from app.command_center.qros_push import deliver_morning_briefing, save_briefing_preferences, qros_summary_snapshot as _qros_summary_snapshot
 from app.command_center.schemas import (
     AgenticPlanResponse,
     AgenticActionRequest,
@@ -436,42 +436,6 @@ def tenant_notification_preferences_put(
     return body
 
 
-def _qros_summary_snapshot(*, tenant_id: str, role: str = "operator") -> dict[str, Any]:
-    from app.recommendations.service import build_recommendations
-    from app.remediation.service import remediation_velocity
-
-    jobs = list_jobs_for_tenant(tenant_id=tenant_id, limit=20)
-    latest = next((j for j in jobs if j.get("readinessScore") is not None), None)
-    prior = next(
-        (j for j in jobs if j.get("readinessScore") is not None and j != latest),
-        None,
-    )
-    delta = None
-    if latest and prior:
-        delta = int(latest["readinessScore"]) - int(prior["readinessScore"])
-    open_critical = 0
-    if latest:
-        bundle = load_scan_bundle(latest["scanId"], tenant_id=tenant_id)
-        report = (bundle or {}).get("report") or {}
-        open_critical = int(report.get("openCriticalCount") or 0)
-    scores = _readiness_scores_for_tenant(tenant_id=tenant_id)
-    forecast = forecast_readiness(scores=scores) if scores else {}
-    alerts = list_alerts(tenant_id=tenant_id, since_days=14, include_resolved=False)
-    velocity = remediation_velocity(tenant_id=tenant_id)
-    recommendations = build_recommendations(tenant_id=tenant_id, role=role)
-    return {
-        "kpis": {
-            "latestReadiness": latest.get("readinessScore") if latest else None,
-            "delta": delta,
-            "openCritical": open_critical,
-        },
-        "alerts": alerts,
-        "recommendations": recommendations,
-        "remediationVelocity": velocity,
-        "forecast": forecast,
-        "maturity": {},
-        "latestScanId": latest.get("scanId") if latest else None,
-    }
 
 
 @router.get("/qros/next-actions", response_model=NextBestActionResponse)
@@ -682,14 +646,17 @@ def tenant_qros_push_briefing_send(
         tenant_id=auth.tenant_id,
         briefing=briefing,
         channels=body.channels,
+        recipients=[str(email) for email in body.recipients],
+        signing_secret=str(get_tenant_settings_raw(tenant_id=auth.tenant_id).get("webhookSigningSecret") or ""),
     )
     log_action(
         tenant_id=auth.tenant_id,
         actor=auth.email or "operator",
-        action="qros_push_briefing_sent",
+        action="qros_push_briefing_attempted",
         resource_id=str(delivery.get("delivered", 0)),
     )
-    return {"status": "success", "delivery": delivery}
+    outcome = "success" if delivery["attempted"] and delivery["delivered"] == delivery["attempted"] else "partial" if delivery["delivered"] else "failed"
+    return {"status": outcome, "delivery": delivery}
 
 
 @router.post("/qros/push-briefing")
@@ -697,20 +664,49 @@ def tenant_qros_push_briefing(
     body: PushBriefingRequest,
     auth: AuthContext = Depends(require_auth_write),
 ) -> dict[str, Any]:
-    upsert_tenant_settings(
-        tenant_id=auth.tenant_id,
-        settings={
-            "pushBriefing": {
-                "channels": body.channels,
-                "cadenceHours": body.cadenceHours,
-                "enabled": True,
-            }
-        },
-    )
+    from app.db.config import persistence_enabled
+    from app.monitoring.scheduler_state import scheduler_metrics
+    import time
+
+    if not persistence_enabled():
+        raise HTTPException(status_code=503, detail="Briefing preferences require persistent storage.")
+    if body.enabled:
+        from app.command_center.qros_push import briefing_destinations
+        from app.notifications.email import smtp_configured
+
+        health = scheduler_metrics()
+        tick = health.get("lastTickAt")
+        if not health.get("schedulerEnabled") or not health.get("redisEnabled") or not tick or time.time() - float(tick) > max(180, float(health["intervalSec"]) * 3):
+            raise HTTPException(status_code=503, detail="The briefing scheduler is unavailable. Try again when the worker is healthy.")
+        _, _, errors = briefing_destinations(tenant_id=auth.tenant_id, channels=body.channels, recipients=body.recipients)
+        if "email" in body.channels and not smtp_configured():
+            errors.append("Email delivery is unavailable until SMTP is configured.")
+        if errors:
+            raise HTTPException(status_code=422, detail=" ".join(errors))
+    saved = save_briefing_preferences(tenant_id=auth.tenant_id, preferences=body.model_dump(mode="json"))
     log_action(
         tenant_id=auth.tenant_id,
         actor=auth.email or "operator",
         action="qros_push_briefing_configured",
         resource_id=",".join(body.channels),
     )
-    return {"status": "success", "channels": body.channels, "cadenceHours": body.cadenceHours}
+    return {"status": "success", **saved}
+
+
+@router.get("/qros/push-briefing")
+def tenant_qros_push_briefing_preferences(
+    auth: AuthContext = Depends(require_auth_readonly),
+) -> dict[str, Any]:
+    from app.command_center.briefing_schedule import briefing_schedule_outcome
+
+    stored = get_tenant_settings_raw(tenant_id=auth.tenant_id).get("pushBriefing") or {}
+    configured = bool(stored.get("revision") and stored.get("firstRunAt"))
+    return {
+        "channels": stored.get("channels", ["email"]),
+        "recipients": stored.get("recipients", []),
+        "cadenceHours": stored.get("cadenceHours", 24),
+        "enabled": bool(stored.get("enabled") and configured),
+        "firstRunAt": stored.get("firstRunAt"),
+        "requiresSave": bool(stored.get("enabled") and not configured),
+        "lastDelivery": briefing_schedule_outcome(tenant_id=auth.tenant_id, revision=stored["revision"]) if configured else None,
+    }

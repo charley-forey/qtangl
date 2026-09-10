@@ -68,10 +68,39 @@ export async function fetchMarketplaceTiles(): Promise<MarketplaceTile[]> {
   return payload.tiles ?? [];
 }
 
-export async function configurePushBriefing(channels: string[], cadenceHours = 24) {
-  return fetchDashboardJson<{ status: string }>("/tenant/qros/push-briefing", {
+export type BriefingChannel = "email" | "slack" | "teams" | "webhook";
+export type BriefingPreferences = {
+  channels: BriefingChannel[];
+  recipients: string[];
+  cadenceHours: number;
+  enabled: boolean;
+};
+export type BriefingDelivery = {
+  delivered: number;
+  attempted: number;
+  errors: string[];
+  reason?: string;
+};
+export type BriefingConfiguration = BriefingPreferences & {
+  firstRunAt?: string | null;
+  requiresSave?: boolean;
+  lastDelivery?: {
+    delivered: number | null;
+    attempted: number | null;
+    status: string;
+    attemptedAt: string;
+    outcomeUnknown?: boolean;
+  } | null;
+};
+
+export async function fetchPushBriefing() {
+  return fetchDashboardJson<BriefingConfiguration>("/tenant/qros/push-briefing");
+}
+
+export async function configurePushBriefing(preferences: BriefingPreferences) {
+  return fetchDashboardJson<BriefingConfiguration>("/tenant/qros/push-briefing", {
     method: "POST",
-    body: JSON.stringify({ channels, cadenceHours }),
+    body: JSON.stringify(preferences),
   });
 }
 
@@ -107,10 +136,10 @@ export async function uninstallMarketplaceTile(tileId: string) {
   });
 }
 
-export async function sendPushBriefingNow(channels: string[]) {
-  return fetchDashboardJson<{ status: string; delivery?: { delivered: number } }>(
+export async function sendPushBriefingNow(preferences: BriefingPreferences) {
+  return fetchDashboardJson<{ status: "success" | "partial" | "failed"; delivery: BriefingDelivery }>(
     "/tenant/qros/push-briefing/send",
-    { method: "POST", body: JSON.stringify({ channels, cadenceHours: 24 }) }
+    { method: "POST", body: JSON.stringify(preferences) }
   );
 }
 
